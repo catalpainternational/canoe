@@ -1,0 +1,64 @@
+.modal-background {
+    position: absolute;
+    height: 100vh;
+    z-index: 1;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+}
+
+.modal-blurred {
+    background-color: rgba(255, 255, 255, 0.8);
+    justify-content: center;
+    flex-direction: column;
+    padding-right: 20px;
+    align-items: center;
+    padding-left: 20px;
+    display: flex;
+    height: 100%;
+}
+
+.modal {
+    box-shadow: 0 0 15px 10px rgba(255, 255, 255, 0.5);
+    border-radius: 30px;
+    border: $border;
+    width: 100%;
+}
+
+.modal-header {
+    border-radius: 30px 30px 0 0;
+    background-color: $white;
+    justify-content: center;
+    border-bottom: $border;
+    display: flex;
+    padding: 20px;
+
+    h5 {
+        margin: 0;
+    }
+}
+
+.modal-body {
+    border-radius: 0 0 30px 30px;
+    background-color: $white;
+    flex-direction: column;
+    padding: 40px 20px;
+    display: flex;
+    
+    h3 {
+        margin-bottom: 20px;
+        text-align: center;
+        margin-top: 0;
+    }
+
+    p {
+        margin-bottom: 30px;
+        text-align: center;
+        margin-top: 0;
+    }
+
+    .btn-primary {
+        margin-bottom: 15px;
+    }
+}

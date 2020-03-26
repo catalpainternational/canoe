@@ -1,0 +1,39 @@
+<LessonModuleComplete>
+        <LessonFrame backgroundColor="{props.background}">
+            <div class="module-complete-container">
+                <div class="sun"></div>
+
+                <div class="body">
+                    <h2>Great job!</h2>
+                    <h3>You've completed the {props.module}</h3>
+                    <p>You're ready to start the {props.nextModule}.</p>
+                </div>
+
+                <div class="bottom-buttons">
+                    <button class="btn-primary" onclick="{goToNextModule}">Let's do this!</button>
+                    <button class="btn-secondary" onclick="{backToLessonPage}">
+                        Back to lesson overview
+                    </button>
+                </div>
+
+            </div>
+        </LessonFrame>
+    </div>
+    <script>
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+
+        export default {
+            components: {
+                lessonframe: LessonFrame
+            },
+
+            goToNextModule() {
+                location.hash = "#" + this.props.lessonId + "/" + this.props.nextModule + "/1";
+            },
+
+            backToLessonPage() {
+                location.hash = "#" + this.props.lessonId;
+            }
+        };
+    </script>
+</LessonModuleComplete>

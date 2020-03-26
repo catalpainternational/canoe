@@ -1,0 +1,229 @@
+h2 {
+    font-family: "TiemposHeadline";
+    line-height: 28px;
+    font-weight: 600;
+    font-size: 22px;
+    color: $gray-1;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 2em;
+        line-height: 1.2;
+        border-bottom: 1px solid #d5dbdf;
+        padding-bottom: 15px;
+    };
+}
+
+h3 {
+    font-family: "TiemposHeadline";
+    line-height: 20px;
+    font-weight: 600;
+    font-size: 18px;
+    color: $gray-1;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1.3em;
+        line-height: 1.4;
+    };
+}
+
+homepage h3 {
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+h4 {
+    font-family: "GalanoGrotesqueAlt";
+    line-height: 20px;
+    font-weight: 600;
+    font-size: 16px;
+    color: $gray-1;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+        line-height: 1.4;
+    };
+}
+
+h5 {
+    font-family: "GalanoGrotesqueAlt";
+    line-height: 20px;
+    font-weight: 600;
+    font-size: 15px;
+    color: $gray-3;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1.1em;
+        line-height: 1.4;
+    };
+}
+
+h6 {
+    font-family: "GalanoGrotesqueAlt";
+    line-height: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    color: $white;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 0.9em;
+        line-height: 1.2;
+    };
+}
+
+p {
+    font-family: "GalanoGrotesqueAlt";
+    line-height: 24px;
+    font-weight: 400;
+    font-size: 13px;
+    color: $gray-3;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+        line-height: 1.3;
+    };
+}
+
+p.feedback-message {
+    font-family: "GalanoGrotesqueAlt";
+    line-height: 18px;
+    font-weight: 600;
+    font-size: 12px;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 0.9em;
+        line-height: 1.5;
+    };
+}
+
+.card-body p, .notification-body p {
+    line-height: 18px;
+    font-size: 12px;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 0.8em;
+        line-height: 1.4;
+    };
+}
+
+.course-header p, .card-footer p, .notification-footer p {
+    text-transform: uppercase;
+    letter-spacing: -0.1px;
+    line-height: 20px;
+    font-size: 10px;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 0.7em;
+        line-height: 1.1;
+    };
+
+    @media only screen and (max-width: 374px) {
+        line-height: 1.25;
+    };
+}
+
+.notifications-toggle p {
+    font-family: "GalanoGrotesqueAlt";
+    line-height: 16px;
+    font-weight: 500;
+    font-size: 12px;
+    color: $gray-1;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1.1em;
+        line-height: 1.3;
+    };
+}
+
+a {
+    font-family: "GalanoGrotesqueAlt";
+    text-decoration: none;
+    line-height: 20px;
+    font-weight: 500;
+    font-size: 10px;
+    color: $blue-1;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1em;
+        line-height: 1.1;
+    };
+}
+
+button {
+    font-family: "GalanoGrotesqueAlt";
+    letter-spacing: 0.6px;
+    line-height: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    color: $white;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1.1em;
+        line-height: 1.3;
+    };
+}
+
+label {
+    font-family: "GalanoGrotesqueAlt";
+    line-height: 18px;
+    font-weight: 400;
+    font-size: 10px;
+    color: $gray-4;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1em;
+        line-height: 1.4;
+    };
+}
+
+input {
+    font-family: "GalanoGrotesqueAlt";
+    line-height: 16px;
+    font-weight: 500;
+    font-size: 12px;
+    color: $gray-1;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+        line-height: 1;
+    };
+}
+
+ul, ol {
+    font-family: "GalanoGrotesqueAlt";
+    line-height: 24px;
+    font-weight: 400;
+    padding-left: 0;
+    font-size: 13px;
+    color: $gray-3;
+
+    @media only screen and (max-width: 600px) {
+        font-size: 1.2em;
+        line-height: 1.4;
+    };
+}
+
+// Text colors
+.text-blue-1 { color: #04788E; }
+.text-blue-2 { color: #00B8AD; }
+.text-brown { color: #744D4D; }
+.text-gray-1 { color: #2A3942; }
+.text-gray-2 { color: #3F525E; }
+.text-gray-3 { color: #596973; }
+.text-gray-4 { color: #82939E; }
+.text-gray-5 { color: #A0AFB8; }
+.text-gray-6 { color: #C9D6DE; }
+.text-gray-7 { color: #C9D6DE; }
+.text-gray-8 { color: #E8EEF1; }
+.text-gray-9 { color: #F4F8FA; }
+.text-gray-10 { color: #FAFDFF; }
+.text-green-1 { color: #007B56; }
+.text-green-2 { color: #10B584; }
+.text-green-3 { color: #F4FFFC; }
+.text-orange-1 { color: #F66400; }
+.text-orange-2 { color: #F67C36; }
+.text-pink-1 { color: #8A0079; }
+.text-pink-2 { color: #C300AB; }
+.text-purple { color: #6F6CAC; }
+.text-red-1 { color: #DE3011; }
+.text-red-2 { color: #FF694D; }
+.text-white { color: #FFFFFF; }

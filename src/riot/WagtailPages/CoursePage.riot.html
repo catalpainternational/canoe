@@ -1,0 +1,58 @@
+<CoursePage>
+    <div class="course background-blue-1">
+        <div class="content-wrapper">
+            <div class="course-header">
+                <div>
+                    <div>
+                        <p>Course</p>
+                    </div>
+                    <h3>{props.wagtailPage.data.title}</h3>
+                    <div>
+                        <p class="bottom-border">{getCourseProgress()} lessons complete</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-title">
+                <div>
+                    <h5>Your lessons</h5>
+                    <span>
+                        <hr>
+                    </span>
+                </div>
+            </div>
+            <Card
+                each="{lesson in props.wagtailPage.lessons}"
+                title="{lesson.title}"
+                description="{lesson.description}"
+                duration="{lesson.duration}"
+                link="{lesson.id}"
+                isCompleted="{isLessonComplete(lesson)}"
+                isComingSoon="{lesson.coming_soon}"
+            >
+            </Card>
+        </div>
+    </div>
+
+    <script>
+        import { countComplete, isComplete } from "Actions/completion";
+        import Card from "RiotTags/Components/Card.riot.html";
+
+        export default {
+            components: {
+                card: Card
+            },
+
+            getCourseProgress() {
+                return (
+                    countComplete(this.props.wagtailPage.data.slug) +
+                    "/" +
+                    this.props.wagtailPage.data.lessons_count
+                );
+            },
+
+            isLessonComplete(lesson) {
+                return isComplete(this.props.wagtailPage.data.slug, lesson.slug);
+            }
+        };
+    </script>
+</CoursePage>

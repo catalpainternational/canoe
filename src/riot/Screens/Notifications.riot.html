@@ -1,0 +1,70 @@
+<Notifications>
+    <div class="notifications">
+        <div class="content-wrapper">
+            <h3>Latest notifications</h3>
+
+            <p if="{state.notifications.length === 0}">No notifications.</p>
+
+            <ol class="notification-list">
+                <li
+                    each="{(notification, index) in state.notifications}"
+                    class="notification-card {markOldNotifications(index)}"
+                >
+                    <div class="notification-header">
+                        <!-- <span class="financial background-blue-1"></span> -->
+                        <h6>{notification.title}</h6>
+                    </div>
+
+                    <div class="notification-body">
+                        <p>{notification.body}</p>
+                    </div>
+
+                    <div class="notification-footer">
+                        <div class="action">
+                            <!-- <span class="arrow-blue"></span>
+                        <p>Start lesson</p> -->
+                        </div>
+                        <div>
+                            <p>{showTimeAgoFromNow(notification.timestamp)}</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        import { getNotifications } from "js/Notifications";
+        import dayjs from "dayjs";
+        import relativeTime from "dayjs/plugin/relativeTime";
+
+        dayjs.extend(relativeTime);
+
+        export default {
+            state: {
+                notifications: []
+            },
+
+            async refreshNotifications() {
+                this.update({
+                    notifications: await getNotifications()
+                });
+            },
+
+            onMounted() {
+                this.refreshNotifications();
+            },
+
+            showTimeAgoFromNow(timestamp) {
+                return dayjs(timestamp).fromNow();
+            },
+
+            markOldNotifications(index) {
+                if (index > 0) {
+                    return "old";
+                }
+                return "";
+            }
+        };
+    </script>
+</Notifications>

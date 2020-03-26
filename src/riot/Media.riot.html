@@ -1,0 +1,72 @@
+<media>
+    <div>
+        <p>{state.cached ? 'This video will play offline.' : 'This video is not yet available offline.'}</p>
+    </div>
+
+    <div>
+        <audio if="{props.media.media_type === 'audio'}" controls crossorigin="anonymous">
+            <source
+                each="{source in props.media.sources}"
+                src="{prefixUrlWithBaseUrl(source.src)}"
+                type="{source.type}"
+            />
+            Your browser does not support the audio element.
+        </audio>
+        <video
+            if="{props.media.media_type === 'video'}"
+            width="100%"
+            crossorigin="anonymous"
+            controls="true"
+            preload="auto"
+        >
+            <!-- if preload set to none the video will not actually be requested, if set to auto it is requested -->
+            <source
+                each="{source in props.media.sources}"
+                src="{prefixUrlWithBaseUrl(source.src)}"
+                type="{ source.type }"
+            />
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <script>
+        import { BACKEND_BASE_URL } from "../js/urls";
+        import {
+            isItemCached,
+            addToCache,
+            deleteItemFromCache
+        } from "../js/cacheManager/cacheManager.js";
+
+        export default {
+            state: {
+                cached: false
+            },
+
+            async onMounted(props, state) {
+                await this.getCacheInfo();
+                if (!this.state.cached) {
+                    this.toggleAvailableOffline();
+                }
+            },
+
+            async getCacheInfo() {
+                const url = this.prefixUrlWithBaseUrl(this.props.media.sources[0].src);
+                const cached = await isItemCached(url);
+                this.update({ cached });
+            },
+
+            async toggleAvailableOffline(e) {
+                const url = this.prefixUrlWithBaseUrl(this.props.media.sources[0].src);
+                const action = this.state.cached
+                    ? deleteItemFromCache(url, "media-cache")
+                    : addToCache(url, "media-cache");
+                await action;
+                this.getCacheInfo();
+            },
+
+            prefixUrlWithBaseUrl(url) {
+                return `${BACKEND_BASE_URL}${url}`;
+            }
+        };
+    </script>
+</media>

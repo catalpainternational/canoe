@@ -1,0 +1,43 @@
+<TopMenu>
+    <header if="{!state.isHome}">
+        <a if="{!state.isObjective}" class="{state.isAppPage && !state.isProfile ? 'arrow-gray' : 'arrow-white'}" onclick="{goBack}"></a>
+        <a if="{state.isObjective}" class="cross close-btn" onclick="{goToLesson}"></a>
+        <a class="site-logo {!state.isAppPage || state.isProfile ? 'white' : ''}" href="#"></a>
+        <a class="cog {state.isSettings ? 'active' : !state.isNotifications ? 'white' : ''}" href="#settings"></a>
+    </header>
+
+    <script>
+        import { parseURLHash } from 'js/Routing';
+
+        export default {
+            onBeforeMount(props, state) {
+                this.updateState();
+            },
+
+            onBeforeUpdate(props, state) {
+                this.updateState();
+            },
+
+            goBack() {
+                window.history.back();
+            },
+
+            goToLesson() {
+                console.log(this.props.wagtailPage.data.id)
+                location.hash = "#" + this.props.wagtailPage.data.id;
+            },
+
+            updateState() {
+                const [afterTheHash, lessonModule] = parseURLHash();
+                this.state.lessonModule = lessonModule;
+                this.state.isObjective = this.state.lessonModule === 'objectives';
+                this.state.isHome = this.props.contentType === 'HomePage';
+                this.state.isCourse = this.props.contentType === 'CoursePage';
+                this.state.isNotifications = this.props.contentType === 'notifications';
+                this.state.isProfile = this.props.contentType === 'profile';
+                this.state.isSettings = this.props.contentType === 'settings';
+                this.state.isAppPage = this.state.isNotifications || this.state.isProfile || this.state.isSettings;
+            }
+        }
+    </script>
+</TopMenu>

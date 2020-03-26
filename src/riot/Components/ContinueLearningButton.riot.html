@@ -1,0 +1,54 @@
+<ContinueLearningButton>
+    <div>
+        <a href="#{state.currentCourse && state.currentCourse.data.id}">
+            <div class="btn-continue-learning">
+                <p>Continue learning</p>
+                <span class="arrow background-gray-2"></span>
+            </div>
+        </a>
+    </div>
+        
+    <script>
+        import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
+        import { getMostRecentCompletion, isTheCourseComplete } from "Actions/completion";
+
+        export default {
+            state: {
+                manifest: null,
+                courses: [],
+                currentCourse: null
+            },
+
+            getCurrentCourse(courses) {
+                const lastCompletion = getMostRecentCompletion();
+                if (lastCompletion === null) {
+                    return null;
+                }
+                const lastWorkedOnCourse = courses.find(
+                    course => course.data.slug === lastCompletion.courseSlug
+                );
+                return lastWorkedOnCourse;
+            },
+
+            isCurrentCourseInProgress(aCourse) {
+                return !isTheCourseComplete(aCourse.data.slug, aCourse.lessons);
+            },
+
+            async renderContinueLearningButton() {
+                const manifest = await getOrFetchManifest();
+                const homePage = await getOrFetchWagtailPage(manifest.home);
+                const courses = homePage.courses;
+                const lastWorkedOnCourse = this.getCurrentCourse(courses);
+
+                this.update({
+                    courses,
+                    currentCourse: lastWorkedOnCourse
+                });
+            },
+
+            onMounted() {
+                this.renderContinueLearningButton();
+            }
+        };
+    </script>
+</ContinueLearningButton>

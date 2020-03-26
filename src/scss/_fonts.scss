@@ -1,0 +1,36 @@
+/* Galano Grotesque Alternative */
+@font-face {
+    font-family: 'GalanoGrotesqueAlt';
+    src: url('../fonts/GalanoGrotesqueAlt-Regular.woff2') format('woff2'),
+         url('../fonts/GalanoGrotesqueAlt-Regular.woff') format('woff');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'GalanoGrotesqueAlt';
+    src: url('../fonts/GalanoGrotesqueAlt-Medium.woff2') format('woff2'),
+         url('../fonts/GalanoGrotesqueAlt-Medium.woff') format('woff');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'GalanoGrotesqueAlt';
+    src: url('../fonts/GalanoGrotesqueAlt-SemiBold.woff2') format('woff2'),
+         url('../fonts/GalanoGrotesqueAlt-SemiBold.woff') format('woff');
+    font-weight: 600;
+}
+
+/* Tiempos Headline */
+@font-face {
+    font-family: 'TiemposHeadline';
+    src: url('../fonts/TiemposHeadline-Medium.woff2') format('woff2'),
+         url('../fonts/TiemposHeadline-Medium.woff') format('woff');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'TiemposHeadline';
+    src: url('../fonts/TiemposHeadline-SemiBold.woff2') format('woff2'),
+         url('../fonts/TiemposHeadline-SemiBold.woff') format('woff');
+    font-weight: 600;
+}
