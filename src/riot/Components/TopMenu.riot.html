@@ -1,9 +1,9 @@
 <TopMenu>
     <header if="{!state.isHome}">
-        <a if="{!state.isObjective}" class="{state.isAppPage && !state.isProfile ? 'arrow-gray' : 'arrow-white'}" onclick="{goBack}"></a>
+        <a if="{!state.isObjective}" class="{state.isAppPage && !state.isProfile && !state.isNotifications ? 'arrow-gray' : 'arrow-white'}" onclick="{goBack}"></a>
         <a if="{state.isObjective}" class="cross close-btn" onclick="{goToLesson}"></a>
-        <a class="site-logo {!state.isAppPage || state.isProfile ? 'white' : ''}" href="#"></a>
-        <a class="cog {state.isSettings ? 'active' : !state.isNotifications ? 'white' : ''}" href="#settings"></a>
+        <a class="site-logo {!state.isAppPage || state.isProfile || state.isNotifications ? 'white' : ''}" href="#"></a>
+        <a class="cog {state.isSettings ? 'active' : 'white'}" href="#settings"></a>
     </header>
 
     <script>
@@ -23,7 +23,6 @@
             },
 
             goToLesson() {
-                console.log(this.props.wagtailPage.data.id)
                 location.hash = "#" + this.props.wagtailPage.data.id;
             },
 
