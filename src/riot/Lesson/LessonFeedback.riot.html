@@ -1,32 +1,41 @@
 <LessonFeedback>
-    <LessonFrame backgroundColor="{props.backgroundColor}">
+    <LessonFrame>
         <div class="card-container">
             <template if="{!state.madeFeedbackDecision}">
-                <div class="sun-icon">icon</div>
-                <div>
-                    <h2>Are you enjoying this lesson?</h2>
-                    <div class="feedback-radio">
-                        <button class="btn-continue-learning" onclick="{clickedThisLessonIsFine}">It's bad.</button>
-                        <button class="btn-continue-learning" onclick="{clickedThisLessonIsGood}">Yeah, it's fine.</button>
-                        <button class="btn-continue-learning" onclick="{clickedThisLessonIsGreat}">Love it.</button>
+                <div class="feedback-icon">
+                    <div class="sun"></div>
+                    <h2>FEEDBACK</h2>
+                </div>
+                <div class="feedback-container">
+                    <h3>Are you enjoying this lesson?</h3>
+                    <div class="feedback-buttons">
+                        <button class="feedback" onclick="{clickedThisLessonIsFine}">
+                            <span class="neutral-smiley"></span>
+                        </button>
+                        <button class="feedback" onclick="{clickedThisLessonIsGood}">
+                            <span class="smiling-smiley"></span>
+                        </button>
+                        <button class="feedback" onclick="{clickedThisLessonIsGreat}">
+                            <span class="thrilled-smiley"></span>
+                        </button>
                     </div>
                     <p>
                         Let us know what you think of this lesson. We value your feedback and treat
                         all feedback as confidential.
                     </p>
                 </div>
-                <button class="btn-continue-learning" onclick="{clickedNoThanks}">No thanks</button>
+                <button class="btn-primary no-thanks" onclick="{clickedNoThanks}">No thanks</button>
             </template>
             <template if="{state.madeFeedbackDecision}">
-                <div class="sun-icon">icon</div>
-                <div>
-                    <h2>Thank you!</h2>
-                    <div class="smiley"></div>
+                <div class="sun"></div>
+                <div class="thank-you-container">
+                    <h3>Thank you!</h3>
+                    <div class="smiling-smiley"></div>
                     <p>
                         We appreciate your feedback and always endeavor to improve your experience.
                     </p>
                 </div>
-                <button class="btn-continue-learning" onclick="{clickedContinue}">Continue</button>
+                <button class="btn-primary" onclick="{clickedContinue}">Continue</button>
             </template>
         </div>
     </LessonFrame>
