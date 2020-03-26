@@ -1,0 +1,68 @@
+/* Base */
+@import "variables";
+@import "typography";
+@import "rich_text";
+@import "buttons";
+@import "images";
+@import "fonts";
+@import "modal";
+
+/* Components */
+@import "notifications";
+@import "bottom_menu";
+@import "top_menu";
+@import "settings";
+@import "profile";
+@import "course";
+@import "lesson";
+@import "cards";
+@import "login";
+@import "home";
+
+/* General */
+body {
+    margin: 0;
+}
+
+div.content-wrapper {
+    min-height: calc(100vh - #{$top-menu-height} - 30px - 40px - #{$bottom-menu-height});
+    padding-bottom: calc(#{$bottom-menu-height} + 40px);
+    padding-right: 30px;
+    padding-left: 30px;
+    background-color: #F5F4F0;
+    max-width: 40em;
+    margin: auto;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.notifications, .profile, .settings {
+    padding-top: 65px;
+    margin-top: -65px;
+    background-color: #F5F4F0;
+}
+
+.background-blue-1 { background-color: #04788E; }
+.background-blue-2 { background-color: #00B8AD; }
+.background-brown { background-color: #744D4D; }
+.background-gray-1 { background-color: #2A3942; }
+.background-gray-2 { background-color: #3F525E; }
+.background-gray-3 { background-color: #596973; }
+.background-gray-4 { background-color: #82939E; }
+.background-gray-5 { background-color: #A0AFB8; }
+.background-gray-6 { background-color: #C9D6DE; }
+.background-gray-7 { background-color: #C9D6DE; }
+.background-gray-8 { background-color: #E8EEF1; }
+.background-gray-9 { background-color: #F4F8FA; }
+.background-gray-10 { background-color: #FAFDFF; }
+.background-green-1 { background-color: #007B56; }
+.background-green-2 { background-color: #10B584; }
+.background-green-3 { background-color: #F4FFFC; }
+.background-orange-1 { background-color: #F66400; }
+.background-orange-2 { background-color: #F67C36; }
+.background-pink-1 { background-color: #8A0079; }
+.background-pink-2 { background-color: #C300AB; }
+.background-purple { background-color: #6F6CAC; }
+.background-red-1 { background-color: #DE3011; }
+.background-red-2 { background-color: #FF694D; }
+.background-white { background-color: #FFFFFF; }

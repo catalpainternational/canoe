@@ -1,0 +1,86 @@
+import { getUserGroups, getUserId } from 'js/AuthenticationUtilities';
+
+const isGoogleAnalyticsAvailable = () => {
+    return !!process.env.GA_TAG;
+}
+
+export const setGoogleAnalyticsGlobalDimensions = () => {
+    if (!isGoogleAnalyticsAvailable()) {
+        return;
+    }
+
+    gtag('set', {
+        'User Id': getUserId(),
+        'Groups': getUserGroups()
+    });
+};
+
+export const logPageView = (pageUrl) => {
+    if (!isGoogleAnalyticsAvailable()) {
+        return;
+    }
+
+    gtag('config', process.env.GA_TAG, {
+        page_location: `${pageUrl}`,
+        page_path: `/${pageUrl}`
+    });
+};
+
+
+export const logNotificationReceived = (type) => {
+    if (!isGoogleAnalyticsAvailable()) {
+        return;
+    }
+
+    gtag('event', 'Received', {
+        event_category: 'Notifications',
+        event_label: `${type}`,
+    });
+};
+
+
+export const logClickedPlayOnVideo = (videoUrl) => {
+    if (!isGoogleAnalyticsAvailable()) {
+        return;
+    }
+
+    gtag('event', 'Clicked Play', {
+        event_category: 'Videos',
+        event_label: videoUrl,
+    });
+};
+
+
+export const logATestAnswer = (answerData) => {
+    if (!isGoogleAnalyticsAvailable()) {
+        return;
+    }
+
+    const { lesson, question, answer, isAnswerCorrect } = answerData;
+    const printAnswerDataInThisOrder = ['lesson', 'question', 'answer', 'isAnswerCorrect'];
+
+    gtag('event', 'Answered a test question', {
+        event_category: 'Tests',
+        event_label: JSON.stringify(answerData, printAnswerDataInThisOrder),
+        dimension3: lesson,
+        dimension4: question,
+        dimension5: answer,
+        metric1: isAnswerCorrect,
+    });
+};
+
+
+export const logLessonFeedback = (answerData) => {
+    if (!isGoogleAnalyticsAvailable()) {
+        return;
+    }
+
+    const { lesson } = answerData;
+    const printAnswerDataInThisOrder = ['lesson', 'feedback'];
+
+    gtag('event', 'Submitted lesson feedback', {
+        event_category: 'Lesson Feedback',
+        event_label: JSON.stringify(answerData, printAnswerDataInThisOrder),
+        dimension3: lesson,
+    });
+};

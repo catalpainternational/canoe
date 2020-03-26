@@ -1,0 +1,161 @@
+.profile {
+    h3:first-child {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    h3 {
+        margin-bottom: 20px;
+        margin-top: 30px;
+        color: white;
+    }
+
+    .overall {
+        position: relative;
+        display: flex;
+        width: fit-content;
+        margin: auto;
+
+        h6 {
+            position: absolute;
+            width: 200px;
+            left: 20px;
+            margin: 0;
+            top: 40px;
+        }
+    }
+}
+
+.profile-header {
+    background-color: #129A62;
+    margin-left: -5px;
+    margin-right: -5px;
+    margin-top: -70px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 70px;
+    padding-bottom: 10px;
+    flex-direction: row;
+    justify-content: space-evenly;
+    display: flex;
+}
+
+Profile .background-gray-2 {
+    display: inline-block;
+}
+
+Profile .left-block {
+    display: inline-block;
+    max-width: 200px;
+    overflow: overlay;
+
+    h6 {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+.report-card {
+    width: 150px;
+    height: 150px;
+}
+
+.course-progress-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+
+    li {
+        margin-bottom: 15px;
+    }
+}
+
+.progress.card {
+    .profile-card {
+        align-items: center;
+        display: flex;
+        padding: 1.25em 1.25em 0.5em 1.25em;
+        background-color: white;
+        border-radius: 8px 8px 0 0;
+
+        span {
+            margin-right: 15px;
+        }
+
+        h5 {
+            margin: 0;
+            width: 100%;
+        }
+    }
+
+    .card-footer {
+        padding-bottom: 25px;
+
+        p {
+            margin: 0 0 0 8px;
+            color: $gray-1;
+            display: inline-block;
+        }
+
+        .checkmark {
+            display: inline-block;
+        }
+    }
+
+    progress {
+        width: 100%;
+        height: 5px;
+        -webkit-appearance: none;
+        border: none; 
+        border-radius: 5px;
+    }
+
+    progress::-webkit-progress-bar {
+        background-color: $gray-8;
+        border-radius: 5px;
+    }
+
+    progress::-webkit-progress-value {
+        background-color: $green-1;
+        border-radius: 5px;
+    }
+
+    progress::-moz-progress-bar {
+        background-color: $green-1;
+        border-radius: 5px;
+        }
+}
+
+.stats {
+    margin-top: 10px;
+    display: flex;
+
+    h5 {
+        margin-bottom: 0;
+    }
+}
+
+.stat.card {
+    min-height: 170px;
+    margin-bottom: 0;
+    width: 50%;
+
+    &:nth-child(odd) {
+        margin-right: 5px;
+    }
+
+    &:nth-child(even) {
+        margin-left: 5px;
+    }
+
+    .profile-card {
+        flex-direction: column;
+        display: flex;
+        padding: 1.25em;
+
+        h5 {
+            font-size: 16px;
+        }
+    }
+}

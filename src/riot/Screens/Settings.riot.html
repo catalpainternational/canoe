@@ -1,0 +1,121 @@
+<Settings>
+    <div class="settings">
+        <div class="content-wrapper">
+            <h3>Your settings</h3>
+            <div class="notifications-toggle">
+                <div
+                    class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
+                    onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"
+                >
+                    <input type="checkbox" />
+                    <div class="slider"></div>
+                </div>
+                <p>Would you like to receive app notifications?</p>
+            </div>
+            <button
+                if="{!state.appIsInstalled}"
+                class="btn-secondary"
+                onclick="{promptUserToInstallApp}"
+            >
+                Add to Home Screen
+            </button>
+            <button class="btn-secondary" onclick="{logout}">Log out</button>
+
+            <!-- <CacheDisplay></CacheDisplay> -->
+        </div>
+    </div>
+    <script>
+        import { logout } from "js/AuthenticationUtilities";
+        import { subscribe, unsubscribe, isSubscribedToNotifications } from "js/Notifications";
+        import { dispatchInstallAppEvent } from "js/Events";
+        import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
+
+        export default {
+            state: {
+                isSubscribedToNotifications: true,
+                disableNotificationsButton: false,
+                appIsInstalled: false
+            },
+            components: {
+                cachedisplay: CacheDisplay
+            },
+
+            logout() {
+                logout();
+            },
+
+            async refreshSettings() {
+                // These updates must remain separate. Riot doesn't update state
+                // values independently.
+                //
+                //   this.update({
+                //       appIsInstalled: this.isAppInstalledToHomeScreen(),
+                //       isSubscribedToNotifications: await isSubscribedToNotifications()
+                //   })
+                //
+                // When in the same update as isSubscribedToNotifications,
+                // appIsInstalled resolves only after
+                // isSubscribedToNotifications's "await" resolves. On slow
+                // connections, when the "Add To Home Screen" button should
+                // hide, the button remains visible. With these cases in mind,
+                // we update appIsInstalled separately so that the button hides
+                // immediately.
+
+                this.update({
+                    appIsInstalled: this.isAppInstalledToHomeScreen()
+                });
+                this.update({
+                    isSubscribedToNotifications: await isSubscribedToNotifications(),
+                });
+            },
+
+            async disableNotificationsButtonAnd(subscribeOrUnsubscribe) {
+                try {
+                    this.update({ disableNotificationsButton: true });
+                    await subscribeOrUnsubscribe();
+                } catch (error) {
+                    if (isAppOffline(error)) {
+                        alertAppIsOffline();
+                    } else if (error instanceof DOMException && error.name === "NotAllowedError") {
+                        alert(
+                            "Your browser blocks notifications. Allow notifications in your browser settings."
+                        );
+                    } else {
+                        throw error;
+                    }
+                } finally {
+                    this.update({ disableNotificationsButton: false });
+                }
+            },
+
+            async subscribe() {
+                await this.disableNotificationsButtonAnd(subscribe);
+                this.refreshSettings();
+            },
+
+            async unsubscribe() {
+                const wantsToUnsubscribe = confirm(
+                    `Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?`
+                );
+
+                if (wantsToUnsubscribe) {
+                    await this.disableNotificationsButtonAnd(unsubscribe);
+                    this.refreshSettings();
+                }
+            },
+
+            promptUserToInstallApp() {
+                dispatchInstallAppEvent();
+                this.refreshSettings();
+            },
+
+            isAppInstalledToHomeScreen() {
+                return window.matchMedia("(display-mode: standalone)").matches;
+            },
+
+            onMounted() {
+                this.refreshSettings();
+            },
+        };
+    </script>
+</Settings>

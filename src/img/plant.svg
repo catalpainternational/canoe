@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="41px" viewBox="0 0 36 41" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M14.5643071,7.32063491 C14.5643071,3.27755989 11.3039759,0 7.28215354,0 C3.26033119,0 1.8189894e-12,3.27755989 1.8189894e-12,7.32063491 C1.8189894e-12,11.3637099 14.5643071,11.3637099 14.5643071,7.32063491 Z" id="path-1"></path>
+        <path d="M24.4033613,12.0267574 C24.4033613,5.38456268 18.9404828,0 12.2016807,0 C5.46287852,0 0,5.38456268 0,12.0267574 C0,18.668952 24.4033613,18.668952 24.4033613,12.0267574 Z" id="path-3"></path>
+    </defs>
+    <g id="Canoe-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Content-Card-(Objectives)" transform="translate(-143.000000, -64.000000)">
+            <g id="Group" transform="translate(141.000000, 64.000000)">
+                <g id="Plants" transform="translate(15.900000, 16.500000) scale(-1, 1) translate(-15.900000, -16.500000) translate(8.400000, 0.000000)">
+                    <line x1="8.68624478" y1="32.2737095" x2="8.68624478" y2="6.39135654" id="Line" stroke="#0C9B70" stroke-width="1.4789916" stroke-linecap="round" stroke-linejoin="round"></line>
+                    <path d="M9.65935548,9.06123524 C11.175888,7.5491036 10.9524118,4.87087004 8.86470585,2.78161678 C6.77730435,0.692363511 0.604612123,0 0.604612123,0 C0.604612123,0 1.28661028,6.16559285 3.3746207,8.25484612 C5.46171773,10.3440994 8.14373637,10.5721506 9.65935548,9.06123524" id="Fill-3" fill="#23D5A0"></path>
+                    <path d="M14.1409244,21.4092436 C15.0987344,20.533799 14.9575916,18.9832427 13.6390404,17.773675 C12.3206816,16.5641073 8.42213913,16.1632653 8.42213913,16.1632653 C8.42213913,16.1632653 8.85287481,19.7328191 10.1716182,20.9423867 C11.4897848,22.1519544 13.1836913,22.2839841 14.1409244,21.4092436" id="Fill-3-Copy" fill="#23D5A0" transform="translate(11.591407, 19.068427) scale(-1, 1) translate(-11.591407, -19.068427) "></path>
+                </g>
+                <g id="Rocks" transform="translate(19.300000, 32.700000) scale(-1, 1) translate(-19.300000, -32.700000) translate(0.800000, 23.200000)">
+                    <g id="Item" transform="translate(21.211025, 6.214723)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="Mask" fill="#4D626E" xlink:href="#path-1"></use>
+                    </g>
+                    <g id="Item" transform="translate(0.000000, 0.226286)">
+                        <mask id="mask-4" fill="white">
+                            <use xlink:href="#path-3"></use>
+                        </mask>
+                        <use id="Oval-Copy-4" fill="#3F525E" xlink:href="#path-3"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

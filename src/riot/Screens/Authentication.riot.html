@@ -1,0 +1,69 @@
+<Authentication>
+    <div>
+        <span class="site-logo"></span>
+        <span class="login-image"></span>
+        <form onsubmit="{loginUser}">
+            <h3>Log In</h3>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input id="username" type="text" name="username" />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" />
+            </div>
+            <div if="{state.errorExplanation}">
+                <span class="warning"></span>
+                <p class="error-message">{state.errorExplanation}</p>
+            </div>
+            <button class="btn-primary" type="submit" disabled={state.isDisabled}>Login</button>
+        </form>
+    </div>
+
+    <script>
+        import { isAppOffline, alertAppIsOffline } from "js/utilities";
+        import { login } from "js/AuthenticationUtilities";
+
+        export default {
+            state: {
+                errorExplanation: null,
+                isDisabled: false
+            },
+
+            getUsernameAndPasswordFromForm() {
+                const usernameInput = this.$("#username");
+                const passwordInput = this.$("#password");
+
+                const usernameAndPassword = {
+                    username: usernameInput.value,
+                    password: passwordInput.value
+                };
+                return usernameAndPassword;
+            },
+
+            async loginUser(event) {
+                event.preventDefault();
+
+                const usernameAndPassword = this.getUsernameAndPasswordFromForm();
+                try {
+                    this.update({ 
+                        isDisabled: true
+                    });
+                    await login(usernameAndPassword);
+                } catch (error) {
+                    if (isAppOffline(error)) {
+                        alertAppIsOffline();
+                    } else if (error.message === "400") {
+                        this.update({
+                            errorExplanation: "Invalid login credentials"
+                        });
+                    }
+                } finally {
+                    this.update({
+                        isDisabled: false
+                    })
+                }
+            }
+        };
+    </script>
+</Authentication>

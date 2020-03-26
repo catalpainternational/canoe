@@ -1,0 +1,93 @@
+<LessonFeedback>
+    <LessonFrame backgroundColor="{props.backgroundColor}">
+        <div class="card-container">
+            <template if="{!state.madeFeedbackDecision}">
+                <div class="sun-icon">icon</div>
+                <div>
+                    <h2>Are you enjoying this lesson?</h2>
+                    <div class="feedback-radio">
+                        <button class="btn-continue-learning" onclick="{clickedThisLessonIsFine}">It's bad.</button>
+                        <button class="btn-continue-learning" onclick="{clickedThisLessonIsGood}">Yeah, it's fine.</button>
+                        <button class="btn-continue-learning" onclick="{clickedThisLessonIsGreat}">Love it.</button>
+                    </div>
+                    <p>
+                        Let us know what you think of this lesson. We value your feedback and treat
+                        all feedback as confidential.
+                    </p>
+                </div>
+                <button class="btn-continue-learning" onclick="{clickedNoThanks}">No thanks</button>
+            </template>
+            <template if="{state.madeFeedbackDecision}">
+                <div class="sun-icon">icon</div>
+                <div>
+                    <h2>Thank you!</h2>
+                    <div class="smiley"></div>
+                    <p>
+                        We appreciate your feedback and always endeavor to improve your experience.
+                    </p>
+                </div>
+                <button class="btn-continue-learning" onclick="{clickedContinue}">Continue</button>
+            </template>
+        </div>
+    </LessonFrame>
+    <script>
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+        import { logLessonFeedback } from "js/GoogleAnalytics";
+        import { parseURLHash } from "js/Routing";
+
+        export default {
+            components: {
+                lessonframe: LessonFrame
+            },
+
+            state: {
+                madeFeedbackDecision: false
+            },
+
+            clickedThisLessonIsFine() {
+                this.sendFeedback("bad");
+                this.update({
+                    madeFeedbackDecision: true
+                });
+            },
+
+            clickedThisLessonIsGood() {
+                this.sendFeedback("fine");
+                this.update({
+                    madeFeedbackDecision: true
+                });
+            },
+
+            clickedThisLessonIsGreat() {
+                this.sendFeedback("great");
+                this.update({
+                    madeFeedbackDecision: true
+                });
+            },
+
+            clickedNoThanks() {
+                this.goToSectionEnd();
+            },
+
+            clickedContinue() {
+                this.goToSectionEnd();
+            },
+
+            goToSectionEnd() {
+                const [lessonNumber, section, cardNumber] = parseURLHash();
+                const nextCardNumber = new Number(cardNumber) + 1;
+                window.location.hash = `#${lessonNumber}/${section}/${nextCardNumber}`;
+            },
+
+            sendFeedback(feedbackString) {
+                const lesson = this.props.lessonName;
+                const feedback = feedbackString;
+
+                logLessonFeedback({
+                    lesson,
+                    feedback
+                });
+            }
+        };
+    </script>
+</LessonFeedback>

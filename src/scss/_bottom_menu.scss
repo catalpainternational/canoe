@@ -1,0 +1,12 @@
+footer {
+    box-shadow: 0 -1px 0 0 $gray-8;
+    border-radius: 30px 30px 0 0;
+    height: $bottom-menu-height;
+    background-color: $white;
+    justify-content: center;
+    align-items: flex-end;
+    position: fixed;
+    display: flex;
+    width: 100%;
+    bottom: 0;
+}

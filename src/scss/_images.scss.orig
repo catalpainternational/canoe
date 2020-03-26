@@ -1,0 +1,350 @@
+<<<<<<< HEAD:olgeta/frontend/src/scss/_images.scss
+@import "_themables";
+
+||||||| merged common ancestors
+=======
+@import "~OverrideSass/themables";
+
+>>>>>>> Canoeification:canoe/src/scss/_images.scss
+%icons-shared {
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.site-logo {
+    @extend %icons-shared;
+    background-image: $logoStandard;
+    background-position: center;
+    height: 20px;
+    width: 87px;
+    
+    &.white {
+        background-image: $logoWhite;
+    }
+}
+
+.cog {
+    @extend %icons-shared;
+    background-image: url("../img/cog.svg");
+    position: absolute;
+    height: 40px;
+    right: -10px;
+    width: 40px;
+    top: 20px;
+
+    &.white {
+        background-image: url("../img/cog_white.svg");
+    }
+
+    &.active {
+        background-image: url("../img/cog_active.svg");
+    }
+}
+
+%bottom-nav-shared {
+    @extend %icons-shared;
+    background-position-x: center;
+    height: 45px;
+    width: 60px;
+}
+
+.courses-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/courses.svg");
+
+    &.active {
+        background-image: url("../img/courses_active.svg");
+    }
+}
+
+.profile-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/profile.svg");
+
+    &.active {
+        background-image: url("../img/profile_active.svg");
+    }
+}
+
+.notifications-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/notifications.svg");
+
+    &.active {
+        background-image: url("../img/notifications_active.svg");
+    }
+}
+
+.checkmark-circle {
+    @extend %icons-shared;
+    background-image: url("../img/checkmark_circle.svg");
+    height: 14px;
+    width: 12px;
+}
+
+.checkmark {
+    @extend %icons-shared;
+    background-image: url("../img/checkmark.svg");
+    height: 10px;
+    width: 12px;
+}
+
+.cross {
+    @extend %icons-shared;
+    background-image: url("../img/cross.svg");
+    height: 10px;
+    width: 12px;
+}
+
+%stat-icon-shared {
+    @extend %icons-shared;
+    height: 25px;
+    width: 25px;
+}
+
+.checkmark-circle-blue {
+    @extend %stat-icon-shared;
+    background-image: url("../img/checkmark_circle_blue.svg");
+}
+
+.road-sign {
+    @extend %stat-icon-shared;
+    background-image: url("../img/road_sign.svg");
+}
+
+.plant {
+    @extend %icons-shared;
+    background-image: url("../img/plant.svg");
+    height: 50px;
+    width: 45px;
+}
+
+%arrow-shared {
+    @extend %icons-shared;
+    background-position: center;
+    background-size: 17px 12px;
+    position: absolute;
+    height: 30px;
+    width: 20px;
+    left: 0;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.arrow-white {
+    @extend %arrow-shared;
+    background-image: url("../img/arrow_white.svg");
+}
+
+.arrow-gray {
+    @extend %arrow-shared;
+    background-image: url("../img/arrow_gray.svg");
+}
+
+.arrow-blue {
+    @extend %icons-shared;
+    background-image: url("../img/arrow_blue.svg");
+    height: 10px;
+    width: 13px;
+}
+
+%lesson-card-shared {
+    @extend %icons-shared;
+    height: 14px;
+    width: 12px;
+}
+
+.clock {
+    @extend %lesson-card-shared;
+    background-image: url("../img/clock.svg");
+}
+
+.people {
+    @extend %lesson-card-shared;
+    background-image: url("../img/people.svg");
+}
+
+.cards {
+    @extend %lesson-card-shared;
+    background-image: url("../img/cards.svg");
+}
+
+.video {
+    @extend %lesson-card-shared;
+    background-image: url("../img/video.svg");
+}
+
+.quiz {
+    @extend %lesson-card-shared;
+    background-image: url("../img/bubbles.svg");
+}
+
+.warning {
+    @extend %icons-shared;
+    background-image: url("../img/warning.svg");
+    height: 16px;
+    width: 15px;
+}
+
+.success {
+    @extend %icons-shared;
+    background-image: url("../img/success.svg");
+    height: 18px;
+    width: 15px;
+}
+
+.report-card {
+    @extend %icons-shared;
+    background-image: url("../img/report_card.svg");
+    height: 200px;
+    max-width: 200px;
+}
+
+.login-image {
+    @extend %icons-shared;
+    background-image: url("../img/login_image.svg");
+    background-position: center;
+    max-width: 250px;
+    height: 190px;
+    width: 100%;
+}
+
+.profile-background-image {
+    @extend %icons-shared;
+    background-image: url("../img/profile_image.svg");
+    background-position: center;
+    height: 185px;
+    width: 280px;
+}
+
+.home-background-image {
+    @extend %icons-shared;
+    background-image: url("../img/home_header_figure.svg");
+    background-position: center;
+    z-index: 2;
+    height: 142px;
+    width: 84px;
+    margin-right: 30px;
+    display: inline-block;
+}
+
+.wave {
+    @extend %icons-shared;
+    background-image: url("../img/home_header_wave.svg");
+    z-index: -1;
+    position: absolute;
+    background-position-x: 50%;
+    background-position-y: 25%;
+    padding-top: 60px;
+    height: 78%;
+    width: 100%;
+    background-color: $blue-1;
+
+    @media only screen and (min-width: 660px) {
+        background-image: none;
+        height: 120%;
+    };
+}
+
+.confetti {
+    @extend %icons-shared;
+    background-image: url("../img/confetti.svg");
+    height: 45%;
+    width: 60%;
+    max-width: 300px;
+}
+
+.sun {
+    @extend %icons-shared;
+    background-image: url("../img/sun.svg");
+    height: 100px;
+    width: 100px;
+}
+
+// Masking icons so we can dynamically set their color
+%mask-icons-shared {
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+}
+
+%courses-icon-shared {
+    @extend %mask-icons-shared;
+    -webkit-mask-position: center;
+    height: 35px;
+    width: 35px;
+}
+
+.financial {
+    @extend %courses-icon-shared;
+    -webkit-mask-image: url("../img/financial.svg");
+}
+
+.leadership {
+    @extend %courses-icon-shared;
+    -webkit-mask-image: url("../img/leadership.svg");
+}
+
+.digital {
+    @extend %courses-icon-shared;
+    -webkit-mask-image: url("../img/digital.svg");
+}
+
+.notification-card .financial,
+.notification-card .leadership,
+.notification-card .digital {
+    height: 20px;
+    width: 20px;
+}
+
+.arrow {
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("../img/arrow.svg");
+    height: 10px;
+    width: 13px;
+}
+
+%jobs-shared {
+    @extend %mask-icons-shared;
+    width: 20px;
+}
+
+.business_owner {
+    @extend %jobs-shared;
+    -webkit-mask-image: url("../img/briefcase.svg");
+    height: 18px;
+}
+
+.builder {
+    @extend %jobs-shared;
+    -webkit-mask-image: url("../img/hammer.svg");
+    height: 18px;
+}
+
+.engineer {
+    @extend %jobs-shared;
+    -webkit-mask-image: url("../img/rulers.svg");
+    height: 20px;
+}
+
+.tourism_hospitality_retail_manager {
+    @extend %jobs-shared;
+    -webkit-mask-image: url("../img/tourism_hospitality_retail.svg");
+    width: 30px;
+    height: 30px;
+}
+
+.communications_and_marketing_specialist {
+    @extend %jobs-shared;
+    -webkit-mask-image: url("../img/communications_and_marketing.svg");
+    height: 26px;
+    width: 30px;
+}
+
+.banking_and_finance_associate {
+    @extend %jobs-shared;
+    -webkit-mask-image: url("../img/banking_and_finance.svg");
+    height: 24px;
+    width: 30px;
+}

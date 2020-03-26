@@ -1,0 +1,192 @@
+<LessonPage>
+    <LessonObjective
+        if="{state.hash === objectivesModule}"
+        objective="{props.wagtailPage.objective}"
+        module="{objectivesModule}"
+        nextModule="{contentModule}"
+        title="{props.wagtailPage.title}"
+        lesson="{props.wagtailPage.data}"
+        course="{props.wagtailPage.course}"
+    ></LessonObjective>
+    <LessonContent
+        if="{state.hash === contentModule}"
+        lessonContent="{props.wagtailPage.content}"
+        module="{contentModule}"
+        nextModule="{testModule}"
+        title="{props.wagtailPage.title}"
+        lesson="{props.wagtailPage.data}"
+        course="{props.wagtailPage.course}"
+    ></LessonContent>
+    <LessonTest
+        if="{state.hash === testModule}"
+        test="{props.wagtailPage.test}"
+        module="{testModule}"
+        title="{props.wagtailPage.title}"
+        lesson="{props.wagtailPage.data}"
+        course="{props.wagtailPage.course}"
+    >
+    </LessonTest>
+
+    <div
+        class="lesson-frame background-blue-1"
+        if="{state.hash == null}"
+    >
+        <div class="content-wrapper">
+            <div class="section-title">
+                <div class="unit">
+                    <h5>Lesson - {props.wagtailPage.course.title}</h5>
+                </div>
+            </div>
+
+            <h2>{props.wagtailPage.title}</h2>
+            
+            <div class="duration">
+                <span class="clock"></span>
+                <p>
+                    {props.wagtailPage.objective.duration + props.wagtailPage.content.duration +
+                    props.wagtailPage.test.duration} mins
+                </p>
+            </div>
+
+            <p if="{props.wagtailPage.data.long_description}" class="description">{props.wagtailPage.data.long_description}</p>
+            <p if="{!props.wagtailPage.data.long_description}" class="description">{props.wagtailPage.data.description}</p>
+
+            <div class="hide">
+                <div class="jobs-card">
+                    <div class="jobs-body">
+                        <h5>Jobs that use these skills</h5>
+                        <div>
+                            <div each="{job in props.wagtailPage.data.jobs}">
+                                <div>
+                                    <span
+                                        class="{job.className} background-{props.wagtailPage.course.colour}"
+                                    ></span>
+                                </div>
+                                <p>{job.text}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Ok, let's get started</h3>
+            </div>
+
+            <div class="section-title">
+                <div>
+                    <h5>Lesson Activities</h5>
+                    <span>
+                        <hr>
+                    </span>
+                </div>
+            </div>
+
+            <Card
+                title="1. {props.wagtailPage.objective.title}"
+                description="{props.wagtailPage.objective.aim}"
+                duration="{props.wagtailPage.objective.duration}"
+                link="{props.wagtailPage.id}/{objectivesModule}/1"
+                isCompleted="{isModuleComplete(objectivesModule)}"
+                type="cards"
+            >
+            </Card>
+
+            <Card
+                title="2. {props.wagtailPage.content.title}"
+                description="{props.wagtailPage.content.aim}"
+                duration="{props.wagtailPage.content.duration}"
+                link="{props.wagtailPage.id}/{contentModule}/1"
+                isCompleted="{isModuleComplete(contentModule)}"
+                type="video"
+            >
+            </Card>
+
+            <Card
+                title="3. {props.wagtailPage.test.title}"
+                description="{props.wagtailPage.test.aim}"
+                duration="{props.wagtailPage.test.duration}"
+                link="{props.wagtailPage.id}/{testModule}/1"
+                isCompleted="{isModuleComplete(testModule)}"
+                type="quiz"
+            >
+            </Card>
+        </div>
+    </div>
+
+    <script>
+        import LessonObjective from "RiotTags/Lesson/LessonObjective.riot.html";
+        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
+        import LessonTest from "RiotTags/Lesson/LessonTest.riot.html";
+        import Card from "RiotTags/Components/Card.riot.html";
+
+        import { isComplete } from "Actions/completion";
+
+        const getHash = () => {
+            return location.hash.split("/");
+        };
+
+        export default {
+            state: {
+                hash: ""
+            },
+
+            objectivesModule: "objectives",
+            contentModule: "content",
+            testModule: "test",
+
+            components: {
+                lessonobjective: LessonObjective,
+                lessoncontent: LessonContent,
+                lessontest: LessonTest,
+                card: Card
+            },
+
+            onBeforeMount(props, state) {
+                state.hash = getHash()[1];
+
+                window.addEventListener("hashchange", this.hashChanged);
+            },
+
+            onBeforeUnmount(props, state) {
+                window.removeEventListener("hashchange", this.hashChanged);
+            },
+
+            hashChanged() {
+                this.update({
+                    hash: getHash()[1]
+                });
+            },
+
+            isModuleComplete(section) {
+                return isComplete(
+                    this.props.wagtailPage.course.slug,
+                    this.props.wagtailPage.data.slug,
+                    section
+                );
+            },
+
+            disableBlockedLessonModules() {
+                const ongoingCards = [...document.getElementsByClassName("ongoing")];
+
+                const isComingSoon = this.props.wagtailPage.data.coming_soon;
+                let sliceFrom = 1;
+
+                if (isComingSoon) {
+                    sliceFrom = 0;
+                }
+
+                const cardsToDisable = ongoingCards.slice(sliceFrom);
+                for (const card of cardsToDisable) {
+                    card.classList.add("disabled");
+                }
+            },
+
+            onMounted() {
+                this.disableBlockedLessonModules();
+            },
+
+            onUpdated() {
+                this.disableBlockedLessonModules();
+            }
+        };
+    </script>
+</LessonPage>

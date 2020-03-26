@@ -1,0 +1,107 @@
+HomePage .course-header {
+    margin-top: 30px;
+
+    &:first-child {
+        margin-top: 10px;
+    }
+}
+
+HomePage .content-wrapper {
+    padding-top: 20px;
+
+    h3 {
+        color: $gray-2;
+        font-weight: 900;
+        font-size: 16px;
+    }
+
+    h3:first-child {
+        margin-top: 0;
+    }
+}
+
+HomePage div.content-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.section-title {
+    h5 {
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 400;
+        width: 180px;
+        margin-right: 5px;
+        margin-bottom: 10px;
+    }
+
+    Profile & h5 {
+        width: 300px;
+    }
+
+    div {
+        display: flex;
+        flex-direction: row; 
+        width: 100%
+    }
+
+    span {
+        width: 100%;
+    }
+
+    hr {
+        width: 100%; 
+        border: 0.5px solid $gray-6; 
+        margin-top: 30px;
+    }
+}
+
+HomePage .header {
+    margin-top: 0;
+    padding: 20px 30px 0 45px;
+    height: 180px;
+    
+    h3 { 
+        color: white;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+
+    h6 {
+        margin: 0px 10px 20px 0px;
+    }
+
+    .header-box {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+HomePage .header:after {
+    content: '';
+    background: #1696ac;
+    width: 100%;
+    height: 20px;
+    border-radius: 0 0 50% 50%;
+    position: absolute;
+    top: 200px;
+    left: 0;
+
+    @media only screen and (min-width: 660px) {
+        display: none;
+    };
+}
+
+HomePage .btn-continue-learning .arrow {
+    top: 125px;
+    left: 175px;
+    display: inline-block;
+}
+
+HomePage .left-block {
+    display: inline-block;
+    max-width: 200px;
+    overflow: overlay;
+    margin-top: 10px;
+}

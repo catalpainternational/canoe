@@ -1,0 +1,30 @@
+<Card>
+    <a class="{props.isCompleted ? 'done': 'ongoing'} lesson card" href="#{props.link}">
+        <div class="card-body">
+            <h4>{props.title}</h4>
+            <div if="{props.isCompleted}" class="white-check"></div>
+            <h5 if={props.isComingSoon}>Coming Soon!</h5>
+            <div if={props.isComingSoon} class="break-card-footer"></div>
+            <p>{props.description}</p>
+        </div>
+        <div class="card-footer">
+            <div if="{props.isCompleted}" class="status done">
+                <span class="checkmark-circle"></span>
+                <p>completed</p>
+            </div>
+            <div if="{!props.isCompleted}" class="status btn-start-lesson ">
+                <span class="arrow-blue"></span>
+                <p>start lesson</p>
+            </div>
+            <div class="break-card-footer"></div>
+            <div class="duration">
+                <span class="clock"></span>
+                <p>{props.duration} mins</p>
+            </div>
+            <div if="{props.type}" class="type">
+                <span class="{props.type}"></span>
+                <p>{props.type}</p>
+            </div>
+        </div>
+    </a>
+</Card>

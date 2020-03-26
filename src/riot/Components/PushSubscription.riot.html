@@ -1,0 +1,23 @@
+<PushSubscription>
+    <script>
+        import { subscribe, unsubscribe, isSubscribedToNotifications } from "js/Notifications";
+
+        export default {
+            async subscribeToNotifications() {
+                const alreadySubscribedToNotifications = await isSubscribedToNotifications();
+
+                if (!alreadySubscribedToNotifications) {
+                    subscribe();
+                }
+            },
+
+            onMounted() {
+                this.subscribeToNotifications();
+            },
+
+            onUnmounted() {
+                unsubscribe();
+            }
+        };
+    </script>
+</PushSubscription>

@@ -1,0 +1,52 @@
+<LessonComplete>
+    <LessonFrame>
+        <div class="confetti background"></div>
+        <div class="report-card overlay"></div>
+        <div class="congratulations-container">
+            <template if="{!isCourseComplete()}">
+                <div>
+                    <h2>Congratulations!</h2>
+                    <p>You just completed the lesson, "{props.title}"</p>
+                </div>
+                <button class="btn-primary" onclick="{goToCourseOverview}">Next Lesson</button>
+            </template>
+            <template if="{isCourseComplete()}">
+                <div>
+                    <h2>Amazing work!</h2>
+                    <h3>You've completed the course</h3>
+                    <p>You are eligible to receive a printed certificate for this course.</p>
+                </div>
+                <button class="btn-primary">Next Course</button>
+                <button class="btn-secondary" onclick="{goHome}">Back to Courses</button>
+            </template>
+        </div>
+    </LessonFrame>
+    <script>
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+        import { countComplete } from "Actions/completion";
+
+        export default {
+            components: {
+                lessonframe: LessonFrame
+            },
+
+            getCourseProgress() {
+                return (
+                    countComplete(this.props.course.slug) + "/" + this.props.course.lessons_count
+                );
+            },
+
+            isCourseComplete() {
+                return countComplete(this.props.course.slug) === this.props.course.lessons_count;
+            },
+
+            goToCourseOverview() {
+                location.hash = "#" + this.props.course.id;
+            },
+
+            goHome() {
+                location.hash = "#";
+            }
+        };
+    </script>
+</LessonComplete>

@@ -1,0 +1,126 @@
+<LessonTest>
+    <div class="test background-blue-1" if="{state.cardIdx < state.cards.length}">
+        <div class="carousel-card">
+            <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
+            <ol>
+                <li
+                    class="{answer === state.selectedAnswer ? 'selected' : ''} {answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
+                    each="{answer in state.cards[state.cardIdx].answers}"
+                    onclick="{() => selectAnswer(answer)}"
+                >
+                    <div>
+                        <div class="radio">
+                            <div></div>
+                        </div>
+                        <p>{answer.text}</p>
+                    </div>
+                    <div if="{answer === state.selectedAnswer && answer.correct}">
+                        <span class="success"></span>
+                        <p class="feedback-message text-green-1">Correct answer. Well done!</p>
+                    </div>
+                    <div if="{answer === state.selectedAnswer && !answer.correct}">
+                        <span class="warning"></span>
+                        <p class="feedback-message text-orange-1">Incorrect answer. Try again.</p>
+                    </div>
+                </li>
+            </ol>
+            <button
+                class="btn-primary"
+                onclick="{nextTestCard}"
+                if="{state.cardIdx < state.cards.length - 1}"
+                disabled="{!state.selectedAnswer.correct}"
+            >
+                Next {state.cardIdx + 1}/{state.cards.length}
+            </button>
+            <button
+                class="btn-primary"
+                onclick="{completePage}"
+                if="{state.cardIdx === state.cards.length - 1}"
+                disabled="{!state.selectedAnswer.correct}"
+            >
+                Finish
+            </button>
+        </div>
+    </div>
+    <LessonFeedback
+        if="{state.cardIdx === state.cards.length}"
+        backgroundColor="{props.course.colour}"
+        lessonName="{props.lesson.title}"
+    ></LessonFeedback>
+    <LessonComplete
+        if="{state.cardIdx === state.cards.length + 1}"
+        course="{props.course}"
+        title="{props.title}"
+        backgroundColor="{props.course.colour}"
+    >
+    </LessonComplete>
+
+    <script>
+        import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
+        import LessonFeedback from "RiotTags/Lesson/LessonFeedback.riot.html";
+
+        import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
+        import { setComplete } from "Actions/completion";
+        import { dispatchTestAnswerEvent } from "js/Events";
+
+        export default {
+            state: {
+                selectedAnswer: {},
+                cards: [],
+                cardIdx: 0
+            },
+
+            components: {
+                lessoncomplete: LessonComplete,
+                lessonfeedback: LessonFeedback
+            },
+
+            onBeforeMount(props, state) {
+                const { cards } = props.test;
+                state.cards = cards;
+                state.cardIdx = getLessonCardIdx();
+                window.addEventListener("hashchange", this.hashChanged);
+            },
+
+            onBeforeUnmount(props, state) {
+                window.removeEventListener("hashchange", this.hashChanged);
+            },
+
+            hashChanged() {
+                this.update({
+                    cardIdx: getLessonCardIdx()
+                });
+            },
+
+            selectAnswer(answer) {
+                this.update({ selectedAnswer: answer });
+                const eventData = {
+                    lesson: this.props.lesson.title,
+                    question: this.state.cards[this.state.cardIdx].question,
+                    answer: answer.text,
+                    isAnswerCorrect: answer.correct
+                };
+                dispatchTestAnswerEvent(eventData);
+            },
+
+            nextTestCard() {
+                window.scroll(0, 0);
+                this.state.selectedAnswer = {};
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
+            },
+
+            completePage() {
+                setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
+            }
+        };
+    </script>
+</LessonTest>
