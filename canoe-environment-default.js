@@ -8,7 +8,7 @@ module.exports = {
     APPLICATION_SERVER_KEY: "",
     WEBPACK_CONFIG: {
         devServer: {
-            port: 9000,
+            port: 8080,
         }
     }
 };
