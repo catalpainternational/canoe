@@ -178,7 +178,7 @@ LessonFrame {
     }
 
     .card-frame {
-        margin: 0 auto #{$bottom-menu-height};
+        margin: 0 10px #{$bottom-menu-height};
         padding: 30px;
         border-radius: 30px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);

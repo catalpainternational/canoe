@@ -1,7 +1,7 @@
 <TopMenu>
     <header if="{!state.isHome}">
         <a if="{!state.isObjective}" class="{state.isAppPage && !state.isProfile && !state.isNotifications ? 'arrow-gray' : 'arrow-white'}" onclick="{goBack}"></a>
-        <a if="{state.isObjective}" class="cross close-btn" onclick="{goToLesson}"></a>
+        <a if="{state.isObjective}" class="cross close-btn" onclick="{backToLessonPage}"></a>
         <a class="site-logo {!state.isAppPage || state.isProfile || state.isNotifications ? 'white' : ''}" href="#"></a>
         <a class="cog {state.isSettings ? 'active' : 'white'}" href="#settings"></a>
     </header>
@@ -22,7 +22,7 @@
                 window.history.back();
             },
 
-            goToLesson() {
+            backToLessonPage() {
                 location.hash = "#" + this.props.wagtailPage.data.id;
             },
 
