@@ -164,7 +164,7 @@ LessonPage .description {
 
 LessonFrame {
     .frame-background {
-        height: calc(100vh - #{$top-menu-height});
+        height: calc(100vh - #{$top-menu-height-no-footer});
         margin-top: -#{$top-menu-height};
         padding-top: calc(#{$top-menu-height} - 10px);
     }
@@ -178,13 +178,13 @@ LessonFrame {
     }
 
     .card-frame {
-        margin: 0 10px #{$bottom-menu-height};
+        margin: 0 10px #{$bottom-menu-height-no-footer};
         padding: 30px;
         border-radius: 30px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
 
         overflow-y: auto;
-        height: calc(100vh - (#{$bottom-menu-height} * 3));
+        height: calc(100vh - (#{$bottom-menu-height-no-footer} * 6));
         max-width: 40em;
 
         background-color: $white;
@@ -192,7 +192,7 @@ LessonFrame {
 }
 
 LessonObjective .objective {
-    height: calc(100vh - #{$top-menu-height});
+    height: calc(100vh - #{$top-menu-height-no-footer});//55px);
     margin-top: -#{$top-menu-height};
     padding-top: calc(#{$top-menu-height} - 10px);
 
@@ -253,6 +253,7 @@ LessonObjective .objective {
 LessonContent .content {
     margin-top: -#{$top-menu-height};
     padding-top: $top-menu-height;
+    padding-bottom: $bottom-menu-height-no-footer;
 
     raw {
         flex: 1;
@@ -291,8 +292,10 @@ LessonContent .content {
     }
 }
 
-LessonContent .content-wrapper {
-    border-radius: 30px 30px 0 0;
+LessonContent div.content-wrapper {
+    min-height: calc(100vh - #{$top-menu-height-no-footer} - 30px - 40px - #{$bottom-menu-height-no-footer});
+    padding-bottom: 30px;
+    border-radius: 30px;
     background-color: $gray-10;
     flex-direction: column;
     padding-top: 30px;
@@ -303,6 +306,7 @@ LessonTest .test {
     overflow: auto;
     margin-top: -#{$top-menu-height};
     padding-top: calc(#{$top-menu-height} - 10px);
+    padding-bottom: 10px;
 
     @media only screen and (max-width: 374px) {
         margin-bottom: 1rem;
