@@ -24,22 +24,26 @@
                     </div>
                 </li>
             </ol>
-            <button
-                class="btn-primary"
-                onclick="{nextTestCard}"
-                if="{state.cardIdx < state.cards.length - 1}"
-                disabled="{!state.selectedAnswer.correct}"
-            >
-                Next {state.cardIdx + 1}/{state.cards.length}
-            </button>
-            <button
-                class="btn-primary"
-                onclick="{completePage}"
-                if="{state.cardIdx === state.cards.length - 1}"
-                disabled="{!state.selectedAnswer.correct}"
-            >
-                Finish
-            </button>
+            <div class="bottom-buttons">
+                <div>
+                    <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
+                </div>
+                <div>
+                    <button 
+                        class="btn-primary" 
+                        onclick="{nextTestCard}" 
+                        if="{state.cardIdx < state.cards.length - 1}" 
+                        disabled="{!state.selectedAnswer.correct}"
+                    >Next</button>
+                    <button 
+                        class="btn-primary"
+                        onclick="{completePage}"
+                        if="{state.cardIdx === state.cards.length - 1}"
+                        disabled="{!state.selectedAnswer.correct}"
+                    >Finish</button>
+                </div>
+            </div>
+            <p class="card-number">{state.cardIdx + 1} of {props.test.cards.length}</p>
         </div>
     </div>
     <LessonFeedback
@@ -90,6 +94,10 @@
                 this.update({
                     cardIdx: getLessonCardIdx()
                 });
+            },
+
+            goBack() {
+                window.history.back();
             },
 
             selectAnswer(answer) {

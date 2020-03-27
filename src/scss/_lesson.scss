@@ -386,6 +386,33 @@ LessonTest .test {
             margin-bottom: 0;
         }
     }
+
+    .bottom-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    }
+
+    .arrow-gray {
+        display: inline-block;
+        position: relative;
+        left: unset;
+        width: 80px;
+        height: 50px;
+    }
+
+    .btn-primary {
+        min-width: 90px;
+        font-size: 12px;
+    }
+
+    .card-number {
+        font-size: 12px;
+        margin-bottom: 0;
+        flex: 0;
+        text-align: center;
+    }
 }
 
 LessonModuleComplete {
