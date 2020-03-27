@@ -1,17 +1,28 @@
 <TopMenu>
     <header if="{!state.isHome}" class="background-{state.color}">
-        <a if="{!state.isObjective && !state.isContent && !state.isTest}" class="{state.isAppPage && !state.isProfile && !state.isNotifications ? 'arrow-gray' : 'arrow-white'}" onclick="{goBack}"></a>
-        <a if="{state.isObjective || state.isContent || state.isTest}" class="cross close-btn" onclick="{backToLessonPage}"></a>
-        <a class="site-logo {!state.isAppPage || state.isProfile || state.isNotifications ? 'white' : ''}" href="#"></a>
+        <a
+            if="{!state.isObjective && !state.isContent && !state.isTest}"
+            class="{state.isAppPage && !state.isProfile && !state.isNotifications ? 'arrow-gray' : 'arrow-white'}"
+            onclick="{goBack}"
+        ></a>
+        <a
+            if="{state.isObjective || state.isContent || state.isTest}"
+            class="cross close-btn"
+            onclick="{backToLessonPage}"
+        ></a>
+        <a
+            class="site-logo {!state.isAppPage || state.isProfile || state.isNotifications ? 'white' : ''}"
+            href="#"
+        ></a>
         <a class="cog {state.isSettings ? 'active' : 'white'}" href="#settings"></a>
     </header>
 
     <script>
-        import { parseURLHash } from 'js/Routing';
+        import { parseURLHash } from "js/Routing";
 
         export default {
             state: {
-                color: ''
+                color: ""
             },
 
             onBeforeMount(props, state) {
@@ -33,20 +44,23 @@
             updateState() {
                 const [afterTheHash, lessonModule] = parseURLHash();
                 this.state.lessonModule = lessonModule;
-                this.state.isObjective = this.state.lessonModule === 'objectives';
-                this.state.isContent = this.state.lessonModule === 'content';
-                this.state.isTest = this.state.lessonModule === 'test';
-                this.state.isHome = this.props.contentType === 'HomePage';
-                this.state.isCourse = this.props.contentType === 'CoursePage';
-                this.state.isNotifications = this.props.contentType === 'notifications';
-                this.state.isProfile = this.props.contentType === 'profile';
-                this.state.isSettings = this.props.contentType === 'settings';
-                this.state.isAppPage = this.state.isNotifications || this.state.isProfile || this.state.isSettings;
+                this.state.isObjective = this.state.lessonModule === "objectives";
+                this.state.isContent = this.state.lessonModule === "content";
+                this.state.isTest = this.state.lessonModule === "test";
+                this.state.isHome = this.props.contentType === "HomePage";
+                this.state.isCourse = this.props.contentType === "CoursePage";
+                this.state.isNotifications = this.props.contentType === "notifications";
+                this.state.isProfile = this.props.contentType === "profile";
+                this.state.isSettings = this.props.contentType === "settings";
+                this.state.isAppPage =
+                    this.state.isNotifications || this.state.isProfile || this.state.isSettings;
 
                 if (this.state.isProfile) {
-                    this.state.color = 'profile-green';
+                    this.state.color = "profile-green";
+                } else {
+                    this.state.color = "";
                 }
             }
-        }
+        };
     </script>
 </TopMenu>
