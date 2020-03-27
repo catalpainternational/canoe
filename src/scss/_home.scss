@@ -2,7 +2,7 @@ HomePage .course-header {
     margin-top: 30px;
 
     &:first-child {
-        margin-top: 10px;
+        margin: 10px 0;
     }
 }
 
@@ -13,6 +13,7 @@ HomePage .content-wrapper {
         color: $gray-2;
         font-weight: 900;
         font-size: 16px;
+        margin-bottom: 5px;
     }
 
     h3:first-child {
@@ -69,6 +70,7 @@ HomePage .header {
 
     h6 {
         margin: 0px 10px 20px 0px;
+        font-weight: 400;
     }
 
     .header-box {
