@@ -1,5 +1,5 @@
 <TopMenu>
-    <header if="{!state.isHome}">
+    <header if="{!state.isHome}" class="background-{state.color}">
         <a if="{!state.isObjective && !state.isContent && !state.isTest}" class="{state.isAppPage && !state.isProfile && !state.isNotifications ? 'arrow-gray' : 'arrow-white'}" onclick="{goBack}"></a>
         <a if="{state.isObjective || state.isContent || state.isTest}" class="cross close-btn" onclick="{backToLessonPage}"></a>
         <a class="site-logo {!state.isAppPage || state.isProfile || state.isNotifications ? 'white' : ''}" href="#"></a>
@@ -10,6 +10,10 @@
         import { parseURLHash } from 'js/Routing';
 
         export default {
+            state: {
+                color: ''
+            },
+
             onBeforeMount(props, state) {
                 this.updateState();
             },
@@ -38,6 +42,10 @@
                 this.state.isProfile = this.props.contentType === 'profile';
                 this.state.isSettings = this.props.contentType === 'settings';
                 this.state.isAppPage = this.state.isNotifications || this.state.isProfile || this.state.isSettings;
+
+                if (this.state.isProfile) {
+                    this.state.color = 'profile-green';
+                }
             }
         }
     </script>
