@@ -196,6 +196,13 @@
     max-width: 200px;
 }
 
+.notifications-image {
+    @extend %icons-shared;
+    background-image: url("../img/notifications_header.svg");
+    height: 250px;
+    width: 250px;
+}
+
 .login-image {
     @extend %icons-shared;
     background-image: $loginImage;

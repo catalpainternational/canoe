@@ -23,7 +23,7 @@
 
 .btn-secondary {
     @extend %buttons-shared;
-    border: 2px solid $blue-1;
+    border: none;
     background-color: $white;
     min-height: 48px;
     color: $blue-1;

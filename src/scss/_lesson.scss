@@ -178,7 +178,7 @@ LessonFrame {
     }
 
     .card-frame {
-        margin: 0 auto #{$bottom-menu-height};
+        margin: 0 10px #{$bottom-menu-height};
         padding: 30px;
         border-radius: 30px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
@@ -261,6 +261,33 @@ LessonContent .content {
     img.richtext-image {
         margin: 1em 0;
         width: 100%;
+    }
+
+    .bottom-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    }
+
+    .arrow-gray {
+        display: inline-block;
+        position: relative;
+        left: unset;
+        width: 80px;
+        height: 50px;
+    }
+
+    .btn-primary {
+        min-width: 90px;
+        font-size: 12px;
+    }
+
+    .card-number {
+        font-size: 12px;
+        margin-bottom: 0;
+        flex: 0;
+        text-align: center;
     }
 }
 
@@ -358,6 +385,33 @@ LessonTest .test {
         li:last-child {
             margin-bottom: 0;
         }
+    }
+
+    .bottom-buttons {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+    }
+
+    .arrow-gray {
+        display: inline-block;
+        position: relative;
+        left: unset;
+        width: 80px;
+        height: 50px;
+    }
+
+    .btn-primary {
+        min-width: 90px;
+        font-size: 12px;
+    }
+
+    .card-number {
+        font-size: 12px;
+        margin-bottom: 0;
+        flex: 0;
+        text-align: center;
     }
 }
 

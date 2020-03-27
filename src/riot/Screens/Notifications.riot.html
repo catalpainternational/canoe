@@ -1,9 +1,25 @@
 <Notifications>
     <div class="notifications">
+
+        <div class="notifications-header">
+            <div class="left-block">
+                <h3>Latest notifications</h3>
+            </div>
+            <span class="notifications-image"></span>
+        </div>
+
         <div class="content-wrapper">
-            <h3>Latest notifications</h3>
 
             <p if="{state.notifications.length === 0}">No notifications.</p>
+
+            <div class="section-title">
+                <div>
+                    <h5>Notifications</h5>
+                    <span>
+                        <hr>
+                    </span>
+                </div>
+            </div>
 
             <ol class="notification-list">
                 <li
@@ -21,8 +37,8 @@
 
                     <div class="notification-footer">
                         <div class="action">
-                            <!-- <span class="arrow-blue"></span>
-                        <p>Start lesson</p> -->
+                            <span class="arrow-blue"></span>
+                            <p>Start lesson</p>
                         </div>
                         <div>
                             <p>{showTimeAgoFromNow(notification.timestamp)}</p>
@@ -42,13 +58,13 @@
 
         export default {
             state: {
-                notifications: []
+                notifications: [{ title: "Test 1", body: "This is the body", timestamp: "2012-09-15"}, { title: "Test 2", body: "This is the body", timestamp: "2012-09-15"}]
             },
 
             async refreshNotifications() {
-                this.update({
-                    notifications: await getNotifications()
-                });
+                // this.update({
+                //     notifications: await getNotifications()
+                // });
             },
 
             onMounted() {
