@@ -26,7 +26,7 @@ body {
 
 div.content-wrapper {
     min-height: calc(100vh - #{$top-menu-height} - 30px - 40px - #{$bottom-menu-height});
-    padding-bottom: calc(#{$bottom-menu-height} + 40px);
+    padding-bottom: calc(#{$bottom-menu-height} + 140px);
     padding-right: 30px;
     padding-left: 30px;
     background-color: #F5F4F0;
