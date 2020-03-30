@@ -47,9 +47,11 @@
                     props.wagtailPage.test.duration} mins
                 </p>
             </div>
-
-            <p if="{props.wagtailPage.data.long_description}" class="description">{props.wagtailPage.data.long_description}</p>
-            <p if="{!props.wagtailPage.data.long_description}" class="description">{props.wagtailPage.data.description}</p>
+            <div class="description">
+                <p>{props.wagtailPage.data.description}</p>
+                <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">{props.wagtailPage.data.long_description}</p>
+                <a if="{props.wagtailPage.data.long_description}" onclick="{toggleLessonDescription}">See {state.showLongDescription ? 'less' : 'more'}</a>
+            </div>
 
             <div class="hide">
                 <div class="jobs-card">
@@ -126,7 +128,8 @@
 
         export default {
             state: {
-                hash: ""
+                hash: "",
+                showLongDescription: false
             },
 
             objectivesModule: "objectives",
@@ -154,6 +157,11 @@
                 this.update({
                     hash: getHash()[1]
                 });
+            },
+
+            toggleLessonDescription() {
+                this.state.showLongDescription = !this.state.showLongDescription;
+                this.update();
             },
 
             isModuleComplete(section) {
