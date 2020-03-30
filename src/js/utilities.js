@@ -1,11 +1,8 @@
-import { countComplete } from "Actions/completion";
+import { getMostRecentCompletion, countComplete } from "Actions/completion";
+import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
 
 export const isAppOffline = error => {
-    if (error instanceof TypeError && error.message === "Failed to fetch") {
-        return true;
-    } else {
-        return false;
-    }
+    return error instanceof TypeError && error.message === "Failed to fetch";
 };
 
 export const alertAppIsOffline = () => {
@@ -37,4 +34,19 @@ export const getHomePageId = homePageUrl => {
     const pageIdPiece = urlsPieces[urlsPieces.length - 2];
     const pageId = Number(pageIdPiece);
     return pageId;
+};
+
+export const getMostRecentlyVisitedCourse = async () => {
+    const lastCompletion = getMostRecentCompletion();
+    if (lastCompletion === null) {
+        return null;
+    }
+
+    const manifest = await getOrFetchManifest();
+    const homePage = await getOrFetchWagtailPage(manifest.home);
+    const courses = homePage.courses;
+    const lastWorkedOnCourse = courses.find(
+        course => course.data.slug === lastCompletion.courseSlug
+    );
+    return lastWorkedOnCourse;
 };
