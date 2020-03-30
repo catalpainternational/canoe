@@ -42,7 +42,7 @@
         justify-content: space-between;
         display: flex;
 
-        @media only screen and (max-width: 374px) {
+        @media only screen and (max-width: $sm-phone) {
             justify-content: left;
         }
     }
@@ -59,7 +59,7 @@
             font-size: 10px;
             color: $gray-1;
 
-            @media only screen and (max-width: 374px) {
+            @media only screen and (max-width: $sm-phone) {
                 line-height: 1.25;
             }
         }
@@ -304,7 +304,7 @@ LessonTest .test {
     margin-top: -#{$top-menu-height};
     padding-top: calc(#{$top-menu-height} - 10px);
 
-    @media only screen and (max-width: 374px) {
+    @media only screen and (max-width: $sm-phone) {
         margin-bottom: 1rem;
     }
 
