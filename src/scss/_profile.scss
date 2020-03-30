@@ -1,3 +1,4 @@
+
 .profile {
     h3:first-child {
         margin-top: 0;
@@ -27,18 +28,8 @@
 }
 
 .profile-header {
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    display: flex;
-
-    height: 30vh;
-    padding: 0 1em;
+    @include screen-banner-styles;
     background-color: $profile-banner-green;
-
-    @media only screen and (min-width: 600px) {
-        height: 20vh;
-    }
 }
 
 Profile .background-gray-2 {

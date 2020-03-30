@@ -1,5 +1,6 @@
 /* Base */
 @import "variables";
+@import "mixins";
 @import "typography";
 @import "rich_text";
 @import "buttons";
@@ -31,7 +32,7 @@ div.content-wrapper {
     padding-left: 30px;
     background-color: #f5f4f0;
     max-width: 40em;
-    margin: auto 10px auto 10px;
+    margin: auto;
 }
 
 .notifications,
@@ -92,6 +93,9 @@ div.content-wrapper {
 }
 .background-profile-green {
     background-color: $profile-banner-green;
+}
+.background-notifications-orange {
+    background-color: $notifications-banner-orange;
 }
 .background-orange-1 {
     background-color: #f66400;
