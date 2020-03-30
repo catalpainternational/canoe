@@ -11,7 +11,7 @@
     background-position: center;
     height: 20px;
     width: 87px;
-    
+
     &.white {
         background-image: $logoWhite;
     }
@@ -243,10 +243,10 @@
     width: 100%;
     background-color: $blue-1;
 
-    @media only screen and (min-width: 660px) {
+    @media only screen and (min-width: $tablet) {
         background-image: none;
         height: 120%;
-    };
+    }
 }
 
 .confetti {
@@ -348,4 +348,31 @@
     -webkit-mask-image: url("../img/banking_and_finance.svg");
     height: 24px;
     width: 30px;
+}
+
+@mixin feedback-icons {
+    height: 50px;
+    width: 41px;
+    background-color: $blue-1;
+    display: block;
+    margin: auto;
+    margin-top: 0.5em;
+}
+
+.neutral-smiley {
+    @extend %mask-icons-shared;
+    @include feedback-icons;
+    -webkit-mask-image: url("../img/neutral.svg");
+}
+
+.smiling-smiley {
+    @extend %mask-icons-shared;
+    @include feedback-icons;
+    -webkit-mask-image: url("../img/smile.svg");
+}
+
+.thrilled-smiley {
+    @extend %mask-icons-shared;
+    @include feedback-icons;
+    -webkit-mask-image: url("../img/thrilled.svg");
 }

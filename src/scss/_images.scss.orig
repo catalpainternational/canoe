@@ -242,7 +242,7 @@
     width: 100%;
     background-color: $blue-1;
 
-    @media only screen and (min-width: 660px) {
+    @media only screen and (min-width: $tablet) {
         background-image: none;
         height: 120%;
     };
