@@ -36,7 +36,7 @@ export const getHomePageId = homePageUrl => {
     return pageId;
 };
 
-export const getMostRecentlyVisitedCourse = async () => {
+export const getLastWorkedOnCourse = async () => {
     const lastCompletion = getMostRecentCompletion();
     if (lastCompletion === null) {
         return null;

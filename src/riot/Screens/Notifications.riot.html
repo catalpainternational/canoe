@@ -50,7 +50,7 @@
     </div>
 
     <script>
-        import { getMostRecentlyVisitedCourse } from "js/utilities";
+        import { getLastWorkedOnCourse } from "js/utilities";
         import { getNotifications } from "js/Notifications";
         import dayjs from "dayjs";
         import relativeTime from "dayjs/plugin/relativeTime";
@@ -64,7 +64,7 @@
             },
 
             async refreshNotifications() {
-                const currentCourse = await getMostRecentlyVisitedCourse();
+                const currentCourse = await getLastWorkedOnCourse();
                 this.update({
                     notifications: await getNotifications(),
                     currentCourse

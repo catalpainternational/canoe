@@ -9,7 +9,7 @@
     </div>
 
     <script>
-        import { getMostRecentlyVisitedCourse } from "js/utilities";
+        import { getLastWorkedOnCourse } from "js/utilities";
 
         export default {
             state: {
@@ -17,7 +17,7 @@
             },
 
             async renderContinueLearningButton() {
-                const lastWorkedOnCourse = await getMostRecentlyVisitedCourse();
+                const lastWorkedOnCourse = await getLastWorkedOnCourse();
 
                 this.update({
                     currentCourse: lastWorkedOnCourse
