@@ -159,8 +159,9 @@
             },
 
             toggleLessonDescription() {
-                this.state.showLongDescription = !this.state.showLongDescription;
-                this.update();
+                this.update({
+                    showLongDescription: !this.state.showLongDescription
+                });
             },
 
             isModuleComplete(section) {
