@@ -28,7 +28,8 @@
         import { logout } from "js/AuthenticationUtilities";
         import { subscribe, unsubscribe, isSubscribedToNotifications } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
-        import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
+        import { isAppOffline } from "js/utilities";
+        // import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
 
         export default {
             state: {
@@ -36,9 +37,9 @@
                 disableNotificationsButton: false,
                 appIsInstalled: false
             },
-            components: {
-                cachedisplay: CacheDisplay
-            },
+            // components: {
+            //     cachedisplay: CacheDisplay
+            // },
 
             logout() {
                 logout();
