@@ -143,6 +143,7 @@ LessonPage .content-wrapper .duration {
     align-items: center;
     display: flex;
     border-bottom: 1px solid #d5dbdf;
+    border-top: 1px solid #d5dbdf;
 
     span {
         margin: 5px;
@@ -150,12 +151,12 @@ LessonPage .content-wrapper .duration {
 
     p {
         font-size: 10px;
-        margin-right: 10px;
+        margin: 3px 10px 3px;
     }
 }
 
 LessonPage .replace-this-with-lessonframe h2 {
-    margin-bottom: 0;
+    margin-bottom: 10px;
 }
 
 LessonPage .description {

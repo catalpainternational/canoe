@@ -1,8 +1,11 @@
 <CoursePage>
     <div class="course background-blue-1">
-        <div class="content-wrapper" onscroll="{stickyHeader()}">
+        <div class="content-wrapper">
             <div class="course-header">
                 <div>
+                    <div>
+                        <a class="arrow-gray" onclick="{goBack}"></a>
+                    </div>
                     <div>
                         <p>Course</p>
                     </div>
@@ -42,12 +45,24 @@
                 card: Card
             },
 
+            onMounted() {
+                window.addEventListener('scroll', this.stickyHeader);
+            },
+
+            onUnmounted() {
+                window.removeEventListener('scroll', this.stickyHeader);
+            },
+
             getCourseProgress() {
                 return (
                     countComplete(this.props.wagtailPage.data.slug) +
-                    "/" +
+                    " / " +
                     this.props.wagtailPage.data.lessons_count
                 );
+            },
+
+            goBack() {
+                window.history.back();
             },
 
             stickyHeader() {
@@ -55,9 +70,9 @@
                 const offset = header[0].offsetTop;
 
                 if (window.pageYOffset > offset) {
-                    header.classList.add("sticky");
+                    header[0].classList.add("sticky");
                 } else {
-                    header.classList.remove("sticky");
+                    header[0].classList.remove("sticky");
                 }
             },
 

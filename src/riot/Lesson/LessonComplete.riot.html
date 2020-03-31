@@ -30,12 +30,6 @@
                 lessonframe: LessonFrame
             },
 
-            getCourseProgress() {
-                return (
-                    countComplete(this.props.course.slug) + "/" + this.props.course.lessons_count
-                );
-            },
-
             isCourseComplete() {
                 return countComplete(this.props.course.slug) === this.props.course.lessons_count;
             },
