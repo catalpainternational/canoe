@@ -1,6 +1,6 @@
 <CoursePage>
     <div class="course background-blue-1">
-        <div class="content-wrapper">
+        <div class="content-wrapper" onscroll="{stickyHeader()}">
             <div class="course-header">
                 <div>
                     <div>
@@ -48,6 +48,17 @@
                     "/" +
                     this.props.wagtailPage.data.lessons_count
                 );
+            },
+
+            stickyHeader() {
+                const header = document.getElementsByClassName("course-header");
+                const offset = header[0].offsetTop;
+
+                if (window.pageYOffset > offset) {
+                    header.classList.add("sticky");
+                } else {
+                    header.classList.remove("sticky");
+                }
             },
 
             isLessonComplete(lesson) {

@@ -57,6 +57,12 @@
     }
 }
 
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
 CoursePage .course {
     margin-top: -#{$top-menu-height};
     padding-top: $top-menu-height;
