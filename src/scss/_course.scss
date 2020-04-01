@@ -97,6 +97,10 @@
     }
 }
 
+.sticky.course-header + .section-title {
+    padding-top: $sticky-header-offset;
+}
+
 CoursePage .course {
     margin-top: -#{$top-menu-height};
     padding-top: $top-menu-height;

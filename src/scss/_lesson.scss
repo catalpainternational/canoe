@@ -159,6 +159,10 @@ LessonPage .content-wrapper {
             display: block;
         }
     }
+
+    .sticky.lesson-header + .duration {
+        margin-top: $sticky-header-offset;
+    }
 }
 
 LessonPage .section-title h5 {
