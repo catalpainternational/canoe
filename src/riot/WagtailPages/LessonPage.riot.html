@@ -27,10 +27,7 @@
     >
     </LessonTest>
 
-    <div
-        class="replace-this-with-lessonframe background-blue-1"
-        if="{state.hash == null}"
-    >
+    <div class="replace-this-with-lessonframe background-blue-1" if="{state.hash == null}">
         <div class="content-wrapper">
             <div class="lesson-header">
                 <div>
@@ -43,7 +40,7 @@
                 </div>
                 <h2>{props.wagtailPage.title}</h2>
             </div>
-            
+
             <div class="duration">
                 <span class="clock"></span>
                 <p>
@@ -53,8 +50,10 @@
             </div>
             <div class="description">
                 <p>{props.wagtailPage.data.description}</p>
-                <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">{props.wagtailPage.data.long_description}</p>
-                
+                <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">
+                    {props.wagtailPage.data.long_description}
+                </p>
+
                 <div if="{state.showLongDescription}" class="hide">
                     <div class="jobs-card">
                         <div class="jobs-body">
@@ -73,14 +72,18 @@
                     </div>
                 </div>
 
-                <a if="{props.wagtailPage.data.long_description}" onclick="{toggleLessonDescription}">See {state.showLongDescription ? 'less' : 'more'}</a>
+                <a
+                    if="{props.wagtailPage.data.long_description}"
+                    onclick="{toggleLessonDescription}"
+                    >See {state.showLongDescription ? 'less' : 'more'}</a
+                >
             </div>
 
             <div class="section-title">
                 <div>
                     <h5>Lesson Activities</h5>
                     <span>
-                        <hr>
+                        <hr />
                     </span>
                 </div>
             </div>
@@ -149,9 +152,18 @@
 
             onBeforeMount(props, state) {
                 state.hash = getHash()[1];
-
                 window.addEventListener("hashchange", this.hashChanged);
-                window.addEventListener('scroll', this.stickyHeader);
+            },
+
+            onMounted(props, state) {
+                state.header = document.getElementsByClassName("lesson-header")[0];
+                state.headerOffsetTop = state.header.offsetTop;
+                window.addEventListener("scroll", this.stickyHeader);
+                this.disableBlockedLessonModules();
+            },
+
+            onUpdated() {
+                this.disableBlockedLessonModules();
             },
 
             onBeforeUnmount(props, state) {
@@ -159,7 +171,7 @@
             },
 
             onUnmounted() {
-                window.removeEventListener('scroll', this.stickyHeader);
+                window.removeEventListener("scroll", this.stickyHeader);
             },
 
             hashChanged() {
@@ -168,9 +180,9 @@
                 });
 
                 if (this.state.hash) {
-                    window.removeEventListener('scroll', this.stickyHeader);
+                    window.removeEventListener("scroll", this.stickyHeader);
                 } else {
-                    window.addEventListener('scroll', this.stickyHeader);
+                    window.addEventListener("scroll", this.stickyHeader);
                 }
             },
 
@@ -193,9 +205,7 @@
             },
 
             stickyHeader() {
-                this.state.header = this.state.header || document.getElementsByClassName("lesson-header")[0];
-
-                if (window.pageYOffset > this.state.header.offsetTop) {
+                if (window.pageYOffset > this.state.headerOffsetTop) {
                     this.state.header.classList.add("sticky");
                 } else {
                     this.state.header.classList.remove("sticky");
@@ -217,14 +227,6 @@
                     card.classList.add("disabled");
                 }
             },
-
-            onMounted() {
-                this.disableBlockedLessonModules();
-            },
-
-            onUpdated() {
-                this.disableBlockedLessonModules();
-            }
         };
     </script>
 </LessonPage>
