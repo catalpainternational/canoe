@@ -32,13 +32,17 @@
         if="{state.hash == null}"
     >
         <div class="content-wrapper">
-            <div class="section-title">
-                <div class="unit">
-                    <h5>Lesson - {props.wagtailPage.course.title}</h5>
+            <div class="lesson-header">
+                <div>
+                    <a class="arrow-gray" onclick="{goBack}"></a>
                 </div>
+                <div class="section-title">
+                    <div class="unit">
+                        <h5>Lesson - {props.wagtailPage.course.title}</h5>
+                    </div>
+                </div>
+                <h2>{props.wagtailPage.title}</h2>
             </div>
-
-            <h2>{props.wagtailPage.title}</h2>
             
             <div class="duration">
                 <span class="clock"></span>
@@ -144,16 +148,31 @@
                 state.hash = getHash()[1];
 
                 window.addEventListener("hashchange", this.hashChanged);
+                window.addEventListener('scroll', this.stickyHeader);
             },
 
             onBeforeUnmount(props, state) {
                 window.removeEventListener("hashchange", this.hashChanged);
             },
 
+            onUnmounted() {
+                window.removeEventListener('scroll', this.stickyHeader);
+            },
+
             hashChanged() {
                 this.update({
                     hash: getHash()[1]
                 });
+
+                if (this.state.hash) {
+                    window.removeEventListener('scroll', this.stickyHeader);
+                } else {
+                    window.addEventListener('scroll', this.stickyHeader);
+                }
+            },
+
+            goBack() {
+                window.history.back();
             },
 
             isModuleComplete(section) {
@@ -162,6 +181,17 @@
                     this.props.wagtailPage.data.slug,
                     section
                 );
+            },
+
+            stickyHeader() {
+                const header = document.getElementsByClassName("lesson-header");
+                const offset = header[0].offsetTop;
+
+                if (window.pageYOffset > offset) {
+                    header[0].classList.add("sticky");
+                } else {
+                    header[0].classList.remove("sticky");
+                }
             },
 
             disableBlockedLessonModules() {
