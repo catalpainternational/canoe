@@ -1,6 +1,5 @@
 <Notifications>
     <div class="notifications">
-
         <div class="notifications-header">
             <div class="left-block">
                 <h3>Latest notifications</h3>
@@ -9,14 +8,13 @@
         </div>
 
         <div class="content-wrapper">
-
             <p if="{state.notifications.length === 0}">No notifications.</p>
 
-            <div class="section-title">
+            <div if="{state.notifications.length > 0}" class="section-title">
                 <div>
                     <h5>Notifications</h5>
                     <span>
-                        <hr>
+                        <hr />
                     </span>
                 </div>
             </div>
@@ -27,7 +25,6 @@
                     class="notification-card {markOldNotifications(index)}"
                 >
                     <div class="notification-header">
-                        <!-- <span class="financial background-blue-1"></span> -->
                         <h6>{notification.title}</h6>
                     </div>
 
@@ -36,20 +33,24 @@
                     </div>
 
                     <div class="notification-footer">
-                        <div class="action">
+                        <a
+                            class="action"
+                            href="#{state.currentCourse && state.currentCourse.data.id}"
+                        >
                             <span class="arrow-blue"></span>
                             <p>Start lesson</p>
-                        </div>
+                        </a>
                         <div>
                             <p>{showTimeAgoFromNow(notification.timestamp)}</p>
                         </div>
                     </div>
                 </li>
-            </ul>
+            </ol>
         </div>
     </div>
 
     <script>
+        import { getLastWorkedOnCourse } from "js/utilities";
         import { getNotifications } from "js/Notifications";
         import dayjs from "dayjs";
         import relativeTime from "dayjs/plugin/relativeTime";
@@ -58,13 +59,16 @@
 
         export default {
             state: {
-                notifications: [{ title: "Test 1", body: "This is the body", timestamp: "2012-09-15"}, { title: "Test 2", body: "This is the body", timestamp: "2012-09-15"}]
+                notifications: [],
+                currentCourse: null
             },
 
             async refreshNotifications() {
-                // this.update({
-                //     notifications: await getNotifications()
-                // });
+                const currentCourse = await getLastWorkedOnCourse();
+                this.update({
+                    notifications: await getNotifications(),
+                    currentCourse
+                });
             },
 
             onMounted() {

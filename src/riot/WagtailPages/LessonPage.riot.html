@@ -51,28 +51,29 @@
                     props.wagtailPage.test.duration} mins
                 </p>
             </div>
-
-            <p if="{props.wagtailPage.data.long_description}" class="description">{props.wagtailPage.data.long_description}</p>
-            <p if="{!props.wagtailPage.data.long_description}" class="description">{props.wagtailPage.data.description}</p>
-
-            <div class="hide">
-                <div class="jobs-card">
-                    <div class="jobs-body">
-                        <h5>Jobs that use these skills</h5>
-                        <div>
-                            <div each="{job in props.wagtailPage.data.jobs}">
-                                <div>
-                                    <span
-                                        class="{job.className} background-{props.wagtailPage.course.colour}"
-                                    ></span>
+            <div class="description">
+                <p>{props.wagtailPage.data.description}</p>
+                <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">{props.wagtailPage.data.long_description}</p>
+                
+                <div if="{state.showLongDescription}" class="hide">
+                    <div class="jobs-card">
+                        <div class="jobs-body">
+                            <h5>Jobs that use these skills</h5>
+                            <div>
+                                <div each="{job in props.wagtailPage.data.jobs}">
+                                    <div>
+                                        <span
+                                            class="{job.className} background-{props.wagtailPage.course.colour}"
+                                        ></span>
+                                    </div>
+                                    <p>{job.text}</p>
                                 </div>
-                                <p>{job.text}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <h3>Ok, let's get started</h3>
+                <a if="{props.wagtailPage.data.long_description}" onclick="{toggleLessonDescription}">See {state.showLongDescription ? 'less' : 'more'}</a>
             </div>
 
             <div class="section-title">
@@ -130,7 +131,8 @@
 
         export default {
             state: {
-                hash: ""
+                hash: "",
+                showLongDescription: false
             },
 
             objectivesModule: "objectives",
@@ -173,6 +175,12 @@
 
             goBack() {
                 window.history.back();
+            },
+
+            toggleLessonDescription() {
+                this.update({
+                    showLongDescription: !this.state.showLongDescription
+                });
             },
 
             isModuleComplete(section) {

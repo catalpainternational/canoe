@@ -1,6 +1,5 @@
 import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls.js";
 import { getAuthenticationToken } from "js/AuthenticationUtilities.js";
-
 import {
     storeWagtailPage,
     getWagtailPageFromStore,

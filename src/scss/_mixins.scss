@@ -1,0 +1,13 @@
+@mixin screen-banner-styles {
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    display: flex;
+
+    height: 30vh;
+    padding: 0 1em;
+
+    @media only screen and (min-width: 600px) {
+        height: 20vh;
+    }
+}

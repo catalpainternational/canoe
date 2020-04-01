@@ -57,6 +57,8 @@
 
                 if (this.state.isProfile) {
                     this.state.color = "profile-green";
+                } else if (this.state.isNotifications) {
+                    this.state.color = "notifications-orange";
                 } else {
                     this.state.color = "";
                 }

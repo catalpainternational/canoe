@@ -199,8 +199,18 @@ LessonPage .replace-this-with-lessonframe h2 {
 }
 
 LessonPage .description {
-    font-size: 15px;
-    margin-bottom: 0;
+    p {
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+
+    a {
+        font-size: 12px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
 
 LessonFrame {
