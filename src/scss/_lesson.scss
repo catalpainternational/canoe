@@ -532,12 +532,20 @@ LessonFeedback {
         &.border-blue-1 {
             border-color: 2px solid $blue-1;
         }
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     button.no-thanks {
         color: $blue-1;
         box-shadow: none;
         background: none;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 }
 
