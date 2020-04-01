@@ -132,7 +132,8 @@
         export default {
             state: {
                 hash: "",
-                showLongDescription: false
+                showLongDescription: false,
+                header: null
             },
 
             objectivesModule: "objectives",
@@ -192,13 +193,12 @@
             },
 
             stickyHeader() {
-                const header = document.getElementsByClassName("lesson-header");
-                const offset = header[0].offsetTop;
+                this.state.header = this.state.header || document.getElementsByClassName("lesson-header")[0];
 
-                if (window.pageYOffset > offset) {
-                    header[0].classList.add("sticky");
+                if (window.pageYOffset > this.state.header.offsetTop) {
+                    this.state.header.classList.add("sticky");
                 } else {
-                    header[0].classList.remove("sticky");
+                    this.state.header.classList.remove("sticky");
                 }
             },
 
