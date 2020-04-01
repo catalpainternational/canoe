@@ -521,7 +521,8 @@ LessonFeedback {
         width: 5.687em;
         border-radius: 50%;
         border: 2px solid $gray-6;
-        margin: 10px;
+        margin: 0 10px;
+        background-color: white;
 
         &:focus {
             border: 2px solid $blue-1;
