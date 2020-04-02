@@ -29,6 +29,7 @@
 
     <div class="replace-this-with-lessonframe background-blue-1" if="{state.hash == null}">
         <div class="content-wrapper">
+            {grabLessonHeaderReference()}
             <div class="lesson-header">
                 <div>
                     <a class="arrow-gray" onclick="{goBack}"></a>
@@ -156,8 +157,6 @@
             },
 
             onMounted(props, state) {
-                state.header = document.getElementsByClassName("lesson-header")[0];
-                state.headerOffsetTop = state.header.offsetTop;
                 window.addEventListener("scroll", this.stickyHeader);
                 this.disableBlockedLessonModules();
             },
@@ -184,6 +183,11 @@
                 } else {
                     window.addEventListener("scroll", this.stickyHeader);
                 }
+            },
+
+            grabLessonHeaderReference() {
+                this.state.header = document.getElementsByClassName("lesson-header")[0];
+                this.state.headerOffsetTop = this.state.header.offsetTop;
             },
 
             goBack() {
@@ -226,7 +230,7 @@
                 for (const card of cardsToDisable) {
                     card.classList.add("disabled");
                 }
-            },
+            }
         };
     </script>
 </LessonPage>
