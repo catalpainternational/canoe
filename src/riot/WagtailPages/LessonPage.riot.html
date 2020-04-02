@@ -186,6 +186,23 @@
             },
 
             grabLessonHeaderReference() {
+                // "Why does this code exist?", you ask. We ran into a bug where
+                // `this.state.header` lost its dom reference, which broke the
+                // sticky header.
+                //
+                // Let's say you're on the lesson overview. When you flip from
+                // to and from a section (objectives, content, or test), the
+                // overview DOM unmounts and mounts. The lesson header in the
+                // newly mounted DOM is different from `this.state.header`.
+                // `this.state.header` refers to the header in the now-unmounted
+                // DOM. So, flipping between overview and a section broke the
+                // sticky header because the new DOM's header never became
+                // sticky.
+                //
+                // `grabLessonHeaderReference` fires whenever the overview DOM
+                // mounts. It always grabs the freshest lesson header reference.
+                // With the fresh reference, `stickyHeader` always makes the
+                // the right header sticky. Problem solved.
                 this.state.header = document.getElementsByClassName("lesson-header")[0];
                 this.state.headerOffsetTop = this.state.header.offsetTop;
             },
