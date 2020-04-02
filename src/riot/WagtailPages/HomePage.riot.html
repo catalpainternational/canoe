@@ -156,7 +156,7 @@
             },
 
             getCourseProgress(course) {
-                return countComplete(course.data.slug) + "/" + course.data.lessons_count;
+                return countComplete(course.data.slug) + " / " + course.data.lessons_count;
             },
 
             isLessonComplete(course, lesson) {

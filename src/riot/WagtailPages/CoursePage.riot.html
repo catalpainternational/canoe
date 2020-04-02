@@ -4,6 +4,9 @@
             <div class="course-header">
                 <div>
                     <div>
+                        <a class="arrow-gray" onclick="{goBack}"></a>
+                    </div>
+                    <div>
                         <p>Course</p>
                     </div>
                     <h3>{props.wagtailPage.data.title}</h3>
@@ -42,12 +45,34 @@
                 card: Card
             },
 
+            onMounted(props, state) {
+                state.header = document.getElementsByClassName("course-header")[0];
+                state.headerOffsetTop = state.header.offsetTop;
+                window.addEventListener('scroll', this.stickyHeader);
+            },
+
+            onUnmounted() {
+                window.removeEventListener('scroll', this.stickyHeader);
+            },
+
             getCourseProgress() {
                 return (
                     countComplete(this.props.wagtailPage.data.slug) +
-                    "/" +
+                    " / " +
                     this.props.wagtailPage.data.lessons_count
                 );
+            },
+
+            goBack() {
+                window.history.back();
+            },
+
+            stickyHeader() {
+                if (window.pageYOffset > this.state.headerOffsetTop) {
+                    this.state.header.classList.add("sticky");
+                } else {
+                    this.state.header.classList.remove("sticky");
+                }
             },
 
             isLessonComplete(lesson) {

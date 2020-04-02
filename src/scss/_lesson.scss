@@ -124,6 +124,45 @@ LessonPage .content-wrapper {
     border-radius: 30px 30px 0 0;
     background-color: $gray-10;
     padding-top: 30px;
+
+    .arrow-gray {
+        display: none;
+    }
+
+    .sticky {
+        position: fixed;
+        top: 0;
+        border: 1px solid #C9D6DE;
+        width: 100%;
+        background-color: #f5f4f0;
+        z-index: 1;
+        left: 0;
+        padding-left: 55px;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+    }
+
+    .sticky.lesson-header {
+        h2 {
+            font-size: 16px;
+            line-height: 15px;
+            padding-bottom: 0;
+        }
+
+        h5 {
+            font-size: 10px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .arrow-gray {
+            margin: 10px 0 0 15px;
+            display: block;
+        }
+    }
+
+    .sticky.lesson-header + .duration {
+        margin-top: $sticky-header-offset;
+    }
 }
 
 LessonPage .section-title h5 {
@@ -135,6 +174,10 @@ LessonPage .section-title .unit h5 {
     margin-top: 0;
 }
 
+LessonPage h2 {
+    border-bottom: none;
+}
+
 LessonPage .hide {
     display: $hideInCanoe;
 }
@@ -143,6 +186,7 @@ LessonPage .content-wrapper .duration {
     align-items: center;
     display: flex;
     border-bottom: 1px solid #d5dbdf;
+    border-top: 1px solid #d5dbdf;
 
     span {
         margin: 5px;
@@ -150,12 +194,12 @@ LessonPage .content-wrapper .duration {
 
     p {
         font-size: 10px;
-        margin-right: 10px;
+        margin: 3px 10px 3px;
     }
 }
 
 LessonPage .replace-this-with-lessonframe h2 {
-    margin-bottom: 0;
+    margin-bottom: 10px;
 }
 
 LessonPage .description {

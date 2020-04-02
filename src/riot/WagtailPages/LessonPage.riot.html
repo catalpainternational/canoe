@@ -27,19 +27,21 @@
     >
     </LessonTest>
 
-    <div
-        class="replace-this-with-lessonframe background-blue-1"
-        if="{state.hash == null}"
-    >
+    <div class="replace-this-with-lessonframe background-blue-1" if="{state.hash == null}">
         <div class="content-wrapper">
-            <div class="section-title">
-                <div class="unit">
-                    <h5>Lesson - {props.wagtailPage.course.title}</h5>
+            {grabLessonHeaderReference()}
+            <div class="lesson-header">
+                <div>
+                    <a class="arrow-gray" onclick="{goBack}"></a>
                 </div>
+                <div class="section-title">
+                    <div class="unit">
+                        <h5>Lesson - {props.wagtailPage.course.title}</h5>
+                    </div>
+                </div>
+                <h2>{props.wagtailPage.title}</h2>
             </div>
 
-            <h2>{props.wagtailPage.title}</h2>
-            
             <div class="duration">
                 <span class="clock"></span>
                 <p>
@@ -49,8 +51,10 @@
             </div>
             <div class="description">
                 <p>{props.wagtailPage.data.description}</p>
-                <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">{props.wagtailPage.data.long_description}</p>
-                
+                <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">
+                    {props.wagtailPage.data.long_description}
+                </p>
+
                 <div if="{state.showLongDescription}" class="hide">
                     <div class="jobs-card">
                         <div class="jobs-body">
@@ -69,14 +73,18 @@
                     </div>
                 </div>
 
-                <a if="{props.wagtailPage.data.long_description}" onclick="{toggleLessonDescription}">See {state.showLongDescription ? 'less' : 'more'}</a>
+                <a
+                    if="{props.wagtailPage.data.long_description}"
+                    onclick="{toggleLessonDescription}"
+                    >See {state.showLongDescription ? 'less' : 'more'}</a
+                >
             </div>
 
             <div class="section-title">
                 <div>
                     <h5>Lesson Activities</h5>
                     <span>
-                        <hr>
+                        <hr />
                     </span>
                 </div>
             </div>
@@ -128,7 +136,8 @@
         export default {
             state: {
                 hash: "",
-                showLongDescription: false
+                showLongDescription: false,
+                header: null
             },
 
             objectivesModule: "objectives",
@@ -144,18 +153,62 @@
 
             onBeforeMount(props, state) {
                 state.hash = getHash()[1];
-
                 window.addEventListener("hashchange", this.hashChanged);
+            },
+
+            onMounted(props, state) {
+                window.addEventListener("scroll", this.stickyHeader);
+                this.disableBlockedLessonModules();
+            },
+
+            onUpdated() {
+                this.disableBlockedLessonModules();
             },
 
             onBeforeUnmount(props, state) {
                 window.removeEventListener("hashchange", this.hashChanged);
             },
 
+            onUnmounted() {
+                window.removeEventListener("scroll", this.stickyHeader);
+            },
+
             hashChanged() {
                 this.update({
                     hash: getHash()[1]
                 });
+
+                if (this.state.hash) {
+                    window.removeEventListener("scroll", this.stickyHeader);
+                } else {
+                    window.addEventListener("scroll", this.stickyHeader);
+                }
+            },
+
+            grabLessonHeaderReference() {
+                // "Why does this code exist?", you ask. We ran into a bug where
+                // `this.state.header` lost its dom reference, which broke the
+                // sticky header.
+                //
+                // Let's say you're on the lesson overview. When you flip from
+                // to and from a section (objectives, content, or test), the
+                // overview DOM unmounts and mounts. The lesson header in the
+                // newly mounted DOM is different from `this.state.header`.
+                // `this.state.header` refers to the header in the now-unmounted
+                // DOM. So, flipping between overview and a section broke the
+                // sticky header because the new DOM's header never became
+                // sticky.
+                //
+                // `grabLessonHeaderReference` fires whenever the overview DOM
+                // mounts. It always grabs the freshest lesson header reference.
+                // With the fresh reference, `stickyHeader` always makes the
+                // the right header sticky. Problem solved.
+                this.state.header = document.getElementsByClassName("lesson-header")[0];
+                this.state.headerOffsetTop = this.state.header.offsetTop;
+            },
+
+            goBack() {
+                window.history.back();
             },
 
             toggleLessonDescription() {
@@ -172,6 +225,14 @@
                 );
             },
 
+            stickyHeader() {
+                if (window.pageYOffset > this.state.headerOffsetTop) {
+                    this.state.header.classList.add("sticky");
+                } else {
+                    this.state.header.classList.remove("sticky");
+                }
+            },
+
             disableBlockedLessonModules() {
                 const ongoingCards = [...document.getElementsByClassName("ongoing")];
 
@@ -186,14 +247,6 @@
                 for (const card of cardsToDisable) {
                     card.classList.add("disabled");
                 }
-            },
-
-            onMounted() {
-                this.disableBlockedLessonModules();
-            },
-
-            onUpdated() {
-                this.disableBlockedLessonModules();
             }
         };
     </script>
