@@ -1,0 +1,11 @@
+wagtail
+wagtail-headless-preview
+django-cors-headers
+djangorestframework
+djangorestframework-jwt
+psycopg2-binary
+sentry-sdk
+django-push-notifications
+wagtailmedia
+-r ./catalpa_django_apps/user_actions/requirements.in
+-r ./rqutils/requirements.txt

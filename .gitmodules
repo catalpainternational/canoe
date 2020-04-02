@@ -1,0 +1,6 @@
+[submodule "backend/catalpa_django_apps"]
+	path = backend/catalpa_django_apps
+	url = git@github.com:catalpainternational/catalpa_django_apps.git
+[submodule "backend/rqutils"]
+	path = backend/rqutils
+	url = git@github.com:catalpainternational/rqutils.git
