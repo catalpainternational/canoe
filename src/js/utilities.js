@@ -1,12 +1,13 @@
 import { getMostRecentCompletion, countComplete } from "Actions/completion";
 import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
+import { dispatchToastEvent } from "js/Events";
 
 export const isAppOffline = error => {
     return error instanceof TypeError && error.message === "Failed to fetch";
 };
 
 export const alertAppIsOffline = () => {
-    alert("You are not connected to the internet.");
+    dispatchToastEvent("You are offline.");
 };
 
 export const getAllLessons = courses => {

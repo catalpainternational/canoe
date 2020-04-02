@@ -1,7 +1,10 @@
-<ConnectionToast>
+<Toast>
     <p id="snackbar">{state.toastMessage}</p>
     <script>
+        import { ON_TOAST_REQUESTED } from "js/Events";
+
         const TOAST_TIMEOUT_MS = 2500;
+
         export default {
             state: {
                 toastMessage: ""
@@ -16,22 +19,12 @@
             },
 
             onMounted() {
-                window.addEventListener("offline", () => {
-                    const toastMessage = "You are offline.";
-                    this.update({
-                        toastMessage
-                    });
-                    this.showToast();
-                });
-
-                window.addEventListener("online", () => {
-                    const toastMessage = "You are online.";
-                    this.update({
-                        toastMessage
-                    });
+                window.addEventListener(ON_TOAST_REQUESTED, toastEvent => {
+                    const toastMessage = toastEvent.detail;
+                    this.update({ toastMessage });
                     this.showToast();
                 });
             }
         };
     </script>
-</ConnectionToast>
+</Toast>

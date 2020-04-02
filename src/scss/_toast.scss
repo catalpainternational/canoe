@@ -9,7 +9,7 @@ $toast-top-position: 1em;
     padding: 1em;
 
     position: fixed;
-    z-index: 1;
+    z-index: 999;
     top: $toast-top-position;
     right: $toast-top-position;
 
