@@ -497,7 +497,7 @@ LessonFeedback {
         text-align: center;
 
         h3 {
-            margin-bottom: 3em;
+            margin-bottom: 2em;
         }
     }
 
@@ -511,8 +511,12 @@ LessonFeedback {
         .smiling-smiley {
             height: 4em;
             width: 4em;
-            margin-bottom: 3em;
+            margin-bottom: 2em;
         }
+    }
+
+    .thank-you-container.btn-primary {
+        margin-top: 2em;
     }
 
 
