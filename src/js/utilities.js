@@ -10,6 +10,10 @@ export const alertAppIsOffline = () => {
     dispatchToastEvent("You are offline.");
 };
 
+export const alertAppIsOnline = () => {
+    dispatchToastEvent("You are online.");
+};
+
 export const getAllLessons = courses => {
     let lessons = [];
     for (const course of courses) {
