@@ -19,6 +19,10 @@
         @include screen-banner-styles;
         background-color: $notifications-banner-orange;
     }
+
+    .left-block {
+        z-index: 1;
+    }
 }
 
 .notification-card {
