@@ -40,6 +40,7 @@ Profile .left-block {
     display: inline-block;
     max-width: 200px;
     overflow: overlay;
+    font-weight: 400;
 
     h6 {
         margin-top: 10px;
@@ -132,6 +133,7 @@ Profile .left-block {
     min-height: 170px;
     margin-bottom: 0;
     width: 50%;
+    background-color: white;
 
     &:nth-child(odd) {
         margin-right: 5px;
