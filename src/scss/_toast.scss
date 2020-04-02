@@ -1,0 +1,68 @@
+$toast-opacity: 1;
+$toast-top-position: 1em;
+
+#snackbar {
+    visibility: hidden;
+    background-color: rgba($gray-9, $toast-opacity);
+    color: $gray-3;
+    border-radius: 5px;
+    padding: 1em;
+
+    position: fixed;
+    z-index: 1;
+    top: $toast-top-position;
+    right: $toast-top-position;
+
+    font-size: 1em;
+    text-align: center;
+
+    &.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2s;
+        animation: fadein 0.5s, fadeout 0.5s 2s;
+    }
+}
+
+@-webkit-keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+    to {
+        top: $toast-top-position;
+        opacity: $toast-opacity;
+    }
+}
+
+@keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+    to {
+        top: $toast-top-position;
+        opacity: $toast-opacity;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        top: $toast-top-position;
+        opacity: $toast-opacity;
+    }
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        top: $toast-top-position;
+        opacity: $toast-opacity;
+    }
+    to {
+        top: 0;
+        opacity: 0;
+    }
+}

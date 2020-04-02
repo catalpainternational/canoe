@@ -1,0 +1,37 @@
+<ConnectionToast>
+    <p id="snackbar">{state.toastMessage}</p>
+    <script>
+        const TOAST_TIMEOUT_MS = 2500;
+        export default {
+            state: {
+                toastMessage: ""
+            },
+
+            showToast() {
+                const toast = document.getElementById("snackbar");
+                toast.className = "show";
+                setTimeout(function() {
+                    toast.className = toast.className.replace("show", "");
+                }, TOAST_TIMEOUT_MS);
+            },
+
+            onMounted() {
+                window.addEventListener("offline", () => {
+                    const toastMessage = "You are offline.";
+                    this.update({
+                        toastMessage
+                    });
+                    this.showToast();
+                });
+
+                window.addEventListener("online", () => {
+                    const toastMessage = "You are online.";
+                    this.update({
+                        toastMessage
+                    });
+                    this.showToast();
+                });
+            }
+        };
+    </script>
+</ConnectionToast>

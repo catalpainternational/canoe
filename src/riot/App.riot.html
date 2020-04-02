@@ -31,6 +31,8 @@
         <PushSubscription></PushSubscription>
     </template>
 
+    <ConnectionToast></ConnectionToast>
+
     <script>
         import { isUserLoggedIn } from "js/AuthenticationUtilities";
         import { getPage } from "js/Routing";
@@ -42,6 +44,7 @@
         import ServiceWorker from "RiotTags/Components/ServiceWorker.riot.html";
         import DataDownload from "RiotTags/Components/DataDownload.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
+        import ConnectionToast from "RiotTags/Components/ConnectionToast.riot.html";
 
         import Authentication from "RiotTags/Screens/Authentication.riot.html";
         import Notifications from "RiotTags/Screens/Notifications.riot.html";
@@ -88,7 +91,8 @@
                 telemetry: Telemetry,
                 serviceworker: ServiceWorker,
                 datadownload: DataDownload,
-                pushsubscription: PushSubscription
+                pushsubscription: PushSubscription,
+                connectiontoast: ConnectionToast
             },
 
             onMounted() {
