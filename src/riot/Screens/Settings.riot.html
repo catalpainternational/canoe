@@ -14,7 +14,7 @@
             </div>
 
             <button
-                if="{!state.appIsInstalled}"
+                if="{state.canAddToHomeScreen}"
                 class="btn-secondary"
                 onclick="{promptUserToInstallApp}"
             >
@@ -39,13 +39,14 @@
             alertIfRequestWasMadeOffline,
             alertIfBrowserBlocksNotifications
         } from "js/ErrorChecks";
+        import { getBrowserVersion } from "js/DjangoPushNotifications";
 
         export default {
             state: {
                 browserSupportsNotifications: false,
                 isSubscribedToNotifications: true,
                 disableNotificationsButton: false,
-                appIsInstalled: false
+                canAddToHomeScreen: false
             },
 
             logout() {
@@ -57,20 +58,20 @@
                 // values independently.
                 //
                 //   this.update({
-                //       appIsInstalled: this.isAppInstalledToHomeScreen(),
+                //       canAddToHomeScreen: this.shouldAddToHomeScreenShow(),
                 //       isSubscribedToNotifications: await isSubscribedToNotifications()
                 //   })
                 //
                 // When in the same update as isSubscribedToNotifications,
-                // appIsInstalled resolves only after
+                // canAddToHomeScreen resolves only after
                 // isSubscribedToNotifications's "await" resolves. On slow
                 // connections, when the "Add To Home Screen" button should
                 // hide, the button remains visible. With these cases in mind,
-                // we update appIsInstalled separately so that the button hides
+                // we update canAddToHomeScreen separately so that the button hides
                 // immediately.
 
                 this.update({
-                    appIsInstalled: this.isAppInstalledToHomeScreen()
+                    canAddToHomeScreen: this.shouldShowAddToHomeScreen()
                 });
 
                 const browserSupportsNotifications = await supportsPushManager();
@@ -121,8 +122,11 @@
                 this.refreshSettings();
             },
 
-            isAppInstalledToHomeScreen() {
-                return window.matchMedia("(display-mode: standalone)").matches;
+            shouldShowAddToHomeScreen() {
+                const { name } = getBrowserVersion(navigator.userAgent);
+                const inSafari = name === "Safari";
+                const inPWAMode = window.matchMedia("(display-mode: standalone)").matches;
+                return !(inSafari || inPWAMode);
             },
 
             onMounted() {
