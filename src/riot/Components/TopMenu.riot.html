@@ -1,28 +1,27 @@
 <TopMenu>
     <header if="{!state.isHome}" class="background-{state.color}">
-        <div if="{!state.isProfile && !state.isNotifications && !state.isSettings}">
-            <a
-                if="{!state.isCard && !state.isLessonList && !state.isCourse}"
-                class="{state.isSettings ? 'arrow-gray' : 'arrow-white'}"
-                onclick="{goBack}"
-            ></a>
-            <a
-                if="{state.isLessonList}"
-                class="arrow-white"
-                onclick="{backToCoursePage}"
-            ></a>
-            <a
-                if="{state.isCourse}"
-                class="arrow-white"
-                onclick="{backToHome}"
-            ></a>
-            <a
-                if="{state.isCard}"
-                class="cross close-btn"
-                onclick="{backToLessonPage}"
-            ></a>
-        </div>
         <a
+            if="{!state.isCard && !state.isLessonList && !state.isCourse && !state.isBasePage}"
+            class="{state.isSettings ? 'arrow-gray' : 'arrow-white'}"
+            onclick="{goBack}"
+        ></a>
+        <a
+            if="{state.isLessonList}"
+            class="arrow-white"
+            onclick="{backToCoursePage}"
+        ></a>
+        <a
+            if="{state.isCourse}"
+            class="arrow-white"
+            onclick="{backToHome}"
+        ></a>
+        <a
+            if="{state.isCard}"
+            class="cross close-btn"
+            onclick="{backToLessonPage}"
+        ></a>
+        <a
+            if="{!state.isBasePage}"
             class="site-logo {state.isSettings ? '' : 'white'}"
             href="#"
         ></a>
@@ -74,6 +73,7 @@
                 this.state.isProfile = this.props.contentType === "profile";
                 this.state.isSettings = this.props.contentType === "settings";
                 this.state.isLessonList = this.props.contentType === "LessonPage" && !this.state.isCard;
+                this.state.isBasePage = this.state.isProfile || this.state.isNotifications || this.state.isSettings
 
                 if (this.state.isProfile) {
                     this.state.color = "profile-green";
