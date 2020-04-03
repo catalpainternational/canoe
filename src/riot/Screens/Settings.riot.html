@@ -2,7 +2,7 @@
     <div class="settings">
         <div class="content-wrapper">
             <h3>Your settings</h3>
-            <div class="notifications-toggle">
+            <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
                     onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"
@@ -12,6 +12,7 @@
                 </div>
                 <p>Would you like to receive app notifications?</p>
             </div>
+
             <button
                 if="{!state.appIsInstalled}"
                 class="btn-secondary"
@@ -19,6 +20,7 @@
             >
                 Add to Home Screen
             </button>
+
             <button class="btn-secondary" onclick="{logout}">Log out</button>
 
             <!-- <CacheDisplay></CacheDisplay> -->
@@ -26,20 +28,25 @@
     </div>
     <script>
         import { logout } from "js/AuthenticationUtilities";
-        import { hasPushManagerSupport, subscribe, unsubscribe, isSubscribedToNotifications } from "js/Notifications";
+        import {
+            supportsPushManager,
+            subscribe,
+            unsubscribe,
+            isSubscribedToNotifications
+        } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
-        import { isAppOffline } from "js/utilities";
-        // import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
+        import {
+            alertIfRequestWasMadeOffline,
+            alertIfBrowserBlocksNotifications
+        } from "js/ErrorChecks";
 
         export default {
             state: {
+                browserSupportsNotifications: false,
                 isSubscribedToNotifications: true,
                 disableNotificationsButton: false,
                 appIsInstalled: false
             },
-            // components: {
-            //     cachedisplay: CacheDisplay
-            // },
 
             logout() {
                 logout();
@@ -65,8 +72,16 @@
                 this.update({
                     appIsInstalled: this.isAppInstalledToHomeScreen()
                 });
+
+                const browserSupportsNotifications = await supportsPushManager();
+
+                if (!browserSupportsNotifications) {
+                    return;
+                }
+
                 this.update({
-                    isSubscribedToNotifications: await isSubscribedToNotifications(),
+                    browserSupportsNotifications,
+                    isSubscribedToNotifications: await isSubscribedToNotifications()
                 });
             },
 
@@ -75,12 +90,8 @@
                     this.update({ disableNotificationsButton: true });
                     await subscribeOrUnsubscribe();
                 } catch (error) {
-                    if (isAppOffline(error)) {
-                        alertAppIsOffline();
-                    } else if (error instanceof DOMException && error.name === "NotAllowedError") {
-                        alert(
-                            "Your browser blocks notifications. Allow notifications in your browser settings."
-                        );
+                    if (alertIfRequestWasMadeOffline(error)) {
+                    } else if (alertIfBrowserBlocksNotifications(error)) {
                     } else {
                         throw error;
                     }
@@ -116,7 +127,7 @@
 
             onMounted() {
                 this.refreshSettings();
-            },
+            }
         };
     </script>
 </Settings>
