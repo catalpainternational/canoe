@@ -362,17 +362,17 @@
 .neutral-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("../img/neutral.svg");
+    -webkit-mask-image: url("../img/neutral.png");
 }
 
 .smiling-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("../img/smile.svg");
+    -webkit-mask-image: url("../img/smile.png");
 }
 
 .thrilled-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("../img/thrilled.svg");
+    -webkit-mask-image: url("../img/thrilled.png");
 }
