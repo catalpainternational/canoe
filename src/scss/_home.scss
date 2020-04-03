@@ -54,7 +54,7 @@ HomePage .content-wrapper {
 
 HomePage .header {
     margin-top: 0;
-    padding: 20px 30px 0 45px;
+    padding: 0px 30px 0 45px;
     height: 181px;
     
     h3 { 
@@ -82,7 +82,7 @@ HomePage .header:after {
     height: 20px;
     border-radius: 0 0 50% 50%;
     position: absolute;
-    top: 200px;
+    top: 245px;
     left: 0;
 
     @media only screen and (min-width: $tablet) {
@@ -101,4 +101,9 @@ HomePage .left-block {
     max-width: 200px;
     overflow: overlay;
     margin-top: 10px;
+}
+
+HomePage div.content-wrapper {	
+    margin-left: 0;	
+    margin-right: 0;	
 }
