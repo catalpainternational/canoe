@@ -54,22 +54,6 @@
             },
 
             async refreshSettings() {
-                // These updates must remain separate. Riot doesn't update state
-                // values independently.
-                //
-                //   this.update({
-                //       canAddToHomeScreen: this.shouldAddToHomeScreenShow(),
-                //       isSubscribedToNotifications: await isSubscribedToNotifications()
-                //   })
-                //
-                // When in the same update as isSubscribedToNotifications,
-                // canAddToHomeScreen resolves only after
-                // isSubscribedToNotifications's "await" resolves. On slow
-                // connections, when the "Add To Home Screen" button should
-                // hide, the button remains visible. With these cases in mind,
-                // we update canAddToHomeScreen separately so that the button hides
-                // immediately.
-
                 this.update({
                     canAddToHomeScreen: this.shouldShowAddToHomeScreen()
                 });
