@@ -27,7 +27,10 @@
                 <button class="btn-primary no-thanks" onclick="{clickedNoThanks}">No thanks</button>
             </template>
             <template if="{state.madeFeedbackDecision}">
-                <div class="sun"></div>
+                <div class="feedback-icon">
+                    <div class="sun"></div>
+                    <h2>FEEDBACK</h2>
+                </div>
                 <div class="thank-you-container">
                     <h3>Thank you!</h3>
                     <div class="smiling-smiley"></div>
@@ -35,7 +38,7 @@
                         We appreciate your feedback and always endeavor to improve your experience.
                     </p>
                 </div>
-                <button class="btn-primary" onclick="{clickedContinue}">Continue</button>
+                <button class="btn-primary thank-you-container" onclick="{clickedContinue}">Continue</button>
             </template>
         </div>
     </LessonFrame>
