@@ -26,7 +26,7 @@
             class="site-logo {state.isSettings ? '' : 'white'}"
             href="#"
         ></a>
-        <a class="cog {state.isSettings ? 'active' : 'white'}" href="#settings"></a>
+        <a if="{!state.isSettings}" class="cog white" href="#settings"></a>
     </header>
 
     <script>
