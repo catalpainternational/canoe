@@ -134,7 +134,7 @@ module.exports = env => {
                 background_color: projectConfiguration.BACKGROUND_COLOR,
                 icons: [
                     {
-                        src: path.resolve("src/logo.png"),
+                        src: path.resolve("../canoe-overrides/img/site_logo.svg"),
                         sizes: "150x150"
                     }
                 ]
