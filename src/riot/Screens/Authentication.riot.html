@@ -12,6 +12,7 @@
                 <label for="password">Password</label>
                 <input id="password" type="password" name="password" />
             </div>
+            <input type="checkbox" onclick="{showPassword}">Show Password
             <div if="{state.errorExplanation}">
                 <span class="warning"></span>
                 <p class="error-message">{state.errorExplanation}</p>
@@ -39,6 +40,15 @@
                     password: passwordInput.value
                 };
                 return usernameAndPassword;
+            },
+
+            showPassword() {
+                const x = document.getElementById("password");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
             },
 
             async loginUser(event) {
