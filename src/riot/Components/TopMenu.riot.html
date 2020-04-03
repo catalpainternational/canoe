@@ -1,7 +1,7 @@
 <TopMenu>
-    <header if="{!state.isHome}" class="background-{state.color}">
+    <header class="background-{state.color}">
         <a
-            if="{!state.isCard && !state.isLessonList && !state.isCourse && !state.isBasePage}"
+            if="{!state.isCard && !state.isLessonList && !state.isCourse && !state.isBasePage && !state.isHome}"
             class="{state.isSettings ? 'arrow-gray' : 'arrow-white'}"
             onclick="{goBack}"
         ></a>
@@ -21,7 +21,7 @@
             onclick="{backToLessonPage}"
         ></a>
         <a
-            if="{!state.isBasePage}"
+            if="{!state.isBasePage && !state.isHome}"
             class="site-logo {state.isSettings ? '' : 'white'}"
             href="#"
         ></a>
@@ -79,6 +79,8 @@
                     this.state.color = "profile-green";
                 } else if (this.state.isNotifications) {
                     this.state.color = "notifications-orange";
+                } else if (this.state.isHome) {
+                    this.state.color = "blue-1";
                 } else {
                     this.state.color = "";
                 }
