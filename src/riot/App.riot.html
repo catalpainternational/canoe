@@ -35,6 +35,7 @@
         import { isUserLoggedIn } from "js/AuthenticationUtilities";
         import { getPage } from "js/Routing";
         import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
+        import { setLocale } from "Translation";
 
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
@@ -127,6 +128,7 @@
             storeListener(previousStoreState, storeState) {
                 if(previousStoreState.language != storeState.language) {
                     console.log('language change detected');
+                    setLocale(storeState.language);
                     this.update();
                 }
             },

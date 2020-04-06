@@ -1,5 +1,5 @@
 const webpack = require("webpack");
-const merge = require('webpack-merge');
+const merge = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
 
@@ -9,18 +9,18 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 
 // default environment configuration
-const defaultEnvironmentConfiguration = require('./canoe-environment-default.js');
+const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
 
 // default project configuration
-const defaultProjectConfiguration = require('./canoe-project-default.js');
+const defaultProjectConfiguration = require("./canoe-project-default.js");
 
-module.exports = env => {
+module.exports = (env) => {
     // read the environment configuration
     const environmentConfiguration = Object.assign(
         defaultEnvironmentConfiguration,
         env && env.ENVIRONMENT_CONFIG_PATH ? require(env.ENVIRONMENT_CONFIG_PATH) : {}
     );
-        
+
     // read the project configuration
     const projectConfiguration = Object.assign(
         defaultProjectConfiguration,
@@ -28,7 +28,7 @@ module.exports = env => {
     );
 
     // merge environment and project configurations for use in webpack compilation
-    // webpack.DefinePlugin will replace process.env.CONFIG_KEY with configured valuea 
+    // webpack.DefinePlugin will replace process.env.CONFIG_KEY with configured valuea
     const processEnvironment = Object.keys(environmentConfiguration).reduce((prev, next) => {
         prev[`process.env.${next}`] = JSON.stringify(environmentConfiguration[next]);
         return prev;
@@ -36,27 +36,27 @@ module.exports = env => {
 
     const baseConfig = {
         context: __dirname,
-        mode: 'development',
-        devtool: 'inline-source-map',
+        mode: "development",
+        devtool: "inline-source-map",
         entry: {
-            canoe: path.resolve(__dirname, 'src', 'index.js'),
+            canoe: path.resolve(__dirname, "src", "index.js"),
         },
         output: {
-            filename: '[name].js',
-            path: path.resolve(__dirname, 'dist'),
+            filename: "[name].js",
+            path: path.resolve(__dirname, "dist"),
         },
         devServer: {
-            contentBase: path.resolve(__dirname, "dist")
+            contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
-            modules: ['node_modules', path.resolve(__dirname, 'modules')],
+            modules: ["node_modules", path.resolve(__dirname, "modules")],
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
                 js: path.resolve(__dirname, "src/js"),
                 ReduxImpl: path.resolve(__dirname, "src/js/redux"),
                 Actions: path.resolve(__dirname, "src/js/actions"),
                 OverrideSass: path.resolve(__dirname, "src", "overrides"),
-            }
+            },
         },
         module: {
             rules: [
@@ -66,9 +66,9 @@ module.exports = env => {
                     use: {
                         loader: "@riotjs/webpack-loader",
                         options: {
-                            type: "es6"
-                        }
-                    }
+                            type: "es6",
+                        },
+                    },
                 },
                 {
                     test: /\.s[ac]ss$/i,
@@ -78,30 +78,30 @@ module.exports = env => {
                         // Translates CSS into CommonJS
                         "css-loader",
                         // Compiles Sass to CSS
-                        "sass-loader"
-                    ]
+                        "sass-loader",
+                    ],
                 },
                 {
                     test: /\.(woff|woff2|eot|ttf|otf)$/,
                     use: {
                         loader: "file-loader",
                         options: {
-                            name: "[name].[ext]"
-                        }
-                    }
+                            name: "[name].[ext]",
+                        },
+                    },
                 },
                 {
                     test: /\.(png|jpg|gif)$/,
-                    use: ["file-loader"]
+                    use: ["file-loader"],
                 },
                 {
                     test: /\.svg$/,
                     use: {
                         loader: "svg-url-loader",
                         options: {
-                            encoding: "base64"
-                        }
-                    }
+                            encoding: "base64",
+                        },
+                    },
                 },
                 {
                     test: /\.m?js$/,
@@ -109,16 +109,16 @@ module.exports = env => {
                     use: {
                         loader: "babel-loader",
                         options: {
-                            presets: ['@babel/preset-env'],
-                            plugins: ['@babel/plugin-transform-runtime']
-                        }
-                    }
-                }
-            ]
+                            presets: ["@babel/preset-env"],
+                            plugins: ["@babel/plugin-transform-runtime"],
+                        },
+                    },
+                },
+            ],
         },
         plugins: [
             new CleanWebpackPlugin({
-                cleanOnceBeforeBuildPatterns: ["**/*"]
+                cleanOnceBeforeBuildPatterns: ["**/*"],
             }),
             new webpack.DefinePlugin(processEnvironment),
             new HtmlWebpackPlugin({
@@ -126,7 +126,7 @@ module.exports = env => {
                 template: path.resolve(__dirname, "src/index.html"),
                 favicon: projectConfiguration.FAVICON_PATH,
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
-                ga_tag: environmentConfiguration.GA_TAG
+                ga_tag: environmentConfiguration.GA_TAG,
             }),
             new WebpackPwaManifest({
                 name: projectConfiguration.SITE_NAME,
@@ -136,25 +136,27 @@ module.exports = env => {
                 icons: [
                     {
                         src: path.resolve("src/logo.png"),
-                        sizes: "150x150"
-                    }
-                ]
+                        sizes: "150x150",
+                    },
+                ],
             }),
             new InjectManifest({
-                swSrc: path.resolve(__dirname, 'src/sw.js'),
-                maximumFileSizeToCacheInBytes: 4000000
+                swSrc: path.resolve(__dirname, "src/sw.js"),
+                maximumFileSizeToCacheInBytes: 4000000,
             }),
             new webpack.ProvidePlugin({
-                getText:  ['translation', 'getText'],
+                getText: ["translation", "getText"],
             }),
-        ]
+        ],
     };
 
-    const productionWebpackConfig =  env && env.PRODUCTION 
-        ? require("./webpack.prod.js")
-        : {}
+    const productionWebpackConfig = env && env.PRODUCTION ? require("./webpack.prod.js") : {};
 
-    const config = merge(baseConfig, projectConfiguration.WEBPACK_CONFIG, environmentConfiguration.WEBPACK_CONFIG, productionWebpackConfig);
-    // console.log(config);
+    const config = merge(
+        baseConfig,
+        projectConfiguration.WEBPACK_CONFIG,
+        environmentConfiguration.WEBPACK_CONFIG,
+        productionWebpackConfig
+    );
     return config;
 };

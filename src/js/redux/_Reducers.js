@@ -1,10 +1,9 @@
 import { combineReducers } from "redux";
-import { setLocale } from 'translation'; 
 
 export const UPDATED_MANIFEST = "UPDATED_MANIFEST";
 export const SITE_DOWNLOADED = "SITE_DOWNLOADED";
 export const ADDED_WAGTAIL_PAGE = "ADDED_WAGTAIL_PAGE";
-export const LANGUAGE_CHANGE = "LANGUAGE_CHANGE";
+export const LANGUAGE_CHANGE = "LANGUAGE_CHANGED";
 
 const updateManifest = (state = {}, action) => {
     switch (action.type) {
@@ -35,10 +34,9 @@ const addWagtailPage = (state = {}, action) => {
     }
 };
 
-const changeLanguage = (state = 'tetum', action) => {
+const changeLanguage = (state = "tetum", action) => {
     switch (action.type) {
         case LANGUAGE_CHANGE:
-            setLocale(action.language);
             return action.language;
         default:
             return state;
