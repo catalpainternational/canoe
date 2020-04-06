@@ -10,8 +10,8 @@ export const installReduxPlugin = function (component, store) {
     }
 
     // if the component has a storeListener function then subscribe it to the store
-    const originalOnMounted = component.onMounted || function () {};
-    const originalOnBeforeUnmount = component.onBeforeUnmount || function () {};
+    const originalOnMounted = component.onMounted || (() => {});
+    const originalOnBeforeUnmount = component.onBeforeUnmount || (() => {});
 
     // store state and subscribe on mount
     component.onMounted = function reduxOnMount(...args) {

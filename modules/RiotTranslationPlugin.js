@@ -7,12 +7,15 @@ import { getText } from "Translation";
 const ORIGINAL_TRANSLATION_ATTRIBUTE = "canoe_translation_original";
 
 export const installTranslationPlugin = function (component) {
-    component.onUpdated = function translateOnUpdated() {
+    const originalOnUpdated = component.onUpdated || (() => {});
+
+    component.onUpdated = function translateOnUpdated(...args) {
         component.$$("[translate]").forEach((element) => {
             if (!element.hasAttribute(ORIGINAL_TRANSLATION_ATTRIBUTE)) {
                 element.setAttribute(ORIGINAL_TRANSLATION_ATTRIBUTE, element.innerText);
             }
             element.innerText = getText(element.getAttribute(ORIGINAL_TRANSLATION_ATTRIBUTE));
         });
+        originalOnUpdated.apply(component, args);
     };
 };

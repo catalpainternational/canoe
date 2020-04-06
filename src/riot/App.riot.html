@@ -127,7 +127,6 @@
 
             storeListener(previousStoreState, storeState) {
                 if(previousStoreState.language != storeState.language) {
-                    console.log('language change detected');
                     setLocale(storeState.language);
                     this.update();
                 }
