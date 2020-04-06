@@ -1,16 +1,16 @@
 <CacheDisplay>
-    <h3>Storage Use</h3>
+    <h3 translate>Storage Use</h3>
     <div if={ state.quotaInfo }>
         <label for="quota">{ pretty(state.quotaInfo.usage) } of { pretty(state.quotaInfo.quota) }</label>
         <br />
         <progress id="quota" value="{ state.quotaInfo.pct }" max="100"> { state.quotaInfo.pct }% </progress>
     </div>
-    <h4>Summary</h4>
+    <h4 translate>Summary</h4>
     <table if={ state.cacheSummary }>
         <thead>
             <tr>
-                <th>Type</th>
-                <th>Total</th>
+                <th translate>Type</th>
+                <th translate>Total</th>
             </tr>
         </thead>
         <tbody>
@@ -20,14 +20,14 @@
             </tr>
         </tbody>
     </table>
-    <h4>Details</h4>
+    <h4 translate>Details</h4>
     <table if={ state.cachesInfo }>
         <thead>
             <tr>
-                <th>Cache</th>
-                <th>Total</th>
-                <th>Count</th>
-                <th>Avg</th>
+                <th translate>Cache</th>
+                <th translate>Total</th>
+                <th translate>Count</th>
+                <th translate>Avg</th>
             </tr>
         </thead>
         <tbody>

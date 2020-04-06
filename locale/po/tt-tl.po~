@@ -31,16 +31,7 @@ msgstr ""
 msgid "Add to Home Screen"
 msgstr ""
 
-msgid "Amazing work!"
-msgstr ""
-
-msgid "Back to Courses"
-msgstr ""
-
 msgid "Back to lesson overview"
-msgstr ""
-
-msgid "Congratulations!"
 msgstr ""
 
 msgid "Continue learning"
@@ -73,9 +64,6 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-msgid "Next Lesson"
-msgstr ""
-
 msgid "Objectives"
 msgstr ""
 
@@ -91,12 +79,6 @@ msgstr ""
 msgid "Would you like to receive app notifications?"
 msgstr "Notifikasuan ka?"
 
-msgid "You are eligible to receive a printed certificate for this course."
-msgstr ""
-
-msgid "You just completed the lesson, \"{props.title}\""
-msgstr ""
-
 msgid ""
 "You only have {getNumberOfLessonsLeftIn(state.currentCourse)} lesson{getNumberOfLessonsLeftIn(state.currentCourse) > 1 ? 's' : ''} left to finish\n"
 "{state.currentCourse.data.title}."
@@ -106,9 +88,6 @@ msgid "You're ready to start the {props.nextModule}."
 msgstr ""
 
 msgid "You've completed the {props.module}"
-msgstr ""
-
-msgid "You've completed the course"
 msgstr ""
 
 #, fuzzy

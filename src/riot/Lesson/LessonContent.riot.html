@@ -16,11 +16,11 @@
                     <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
                 </div>
                 <div>
-                    <button class="btn-primary" onclick="{nextContentPage}" if="{state.cardIdx < props.lessonContent.cards.length - 1}">Next</button>
-                    <button class="btn-primary" onclick="{completeContentModal}" if="{state.cardIdx === props.lessonContent.cards.length - 1}">Finish</button>
+                    <button class="btn-primary" onclick="{nextContentPage}" if="{state.cardIdx < props.lessonContent.cards.length - 1}" translate>Next</button>
+                    <button class="btn-primary" onclick="{completeContentModal}" if="{state.cardIdx === props.lessonContent.cards.length - 1}" translate>Finish</button>
                 </div>
             </div>
-            <p class="card-number">{state.cardIdx + 1} of {props.lessonContent.cards.length}</p>
+            <p class="card-number" translate>{state.cardIdx + 1} of {props.lessonContent.cards.length}</p>
         </div>
     </div>
     <LessonModuleComplete

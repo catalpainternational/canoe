@@ -9,6 +9,7 @@
                 each="{source in props.media.sources}"
                 src="{prefixUrlWithBaseUrl(source.src)}"
                 type="{source.type}"
+                translate
             />
             Your browser does not support the audio element.
         </audio>
@@ -24,6 +25,7 @@
                 each="{source in props.media.sources}"
                 src="{prefixUrlWithBaseUrl(source.src)}"
                 type="{ source.type }"
+                translate
             />
             Your browser does not support the video tag.
         </video>

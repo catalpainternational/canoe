@@ -6,16 +6,313 @@ msgstr ""
 "POT-Creation-Date: 2020-04-06 14:59+0900\n"
 "Language: en\n"
 
+#: ./src/riot/Media.riot.html:24
+#: ./src/riot/Media.riot.html:8
+msgid ""
+msgstr ""
+
+#: ./src/riot/WagtailPages/CoursePage.riot.html:14
+msgid "{getCourseProgress()} lessons complete"
+msgstr ""
+
+#: ./src/riot/WagtailPages/HomePage.riot.html:37
+msgid "{getCourseProgress(course)} lessons complete"
+msgstr ""
+
+#: ./src/riot/Screens/Profile.riot.html:31
+msgid ""
+"{getNumberOfCompletedLessonsFor(course)} out of\n"
+"{course.lessons.length} completed"
+msgstr ""
+
+#: ./src/riot/Components/Card.riot.html:22
+msgid "{props.duration} mins"
+msgstr ""
+
+#: ./src/riot/WagtailPages/LessonPage.riot.html:47
+msgid ""
+"{props.wagtailPage.objective.duration + props.wagtailPage.content.duration +\n"
+"props.wagtailPage.test.duration} mins"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonContent.riot.html:23
+msgid "{state.cardIdx + 1} of {props.lessonContent.cards.length}"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonObjective.riot.html:16
+msgid "{state.cardIdx + 1} of {props.objective.cards.length}"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonTest.riot.html:45
+msgid "{state.cardIdx + 1} of {props.test.cards.length}"
+msgstr ""
+
 #: ./src/riot/Screens/Settings.riot.html:20
 msgid "Add to Home Screen"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonComplete.riot.html:15
+msgid "Amazing work!"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonFeedback.riot.html:10
+msgid "Are you enjoying this lesson?"
+msgstr ""
+
+#: ./src/riot/CacheDisplay.riot.html:30
+msgid "Avg"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonComplete.riot.html:20
+msgid "Back to Courses"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonModuleComplete.riot.html:14
+msgid "Back to lesson overview"
+msgstr ""
+
+#: ./src/riot/CacheDisplay.riot.html:27
+msgid "Cache"
+msgstr ""
+
+#: ./src/riot/Components/Card.riot.html:6
+msgid "Coming Soon!"
+msgstr ""
+
+#: ./src/riot/Components/Card.riot.html:13
+msgid "completed"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonComplete.riot.html:8
+msgid "Congratulations!"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonFeedback.riot.html:41
+msgid "Continue"
+msgstr ""
+
+#: ./src/riot/Components/ContinueLearningButton.riot.html:5
+msgid "Continue learning"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonTest.riot.html:19
+msgid "Correct answer. Well done!"
+msgstr ""
+
+#: ./src/riot/CacheDisplay.riot.html:29
+msgid "Count"
+msgstr ""
+
+#: ./src/riot/WagtailPages/CoursePage.riot.html:10
+msgid "Course"
+msgstr ""
+
+#: ./src/riot/CacheDisplay.riot.html:23
+msgid "Details"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonFeedback.riot.html:32
+#: ./src/riot/Lesson/LessonFeedback.riot.html:7
+msgid "FEEDBACK"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonContent.riot.html:20
+#: ./src/riot/Lesson/LessonObjective.riot.html:13
+#: ./src/riot/Lesson/LessonTest.riot.html:36
+msgid "Finish"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonModuleComplete.riot.html:7
+msgid "Great job!"
+msgstr ""
+
+#: ./src/riot/Screens/Profile.riot.html:6
+msgid ""
+"Great work {getUsername()}! You have completed {getPercentOfLessonsCompleted()}% \n"
+"of your overall coursework"
+msgstr ""
+
+#: ./src/riot/WagtailPages/HomePage.riot.html:6
+msgid "Hi {getUsername()}"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonTest.riot.html:23
+msgid "Incorrect answer. Try again."
+msgstr ""
+
+#: ./src/riot/WagtailPages/LessonPage.riot.html:61
+msgid "Jobs that use these skills"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonModuleComplete.riot.html:13
+msgid "Keep going"
+msgstr ""
+
+#: ./src/riot/Screens/Notifications.riot.html:5
+msgid "Latest notifications"
+msgstr ""
+
+#: ./src/riot/Screens/Profile.riot.html:47
+msgid "Learning statistics"
+msgstr ""
+
+#: ./src/riot/WagtailPages/LessonPage.riot.html:39
+msgid "Lesson - {props.wagtailPage.course.title}"
+msgstr ""
+
+#: ./src/riot/WagtailPages/LessonPage.riot.html:87
+msgid "Lesson Activities"
+msgstr ""
+
+#: ./src/riot/Screens/Profile.riot.html:58
+msgid "lessons completed so far"
+msgstr ""
+
+#: ./src/riot/Screens/Profile.riot.html:66
+msgid "lessons remaining to finish your study"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonFeedback.riot.html:22
+msgid ""
+"Let us know what you think of this lesson. We value your feedback and treat\n"
+"all feedback as confidential."
+msgstr ""
+
+#: ./src/riot/Screens/Authentication.riot.html:6
+msgid "Log In"
+msgstr ""
+
+#: ./src/riot/Screens/Settings.riot.html:29
+msgid "Log out"
+msgstr ""
+
+#: ./src/riot/Screens/Authentication.riot.html:19
+msgid "Login"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonContent.riot.html:19
+#: ./src/riot/Lesson/LessonObjective.riot.html:12
+#: ./src/riot/Lesson/LessonTest.riot.html:29
+msgid "Next"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonComplete.riot.html:11
+msgid "Next Lesson"
+msgstr ""
+
+#: ./src/riot/Screens/Notifications.riot.html:11
+msgid "No notifications."
+msgstr ""
+
+#: ./src/riot/Lesson/LessonFeedback.riot.html:27
+msgid "No thanks"
+msgstr ""
+
+#: ./src/riot/Screens/Notifications.riot.html:15
+msgid "Notifications"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonObjective.riot.html:5
+msgid "Objectives"
 msgstr ""
 
 #: src/riot/Screens/Settings.riot.html:104
 msgid "Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
 msgstr ""
 
+#: ./src/riot/Screens/Profile.riot.html:5
+msgid "Overall progress"
+msgstr ""
+
+#: ./src/riot/Screens/Authentication.riot.html:12
+msgid "Password"
+msgstr ""
+
+#: ./src/riot/Screens/Profile.riot.html:16
+msgid "Progress by course"
+msgstr ""
+
+#: ./src/riot/WagtailPages/LessonPage.riot.html:76
+msgid "See {state.showLongDescription ? 'less' : 'more'}"
+msgstr ""
+
+#: ./src/riot/Components/Card.riot.html:17
+msgid "start lesson"
+msgstr ""
+
+#: ./src/riot/Screens/Notifications.riot.html:41
+msgid "Start lesson"
+msgstr ""
+
+#: ./src/riot/CacheDisplay.riot.html:2
+msgid "Storage Use"
+msgstr ""
+
+#: ./src/riot/CacheDisplay.riot.html:8
+msgid "Summary"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonFeedback.riot.html:35
+msgid "Thank you!"
+msgstr ""
+
+#: ./src/riot/CacheDisplay.riot.html:13
+#: ./src/riot/CacheDisplay.riot.html:28
+msgid "Total"
+msgstr ""
+
+#: ./src/riot/CacheDisplay.riot.html:12
+msgid "Type"
+msgstr ""
+
+#: ./src/riot/Screens/Authentication.riot.html:8
+msgid "Username"
+msgstr ""
+
+#: ./src/riot/WagtailPages/HomePage.riot.html:39
+msgid "view all"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonFeedback.riot.html:37
+msgid "We appreciate your feedback and always endeavor to improve your experience."
+msgstr ""
+
 #: ./src/riot/Screens/Settings.riot.html:17
 msgid "Would you like to receive app notifications?"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonComplete.riot.html:17
+msgid "You are eligible to receive a printed certificate for this course."
+msgstr ""
+
+#: ./src/riot/Lesson/LessonComplete.riot.html:9
+msgid "You just completed the lesson, \"{props.title}\""
+msgstr ""
+
+#: ./src/riot/WagtailPages/HomePage.riot.html:7
+msgid ""
+"You only have {getNumberOfLessonsLeftIn(state.currentCourse)} lesson{getNumberOfLessonsLeftIn(state.currentCourse) > 1 ? 's' : ''} left to finish\n"
+"{state.currentCourse.data.title}."
+msgstr ""
+
+#: ./src/riot/Lesson/LessonModuleComplete.riot.html:9
+msgid "You're ready to start the {props.nextModule}."
+msgstr ""
+
+#: ./src/riot/Lesson/LessonModuleComplete.riot.html:8
+msgid "You've completed the {props.module}"
+msgstr ""
+
+#: ./src/riot/Lesson/LessonComplete.riot.html:16
+msgid "You've completed the course"
+msgstr ""
+
+#: ./src/riot/WagtailPages/HomePage.riot.html:22
+msgid "Your courses"
+msgstr ""
+
+#: ./src/riot/WagtailPages/CoursePage.riot.html:20
+msgid "Your lessons"
 msgstr ""
 
 #: ./src/riot/Screens/Settings.riot.html:4
