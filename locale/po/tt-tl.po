@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Canoe\n"
+"Report-Msgid-Bugs-To: engineering@catalpa.io\n"
+"POT-Creation-Date: 2020-04-06 14:59+0900\n"
+"PO-Revision-Date: 2020-04-06 15:39+0900\n"
+"Last-Translator: Peter Coward <peter@catalpa.io>\n"
+"Language-Team: Language tt-tl\n"
+"Language: tt-tl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Add to Home Screen"
+msgstr ""
+
+msgid "Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
+msgstr "Tebes hakarak taka notifikasuan?"
+
+msgid "Would you like to receive app notifications?"
+msgstr "Notifikasuan ka?"
+
+msgid "Your settings"
+msgstr "Ita nia konfigurasaun"

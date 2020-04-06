@@ -49,6 +49,7 @@ module.exports = env => {
             contentBase: path.resolve(__dirname, "dist")
         },
         resolve: {
+            modules: ['node_modules', path.resolve(__dirname, 'modules')],
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
                 js: path.resolve(__dirname, "src/js"),
@@ -143,6 +144,9 @@ module.exports = env => {
                 swSrc: path.resolve(__dirname, 'src/sw.js'),
                 maximumFileSizeToCacheInBytes: 4000000
             }),
+            new webpack.ProvidePlugin({
+                getText:  ['translation', 'getText'],
+            }),
         ]
     };
 
@@ -151,6 +155,6 @@ module.exports = env => {
         : {}
 
     const config = merge(baseConfig, projectConfiguration.WEBPACK_CONFIG, environmentConfiguration.WEBPACK_CONFIG, productionWebpackConfig);
-    console.log(config);
+    // console.log(config);
     return config;
 };

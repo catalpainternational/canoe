@@ -124,6 +124,13 @@
                 scrollToFirstUnfinishedContent();
             },
 
+            storeListener(previousStoreState, storeState) {
+                if(previousStoreState.language != storeState.language) {
+                    console.log('language change detected');
+                    this.update();
+                }
+            },
+
             async route() {
                 const page = await getPage();
                 const pageModel = getWagtailPageModelName(page);

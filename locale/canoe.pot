@@ -1,0 +1,23 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: Canoe\n"
+"Report-Msgid-Bugs-To: engineering@catalpa.io\n"
+"POT-Creation-Date: 2020-04-06 14:59+0900\n"
+"Language: en\n"
+
+#: ./src/riot/Screens/Settings.riot.html:20
+msgid "Add to Home Screen"
+msgstr ""
+
+#: src/riot/Screens/Settings.riot.html:104
+msgid "Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
+msgstr ""
+
+#: ./src/riot/Screens/Settings.riot.html:17
+msgid "Would you like to receive app notifications?"
+msgstr ""
+
+#: ./src/riot/Screens/Settings.riot.html:4
+msgid "Your settings"
+msgstr ""
