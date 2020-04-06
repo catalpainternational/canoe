@@ -145,7 +145,7 @@ module.exports = (env) => {
                 maximumFileSizeToCacheInBytes: 4000000,
             }),
             new webpack.ProvidePlugin({
-                getText: ["translation", "getText"],
+                getText: ["Translation", "getText"],
             }),
         ],
     };
