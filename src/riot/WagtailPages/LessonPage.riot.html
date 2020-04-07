@@ -36,7 +36,7 @@
                 </div>
                 <div class="section-title">
                     <div class="unit">
-                        <h5 translate>Lesson - {props.wagtailPage.course.title}</h5>
+                        <h5><span translate>Lesson - </span>{props.wagtailPage.course.title}</h5>
                     </div>
                 </div>
                 <h2>{props.wagtailPage.title}</h2>
@@ -44,9 +44,9 @@
 
             <div class="duration">
                 <span class="clock"></span>
-                <p translate>
+                <p>
                     {props.wagtailPage.objective.duration + props.wagtailPage.content.duration +
-                    props.wagtailPage.test.duration} mins
+                    props.wagtailPage.test.duration}<span translate> mins</span>
                 </p>
             </div>
             <div class="description">
@@ -74,12 +74,17 @@
                 </div>
 
                 <a
-                    if="{props.wagtailPage.data.long_description}"
+                    if="{props.wagtailPage.data.long_description && state.showLongDescription}"
                     onclick="{toggleLessonDescription}"
                     translate
-                    >See {state.showLongDescription ? 'less' : 'more'}</a
+                    >See less</a
                 >
-                <!-- might be tough to translate less/more -->
+                <a
+                    if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
+                    onclick="{toggleLessonDescription}"
+                    translate
+                    >See more</a
+                >
             </div>
 
             <div class="section-title">

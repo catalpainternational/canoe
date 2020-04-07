@@ -3,8 +3,8 @@
         <div class="profile-header">
             <div class="left-block">
                 <h3 translate>Overall progress</h3>
-                <h6 translate>Great work {getUsername()}! You have completed {getPercentOfLessonsCompleted()}% 
-                    of your overall coursework
+                <h6><span translate>Great work </span>{getUsername()}!<span translate> You have completed </span>{getPercentOfLessonsCompleted()}%
+                    <span translate> of your overall coursework</span>
                 </h6>
                 <ContinueLearningButton if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"></ContinueLearningButton>
             </div>
@@ -28,9 +28,9 @@
                         </div>
                         <div class="card-footer">
                             <span class="checkmark"></span>
-                            <p translate>
-                                {getNumberOfCompletedLessonsFor(course)} out of
-                                {course.lessons.length} completed
+                            <p>
+                                {getNumberOfCompletedLessonsFor(course)}<span translate> out of </span>
+                                {course.lessons.length}<span translate> completed</span>
                             </p>
                             <progress
                                 if="{getNumberOfCompletedLessonsFor(course) > 0}"

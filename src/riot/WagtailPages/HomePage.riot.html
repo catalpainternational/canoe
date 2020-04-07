@@ -3,9 +3,9 @@
     <div class="header">
         <div class="header-box">
             <div class="left-block">
-                <h3 translate>Hi {getUsername()}</h3>
-                <h6 if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}" translate>
-                    You only have {getNumberOfLessonsLeftIn(state.currentCourse)} lesson{getNumberOfLessonsLeftIn(state.currentCourse) > 1 ? 's' : ''} left to finish
+                <h3><span translate>Hi </span>{getUsername()}</h3>
+                <h6 if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}">
+                    <span translate>You only have </span>{getNumberOfLessonsLeftIn(state.currentCourse)}<span translate> lesson</span>{getNumberOfLessonsLeftIn(state.currentCourse) > 1 ? 's' : ''}<span translate> left to finish</span>
                     {state.currentCourse.data.title}.
                 </h6>
                 <ContinueLearningButton if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
@@ -34,7 +34,7 @@
                 <div>
                     <a href="#{course.data.id}"> <h3>{course.data.title}</h3> </a>
                     <div>
-                        <p translate>{getCourseProgress(course)} lessons complete</p>
+                        <p>{getCourseProgress(course)}<span translate> lessons complete</span></p>
                         <a href="#{course.data.id}">
                             <p class="text-purple" translate>view all</p>
                             <span class="arrow background-purple"></span>

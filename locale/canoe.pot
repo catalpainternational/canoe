@@ -11,42 +11,6 @@ msgstr ""
 msgid ""
 msgstr ""
 
-#: ./src/riot/WagtailPages/CoursePage.riot.html:14
-msgid "{getCourseProgress()} lessons complete"
-msgstr ""
-
-#: ./src/riot/WagtailPages/HomePage.riot.html:37
-msgid "{getCourseProgress(course)} lessons complete"
-msgstr ""
-
-#: ./src/riot/Screens/Profile.riot.html:31
-msgid ""
-"{getNumberOfCompletedLessonsFor(course)} out of\n"
-"{course.lessons.length} completed"
-msgstr ""
-
-#: ./src/riot/Components/Card.riot.html:22
-msgid "{props.duration} mins"
-msgstr ""
-
-#: ./src/riot/WagtailPages/LessonPage.riot.html:47
-msgid ""
-"{props.wagtailPage.objective.duration + props.wagtailPage.content.duration +\n"
-"props.wagtailPage.test.duration} mins"
-msgstr ""
-
-#: ./src/riot/Lesson/LessonContent.riot.html:23
-msgid "{state.cardIdx + 1} of {props.lessonContent.cards.length}"
-msgstr ""
-
-#: ./src/riot/Lesson/LessonObjective.riot.html:16
-msgid "{state.cardIdx + 1} of {props.objective.cards.length}"
-msgstr ""
-
-#: ./src/riot/Lesson/LessonTest.riot.html:45
-msgid "{state.cardIdx + 1} of {props.test.cards.length}"
-msgstr ""
-
 #: ./src/riot/Screens/Settings.riot.html:20
 msgid "Add to Home Screen"
 msgstr ""
@@ -80,6 +44,7 @@ msgid "Coming Soon!"
 msgstr ""
 
 #: ./src/riot/Components/Card.riot.html:13
+#: ./src/riot/Screens/Profile.riot.html:33
 msgid "completed"
 msgstr ""
 
@@ -127,13 +92,11 @@ msgid "Great job!"
 msgstr ""
 
 #: ./src/riot/Screens/Profile.riot.html:6
-msgid ""
-"Great work {getUsername()}! You have completed {getPercentOfLessonsCompleted()}% \n"
-"of your overall coursework"
+msgid "Great work"
 msgstr ""
 
 #: ./src/riot/WagtailPages/HomePage.riot.html:6
-msgid "Hi {getUsername()}"
+msgid "Hi"
 msgstr ""
 
 #: ./src/riot/Lesson/LessonTest.riot.html:23
@@ -156,12 +119,25 @@ msgstr ""
 msgid "Learning statistics"
 msgstr ""
 
-#: ./src/riot/WagtailPages/LessonPage.riot.html:39
-msgid "Lesson - {props.wagtailPage.course.title}"
+#: ./src/riot/WagtailPages/HomePage.riot.html:8
+msgid "left to finish"
 msgstr ""
 
-#: ./src/riot/WagtailPages/LessonPage.riot.html:87
+#: ./src/riot/WagtailPages/HomePage.riot.html:8
+msgid "lesson"
+msgstr ""
+
+#: ./src/riot/WagtailPages/LessonPage.riot.html:39
+msgid "Lesson -"
+msgstr ""
+
+#: ./src/riot/WagtailPages/LessonPage.riot.html:92
 msgid "Lesson Activities"
+msgstr ""
+
+#: ./src/riot/WagtailPages/CoursePage.riot.html:14
+#: ./src/riot/WagtailPages/HomePage.riot.html:37
+msgid "lessons complete"
 msgstr ""
 
 #: ./src/riot/Screens/Profile.riot.html:58
@@ -178,16 +154,18 @@ msgid ""
 "all feedback as confidential."
 msgstr ""
 
-#: ./src/riot/Screens/Authentication.riot.html:6
-msgid "Log In"
-msgstr ""
-
 #: ./src/riot/Screens/Settings.riot.html:29
 msgid "Log out"
 msgstr ""
 
 #: ./src/riot/Screens/Authentication.riot.html:19
+#: ./src/riot/Screens/Authentication.riot.html:6
 msgid "Login"
+msgstr ""
+
+#: ./src/riot/Components/Card.riot.html:22
+#: ./src/riot/WagtailPages/LessonPage.riot.html:49
+msgid "mins"
 msgstr ""
 
 #: ./src/riot/Lesson/LessonContent.riot.html:19
@@ -216,8 +194,22 @@ msgstr ""
 msgid "Objectives"
 msgstr ""
 
+#: ./src/riot/Lesson/LessonContent.riot.html:23
+#: ./src/riot/Lesson/LessonObjective.riot.html:16
+#: ./src/riot/Lesson/LessonTest.riot.html:45
+msgid "of"
+msgstr ""
+
+#: ./src/riot/Screens/Profile.riot.html:7
+msgid "of your overall coursework"
+msgstr ""
+
 #: src/riot/Screens/Settings.riot.html:104
 msgid "Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
+msgstr ""
+
+#: ./src/riot/Screens/Profile.riot.html:32
+msgid "out of"
 msgstr ""
 
 #: ./src/riot/Screens/Profile.riot.html:5
@@ -233,7 +225,11 @@ msgid "Progress by course"
 msgstr ""
 
 #: ./src/riot/WagtailPages/LessonPage.riot.html:76
-msgid "See {state.showLongDescription ? 'less' : 'more'}"
+msgid "See less"
+msgstr ""
+
+#: ./src/riot/WagtailPages/LessonPage.riot.html:82
+msgid "See more"
 msgstr ""
 
 #: ./src/riot/Components/Card.riot.html:17
@@ -285,14 +281,16 @@ msgstr ""
 msgid "You are eligible to receive a printed certificate for this course."
 msgstr ""
 
+#: ./src/riot/Screens/Profile.riot.html:6
+msgid "You have completed"
+msgstr ""
+
 #: ./src/riot/Lesson/LessonComplete.riot.html:9
 msgid "You just completed the lesson, \"{props.title}\""
 msgstr ""
 
-#: ./src/riot/WagtailPages/HomePage.riot.html:7
-msgid ""
-"You only have {getNumberOfLessonsLeftIn(state.currentCourse)} lesson{getNumberOfLessonsLeftIn(state.currentCourse) > 1 ? 's' : ''} left to finish\n"
-"{state.currentCourse.data.title}."
+#: ./src/riot/WagtailPages/HomePage.riot.html:8
+msgid "You only have"
 msgstr ""
 
 #: ./src/riot/Lesson/LessonModuleComplete.riot.html:9
