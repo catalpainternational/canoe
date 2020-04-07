@@ -22,7 +22,7 @@
                 <span class="warning"></span>
                 <p class="error-message">{state.errorExplanation}</p>
             </div>
-            <button class="btn-primary" type="submit" disabled="{state.isDisabled}">Login</button>
+            <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}">Login</button>
         </form>
     </div>
 
@@ -33,7 +33,7 @@
         export default {
             state: {
                 errorExplanation: null,
-                isDisabled: false,
+                isLoginButtonDisabled: false,
                 isShowingPassword: false
             },
 
@@ -49,15 +49,15 @@
             },
 
             showPassword() {
-                const password_input = document.getElementById("password");
-                const eye_icon = document.getElementsByClassName("icon-box")[0];
+                const passwordElement = this.$("#password");
+                const eyeIcon = this.$(".icon-box");
 
-                if (password_input.type === "password") {
-                    password_input.type = "text";
-                    eye_icon.classList.remove("crossout");
+                if (passwordElement.type === "password") {
+                    passwordElement.type = "text";
+                    eyeIcon.classList.remove("crossout");
                 } else {
-                    password_input.type = "password";
-                    eye_icon.classList.add("crossout");
+                    passwordElement.type = "password";
+                    eyeIcon.classList.add("crossout");
                 }
                 this.update({
                     isShowingPassword: !this.state.isShowingPassword
@@ -70,7 +70,7 @@
                 const usernameAndPassword = this.getUsernameAndPasswordFromForm();
                 try {
                     this.update({
-                        isDisabled: true
+                        isLoginButtonDisabled: true
                     });
                     await login(usernameAndPassword);
                 } catch (error) {
@@ -82,7 +82,7 @@
                     }
                 } finally {
                     this.update({
-                        isDisabled: false
+                        isLoginButtonDisabled: false
                     });
                 }
             }

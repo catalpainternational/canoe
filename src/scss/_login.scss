@@ -11,6 +11,12 @@ Authentication > div {
         margin-bottom: 20px;
     }
 
+    .eye {
+        position: absolute;
+        top: 3px;
+        left: 2px;
+    }
+
     form {
         max-width: 300px;
         width: 100%;
@@ -79,7 +85,7 @@ Authentication > div {
 .password-placement {
     position: absolute;
     top: 10px;
-    font-size: 14px;
+    font-size: 0.875em;
     min-width: 150px;
     left: 35px;
 }
