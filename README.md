@@ -1,11 +1,11 @@
 # Canoe
 
-Canoe is the shared frontend interface for Catalpa's e-learning projects
+Canoe is the shared progressive web app for Catalpa's e-learning projects.
 
 ## Overview
 
-Canoe is designed to be a pure javascript codebase that can be hosted purely by NGINX or even on a CDN.
-It is dependent on a backend server application that lives in the project contianing it to provide authentication, content and action storing APIs
+Canoe is designed to be a pure javascript codebase that can be hosted simply by NGINX or even on a CDN.
+It is dependent on a backend server application that lives in the project contianing it to provide authentication, content and action storing APIs.
 
 ## Instructions
 
