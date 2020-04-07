@@ -1,12 +1,21 @@
 <PushSubscription>
     <script>
-        import { subscribe, unsubscribe, isSubscribedToNotifications } from "js/Notifications";
+        import {
+            supportsPushManager,
+            subscribe,
+            unsubscribe,
+            isSubscribedToNotifications
+        } from "js/Notifications";
 
         export default {
             async subscribeToNotifications() {
-                const alreadySubscribedToNotifications = await isSubscribedToNotifications();
+                const browserSupportsNotifications = await supportsPushManager();
 
-                if (!alreadySubscribedToNotifications) {
+                if (browserSupportsNotifications) {
+                    const alreadySubscribedToNotifications = await isSubscribedToNotifications();
+                    if (alreadySubscribedToNotifications) {
+                        return;
+                    }
                     subscribe();
                 }
             },

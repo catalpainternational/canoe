@@ -32,7 +32,7 @@
             {grabLessonHeaderReference()}
             <div class="lesson-header">
                 <div>
-                    <a class="arrow-gray" onclick="{goBack}"></a>
+                    <a class="arrow-gray" onclick="{backToCoursePage}"></a>
                 </div>
                 <div class="section-title">
                     <div class="unit">
@@ -207,8 +207,8 @@
                 this.state.headerOffsetTop = this.state.header.offsetTop;
             },
 
-            goBack() {
-                window.history.back();
+            backToCoursePage() {
+                location.hash = "#" + this.props.wagtailPage.course.id;
             },
 
             toggleLessonDescription() {

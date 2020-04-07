@@ -7,7 +7,7 @@
 }
 
 .course-header {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     display: flex;
 
     & > span {
@@ -29,9 +29,9 @@
             display: flex;
 
             p {
-                margin: 0;
+                margin: 5px 0;
                 flex: 1;
-                font-size: 10px;
+                font-size: 14px;
 
                 &.bottom-border {
                     border-bottom: 1px solid;

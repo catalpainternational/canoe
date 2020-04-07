@@ -30,3 +30,9 @@ Check the project documentation. It is usual for a project to implement build sc
 Canoe is intended to be easily and quickly configurable to run in a new project. We have mechanisms through configuration files to allow overriding assets to change css and images.
 
 [Read More](./README_PROJECT_INTEGRATION.md)
+
+## Google Analytics
+
+Canoe is currently instrumented to submit data to google anlaytics if configured at the project level
+
+[Read More](./README_GOOGLE_ANALYTICS.md)
