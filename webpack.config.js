@@ -133,9 +133,22 @@ module.exports = env => {
                 description: projectConfiguration.SITE_DESCRIPTION,
                 background_color: projectConfiguration.BACKGROUND_COLOR,
                 icons: [
+                    /*{
+                      src: projectConfiguration.FAVICON_PATH,
+                      sizes: [120, 152, 167, 180, 1024],
+                      destination: path.join('icons', 'ios'),
+                      ios: true
+                    },
                     {
-                        src: path.resolve("src/logo.png"),
-                        sizes: "150x150"
+                      src: projectConfiguration.FAVICON_PATH,
+                      size: 1024,
+                      destination: path.join('icons', 'ios'),
+                      ios: 'startup'
+                    },*/
+                    {
+                      src: projectConfiguration.FAVICON_PATH,
+                      sizes: [36, 48, 72, 96, 144, 192, 512],
+                      destination: path.join('icons', 'android')
                     }
                 ]
             }),
