@@ -5,7 +5,7 @@ const gt = new Gettext();
 gt.addTranslations("tetum", "messages", tetumTranslations);
 gt.setLocale("tetum");
 
-gt.on("error", (error) => console.error("oh nose", error));
+gt.on("error", (error) => console.warn("missing translation:", error));
 
 export function getText(key) {
     return gt.gettext(key);
