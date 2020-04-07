@@ -1,7 +1,7 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { getBrowserVersion, urlBase64ToUint8Array } from "js/DjangoPushNotifications";
-import { isAppOffline, alertAppIsOffline } from "js/utilities";
+import { alertIfRequestWasMadeOffline } from "js/ErrorChecks";
 
 const APPLICATION_SERVER_KEY = `${process.env.APPLICATION_SERVER_KEY}`;
 const NOTIFICATION_ID_KEY = "notificationRegistrationId";
@@ -108,6 +108,11 @@ const hasPermissionToNotify = () => {
     return true;
 };
 
+export const supportsPushManager = async () => {
+    const swRegistration = await navigator.serviceWorker.ready;
+    return !!swRegistration.pushManager;
+};
+
 export const subscribe = async () => {
     const swRegistration = await navigator.serviceWorker.ready;
     const subscription = await turnOnNotifications(swRegistration);
@@ -135,9 +140,7 @@ export const isSubscribedToNotifications = async () => {
     try {
         subscriptionOnServer = await fetchNotificationSubscription(localRegistrationID);
     } catch (error) {
-        if (isAppOffline(error)) {
-            alertAppIsOffline();
-        }
+        alertIfRequestWasMadeOffline(error);
         return false;
     }
 

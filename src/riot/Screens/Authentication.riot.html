@@ -17,12 +17,12 @@
                 <span class="warning"></span>
                 <p class="error-message">{state.errorExplanation}</p>
             </div>
-            <button class="btn-primary" type="submit" disabled={state.isDisabled}>Login</button>
+            <button class="btn-primary" type="submit" disabled="{state.isDisabled}">Login</button>
         </form>
     </div>
 
     <script>
-        import { isAppOffline, alertAppIsOffline } from "js/utilities";
+        import { alertIfRequestWasMadeOffline } from "js/ErrorChecks";
         import { login } from "js/AuthenticationUtilities";
 
         export default {
@@ -56,13 +56,12 @@
 
                 const usernameAndPassword = this.getUsernameAndPasswordFromForm();
                 try {
-                    this.update({ 
+                    this.update({
                         isDisabled: true
                     });
                     await login(usernameAndPassword);
                 } catch (error) {
-                    if (isAppOffline(error)) {
-                        alertAppIsOffline();
+                    if (alertIfRequestWasMadeOffline(error)) {
                     } else if (error.message === "400") {
                         this.update({
                             errorExplanation: "Invalid login credentials"
@@ -71,7 +70,7 @@
                 } finally {
                     this.update({
                         isDisabled: false
-                    })
+                    });
                 }
             }
         };
