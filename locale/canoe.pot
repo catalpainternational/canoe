@@ -5,12 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Language: en\n"
 
-#: ./src/riot/Media.riot.html:24
-#: ./src/riot/Media.riot.html:8
-msgid ""
-msgstr ""
-
-#: ./src/riot/Screens/Settings.riot.html:20
+#: ./src/riot/Screens/Settings.riot.html:21
 msgid "Add to Home Screen"
 msgstr ""
 
@@ -80,7 +75,7 @@ msgstr ""
 msgid "FEEDBACK"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonContent.riot.html:20
+#: ./src/riot/Lesson/LessonContent.riot.html:26
 #: ./src/riot/Lesson/LessonObjective.riot.html:13
 #: ./src/riot/Lesson/LessonTest.riot.html:36
 msgid "Finish"
@@ -108,6 +103,10 @@ msgstr ""
 
 #: ./src/riot/Lesson/LessonModuleComplete.riot.html:13
 msgid "Keep going"
+msgstr ""
+
+#: ./src/riot/Screens/Settings.riot.html:17
+msgid "Language"
 msgstr ""
 
 #: ./src/riot/Screens/Notifications.riot.html:5
@@ -153,7 +152,7 @@ msgid ""
 "all feedback as confidential."
 msgstr ""
 
-#: ./src/riot/Screens/Settings.riot.html:29
+#: ./src/riot/Screens/Settings.riot.html:30
 msgid "Log out"
 msgstr ""
 
@@ -167,7 +166,7 @@ msgstr ""
 msgid "mins"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonContent.riot.html:19
+#: ./src/riot/Lesson/LessonContent.riot.html:18
 #: ./src/riot/Lesson/LessonObjective.riot.html:12
 #: ./src/riot/Lesson/LessonTest.riot.html:29
 msgid "Next"
@@ -193,7 +192,7 @@ msgstr ""
 msgid "Objectives"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonContent.riot.html:23
+#: ./src/riot/Lesson/LessonContent.riot.html:36
 #: ./src/riot/Lesson/LessonObjective.riot.html:16
 #: ./src/riot/Lesson/LessonTest.riot.html:45
 msgid "of"
@@ -203,7 +202,7 @@ msgstr ""
 msgid "of your overall coursework"
 msgstr ""
 
-#: src/riot/Screens/Settings.riot.html:104
+#: src/riot/Screens/Settings.riot.html:105
 msgid "Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
 msgstr ""
 
@@ -272,7 +271,7 @@ msgstr ""
 msgid "We appreciate your feedback and always endeavor to improve your experience."
 msgstr ""
 
-#: ./src/riot/Screens/Settings.riot.html:17
+#: ./src/riot/Screens/Settings.riot.html:14
 msgid "Would you like to receive app notifications?"
 msgstr ""
 
@@ -302,6 +301,14 @@ msgstr ""
 
 #: ./src/riot/Lesson/LessonComplete.riot.html:16
 msgid "You've completed the course"
+msgstr ""
+
+#: ./src/riot/Media.riot.html:13
+msgid "Your browser does not support the audio element."
+msgstr ""
+
+#: ./src/riot/Media.riot.html:28
+msgid "Your browser does not support the video tag."
 msgstr ""
 
 #: ./src/riot/WagtailPages/HomePage.riot.html:22

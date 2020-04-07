@@ -9,9 +9,8 @@
                 each="{source in props.media.sources}"
                 src="{prefixUrlWithBaseUrl(source.src)}"
                 type="{source.type}"
-                translate
             />
-            Your browser does not support the audio element.
+            <span translate>Your browser does not support the audio element.</span>
         </audio>
         <video
             if="{props.media.media_type === 'video'}"
@@ -25,9 +24,8 @@
                 each="{source in props.media.sources}"
                 src="{prefixUrlWithBaseUrl(source.src)}"
                 type="{ source.type }"
-                translate
             />
-            Your browser does not support the video tag.
+            <span translate>Your browser does not support the video tag.</span>
         </video>
     </div>
 

@@ -1,0 +1,130 @@
+<LessonContent>
+    <div class="content background-blue-1" if="{state.cardIdx < props.lessonContent.cards.length}">
+        <div class="content-wrapper">
+            <Raw
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"
+                html="{props.lessonContent.cards[state.cardIdx].content}"
+            />
+            <Media
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'media'}"
+                media="{props.lessonContent.cards[state.cardIdx]}"
+            />
+
+            <div class="bottom-buttons">
+                <div>
+                    <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
+                </div>
+                <div>
+<<<<<<< HEAD
+                    <button class="btn-primary" onclick="{nextContentPage}" if="{state.cardIdx < props.lessonContent.cards.length - 1}" translate>Next</button>
+                    <button class="btn-primary" onclick="{completeContentModal}" if="{state.cardIdx === props.lessonContent.cards.length - 1}" translate>Finish</button>
+||||||| merged common ancestors
+                    <button class="btn-primary" onclick="{nextContentPage}" if="{state.cardIdx < props.lessonContent.cards.length - 1}">Next</button>
+                    <button class="btn-primary" onclick="{completeContentModal}" if="{state.cardIdx === props.lessonContent.cards.length - 1}">Finish</button>
+=======
+                    <button
+                        class="btn-primary"
+                        onclick="{nextContentPage}"
+                        if="{state.cardIdx < props.lessonContent.cards.length - 1}"
+                    >
+                        Next
+                    </button>
+                    <button
+                        class="btn-primary"
+                        onclick="{completeContentModal}"
+                        if="{state.cardIdx === props.lessonContent.cards.length - 1}"
+                    >
+                        Finish
+                    </button>
+>>>>>>> i18n_prototype
+                </div>
+            </div>
+            <p class="card-number">{state.cardIdx + 1}<span translate> of </span>{props.lessonContent.cards.length}</p>
+        </div>
+    </div>
+    <LessonModuleComplete
+        if="{state.cardIdx === props.lessonContent.cards.length}"
+        lessonId="{props.lesson.id}"
+        module="{props.module}"
+        nextModule="{props.nextModule}"
+        title="{props.title}"
+    ></LessonModuleComplete>
+
+    <script>
+        import LessonModuleComplete from "RiotTags/Lesson/LessonModuleComplete.riot.html";
+        import Raw from "RiotTags/Components/Raw.riot.html";
+        import Media from "RiotTags/Media.riot.html";
+
+        import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
+        import { setComplete } from "Actions/completion";
+        import { dispatchPlayVideoEvent } from "js/Events";
+
+        export default {
+            state: {
+                cardIdx: 0,
+                iframes: [],
+            },
+
+            components: {
+                lessonmodulecomplete: LessonModuleComplete,
+                media: Media,
+                raw: Raw,
+            },
+
+            onBeforeMount(props, state) {
+                state.cardIdx = getLessonCardIdx();
+                window.addEventListener("hashchange", this.hashChanged);
+            },
+
+            onBeforeUnmount(props, state) {
+                window.removeEventListener("hashchange", this.hashChanged);
+            },
+
+            hashChanged() {
+                this.update({
+                    cardIdx: getLessonCardIdx(),
+                });
+            },
+
+            goBack() {
+                window.history.back();
+            },
+
+            nextContentPage() {
+                window.scroll(0, 0);
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
+            },
+
+            completeContentModal() {
+                setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
+            },
+
+            checkForPlayableVideos() {
+                this.state.iframes = this.$$("iframe");
+            },
+
+            notifyGoogleAnalyticsIfVideoIsPlaying() {
+                for (const iframe of this.state.iframes) {
+                    if (document.activeElement === iframe) {
+                        const videoUrl = iframe.src;
+                        dispatchPlayVideoEvent(videoUrl);
+                    }
+                }
+            },
+
+            onUpdated() {
+                this.checkForPlayableVideos();
+                window.onblur = this.notifyGoogleAnalyticsIfVideoIsPlaying;
+            },
+        };
+    </script>
+</LessonContent>

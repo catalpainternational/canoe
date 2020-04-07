@@ -11,33 +11,55 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "{getCourseProgress()} lessons complete"
-msgstr ""
-
-msgid "{getCourseProgress(course)} lessons complete"
-msgstr ""
-
-msgid ""
-"{props.wagtailPage.objective.duration + props.wagtailPage.content.duration +\n"
-"props.wagtailPage.test.duration} mins"
-msgstr ""
-
-msgid "{state.cardIdx + 1} of {props.lessonContent.cards.length}"
-msgstr ""
-
-msgid "{state.cardIdx + 1} of {props.objective.cards.length}"
-msgstr ""
-
 msgid "Add to Home Screen"
+msgstr ""
+
+msgid "Amazing work!"
+msgstr ""
+
+msgid "Are you enjoying this lesson?"
+msgstr ""
+
+msgid "Avg"
+msgstr ""
+
+msgid "Back to Courses"
 msgstr ""
 
 msgid "Back to lesson overview"
 msgstr ""
 
+msgid "Cache"
+msgstr ""
+
+msgid "Coming Soon!"
+msgstr ""
+
+msgid "completed"
+msgstr ""
+
+msgid "Congratulations!"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
 msgid "Continue learning"
 msgstr ""
 
+msgid "Correct answer. Well done!"
+msgstr ""
+
+msgid "Count"
+msgstr ""
+
 msgid "Course"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "FEEDBACK"
 msgstr ""
 
 msgid "Finish"
@@ -46,7 +68,13 @@ msgstr ""
 msgid "Great job!"
 msgstr ""
 
-msgid "Hi {getUsername()}"
+msgid "Great work"
+msgstr ""
+
+msgid "Hi"
+msgstr ""
+
+msgid "Incorrect answer. Try again."
 msgstr ""
 
 msgid "Jobs that use these skills"
@@ -55,39 +83,157 @@ msgstr ""
 msgid "Keep going"
 msgstr ""
 
-msgid "Lesson - {props.wagtailPage.course.title}"
+msgid "Language"
+msgstr ""
+
+msgid "Latest notifications"
+msgstr ""
+
+msgid "Learning statistics"
+msgstr ""
+
+msgid "left to finish"
+msgstr ""
+
+#, fuzzy
+msgid "lesson"
+msgstr "Ita nia konfigurasaun"
+
+msgid "Lesson -"
 msgstr ""
 
 msgid "Lesson Activities"
 msgstr ""
 
+msgid "lessons complete"
+msgstr ""
+
+msgid "lessons completed so far"
+msgstr ""
+
+msgid "lessons remaining to finish your study"
+msgstr ""
+
+msgid ""
+"Let us know what you think of this lesson. We value your feedback and treat\n"
+"all feedback as confidential."
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "mins"
+msgstr ""
+
 msgid "Next"
+msgstr ""
+
+msgid "Next Lesson"
+msgstr ""
+
+msgid "No notifications."
+msgstr ""
+
+msgid "No thanks"
+msgstr ""
+
+msgid "Notifications"
 msgstr ""
 
 msgid "Objectives"
 msgstr ""
 
+msgid "of"
+msgstr ""
+
+msgid "of your overall coursework"
+msgstr ""
+
 msgid "Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
 msgstr "Tebes hakarak taka notifikasuan?"
 
-msgid "See {state.showLongDescription ? 'less' : 'more'}"
+msgid "out of"
+msgstr ""
+
+msgid "Overall progress"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+#, fuzzy
+msgid "Progress by course"
+msgstr "Ita nia konfigurasaun"
+
+msgid "See less"
+msgstr ""
+
+msgid "See more"
+msgstr ""
+
+#, fuzzy
+msgid "start lesson"
+msgstr "Ita nia konfigurasaun"
+
+#, fuzzy
+msgid "Start lesson"
+msgstr "Ita nia konfigurasaun"
+
+msgid "Storage Use"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Thank you!"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Username"
 msgstr ""
 
 msgid "view all"
 msgstr ""
 
+msgid "We appreciate your feedback and always endeavor to improve your experience."
+msgstr ""
+
 msgid "Would you like to receive app notifications?"
 msgstr "Notifikasuan ka?"
 
-msgid ""
-"You only have {getNumberOfLessonsLeftIn(state.currentCourse)} lesson{getNumberOfLessonsLeftIn(state.currentCourse) > 1 ? 's' : ''} left to finish\n"
-"{state.currentCourse.data.title}."
+msgid "You are eligible to receive a printed certificate for this course."
+msgstr ""
+
+msgid "You have completed"
+msgstr ""
+
+msgid "You just completed the lesson, \"{props.title}\""
+msgstr ""
+
+msgid "You only have"
 msgstr ""
 
 msgid "You're ready to start the {props.nextModule}."
 msgstr ""
 
 msgid "You've completed the {props.module}"
+msgstr ""
+
+msgid "You've completed the course"
+msgstr ""
+
+msgid "Your browser does not support the audio element."
+msgstr ""
+
+msgid "Your browser does not support the video tag."
 msgstr ""
 
 #, fuzzy
