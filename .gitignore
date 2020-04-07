@@ -106,4 +106,7 @@ dist
 canoe-environment.js
 canoe-project.js
 
+*.~
+
 .DS_Store
+
