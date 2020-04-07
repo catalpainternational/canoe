@@ -3,9 +3,6 @@
         <div class="content-wrapper">
             <h3 translate>Your settings</h3>
 
-
-            <LanguageToggle></LanguageToggle>
-
             <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
@@ -16,6 +13,10 @@
                 </div>
                 <p translate>Would you like to receive app notifications?</p>
             </div>
+
+            <h4 translate>Language</h4>
+
+            <LanguageSelector></LanguageSelector>
 
             <button
                 if="{state.canAddToHomeScreen}"
@@ -32,7 +33,7 @@
         </div>
     </div>
     <script>
-        import LanguageToggle from "RiotTags/Components/LanguageToggle.riot.html";
+        import LanguageSelector from "RiotTags/Components/LanguageSelector.riot.html";
         import { logout } from "js/AuthenticationUtilities";
         import {
             supportsPushManager,
@@ -55,7 +56,7 @@
                 canAddToHomeScreen: false
             },
             components: {
-                languagetoggle: LanguageToggle
+                languageselector: LanguageSelector
             },
 
             logout() {
