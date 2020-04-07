@@ -1,5 +1,5 @@
 import Gettext from "node-gettext";
-import tetumTranslations from "../locale/json/tm-tl.json";
+import tetumTranslations from "../locale/json/tet.json";
 import { store } from "ReduxImpl/Store";
 const gt = new Gettext();
 gt.addTranslations("tetum", "messages", tetumTranslations);
