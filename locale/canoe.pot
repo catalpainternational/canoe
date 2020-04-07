@@ -5,6 +5,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Language: en\n"
 
+#: src/riot/WagtailPages/HomePage.riot.html:105
+msgid "%2 / %1 lesson complete"
+msgid_plural "%2 / %1 lessons complete"
+msgstr[0] ""
+msgstr[1] ""
+
 #: ./src/riot/Screens/Settings.riot.html:21
 msgid "Add to Home Screen"
 msgstr ""
@@ -117,14 +123,6 @@ msgstr ""
 msgid "Learning statistics"
 msgstr ""
 
-#: ./src/riot/WagtailPages/HomePage.riot.html:8
-msgid "left to finish"
-msgstr ""
-
-#: ./src/riot/WagtailPages/HomePage.riot.html:8
-msgid "lesson"
-msgstr ""
-
 #: ./src/riot/WagtailPages/LessonPage.riot.html:39
 msgid "Lesson -"
 msgstr ""
@@ -134,7 +132,6 @@ msgid "Lesson Activities"
 msgstr ""
 
 #: ./src/riot/WagtailPages/CoursePage.riot.html:14
-#: ./src/riot/WagtailPages/HomePage.riot.html:37
 msgid "lessons complete"
 msgstr ""
 
@@ -202,10 +199,6 @@ msgstr ""
 msgid "of your overall coursework"
 msgstr ""
 
-#: src/riot/Screens/Settings.riot.html:105
-msgid "Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
-msgstr ""
-
 #: ./src/riot/Screens/Profile.riot.html:32
 msgid "out of"
 msgstr ""
@@ -263,7 +256,7 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: ./src/riot/WagtailPages/HomePage.riot.html:39
+#: ./src/riot/WagtailPages/HomePage.riot.html:38
 msgid "view all"
 msgstr ""
 
@@ -287,9 +280,11 @@ msgstr ""
 msgid "You just completed the lesson, \"{props.title}\""
 msgstr ""
 
-#: ./src/riot/WagtailPages/HomePage.riot.html:8
-msgid "You only have"
-msgstr ""
+#: src/riot/WagtailPages/HomePage.riot.html:98
+msgid "You only have %1 lesson left to finish %2."
+msgid_plural "You only have %1 lessons left to finish %2."
+msgstr[0] ""
+msgstr[1] ""
 
 #: ./src/riot/Lesson/LessonModuleComplete.riot.html:9
 msgid "You're ready to start the {props.nextModule}."
@@ -311,7 +306,7 @@ msgstr ""
 msgid "Your browser does not support the video tag."
 msgstr ""
 
-#: ./src/riot/WagtailPages/HomePage.riot.html:22
+#: ./src/riot/WagtailPages/HomePage.riot.html:21
 msgid "Your courses"
 msgstr ""
 

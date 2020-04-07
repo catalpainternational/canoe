@@ -2,14 +2,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Canoe\n"
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
-"POT-Creation-Date: 2020-04-06 14:59+0900\n"
-"PO-Revision-Date: 2020-04-06 15:39+0900\n"
+"PO-Revision-Date: 2020-04-08 11:29+0900\n"
 "Last-Translator: Peter Coward <peter@catalpa.io>\n"
-"Language-Team: Language tt-tl\n"
-"Language: tt-tl\n"
+"Language-Team: Catalpa International\n"
+"Language: tet\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "%2 / %1 lesson complete"
+msgid_plural "%2 / %1 lessons complete"
+msgstr[0] "%2 / %1 lisaun kompletu"
+msgstr[1] "%2 / %1 lisaun sira kompletu"
 
 msgid "Add to Home Screen"
 msgstr ""
@@ -92,13 +97,6 @@ msgstr ""
 msgid "Learning statistics"
 msgstr ""
 
-msgid "left to finish"
-msgstr ""
-
-#, fuzzy
-msgid "lesson"
-msgstr "Ita nia konfigurasaun"
-
 msgid "Lesson -"
 msgstr ""
 
@@ -152,9 +150,6 @@ msgstr ""
 msgid "of your overall coursework"
 msgstr ""
 
-msgid "Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
-msgstr "Tebes hakarak taka notifikasuan?"
-
 msgid "out of"
 msgstr ""
 
@@ -164,9 +159,8 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#, fuzzy
 msgid "Progress by course"
-msgstr "Ita nia konfigurasaun"
+msgstr ""
 
 msgid "See less"
 msgstr ""
@@ -174,13 +168,11 @@ msgstr ""
 msgid "See more"
 msgstr ""
 
-#, fuzzy
 msgid "start lesson"
-msgstr "Ita nia konfigurasaun"
+msgstr ""
 
-#, fuzzy
 msgid "Start lesson"
-msgstr "Ita nia konfigurasaun"
+msgstr ""
 
 msgid "Storage Use"
 msgstr ""
@@ -207,7 +199,7 @@ msgid "We appreciate your feedback and always endeavor to improve your experienc
 msgstr ""
 
 msgid "Would you like to receive app notifications?"
-msgstr "Notifikasuan ka?"
+msgstr ""
 
 msgid "You are eligible to receive a printed certificate for this course."
 msgstr ""
@@ -218,8 +210,10 @@ msgstr ""
 msgid "You just completed the lesson, \"{props.title}\""
 msgstr ""
 
-msgid "You only have"
-msgstr ""
+msgid "You only have %1 lesson left to finish %2."
+msgid_plural "You only have %1 lessons left to finish %2."
+msgstr[0] "Deit %1 lisaun too kompletu %2"
+msgstr[1] "Deit %1 lisaun too kompletu %2"
 
 msgid "You're ready to start the {props.nextModule}."
 msgstr ""
@@ -236,13 +230,11 @@ msgstr ""
 msgid "Your browser does not support the video tag."
 msgstr ""
 
-#, fuzzy
 msgid "Your courses"
-msgstr "Ita nia konfigurasaun"
+msgstr ""
 
-#, fuzzy
 msgid "Your lessons"
-msgstr "Ita nia konfigurasaun"
+msgstr ""
 
 msgid "Your settings"
-msgstr "Ita nia konfigurasaun"
+msgstr "Konfigurasuan"
