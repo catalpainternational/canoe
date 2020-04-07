@@ -34,7 +34,7 @@ const addWagtailPage = (state = {}, action) => {
     }
 };
 
-const changeLanguage = (state = "tetum", action) => {
+const changeLanguage = (state = '', action) => {
     switch (action.type) {
         case LANGUAGE_CHANGE:
             return action.language;

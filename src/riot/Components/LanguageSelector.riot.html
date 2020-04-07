@@ -4,13 +4,12 @@
         <option value="english">English</option>
     </select>
     <script>
-        import { store, changeLanguage } from "ReduxImpl/Store";
+        import { getLanguage, changeLanguage } from "ReduxImpl/Store";
 
         export default function LanguageSelector() {
-            const state = store.getState();
             return {
                 state: { 
-                    language : state.language,
+                    language : getLanguage(),
                 },
                 setLanguage(e) {
                     changeLanguage(e.currentTarget.value);

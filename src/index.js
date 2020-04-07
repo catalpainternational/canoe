@@ -4,9 +4,11 @@ import { installReduxPlugin } from "ReduxImpl/RiotReduxPlugin";
 import { installTranslationPlugin } from "RiotTranslationPlugin";
 
 import App from "RiotTags/App.riot.html";
-import { store } from "ReduxImpl/Store";
+import { store, changeLanguage } from "ReduxImpl/Store";
 
 import "./scss/olgeta.scss";
+
+changeLanguage('tetum');
 
 riot.install(function (component) {
     // all components will pass through here
