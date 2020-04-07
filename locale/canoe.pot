@@ -3,7 +3,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Project-Id-Version: Canoe\n"
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
-"POT-Creation-Date: 2020-04-06 14:59+0900\n"
 "Language: en\n"
 
 #: ./src/riot/Screens/Settings.riot.html:20

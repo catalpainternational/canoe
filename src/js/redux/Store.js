@@ -4,7 +4,6 @@ import { reducers, UPDATED_MANIFEST, SITE_DOWNLOADED, ADDED_WAGTAIL_PAGE, LANGUA
 
 export const store = createStore(
     reducers,
-    {language: 'tetum'},
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
@@ -22,6 +21,10 @@ export const storeSiteDownloadedIs = trueOrFalse => {
 
 export const changeLanguage = language => {
     store.dispatch({ type: LANGUAGE_CHANGE, language: language });
+};
+
+export const getLanguage = () => {
+    return store.getState().language;
 };
 
 export const getWagtailPageFromStore = pageId => {

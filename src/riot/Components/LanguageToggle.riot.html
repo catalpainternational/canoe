@@ -1,35 +1,41 @@
 <LanguageToggle>
-    <input 
-        type="radio" 
-        id="tetum" 
+    <input
+        type="radio"
+        id="tetum"
         name="language"
-        value="tetum" 
-        checked={ state.language === 'tetum' }
-        onchange={ setLanguage }>
+        value="tetum"
+        checked="{state.language === 'tetum'}"
+        onchange="{setLanguage}"
+    />
     <label for="tetum">Tetum</label>
     <input
         type="radio"
         id="english"
         name="language"
         value="english"
-        checked={ state.language === 'english' }
-        onchange={ setLanguage }>
+        checked="{state.language === 'english'}"
+        onchange="{setLanguage}"
+    />
     <label for="english">English</label>
 
     <script>
-        import { store, changeLanguage } from "ReduxImpl/Store";
+        import { getLanguage, changeLanguage } from "ReduxImpl/Store";
 
         export default function LanguageToggle() {
-            const state = store.getState();
+            const language = getLanguage();
             return {
-                state: { 
-                    language : state.language,
+                state: {
+                    language,
                 },
+
                 setLanguage(e) {
                     changeLanguage(e.currentTarget.value);
+                },
+
+                storeListener() {
+
                 }
-            }
+            };
         }
-        
     </script>
 </LanguageToggle>
