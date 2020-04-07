@@ -12,7 +12,12 @@
                 <label for="password">Password</label>
                 <input id="password" type="password" name="password" />
             </div>
-            <input type="checkbox" onclick="{showPassword}">Show Password
+            <div class="icon-box crossout">
+                <a onclick="{showPassword}">
+                    <span class="eye"></span>
+                    <span class="password-placement">{state.isShowingPassword ? 'Hide' : 'Show'} Password</span>
+                </a>
+            </div>
             <div if="{state.errorExplanation}">
                 <span class="warning"></span>
                 <p class="error-message">{state.errorExplanation}</p>
@@ -28,7 +33,8 @@
         export default {
             state: {
                 errorExplanation: null,
-                isDisabled: false
+                isDisabled: false,
+                isShowingPassword: false
             },
 
             getUsernameAndPasswordFromForm() {
@@ -43,12 +49,19 @@
             },
 
             showPassword() {
-                const x = document.getElementById("password");
-                if (x.type === "password") {
-                    x.type = "text";
+                const password_input = document.getElementById("password");
+                const eye_icon = document.getElementsByClassName("icon-box")[0];
+
+                if (password_input.type === "password") {
+                    password_input.type = "text";
+                    eye_icon.classList.remove("crossout");
                 } else {
-                    x.type = "password";
+                    password_input.type = "password";
+                    eye_icon.classList.add("crossout");
                 }
+                this.update({
+                    isShowingPassword: !this.state.isShowingPassword
+                });
             },
 
             async loginUser(event) {

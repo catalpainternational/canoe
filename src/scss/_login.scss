@@ -44,6 +44,17 @@ Authentication > div {
         button {
             width: 100%;
         }
+
+        div.icon-box {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            margin-bottom: 25%;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
     }
 
     input {
@@ -63,4 +74,28 @@ Authentication > div {
     input:-webkit-autofill:active {
         box-shadow: 0 0 0 1000px white inset !important;
     }
+}
+
+.password-placement {
+    position: absolute;
+    top: 10px;
+    font-size: 14px;
+    min-width: 150px;
+    left: 35px;
+}
+
+.crossout:before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1.5px solid;
+    border-color: $gray-1;
+
+    -webkit-transform: rotate(-35deg);
+    -moz-transform: rotate(-35deg);
+    -ms-transform: rotate(-35deg);
+    -o-transform: rotate(-35deg);
+    transform: rotate(-35deg);
 }
