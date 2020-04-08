@@ -42,6 +42,9 @@ const getCachedUrlsAndDeleteCruft = async (cacheName, manifestsUrls) => {
 
 export class SiteDownloader {
     constructor() {
+        if (!navigator.serviceWorker) {
+            return;
+        }
         this.PAGES_CACHE = "pages-cache";
         this.MEDIA_CACHE = "images-cache";
     }
