@@ -1,8 +1,28 @@
 <ChangeBrowser>
-    <div>
+    <div if="{!state.isBrowserSupported}">
         <span class="site-logo"></span>
         <span class="login-image"></span>
-        <p>We're sorry! We're still adding support for Asteroid on Chrome in iOS.</p> 
+        <p>We're sorry! We're still adding support for Asteroid on Chrome in iOS.</p>
         <p>In the meantime please use Safari.</p>
     </div>
+    <script>
+        import { signalUpdatedBrowserSupport } from "ReduxImpl/Store";
+        import { getBrowserVersion } from "js/DjangoPushNotifications";
+
+        const browser = getBrowserVersion(navigator.userAgent);
+        const platform = navigator.platform;
+
+        export default {
+            state: {
+                isBrowserSupported: true,
+            },
+
+            onMounted() {
+                const isBrowserSupported =
+                    platform.indexOf("iPhone") !== -1 && browser.name == "Chrome";
+                signalUpdatedBrowserSupport(isBrowserSupported);
+                this.update({ isBrowserSupported });
+            },
+        };
+    </script>
 </ChangeBrowser>
