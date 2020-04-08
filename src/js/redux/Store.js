@@ -25,7 +25,7 @@ export const storeSiteDownloadedIs = (trueOrFalse) => {
     store.dispatch({ type: SITE_DOWNLOADED, siteIsDownloaded: trueOrFalse });
 };
 
-export const storeUpdatedBrowserSupport = (trueOrFalse) => {
+export const storeBrowserSupport = (trueOrFalse) => {
     store.dispatch({ type: UPDATED_BROWSER_SUPPORT, isBrowserSupported: trueOrFalse });
 };
 

@@ -9,7 +9,8 @@
     "private": true,
     "scripts": {
         "build": "webpack",
-        "start": "webpack-dev-server"
+        "start": "webpack-dev-server",
+        "start-on-network": "webpack-dev-server --host 0.0.0.0 --port 3000"
     },
     "devDependencies": {
         "@babel/core": "^7.8.4",

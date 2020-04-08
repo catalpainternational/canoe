@@ -6,11 +6,8 @@
         <p>In the meantime please use Safari.</p>
     </div>
     <script>
-        import { signalUpdatedBrowserSupport } from "ReduxImpl/Store";
-        import { getBrowserVersion } from "js/DjangoPushNotifications";
-
-        const browser = getBrowserVersion(navigator.userAgent);
-        const platform = navigator.platform;
+        import { storeBrowserSupport } from "ReduxImpl/Store";
+        const is_iOSChrome = navigator.userAgent.match('CriOS');
 
         export default {
             state: {
@@ -18,9 +15,8 @@
             },
 
             onMounted() {
-                const isBrowserSupported =
-                    platform.indexOf("iPhone") !== -1 && browser.name == "Chrome";
-                signalUpdatedBrowserSupport(isBrowserSupported);
+                const isBrowserSupported = !is_iOSChrome;
+                storeBrowserSupport(isBrowserSupported);
                 this.update({ isBrowserSupported });
             },
         };

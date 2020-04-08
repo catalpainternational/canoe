@@ -10,7 +10,7 @@
 
         <DataDownload if="{isUserLoggedIn()}"></DataDownload>
 
-        <template if="{isUserLoggedIn() && isSiteDownloaded()">
+        <template if="{isUserLoggedIn() && isSiteDownloaded()}">
             <TopMenu
                 contentType="{state.contentType}"
                 wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
