@@ -2,18 +2,24 @@ const { GettextExtractor, JsExtractors, HtmlExtractors } = require("gettext-extr
 
 const extractor = new GettextExtractor();
 
+const jsParserCommentOptions = {
+    otherLineLeading: true,
+};
+
 const jsParser = extractor
     .createJsParser([
         JsExtractors.callExpression("gettext", {
             arguments: {
                 text: 0,
             },
+            comments: jsParserCommentOptions,
         }),
         JsExtractors.callExpression("ngettext", {
             arguments: {
                 text: 0,
                 textPlural: 1,
             },
+            comments: jsParserCommentOptions,
         }),
     ])
     .parseFilesGlob("./src/**/*.@(ts|js|tsx|jsx)");

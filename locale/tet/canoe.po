@@ -25,16 +25,10 @@ msgstr ""
 msgid "Are you enjoying this lesson?"
 msgstr ""
 
-msgid "Avg"
-msgstr ""
-
 msgid "Back to Courses"
 msgstr ""
 
 msgid "Back to lesson overview"
-msgstr ""
-
-msgid "Cache"
 msgstr ""
 
 msgid "Coming Soon!"
@@ -55,13 +49,7 @@ msgstr ""
 msgid "Correct answer. Well done!"
 msgstr ""
 
-msgid "Count"
-msgstr ""
-
 msgid "Course"
-msgstr ""
-
-msgid "Details"
 msgstr ""
 
 msgid "FEEDBACK"
@@ -174,19 +162,7 @@ msgstr ""
 msgid "Start lesson"
 msgstr ""
 
-msgid "Storage Use"
-msgstr ""
-
-msgid "Summary"
-msgstr ""
-
 msgid "Thank you!"
-msgstr ""
-
-msgid "Total"
-msgstr ""
-
-msgid "Type"
 msgstr ""
 
 msgid "Username"
@@ -207,7 +183,8 @@ msgstr ""
 msgid "You have completed"
 msgstr ""
 
-msgid "You just completed the lesson, \"{props.title}\""
+#. message on completion of a lesson %1 is replaced by the lesson title
+msgid "You just completed the lesson, \"%1\""
 msgstr ""
 
 msgid "You only have %1 lesson left to finish %2."
@@ -215,10 +192,12 @@ msgid_plural "You only have %1 lessons left to finish %2."
 msgstr[0] "Deit %1 lisaun too kompletu %2"
 msgstr[1] "Deit %1 lisaun too kompletu %2"
 
-msgid "You're ready to start the {props.nextModule}."
+#. message to say what module is next ( %1 is content or test )
+msgid "You're ready to start the %1."
 msgstr ""
 
-msgid "You've completed the {props.module}"
+#. message on completing objectives, content or test ( %1 )
+msgid "You've completed the %1"
 msgstr ""
 
 msgid "You've completed the course"

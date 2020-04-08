@@ -23,20 +23,12 @@ msgstr ""
 msgid "Are you enjoying this lesson?"
 msgstr ""
 
-#: ./src/riot/CacheDisplay.riot.html:30
-msgid "Avg"
-msgstr ""
-
 #: ./src/riot/Lesson/LessonComplete.riot.html:20
 msgid "Back to Courses"
 msgstr ""
 
 #: ./src/riot/Lesson/LessonModuleComplete.riot.html:14
 msgid "Back to lesson overview"
-msgstr ""
-
-#: ./src/riot/CacheDisplay.riot.html:27
-msgid "Cache"
 msgstr ""
 
 #: ./src/riot/Components/Card.riot.html:6
@@ -64,16 +56,8 @@ msgstr ""
 msgid "Correct answer. Well done!"
 msgstr ""
 
-#: ./src/riot/CacheDisplay.riot.html:29
-msgid "Count"
-msgstr ""
-
 #: ./src/riot/WagtailPages/CoursePage.riot.html:10
 msgid "Course"
-msgstr ""
-
-#: ./src/riot/CacheDisplay.riot.html:23
-msgid "Details"
 msgstr ""
 
 #: ./src/riot/Lesson/LessonFeedback.riot.html:32
@@ -231,25 +215,8 @@ msgstr ""
 msgid "Start lesson"
 msgstr ""
 
-#: ./src/riot/CacheDisplay.riot.html:2
-msgid "Storage Use"
-msgstr ""
-
-#: ./src/riot/CacheDisplay.riot.html:8
-msgid "Summary"
-msgstr ""
-
 #: ./src/riot/Lesson/LessonFeedback.riot.html:35
 msgid "Thank you!"
-msgstr ""
-
-#: ./src/riot/CacheDisplay.riot.html:13
-#: ./src/riot/CacheDisplay.riot.html:28
-msgid "Total"
-msgstr ""
-
-#: ./src/riot/CacheDisplay.riot.html:12
-msgid "Type"
 msgstr ""
 
 #: ./src/riot/Screens/Authentication.riot.html:8
@@ -276,8 +243,9 @@ msgstr ""
 msgid "You have completed"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:9
-msgid "You just completed the lesson, \"{props.title}\""
+#. message on completion of a lesson %1 is replaced by the lesson title
+#: src/riot/Lesson/LessonComplete.riot.html:47
+msgid "You just completed the lesson, \"%1\""
 msgstr ""
 
 #: src/riot/WagtailPages/HomePage.riot.html:98
@@ -286,12 +254,14 @@ msgid_plural "You only have %1 lessons left to finish %2."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ./src/riot/Lesson/LessonModuleComplete.riot.html:9
-msgid "You're ready to start the {props.nextModule}."
+#. message to say what module is next ( %1 is content or test )
+#: src/riot/Lesson/LessonModuleComplete.riot.html:47
+msgid "You're ready to start the %1."
 msgstr ""
 
-#: ./src/riot/Lesson/LessonModuleComplete.riot.html:8
-msgid "You've completed the {props.module}"
+#. message on completing objectives, content or test ( %1 )
+#: src/riot/Lesson/LessonModuleComplete.riot.html:40
+msgid "You've completed the %1"
 msgstr ""
 
 #: ./src/riot/Lesson/LessonComplete.riot.html:16
