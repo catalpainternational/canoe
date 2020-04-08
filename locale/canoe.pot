@@ -5,12 +5,19 @@ msgstr ""
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Language: en\n"
 
-#: src/riot/WagtailPages/HomePage.riot.html:105
+#. displays how many lessons of the total in a course have been completed
+#: src/riot/Screens/Profile.riot.html:158
+msgid "%1 out of %2 completed"
+msgstr ""
+
+#. displays how many lessons are complete and how many lessons are in the current course
+#: src/riot/WagtailPages/HomePage.riot.html:106
 msgid "%2 / %1 lesson complete"
 msgid_plural "%2 / %1 lessons complete"
 msgstr[0] ""
 msgstr[1] ""
 
+#. This button adds an icon to the device homescreen
 #: ./src/riot/Screens/Settings.riot.html:21
 msgid "Add to Home Screen"
 msgstr ""
@@ -36,7 +43,6 @@ msgid "Coming Soon!"
 msgstr ""
 
 #: ./src/riot/Components/Card.riot.html:13
-#: ./src/riot/Screens/Profile.riot.html:33
 msgid "completed"
 msgstr ""
 
@@ -103,7 +109,7 @@ msgstr ""
 msgid "Latest notifications"
 msgstr ""
 
-#: ./src/riot/Screens/Profile.riot.html:47
+#: ./src/riot/Screens/Profile.riot.html:46
 msgid "Learning statistics"
 msgstr ""
 
@@ -119,11 +125,11 @@ msgstr ""
 msgid "lessons complete"
 msgstr ""
 
-#: ./src/riot/Screens/Profile.riot.html:58
+#: ./src/riot/Screens/Profile.riot.html:57
 msgid "lessons completed so far"
 msgstr ""
 
-#: ./src/riot/Screens/Profile.riot.html:66
+#: ./src/riot/Screens/Profile.riot.html:65
 msgid "lessons remaining to finish your study"
 msgstr ""
 
@@ -133,7 +139,7 @@ msgid ""
 "all feedback as confidential."
 msgstr ""
 
-#: ./src/riot/Screens/Settings.riot.html:30
+#: ./src/riot/Screens/Settings.riot.html:31
 msgid "Log out"
 msgstr ""
 
@@ -181,10 +187,6 @@ msgstr ""
 
 #: ./src/riot/Screens/Profile.riot.html:7
 msgid "of your overall coursework"
-msgstr ""
-
-#: ./src/riot/Screens/Profile.riot.html:32
-msgid "out of"
 msgstr ""
 
 #: ./src/riot/Screens/Profile.riot.html:5

@@ -29,8 +29,7 @@
                         <div class="card-footer">
                             <span class="checkmark"></span>
                             <p>
-                                {getNumberOfCompletedLessonsFor(course)}<span translate> out of </span>
-                                {course.lessons.length}<span translate> completed</span>
+                                { courseLessonsCompletedMessage(course) }
                             </p>
                             <progress
                                 if="{getNumberOfCompletedLessonsFor(course) > 0}"
@@ -152,7 +151,15 @@
 
             onMounted() {
                 this.renderProfilePage();
-            }
+            },
+
+            courseLessonsCompletedMessage(course) {
+                // displays how many lessons of the total in a course have been completed
+                return gettext("%1 out of %2 completed",
+                    this.getNumberOfCompletedLessonsFor(course),
+                    course.lessons.length,
+                );
+            },
         };
     </script>
 </Profile>

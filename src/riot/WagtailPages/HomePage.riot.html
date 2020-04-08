@@ -102,6 +102,7 @@
                 );
             },
             courseProgressMessage(course) {
+                // displays how many lessons are complete and how many lessons are in the current course
                 return ngettext("%2 / %1 lesson complete",  // this is the singular form
                     "%2 / %1 lessons complete",             // this is the plural form
                     course.data.lessons_count,              // the plurality of this number decides which form is used - it replaces %1

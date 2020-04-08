@@ -3,13 +3,8 @@
         "language": "tet",
         "plural-forms": "nplurals=2; plural=(n != 1);"
     },
-    "%2 / %1 lesson complete": [
-        "%2 / %1 lisaun kompletu",
-        "%2 / %1 lisaun sira kompletu"
-    ],
-    "You only have %1 lesson left to finish %2.": [
-        "Deit %1 lisaun too kompletu %2",
-        "Deit %1 lisaun too kompletu %2"
-    ],
-    "Your settings": "Konfigurasuan"
+    "%2 / %1 lesson complete": "%2 / %1 lisaun kompletu",
+    "Add to Home Screen": "Hatama Aplikasaun",
+    "Amazing work!": "Diak loos!",
+    "Are you enjoying this lesson?": "Lisaun nee diak ka?"
 }
