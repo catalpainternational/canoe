@@ -212,6 +212,13 @@
     width: 100%;
 }
 
+.eye {
+    @extend %icons-shared;
+    background-image: url("../img/eye.svg");
+    height: 25px;
+    width: 25px;
+}
+
 .profile-background-image {
     @extend %icons-shared;
     background-image: url("../img/profile_image.svg");
