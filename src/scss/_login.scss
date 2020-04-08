@@ -64,3 +64,19 @@ Authentication > div {
         box-shadow: 0 0 0 1000px white inset !important;
     }
 }
+
+ChangeBrowser div {
+    min-height: 800px;
+    min-width: 300px;
+    padding: 30px;
+    background-color: $tan;
+    margin: auto;
+
+    span {
+        margin: 10px;
+    }
+
+    .site-logo, .login-image {
+        display: block;
+    }
+}
