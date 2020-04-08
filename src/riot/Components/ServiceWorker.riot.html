@@ -2,17 +2,23 @@
     <script>
         import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
 
+        const EVERY_FOUR_HOURS = 1000 * 60 * 60 * 4;
+
         export default {
+            state: {
+                swUpdatePoller: null,
+            },
+
             onMounted() {
                 if (!("serviceWorker" in navigator)) {
                     return;
                 }
 
-                navigator.serviceWorker.register("sw.js").catch(err => {
+                navigator.serviceWorker.register("sw.js").catch((err) => {
                     console.error(`Can't register Service Worker: ${err}`);
                 });
 
-                window.addEventListener("beforeinstallprompt", async e => {
+                window.addEventListener("beforeinstallprompt", async (e) => {
                     e.preventDefault();
                     const deferredPrompt = e;
 
@@ -29,7 +35,32 @@
                     isRefreshed = true;
                     window.location.reload(true);
                 });
-            }
+
+                this.pollForServiceWorkerUpdates();
+            },
+
+            onUnmounted() {
+                this.clearIntervals();
+            },
+
+            pollForServiceWorkerUpdates() {
+                this.state.swUpdatePoller = window.setInterval(
+                    this.updateServiceWorker,
+                    EVERY_FOUR_HOURS
+                );
+            },
+
+            async updateServiceWorker() {
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (!registration) {
+                    return;
+                }
+                registration.update();
+            },
+
+            clearIntervals() {
+                window.clearInterval(this.state.swUpdatePoller);
+            },
         };
     </script>
 </ServiceWorker>
