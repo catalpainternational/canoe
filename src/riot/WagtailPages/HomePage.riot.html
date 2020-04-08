@@ -105,8 +105,9 @@
                 // displays how many lessons are complete and how many lessons are in the current course
                 return ngettext("%2 / %1 lesson complete",  // this is the singular form
                     "%2 / %1 lessons complete",             // this is the plural form
-                    course.data.lessons_count,              // the plurality of this number decides which form is used - it replaces %1
-                    countComplete(course.data.slug)         // subsequent arguments replace %2+
+                    course.data.lessons_count,              // the plurality of this number decides which form is used
+                    course.data.lessons_count,              // first subsequent argument replaces %1
+                    countComplete(course.data.slug),        // other subsequent arguments replace %2+
                 );
             },
 
