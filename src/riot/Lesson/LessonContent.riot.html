@@ -33,7 +33,7 @@
                     </button>
                 </div>
             </div>
-            <p class="card-number">{state.cardIdx + 1}<span translate> of </span>{props.lessonContent.cards.length}</p>
+            <p class="card-number">{ cardNumberMessage() }</p>
         </div>
     </div>
     <LessonModuleComplete
@@ -82,6 +82,15 @@
 
             goBack() {
                 window.history.back();
+            },
+
+            cardNumberMessage() {
+                // display the number of the current card out of the total number of cards
+                return gettext(
+                    "%1 of %2",
+                    this.state.cardIdx + 1,
+                    this.props.lessonContent.cards.length
+                );
             },
 
             nextContentPage() {

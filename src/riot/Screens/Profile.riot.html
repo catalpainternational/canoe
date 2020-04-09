@@ -3,9 +3,7 @@
         <div class="profile-header">
             <div class="left-block">
                 <h3 translate>Overall progress</h3>
-                <h6><span translate>Great work </span>{getUsername()}!<span translate> You have completed </span>{getPercentOfLessonsCompleted()}%
-                    <span translate> of your overall coursework</span>
-                </h6>
+                <h6>{ percentLessonsCompleteMessage() }</h6>
                 <ContinueLearningButton if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"></ContinueLearningButton>
             </div>
             <span class="report-card"></span>
@@ -133,10 +131,6 @@
                 return Math.round(percentage) || 0;
             },
 
-            getUsername() {
-                return getUsername();
-            },
-
             async renderProfilePage() {
                 const manifest = await getOrFetchManifest();
                 const homePage = await getOrFetchWagtailPage(manifest.home);
@@ -155,11 +149,21 @@
 
             courseLessonsCompletedMessage(course) {
                 // displays how many lessons of the total in a course have been completed
-                return gettext("%1 out of %2 completed",
+                return gettext(
+                    "%1 out of %2 completed",
                     this.getNumberOfCompletedLessonsFor(course),
                     course.lessons.length,
                 );
             },
+
+            percentLessonsCompleteMessage() {
+                // displays percentage of completed lessons in all courses combined
+                return gettext(
+                    "Great work %1! You have completed %2\% of your overall coursework",
+                    getUsername(),
+                    this.getPercentOfLessonsCompleted()
+                );
+            }
         };
     </script>
 </Profile>

@@ -19,7 +19,7 @@
             <div class="break-card-footer"></div>
             <div class="duration">
                 <span class="clock"></span>
-                <p>{props.duration}<span translate>mins</span></p>
+                <p>{ durationMessage() }</p>
             </div>
             <div if="{props.type}" class="type">
                 <span class="{props.type}"></span>
@@ -27,4 +27,17 @@
             </div>
         </div>
     </a>
+    <script>
+        export default {
+            durationMessage() {
+                // the number of minutes it will take to complete the objective, content, test, or lesson
+                return ngettext(
+                    "%1 min", 
+                    "%1 mins",
+                    this.props.duration,
+                    this.props.duration
+                );
+            },
+        }
+    </script>
 </Card>

@@ -3,7 +3,7 @@
     <div class="header">
         <div class="header-box">
             <div class="left-block">
-                <h3><span translate>Hi </span>{getUsername()}</h3>
+                <h3>{ greetingMessage() }</h3>
                 <h6 if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}">
                     { continueLearningMessage() }
                 </h6>
@@ -95,7 +95,8 @@
                 this.state.currentCourse = lastWorkedOnCourse;
             },
             continueLearningMessage() {
-                return ngettext("You only have %1 lesson left to finish %2.",
+                return ngettext(
+                    "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
                     this.state.currentCourse.data.lessons_count - getNumberOfCompletedLessonsFor(this.state.currentCourse),
                     this.state.currentCourse.data.title
@@ -103,11 +104,20 @@
             },
             courseProgressMessage(course) {
                 // displays how many lessons are complete and how many lessons are in the current course
-                return ngettext("%2 / %1 lesson complete",  // this is the singular form
+                return ngettext(
+                    "%2 / %1 lesson complete",  // this is the singular form
                     "%2 / %1 lessons complete",             // this is the plural form
                     course.data.lessons_count,              // the plurality of this number decides which form is used
                     course.data.lessons_count,              // first subsequent argument replaces %1
                     countComplete(course.data.slug),        // other subsequent arguments replace %2+
+                );
+            },
+
+            greetingMessage() {
+                // Greet the user with their username
+                return gettext(
+                    "Hi %1",
+                    getUsername()
                 );
             },
 
@@ -151,10 +161,6 @@
 
             isCurrentCourseInProgress(aCourse) {
                 return !isTheCourseComplete(aCourse.data.slug, aCourse.lessons);
-            },
-
-            getUsername() {
-                return getUsername();
             },
 
             isLessonComplete(course, lesson) {

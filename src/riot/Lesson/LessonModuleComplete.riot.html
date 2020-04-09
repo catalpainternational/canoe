@@ -37,15 +37,17 @@
 
             moduleCompleteMessage() {
                 // message on completing objectives, content or test ( %1 )
-                return gettext("You've completed the %1",
-                    props.module
+                return gettext(
+                    "You've completed the %1",
+                    this.props.module
                 );
             },
 
             nextModuleMessage() {
                 // message to say what module is next ( %1 is content or test )
-                return gettext("You're ready to start the %1.",
-                    props.nextModule
+                return gettext(
+                    "You're ready to start the %1.",
+                    this.props.nextModule
                 );
             },
         };
