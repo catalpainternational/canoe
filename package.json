@@ -10,7 +10,9 @@
     "scripts": {
         "build": "webpack",
         "start": "webpack-dev-server",
-        "translate": "node messages_scan.js && msgmerge --update --no-location --no-wrap locale/tet/canoe.po locale/canoe.pot && node_modules/gettext.js/bin/po2json locale/tet/canoe.po locale/json/tet.json -p"
+        "makemessages": "node messages_scan.js && msgmerge --update --no-location --no-wrap locale/tet/canoe.po locale/canoe.pot",
+        "compilemessages": "node_modules/gettext.js/bin/po2json locale/tet/canoe.po locale/json/tet.json -p",
+        "translate": "yarn makemessages && yarn compilemessages"
     },
     "devDependencies": {
         "@babel/core": "^7.8.4",
