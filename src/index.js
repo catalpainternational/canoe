@@ -17,7 +17,6 @@ riot.install(function (component) {
 });
 
 riot.register("app", App);
-
 window.addEventListener("load", () => {
     riot.mount("app", { store });
 });

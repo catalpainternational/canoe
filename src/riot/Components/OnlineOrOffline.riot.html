@@ -1,0 +1,12 @@
+<OnlineOrOffline>
+    <script>
+        import { alertAppIsOnline, alertAppIsOffline } from "js/utilities";
+
+        export default {
+            onMounted() {
+                window.addEventListener("online", alertAppIsOnline);
+                window.addEventListener("offline", alertAppIsOffline);
+            }
+        };
+    </script>
+</OnlineOrOffline>
