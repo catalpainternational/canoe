@@ -2,13 +2,10 @@
     <script>
         import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
 
-        const EVERY_FOUR_HOURS = 1000 * 60 * 60 * 4;
+        const SW_UPDATE_INTERVAL = 1000 * 60 * 60 * 4;
+        let swUpdatePoller = null;
 
         export default {
-            state: {
-                swUpdatePoller: null,
-            },
-
             onMounted() {
                 if (!("serviceWorker" in navigator)) {
                     return;
@@ -44,10 +41,7 @@
             },
 
             pollForServiceWorkerUpdates() {
-                this.state.swUpdatePoller = window.setInterval(
-                    this.updateServiceWorker,
-                    EVERY_FOUR_HOURS
-                );
+                swUpdatePoller = window.setInterval(this.updateServiceWorker, SW_UPDATE_INTERVAL);
             },
 
             async updateServiceWorker() {
@@ -59,7 +53,7 @@
             },
 
             clearIntervals() {
-                window.clearInterval(this.state.swUpdatePoller);
+                window.clearInterval(swUpdatePoller);
             },
         };
     </script>
