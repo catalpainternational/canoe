@@ -36,7 +36,7 @@
                 </div>
                 <div class="section-title">
                     <div class="unit">
-                        <h5>Lesson - {props.wagtailPage.course.title}</h5>
+                        <h5>{ lessonTitleMessage() }</h5>
                     </div>
                 </div>
                 <h2>{props.wagtailPage.title}</h2>
@@ -44,10 +44,7 @@
 
             <div class="duration">
                 <span class="clock"></span>
-                <p>
-                    {props.wagtailPage.objective.duration + props.wagtailPage.content.duration +
-                    props.wagtailPage.test.duration} mins
-                </p>
+                <p>{ durationOfLessonMessage() }</p>
             </div>
             <div class="description">
                 <p>{props.wagtailPage.data.description}</p>
@@ -58,7 +55,7 @@
                 <div if="{state.showLongDescription}" class="hide">
                     <div class="jobs-card">
                         <div class="jobs-body">
-                            <h5>Jobs that use these skills</h5>
+                            <h5 translate>Jobs that use these skills</h5>
                             <div>
                                 <div each="{job in props.wagtailPage.data.jobs}">
                                     <div>
@@ -74,15 +71,22 @@
                 </div>
 
                 <a
-                    if="{props.wagtailPage.data.long_description}"
+                    if="{props.wagtailPage.data.long_description && state.showLongDescription}"
                     onclick="{toggleLessonDescription}"
-                    >See {state.showLongDescription ? 'less' : 'more'}</a
+                    translate
+                    >See less</a
+                >
+                <a
+                    if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
+                    onclick="{toggleLessonDescription}"
+                    translate
+                    >See more</a
                 >
             </div>
 
             <div class="section-title">
                 <div>
-                    <h5>Lesson Activities</h5>
+                    <h5 translate>Lesson Activities</h5>
                     <span>
                         <hr />
                     </span>
@@ -173,6 +177,14 @@
                 window.removeEventListener("scroll", this.stickyHeader);
             },
 
+            lessonTitleMessage () {
+                // display the title of the lesson
+                return gettext(
+                    "Lesson - %1",
+                    this.props.wagtailPage.course.title
+                );
+            },
+
             hashChanged() {
                 this.update({
                     hash: getHash()[1]
@@ -183,6 +195,15 @@
                 } else {
                     window.addEventListener("scroll", this.stickyHeader);
                 }
+            },
+
+            durationOfLessonMessage() {
+                // the total duration of the lesson in minutes
+                return gettext(
+                    "%1 mins", 
+                    this.props.wagtailPage.objective.duration + this.props.wagtailPage.content.duration +
+                    this.props.wagtailPage.test.duration
+                );
             },
 
             grabLessonHeaderReference() {

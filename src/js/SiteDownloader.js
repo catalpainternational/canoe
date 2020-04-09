@@ -66,7 +66,7 @@ export class SiteDownloader {
         const imagesToFetch = leftDifference(manifestsMediaUrls, cachedMediaUrls);
 
         if (pagesToFetch.size > 0 || imagesToFetch.size > 0) {
-            dispatchToastEvent("Site is downloading.");
+            dispatchToastEvent(gettext("Site is downloading."));
         }
 
         for (const pagePath of pagesToFetch) {
@@ -79,7 +79,7 @@ export class SiteDownloader {
         }
 
         if (pagesToFetch.size > 0 || imagesToFetch.size > 0) {
-            dispatchToastEvent("Site download is complete!");
+            dispatchToastEvent(gettext("Site download is complete!"));
         }
     }
 }

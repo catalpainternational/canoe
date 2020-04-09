@@ -140,6 +140,12 @@
                 scrollToFirstUnfinishedContent();
             },
 
+            storeListener(previousStoreState, storeState) {
+                if(previousStoreState.language != storeState.language) {
+                    this.update();
+                }
+            },
+
             async route() {
                 const page = await getPage();
                 const pageModel = getWagtailPageModelName(page);

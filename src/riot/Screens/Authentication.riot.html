@@ -3,13 +3,13 @@
         <span class="site-logo"></span>
         <span class="login-image"></span>
         <form onsubmit="{loginUser}">
-            <h3>Log In</h3>
+            <h3 translate>Login</h3>
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username" translate>Username</label>
                 <input id="username" type="text" name="username" />
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password" translate>Password</label>
                 <input id="password" type="password" name="password" />
             </div>
             <div class="icon-box crossout">
@@ -22,7 +22,7 @@
                 <span class="warning"></span>
                 <p class="error-message">{state.errorExplanation}</p>
             </div>
-            <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}">Login</button>
+            <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}" translate>Login</button>
         </form>
     </div>
 

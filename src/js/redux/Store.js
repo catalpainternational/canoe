@@ -6,6 +6,7 @@ import {
     SITE_DOWNLOADED,
     ADDED_WAGTAIL_PAGE,
     UPDATED_BROWSER_SUPPORT,
+    LANGUAGE_CHANGE,
 } from "./_Reducers";
 
 export const store = createStore(
@@ -23,6 +24,14 @@ export const storeManifest = (manifest) => {
 
 export const storeSiteDownloadedIs = (trueOrFalse) => {
     store.dispatch({ type: SITE_DOWNLOADED, siteIsDownloaded: trueOrFalse });
+};
+
+export const changeLanguage = language => {
+    store.dispatch({ type: LANGUAGE_CHANGE, language: language });
+};
+
+export const getLanguage = () => {
+    return store.getState().language;
 };
 
 export const storeBrowserSupport = (trueOrFalse) => {

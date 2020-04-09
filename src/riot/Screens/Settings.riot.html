@@ -1,7 +1,8 @@
 <Settings>
     <div class="settings">
         <div class="content-wrapper">
-            <h3>Your settings</h3>
+            <h3 translate>Your settings</h3>
+
             <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
@@ -10,23 +11,30 @@
                     <input type="checkbox" />
                     <div class="slider"></div>
                 </div>
-                <p>Would you like to receive app notifications?</p>
+                <p translate>Would you like to receive app notifications?</p>
             </div>
+
+            <h4 translate>Language</h4>
+
+            <LanguageSelector></LanguageSelector>
 
             <button
                 if="{state.canAddToHomeScreen}"
                 class="btn-secondary"
                 onclick="{promptUserToInstallApp}"
+                translate
+                translation-comment="This button adds an icon to the device homescreen"
             >
                 Add to Home Screen
             </button>
 
-            <button class="btn-secondary" onclick="{logout}">Log out</button>
+            <button class="btn-secondary" onclick="{logout}" translate>Log out</button>
 
             <!-- <CacheDisplay></CacheDisplay> -->
         </div>
     </div>
     <script>
+        import LanguageSelector from "RiotTags/Components/LanguageSelector.riot.html";
         import { logout } from "js/AuthenticationUtilities";
         import {
             supportsPushManager,
@@ -48,6 +56,9 @@
                 isSubscribedToNotifications: true,
                 disableNotificationsButton: false,
                 canAddToHomeScreen: false
+            },
+            components: {
+                languageselector: LanguageSelector
             },
 
             logout() {
@@ -93,7 +104,7 @@
 
             async unsubscribe() {
                 const wantsToUnsubscribe = confirm(
-                    `Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?`
+                    getText(`Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?`)
                 );
 
                 if (wantsToUnsubscribe) {

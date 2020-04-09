@@ -3,10 +3,9 @@
     <div class="header">
         <div class="header-box">
             <div class="left-block">
-                <h3>Hi {getUsername()}</h3>
+                <h3>{ greetingMessage() }</h3>
                 <h6 if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}">
-                    You only have {getNumberOfLessonsLeftIn(state.currentCourse)} lesson{getNumberOfLessonsLeftIn(state.currentCourse) > 1 ? 's' : ''} left to finish
-                    {state.currentCourse.data.title}.
+                    { continueLearningMessage() }
                 </h6>
                 <ContinueLearningButton if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
                     class="profile header-text"
@@ -19,7 +18,7 @@
     <div class="content-wrapper">
         <div class="section-title">
             <div>
-                <h5>Your courses</h5>
+                <h5 translate>Your courses</h5>
                 <span>
                     <hr>
                 </span>
@@ -34,9 +33,9 @@
                 <div>
                     <a href="#{course.data.id}"> <h3>{course.data.title}</h3> </a>
                     <div>
-                        <p>{getCourseProgress(course)} lessons complete</p>
+                        <p>{ courseProgressMessage(course) }</p>
                         <a href="#{course.data.id}">
-                            <p class="text-purple">view all</p>
+                            <p class="text-purple" translate>view all</p>
                             <span class="arrow background-purple"></span>
                         </a>
                     </div>
@@ -73,7 +72,6 @@
             isTheCourseComplete 
         } from "Actions/completion";
         import { ON_COMPLETION_CHANGE } from "js/Events";
-
         export default {
             state: {
                 nextLesson: {},
@@ -96,9 +94,31 @@
                 this.state.courses = courses;
                 this.state.currentCourse = lastWorkedOnCourse;
             },
+            continueLearningMessage() {
+                return ngettext(
+                    "You only have %1 lesson left to finish %2.",
+                    "You only have %1 lessons left to finish %2.",
+                    this.state.currentCourse.data.lessons_count - getNumberOfCompletedLessonsFor(this.state.currentCourse),
+                    this.state.currentCourse.data.title
+                );
+            },
+            courseProgressMessage(course) {
+                // displays how many lessons are complete and how many lessons are in the current course
+                return ngettext(
+                    "%2 / %1 lesson complete",  // this is the singular form
+                    "%2 / %1 lessons complete",             // this is the plural form
+                    course.data.lessons_count,              // the plurality of this number decides which form is used
+                    course.data.lessons_count,              // first subsequent argument replaces %1
+                    countComplete(course.data.slug),        // other subsequent arguments replace %2+
+                );
+            },
 
-            getNumberOfLessonsLeftIn(course) {
-                return course.data.lessons_count - this.getNumberOfCompletedLessonsFor(course);
+            greetingMessage() {
+                // Greet the user with their username
+                return gettext(
+                    "Hi %1",
+                    getUsername()
+                );
             },
 
             getCurrentCourse(courses) {
@@ -110,10 +130,6 @@
                     course => course.data.slug === lastCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
-            },
-
-            getNumberOfCompletedLessonsFor(course) {
-                return getNumberOfCompletedLessonsFor(course);
             },
 
             getNextLesson(course) {
@@ -135,10 +151,6 @@
                 }
             },
 
-            getNumberOfCompletedLessonsFor(course) {
-                return getNumberOfCompletedLessonsFor(course);
-            },
-
             getPercentOfLessonsCompleted() {
                 const percentage =
                     (getNumberOfCompletedLessons(this.state.courses) /
@@ -149,14 +161,6 @@
 
             isCurrentCourseInProgress(aCourse) {
                 return !isTheCourseComplete(aCourse.data.slug, aCourse.lessons);
-            },
-
-            getUsername() {
-                return getUsername();
-            },
-
-            getCourseProgress(course) {
-                return countComplete(course.data.slug) + " / " + course.data.lessons_count;
             },
 
             isLessonComplete(course, lesson) {

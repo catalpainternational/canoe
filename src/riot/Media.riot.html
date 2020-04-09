@@ -10,7 +10,7 @@
                 src="{prefixUrlWithBaseUrl(source.src)}"
                 type="{source.type}"
             />
-            Your browser does not support the audio element.
+            <span translate>Your browser does not support the audio element.</span>
         </audio>
         <video
             if="{props.media.media_type === 'video'}"
@@ -25,7 +25,7 @@
                 src="{prefixUrlWithBaseUrl(source.src)}"
                 type="{ source.type }"
             />
-            Your browser does not support the video tag.
+            <span translate>Your browser does not support the video tag.</span>
         </video>
     </div>
 

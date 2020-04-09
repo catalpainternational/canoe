@@ -9,7 +9,10 @@
     "private": true,
     "scripts": {
         "build": "webpack",
-        "start": "webpack-dev-server"
+        "start": "webpack-dev-server",
+        "makemessages": "node messages_scan.js && msgmerge --update --no-location --no-wrap locale/tet/canoe.po locale/canoe.pot",
+        "compilemessages": "node_modules/gettext.js/bin/po2json locale/tet/canoe.po locale/json/tet.json -p",
+        "translate": "yarn makemessages && yarn compilemessages"
     },
     "devDependencies": {
         "@babel/core": "^7.8.4",
@@ -21,6 +24,7 @@
         "css-loader": "^3.4.2",
         "cssnano": "^4.1.10",
         "file-loader": "^5.1.0",
+        "gettext-extractor": "^3.5.2",
         "html-loader": "^0.5.5",
         "html-webpack-plugin": "^3.2.0",
         "node-sass": "^4.13.1",
@@ -41,6 +45,7 @@
         "@riotjs/webpack-loader": "^4.0.3",
         "babel-polyfill": "^6.26.0",
         "dayjs": "^1.8.20",
+        "gettext.js": "^0.9.0",
         "idb": "^5.0.1",
         "pretty-bytes": "^5.3.0",
         "redux": "^4.0.5",
