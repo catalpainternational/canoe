@@ -1,5 +1,8 @@
 <App>
     <ServiceWorker></ServiceWorker>
+    <OnlineOrOffline></OnlineOrOffline>
+    <Toast></Toast>
+
     <Authentication if="{!isUserLoggedIn()}"></Authentication>
 
     <DataDownload if="{isUserLoggedIn()}"></DataDownload>
@@ -42,6 +45,8 @@
         import ServiceWorker from "RiotTags/Components/ServiceWorker.riot.html";
         import DataDownload from "RiotTags/Components/DataDownload.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
+        import Toast from "RiotTags/Components/Toast.riot.html";
+        import OnlineOrOffline from "RiotTags/Components/OnlineOrOffline.riot.html";
 
         import Authentication from "RiotTags/Screens/Authentication.riot.html";
         import Notifications from "RiotTags/Screens/Notifications.riot.html";
@@ -88,7 +93,9 @@
                 telemetry: Telemetry,
                 serviceworker: ServiceWorker,
                 datadownload: DataDownload,
-                pushsubscription: PushSubscription
+                pushsubscription: PushSubscription,
+                toast: Toast,
+                onlineoroffline: OnlineOrOffline
             },
 
             onMounted() {
