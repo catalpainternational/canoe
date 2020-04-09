@@ -6,7 +6,6 @@ import App from "RiotTags/App.riot.html";
 import { store } from "ReduxImpl/Store";
 
 riot.register("app", App);
-
 window.addEventListener("load", () => {
     riot.mount("app", { store });
 });

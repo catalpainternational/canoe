@@ -1,43 +1,50 @@
 <App>
-    <ServiceWorker></ServiceWorker>
-    <OnlineOrOffline></OnlineOrOffline>
-    <Toast></Toast>
+    <template if="{!isBrowserSupported()}">
+        <ChangeBrowser></ChangeBrowser>
+    </template>
 
-    <Authentication if="{!isUserLoggedIn()}"></Authentication>
+    <template if="{isBrowserSupported()}">
+        <ServiceWorker></ServiceWorker>
+        <OnlineOrOffline></OnlineOrOffline>
+        <Toast></Toast>
+      
+        <Authentication if="{!isUserLoggedIn()}"></Authentication>
 
-    <DataDownload if="{isUserLoggedIn()}"></DataDownload>
+        <DataDownload if="{isUserLoggedIn()}"></DataDownload>
 
-    <template if="{isUserLoggedIn() && props.store.getState().siteIsDownloaded}">
-        <TopMenu
-            contentType="{state.contentType}"
-            wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
-        ></TopMenu>
+        <template if="{isUserLoggedIn() && isSiteDownloaded()}">
+            <TopMenu
+                contentType="{state.contentType}"
+                wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
+            ></TopMenu>
 
-        <HomePage
-            if="{state.contentType === 'HomePage'}"
-            wagtailPage="{state.wagtailPage}"
-        ></HomePage>
-        <CoursePage
-            if="{state.contentType === 'CoursePage'}"
-            wagtailPage="{state.wagtailPage}"
-        ></CoursePage>
-        <LessonPage
-            if="{state.contentType === 'LessonPage'}"
-            wagtailPage="{state.wagtailPage}"
-        ></LessonPage>
-        <Settings if="{state.contentType === 'settings'}"></Settings>
-        <Notifications if="{state.contentType === 'notifications'}"></Notifications>
-        <Profile if="{state.contentType === 'profile'}"></Profile>
+            <HomePage
+                if="{state.contentType === 'HomePage'}"
+                wagtailPage="{state.wagtailPage}"
+            ></HomePage>
+            <CoursePage
+                if="{state.contentType === 'CoursePage'}"
+                wagtailPage="{state.wagtailPage}"
+            ></CoursePage>
+            <LessonPage
+                if="{state.contentType === 'LessonPage'}"
+                wagtailPage="{state.wagtailPage}"
+            ></LessonPage>
+            <Settings if="{state.contentType === 'settings'}"></Settings>
+            <Notifications if="{state.contentType === 'notifications'}"></Notifications>
+            <Profile if="{state.contentType === 'profile'}"></Profile>
 
-        <BottomMenu contentType="{state.contentType}"></BottomMenu>
-        <Telemetry></Telemetry>
-        <PushSubscription></PushSubscription>
+            <BottomMenu contentType="{state.contentType}"></BottomMenu>
+            <Telemetry></Telemetry>
+            <PushSubscription></PushSubscription>
+        </template>
     </template>
 
     <script>
         import { isUserLoggedIn } from "js/AuthenticationUtilities";
         import { getPage } from "js/Routing";
         import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
+        import { isBrowserSupported, isSiteDownloaded } from "ReduxImpl/Store";
 
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
@@ -52,6 +59,7 @@
         import Notifications from "RiotTags/Screens/Notifications.riot.html";
         import Profile from "RiotTags/Screens/Profile.riot.html";
         import Settings from "RiotTags/Screens/Settings.riot.html";
+        import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
 
         import HomePage from "RiotTags/WagtailPages/HomePage.riot.html";
         import CoursePage from "RiotTags/WagtailPages/CoursePage.riot.html";
@@ -77,7 +85,7 @@
             state: {
                 wagtailPage: {},
                 homePageURL: "",
-                appTitle: ""
+                appTitle: "",
             },
 
             components: {
@@ -94,8 +102,9 @@
                 serviceworker: ServiceWorker,
                 datadownload: DataDownload,
                 pushsubscription: PushSubscription,
+                changebrowser: ChangeBrowser,
                 toast: Toast,
-                onlineoroffline: OnlineOrOffline
+                onlineoroffline: OnlineOrOffline,
             },
 
             onMounted() {
@@ -137,13 +146,21 @@
 
                 this.update({
                     wagtailPage: page,
-                    contentType: pageModel
+                    contentType: pageModel,
                 });
+            },
+
+            isBrowserSupported() {
+                return isBrowserSupported();
+            },
+
+            isSiteDownloaded() {
+                return isSiteDownloaded();
             },
 
             isUserLoggedIn() {
                 return isUserLoggedIn();
-            }
+            },
         };
 
         function getWagtailPageModelName(wagtailPage) {
