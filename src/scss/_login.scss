@@ -5,9 +5,16 @@ Authentication > div {
     align-items: center;
     display: flex;
     padding: 20px;
+    background-color: $tan;
 
     span.site-logo {
         margin-bottom: 20px;
+    }
+
+    .eye {
+        position: absolute;
+        top: 3px;
+        left: 2px;
     }
 
     form {
@@ -43,11 +50,23 @@ Authentication > div {
         button {
             width: 100%;
         }
+
+        div.icon-box {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            margin-bottom: 25%;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
     }
 
     input {
         border: none;
         padding: 0;
+        background-color: $tan;
 
         &:focus {
             outline: none;
@@ -60,5 +79,45 @@ Authentication > div {
     input:-webkit-autofill:focus,
     input:-webkit-autofill:active {
         box-shadow: 0 0 0 1000px white inset !important;
+    }
+}
+
+.password-placement {
+    position: absolute;
+    top: 10px;
+    font-size: 0.875em;
+    min-width: 150px;
+    left: 35px;
+}
+
+.crossout:before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1.5px solid;
+    border-color: $gray-1;
+
+    -webkit-transform: rotate(-35deg);
+    -moz-transform: rotate(-35deg);
+    -ms-transform: rotate(-35deg);
+    -o-transform: rotate(-35deg);
+    transform: rotate(-35deg);
+}
+
+ChangeBrowser div {
+    min-height: 800px;
+    min-width: 300px;
+    padding: 30px;
+    background-color: $tan;
+    margin: auto;
+
+    span {
+        margin: 10px;
+    }
+
+    .site-logo, .login-image {
+        display: block;
     }
 }

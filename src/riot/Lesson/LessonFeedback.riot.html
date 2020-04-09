@@ -4,10 +4,10 @@
             <template if="{!state.madeFeedbackDecision}">
                 <div class="feedback-icon">
                     <div class="sun"></div>
-                    <h2>FEEDBACK</h2>
+                    <h2 translate>FEEDBACK</h2>
                 </div>
                 <div class="feedback-container">
-                    <h3>Are you enjoying this lesson?</h3>
+                    <h3 translate>Are you enjoying this lesson?</h3>
                     <div class="feedback-buttons">
                         <button class="feedback" onclick="{clickedThisLessonIsFine}">
                             <span class="neutral-smiley"></span>
@@ -19,23 +19,26 @@
                             <span class="thrilled-smiley"></span>
                         </button>
                     </div>
-                    <p>
+                    <p translate>
                         Let us know what you think of this lesson. We value your feedback and treat
                         all feedback as confidential.
                     </p>
                 </div>
-                <button class="btn-primary no-thanks" onclick="{clickedNoThanks}">No thanks</button>
+                <button class="btn-primary no-thanks" onclick="{clickedNoThanks}" translate>No thanks</button>
             </template>
             <template if="{state.madeFeedbackDecision}">
-                <div class="sun"></div>
+                <div class="feedback-icon">
+                    <div class="sun"></div>
+                    <h2 translate>FEEDBACK</h2>
+                </div>
                 <div class="thank-you-container">
-                    <h3>Thank you!</h3>
+                    <h3 translate>Thank you!</h3>
                     <div class="smiling-smiley"></div>
-                    <p>
+                    <p translate>
                         We appreciate your feedback and always endeavor to improve your experience.
                     </p>
                 </div>
-                <button class="btn-primary" onclick="{clickedContinue}">Continue</button>
+                <button class="btn-primary thank-you-container" onclick="{clickedContinue}" translate>Continue</button>
             </template>
         </div>
     </LessonFrame>

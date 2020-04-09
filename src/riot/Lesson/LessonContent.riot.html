@@ -1,26 +1,39 @@
 <LessonContent>
-    <div
-        class="content background-blue-1"
-        if="{state.cardIdx < props.lessonContent.cards.length}"
-    >
+    <div class="content background-blue-1" if="{state.cardIdx < props.lessonContent.cards.length}">
         <div class="content-wrapper">
             <Raw
-                if="{props.lessonContent.cards[state.cardIdx].tag == 'raw'}"
-                html="{props.lessonContent.cards[state.cardIdx].content}" />
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"
+                html="{props.lessonContent.cards[state.cardIdx].content}"
+            />
             <Media
-                if="{props.lessonContent.cards[state.cardIdx].tag == 'media'}"
-                media="{props.lessonContent.cards[state.cardIdx]}" />
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'media'}"
+                media="{props.lessonContent.cards[state.cardIdx]}"
+            />
 
             <div class="bottom-buttons">
                 <div>
                     <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
                 </div>
                 <div>
-                    <button class="btn-primary" onclick="{nextContentPage}" if="{state.cardIdx < props.lessonContent.cards.length - 1}">Next</button>
-                    <button class="btn-primary" onclick="{completeContentModal}" if="{state.cardIdx === props.lessonContent.cards.length - 1}">Finish</button>
+                    <button
+                        class="btn-primary"
+                        onclick="{nextContentPage}"
+                        if="{state.cardIdx < props.lessonContent.cards.length - 1}"
+                        translate
+                    >
+                        Next
+                    </button>
+                    <button
+                        class="btn-primary"
+                        onclick="{completeContentModal}"
+                        if="{state.cardIdx === props.lessonContent.cards.length - 1}"
+                        translate
+                    >
+                        Finish
+                    </button>
                 </div>
             </div>
-            <p class="card-number">{state.cardIdx + 1} of {props.lessonContent.cards.length}</p>
+            <p class="card-number">{ cardNumberMessage() }</p>
         </div>
     </div>
     <LessonModuleComplete
@@ -43,13 +56,13 @@
         export default {
             state: {
                 cardIdx: 0,
-                iframes: []
+                iframes: [],
             },
 
             components: {
                 lessonmodulecomplete: LessonModuleComplete,
                 media: Media,
-                raw: Raw
+                raw: Raw,
             },
 
             onBeforeMount(props, state) {
@@ -63,12 +76,21 @@
 
             hashChanged() {
                 this.update({
-                    cardIdx: getLessonCardIdx()
+                    cardIdx: getLessonCardIdx(),
                 });
             },
 
             goBack() {
                 window.history.back();
+            },
+
+            cardNumberMessage() {
+                // display the number of the current card out of the total number of cards
+                return gettext(
+                    "%1 of %2",
+                    this.state.cardIdx + 1,
+                    this.props.lessonContent.cards.length
+                );
             },
 
             nextContentPage() {
@@ -105,7 +127,7 @@
             onUpdated() {
                 this.checkForPlayableVideos();
                 window.onblur = this.notifyGoogleAnalyticsIfVideoIsPlaying;
-            }
+            },
         };
     </script>
 </LessonContent>

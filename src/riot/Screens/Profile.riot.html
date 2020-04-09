@@ -2,10 +2,8 @@
     <div class="profile">
         <div class="profile-header">
             <div class="left-block">
-                <h3>Overall progress</h3>
-                <h6>Great work {getUsername()}! You have completed {getPercentOfLessonsCompleted()}% 
-                    of your overall coursework
-                </h6>
+                <h3 translate>Overall progress</h3>
+                <h6>{ percentLessonsCompleteMessage() }</h6>
                 <ContinueLearningButton if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"></ContinueLearningButton>
             </div>
             <span class="report-card"></span>
@@ -13,7 +11,7 @@
         <div class="content-wrapper">
             <div class="section-title">
                 <div>
-                    <h5>Progress by course</h5>
+                    <h5 translate>Progress by course</h5>
                     <span>
                         <hr>
                     </span>
@@ -29,8 +27,7 @@
                         <div class="card-footer">
                             <span class="checkmark"></span>
                             <p>
-                                {getNumberOfCompletedLessonsFor(course)} out of
-                                {course.lessons.length} completed
+                                { courseLessonsCompletedMessage(course) }
                             </p>
                             <progress
                                 if="{getNumberOfCompletedLessonsFor(course) > 0}"
@@ -44,7 +41,7 @@
 
             <div class="section-title">
                 <div>
-                    <h5>Learning statistics</h5>
+                    <h5 translate>Learning statistics</h5>
                     <span>
                         <hr>
                     </span>
@@ -54,16 +51,16 @@
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
                         <span class="checkmark-circle-blue"></span>
-                        <h5>{getNumberOfCompletedLessons()} lessons completed so far</h5>
+                        <h3>{getNumberOfCompletedLessons()}</h3>
+                        <h5 translate>lessons completed so far</h5>
                     </div>
                 </div>
 
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
                         <span class="road-sign"></span>
-                        <h5>
-                            {getNumberOfLessonsLeft()} lessons remaining to finish your study
-                        </h5>
+                        <h3>{getNumberOfLessonsLeft()}</h3>
+                        <h5 translate>lessons remaining to finish your study</h5>
                     </div>
                 </div>
             </div>
@@ -134,10 +131,6 @@
                 return Math.round(percentage) || 0;
             },
 
-            getUsername() {
-                return getUsername();
-            },
-
             async renderProfilePage() {
                 const manifest = await getOrFetchManifest();
                 const homePage = await getOrFetchWagtailPage(manifest.home);
@@ -152,6 +145,24 @@
 
             onMounted() {
                 this.renderProfilePage();
+            },
+
+            courseLessonsCompletedMessage(course) {
+                // displays how many lessons of the total in a course have been completed
+                return gettext(
+                    "%1 out of %2 completed",
+                    this.getNumberOfCompletedLessonsFor(course),
+                    course.lessons.length,
+                );
+            },
+
+            percentLessonsCompleteMessage() {
+                // displays percentage of completed lessons in all courses combined
+                return gettext(
+                    "Great work %1! You have completed %2\% of your overall coursework",
+                    getUsername(),
+                    this.getPercentOfLessonsCompleted()
+                );
             }
         };
     </script>

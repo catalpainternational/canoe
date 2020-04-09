@@ -200,7 +200,7 @@
     @extend %icons-shared;
     background-image: url("../img/notifications_header.svg");
     height: 154px;
-    width: 250px;
+    width: 150px;
 }
 
 .login-image {
@@ -210,6 +210,13 @@
     max-width: 250px;
     height: 190px;
     width: 100%;
+}
+
+.eye {
+    @extend %icons-shared;
+    background-image: url("../img/eye.svg");
+    height: 25px;
+    width: 25px;
 }
 
 .profile-background-image {
@@ -362,17 +369,17 @@
 .neutral-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("../img/neutral.svg");
+    -webkit-mask-image: url("../img/neutral.png");
 }
 
 .smiling-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("../img/smile.svg");
+    -webkit-mask-image: url("../img/smile.png");
 }
 
 .thrilled-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("../img/thrilled.svg");
+    -webkit-mask-image: url("../img/thrilled.png");
 }

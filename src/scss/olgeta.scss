@@ -19,6 +19,7 @@
 @import "cards";
 @import "login";
 @import "home";
+@import "toast";
 
 /* General */
 body {
@@ -30,9 +31,9 @@ div.content-wrapper {
     padding-bottom: calc(#{$bottom-menu-height} + 140px);
     padding-right: 30px;
     padding-left: 30px;
-    background-color: #f5f4f0;
+    background-color: $tan;
     max-width: 40em;
-    margin: auto;
+    margin: auto 10px;
 }
 
 .notifications,
@@ -40,7 +41,7 @@ div.content-wrapper {
 .settings {
     padding-top: 65px;
     margin-top: -65px;
-    background-color: #f5f4f0;
+    background-color: $tan;
 }
 
 .background-blue-1 {

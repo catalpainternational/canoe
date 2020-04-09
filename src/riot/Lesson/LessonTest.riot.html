@@ -16,11 +16,11 @@
                     </div>
                     <div if="{answer === state.selectedAnswer && answer.correct}">
                         <span class="success"></span>
-                        <p class="feedback-message text-green-1">Correct answer. Well done!</p>
+                        <p class="feedback-message text-green-1" translate>Correct answer. Well done!</p>
                     </div>
                     <div if="{answer === state.selectedAnswer && !answer.correct}">
                         <span class="warning"></span>
-                        <p class="feedback-message text-orange-1">Incorrect answer. Try again.</p>
+                        <p class="feedback-message text-orange-1" translate>Incorrect answer. Try again.</p>
                     </div>
                 </li>
             </ol>
@@ -31,16 +31,18 @@
                         onclick="{nextTestCard}" 
                         if="{state.cardIdx < state.cards.length - 1}" 
                         disabled="{!state.selectedAnswer.correct}"
+                        translate
                     >Next</button>
                     <button 
                         class="btn-primary"
                         onclick="{completePage}"
                         if="{state.cardIdx === state.cards.length - 1}"
                         disabled="{!state.selectedAnswer.correct}"
+                        translate
                     >Finish</button>
                 </div>
             </div>
-            <p class="card-number">{state.cardIdx + 1} of {props.test.cards.length}</p>
+            <p class="card-number">{ cardNumberMessage() }</p>
         </div>
     </div>
     <LessonFeedback
@@ -95,6 +97,15 @@
 
             goBack() {
                 window.history.back();
+            },
+
+            cardNumberMessage() {
+                // display the number of the current card out of the total number of cards
+                return gettext(
+                    "%1 of %2",
+                    this.state.cardIdx + 1,
+                    this.props.test.cards.length
+                );
             },
 
             selectAnswer(answer) {
