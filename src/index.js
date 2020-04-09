@@ -8,7 +8,7 @@ import { store, changeLanguage } from "ReduxImpl/Store";
 
 import "./scss/olgeta.scss";
 
-changeLanguage('tetum');
+changeLanguage('tet');
 
 riot.install(function (component) {
     // all components will pass through here
