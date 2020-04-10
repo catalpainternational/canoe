@@ -29,7 +29,8 @@ export async function initializeServiceWorker() {
             
             const swUpdatePoller = window.setInterval(checkForNewVersion, SW_UPDATE_INTERVAL);
         });
-
+    } else {
+        serviceWorkerEvent('notsupported')
     }
 }
 

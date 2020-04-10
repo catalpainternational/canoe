@@ -62,6 +62,8 @@ const serviceWorker = (state = 'none', action) => {
                     return 'installed';
                 case 'externalactivated':
                     return 'updated';
+                case 'notsupported':
+                    return 'notsupported';
                 default:
                     return 'unknown';
             }
