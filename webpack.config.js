@@ -42,7 +42,8 @@ module.exports = (env) => {
             canoe: path.resolve(__dirname, "src", "index.js"),
         },
         output: {
-            filename: "[name].js",
+            filename: "[name]-[contenthash].js",
+            chunkFilename: '[name]-[contenthash].bundle.js',
             path: path.resolve(__dirname, "dist"),
         },
         devServer: {

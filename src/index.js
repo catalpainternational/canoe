@@ -1,22 +1,26 @@
 import "babel-polyfill";
-import * as riot from "riot";
-import { installReduxPlugin } from "ReduxImpl/RiotReduxPlugin";
-import { installTranslationPlugin } from "RiotTranslationPlugin";
 
-import App from "RiotTags/App.riot.html";
-import { store, changeLanguage } from "ReduxImpl/Store";
+import { store } from "ReduxImpl/Store";
+import { initializeServiceWorker } from "js/ServiceWorkerManagement"
 
-import "./scss/olgeta.scss";
+let storeState = store.getState();
 
-changeLanguage('tet');
+initializeServiceWorker();
 
-riot.install(function (component) {
-    // all components will pass through here
-    installTranslationPlugin(component);
-    installReduxPlugin(component, store);
-});
-
-riot.register("app", App);
-window.addEventListener("load", () => {
-    riot.mount("app", { store });
+store.subscribe( () => {
+    const newStoreState = store.getState();
+    if(newStoreState.serviceWorker !== storeState.serviceWorker) {
+        switch(newStoreState.serviceWorker) {
+            case 'installed':
+                import(/* webpackChunkName: "app" */ "./app.js")
+                return;
+            case 'updated':
+                // TODO should we reload? it might interrupt something
+                // should we prompt the user?
+                window.location.reload(true);
+                return;
+            default:
+                return;
+        }
+    }
 });
