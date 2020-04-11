@@ -1,6 +1,5 @@
 import { fetchPage, fetchImage, getOrFetchManifest } from "js/WagtailPagesAPI";
-import { storeWagtailPage } from "ReduxImpl/Store";
-import { dispatchToastEvent } from "js/Events";
+import { storeWagtailPage, changeContentDownloaderStatus } from "ReduxImpl/Store";
 
 const trimDomain = urlWithDomain => urlWithDomain.replace(/^.*\/\/[^\/]+/, "");
 
@@ -66,7 +65,7 @@ export class SiteDownloader {
         const imagesToFetch = leftDifference(manifestsMediaUrls, cachedMediaUrls);
 
         if (pagesToFetch.size > 0 || imagesToFetch.size > 0) {
-            dispatchToastEvent(gettext("Site is downloading."));
+            changeContentDownloaderStatus("downloading");
         }
 
         for (const pagePath of pagesToFetch) {
@@ -79,7 +78,7 @@ export class SiteDownloader {
         }
 
         if (pagesToFetch.size > 0 || imagesToFetch.size > 0) {
-            dispatchToastEvent(gettext("Site download is complete!"));
+            changeContentDownloaderStatus("downloaded");
         }
     }
 }

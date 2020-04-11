@@ -1,9 +1,17 @@
 <Toast>
     <p id="snackbar">{state.toastMessage}</p>
+    <p id="error"></p>
     <script>
-        import { ON_TOAST_REQUESTED } from "js/Events";
-
+        import { setErrorShown } from "ReduxImpl/Store";
         const TOAST_TIMEOUT_MS = 2500;
+        const NETWORK_MESSAGES = {
+            "offline": () => gettext("You are offline."),
+            "online": () => gettext("You are online."),
+        };
+        const DOWNLOADER_MESSAGES = {
+            "downloading": () => gettext("Site is downloading."),
+            "downloaded": () => gettext("Site download is complete!"),
+        }
 
         export default {
             state: {
@@ -17,14 +25,32 @@
                     toast.className = toast.className.replace("show", "");
                 }, TOAST_TIMEOUT_MS);
             },
+            showError(message) {
+                const errElement = this.$("#error");
+                errElement.innerText = message;
+                errElement.className = "show";
+                setTimeout(function() {
+                    errElement.className = errElement.className.replace("show", "");
+                }, TOAST_TIMEOUT_MS);
+            },
 
-            onMounted() {
-                window.addEventListener(ON_TOAST_REQUESTED, toastEvent => {
-                    const toastMessage = toastEvent.detail;
-                    this.update({ toastMessage });
+            storeListener(previousStoreState, storeState) {
+                let newMessage = '';
+                if(previousStoreState.networkState != storeState.networkState) {
+                    newMessage = NETWORK_MESSAGES[storeState.networkState]();
+                }
+                if(previousStoreState.contentDownloader != storeState.contentDownloader) {
+                    newMessage = DOWNLOADER_MESSAGES[storeState.contentDownloader]();
+                }
+                if(storeState.error && !storeState.error.shown) {
+                    this.showError(storeState.error.message);
+                    setErrorShown();
+                }
+                if (newMessage) {
+                    this.update({ toastMessage: newMessage });
                     this.showToast();
-                });
-            }
+                }
+            },
         };
     </script>
 </Toast>

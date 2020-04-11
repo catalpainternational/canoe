@@ -5,7 +5,11 @@ export const SITE_DOWNLOADED = "SITE_DOWNLOADED";
 export const ADDED_WAGTAIL_PAGE = "ADDED_WAGTAIL_PAGE";
 export const LANGUAGE_CHANGE = "LANGUAGE_CHANGED";
 export const UPDATED_BROWSER_SUPPORT = "UPDATED_BROWSER_SUPPORT";
-export const SERVICE_WORKER_EVENT = "SERVICE_WORKER_EVENT";
+export const SERVICE_WORKER = "SERVICE_WORKER";
+export const NETWORK_STATE = "NETWORK_STATE";
+export const CONTENT_DOWNLOAD = "CONTENT_DOWNLOAD";
+export const ERROR = "ERROR";
+export const ERROR_SHOWN = "ERROR_SHOWN";
 
 const updateManifest = (state = {}, action) => {
     switch (action.type) {
@@ -56,7 +60,7 @@ const signalBrowserSupport = (state = false, action) => {
 
 const serviceWorker = (state = 'none', action) => {
     switch (action.type) {
-        case SERVICE_WORKER_EVENT:
+        case SERVICE_WORKER:
             switch (action.event_type) {
                 case 'installed':
                     return 'installed';
@@ -72,6 +76,38 @@ const serviceWorker = (state = 'none', action) => {
     }
 }
 
+const networkState = (state = 'unknown', action) => {
+    switch (action.type) {
+        case NETWORK_STATE:
+            return action.networkState;
+        default:
+            return state;
+    }
+}
+
+const contentDownloader = (state = '', action) => {
+    switch (action.type) {
+        case CONTENT_DOWNLOAD:
+            return action.status;
+        default:
+            return state;
+    }
+}
+
+const error = (state = '', action) => {
+    switch (action.type) {
+        case ERROR:
+            return { message: action.message };
+        case ERROR_SHOWN:
+            return {
+                message: state.message,
+                shown: true,
+            };
+        default:
+            return state;
+    }
+}
+
 
 export const reducers = combineReducers({
     manifest: updateManifest,
@@ -80,4 +116,7 @@ export const reducers = combineReducers({
     language: changeLanguage,
     isBrowserSupported: signalBrowserSupport,
     serviceWorker: serviceWorker,
+    networkState: networkState,
+    contentDownloader: contentDownloader,
+    error: error,
 });

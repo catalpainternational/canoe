@@ -7,7 +7,11 @@ import {
     ADDED_WAGTAIL_PAGE,
     UPDATED_BROWSER_SUPPORT,
     LANGUAGE_CHANGE,
-    SERVICE_WORKER_EVENT,
+    SERVICE_WORKER,
+    NETWORK_STATE,
+    CONTENT_DOWNLOAD,
+    ERROR,
+    ERROR_SHOWN,
 } from "./_Reducers";
 
 export const store = createStore(
@@ -32,8 +36,28 @@ export const changeLanguage = language => {
 };
 
 export const serviceWorkerEvent = event_type => {
-    store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: event_type });
+    store.dispatch({ type: SERVICE_WORKER, event_type: event_type });
 };
+
+export const changeNetworkState = networkState => {
+    store.dispatch({ type: NETWORK_STATE, networkState });
+}
+
+export const getNetworkState = () => {
+    return store.getState().networkState;
+};
+
+export const changeContentDownloaderStatus = status => {
+    store.dispatch({ type: CONTENT_DOWNLOAD, status });
+}
+
+export const reportError = message => {
+    store.dispatch({ type: ERROR, message });
+}
+export const setErrorShown = () => {
+    store.dispatch({ type: ERROR_SHOWN });
+}
+
 
 export const getLanguage = () => {
     return store.getState().language;

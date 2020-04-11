@@ -1,7 +1,7 @@
 $toast-opacity: 1;
 $toast-top-position: 1em;
 
-#snackbar {
+#snackbar, #error {
     visibility: hidden;
     background-color: rgba($gray-9, $toast-opacity);
     color: $gray-3;
