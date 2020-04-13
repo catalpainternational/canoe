@@ -34,13 +34,36 @@
 
 <body>
     <div id="canoe_loading">
-        We are downloading stuff, BE PATIENT!
+        <img inline src="src/img/site_logo_white.svg">
+        <div id="service_worker_loading">
+            Favor hein...<br />
+            Please wait...
+        </div>
+        <div id="service_worker_notsupported" hidden>
+            Your browser does not support serviceworkers
+        </div>
     </div>
     <App>
     </App>
-    <div id="service_worker_notsupported" hidden>
-        Your browser stinks
-    </div>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        #service_worker_loading, #service_worker_notsupported {
+            padding-top: 100px;
+        }
+        #canoe_loading {
+            height: 100%;
+            margin: -8px;
+            width: auto;
+            background-color: #13BF97;
+            padding: 30px;
+            font-family: Verdana;
+            font-size: xx-large;
+            color: white;
+            text-align: center;
+        }
+    </style>
 </body>
 
 </html>

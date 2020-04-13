@@ -8,23 +8,24 @@ let storeState = store.getState();
 store.subscribe( () => {
     const newStoreState = store.getState();
     if(newStoreState.serviceWorker !== storeState.serviceWorker) {
-        // hide the loading splash
-        document.querySelector('#canoe_loading').hidden = true;
 
         switch(newStoreState.serviceWorker) {
             case 'notsupported':
+                document.querySelector('#service_worker_loading').hidden = true;
                 document.querySelector('#service_worker_notsupported').hidden = false;
-                return;
+                break;
             case 'installed':
+                // hide the loading splash
+                document.querySelector('#canoe_loading').hidden = true;
                 import(/* webpackChunkName: "app" */ "./app.js")
-                return;
+                break;
             case 'updated':
                 // TODO should we reload? it might interrupt something
                 // should we prompt the user?
                 window.location.reload(true);
-                return;
+                break;
             default:
-                return;
+                break;
         }
     }
 });

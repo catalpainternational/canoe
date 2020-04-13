@@ -6,6 +6,7 @@ const fs = require("fs");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { InjectManifest } = require("workbox-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 
 // default environment configuration
@@ -129,6 +130,7 @@ module.exports = (env) => {
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
                 ga_tag: environmentConfiguration.GA_TAG,
             }),
+            new HtmlWebpackInlineSVGPlugin({runPreEmit: true}),
             new WebpackPwaManifest({
                 name: projectConfiguration.SITE_NAME,
                 short_name: projectConfiguration.SITE_SHORT_NAME,
