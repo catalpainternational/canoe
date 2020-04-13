@@ -217,12 +217,23 @@ LessonPage .description {
     }
 }
 
+LessonComplete, LessonModuleComplete, LessonFeedback {
+    LessonFrame {
+        .frame-background {
+            min-height: 550px;
+        }
+
+        .card-frame {
+            min-height: 460px;
+        }
+    }
+}
+
 LessonFrame {
     .frame-background {
         height: calc(100vh - #{$top-menu-height-no-footer});
         margin-top: -#{$top-menu-height};
         padding-top: calc(#{$top-menu-height} - 10px);
-        padding-bottom: $bottom-menu-height;
     }
 
     .card-container {
