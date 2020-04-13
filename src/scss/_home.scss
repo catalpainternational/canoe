@@ -26,13 +26,13 @@ HomePage .content-wrapper {
         text-transform: uppercase;
         font-size: 14px;
         font-weight: 400;
-        width: 180px;
+        min-width: 130px;
         margin-right: 5px;
         margin-bottom: 10px;
     }
 
     Profile & h5 {
-        width: 300px;
+        min-width: 180px;
     }
 
     div {
