@@ -5,6 +5,7 @@
 import { Workbox } from 'workbox-window';
 import { serviceWorkerEvent } from "ReduxImpl/Store";
 const SW_UPDATE_INTERVAL = 1000 * 10 * 60 * 4;
+import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
 
 
 export async function initializeServiceWorker() {
@@ -29,22 +30,16 @@ export async function initializeServiceWorker() {
             
             const swUpdatePoller = window.setInterval(checkForNewVersion, SW_UPDATE_INTERVAL);
         });
+
+        window.addEventListener("beforeinstallprompt", async (e) => {
+            e.preventDefault();
+            const deferredPrompt = e;
+
+            window.addEventListener(ON_ADD_TO_HOME_SCREEN, async () => {
+                deferredPrompt.prompt();
+            });
+        });
     } else {
         serviceWorkerEvent('notsupported')
     }
 }
-
-/* fragment left for re-implemation in future commit
-if ("serviceWorker" in navigator) {
-
-    window.addEventListener("beforeinstallprompt", async (e) => {
-        e.preventDefault();
-        const deferredPrompt = e;
-
-        window.addEventListener(ON_ADD_TO_HOME_SCREEN, async () => {
-            deferredPrompt.prompt();
-        });
-    });
-}
-
-        */
