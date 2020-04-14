@@ -487,6 +487,18 @@ LessonTest {
 
     .showElement.feedback-modal {
         display: unset;
+        animation-duration: 0.6s;
+        animation-name: slideModal;
+    }
+
+    @keyframes slideModal {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0%);
+        }
     }
 
     .test.showElement:after {
