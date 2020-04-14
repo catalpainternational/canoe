@@ -27,7 +27,7 @@ msgstr ""
 #. display the number of the current card out of the total number of cards
 #: src/riot/Lesson/LessonContent.riot.html:89
 #: src/riot/Lesson/LessonObjective.riot.html:57
-#: src/riot/Lesson/LessonTest.riot.html:104
+#: src/riot/Lesson/LessonTest.riot.html:99
 msgid "%1 of %2"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgid "Continue learning"
 msgstr ""
 
 #: ./src/riot/Lesson/LessonTest.riot.html:19
-msgid "Correct answer. Well done!"
+msgid "Correct answer"
 msgstr ""
 
 #: ./src/riot/WagtailPages/CoursePage.riot.html:10
@@ -99,8 +99,12 @@ msgstr ""
 
 #: ./src/riot/Lesson/LessonContent.riot.html:26
 #: ./src/riot/Lesson/LessonObjective.riot.html:13
-#: ./src/riot/Lesson/LessonTest.riot.html:36
+#: ./src/riot/Lesson/LessonTest.riot.html:35
 msgid "Finish"
+msgstr ""
+
+#: src/riot/Lesson/LessonTest.riot.html:110
+msgid "Great"
 msgstr ""
 
 #: ./src/riot/Lesson/LessonModuleComplete.riot.html:7
@@ -122,7 +126,7 @@ msgid "In the meantime please use Safari."
 msgstr ""
 
 #: ./src/riot/Lesson/LessonTest.riot.html:23
-msgid "Incorrect answer. Try again."
+msgid "Incorrect answer"
 msgstr ""
 
 #: ./src/riot/WagtailPages/LessonPage.riot.html:58
@@ -179,7 +183,7 @@ msgstr ""
 
 #: ./src/riot/Lesson/LessonContent.riot.html:18
 #: ./src/riot/Lesson/LessonObjective.riot.html:12
-#: ./src/riot/Lesson/LessonTest.riot.html:29
+#: ./src/riot/Lesson/LessonTest.riot.html:34
 msgid "Next"
 msgstr ""
 
@@ -203,6 +207,10 @@ msgstr ""
 msgid "Objectives"
 msgstr ""
 
+#: src/riot/Lesson/LessonTest.riot.html:124
+msgid "Oops"
+msgstr ""
+
 #: ./src/riot/Screens/Profile.riot.html:5
 msgid "Overall progress"
 msgstr ""
@@ -213,6 +221,10 @@ msgstr ""
 
 #: ./src/riot/Screens/Profile.riot.html:14
 msgid "Progress by course"
+msgstr ""
+
+#: src/riot/Lesson/LessonTest.riot.html:131
+msgid "Read the question more carefully!"
 msgstr ""
 
 #: ./src/riot/WagtailPages/LessonPage.riot.html:73
@@ -243,6 +255,10 @@ msgstr ""
 msgid "Thank you!"
 msgstr ""
 
+#: ./src/riot/Lesson/LessonTest.riot.html:40
+msgid "Try again"
+msgstr ""
+
 #: ./src/riot/Screens/Authentication.riot.html:8
 msgid "Username"
 msgstr ""
@@ -257,6 +273,10 @@ msgstr ""
 
 #: ./src/riot/Screens/ChangeBrowser.riot.html:5
 msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
+msgstr ""
+
+#: src/riot/Lesson/LessonTest.riot.html:117
+msgid "Well done, keep it up!"
 msgstr ""
 
 #: ./src/riot/Screens/Settings.riot.html:14
