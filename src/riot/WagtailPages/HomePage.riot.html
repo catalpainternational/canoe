@@ -112,11 +112,10 @@
                 const numberOfCompleteLessons = getNumberOfCompleteLessons(courseSlug, lessonSlugs);
 
                 return ngettext(
-                    "%2 / %1 lesson complete", // this is the singular form
-                    "%2 / %1 lessons complete", // this is the plural form
-                    course.data.lessons_count, // the plurality of this number decides which form is used
-                    course.data.lessons_count, // first subsequent argument replaces %1
-                    numberOfCompleteLessons
+                    "%1 / %2 lesson complete",
+                    "%1 / %2 lessons complete",
+                    numberOfCompleteLessons,
+                    course.data.lessons_count
                 );
             },
 
