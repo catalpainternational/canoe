@@ -17,7 +17,7 @@ window.addEventListener(ON_ACTION_CHANGE, initialiseCompletions);
 export async function initialiseCompletions() {
     try {
         const actions = await getCompletions();
-        actions.forEach(action => {
+        actions.forEach((action) => {
             setCompleteInternal(action.course, action.lesson, action.section, action.date);
         });
         window.dispatchEvent(new CustomEvent(ON_COMPLETION_CHANGE));
@@ -39,7 +39,7 @@ function setCompleteInternal(course, lesson, section, date) {
     lessonMap.set(section, date);
 }
 
-const isLaterThanCutoff = completion => {
+const isLaterThanCutoff = (completion) => {
     if (!completion) {
         return false;
     }
@@ -48,7 +48,7 @@ const isLaterThanCutoff = completion => {
     return completion >= dontShowActionsFromBeforeThisDate;
 };
 
-function lessonComplete(lessonMap) {
+function isLessonComplete(lessonMap) {
     const objectiveCompletion = lessonMap.get("objectives");
     const contentCompletion = lessonMap.get("content");
     const testCompletion = lessonMap.get("test");
@@ -81,7 +81,7 @@ export function isComplete(course, lesson, section) {
         const sectionCompletion = lessonMap.get(section);
         return isLaterThanCutoff(sectionCompletion);
     } else {
-        return lessonComplete(lessonMap);
+        return isLessonComplete(lessonMap);
     }
 }
 
@@ -89,7 +89,7 @@ export function countComplete(courseSlug) {
     const courseMap = getCourseMap(courseSlug);
     let numCompletedLessons = 0;
     for (const lessonMap of courseMap.values()) {
-        if (lessonComplete(lessonMap)) {
+        if (isLessonComplete(lessonMap)) {
             numCompletedLessons += 1;
         }
     }

@@ -7,7 +7,8 @@
                 <h6 if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}">
                     { continueLearningMessage() }
                 </h6>
-                <ContinueLearningButton if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
+                <ContinueLearningButton
+                    if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
                     class="profile header-text"
                     background="home-background-image"
                 ></ContinueLearningButton>
@@ -20,14 +21,11 @@
             <div>
                 <h5 translate>Your courses</h5>
                 <span>
-                    <hr>
+                    <hr />
                 </span>
             </div>
         </div>
-        <div
-            class="course"
-            each="{course in props.wagtailPage.courses}"
-        >
+        <div class="course" each="{course in props.wagtailPage.courses}">
             <div class="course-header">
                 <span class="background-{course.data.colour}"></span>
                 <div>
@@ -60,65 +58,67 @@
         import Card from "RiotTags/Components/Card.riot.html";
 
         import { getUsername } from "js/AuthenticationUtilities";
-        import { 
-            getAllLessons, 
+        import { getAllLessons } from "js/utilities";
+        import {
             getNumberOfCompletedLessons,
-            getNumberOfCompletedLessonsFor 
-        } from "js/utilities";
-        import { 
-            countComplete, 
-            isComplete, 
+            getNumberOfCompletedLessonsFor,
+        } from "js/LearningStatistics";
+        import {
+            countComplete,
+            isComplete,
             getMostRecentCompletion,
-            isTheCourseComplete 
+            isTheCourseComplete,
         } from "Actions/completion";
         import { ON_COMPLETION_CHANGE } from "js/Events";
+
         export default {
             state: {
                 nextLesson: {},
                 courses: [],
-                currentCourse: null
+                currentCourse: null,
             },
 
             components: {
                 card: Card,
-                continuelearningbutton: ContinueLearningButton
+                continuelearningbutton: ContinueLearningButton,
             },
 
             onBeforeMount(props, state) {
                 const courses = props.wagtailPage.courses;
                 const lastWorkedOnCourse = this.getCurrentCourse(courses);
-                courses.forEach(course => {
+                courses.forEach((course) => {
                     this.getNextLesson(course);
                 });
 
                 this.state.courses = courses;
                 this.state.currentCourse = lastWorkedOnCourse;
             },
+
             continueLearningMessage() {
                 return ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
-                    this.state.currentCourse.data.lessons_count - getNumberOfCompletedLessonsFor(this.state.currentCourse),
+                    this.state.currentCourse.data.lessons_count -
+                        getNumberOfCompletedLessonsFor(this.state.currentCourse),
                     this.state.currentCourse.data.title
                 );
             },
+
             courseProgressMessage(course) {
                 // displays how many lessons are complete and how many lessons are in the current course
+                console.log(course);
                 return ngettext(
-                    "%2 / %1 lesson complete",  // this is the singular form
-                    "%2 / %1 lessons complete",             // this is the plural form
-                    course.data.lessons_count,              // the plurality of this number decides which form is used
-                    course.data.lessons_count,              // first subsequent argument replaces %1
-                    countComplete(course.data.slug),        // other subsequent arguments replace %2+
+                    "%2 / %1 lesson complete", // this is the singular form
+                    "%2 / %1 lessons complete", // this is the plural form
+                    course.data.lessons_count, // the plurality of this number decides which form is used
+                    course.data.lessons_count, // first subsequent argument replaces %1
+                    countComplete(course.data.slug) // other subsequent arguments replace %2+
                 );
             },
 
             greetingMessage() {
                 // Greet the user with their username
-                return gettext(
-                    "Hi %1",
-                    getUsername()
-                );
+                return gettext("Hi %1", getUsername());
             },
 
             getCurrentCourse(courses) {
@@ -127,7 +127,7 @@
                     return null;
                 }
                 const lastWorkedOnCourse = courses.find(
-                    course => course.data.slug === lastCompletion.courseSlug
+                    (course) => course.data.slug === lastCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
             },
@@ -165,7 +165,7 @@
 
             isLessonComplete(course, lesson) {
                 return isComplete(course.data.slug, lesson.slug);
-            }
+            },
         };
     </script>
 </Home>
