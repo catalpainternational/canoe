@@ -29,14 +29,14 @@
     </div>
     <div id="modal" class="feedback-modal">
         <div if="{state.selectedAnswer.correct}">
-            <h2 translate>Great</h2>
-            <p translate>Well done, keep it up!</p>
+            <h2>{ correctTitleMessage() }</h2>
+            <p>{ correctTextMessage() }</p>
             <button if="{state.cardIdx < state.cards.length - 1}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
             <button if="{state.cardIdx === state.cards.length - 1}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
         </div>
         <div if="{!state.selectedAnswer.correct}">
-            <h2 translate>Oops</h2>
-            <p translate>Read the question more carefully!</p>
+            <h2>{ incorrectTitleMessage() }</h2>
+            <p>{ incorrectTextMessage() }</p>
             <button class="btn-primary btn-wrong" onclick="{ () => toggleModal(false) }" translate>Try again</button>
         </div>
     </div>
@@ -101,6 +101,34 @@
                     this.state.cardIdx + 1,
                     this.props.test.cards.length
                 );
+            },
+
+            correctTitleMessage() {
+                // title for correct answer feedback
+                return this.state.selectedAnswer.correctTitle 
+                ? this.state.selectedAnswer.correctTitle
+                : gettext("Great");
+            },
+
+            correctTextMessage() {
+                // text for correct answer feedback
+                return this.state.selectedAnswer.correctText 
+                ? this.state.selectedAnswer.correctText
+                : gettext("Well done, keep it up!");
+            },
+
+            incorrectTitleMessage() {
+                // title for incorrect answer feedback
+                return this.state.selectedAnswer.incorrectTitle 
+                ? this.state.selectedAnswer.incorrectTitle
+                : gettext("Oops");
+            },
+
+            incorrectTextMessage() {
+                // text for incorrect answer feedback
+                return this.state.selectedAnswer.incorrectText 
+                ? this.state.selectedAnswer.incorrectText
+                : gettext("Read the question more carefully!");
             },
 
             selectAnswer(answer) {
