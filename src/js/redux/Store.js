@@ -5,6 +5,9 @@ import {
     UPDATED_MANIFEST,
     SITE_DOWNLOADED,
     ADDED_WAGTAIL_PAGE,
+    ADDED_HOME_PAGE,
+    ADDED_COURSE_PAGE,
+    ADDED_LESSON_PAGE,
     UPDATED_BROWSER_SUPPORT,
     LANGUAGE_CHANGE,
 } from "./_Reducers";
@@ -15,6 +18,19 @@ export const store = createStore(
 );
 
 export const storeWagtailPage = (wagtailPage) => {
+    switch (wagtailPage.meta.type) {
+        case "elearning_content.HomePage":
+            store.dispatch({ type: ADDED_HOME_PAGE, home: wagtailPage });
+            break;
+        case "elearning_content.CoursePage":
+            store.dispatch({ type: ADDED_COURSE_PAGE, course: wagtailPage });
+            break;
+        case "elearning_content.LessonPage":
+            store.dispatch({ type: ADDED_LESSON_PAGE, lesson: wagtailPage });
+            break;
+        default:
+            throw new Error(`${wagtailPage.meta.type} is an unreckognized page type.`);
+    }
     store.dispatch({ type: ADDED_WAGTAIL_PAGE, wagtailPage });
 };
 
@@ -26,7 +42,7 @@ export const storeSiteDownloadedIs = (trueOrFalse) => {
     store.dispatch({ type: SITE_DOWNLOADED, siteIsDownloaded: trueOrFalse });
 };
 
-export const changeLanguage = language => {
+export const changeLanguage = (language) => {
     store.dispatch({ type: LANGUAGE_CHANGE, language: language });
 };
 
@@ -52,4 +68,40 @@ export const isSiteDownloaded = () => {
 
 export const isBrowserSupported = () => {
     return store.getState().isBrowserSupported;
+};
+
+export const getCourseById = (courseId) => {
+    const course = store.getState().courses[courseId];
+    if (!course) {
+        throw new Error(`Course ${courseId} doesn't exist.`);
+    }
+    return course;
+};
+
+export const getLessonById = (lessonId) => {
+    const lesson = store.getState().lessons[lessonId];
+    if (!lesson) {
+        throw new Error(`Course ${lessonId} doesn't exist.`);
+    }
+    return lesson;
+};
+
+export const getACoursesLessons = (courseId) => {
+    const course = store.getState().courses[courseId];
+    if (!course) {
+        throw new Error(`Course ${courseId} doesn't exist.`);
+    }
+    const lessonIds = course.lessonIds;
+    const lessons = lessonIds.map(lessonId => getLessonById(lessonId));
+    return lessons;
+};
+
+export const getALessonsCourse = (lessonId) => {
+    const lesson = store.getState().lessons[lessonId];
+    if (!lesson) {
+        throw new Error(`Course ${lessonId} doesn't exist.`);
+    }
+    const parentCourseId = lesson.parentId;
+    const parentCourse = getCourseById(parentCourseId);
+    return parentCourse;
 };
