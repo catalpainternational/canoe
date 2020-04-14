@@ -6,7 +6,8 @@
  */
 
 import { storeCompletion, getCompletions } from "./actions_store";
-import { ON_ACTION_CHANGE, ON_COMPLETION_CHANGE } from "../Events";
+import { ON_ACTION_CHANGE, ON_COMPLETION_CHANGE } from "js/Events";
+import { intersection } from "js/SetMethods";
 
 const courses = new Map();
 
@@ -95,6 +96,22 @@ export function countComplete(courseSlug) {
     }
     return numCompletedLessons;
 }
+
+export const countNumberOfCompleteLessons = (courseSlug, lessonSlugs) => {
+    const courseMap = getCourseMap(courseSlug);
+    const lessonsInCourseMap = new Set(courseMap.keys());
+    const liveLessons = new Set(lessonSlugs);
+    const liveLessonsInCourseMap = intersection(lessonsInCourseMap, liveLessons);
+
+    let numCompletedLessons = 0;
+    for (const lessonSlug of liveLessonsInCourseMap) {
+        const lessonCompletion = courseMap.get(lessonSlug);
+        if (isLessonComplete(lessonCompletion)) {
+            numCompletedLessons += 1;
+        }
+    }
+    return numCompletedLessons;
+};
 
 export const isTheCourseComplete = (courseSlug, coursesLessons) => {
     const numberOfCoursesCompletions = countComplete(courseSlug);

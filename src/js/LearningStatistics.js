@@ -1,4 +1,5 @@
 import { countComplete } from "Actions/completion";
+import { countNumberOfCompleteLessons } from "Actions/completion";
 
 export const getNumberOfCompletedLessons = (courses) => {
     let numberOfCompletedLessons = 0;
@@ -9,6 +10,9 @@ export const getNumberOfCompletedLessons = (courses) => {
 };
 
 export const getNumberOfCompletedLessonsFor = (course) => {
-    console.log(course);
     return countComplete(course.data.slug);
+};
+
+export const getNumberOfCompleteLessons = (course, lessons) => {
+    return countNumberOfCompleteLessons(course, lessons);
 };

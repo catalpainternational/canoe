@@ -34,7 +34,6 @@
             },
 
             isCourseComplete() {
-                console.log(this.props.course);
                 return countComplete(this.props.course.slug) === this.props.course.lessons_count;
             },
 

@@ -69,6 +69,7 @@
             getMostRecentCompletion,
             isTheCourseComplete,
         } from "Actions/completion";
+        import { getNumberOfCompleteLessons } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
 
         export default {
@@ -106,13 +107,16 @@
 
             courseProgressMessage(course) {
                 // displays how many lessons are complete and how many lessons are in the current course
-                console.log(course);
+                const courseSlug = course.data.slug;
+                const lessonSlugs = course.lessons.map((lesson) => lesson.slug);
+                const numberOfCompleteLessons = getNumberOfCompleteLessons(courseSlug, lessonSlugs);
+
                 return ngettext(
                     "%2 / %1 lesson complete", // this is the singular form
                     "%2 / %1 lessons complete", // this is the plural form
                     course.data.lessons_count, // the plurality of this number decides which form is used
                     course.data.lessons_count, // first subsequent argument replaces %1
-                    countComplete(course.data.slug) // other subsequent arguments replace %2+
+                    numberOfCompleteLessons
                 );
             },
 
