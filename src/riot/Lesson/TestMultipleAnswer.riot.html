@@ -1,0 +1,45 @@
+<TestMultipleAnswer class="answer">
+	<h3>MULTIPLE</h3>
+	<ol>
+		<li
+			class="{answer === state.selectedAnswer ? 'selected' : ''} {answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
+			each="{answer in props.answers}"
+			onclick="{() => selectAnswer(answer)}"
+		>
+			<div>
+				<input type="checkbox" />
+				<p>{answer.text}</p>
+			</div>
+			<div if="{answer === state.selectedAnswer && answer.correct}">
+				<span class="success"></span>
+				<p class="feedback-message text-green-1" translate>Correct answer</p>
+			</div>
+			<div if="{answer === state.selectedAnswer && !answer.correct}">
+				<span class="warning"></span>
+				<p class="feedback-message text-orange-1" translate>Incorrect answer</p>
+			</div>
+		</li>
+	</ol>
+
+	<script>
+		import { dispatchTestAnswerEvent } from "js/Events";
+
+		export default {
+			state: {
+				selectedAnswer: {}
+			},
+
+			selectAnswer(answer) {
+                this.update({ selectedAnswer: answer });
+                const eventData = {
+                    lesson: this.props.lessonName,
+                    question: this.props.question,
+                    answer: answer.text,
+                    isAnswerCorrect: answer.correct
+                };
+                dispatchTestAnswerEvent(eventData);
+                this.props.toggleModal(true, answer);
+            },
+		}
+	</script>
+</TestMultipleAnswer>
