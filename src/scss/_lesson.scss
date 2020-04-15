@@ -42,10 +42,6 @@
     .card-footer {
         justify-content: space-between;
         display: flex;
-
-        @media only screen and (max-width: $sm-phone) {
-            justify-content: left;
-        }
     }
 }
 
@@ -120,6 +116,12 @@ LessonPage .replace-this-with-lessonframe {
     padding-top: $top-menu-height;
 }
 
+LessonPage .unit h5 {
+    width: 100%;
+    margin: 5px 0;
+    font-weight: 400;
+}
+
 LessonPage .content-wrapper {
     border-radius: 30px 30px 0 0;
     background-color: $gray-10;
@@ -165,15 +167,6 @@ LessonPage .content-wrapper {
     }
 }
 
-LessonPage .section-title h5 {
-    min-width: 150px;
-}
-
-LessonPage .section-title .unit h5 {
-    width: 100%;
-    margin-top: 0;
-}
-
 LessonPage h2 {
     border-bottom: none;
 }
@@ -185,8 +178,8 @@ LessonPage .hide {
 LessonPage .content-wrapper .duration {
     align-items: center;
     display: flex;
-    border-bottom: 1px solid #d5dbdf;
-    border-top: 1px solid #d5dbdf;
+    border-bottom: 1px solid $gray-6;
+    border-top: 1px solid $gray-6;
 
     span {
         margin: 5px;
@@ -360,121 +353,155 @@ LessonContent div.content-wrapper {
     display: flex;
 }
 
-LessonTest .test {
-    overflow: auto;
-    margin-top: -#{$top-menu-height};
-    padding-top: calc(#{$top-menu-height} - 10px);
-    padding-bottom: 10px;
+LessonTest {
+    .test {
+        overflow: auto;
+        margin-top: -#{$top-menu-height};
+        padding-top: calc(#{$top-menu-height} - 10px);
+        padding-bottom: 10px;
 
-    @media only screen and (max-width: $sm-phone) {
-        margin-bottom: 1rem;
-    }
+        @media only screen and (max-width: $sm-phone) {
+            margin-bottom: 1rem;
+        }
 
-    ol {
-        flex: 1;
+        ol {
+            flex: 1;
 
-        li {
-            flex-direction: column;
-            margin-bottom: 10px;
-            display: flex;
-
-            & > div {
-                align-items: center;
+            li {
+                flex-direction: column;
+                margin-bottom: 10px;
                 display: flex;
 
-                p {
-                    flex-shrink: 1;
-                    margin: 0;
-                }
-            }
-
-            & > div:nth-child(2) {
-                padding-left: 35px;
-
-                p {
-                    margin-left: 5px;
-                }
-            }
-
-            .radio {
-                background-color: $white;
-                border-radius: 50%;
-                margin-right: 10px;
-                position: relative;
-                border: $border;
-                flex-shrink: 0;
-                height: 23px;
-                width: 23px;
-
                 & > div {
+                    align-items: center;
+                    display: flex;
+
+                    p {
+                        flex-shrink: 1;
+                        margin: 0;
+                    }
+                }
+
+                & > div:nth-child(2) {
+                    padding-left: 35px;
+
+                    p {
+                        margin-left: 5px;
+                    }
+                }
+
+                .radio {
+                    background-color: $white;
                     border-radius: 50%;
-                    position: absolute;
-                    margin: auto;
-                    height: 11px;
-                    width: 11px;
-                    bottom: 0;
-                    right: 0;
-                    left: 0;
-                    top: 0;
+                    margin-right: 10px;
+                    position: relative;
+                    border: $border;
+                    flex-shrink: 0;
+                    height: 23px;
+                    width: 23px;
+
+                    & > div {
+                        border-radius: 50%;
+                        position: absolute;
+                        margin: auto;
+                        height: 11px;
+                        width: 11px;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        top: 0;
+                    }
                 }
+            }
+
+            li:hover {
+                cursor: pointer;
+            }
+
+            li.selected {
+                .radio {
+                    & > div {
+                        background-color: $green-1;
+                    }
+                }
+            }
+
+            li.selected.wrong {
+                .radio {
+                    border: 2px solid $red-2;
+                    height: 21px;
+                    width: 21px;
+
+                    & > div {
+                        background-color: $red-2;
+                    }
+                }
+            }
+
+            li:last-child {
+                margin-bottom: 0;
             }
         }
 
-        li:hover {
-            cursor: pointer;
+        .btn-primary {
+            min-width: 90px;
+            font-size: 12px;
         }
 
-        li.selected {
-            .radio {
-                & > div {
-                    background-color: $green-1;
-                }
-            }
+        .card-number {
+            font-size: 12px;
+            margin-bottom: -15px;
+            flex: 0;
+            text-align: center;
         }
+    }
 
-        li.selected.wrong {
-            .radio {
-                border: 2px solid $red-2;
-                height: 21px;
-                width: 21px;
+    .feedback-modal {
+        position: absolute;
+        bottom: 0px;
+        background-color: white;
+        width: 100%;
+        text-align: center;
+        height: 300px;
+        border-radius: 30px 30px 0px 0px;
+        box-shadow: 0px 0px 10px 5px $gray-3;
+        display: none;
 
-                & > div {
-                    background-color: $red-2;
-                }
-            }
-        }
-
-        li:last-child {
+        h2 {
+            margin-top: 40px;
             margin-bottom: 0;
         }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 40px;
+        }
     }
 
-    .bottom-buttons {
-        display: flex;
-        justify-content: center;
-        flex-direction: row;
+    .showElement.feedback-modal {
+        display: unset;
+        animation-duration: 0.6s;
+        animation-name: slideModal;
+    }
+
+    @keyframes slideModal {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0%);
+        }
+    }
+
+    .test.showElement:after {
+        content: '';
+        position: fixed;
         width: 100%;
-        margin-bottom: 15px;
-    }
-
-    .arrow-gray {
-        display: inline-block;
-        position: relative;
-        left: unset;
-        width: 80px;
-        height: 50px;
-    }
-
-    .btn-primary {
-        min-width: 90px;
-        font-size: 12px;
-    }
-
-    .card-number {
-        font-size: 12px;
-        margin-bottom: -15px;
-        flex: 0;
-        text-align: center;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba(black, 0.4);
     }
 }
 

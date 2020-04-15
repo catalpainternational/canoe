@@ -1,5 +1,5 @@
 <LessonTest>
-    <div class="test background-blue-1" if="{state.cardIdx < state.cards.length}">
+    <div id="test" class="test background-blue-1" if="{state.cardIdx < state.cards.length}">
         <div class="carousel-card">
             <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
             <ol>
@@ -16,33 +16,28 @@
                     </div>
                     <div if="{answer === state.selectedAnswer && answer.correct}">
                         <span class="success"></span>
-                        <p class="feedback-message text-green-1" translate>Correct answer. Well done!</p>
+                        <p class="feedback-message text-green-1" translate>Correct answer</p>
                     </div>
                     <div if="{answer === state.selectedAnswer && !answer.correct}">
                         <span class="warning"></span>
-                        <p class="feedback-message text-orange-1" translate>Incorrect answer. Try again.</p>
+                        <p class="feedback-message text-orange-1" translate>Incorrect answer</p>
                     </div>
                 </li>
             </ol>
-            <div class="bottom-buttons">
-                <div>
-                    <button 
-                        class="btn-primary" 
-                        onclick="{nextTestCard}" 
-                        if="{state.cardIdx < state.cards.length - 1}" 
-                        disabled="{!state.selectedAnswer.correct}"
-                        translate
-                    >Next</button>
-                    <button 
-                        class="btn-primary"
-                        onclick="{completePage}"
-                        if="{state.cardIdx === state.cards.length - 1}"
-                        disabled="{!state.selectedAnswer.correct}"
-                        translate
-                    >Finish</button>
-                </div>
-            </div>
             <p class="card-number">{ cardNumberMessage() }</p>
+        </div>
+    </div>
+    <div id="modal" class="feedback-modal">
+        <div if="{state.selectedAnswer.correct}">
+            <h2>{ correctTitleMessage() }</h2>
+            <p>{ correctTextMessage() }</p>
+            <button if="{state.cardIdx < state.cards.length - 1}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
+            <button if="{state.cardIdx === state.cards.length - 1}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
+        </div>
+        <div if="{!state.selectedAnswer.correct}">
+            <h2>{ incorrectTitleMessage() }</h2>
+            <p>{ incorrectTextMessage() }</p>
+            <button class="btn-primary btn-wrong" onclick="{ () => toggleModal(false) }" translate>Try again</button>
         </div>
     </div>
     <LessonFeedback
@@ -108,6 +103,34 @@
                 );
             },
 
+            correctTitleMessage() {
+                // title for correct answer feedback
+                return this.state.selectedAnswer.correctTitle 
+                ? this.state.selectedAnswer.correctTitle
+                : gettext("Great");
+            },
+
+            correctTextMessage() {
+                // text for correct answer feedback
+                return this.state.selectedAnswer.correctText 
+                ? this.state.selectedAnswer.correctText
+                : gettext("Well done, keep it up!");
+            },
+
+            incorrectTitleMessage() {
+                // title for incorrect answer feedback
+                return this.state.selectedAnswer.incorrectTitle 
+                ? this.state.selectedAnswer.incorrectTitle
+                : gettext("Oops");
+            },
+
+            incorrectTextMessage() {
+                // text for incorrect answer feedback
+                return this.state.selectedAnswer.incorrectText 
+                ? this.state.selectedAnswer.incorrectText
+                : gettext("Read the question more carefully!");
+            },
+
             selectAnswer(answer) {
                 this.update({ selectedAnswer: answer });
                 const eventData = {
@@ -117,9 +140,24 @@
                     isAnswerCorrect: answer.correct
                 };
                 dispatchTestAnswerEvent(eventData);
+                this.toggleModal(true);
+            },
+
+            toggleModal(showModal) {
+                const modalElement = this.$("#modal");
+                const testElement = this.$("#test");
+
+                if (showModal) {
+                    modalElement.classList.add("showElement");
+                    testElement.classList.add("showElement");
+                } else {
+                    modalElement.classList.remove("showElement");
+                    testElement.classList.remove("showElement");
+                }
             },
 
             nextTestCard() {
+                this.toggleModal(false);
                 window.scroll(0, 0);
                 this.state.selectedAnswer = {};
                 location.hash = getLessonModuleHash(
@@ -130,6 +168,7 @@
             },
 
             completePage() {
+                this.toggleModal(false);
                 setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
                 location.hash = getLessonModuleHash(
                     this.props.lesson.id,
