@@ -81,27 +81,7 @@ export const getCourseById = (courseId) => {
 export const getLessonById = (lessonId) => {
     const lesson = store.getState().lessons[lessonId];
     if (!lesson) {
-        throw new Error(`Course ${lessonId} doesn't exist.`);
+        throw new Error(`Lesson ${lessonId} doesn't exist.`);
     }
     return lesson;
-};
-
-export const getACoursesLessons = (courseId) => {
-    const course = store.getState().courses[courseId];
-    if (!course) {
-        throw new Error(`Course ${courseId} doesn't exist.`);
-    }
-    const lessonIds = course.lessonIds;
-    const lessons = lessonIds.map(lessonId => getLessonById(lessonId));
-    return lessons;
-};
-
-export const getALessonsCourse = (lessonId) => {
-    const lesson = store.getState().lessons[lessonId];
-    if (!lesson) {
-        throw new Error(`Course ${lessonId} doesn't exist.`);
-    }
-    const parentCourseId = lesson.parentId;
-    const parentCourse = getCourseById(parentCourseId);
-    return parentCourse;
 };

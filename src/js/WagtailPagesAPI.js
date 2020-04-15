@@ -4,7 +4,9 @@ import {
     storeWagtailPage,
     getWagtailPageFromStore,
     getManifestFromStore,
-    storeManifest
+    storeManifest,
+    getLessonById,
+    getCourseById,
 } from "ReduxImpl/Store";
 
 async function token_authed_fetch(url) {
@@ -14,8 +16,8 @@ async function token_authed_fetch(url) {
         mode: "cors",
         headers: {
             "Content-Type": "text/json",
-            Authorization: `JWT ${token}`
-        }
+            Authorization: `JWT ${token}`,
+        },
     });
 
     if (!response.ok) {
@@ -40,7 +42,7 @@ export async function fetchPage(path) {
     return pageMetadata;
 }
 
-export const fetchImage = async path => {
+export const fetchImage = async (path) => {
     return new Promise((resolve, reject) => {
         const image = new Image();
         // Workbox only caches crossorigin images.
@@ -62,7 +64,7 @@ export const getOrFetchManifest = async () => {
     return manifest;
 };
 
-export const getOrFetchWagtailPage = async path => {
+export const getOrFetchWagtailPage = async (path) => {
     const pathPieces = path.split("/");
     const secondToLastPiece = pathPieces[pathPieces.length - 2];
     const pageId = Number(secondToLastPiece);
@@ -75,4 +77,35 @@ export const getOrFetchWagtailPage = async path => {
     const wagtailPage = await fetchPage(path);
     storeWagtailPage(wagtailPage);
     return wagtailPage;
+};
+
+const _getOrFetchWagtailPageById = async (pageId) => {
+    const manifest = await getOrFetchManifest();
+    const pagePath = manifest.pages[pageId];
+    return getOrFetchWagtailPage(pagePath);
+};
+
+export const getACoursesLessons = async (courseId) => {
+    await _getOrFetchWagtailPageById(courseId);
+
+    const course = getCourseById(courseId);
+    const lessonIds = course.lessonIds;
+    const lessons = [];
+
+    for (const lessonId of lessonIds) {
+        await _getOrFetchWagtailPageById(lessonId);
+        const lesson = getLessonById(lessonId);
+        lessons.push(lesson);
+    }
+    return lessons;
+};
+
+export const getALessonsCourse = async (lessonId) => {
+    await _getOrFetchWagtailPageById(lessonId);
+
+    const lesson = getLessonById(lessonId);
+    const parentCourseId = lesson.parentId;
+    await _getOrFetchWagtailPageById(parentCourseId);
+    const parentCourse = getCourseById(parentCourseId);
+    return parentCourse;
 };
