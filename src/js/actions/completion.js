@@ -6,7 +6,8 @@
  */
 
 import { storeCompletion, getCompletions } from "./actions_store";
-import { ON_ACTION_CHANGE, ON_COMPLETION_CHANGE } from "../Events";
+import { ON_ACTION_CHANGE, ON_COMPLETION_CHANGE } from "js/Events";
+import { intersection } from "js/SetMethods";
 
 const courses = new Map();
 
@@ -17,7 +18,7 @@ window.addEventListener(ON_ACTION_CHANGE, initialiseCompletions);
 export async function initialiseCompletions() {
     try {
         const actions = await getCompletions();
-        actions.forEach(action => {
+        actions.forEach((action) => {
             setCompleteInternal(action.course, action.lesson, action.section, action.date);
         });
         window.dispatchEvent(new CustomEvent(ON_COMPLETION_CHANGE));
@@ -39,7 +40,7 @@ function setCompleteInternal(course, lesson, section, date) {
     lessonMap.set(section, date);
 }
 
-const isLaterThanCutoff = completion => {
+const isLaterThanCutoff = (completion) => {
     if (!completion) {
         return false;
     }
@@ -48,7 +49,7 @@ const isLaterThanCutoff = completion => {
     return completion >= dontShowActionsFromBeforeThisDate;
 };
 
-function lessonComplete(lessonMap) {
+function isLessonComplete(lessonMap) {
     const objectiveCompletion = lessonMap.get("objectives");
     const contentCompletion = lessonMap.get("content");
     const testCompletion = lessonMap.get("test");
@@ -81,7 +82,7 @@ export function isComplete(course, lesson, section) {
         const sectionCompletion = lessonMap.get(section);
         return isLaterThanCutoff(sectionCompletion);
     } else {
-        return lessonComplete(lessonMap);
+        return isLessonComplete(lessonMap);
     }
 }
 
@@ -89,12 +90,28 @@ export function countComplete(courseSlug) {
     const courseMap = getCourseMap(courseSlug);
     let numCompletedLessons = 0;
     for (const lessonMap of courseMap.values()) {
-        if (lessonComplete(lessonMap)) {
+        if (isLessonComplete(lessonMap)) {
             numCompletedLessons += 1;
         }
     }
     return numCompletedLessons;
 }
+
+export const countNumberOfCompleteLessons = (courseSlug, lessonSlugs) => {
+    const courseMap = getCourseMap(courseSlug);
+    const lessonsInCourseMap = new Set(courseMap.keys());
+    const liveLessons = new Set(lessonSlugs);
+    const liveLessonsInCourseMap = intersection(lessonsInCourseMap, liveLessons);
+
+    let numCompletedLessons = 0;
+    for (const lessonSlug of liveLessonsInCourseMap) {
+        const lessonCompletion = courseMap.get(lessonSlug);
+        if (isLessonComplete(lessonCompletion)) {
+            numCompletedLessons += 1;
+        }
+    }
+    return numCompletedLessons;
+};
 
 export const isTheCourseComplete = (courseSlug, coursesLessons) => {
     const numberOfCoursesCompletions = countComplete(courseSlug);

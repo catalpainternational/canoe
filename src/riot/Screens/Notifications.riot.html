@@ -10,14 +10,7 @@
         <div class="content-wrapper">
             <p if="{state.notifications.length === 0}" translate>No notifications.</p>
 
-            <div if="{state.notifications.length > 0}" class="section-title">
-                <div>
-                    <h5 translate>Notifications</h5>
-                    <span>
-                        <hr />
-                    </span>
-                </div>
-            </div>
+            <h5 if="{state.notifications.length > 0}" class="section-title" translate>Notifications</h5>
 
             <ol class="notification-list">
                 <li

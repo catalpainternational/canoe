@@ -1,16 +1,9 @@
 import { fetchPage, fetchImage, getOrFetchManifest } from "js/WagtailPagesAPI";
 import { storeWagtailPage } from "ReduxImpl/Store";
 import { dispatchToastEvent } from "js/Events";
+import { leftDifference } from "js/SetMethods";
 
 const trimDomain = urlWithDomain => urlWithDomain.replace(/^.*\/\/[^\/]+/, "");
-
-const leftDifference = (leftSet, rightSet) => {
-    const _difference = new Set(leftSet);
-    for (const element of rightSet) {
-        _difference.delete(element);
-    }
-    return _difference;
-};
 
 const addCachedPageToRedux = async cacheKeyRequest => {
     const pagesCache = await caches.open("pages-cache");
