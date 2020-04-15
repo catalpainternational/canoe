@@ -70,18 +70,12 @@ export const isBrowserSupported = () => {
     return store.getState().isBrowserSupported;
 };
 
-export const getCourseById = (courseId) => {
+export const getCourse = (courseId) => {
     const course = store.getState().courses[courseId];
-    if (!course) {
-        throw new Error(`Course ${courseId} doesn't exist.`);
-    }
     return course;
 };
 
-export const getLessonById = (lessonId) => {
+export const getLesson = (lessonId) => {
     const lesson = store.getState().lessons[lessonId];
-    if (!lesson) {
-        throw new Error(`Lesson ${lessonId} doesn't exist.`);
-    }
     return lesson;
 };

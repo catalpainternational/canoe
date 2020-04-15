@@ -5,8 +5,8 @@ import {
     getWagtailPageFromStore,
     getManifestFromStore,
     storeManifest,
-    getLessonById,
-    getCourseById,
+    getCourse,
+    getLesson,
 } from "ReduxImpl/Store";
 
 async function token_authed_fetch(url) {
@@ -85,27 +85,46 @@ const _getOrFetchWagtailPageById = async (pageId) => {
     return getOrFetchWagtailPage(pagePath);
 };
 
-export const getACoursesLessons = async (courseId) => {
+export const getCourseById = async (courseId) => {
     await _getOrFetchWagtailPageById(courseId);
+    // Until we can switch to a flatter data representation, this ensures the
+    // store has the course.
 
-    const course = getCourseById(courseId);
+    const course = getCourse(courseId);
+    if (!course) {
+        throw new Error(`Course ${courseId} doesn't exist.`);
+    }
+    return course;
+};
+
+export const getLessonById = async (lessonId) => {
+    await _getOrFetchWagtailPageById(lessonId);
+    // Until we can switch to a flatter data representation, this ensures the
+    // store has the lesson.
+
+    const lesson = getLesson(lessonId);
+    if (!lesson) {
+        throw new Error(`Lesson ${lessonId} doesn't exist.`);
+    }
+    return lesson;
+};
+
+export const getACoursesLessons = async (courseId) => {
+    const course = await getCourseById(courseId);
     const lessonIds = course.lessonIds;
     const lessons = [];
 
     for (const lessonId of lessonIds) {
-        await _getOrFetchWagtailPageById(lessonId);
-        const lesson = getLessonById(lessonId);
+        const lesson = await getLessonById(lessonId);
         lessons.push(lesson);
     }
+
     return lessons;
 };
 
 export const getALessonsCourse = async (lessonId) => {
-    await _getOrFetchWagtailPageById(lessonId);
-
-    const lesson = getLessonById(lessonId);
+    const lesson = await getLessonById(lessonId);
     const parentCourseId = lesson.parentId;
-    await _getOrFetchWagtailPageById(parentCourseId);
-    const parentCourse = getCourseById(parentCourseId);
+    const parentCourse = await getCourseById(parentCourseId);
     return parentCourse;
 };

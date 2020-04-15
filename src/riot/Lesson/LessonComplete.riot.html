@@ -1,6 +1,6 @@
 <LessonComplete>
     <LessonFrame>
-        <template if="{state.lessons.length}">
+        <template if="{state.lessonSlugs.length}">
             <div class="confetti background"></div>
             <div class="report-card overlay"></div>
             <div class="congratulations-container">
@@ -40,23 +40,22 @@
             },
 
             state: {
-                lessons: [],
+                lessonSlugs: [],
             },
 
             onMounted() {
-                this.loadCompletedLessonsData();
+                this.loadLessonsForIsCourseComplete();
             },
 
-            async loadCompletedLessonsData() {
+            async loadLessonsForIsCourseComplete() {
                 const lessons = await getACoursesLessons(this.props.course.id);
-                console.log(lessons);
                 const lessonSlugs = lessons.map((lesson) => lesson.slug);
                 this.update({ lessons: lessonSlugs });
             },
 
             isCourseComplete() {
                 return (
-                    getNumberOfCompleteLessons(this.props.course.slug, this.state.lessons) ===
+                    getNumberOfCompleteLessons(this.props.course.slug, this.state.lessonSlugs) ===
                     this.props.course.lessons_count
                 );
             },
