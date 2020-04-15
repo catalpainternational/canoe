@@ -11,10 +11,6 @@
         list-style-type: none;
     }
 
-    .section-title h5 {
-        margin-bottom: 0;
-    }
-
     .notifications-header {
         @include screen-banner-styles;
         background-color: $notifications-banner-orange;
