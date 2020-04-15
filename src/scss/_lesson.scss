@@ -360,7 +360,11 @@ LessonContent div.content-wrapper {
     display: flex;
 }
 
-LessonTest {
+LessonTest, TestSingleAnswer {
+    .answer {
+        flex: 1;
+    }
+
     .test {
         overflow: auto;
         margin-top: -#{$top-menu-height};

@@ -2,28 +2,12 @@
     <div id="test" class="test background-blue-1" if="{state.cardIdx < state.cards.length}">
         <div class="carousel-card">
             <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
-            <ol>
-                <li
-                    class="{answer === state.selectedAnswer ? 'selected' : ''} {answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
-                    each="{answer in state.cards[state.cardIdx].answers}"
-                    onclick="{() => selectAnswer(answer)}"
-                >
-                    <div>
-                        <div class="radio">
-                            <div></div>
-                        </div>
-                        <p>{answer.text}</p>
-                    </div>
-                    <div if="{answer === state.selectedAnswer && answer.correct}">
-                        <span class="success"></span>
-                        <p class="feedback-message text-green-1" translate>Correct answer</p>
-                    </div>
-                    <div if="{answer === state.selectedAnswer && !answer.correct}">
-                        <span class="warning"></span>
-                        <p class="feedback-message text-orange-1" translate>Incorrect answer</p>
-                    </div>
-                </li>
-            </ol>
+            <TestSingleAnswer 
+                lessonName="{props.lesson.title}"
+                answers="{state.cards[state.cardIdx].answers}"
+                question="{state.cards[state.cardIdx].question}"
+                toggleModal="{toggleModal}"
+            ></TestSingleAnswer>
             <p class="card-number">{ cardNumberMessage() }</p>
         </div>
     </div>
@@ -56,6 +40,8 @@
     <script>
         import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
         import LessonFeedback from "RiotTags/Lesson/LessonFeedback.riot.html";
+        import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
+        import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
 
         import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
         import { setComplete } from "Actions/completion";
@@ -70,7 +56,9 @@
 
             components: {
                 lessoncomplete: LessonComplete,
-                lessonfeedback: LessonFeedback
+                lessonfeedback: LessonFeedback,
+                testsingleanswer: TestSingleAnswer,
+                testmultipleanswer: TestMultipleAnswer
             },
 
             onBeforeMount(props, state) {
@@ -143,7 +131,7 @@
                 this.toggleModal(true);
             },
 
-            toggleModal(showModal) {
+            toggleModal(showModal, answer) {
                 const modalElement = this.$("#modal");
                 const testElement = this.$("#test");
 
@@ -154,6 +142,7 @@
                     modalElement.classList.remove("showElement");
                     testElement.classList.remove("showElement");
                 }
+                this.update({ selectedAnswer: answer});
             },
 
             nextTestCard() {
