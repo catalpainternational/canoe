@@ -70,7 +70,7 @@ msgstr ""
 msgid "Continue learning"
 msgstr ""
 
-msgid "Correct answer. Well done!"
+msgid "Correct answer"
 msgstr ""
 
 msgid "Course"
@@ -80,6 +80,9 @@ msgid "FEEDBACK"
 msgstr ""
 
 msgid "Finish"
+msgstr ""
+
+msgid "Great"
 msgstr ""
 
 msgid "Great job!"
@@ -96,7 +99,7 @@ msgstr ""
 msgid "In the meantime please use Safari."
 msgstr ""
 
-msgid "Incorrect answer. Try again."
+msgid "Incorrect answer"
 msgstr ""
 
 msgid "Jobs that use these skills"
@@ -156,6 +159,9 @@ msgstr ""
 msgid "Objectives"
 msgstr ""
 
+msgid "Oops"
+msgstr ""
+
 msgid "Overall progress"
 msgstr ""
 
@@ -163,6 +169,9 @@ msgid "Password"
 msgstr ""
 
 msgid "Progress by course"
+msgstr ""
+
+msgid "Read the question more carefully!"
 msgstr ""
 
 msgid "See less"
@@ -186,6 +195,9 @@ msgstr ""
 msgid "Thank you!"
 msgstr ""
 
+msgid "Try again"
+msgstr ""
+
 msgid "Username"
 msgstr ""
 
@@ -196,6 +208,9 @@ msgid "We appreciate your feedback and always endeavor to improve your experienc
 msgstr ""
 
 msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
+msgstr ""
+
+msgid "Well done, keep it up!"
 msgstr ""
 
 msgid "Would you like to receive app notifications?"
