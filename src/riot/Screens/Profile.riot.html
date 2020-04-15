@@ -4,7 +4,9 @@
             <div class="left-block">
                 <h3 translate>Overall progress</h3>
                 <h6>{ percentLessonsCompleteMessage() }</h6>
-                <ContinueLearningButton if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"></ContinueLearningButton>
+                <ContinueLearningButton
+                    if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
+                ></ContinueLearningButton>
             </div>
             <span class="report-card"></span>
         </div>
@@ -56,28 +58,26 @@
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
         import {
-            countComplete,
             getMostRecentCompletion,
-            isTheCourseComplete
+            isTheCourseComplete,
         } from "Actions/completion";
         import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
         import { getUsername } from "js/AuthenticationUtilities";
+        import { getAllLessons, getHomePageId } from "js/utilities";
         import {
-            getAllLessons,
             getNumberOfCompletedLessons,
             getNumberOfCompletedLessonsFor,
-            getHomePageId
-        } from "js/utilities";
+        } from "js/LearningStatistics";
 
         export default {
             state: {
                 manifest: null,
                 courses: [],
-                currentCourse: null
+                currentCourse: null,
             },
 
             components: {
-                continuelearningbutton: ContinueLearningButton
+                continuelearningbutton: ContinueLearningButton,
             },
 
             isCurrentCourseInProgress(aCourse) {
@@ -90,7 +90,7 @@
                     return null;
                 }
                 const lastWorkedOnCourse = courses.find(
-                    course => course.data.slug === lastCompletion.courseSlug
+                    (course) => course.data.slug === lastCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
             },
@@ -125,7 +125,7 @@
 
                 this.update({
                     courses,
-                    currentCourse: lastWorkedOnCourse
+                    currentCourse: lastWorkedOnCourse,
                 });
             },
 
@@ -138,7 +138,7 @@
                 return gettext(
                     "%1 out of %2 completed",
                     this.getNumberOfCompletedLessonsFor(course),
-                    course.lessons.length,
+                    course.lessons.length
                 );
             },
 
@@ -149,7 +149,7 @@
                     getUsername(),
                     this.getPercentOfLessonsCompleted()
                 );
-            }
+            },
         };
     </script>
 </Profile>

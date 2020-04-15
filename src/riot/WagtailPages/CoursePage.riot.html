@@ -30,27 +30,30 @@
     </div>
 
     <script>
-        import { countComplete, isComplete } from "Actions/completion";
+        import { getNumberOfCompleteLessons } from "js/LearningStatistics";
+        import { isComplete } from "Actions/completion";
         import Card from "RiotTags/Components/Card.riot.html";
 
         export default {
             components: {
-                card: Card
+                card: Card,
             },
 
             onMounted(props, state) {
                 state.header = document.getElementsByClassName("course-header")[0];
                 state.headerOffsetTop = state.header.offsetTop;
-                window.addEventListener('scroll', this.stickyHeader);
+                window.addEventListener("scroll", this.stickyHeader);
             },
 
             onUnmounted() {
-                window.removeEventListener('scroll', this.stickyHeader);
+                window.removeEventListener("scroll", this.stickyHeader);
             },
 
             getCourseProgress() {
+                const courseSlug = this.props.wagtailPage.data.slug;
+                const lessonSlugs = this.props.wagtailPage.lessons.map((lesson) => lesson.slug);
                 return (
-                    countComplete(this.props.wagtailPage.data.slug) +
+                    getNumberOfCompleteLessons(this.props.wagtailPage.data.slug, lessonSlugs) +
                     " / " +
                     this.props.wagtailPage.data.lessons_count
                 );
@@ -79,7 +82,7 @@
                     "%1 lessons complete",
                     this.getCourseProgress()
                 );
-            }
+            },
         };
     </script>
 </CoursePage>
