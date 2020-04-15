@@ -33,6 +33,7 @@ module.exports = (env) => {
         prev[`process.env.${next}`] = JSON.stringify(environmentConfiguration[next]);
         return prev;
     }, {});
+    processEnvironment["process.env.SITE_NAME"] = JSON.stringify(projectConfiguration.SITE_NAME);
 
     const baseConfig = {
         context: __dirname,
