@@ -50,7 +50,7 @@
             async loadLessonsForIsCourseComplete() {
                 const lessons = await getACoursesLessons(this.props.course.id);
                 const lessonSlugs = lessons.map((lesson) => lesson.slug);
-                this.update({ lessons: lessonSlugs });
+                this.update({ lessonSlugs });
             },
 
             isCourseComplete() {
