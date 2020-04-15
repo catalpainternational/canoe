@@ -91,18 +91,17 @@ module.exports = (env) => {
                     },
                 },
                 {
-                    test: /\.(png|jpg|gif)$/,
-                    use: ["file-loader"],
-                },
-                {
-                    test: /\.svg$/,
-                    use: {
-                        loader: "svg-url-loader",
-                        options: {
-                            encoding: "base64",
-                        },
-                    },
-                },
+  test: /\.(gif|png|jpe?g|svg)$/i,
+  use: [
+    'file-loader',
+    {
+      loader: 'image-webpack-loader',
+      options: {
+        // disable: true, // webpack@2.x and newer
+      },
+    },
+  ],
+},
                 {
                     test: /\.m?js$/,
                     exclude: /node_modules/,
