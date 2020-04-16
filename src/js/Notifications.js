@@ -113,13 +113,13 @@ export const supportsPushManager = async () => {
     return !!swRegistration.pushManager;
 };
 
-export const subscribe = async () => {
+export const subscribeToNotifications = async () => {
     const swRegistration = await navigator.serviceWorker.ready;
     const subscription = await turnOnNotifications(swRegistration);
     storeRegistrationId(subscription.registration_id);
 };
 
-export const unsubscribe = async () => {
+export const unsubscribeFromNotifications = async () => {
     const swRegistration = await navigator.serviceWorker.ready;
     const subscription = await swRegistration.pushManager.getSubscription();
 
