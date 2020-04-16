@@ -3,22 +3,30 @@
         <div class="carousel-card">
             <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
             <TestSingleAnswer 
+                if="{!state.isMultipleAnswers}"
                 lessonName="{props.lesson.title}"
                 answers="{state.cards[state.cardIdx].answers}"
                 question="{state.cards[state.cardIdx].question}"
                 toggleModal="{toggleModal}"
             ></TestSingleAnswer>
+            <TestMultipleAnswer
+                if="{state.isMultipleAnswers}"
+                lessonName="{props.lesson.title}"
+                answers="{state.cards[state.cardIdx].answers}"
+                question="{state.cards[state.cardIdx].question}"
+                toggleModal="{toggleModal}"
+            ></TestMultipleAnswer>
             <p class="card-number">{ cardNumberMessage() }</p>
         </div>
     </div>
     <div id="modal" class="feedback-modal">
-        <div if="{state.selectedAnswer.correct}">
+        <div if="{state.selectedAnswer.correct || !state.hasIncorrectAnswers}">
             <h2>{ correctTitleMessage() }</h2>
             <p>{ correctTextMessage() }</p>
             <button if="{state.cardIdx < state.cards.length - 1}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
             <button if="{state.cardIdx === state.cards.length - 1}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
         </div>
-        <div if="{!state.selectedAnswer.correct}">
+        <div if="{!state.selectedAnswer.correct || state.hasIncorrectAnswers}">
             <h2>{ incorrectTitleMessage() }</h2>
             <p>{ incorrectTextMessage() }</p>
             <button class="btn-primary btn-wrong" onclick="{ () => toggleModal(false) }" translate>Try again</button>
@@ -51,7 +59,9 @@
             state: {
                 selectedAnswer: {},
                 cards: [],
-                cardIdx: 0
+                cardIdx: 0,
+                isMultipleAnswers: false,
+                hasIncorrectAnswers: false
             },
 
             components: {
@@ -63,9 +73,22 @@
 
             onBeforeMount(props, state) {
                 const { cards } = props.test;
-                state.cards = cards;
+                // state.cards = cards;
                 state.cardIdx = getLessonCardIdx();
                 window.addEventListener("hashchange", this.hashChanged);
+                
+                const dummyCard = [{
+                    question: "Which organs are primarily affected by COVID-19?", 
+                    answers: [
+                        {text: "A long time ago in a galaxy far far away", correct: false},
+                        {text: "It is a period of civil war.", correct: true},
+                        {text: "During the battle, Rebel spies managed to steal secret plans.", correct: true},
+                        {text: "Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship.", correct: false},
+                    ]
+                }];
+                state.cards = dummyCard;
+                const correctAnswers = dummyCard[0].answers.filter(a => a.correct);
+                state.isMultipleAnswers = correctAnswers.length > 1;
             },
 
             onBeforeUnmount(props, state) {
@@ -119,30 +142,33 @@
                 : gettext("Read the question more carefully!");
             },
 
-            selectAnswer(answer) {
-                this.update({ selectedAnswer: answer });
-                const eventData = {
-                    lesson: this.props.lesson.title,
-                    question: this.state.cards[this.state.cardIdx].question,
-                    answer: answer.text,
-                    isAnswerCorrect: answer.correct
-                };
-                dispatchTestAnswerEvent(eventData);
-                this.toggleModal(true);
-            },
+            // selectAnswer(answer) {
+            //     this.update({ selectedAnswer: answer });
+            //     const eventData = {
+            //         lesson: this.props.lesson.title,
+            //         question: this.state.cards[this.state.cardIdx].question,
+            //         answer: answer.text,
+            //         isAnswerCorrect: answer.correct
+            //     };
+            //     dispatchTestAnswerEvent(eventData);
+            //     this.toggleModal(true);
+            // },
 
-            toggleModal(showModal, answer) {
+            toggleModal(showModal, answer, hasIncorrectAnswers) {
                 const modalElement = this.$("#modal");
                 const testElement = this.$("#test");
 
                 if (showModal) {
+                    this.update({ 
+                        selectedAnswer: answer, 
+                        hasIncorrectAnswers: hasIncorrectAnswers
+                    });
                     modalElement.classList.add("showElement");
                     testElement.classList.add("showElement");
                 } else {
                     modalElement.classList.remove("showElement");
                     testElement.classList.remove("showElement");
                 }
-                this.update({ selectedAnswer: answer});
             },
 
             nextTestCard() {
