@@ -125,7 +125,7 @@ self.addEventListener("push", async event => {
     };
     event.waitUntil(self.registration.showNotification(title, options));
 
-    const allClients = await clients.matchAll({
+    const allClients = await self.clients.matchAll({
         includeUncontrolled: true
     });
 
@@ -143,5 +143,5 @@ self.addEventListener("install", () => {
 });
 
 self.addEventListener("activate", () => {
-    clients.claim();
+    self.clients.claim();
 });
