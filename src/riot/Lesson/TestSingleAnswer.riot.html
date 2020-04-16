@@ -1,36 +1,36 @@
 <TestSingleAnswer class="answer">
-	<ol>
-		<li
-			class="{answer === state.selectedAnswer ? 'selected' : ''} {answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
-			each="{answer in props.answers}"
-			onclick="{() => selectAnswer(answer)}"
-		>
-			<div>
-				<div class="radio">
-					<div></div>
-				</div>
-				<p>{answer.text}</p>
-			</div>
-			<div if="{answer === state.selectedAnswer && answer.correct}">
-				<span class="success"></span>
-				<p class="feedback-message text-green-1" translate>Correct answer</p>
-			</div>
-			<div if="{answer === state.selectedAnswer && !answer.correct}">
-				<span class="warning"></span>
-				<p class="feedback-message text-orange-1" translate>Incorrect answer</p>
-			</div>
-		</li>
-	</ol>
+    <ol>
+        <li
+            class="{answer === state.selectedAnswer ? 'selected' : ''} {answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
+            each="{answer in props.answers}"
+            onclick="{() => selectAnswer(answer)}"
+        >
+            <div>
+                <div class="radio">
+                    <div></div>
+                </div>
+                <p>{answer.text}</p>
+            </div>
+            <div if="{answer === state.selectedAnswer && answer.correct}">
+                <span class="success"></span>
+                <p class="feedback-message text-green-1" translate>Correct answer</p>
+            </div>
+            <div if="{answer === state.selectedAnswer && !answer.correct}">
+                <span class="warning"></span>
+                <p class="feedback-message text-orange-1" translate>Incorrect answer</p>
+            </div>
+        </li>
+    </ol>
 
-	<script>
-		import { dispatchTestAnswerEvent } from "js/Events";
+    <script>
+        import { dispatchTestAnswerEvent } from "js/Events";
 
-		export default {
-			state: {
-				selectedAnswer: {}
-			},
+        export default {
+            state: {
+                selectedAnswer: {}
+            },
 
-			selectAnswer(answer) {
+            selectAnswer(answer) {
                 this.update({ selectedAnswer: answer });
                 const eventData = {
                     lesson: this.props.lessonName,
@@ -41,6 +41,6 @@
                 dispatchTestAnswerEvent(eventData);
                 this.props.toggleModal(true, answer);
             },
-		}
-	</script>
+        }
+    </script>
 </TestSingleAnswer>
