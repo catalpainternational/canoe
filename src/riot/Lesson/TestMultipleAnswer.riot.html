@@ -53,10 +53,10 @@
                 const numberIncorrectAnswersChosen = this.state.visibleAnswers.filter(a => !a.correct).length;
                 const numberCorrectAnswersChosen = this.state.visibleAnswers.filter(a => a.correct).length;
                 const numberCorrectAnswersMissing = this.state.numberTotalCorrectAnswers - numberCorrectAnswersChosen;
-                const incompleteSubmission = numberCorrectAnswersMissing > 0 || numberIncorrectAnswersChosen > 0
+                const isTestComplete = numberCorrectAnswersMissing === 0 && numberIncorrectAnswersChosen === 0
 
                 this.update();
-                this.props.toggleModal(true, {}, incompleteSubmission);
+                this.props.toggleModal(true, {}, isTestComplete);
             },
 
             selectAnswer(answer) {

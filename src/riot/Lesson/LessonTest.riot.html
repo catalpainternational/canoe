@@ -21,13 +21,13 @@
         </div>
     </div>
     <div id="modal" class="feedback-modal">
-        <div if="{state.selectedAnswer.correct || !state.incompleteSubmission}">
+        <div if="{state.selectedAnswer.correct || state.isTestComplete}">
             <h2>{ correctTitleMessage() }</h2>
             <p>{ correctTextMessage() }</p>
             <button if="{state.cardIdx < state.cards.length - 1}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
             <button if="{state.cardIdx === state.cards.length - 1}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
         </div>
-        <div if="{!state.isMultipleAnswers && !state.selectedAnswer.correct || state.incompleteSubmission}">
+        <div if="{!state.isMultipleAnswers && !state.selectedAnswer.correct || !state.isTestComplete}">
             <h2>{ incorrectTitleMessage() }</h2>
             <p>{ incorrectTextMessage() }</p>
             <button class="btn-primary btn-wrong" onclick="{ () => toggleModal(false) }" translate>Try again</button>
@@ -148,7 +148,7 @@
                 : gettext("Read the question more carefully!");
             },
 
-            toggleModal(showModal, answer, incompleteSubmission) {
+            toggleModal(showModal, answer, isTestComplete) {
                 const modalElement = this.$("#modal");
                 const testElement = this.$("#test");
 
@@ -157,7 +157,7 @@
                     testElement.classList.add("showElement");
                     this.update({
                         selectedAnswer: answer, 
-                        incompleteSubmission
+                        isTestComplete
                     });
                 } else {
                     modalElement.classList.remove("showElement");
