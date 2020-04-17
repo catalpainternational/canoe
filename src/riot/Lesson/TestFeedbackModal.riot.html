@@ -1,14 +1,14 @@
 <TestFeedbackModal>
     <div id="modal" class="feedback-modal">
 
-        <div if="{state.selectedAnswer.correct || props.isTestComplete}">
+        <div if="{props.selectedAnswer.correct || props.isTestComplete}">
             <h2>{ correctTitleMessage() }</h2>
             <p>{ correctTextMessage() }</p>
-            <button if="{state.cardIdx < state.cards.length - 1}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
-            <button if="{state.cardIdx === state.cards.length - 1}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
+            <button if="{!props.isLastQuestion}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
+            <button if="{props.isLastQuestion}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
         </div>
 
-        <div if="{!state.isMultipleAnswers && !state.selectedAnswer.correct || !props.isTestComplete}">
+        <div if="{!props.isMultipleAnswers && !props.selectedAnswer.correct || !props.isTestComplete}">
             <h2>{ incorrectTitleMessage() }</h2>
             <p>{ incorrectTextMessage() }</p>
             <button class="btn-primary btn-wrong" onclick="{ () => toggleModal(false) }" translate>Try again</button>
@@ -17,7 +17,58 @@
     <script>
         export default {
             state: {
-                selectedAnswer: {}
+                // selectedAnswer: {}
+            },
+
+            nextTestCard() {
+                // this.toggleModal(false);
+                console.log("moving to the next card")
+                // window.scroll(0, 0);
+                // this.state.selectedAnswer = {};
+                // location.hash = getLessonModuleHash(
+                //     this.props.lesson.id,
+                //     this.props.module,
+                //     this.state.cardIdx
+                // );
+            },
+
+            completePage() {
+                // this.toggleModal(false);
+                console.log("the test is complete")
+                // setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
+                // location.hash = getLessonModuleHash(
+                //     this.props.lesson.id,
+                //     this.props.module,
+                //     this.state.cardIdx
+                // );
+            },
+
+            correctTitleMessage() {
+                // title for correct answer feedback
+                return this.props.selectedAnswer.correctTitle 
+                ? this.props.selectedAnswer.correctTitle
+                : gettext("Great");
+            },
+
+            correctTextMessage() {
+                // text for correct answer feedback
+                return this.props.selectedAnswer.correctText 
+                ? this.props.selectedAnswer.correctText
+                : gettext("Well done, keep it up!");
+            },
+
+            incorrectTitleMessage() {
+                // title for incorrect answer feedback
+                return this.props.selectedAnswer.incorrectTitle 
+                ? this.props.selectedAnswer.incorrectTitle
+                : gettext("Oops");
+            },
+
+            incorrectTextMessage() {
+                // text for incorrect answer feedback
+                return this.props.selectedAnswer.incorrectText 
+                ? this.props.selectedAnswer.incorrectText
+                : gettext("Read the question more carefully!");
             },
         }
     </script>
