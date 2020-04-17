@@ -33,6 +33,9 @@
             <button class="btn-primary btn-wrong" onclick="{ () => toggleModal(false) }" translate>Try again</button>
         </div>
     </div>
+    <TestFeedbackModal
+        if="{false}"
+    ></TestFeedbackModal>
     <LessonFeedback
         if="{state.cardIdx === state.cards.length}"
         backgroundColor="{props.course.colour}"
@@ -51,6 +54,7 @@
         import LessonFeedback from "RiotTags/Lesson/LessonFeedback.riot.html";
         import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
         import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
+        import TestFeedbackModal from "RiotTags/Lesson/TestFeedbackModal.riot.html";
 
         import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
         import { setComplete } from "Actions/completion";
@@ -69,7 +73,8 @@
                 lessoncomplete: LessonComplete,
                 lessonfeedback: LessonFeedback,
                 testsingleanswer: TestSingleAnswer,
-                testmultipleanswer: TestMultipleAnswer
+                testmultipleanswer: TestMultipleAnswer,
+                testfeedbackmodal: TestFeedbackModal
             },
 
             onBeforeMount(props, state) {

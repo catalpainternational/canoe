@@ -353,7 +353,7 @@ LessonContent div.content-wrapper {
     display: flex;
 }
 
-LessonTest, TestSingleAnswer, TestMultipleAnswer {
+LessonTest, TestSingleAnswer, TestMultipleAnswer, TestFeedbackModal {
     .answer {
         flex: 1;
         display: flex;
