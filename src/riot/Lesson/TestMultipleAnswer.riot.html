@@ -1,5 +1,5 @@
 <TestMultipleAnswer class="answer">
-    <h4>Check all that apply</h4>
+    <h4 translate>Check all answers that apply</h4>
     <ol>
         <li
             class="{state.visibleAnswers.includes(answer) && answer.correct ? '' : 'wrong'}"
@@ -35,36 +35,35 @@
         export default {
             state: {
                 hiddenAnswers: [],
-                visibleAnswers: []
+                visibleAnswers: [],
+                numberTotalCorrectAnswers: ''
             },
 
-            submitAnswer(answer) {
-                const eventData = {
-                    lesson: this.props.lessonName,
-                    question: this.props.question,
-                    answer: answer.text,
-                    isAnswerCorrect: answer.correct
-                };
-                dispatchTestAnswerEvent(eventData);
+            onMounted() {
+                const numberTotalCorrectAnswers = this.props.answers.filter(a => a.correct).length;
+                this.update({ numberTotalCorrectAnswers });
             },
 
             showResults() {
                 this.state.visibleAnswers = this.state.visibleAnswers.concat(this.state.hiddenAnswers);
-                const hasIncorrectAnswers = this.state.visibleAnswers.includes('false');
                 this.state.hiddenAnswers = [];
-                console.log(hasIncorrectAnswers)
+
+                const numberIncorrectAnswersChosen = this.state.visibleAnswers.filter(a => !a.correct).length;
+                const numberCorrectAnswersChosen = this.state.visibleAnswers.filter(a => a.correct).length;
+                const numberCorrectAnswersMissing = this.state.numberTotalCorrectAnswers - numberCorrectAnswersChosen;
+                const incompleteSubmission = numberCorrectAnswersMissing > 0 || numberIncorrectAnswersChosen > 0
 
                 this.update();
-                this.props.toggleModal(true, {}, hasIncorrectAnswers);
+                this.props.toggleModal(true, {}, incompleteSubmission);
             },
 
             selectAnswer(answer) {
                 if (this.state.visibleAnswers.includes(answer)) {
-                    const answerIndex = this.state.visibleAnswers.indexOf(answer);
-                    this.state.visibleAnswers.splice(answerIndex, 1);
+                    const visibleAnswerIndex = this.state.visibleAnswers.indexOf(answer);
+                    this.state.visibleAnswers.splice(visibleAnswerIndex, 1);
                 } else if (this.state.hiddenAnswers.includes(answer)) {
-                    const answerIndex = this.state.hiddenAnswers.indexOf(answer);
-                    this.state.hiddenAnswers.splice(answerIndex, 1);
+                    const hiddenAnswerIndex = this.state.hiddenAnswers.indexOf(answer);
+                    this.state.hiddenAnswers.splice(hiddenAnswerIndex, 1);
                 } else {
                     this.state.hiddenAnswers.push(answer);
                 }

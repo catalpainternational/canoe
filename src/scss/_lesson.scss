@@ -444,6 +444,8 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer {
 
                 .cross {
                     background-color: $red-2;
+                    border-radius: 15px;
+                    width: 15px;
                 }
 
                 .pendingAnswer {
