@@ -2,33 +2,33 @@
     <div id="test" class="test background-blue-1" if="{state.cardIdx < state.cards.length}">
         <div class="carousel-card">
             <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
-            <!-- state.cards[state.cardIdx].answers.filter(a => a.correct).length < 2 -->
             <TestSingleAnswer 
-                if="{!state.isMultipleAnswers}"
+                if="{state.isSingleAnswer}"
                 lessonName="{props.lesson.title}"
                 answers="{state.cards[state.cardIdx].answers}"
                 question="{state.cards[state.cardIdx].question}"
                 toggleModal="{toggleModal}"
             ></TestSingleAnswer>
             <TestMultipleAnswer
-                if="{state.isMultipleAnswers}"
+                if="{!state.isSingleAnswer}"
                 lessonName="{props.lesson.title}"
                 answers="{state.cards[state.cardIdx].answers}"
                 question="{state.cards[state.cardIdx].question}"
                 toggleModal="{toggleModal}"
             ></TestMultipleAnswer>
-            <button class="btn-primary" onclick="{ showModal }">Show modal</button>
             <p class="card-number">{ cardNumberMessage() }</p>
         </div>
     </div>
-    <!-- isLastQuestion="{state.cardIdx === state.cards.length - 1}"-->
     <TestFeedbackModal
         if="{state.showModal}"
-        hasIncorrectAnswers="{true}"
-        isMultipleAnswers="{true}"
-        isTestComplete="{false}"
-        selectedAnswer="{{text: "It is a period of civil war.", correct: true}}"
-        isLastQuestion="{false}"
+        isQuestionComplete="{state.isQuestionComplete}"
+        selectedAnswers="{state.selectedAnswers}"
+        isLastQuestion="{state.cardIdx === state.cards.length - 1}"
+        toggleModal="{toggleModal}"
+        course="{props.course}"
+        lesson="{props.lesson}"
+        module="{props.module}"
+        cardIdx="{state.cardIdx}"
     ></TestFeedbackModal>
     <LessonFeedback
         if="{state.cardIdx === state.cards.length}"
@@ -50,17 +50,14 @@
         import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
         import TestFeedbackModal from "RiotTags/Lesson/TestFeedbackModal.riot.html";
 
-        import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
-        import { setComplete } from "Actions/completion";
+        import { getLessonCardIdx } from "js/Routing";
         import { dispatchTestAnswerEvent } from "js/Events";
 
         export default {
             state: {
-                selectedAnswer: {},
                 cards: [],
                 cardIdx: 0,
-                isMultipleAnswers: false,
-                hasIncorrectAnswers: false,
+                isSingleAnswer: false,
                 showModal: false
             },
 
@@ -74,22 +71,15 @@
 
             onBeforeMount(props, state) {
                 const { cards } = props.test;
-                // state.cards = cards;
+                state.cards = cards;
                 state.cardIdx = getLessonCardIdx();
                 window.addEventListener("hashchange", this.hashChanged);
-                
-                const dummyCard = [{
-                    question: "Which organs are primarily affected by COVID-19?", 
-                    answers: [
-                        {text: "A long time ago in a galaxy far far away", correct: false},
-                        {text: "It is a period of civil war.", correct: true},
-                        {text: "During the battle, Rebel spies managed to steal secret plans.", correct: true},
-                        {text: "Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship.", correct: false},
-                    ]
-                }];
-                state.cards = dummyCard;
-                const correctAnswers = dummyCard[0].answers.filter(a => a.correct);
-                state.isMultipleAnswers = correctAnswers.length > 1;
+            },
+
+            onMounted(props, state) {
+                this.update({ 
+                    isSingleAnswer: this.state.cards[this.state.cardIdx].answers.filter(a => a.correct).length === 1 
+                });
             },
 
             onBeforeUnmount(props, state) {
@@ -97,8 +87,12 @@
             },
 
             hashChanged() {
+                const cardIdx = getLessonCardIdx();
+                const isSingleAnswer = this.state.cards[cardIdx] && this.state.cards[cardIdx].answers.filter(a => a.correct).length === 1;
+
                 this.update({
-                    cardIdx: getLessonCardIdx()
+                    cardIdx,
+                    isSingleAnswer
                 });
             },
 
@@ -115,24 +109,18 @@
                 );
             },
 
-            showModal() {
-                this.update({ showModal: true });
-                this.$("#test").classList.add("showElement");
-            },
+            toggleModal(showModal, selectedAnswers, isQuestionComplete) {
+                this.update({
+                    selectedAnswers,
+                    isQuestionComplete 
+                });
 
-            toggleModal(showModal, answer, isTestComplete) {
-                const modalElement = this.$("#modal");
                 const testElement = this.$("#test");
-
                 if (showModal) {
-                    modalElement.classList.add("showElement");
+                    this.update({ showModal: true });
                     testElement.classList.add("showElement");
-                    this.update({
-                        selectedAnswer: answer, 
-                        isTestComplete
-                    });
                 } else {
-                    modalElement.classList.remove("showElement");
+                    this.update({ showModal: false });
                     testElement.classList.remove("showElement");
                 }
             },

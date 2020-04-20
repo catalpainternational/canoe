@@ -39,7 +39,7 @@
                     isAnswerCorrect: answer.correct
                 };
                 dispatchTestAnswerEvent(eventData);
-                this.props.toggleModal(true, answer);
+                this.props.toggleModal(true, answer, answer.correct);
             },
         }
     </script>

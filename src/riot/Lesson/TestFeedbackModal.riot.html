@@ -1,73 +1,69 @@
 <TestFeedbackModal>
     <div id="modal" class="feedback-modal">
 
-        <div if="{props.selectedAnswer.correct || props.isTestComplete}">
+        <div if="{props.isQuestionComplete}">
             <h2>{ correctTitleMessage() }</h2>
             <p>{ correctTextMessage() }</p>
             <button if="{!props.isLastQuestion}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
             <button if="{props.isLastQuestion}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
         </div>
 
-        <div if="{!props.isMultipleAnswers && !props.selectedAnswer.correct || !props.isTestComplete}">
+        <div if="{!props.isQuestionComplete}">
             <h2>{ incorrectTitleMessage() }</h2>
             <p>{ incorrectTextMessage() }</p>
-            <button class="btn-primary btn-wrong" onclick="{ () => toggleModal(false) }" translate>Try again</button>
+            <button class="btn-primary btn-wrong" onclick="{ () => props.toggleModal(false, {}) }" translate>Try again</button>
         </div>
     </div>
     <script>
-        export default {
-            state: {
-                // selectedAnswer: {}
-            },
+        import { getLessonModuleHash } from "js/Routing";
+        import { setComplete } from "Actions/completion";
 
+        export default {
             nextTestCard() {
-                // this.toggleModal(false);
-                console.log("moving to the next card")
-                // window.scroll(0, 0);
-                // this.state.selectedAnswer = {};
-                // location.hash = getLessonModuleHash(
-                //     this.props.lesson.id,
-                //     this.props.module,
-                //     this.state.cardIdx
-                // );
+                this.props.toggleModal(false, {});
+                window.scroll(0, 0);
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.props.cardIdx
+                );
             },
 
             completePage() {
-                // this.toggleModal(false);
-                console.log("the test is complete")
-                // setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
-                // location.hash = getLessonModuleHash(
-                //     this.props.lesson.id,
-                //     this.props.module,
-                //     this.state.cardIdx
-                // );
+                this.props.toggleModal(false, {});
+                setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.props.cardIdx
+                );
             },
 
             correctTitleMessage() {
                 // title for correct answer feedback
-                return this.props.selectedAnswer.correctTitle 
-                ? this.props.selectedAnswer.correctTitle
+                return this.props.selectedAnswers.correctTitle 
+                ? this.props.selectedAnswers.correctTitle
                 : gettext("Great");
             },
 
             correctTextMessage() {
                 // text for correct answer feedback
-                return this.props.selectedAnswer.correctText 
-                ? this.props.selectedAnswer.correctText
+                return this.props.selectedAnswers.correctText 
+                ? this.props.selectedAnswers.correctText
                 : gettext("Well done, keep it up!");
             },
 
             incorrectTitleMessage() {
                 // title for incorrect answer feedback
-                return this.props.selectedAnswer.incorrectTitle 
-                ? this.props.selectedAnswer.incorrectTitle
+                return this.props.selectedAnswers.incorrectTitle 
+                ? this.props.selectedAnswers.incorrectTitle
                 : gettext("Oops");
             },
 
             incorrectTextMessage() {
                 // text for incorrect answer feedback
-                return this.props.selectedAnswer.incorrectText 
-                ? this.props.selectedAnswer.incorrectText
+                return this.props.selectedAnswers.incorrectText 
+                ? this.props.selectedAnswers.incorrectText
                 : gettext("Read the question more carefully!");
             },
         }

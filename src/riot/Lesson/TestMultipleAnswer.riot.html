@@ -49,14 +49,14 @@
             showResults() {
                 this.state.visibleAnswers = this.state.visibleAnswers.concat(this.state.hiddenAnswers);
                 this.state.hiddenAnswers = [];
+                this.update();
 
                 const numberIncorrectAnswersChosen = this.state.visibleAnswers.filter(a => !a.correct).length;
                 const numberCorrectAnswersChosen = this.state.visibleAnswers.filter(a => a.correct).length;
                 const numberCorrectAnswersMissing = this.state.numberTotalCorrectAnswers - numberCorrectAnswersChosen;
-                const isTestComplete = numberCorrectAnswersMissing === 0 && numberIncorrectAnswersChosen === 0
-
-                this.update();
-                this.props.toggleModal(true, {}, isTestComplete);
+                const isQuestionComplete = numberCorrectAnswersMissing === 0 && numberIncorrectAnswersChosen === 0
+                
+                this.props.toggleModal(true, this.state.visibleAnswers, isQuestionComplete);
             },
 
             selectAnswer(answer) {
