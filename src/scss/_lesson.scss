@@ -220,11 +220,11 @@ LessonPage .description {
 LessonComplete, LessonModuleComplete, LessonFeedback {
     LessonFrame {
         .frame-background {
-            min-height: 550px;
+            min-height: auto;
         }
 
         .card-frame {
-            min-height: 460px;
+            min-height: auto;
         }
     }
 }
@@ -377,10 +377,6 @@ LessonTest .test {
     padding-top: calc(#{$top-menu-height} - 10px);
     padding-bottom: 10px;
 
-    @media only screen and (max-width: $sm-phone) {
-        margin-bottom: 1rem;
-    }
-
     ol {
         flex: 1;
 
@@ -527,6 +523,11 @@ LessonFeedback {
         flex-flow: row nowrap;
         justify-content: space-evenly;
         margin-bottom: 3em;
+
+        @media only screen and (max-width: $sm-phone) {
+            flex-flow: column;
+            align-items: center;
+        }
     }
 
     .feedback-icon {
@@ -599,6 +600,10 @@ LessonFeedback {
 
         &:hover {
             cursor: pointer;
+        }
+
+        @media only screen and (max-width: $sm-phone) {
+            margin: 10px;
         }
     }
 
