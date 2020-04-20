@@ -4,19 +4,14 @@
             <div class="left-block">
                 <h3 translate>Overall progress</h3>
                 <h6>{ percentLessonsCompleteMessage() }</h6>
-                <ContinueLearningButton if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"></ContinueLearningButton>
+                <ContinueLearningButton
+                    if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
+                ></ContinueLearningButton>
             </div>
             <span class="report-card"></span>
         </div>
         <div class="content-wrapper">
-            <div class="section-title">
-                <div>
-                    <h5 translate>Progress by course</h5>
-                    <span>
-                        <hr>
-                    </span>
-                </div>
-            </div>
+            <h5 class="section-title" translate>Progress by course</h5>
             <ul class="course-progress-list">
                 <li each="{course in state.courses}">
                     <a class="progress card" href="#{course.data.id}">
@@ -39,14 +34,7 @@
                 </li>
             </ul>
 
-            <div class="section-title">
-                <div>
-                    <h5 translate>Learning statistics</h5>
-                    <span>
-                        <hr>
-                    </span>
-                </div>
-            </div>
+            <h5 class="section-title" translate>Learning statistics</h5>
             <div class="stats">
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
@@ -70,28 +58,26 @@
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
         import {
-            countComplete,
             getMostRecentCompletion,
-            isTheCourseComplete
+            isTheCourseComplete,
         } from "Actions/completion";
         import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
         import { getUsername } from "js/AuthenticationUtilities";
+        import { getAllLessons, getHomePageId } from "js/utilities";
         import {
-            getAllLessons,
             getNumberOfCompletedLessons,
             getNumberOfCompletedLessonsFor,
-            getHomePageId
-        } from "js/utilities";
+        } from "js/LearningStatistics";
 
         export default {
             state: {
                 manifest: null,
                 courses: [],
-                currentCourse: null
+                currentCourse: null,
             },
 
             components: {
-                continuelearningbutton: ContinueLearningButton
+                continuelearningbutton: ContinueLearningButton,
             },
 
             isCurrentCourseInProgress(aCourse) {
@@ -104,7 +90,7 @@
                     return null;
                 }
                 const lastWorkedOnCourse = courses.find(
-                    course => course.data.slug === lastCompletion.courseSlug
+                    (course) => course.data.slug === lastCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
             },
@@ -139,7 +125,7 @@
 
                 this.update({
                     courses,
-                    currentCourse: lastWorkedOnCourse
+                    currentCourse: lastWorkedOnCourse,
                 });
             },
 
@@ -152,7 +138,7 @@
                 return gettext(
                     "%1 out of %2 completed",
                     this.getNumberOfCompletedLessonsFor(course),
-                    course.lessons.length,
+                    course.lessons.length
                 );
             },
 
@@ -163,7 +149,7 @@
                     getUsername(),
                     this.getPercentOfLessonsCompleted()
                 );
-            }
+            },
         };
     </script>
 </Profile>

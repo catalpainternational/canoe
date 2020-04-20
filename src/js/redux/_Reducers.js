@@ -5,6 +5,7 @@ export const SITE_DOWNLOADED = "SITE_DOWNLOADED";
 export const ADDED_WAGTAIL_PAGE = "ADDED_WAGTAIL_PAGE";
 export const LANGUAGE_CHANGE = "LANGUAGE_CHANGED";
 export const UPDATED_BROWSER_SUPPORT = "UPDATED_BROWSER_SUPPORT";
+export const SERVICE_WORKER_EVENT = "SERVICE_WORKER_EVENT";
 
 const updateManifest = (state = {}, action) => {
     switch (action.type) {
@@ -53,10 +54,30 @@ const signalBrowserSupport = (state = false, action) => {
     }
 };
 
+const serviceWorker = (state = 'none', action) => {
+    switch (action.type) {
+        case SERVICE_WORKER_EVENT:
+            switch (action.event_type) {
+                case 'installed':
+                    return 'installed';
+                case 'externalactivated':
+                    return 'updated';
+                case 'notsupported':
+                    return 'notsupported';
+                default:
+                    return 'unknown';
+            }
+        default:
+            return state;
+    }
+}
+
+
 export const reducers = combineReducers({
     manifest: updateManifest,
     siteIsDownloaded: signalSiteIsDownloaded,
     pages: addWagtailPage,
     language: changeLanguage,
     isBrowserSupported: signalBrowserSupport,
+    serviceWorker: serviceWorker,
 });

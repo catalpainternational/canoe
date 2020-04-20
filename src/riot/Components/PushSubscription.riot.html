@@ -2,13 +2,13 @@
     <script>
         import {
             supportsPushManager,
-            subscribe,
-            unsubscribe,
+            subscribeToNotifications,
+            unsubscribeFromNotifications,
             isSubscribedToNotifications
         } from "js/Notifications";
 
         export default {
-            async subscribeToNotifications() {
+            async subscribe() {
                 const browserSupportsNotifications = await supportsPushManager();
 
                 if (browserSupportsNotifications) {
@@ -16,16 +16,16 @@
                     if (alreadySubscribedToNotifications) {
                         return;
                     }
-                    subscribe();
+                    subscribeToNotifications();
                 }
             },
 
             onMounted() {
-                this.subscribeToNotifications();
+                this.subscribe();
             },
 
             onUnmounted() {
-                unsubscribe();
+                unsubscribeFromNotifications();
             }
         };
     </script>

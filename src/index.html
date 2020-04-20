@@ -33,8 +33,37 @@
 </head>
 
 <body>
-    <App></App>
-    <ChangeBrowser></ChangeBrowser>
+    <div id="preapp-messages">
+        <img inline src="src/img/site_logo_white.svg">
+        <div id="service-worker-loading">
+            Favor hein...<br />
+            Please wait...
+        </div>
+        <div id="service-worker-notsupported" hidden>
+            Your browser does not support serviceworkers
+        </div>
+    </div>
+    <App>
+    </App>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        #service-worker-loading, #service-worker-notsupported {
+            padding-top: 100px;
+        }
+        #preapp-messages {
+            height: 100%;
+            margin: -8px;
+            width: auto;
+            background-color: #13BF97;
+            padding: 30px;
+            font-family: Verdana;
+            font-size: xx-large;
+            color: white;
+            text-align: center;
+        }
+    </style>
 </body>
 
 </html>

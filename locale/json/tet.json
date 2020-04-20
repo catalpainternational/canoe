@@ -1,10 +1,19 @@
 {
     "": {
         "language": "tet",
-        "plural-forms": "nplurals=2; plural=(n != 1);"
+        "plural-forms": "nplurals=1; plural=0;"
     },
-    "%2 / %1 lesson complete": "%2 / %1 lisaun kompletu",
+    "%1 min": [
+        ""
+    ],
+    "%1 out of %2 completed": "%1 husi %2 kompletu",
+    "%2 / %1 lesson complete": [
+        "%2 / %1 lisaun kompletu"
+    ],
     "Add to Home Screen": "Hatama Aplikasaun",
     "Amazing work!": "Diak loos!",
-    "Are you enjoying this lesson?": "Lisaun nee diak ka?"
+    "Are you enjoying this lesson?": "Lisaun nee diak ka?",
+    "You only have %1 lesson left to finish %2.": [
+        ""
+    ]
 }
