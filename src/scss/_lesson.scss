@@ -519,7 +519,7 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestFeedbackModal {
     }
 
     .feedback-modal {
-        position: absolute;
+        position: fixed;
         bottom: 0px;
         background-color: white;
         width: 100%;
