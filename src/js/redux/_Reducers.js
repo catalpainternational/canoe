@@ -8,6 +8,7 @@ export const ADDED_COURSE_PAGE = "ADDED_COURSE_PAGE";
 export const ADDED_LESSON_PAGE = "ADDED_LESSON_PAGE";
 export const LANGUAGE_CHANGE = "LANGUAGE_CHANGED";
 export const UPDATED_BROWSER_SUPPORT = "UPDATED_BROWSER_SUPPORT";
+export const SERVICE_WORKER_EVENT = "SERVICE_WORKER_EVENT";
 
 const updateManifest = (state = {}, action) => {
     switch (action.type) {
@@ -122,6 +123,25 @@ const signalBrowserSupport = (state = false, action) => {
     }
 };
 
+const serviceWorker = (state = 'none', action) => {
+    switch (action.type) {
+        case SERVICE_WORKER_EVENT:
+            switch (action.event_type) {
+                case 'installed':
+                    return 'installed';
+                case 'externalactivated':
+                    return 'updated';
+                case 'notsupported':
+                    return 'notsupported';
+                default:
+                    return 'unknown';
+            }
+        default:
+            return state;
+    }
+}
+
+
 export const reducers = combineReducers({
     manifest: updateManifest,
     siteIsDownloaded: signalSiteIsDownloaded,
@@ -131,4 +151,5 @@ export const reducers = combineReducers({
     lessons: addLesson,
     language: changeLanguage,
     isBrowserSupported: signalBrowserSupport,
+    serviceWorker: serviceWorker,
 });

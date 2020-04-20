@@ -10,6 +10,7 @@ import {
     ADDED_LESSON_PAGE,
     UPDATED_BROWSER_SUPPORT,
     LANGUAGE_CHANGE,
+    SERVICE_WORKER_EVENT,
 } from "./_Reducers";
 
 export const store = createStore(
@@ -46,6 +47,10 @@ export const changeLanguage = (language) => {
     store.dispatch({ type: LANGUAGE_CHANGE, language: language });
 };
 
+export const serviceWorkerEvent = event_type => {
+    store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: event_type });
+};
+
 export const getLanguage = () => {
     return store.getState().language;
 };
@@ -79,3 +84,4 @@ export const getLesson = (lessonId) => {
     const lesson = store.getState().lessons[lessonId];
     return lesson;
 };
+
