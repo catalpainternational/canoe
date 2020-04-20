@@ -1,30 +1,14 @@
 <TopMenu>
     <header class="background-{state.color}">
         <a
-            if="{!state.isCard && !state.isLessonList && !state.isCourse && !state.isBasePage && !state.isHome}"
+            if="{!state.isCard && !state.isSectionList && !state.isCourse && !state.isBasePage && !state.isHome}"
             class="{state.isSettings ? 'arrow-gray' : 'arrow-white'}"
             onclick="{goBack}"
         ></a>
-        <a
-            if="{state.isLessonList}"
-            class="arrow-white"
-            onclick="{backToCoursePage}"
-        ></a>
-        <a
-            if="{state.isCourse}"
-            class="arrow-white"
-            onclick="{backToHome}"
-        ></a>
-        <a
-            if="{state.isCard}"
-            class="cross close-btn"
-            onclick="{backToLessonPage}"
-        ></a>
-        <a
-            if="{!state.isHome}"
-            class="site-logo {state.isSettings ? '' : 'white'}"
-            href="#"
-        ></a>
+        <a if="{state.isSectionList}" class="arrow-white" onclick="{backToCoursePage}"></a>
+        <a if="{state.isCourse}" class="arrow-white" onclick="{backToHome}"></a>
+        <a if="{state.isCard}" class="cross close-btn" onclick="{backToLessonPage}"></a>
+        <a if="{!state.isHome}" class="site-logo {state.isSettings ? '' : 'white'}" href="#"></a>
         <a if="{!state.isSettings}" class="cog white" href="#settings"></a>
     </header>
 
@@ -33,7 +17,7 @@
 
         export default {
             state: {
-                color: ""
+                color: "",
             },
 
             onBeforeMount(props, state) {
@@ -66,25 +50,28 @@
                 this.state.isObjective = this.state.lessonModule === "objectives";
                 this.state.isContent = this.state.lessonModule === "content";
                 this.state.isTest = this.state.lessonModule === "test";
-                this.state.isCard = this.state.isTest || this.state.isContent || this.state.isObjective;
+                this.state.isCard =
+                    this.state.isTest || this.state.isContent || this.state.isObjective;
                 this.state.isHome = this.props.contentType === "HomePage";
                 this.state.isCourse = this.props.contentType === "CoursePage";
                 this.state.isNotifications = this.props.contentType === "notifications";
                 this.state.isProfile = this.props.contentType === "profile";
                 this.state.isSettings = this.props.contentType === "settings";
-                this.state.isLessonList = this.props.contentType === "LessonPage" && !this.state.isCard;
-                this.state.isBasePage = this.state.isProfile || this.state.isNotifications || this.state.isSettings
+                this.state.isSectionList =
+                    this.props.contentType === "LessonPage" && !this.state.isCard;
+                this.state.isBasePage =
+                    this.state.isProfile || this.state.isNotifications || this.state.isSettings;
 
                 if (this.state.isProfile) {
                     this.state.color = "profile-green";
                 } else if (this.state.isNotifications) {
                     this.state.color = "notifications-orange";
-                } else if (this.state.isHome) {
+                } else if (this.state.isHome || this.state.isCard) {
                     this.state.color = "blue-1";
                 } else {
                     this.state.color = "";
                 }
-            }
+            },
         };
     </script>
 </TopMenu>

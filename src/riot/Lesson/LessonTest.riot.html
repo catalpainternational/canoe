@@ -1,22 +1,20 @@
 <LessonTest>
-    <div id="test" class="test background-blue-1" if="{state.cardIdx < state.cards.length}">
-        <div class="carousel-card">
-            <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
-            <TestSingleAnswer 
-                if="{state.isSingleAnswer}"
-                lessonName="{props.lesson.title}"
-                card="{state.cards[state.cardIdx]}"
-                toggleModal="{toggleModal}"
-            ></TestSingleAnswer>
-            <TestMultipleAnswer
-                if="{!state.isSingleAnswer}"
-                lessonName="{props.lesson.title}"
-                card="{state.cards[state.cardIdx]}"
-                toggleModal="{toggleModal}"
-            ></TestMultipleAnswer>
-            <p class="card-number">{ cardNumberMessage() }</p>
-        </div>
-    </div>
+    <LessonFrame if="{state.cardIdx < state.cards.length}" id="test" extraStyleClasses="test">
+        <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
+        <TestSingleAnswer
+            if="{state.isSingleAnswer}"
+            lessonName="{props.lesson.title}"
+            card="{state.cards[state.cardIdx]}"
+            toggleModal="{toggleModal}"
+        ></TestSingleAnswer>
+        <TestMultipleAnswer
+            if="{!state.isSingleAnswer}"
+            lessonName="{props.lesson.title}"
+            card="{state.cards[state.cardIdx]}"
+            toggleModal="{toggleModal}"
+        ></TestMultipleAnswer>
+        <p class="card-number">{ cardNumberMessage() }</p>
+    </LessonFrame>
     <TestPopupModal
         if="{state.showModal}"
         isQuestionComplete="{state.isQuestionComplete}"
@@ -47,6 +45,7 @@
         import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
         import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
         import TestPopupModal from "RiotTags/Lesson/TestPopupModal.riot.html";
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
         import { getLessonCardIdx } from "js/Routing";
         import { dispatchTestAnswerEvent } from "js/Events";
@@ -57,7 +56,7 @@
                 cardIdx: 0,
                 isSingleAnswer: false,
                 showModal: false,
-                selectedAnswer: {}
+                selectedAnswer: {},
             },
 
             components: {
@@ -65,7 +64,8 @@
                 lessonfeedback: LessonFeedback,
                 testsingleanswer: TestSingleAnswer,
                 testmultipleanswer: TestMultipleAnswer,
-                testpopupmodal: TestPopupModal
+                testpopupmodal: TestPopupModal,
+                lessonframe: LessonFrame,
             },
 
             onBeforeMount(props, state) {
@@ -77,9 +77,12 @@
 
             onMounted(props, state) {
                 const card = this.state.cards[this.state.cardIdx];
-                const correctAnswers = card && card.answers.filter(answer => answer.correct);
-                this.update({ 
-                    isSingleAnswer: card && correctAnswers.length === 1 
+                if (!card) {
+                    return;
+                }
+                const correctAnswers = card.answers.filter((answer) => answer.correct);
+                this.update({
+                    isSingleAnswer: correctAnswers.length === 1,
                 });
             },
 
@@ -90,12 +93,15 @@
             hashChanged() {
                 const cardIdx = getLessonCardIdx();
                 const card = this.state.cards[cardIdx];
-                const correctAnswers = card && card.answers.filter(answer => answer.correct);
-                const isSingleAnswer = card && correctAnswers.length === 1;
+                let isSingleAnswer = null;
+                if (card) {
+                    const correctAnswers = card.answers.filter((answer) => answer.correct);
+                    isSingleAnswer = correctAnswers.length === 1;
+                }
 
                 this.update({
                     cardIdx,
-                    isSingleAnswer
+                    isSingleAnswer,
                 });
             },
 
@@ -105,26 +111,82 @@
 
             cardNumberMessage() {
                 // display the number of the current card out of the total number of cards
-                return gettext(
-                    "%1 of %2",
-                    this.state.cardIdx + 1,
-                    this.props.test.cards.length
-                );
+                return gettext("%1 of %2", this.state.cardIdx + 1, this.props.test.cards.length);
             },
 
             toggleModal(showModal, selectedAnswer, isQuestionComplete) {
                 this.update({
+                    showModal,
                     selectedAnswer,
                     isQuestionComplete,
-                    showModal,
                 });
-
                 const testElement = this.$("#test");
                 if (showModal) {
                     testElement.classList.add("showElement");
                 } else {
                     testElement.classList.remove("showElement");
                 }
+            },
+
+            correctTitleMessage() {
+                // title for correct answer feedback
+                return this.state.selectedAnswer.correctTitle
+                    ? this.state.selectedAnswer.correctTitle
+                    : gettext("Great");
+            },
+
+            correctTextMessage() {
+                // text for correct answer feedback
+                return this.state.selectedAnswer.correctText
+                    ? this.state.selectedAnswer.correctText
+                    : gettext("Well done, keep it up!");
+            },
+
+            incorrectTitleMessage() {
+                // title for incorrect answer feedback
+                return this.state.selectedAnswer.incorrectTitle
+                    ? this.state.selectedAnswer.incorrectTitle
+                    : gettext("Oops");
+            },
+
+            incorrectTextMessage() {
+                // text for incorrect answer feedback
+                return this.state.selectedAnswer.incorrectText
+                    ? this.state.selectedAnswer.incorrectText
+                    : gettext("Read the question more carefully!");
+            },
+
+            selectAnswer(answer) {
+                this.update({ selectedAnswer: answer });
+                const eventData = {
+                    lesson: this.props.lesson.title,
+                    question: this.state.cards[this.state.cardIdx].question,
+                    answer: answer.text,
+                    isAnswerCorrect: answer.correct,
+                };
+                dispatchTestAnswerEvent(eventData);
+                this.toggleModal(true);
+            },
+
+            nextTestCard() {
+                this.toggleModal(false);
+                window.scroll(0, 0);
+                this.state.selectedAnswer = {};
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
+            },
+
+            completePage() {
+                this.toggleModal(false);
+                setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
             },
         };
     </script>

@@ -1,7 +1,9 @@
 <LessonFrame>
     <div class="frame-background background-blue-1">
         <div class="card-frame">
-            <slot />
+            <div class="card-container {props.extrastyleclasses}">
+                <slot />
+            </div>
         </div>
     </div>
 </LessonFrame>
