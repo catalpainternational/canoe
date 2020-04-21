@@ -18,11 +18,6 @@
         import { setComplete } from "Actions/completion";
 
         export default {
-
-            onMounted(props, state) {
-                console.log(props.selectedAnswers);
-            },
-
             nextTestCard() {
                 this.props.toggleModal(false, {});
                 window.scroll(0, 0);
