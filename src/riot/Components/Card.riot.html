@@ -27,9 +27,8 @@
             durationMessage() {
                 // the number of minutes it will take to complete the objective, content, test, or lesson
                 return ngettext(
-                    "%1 min", 
-                    "%1 mins",
-                    this.props.duration,
+                    "%1 minute",
+                    "%1 minutes",
                     this.props.duration
                 );
             },
