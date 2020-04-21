@@ -12,6 +12,11 @@ store.subscribe( () => {
     }
 
     switch(newStoreState.serviceWorker) {
+        case "install-failed":
+            document.querySelector("#service-worker-loading").hidden = true;
+            document.querySelector("#service-worker-notsupported").hidden = true;
+            document.querySelector("#service-worker-failed").hidden = false;
+            break;
         case "notsupported":
             document.querySelector("#service-worker-loading").hidden = true;
             document.querySelector("#service-worker-notsupported").hidden = false;

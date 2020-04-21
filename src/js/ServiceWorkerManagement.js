@@ -19,7 +19,9 @@ export async function initializeServiceWorker() {
     wb.addEventListener("externalactivated", () => {
         serviceWorkerEvent("externalactivated")
     });
-
+    wb.addEventListener("redundant", () => {
+        serviceWorkerEvent("install-failed")
+    });
     wb.register();
 
     navigator.serviceWorker.ready.then(sw=>{

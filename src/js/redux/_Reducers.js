@@ -58,6 +58,8 @@ const serviceWorker = (state = 'none', action) => {
     switch (action.type) {
         case SERVICE_WORKER_EVENT:
             switch (action.event_type) {
+                case 'install-failed':
+                    return 'install-failed';
                 case 'installed':
                     return 'installed';
                 case 'externalactivated':
