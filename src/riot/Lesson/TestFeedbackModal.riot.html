@@ -1,22 +1,16 @@
 <TestFeedbackModal>
     <div id="modal" class="feedback-modal">
-        <div if="{props.isQuestionComplete}">
-            <h2>{ correctTitleMessage() }</h2>
-            <div>
-                <span class="success"></span>
-                <p>{ correctTextMessage() }</p>
-            </div>
-            <button if="{!props.isLastQuestion}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
-            <button if="{props.isLastQuestion}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
+        <h2 if="{props.isQuestionComplete}">{ correctTitleMessage() }</h2>
+        <h2 if="{!props.isQuestionComplete}">{ incorrectTitleMessage() }</h2>
+        <div each="{answer in props.selectedAnswers}">
+            <span if="{answer.correct}" class="success"></span>
+            <span if="{!answer.correct}" class="warning"></span>
+            <p if="{answer.correct}" >{ correctTextMessage(answer) }</p>
+            <p if="{!answer.correct}">{ incorrectTextMessage(answer) }</p>
         </div>
-        <div if="{!props.isQuestionComplete}">
-            <h2>{ incorrectTitleMessage() }</h2>
-            <div>
-                <span class="warning"></span>
-                <p>{ incorrectTextMessage() }</p>
-            </div>
-            <button class="btn-primary btn-wrong" onclick="{ () => props.toggleModal(false, {}) }" translate>Try again</button>
-        </div>
+        <button if="{props.isQuestionComplete && !props.isLastQuestion}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
+        <button if="{props.isQuestionComplete && props.isLastQuestion}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
+        <button if="{!props.isQuestionComplete}" class="btn-primary btn-wrong" onclick="{ () => props.toggleModal(false, {}) }" translate>Try again</button>
     </div>
 
     <script>
@@ -24,6 +18,11 @@
         import { setComplete } from "Actions/completion";
 
         export default {
+
+            onMounted(props, state) {
+                console.log(props.selectedAnswers);
+            },
+
             nextTestCard() {
                 this.props.toggleModal(false, {});
                 window.scroll(0, 0);
@@ -51,10 +50,10 @@
                 : gettext("Great");
             },
 
-            correctTextMessage() {
+            correctTextMessage(answer) {
                 // text for correct answer feedback
-                return this.props.selectedAnswers.correctText 
-                ? this.props.selectedAnswers.correctText
+                return answer.correctText 
+                ? answer.correctText
                 : gettext("Well done, keep it up!");
             },
 
@@ -65,10 +64,10 @@
                 : gettext("Oops");
             },
 
-            incorrectTextMessage() {
+            incorrectTextMessage(answer) {
                 // text for incorrect answer feedback
-                return this.props.selectedAnswers.incorrectText 
-                ? this.props.selectedAnswers.incorrectText
+                return answer.incorrectText 
+                ? answer.incorrectText
                 : gettext("Read the question more carefully!");
             },
         }

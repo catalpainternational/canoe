@@ -44,7 +44,10 @@
 
             onMounted() {
                 const numberTotalCorrectAnswers = this.props.answers.filter(a => a.correct).length;
-                this.update({ numberTotalCorrectAnswers });
+                this.update({ 
+                    numberTotalCorrectAnswers, 
+                    hiddenAnswers: [] 
+                });
             },
 
             showResults() {
@@ -60,7 +63,9 @@
                 this.props.toggleModal(true, this.state.visibleAnswers, isQuestionComplete);
                 
                 if (isQuestionComplete) {
-                    this.update({ visibleAnswers: [] });
+                    this.update({ 
+                        visibleAnswers: []
+                    });
                 };
             },
 
