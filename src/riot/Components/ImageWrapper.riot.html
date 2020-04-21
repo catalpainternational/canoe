@@ -1,0 +1,16 @@
+<imagewrapper>
+    <img alt="{ props.alt }" 
+        class="richtext-image"
+        crossorigin="anonymous"
+        src="{ getImagePath(props.id) }">
+    </div>
+
+    <script>
+        import { imagePath } from "js/RenditionSelector"
+        export default {
+            getImagePath(id) {
+                return imagePath(id);
+            },
+        };
+    </script>
+</imagewrapper>

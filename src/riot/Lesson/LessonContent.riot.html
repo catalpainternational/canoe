@@ -5,6 +5,10 @@
                 if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"
                 html="{props.lessonContent.cards[state.cardIdx].content}"
             />
+            <BaseCard
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'base'}"
+                card="{props.lessonContent.cards[state.cardIdx]}"
+            />
             <Media
                 if="{props.lessonContent.cards[state.cardIdx].tag === 'media'}"
                 media="{props.lessonContent.cards[state.cardIdx]}"
@@ -47,7 +51,8 @@
     <script>
         import LessonModuleComplete from "RiotTags/Lesson/LessonModuleComplete.riot.html";
         import Raw from "RiotTags/Components/Raw.riot.html";
-        import Media from "RiotTags/Media.riot.html";
+        import Media from "RiotTags/Components/Media.riot.html";
+        import BaseCard from "RiotTags/Components/BaseCard.riot.html";
 
         import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
         import { setComplete } from "Actions/completion";
@@ -62,6 +67,7 @@
             components: {
                 lessonmodulecomplete: LessonModuleComplete,
                 media: Media,
+                basecard: BaseCard,
                 raw: Raw,
             },
 

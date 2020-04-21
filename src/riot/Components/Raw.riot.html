@@ -1,8 +1,24 @@
 <raw>
     <script>
+        import * as riot from "riot";
+        import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
+
+        const mountImage = riot.component(ImageWrapper);
         export default {
             setInnerHTML() {
                 this.root.innerHTML = this.props.html;
+                this.$$("embed").forEach(m => {
+                    mountImage(
+                        m.insertAdjacentElement(
+                            "afterend",
+                            document.createElement("div")
+                        ),
+                        {
+                            id:m.getAttribute("id"),
+                            alt:m.getAttribute("alt"),
+                        }
+                    );
+                });
             },
 
             onMounted() {
