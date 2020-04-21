@@ -31,6 +31,7 @@
         disabled="{state.hiddenAnswers.length === 0 && state.visibleAnswers.length === 0}"
         translate
     >Submit</button>
+
     <script>
         import { dispatchTestAnswerEvent } from "js/Events";
 
@@ -57,6 +58,10 @@
                 const isQuestionComplete = numberCorrectAnswersMissing === 0 && numberIncorrectAnswersChosen === 0
                 
                 this.props.toggleModal(true, this.state.visibleAnswers, isQuestionComplete);
+                
+                if (isQuestionComplete) {
+                    this.update({ visibleAnswers: [] });
+                };
             },
 
             selectAnswer(answer) {

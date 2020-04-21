@@ -1,19 +1,18 @@
 <TestFeedbackModal>
     <div id="modal" class="feedback-modal">
-
         <div if="{props.isQuestionComplete}">
             <h2>{ correctTitleMessage() }</h2>
             <p>{ correctTextMessage() }</p>
             <button if="{!props.isLastQuestion}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
             <button if="{props.isLastQuestion}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
         </div>
-
         <div if="{!props.isQuestionComplete}">
             <h2>{ incorrectTitleMessage() }</h2>
             <p>{ incorrectTextMessage() }</p>
             <button class="btn-primary btn-wrong" onclick="{ () => props.toggleModal(false, {}) }" translate>Try again</button>
         </div>
     </div>
+    
     <script>
         import { getLessonModuleHash } from "js/Routing";
         import { setComplete } from "Actions/completion";

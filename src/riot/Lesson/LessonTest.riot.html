@@ -78,7 +78,7 @@
 
             onMounted(props, state) {
                 this.update({ 
-                    isSingleAnswer: this.state.cards[this.state.cardIdx].answers.filter(a => a.correct).length === 1 
+                    isSingleAnswer: this.state.cards[this.state.cardIdx] && this.state.cards[this.state.cardIdx].answers.filter(a => a.correct).length === 1 
                 });
             },
 
