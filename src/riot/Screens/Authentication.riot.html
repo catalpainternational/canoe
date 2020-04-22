@@ -6,11 +6,11 @@
             <h3 translate>Login</h3>
             <div class="form-group">
                 <label for="username" translate>Username</label>
-                <input id="username" type="text" name="username" />
+                <input id="username" type="text" name="username" oninput="{clearError}" />
             </div>
             <div class="form-group">
                 <label for="password" translate>Password</label>
-                <input id="password" type="password" name="password" />
+                <input id="password" type="password" name="password" oninput="{clearError}" />
             </div>
             <div class="icon-box crossout">
                 <a onclick="{showPassword}">
@@ -83,6 +83,14 @@
                 } finally {
                     this.update({
                         isLoginButtonDisabled: false
+                    });
+                }
+            },
+
+            clearError() {
+                if (this.state.errorExplanation) {
+                    this.update({
+                        errorExplanation: null
                     });
                 }
             }
