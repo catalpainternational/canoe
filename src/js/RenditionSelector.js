@@ -3,15 +3,15 @@ import { getManifestFromStore } from "ReduxImpl/Store"
 
 const FILTER_SPEC = 'width-800|format-webp';
 
-export function imagePath(id) {
+export function getImagePath(id) {
     const images = getManifestFromStore().images;
-    return renditionUrl(images[id]);
+    return _getRenditionUrl(images[id]);
 }
 
-export function imageUrls(images) {
-    return Object.values(images).map(renditionUrl);
+export function getImageUrls(images) {
+    return Object.values(images).map(_getRenditionUrl);
 }
 
-function renditionUrl(renditions) {
+function _getRenditionUrl(renditions) {
     return `${BACKEND_BASE_URL}/media/${renditions[FILTER_SPEC]}`;
 }

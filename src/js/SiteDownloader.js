@@ -2,7 +2,7 @@ import { fetchPage, fetchImage, getOrFetchManifest } from "js/WagtailPagesAPI";
 import { storeWagtailPage } from "ReduxImpl/Store";
 import { dispatchToastEvent } from "js/Events";
 import { leftDifference } from "js/SetMethods";
-import { imageUrls } from "js/RenditionSelector"
+import { getImageUrls } from "js/RenditionSelector"
 
 const trimDomain = urlWithDomain => urlWithDomain.replace(/^.*\/\/[^\/]+/, "");
 
@@ -45,7 +45,7 @@ export class SiteDownloader {
         const manifest = await getOrFetchManifest();
 
         const manifestsPageUrls = new Set([manifest.home, ...Object.values(manifest.pages)]);
-        const manifestsMediaUrls = new Set(imageUrls(manifest.images));
+        const manifestsMediaUrls = new Set(getImageUrls(manifest.images));
 
         const cachedPageUrls = await getCachedUrlsAndDeleteCruft(
             this.PAGES_CACHE,

@@ -1,10 +1,10 @@
-<basecard>
-    <h3 if={ props.card.header }>{ props.card.header }</h3>
+<BasicCard>
+    <h3 if="{ props.card.header }">{ props.card.header }</h3>
 
-    <imagewrapper if={ props.card.image.id } 
+    <ImageWrapper if="{ props.card.image.id }" 
         id="{ props.card.image.id }" 
         alt="{ props.card.image.alt }">
-    </imagewrapper>
+    </ImageWrapper>
 
     <div class="richtext" />
 
@@ -27,4 +27,4 @@
             },
         };
     </script>
-</basecard>
+</BasicCard>
