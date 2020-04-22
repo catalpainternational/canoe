@@ -556,6 +556,7 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestFeedbackModal {
         .success, .warning {
             margin-right: 5px;
             display: flex;
+            flex: none;
         }
     }
 
