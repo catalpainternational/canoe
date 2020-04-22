@@ -1,7 +1,9 @@
 <TestFeedbackModal>
     <div id="modal" class="feedback-modal">
-        <h2 if="{props.isQuestionComplete}">{ correctTitleMessage() }</h2>
-        <h2 if="{!props.isQuestionComplete}">{ incorrectTitleMessage() }</h2>
+        <div each="{answer in props.selectedAnswers}">
+            <h2 if="{props.isQuestionComplete}">{ correctTitleMessage(answer) }</h2>
+            <h2 if="{!props.isQuestionComplete}">{ incorrectTitleMessage(answer) }</h2>
+        </div>
         <div each="{answer in props.selectedAnswers}">
             <span if="{answer.correct}" class="success"></span>
             <span if="{!answer.correct}" class="warning"></span>
@@ -38,31 +40,31 @@
                 );
             },
 
-            correctTitleMessage() {
+            correctTitleMessage(answer) {
                 // title for correct answer feedback
-                return this.props.selectedAnswers.correctTitle 
-                ? this.props.selectedAnswers.correctTitle
+                return answer.correct_title 
+                ? answer.correct_title
                 : gettext("Great");
             },
 
             correctTextMessage(answer) {
                 // text for correct answer feedback
-                return answer.correctText 
-                ? answer.correctText
+                return answer.correct_text 
+                ? answer.correct_text
                 : gettext("Well done, keep it up!");
             },
 
-            incorrectTitleMessage() {
+            incorrectTitleMessage(answer) {
                 // title for incorrect answer feedback
-                return this.props.selectedAnswers.incorrectTitle 
-                ? this.props.selectedAnswers.incorrectTitle
+                return answer.incorrect_title 
+                ? answer.incorrect_title
                 : gettext("Oops");
             },
 
             incorrectTextMessage(answer) {
                 // text for incorrect answer feedback
-                return answer.incorrectText 
-                ? answer.incorrectText
+                return answer.incorrect_text 
+                ? answer.incorrect_text
                 : gettext("Read the question more carefully!");
             },
         }
