@@ -4,7 +4,7 @@
         <ol>
             <li
                 class="{state.visibleAnswers.includes(answer) && answer.correct ? '' : 'wrong'}"
-                each="{answer in props.answers}"
+                each="{answer in props.card.answers}"
                 onclick="{() => selectAnswer(answer)}"
             >
                 <div>
@@ -43,7 +43,7 @@
             },
 
             onMounted() {
-                const numberTotalCorrectAnswers = this.props.answers.filter(a => a.correct).length;
+                const numberTotalCorrectAnswers = this.props.card.answers.filter(a => a.correct).length;
                 this.update({ 
                     numberTotalCorrectAnswers, 
                     hiddenAnswers: [] 

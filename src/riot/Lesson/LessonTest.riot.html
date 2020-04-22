@@ -5,15 +5,13 @@
             <TestSingleAnswer 
                 if="{state.isSingleAnswer}"
                 lessonName="{props.lesson.title}"
-                answers="{state.cards[state.cardIdx].answers}"
-                question="{state.cards[state.cardIdx].question}"
+                card="{state.cards[state.cardIdx]}"
                 toggleModal="{toggleModal}"
             ></TestSingleAnswer>
             <TestMultipleAnswer
                 if="{!state.isSingleAnswer}"
                 lessonName="{props.lesson.title}"
-                answers="{state.cards[state.cardIdx].answers}"
-                question="{state.cards[state.cardIdx].question}"
+                card="{state.cards[state.cardIdx]}"
                 toggleModal="{toggleModal}"
             ></TestMultipleAnswer>
             <p class="card-number">{ cardNumberMessage() }</p>

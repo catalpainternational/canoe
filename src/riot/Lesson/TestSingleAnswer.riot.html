@@ -2,7 +2,7 @@
     <ol>
         <li
             class="{answer === state.selectedAnswer ? 'selected' : ''} {answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
-            each="{answer in props.answers}"
+            each="{answer in props.card.answers}"
             onclick="{() => selectAnswer(answer)}"
         >
             <div>
@@ -34,7 +34,7 @@
                 this.update({ selectedAnswer: answer });
                 const eventData = {
                     lesson: this.props.lessonName,
-                    question: this.props.question,
+                    question: this.props.card.question,
                     answer: answer.text,
                     isAnswerCorrect: answer.correct
                 };
