@@ -3,7 +3,6 @@
         <h4><span translate>Check </span><span class="bold" translate>all</span><span> answers that apply</span></h4>
         <ol>
             <li
-                class="{state.visibleAnswers.includes(answer) && answer.correct ? '' : 'wrong'}"
                 each="{answer in props.card.answers}"
                 onclick="{() => selectAnswer(answer)}"
             >
