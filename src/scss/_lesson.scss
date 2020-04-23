@@ -210,12 +210,23 @@ LessonPage .description {
     }
 }
 
+LessonComplete, LessonModuleComplete, LessonFeedback {
+    LessonFrame {
+        .frame-background {
+            min-height: auto;
+        }
+
+        .card-frame {
+            min-height: auto;
+        }
+    }
+}
+
 LessonFrame {
     .frame-background {
         height: calc(100vh - #{$top-menu-height-no-footer});
         margin-top: -#{$top-menu-height};
         padding-top: calc(#{$top-menu-height} - 10px);
-        padding-bottom: $bottom-menu-height;
     }
 
     .card-container {
@@ -396,7 +407,6 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestFeedbackModal {
 
         button {
             flex: end;
-
         }
 
         ol {
@@ -617,6 +627,11 @@ LessonFeedback {
         flex-flow: row nowrap;
         justify-content: space-evenly;
         margin-bottom: 3em;
+
+        @media only screen and (max-width: $sm-phone) {
+            flex-flow: column;
+            align-items: center;
+        }
     }
 
     .feedback-icon {
@@ -689,6 +704,10 @@ LessonFeedback {
 
         &:hover {
             cursor: pointer;
+        }
+
+        @media only screen and (max-width: $sm-phone) {
+            margin: 10px;
         }
     }
 
