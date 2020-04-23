@@ -13,6 +13,7 @@ store.subscribe( () => {
 
     switch(newStoreState.serviceWorker) {
         case "install-failed":
+            // show a retry message
             document.querySelector("#service-worker-loading").hidden = true;
             document.querySelector("#service-worker-notsupported").hidden = true;
             document.querySelector("#service-worker-failed").hidden = false;
@@ -21,12 +22,12 @@ store.subscribe( () => {
             document.querySelector("#service-worker-loading").hidden = true;
             document.querySelector("#service-worker-notsupported").hidden = false;
             break;
-        case "installed":
+        case "controlling":
             // hide the loading splash
             document.querySelector("#preapp-messages").hidden = true;
             import(/* webpackChunkName: "app" */ "./app.js")
             break;
-        case "updated":
+        case "update-waiting":
             // TODO should we reload? it might interrupt something
             // should we prompt the user?
             window.location.reload(true);
@@ -34,6 +35,8 @@ store.subscribe( () => {
         default:
             break;
     }
+    // store state for next time
+    storeState = store.getState();
 });
 
 initializeServiceWorker();

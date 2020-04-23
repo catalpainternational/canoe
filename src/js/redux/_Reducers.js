@@ -54,20 +54,20 @@ const signalBrowserSupport = (state = false, action) => {
     }
 };
 
-const serviceWorker = (state = 'none', action) => {
+const serviceWorker = (state = "unknown", action) => {
     switch (action.type) {
         case SERVICE_WORKER_EVENT:
             switch (action.event_type) {
-                case 'install-failed':
-                    return 'install-failed';
-                case 'installed':
-                    return 'installed';
-                case 'externalactivated':
-                    return 'updated';
-                case 'notsupported':
-                    return 'notsupported';
+                case "controlling":
+                    return "controlling";
+                case "redundant":
+                    return state === "controlling" ? "update-waiting" : "install-failed"
+                case "update-waiting":
+                    return "update-waiting";
+                case "notsupported":
+                    return "notsupported";
                 default:
-                    return 'unknown';
+                    return "unknown";
             }
         default:
             return state;
