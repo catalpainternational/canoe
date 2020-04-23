@@ -11,14 +11,6 @@
                 </div>
                 <p>{answer.text}</p>
             </div>
-            <div if="{answer === state.selectedAnswer && answer.correct}">
-                <span class="success"></span>
-                <p class="feedback-message text-green-1" translate>Correct answer</p>
-            </div>
-            <div if="{answer === state.selectedAnswer && !answer.correct}">
-                <span class="warning"></span>
-                <p class="feedback-message text-orange-1" translate>Incorrect answer</p>
-            </div>
         </li>
     </ol>
 
@@ -39,7 +31,7 @@
                     isAnswerCorrect: answer.correct
                 };
                 dispatchTestAnswerEvent(eventData);
-                this.props.toggleModal(true, [answer], answer.correct);
+                this.props.toggleModal(true, answer, answer.correct);
             },
         }
     </script>

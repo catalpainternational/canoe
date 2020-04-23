@@ -52,7 +52,7 @@
                 const numberCorrectAnswersMissing = this.state.numberTotalCorrectAnswers - numberCorrectAnswersChosen;
                 const isQuestionComplete = numberCorrectAnswersMissing === 0 && numberIncorrectAnswersChosen === 0
                 
-                this.props.toggleModal(true, this.state.visibleAnswers, isQuestionComplete);
+                this.props.toggleModal(true, {}, isQuestionComplete);
                 
                 if (isQuestionComplete) {
                     this.update({ 

@@ -1,14 +1,9 @@
 <TestFeedbackModal>
     <div id="modal" class="feedback-modal">
-        <div each="{answer in props.selectedAnswers}">
-            <h2 if="{props.isQuestionComplete}">{ correctTitleMessage(answer) }</h2>
-            <h2 if="{!props.isQuestionComplete}">{ incorrectTitleMessage(answer) }</h2>
-        </div>
-        <div each="{answer in props.selectedAnswers}">
-            <span if="{answer.correct}" class="success"></span>
-            <span if="{!answer.correct}" class="warning"></span>
-            <p if="{answer.correct}" >{ correctTextMessage(answer) }</p>
-            <p if="{!answer.correct}">{ incorrectTextMessage(answer) }</p>
+        <h2>{ props.isQuestionComplete ? correctTitleMessage(props.selectedAnswer) : incorrectTitleMessage(props.selectedAnswer) }</h2>
+        <div>
+            <span class="{ props.isQuestionComplete ? 'success' : 'warning'}"></span>
+            <p>{ props.isQuestionComplete ? correctTextMessage(props.selectedAnswer) : incorrectTextMessage(props.selectedAnswer) }</p>
         </div>
         <button if="{props.isQuestionComplete && !props.isLastQuestion}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
         <button if="{props.isQuestionComplete && props.isLastQuestion}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
@@ -40,31 +35,31 @@
                 );
             },
 
-            correctTitleMessage(answer) {
+            correctTitleMessage(selectedAnswer) {
                 // title for correct answer feedback
-                return answer.correct_title 
-                ? answer.correct_title
+                return selectedAnswer.feedback_title 
+                ? selectedAnswer.feedback_title
                 : gettext("Great");
             },
 
-            correctTextMessage(answer) {
+            correctTextMessage(selectedAnswer) {
                 // text for correct answer feedback
-                return answer.correct_text 
-                ? answer.correct_text
+                return selectedAnswer.feedback_text 
+                ? selectedAnswer.feedback_text 
                 : gettext("Well done, keep it up!");
             },
 
-            incorrectTitleMessage(answer) {
+            incorrectTitleMessage(selectedAnswer) {
                 // title for incorrect answer feedback
-                return answer.incorrect_title 
-                ? answer.incorrect_title
+                return selectedAnswer.feedback_title
+                ? selectedAnswer.feedback_title
                 : gettext("Oops");
             },
 
-            incorrectTextMessage(answer) {
+            incorrectTextMessage(selectedAnswer) {
                 // text for incorrect answer feedback
-                return answer.incorrect_text 
-                ? answer.incorrect_text
+                return selectedAnswer.feedback_text 
+                ? selectedAnswer.feedback_text 
                 : gettext("Read the question more carefully!");
             },
         }

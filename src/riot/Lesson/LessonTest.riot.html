@@ -20,7 +20,7 @@
     <TestFeedbackModal
         if="{state.showModal}"
         isQuestionComplete="{state.isQuestionComplete}"
-        selectedAnswers="{state.selectedAnswers}"
+        selectedAnswer="{state.selectedAnswer}"
         isLastQuestion="{state.cardIdx === state.cards.length - 1}"
         toggleModal="{toggleModal}"
         course="{props.course}"
@@ -57,7 +57,7 @@
                 cardIdx: 0,
                 isSingleAnswer: false,
                 showModal: false,
-                selectedAnswers: []
+                selectedAnswer: {}
             },
 
             components: {
@@ -108,9 +108,9 @@
                 );
             },
 
-            toggleModal(showModal, selectedAnswers, isQuestionComplete) {
+            toggleModal(showModal, selectedAnswer, isQuestionComplete) {
                 this.update({
-                    selectedAnswers,
+                    selectedAnswer,
                     isQuestionComplete 
                 });
 
