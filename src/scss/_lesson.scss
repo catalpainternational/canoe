@@ -374,6 +374,10 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestFeedbackModal {
         .answers-block {
             flex: 1;
         }
+
+        .bold {
+            font-weight: 650;
+        }
     }
 
     .test {
@@ -444,19 +448,13 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestFeedbackModal {
                     }
                 }
 
-                .checkmark, .cross, .pendingAnswer {
+                .pendingAnswer, .success, .warning {
                     height: 15px;
                     width: 18px;
                     margin-right: 5px;
                     display: inline-block;
                     position: absolute;
                     margin-left: 4px;
-                }
-
-                .cross {
-                    background-color: $red-2;
-                    border-radius: 15px;
-                    width: 15px;
                 }
 
                 .pendingAnswer {

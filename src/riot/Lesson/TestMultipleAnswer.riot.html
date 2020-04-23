@@ -1,6 +1,6 @@
 <TestMultipleAnswer class="answer">
     <div class="answers-block">
-        <h4 translate>Check all answers that apply</h4>
+        <h4><span translate>Check </span><span class="bold" translate>all</span><span> answers that apply</span></h4>
         <ol>
             <li
                 class="{state.visibleAnswers.includes(answer) && answer.correct ? '' : 'wrong'}"
@@ -9,18 +9,10 @@
             >
                 <div>
                     <span class="checkbox"></span>
-                    <span if="{state.visibleAnswers.includes(answer) && answer.correct}" class="checkmark"></span>
-                    <span if="{state.visibleAnswers.includes(answer) && !answer.correct}" class="cross"></span>
+                    <span if="{state.visibleAnswers.includes(answer) && answer.correct}" class="success"></span>
+                    <span if="{state.visibleAnswers.includes(answer) && !answer.correct}" class="warning"></span>
                     <span if="{state.hiddenAnswers.includes(answer) && !state.visibleAnswers.includes(answer)}" class="pendingAnswer"></span>
                     <p>{answer.text}</p>
-                </div>
-                <div if="{state.visibleAnswers.includes(answer) && answer.correct}">
-                    <span class="success"></span>
-                    <p class="feedback-message text-green-1" translate>Correct answer</p>
-                </div>
-                <div if="{state.visibleAnswers.includes(answer) && !answer.correct}">
-                    <span class="warning"></span>
-                    <p class="feedback-message text-orange-1" translate>Incorrect answer</p>
                 </div>
             </li>
         </ol>
