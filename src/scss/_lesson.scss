@@ -364,7 +364,7 @@ LessonContent div.content-wrapper {
     display: flex;
 }
 
-LessonTest, TestSingleAnswer, TestMultipleAnswer, TestFeedbackModal {
+LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
     .answer {
         flex: 1;
         display: flex;
@@ -526,7 +526,7 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestFeedbackModal {
         }
     }
 
-    .feedback-modal {
+    .popup-modal {
         position: fixed;
         bottom: 0px;
         background-color: white;

@@ -17,7 +17,7 @@
             <p class="card-number">{ cardNumberMessage() }</p>
         </div>
     </div>
-    <TestFeedbackModal
+    <TestPopupModal
         if="{state.showModal}"
         isQuestionComplete="{state.isQuestionComplete}"
         selectedAnswer="{state.selectedAnswer}"
@@ -27,7 +27,7 @@
         lesson="{props.lesson}"
         module="{props.module}"
         cardIdx="{state.cardIdx}"
-    ></TestFeedbackModal>
+    ></TestPopupModal>
     <LessonFeedback
         if="{state.cardIdx === state.cards.length}"
         backgroundColor="{props.course.colour}"
@@ -46,7 +46,7 @@
         import LessonFeedback from "RiotTags/Lesson/LessonFeedback.riot.html";
         import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
         import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
-        import TestFeedbackModal from "RiotTags/Lesson/TestFeedbackModal.riot.html";
+        import TestPopupModal from "RiotTags/Lesson/TestPopupModal.riot.html";
 
         import { getLessonCardIdx } from "js/Routing";
         import { dispatchTestAnswerEvent } from "js/Events";
@@ -65,7 +65,7 @@
                 lessonfeedback: LessonFeedback,
                 testsingleanswer: TestSingleAnswer,
                 testmultipleanswer: TestMultipleAnswer,
-                testfeedbackmodal: TestFeedbackModal
+                testpopupmodal: TestPopupModal
             },
 
             onBeforeMount(props, state) {
@@ -90,7 +90,7 @@
             hashChanged() {
                 const cardIdx = getLessonCardIdx();
                 const card = this.state.cards[cardIdx];
-                const correctAnswers = card.answers.filter(answer => answer.correct);
+                const correctAnswers = card && card.answers.filter(answer => answer.correct);
                 const isSingleAnswer = card && correctAnswers.length === 1;
 
                 this.update({
@@ -115,15 +115,14 @@
             toggleModal(showModal, selectedAnswer, isQuestionComplete) {
                 this.update({
                     selectedAnswer,
-                    isQuestionComplete 
+                    isQuestionComplete,
+                    showModal,
                 });
 
                 const testElement = this.$("#test");
                 if (showModal) {
-                    this.update({ showModal: true });
                     testElement.classList.add("showElement");
                 } else {
-                    this.update({ showModal: false });
                     testElement.classList.remove("showElement");
                 }
             },
