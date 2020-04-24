@@ -37,31 +37,23 @@
 
             correctTitleMessage(selectedAnswer) {
                 // title for correct answer feedback
-                return selectedAnswer.feedback_title 
-                ? selectedAnswer.feedback_title
-                : gettext("Great");
+                return selectedAnswer.feedback_title || gettext("Great");
             },
 
             correctTextMessage(selectedAnswer) {
                 // text for correct answer feedback
-                return selectedAnswer.feedback_text 
-                ? selectedAnswer.feedback_text 
-                : gettext("Well done, keep it up!");
+                return selectedAnswer.feedback_text || gettext("Well done, keep it up!");
             },
 
             incorrectTitleMessage(selectedAnswer) {
                 // title for incorrect answer feedback
-                return selectedAnswer.feedback_title
-                ? selectedAnswer.feedback_title
-                : gettext("Oops");
+                return selectedAnswer.feedback_title || gettext("Oops");
             },
 
             incorrectTextMessage(selectedAnswer) {
                 // text for incorrect answer feedback
-                return selectedAnswer.feedback_text 
-                ? selectedAnswer.feedback_text 
-                : gettext("Read the question more carefully!");
+                return selectedAnswer.feedback_text || gettext("Read the question more carefully!");
             },
         }
     </script>
-</TestFeedbackModal>
+</TestPopupModal>

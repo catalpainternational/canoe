@@ -22,7 +22,7 @@
         onclick="{showResults}"
         disabled="{state.hiddenAnswers.length === 0 && state.visibleAnswers.length === 0}"
         translate
-    >Submit</button>
+    >Check answers</button>
 
     <script>
         import { dispatchTestAnswerEvent } from "js/Events";
@@ -50,7 +50,7 @@
                 const numberIncorrectAnswersChosen = this.state.visibleAnswers.filter(a => !a.correct).length;
                 const numberCorrectAnswersChosen = this.state.visibleAnswers.filter(a => a.correct).length;
                 const numberCorrectAnswersMissing = this.state.numberTotalCorrectAnswers - numberCorrectAnswersChosen;
-                const isQuestionComplete = numberCorrectAnswersMissing === 0 && numberIncorrectAnswersChosen === 0
+                const isQuestionComplete = numberCorrectAnswersChosen === this.state.numberTotalCorrectAnswers && numberIncorrectAnswersChosen === 0;
                 
                 this.props.toggleModal(true, {}, isQuestionComplete);
                 
