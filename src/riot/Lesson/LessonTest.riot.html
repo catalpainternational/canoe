@@ -23,7 +23,7 @@
         selectedAnswer="{state.selectedAnswer}"
         isLastQuestion="{state.cardIdx === state.cards.length - 1}"
         toggleModal="{toggleModal}"
-        course="{props.course}"
+        courseSlug="{props.course.slug}"
         lesson="{props.lesson}"
         module="{props.module}"
         cardIdx="{state.cardIdx}"
@@ -76,8 +76,10 @@
             },
 
             onMounted(props, state) {
+                const card = this.state.cards[this.state.cardIdx];
+                const correctAnswers = card.answers.filter(answer => answer.correct);
                 this.update({ 
-                    isSingleAnswer: this.state.cards[this.state.cardIdx] && this.state.cards[this.state.cardIdx].answers.filter(a => a.correct).length === 1 
+                    isSingleAnswer: card && correctAnswers.length === 1 
                 });
             },
 
@@ -87,7 +89,9 @@
 
             hashChanged() {
                 const cardIdx = getLessonCardIdx();
-                const isSingleAnswer = this.state.cards[cardIdx] && this.state.cards[cardIdx].answers.filter(a => a.correct).length === 1;
+                const card = this.state.cards[cardIdx];
+                const correctAnswers = card.answers.filter(answer => answer.correct);
+                const isSingleAnswer = card && correctAnswers.length === 1;
 
                 this.update({
                     cardIdx,
