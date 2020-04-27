@@ -42,14 +42,14 @@ export async function fetchPage(path) {
     return pageMetadata;
 }
 
-export const fetchImage = async (path) => {
+export const fetchImage = async (url) => {
     return new Promise((resolve, reject) => {
         const image = new Image();
         // Workbox only caches crossorigin images.
         image.crossOrigin = "anonymous";
         image.onload = () => resolve(image.height);
         image.onerror = reject;
-        image.src = `${BACKEND_BASE_URL}${path}`;
+        image.src = url;
     });
 };
 
