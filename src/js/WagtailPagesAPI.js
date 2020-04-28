@@ -49,7 +49,7 @@ export const fetchImage = async (url) => {
         image.crossOrigin = "anonymous";
         image.onload = () => resolve(image.height);
         image.onerror = reject;
-        image.src = url;
+        image.src = `${BACKEND_BASE_URL}${url}`;
     });
 };
 
