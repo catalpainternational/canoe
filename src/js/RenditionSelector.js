@@ -9,8 +9,12 @@ export function getImagePath(id) {
 }
 
 export function getImageUrls(images) {
-    return Object.values(images).map(_getRenditionUrl);
+    return Object.values(images).map(_getRenditionUrlWithoutDomain);
 }
+
+export const _getRenditionUrlWithoutDomain = (renditions) => {
+    return `/media/${renditions[FILTER_SPEC]}`;
+};
 
 function _getRenditionUrl(renditions) {
     return `${BACKEND_BASE_URL}/media/${renditions[FILTER_SPEC]}`;
