@@ -1,0 +1,90 @@
+<CoursePromoWithLinkToNextLesson>
+    <div class="course">
+        <div class="course-header">
+            <span class="background-{props.course.color}"></span>
+            <div>
+                <a href="#{props.course.id}"> <h3>{props.course.title}</h3> </a>
+                <div>
+                    <p>{ state.courseProgressString }</p>
+                    <a href="#{props.course.id}">
+                        <p class="text-purple" translate>view all</p>
+                        <span class="arrow background-purple"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <Card
+            if="{state.nextLesson}"
+            title="{state.nextLesson.title}"
+            description="{state.nextLesson.short_description}"
+            duration="{state.nextLesson.duration}"
+            link="{state.nextLesson.id}"
+            isCompleted="{isLessonComplete(props.course, state.nextLesson)}"
+            isComingSoon="{state.nextLesson.coming_soon}"
+        >
+        </Card>
+    </div>
+    <script>
+        import Card from "RiotTags/Components/Card.riot.html";
+        import { getACoursesLessons } from "js/WagtailPagesAPI";
+        import { getNumberOfCompleteLessons } from "js/LearningStatistics";
+        import { isComplete } from "Actions/completion";
+
+        export default {
+            components: {
+                card: Card,
+            },
+
+            state: {
+                nextLesson: null,
+                courseProgressString: "",
+            },
+
+            async onMounted(props, state) {
+                const lessons = await getACoursesLessons(props.course.id);
+                const nextLesson = await this.getNextLesson(props.course, lessons);
+                const courseProgressString = await this.getCourseProgressMessage(props.course);
+
+                this.update({ nextLesson, courseProgressString });
+            },
+
+            getNextLesson(course, lessons) {
+                const lastLesson = lessons[lessons.length - 1];
+
+                const isUnfinishedAndIsntComingSoon = (lesson, course) => {
+                    return !isComplete(course.slug, lesson.slug) && !lesson.coming_soon;
+                };
+
+                let nextLesson = null;
+                for (const lesson of lessons) {
+                    if (
+                        isUnfinishedAndIsntComingSoon(lesson, course) ||
+                        lesson.id === lastLesson.id
+                    ) {
+                        nextLesson = lesson;
+                    }
+                }
+                return nextLesson;
+            },
+
+            async getCourseProgressMessage(course) {
+                // displays how many lessons are complete and how many lessons are in the current course
+                const courseSlug = course.slug;
+                const lessons = await getACoursesLessons(course.id);
+                const lessonSlugs = lessons.map((lesson) => lesson.slug);
+                const numberOfCompleteLessons = getNumberOfCompleteLessons(courseSlug, lessonSlugs);
+
+                return ngettext(
+                    "%1 / %2 lesson complete",
+                    "%1 / %2 lessons complete",
+                    numberOfCompleteLessons,
+                    lessons.length
+                );
+            },
+
+            isLessonComplete(course, lesson) {
+                return isComplete(course.slug, lesson.slug);
+            },
+        };
+    </script>
+</CoursePromoWithLinkToNextLesson>

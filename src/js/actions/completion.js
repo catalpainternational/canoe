@@ -113,6 +113,12 @@ export const countNumberOfCompleteLessons = (courseSlug, lessonSlugs) => {
     return numCompletedLessons;
 };
 
+export const isTheCourseCompleteNew = (courseSlug, lessonSlugs) => {
+    const numberOfCompleteLessons = countNumberOfCompleteLessons(courseSlug, lessonSlugs);
+    const numberOfLessons = lessonSlugs.length;
+    return numberOfCompleteLessons === numberOfLessons
+};
+
 export const isTheCourseComplete = (courseSlug, coursesLessons) => {
     const numberOfCoursesCompletions = countComplete(courseSlug);
     const numberOfCoursesLessons = coursesLessons.size || coursesLessons.length;

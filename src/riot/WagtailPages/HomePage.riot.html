@@ -4,11 +4,11 @@
         <div class="header-box">
             <div class="left-block">
                 <h3>{ greetingMessage() }</h3>
-                <h6 if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}">
-                    { continueLearningMessage() }
+                <h6 if="{state.currentCourse}">
+                    { state.messageAboveContinueButton }
                 </h6>
                 <ContinueLearningButton
-                    if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
+                    if="{state.currentCourse}"
                     class="profile header-text"
                     background="home-background-image"
                 ></ContinueLearningButton>
@@ -18,96 +18,80 @@
     </div>
     <div class="content-wrapper">
         <h5 class="section-title" translate>Your courses</h5>
-        <div class="course" each="{course in props.wagtailPage.courses}">
-            <div class="course-header">
-                <span class="background-{course.data.colour}"></span>
-                <div>
-                    <a href="#{course.data.id}"> <h3>{course.data.title}</h3> </a>
-                    <div>
-                        <p>{ courseProgressMessage(course) }</p>
-                        <a href="#{course.data.id}">
-                            <p class="text-purple" translate>view all</p>
-                            <span class="arrow background-purple"></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <Card
-                if="{state.nextLesson[course.data.id]}"
-                title="{state.nextLesson[course.data.id].title}"
-                description="{state.nextLesson[course.data.id].description}"
-                duration="{state.nextLesson[course.data.id].duration}"
-                link="{state.nextLesson[course.data.id].id}"
-                isCompleted="{isLessonComplete(course, state.nextLesson[course.data.id])}"
-                isComingSoon="{state.nextLesson[course.data.id].coming_soon}"
-            >
-            </Card>
-        </div>
+        <CoursePromoWithLinkToNextLesson
+            each="{course in state.courses}"
+            course="{course}"
+        ></CoursePromoWithLinkToNextLesson>
     </div>
 
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
-        import Card from "RiotTags/Components/Card.riot.html";
+        import CoursePromoWithLinkToNextLesson from "RiotTags/Components/CoursePromoWithLinkToNextLesson.riot.html";
 
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons } from "js/utilities";
         import {
             getNumberOfCompletedLessons,
-            getNumberOfCompletedLessonsFor,
+            getNumberOfCompleteLessons,
         } from "js/LearningStatistics";
         import {
             isComplete,
             getMostRecentCompletion,
-            isTheCourseComplete,
+            isTheCourseCompleteNew,
         } from "Actions/completion";
-        import { getNumberOfCompleteLessons } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
+        import { getCourseById, getACoursesLessons } from "js/WagtailPagesAPI";
 
         export default {
             state: {
-                nextLesson: {},
                 courses: [],
                 currentCourse: null,
+                messageAboveContinueButton: "",
             },
 
             components: {
-                card: Card,
                 continuelearningbutton: ContinueLearningButton,
+                coursepromowithlinktonextlesson: CoursePromoWithLinkToNextLesson,
             },
 
-            onBeforeMount(props, state) {
-                const courses = props.wagtailPage.courses;
-                const lastWorkedOnCourse = this.getCurrentCourse(courses);
-                courses.forEach((course) => {
-                    this.getNextLesson(course);
+            onMounted(props, state) {
+                this.renderHomePage(props, state);
+            },
+
+            async renderHomePage(props, state) {
+                const courseIds = props.wagtailPage.courseIds;
+                const courses = [];
+                for (const courseId of courseIds) {
+                    courses.push(await getCourseById(courseId));
+                }
+
+                const lastWorkedOnCourse = await this.getCurrentCourse(courses);
+                let messageAboveContinueButton = "";
+                if (lastWorkedOnCourse) {
+                    messageAboveContinueButton = await this.getContinueLearningMessage(
+                        lastWorkedOnCourse
+                    );
+                }
+
+                this.update({
+                    courses,
+                    currentCourse: lastWorkedOnCourse,
+                    messageAboveContinueButton,
                 });
-
-                this.state.courses = courses;
-                this.state.currentCourse = lastWorkedOnCourse;
             },
 
-            continueLearningMessage() {
-                return ngettext(
+            async getContinueLearningMessage(currentCourse) {
+                const lessons = await getACoursesLessons(currentCourse.id);
+                const lessonSlugs = lessons.map((lesson) => lesson.slug);
+                const numberOfLessons = lessons.length;
+
+                const messageAboveContinueButton = ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
-                    this.state.currentCourse.data.lessons_count -
-                        getNumberOfCompletedLessonsFor(this.state.currentCourse),
-                    this.state.currentCourse.data.title
+                    numberOfLessons - getNumberOfCompleteLessons(currentCourse.slug, lessonSlugs),
+                    currentCourse.title
                 );
-            },
-
-            courseProgressMessage(course) {
-                // displays how many lessons are complete and how many lessons are in the current course
-                const courseSlug = course.data.slug;
-                const lessonSlugs = course.lessons.map((lesson) => lesson.slug);
-                const numberOfCompleteLessons = getNumberOfCompleteLessons(courseSlug, lessonSlugs);
-
-                return ngettext(
-                    "%1 / %2 lesson complete",
-                    "%1 / %2 lessons complete",
-                    numberOfCompleteLessons,
-                    course.data.lessons_count
-                );
+                return messageAboveContinueButton;
             },
 
             greetingMessage() {
@@ -115,34 +99,32 @@
                 return gettext("Hi %1", getUsername());
             },
 
-            getCurrentCourse(courses) {
+            async getCurrentCourse(courses) {
                 const lastCompletion = getMostRecentCompletion();
                 if (lastCompletion === null) {
                     return null;
                 }
+
                 const lastWorkedOnCourse = courses.find(
-                    (course) => course.data.slug === lastCompletion.courseSlug
+                    (course) => course.slug === lastCompletion.courseSlug
                 );
-                return lastWorkedOnCourse;
-            },
 
-            getNextLesson(course) {
-                const lessons = course.lessons;
-                const lastLesson = lessons[lessons.length - 1];
-
-                const isUnfinishedAndIsntComingSoon = (lesson, course) => {
-                    return !isComplete(course.data.slug, lesson.slug) && !lesson.coming_soon;
-                };
-
-                for (const lesson of lessons) {
-                    if (
-                        isUnfinishedAndIsntComingSoon(lesson, course) ||
-                        lesson.id === lastLesson.id
-                    ) {
-                        this.state.nextLesson[course.data.id] = lesson;
-                        return true;
-                    }
+                if (!lastWorkedOnCourse) {
+                    return null;
                 }
+
+                const andItsLessons = await getACoursesLessons(lastWorkedOnCourse.id);
+
+                const isCourseComplete = this.isCurrentCourseComplete(
+                    lastWorkedOnCourse,
+                    andItsLessons
+                );
+
+                if (isCourseComplete) {
+                    return null;
+                }
+
+                return lastWorkedOnCourse;
             },
 
             getPercentOfLessonsCompleted() {
@@ -153,12 +135,9 @@
                 return Math.round(percentage) || 0;
             },
 
-            isCurrentCourseInProgress(aCourse) {
-                return !isTheCourseComplete(aCourse.data.slug, aCourse.lessons);
-            },
-
-            isLessonComplete(course, lesson) {
-                return isComplete(course.data.slug, lesson.slug);
+            isCurrentCourseComplete(aCourse, lessons) {
+                const lessonSlugs = lessons.map((lesson) => lesson.slug);
+                return isTheCourseCompleteNew(aCourse.slug, lessonSlugs);
             },
         };
     </script>

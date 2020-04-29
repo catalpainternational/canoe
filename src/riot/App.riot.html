@@ -167,7 +167,7 @@
         };
 
         function getWagtailPageModelName(wagtailPage) {
-            const type = wagtailPage.meta.type;
+            const type = wagtailPage.type || wagtailPage.meta.type;
             return type.substring(type.lastIndexOf(".") + 1);
         }
     </script>

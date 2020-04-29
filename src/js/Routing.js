@@ -1,12 +1,17 @@
-import { fetchPage, getOrFetchWagtailPage, getOrFetchManifest } from "js/WagtailPagesAPI.js";
+import {
+    fetchPage,
+    getOrFetchWagtailPage,
+    getOrFetchManifest,
+    getHomePage,
+} from "js/WagtailPagesAPI.js";
 
 const IS_SETTINGS_NOTIFICATIONS_OR_PROFILE = /#([A-Za-z]+)/;
 const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
 const IS_PAGE_PREVIEW = /^\?(.+)/;
 
-const getPreviewPageUrl = queryString => {
+const getPreviewPageUrl = (queryString) => {
     const params = {};
-    queryString.replace(/([^=&]+)=([^&]*)/g, function(m, key, value) {
+    queryString.replace(/([^=&]+)=([^&]*)/g, function (m, key, value) {
         params[decodeURIComponent(key)] = decodeURIComponent(value);
     });
     const contentType = encodeURIComponent(params["content_type"]);
@@ -37,12 +42,11 @@ export const getPage = async () => {
         const pageType = appPageMatch[1];
         page = {
             meta: {
-                type: pageType
-            }
+                type: pageType,
+            },
         };
     } else {
-        pageUrl = manifest.home;
-        page = await getOrFetchWagtailPage(pageUrl);
+        page = await getHomePage();
     }
 
     return page;

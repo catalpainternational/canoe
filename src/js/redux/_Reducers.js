@@ -44,15 +44,18 @@ const addHome = (state = {}, action) => {
         case ADDED_HOME_PAGE:
             const home = action.home;
             const newHome = {
-                [home.id]: {
+                tet: {
+                    id: home.id,
+                    type: home.meta.type,
                     title: home.title,
                     slug: home.meta.slug,
                     body: home.body,
-                    courseIds: home.courses.map((course) => course.id),
+                    courseIds: home.courses.map((course) => course.data.id),
                     parentId: home.meta.parent,
                 },
             };
-            return newHome;
+            const nextState = Object.assign({}, state, newHome);
+            return nextState;
         default:
             return state;
     }
@@ -64,9 +67,11 @@ const addCourse = (state = {}, action) => {
             const course = action.course;
             const newCourse = {
                 [course.id]: {
+                    id: course.id,
+                    type: course.meta.type,
                     title: course.title,
                     slug: course.data.slug,
-                    color: course.data.color,
+                    color: course.data.colour,
                     icon: course.data.icon,
                     parentId: course.meta.parent.id,
                     lessonIds: course.lessons.map((lesson) => lesson.id),
@@ -85,6 +90,8 @@ const addLesson = (state = {}, action) => {
             const lesson = action.lesson;
             const newLesson = {
                 [lesson.id]: {
+                    id: lesson.id,
+                    type: lesson.meta.type,
                     title: lesson.title,
                     slug: lesson.data.slug,
                     short_description: lesson.data.description,
