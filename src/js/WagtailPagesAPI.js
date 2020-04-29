@@ -5,6 +5,7 @@ import {
     getWagtailPageFromStore,
     getManifestFromStore,
     storeManifest,
+    getHome,
     getCourse,
     getLesson,
 } from "ReduxImpl/Store";
@@ -83,6 +84,18 @@ const _getOrFetchWagtailPageById = async (pageId) => {
     const manifest = await getOrFetchManifest();
     const pagePath = manifest.pages[pageId];
     return getOrFetchWagtailPage(pagePath);
+};
+
+const _ensureHomeExists = async () => {
+    const manifest = await getOrFetchManifest();
+    const home = await getOrFetchWagtailPage(manifest.home);
+};
+
+export const getHomePage = async () => {
+    await _ensureHomeExists();
+
+    const home = getHome();
+    return home;
 };
 
 export const getCourseById = async (courseId) => {

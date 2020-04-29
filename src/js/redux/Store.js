@@ -47,7 +47,7 @@ export const changeLanguage = (language) => {
     store.dispatch({ type: LANGUAGE_CHANGE, language: language });
 };
 
-export const serviceWorkerEvent = event_type => {
+export const serviceWorkerEvent = (event_type) => {
     store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: event_type });
 };
 
@@ -75,6 +75,17 @@ export const isBrowserSupported = () => {
     return store.getState().isBrowserSupported;
 };
 
+export const getHome = () => {
+    const language = getLanguage();
+    let home = null;
+    if (language === "tet") {
+        home = store.getState().home.tet;
+    } else {
+        home = store.getState().home.tet;
+    }
+    return home;
+};
+
 export const getCourse = (courseId) => {
     const course = store.getState().courses[courseId];
     return course;
@@ -84,4 +95,3 @@ export const getLesson = (lessonId) => {
     const lesson = store.getState().lessons[lessonId];
     return lesson;
 };
-
