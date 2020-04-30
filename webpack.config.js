@@ -133,6 +133,8 @@ module.exports = (env) => {
             }),
             new HtmlWebpackInlineSVGPlugin({runPreEmit: true}),
             new WebpackPwaManifest({
+                inject: true,
+                ios: true,
                 name: projectConfiguration.SITE_NAME,
                 short_name: projectConfiguration.SITE_SHORT_NAME,
                 description: projectConfiguration.SITE_DESCRIPTION,
