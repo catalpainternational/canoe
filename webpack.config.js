@@ -133,26 +133,29 @@ module.exports = (env) => {
             }),
             new HtmlWebpackInlineSVGPlugin({runPreEmit: true}),
             new WebpackPwaManifest({
+                inject: true,
+                ios: true,
                 name: projectConfiguration.SITE_NAME,
                 short_name: projectConfiguration.SITE_SHORT_NAME,
                 description: projectConfiguration.SITE_DESCRIPTION,
                 background_color: projectConfiguration.BACKGROUND_COLOR,
                 icons: [
-                    /*{
+                    {
                       src: projectConfiguration.FAVICON_PATH,
-                      sizes: [120, 152, 167, 180, 1024],
-                      destination: path.join('icons', 'ios'),
-                      ios: true
+                      sizes: [120],
+                      destination: path.join("icons", "ios"),
+                      ios: true,
+                      manifest: false
                     },
                     {
                       src: projectConfiguration.FAVICON_PATH,
-                      size: 1024,
-                      destination: path.join('icons', 'ios'),
-                      ios: 'startup'
-                    },*/
+                      size: [120],
+                      destination: path.join("icons", "ios"),
+                      ios: "startup"
+                    },
                     {
                       src: projectConfiguration.FAVICON_PATH,
-                      sizes: [36, 48, 72, 96, 144, 192, 512],
+                      sizes: [96],
                       destination: path.join("icons", "android"),
                     }
                 ]
