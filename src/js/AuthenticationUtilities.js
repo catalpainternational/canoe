@@ -65,7 +65,11 @@ export const login = async usernameAndPassword => {
 
     const { token, username, userId, groups } = response;
 
-    setCookie(JWT_TOKEN_STORAGE_KEY, token, ["secure"], {expires: "Fri, 31 Dec 9999 23:59:59 GMT"});
+    // Browsers refuse to set secure cookies from non https locations
+    setCookie(JWT_TOKEN_STORAGE_KEY, token,
+        window.location.protocol === "https:" ? ["secure"] : [],
+        {expires: "Fri, 31 Dec 9999 23:59:59 GMT", samesite: "strict"}
+    );
     localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
     localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
