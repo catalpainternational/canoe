@@ -165,6 +165,10 @@
     max-width: $tablet;
 
     background-color: $white;
+
+    @media only screen and (min-width: $tablet-plus) {
+        margin: auto;
+    }
 }
 
 .notification-card {
