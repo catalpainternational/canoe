@@ -32,8 +32,12 @@ div.content-wrapper {
     padding-right: 30px;
     padding-left: 30px;
     background-color: $tan;
-    max-width: 40em;
-    margin: auto 10px;
+    max-width: $tablet;
+    margin: auto;
+
+    @media only screen and (max-width: $tablet) {
+        margin: auto 10px;
+    }
 }
 
 .notifications,
