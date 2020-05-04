@@ -6,8 +6,17 @@ const USER_ID_STORAGE_KEY = "userId";
 const JWT_TOKEN_STORAGE_KEY = "token";
 const USER_GROUPS_STORAGE_KEY = "userGroups";
 
-const setCookie = (name, value) => {
-    document.cookie = `${name}=${value};`;
+const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
+    // sets name=value cookie
+    // sets keyOnlyAttributes provided eg ['secure', 'samesite']
+    // sets value attributes provided eg {expires:'Fri, 31 Dec 9999 23:59:59 GMT'}
+    document.cookie = Object.entries(attributes).reduce(
+        (cookieString, keyValue) => `${cookieString};${keyValue[0]}=${keyValue[1]}`,
+        keyOnlyAttributes.reduce(
+            (cookieString, attribute) => `${cookieString};${attribute}`,
+            `${name}=${value}`
+        )
+    );
 };
 
 const getCookie = name => {
@@ -56,7 +65,11 @@ export const login = async usernameAndPassword => {
 
     const { token, username, userId, groups } = response;
 
-    setCookie(JWT_TOKEN_STORAGE_KEY, token);
+    // Browsers refuse to set secure cookies from non https locations
+    setCookie(JWT_TOKEN_STORAGE_KEY, token,
+        window.location.protocol === "https:" ? ["secure"] : [],
+        {expires: "Fri, 31 Dec 9999 23:59:59 GMT", samesite: "strict"}
+    );
     localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
     localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);

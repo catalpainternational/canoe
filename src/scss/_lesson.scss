@@ -210,12 +210,23 @@ LessonPage .description {
     }
 }
 
+LessonComplete, LessonModuleComplete, LessonFeedback {
+    LessonFrame {
+        .frame-background {
+            min-height: auto;
+        }
+
+        .card-frame {
+            min-height: auto;
+        }
+    }
+}
+
 LessonFrame {
     .frame-background {
         height: calc(100vh - #{$top-menu-height-no-footer});
         margin-top: -#{$top-menu-height};
         padding-top: calc(#{$top-menu-height} - 10px);
-        padding-bottom: $bottom-menu-height;
     }
 
     .card-container {
@@ -353,7 +364,33 @@ LessonContent div.content-wrapper {
     display: flex;
 }
 
-LessonTest {
+LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
+    .answer {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        h4 {
+            margin: 0 0 1.5em 0;
+            font-weight: 100;
+            font-size: 1em;
+            color: $gray-3;
+        }
+        
+        button {
+            width: 90px;
+            align-self: center;
+        }
+
+        .answers-block {
+            flex: 1;
+        }
+
+        .bold {
+            font-weight: 650;
+        }
+    }
+
     .test {
         overflow: auto;
         margin-top: -#{$top-menu-height};
@@ -364,12 +401,20 @@ LessonTest {
             margin-bottom: 1rem;
         }
 
+        h3 {
+            margin-bottom: 0.3em;
+        }
+
+        button {
+            flex: end;
+        }
+
         ol {
             flex: 1;
 
             li {
                 flex-direction: column;
-                margin-bottom: 10px;
+                margin-bottom: 15px;
                 display: flex;
 
                 & > div {
@@ -412,6 +457,31 @@ LessonTest {
                         top: 0;
                     }
                 }
+
+                .pendingAnswer, .success, .warning {
+                    height: 15px;
+                    width: 18px;
+                    margin-right: 5px;
+                    display: inline-block;
+                    position: absolute;
+                    margin-left: 4px;
+                }
+
+                .pendingAnswer {
+                    background-color: $blue-1;
+                    border-radius: 10px;
+                }
+
+                .checkbox {
+                    content: ''; 
+                    box-sizing: border-box;
+                    height: 25px;
+                    width: 25px;
+                    border: 1px solid $gray-5;
+                    border-radius: 3px;
+                    margin-right: 15px;
+                    flex: none;
+                }
             }
 
             li:hover {
@@ -444,7 +514,6 @@ LessonTest {
         }
 
         .btn-primary {
-            min-width: 90px;
             font-size: 12px;
         }
 
@@ -456,8 +525,8 @@ LessonTest {
         }
     }
 
-    .feedback-modal {
-        position: absolute;
+    .popup-modal {
+        position: fixed;
         bottom: 0px;
         background-color: white;
         width: 100%;
@@ -465,23 +534,37 @@ LessonTest {
         height: 300px;
         border-radius: 30px 30px 0px 0px;
         box-shadow: 0px 0px 10px 5px $gray-3;
-        display: none;
+        animation-duration: 0.6s;
+        animation-name: slideModal;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+            
+        & > div {
+            flex-direction: row;
+            align-items: start;
+            display: flex;
+        }
 
         h2 {
-            margin-top: 40px;
+            margin-top: 30px;
             margin-bottom: 0;
+        }
+
+        button {
+            margin-top: 15px;
         }
 
         p {
             margin-top: 0;
-            margin-bottom: 40px;
+            margin-bottom: 15px;
         }
-    }
 
-    .showElement.feedback-modal {
-        display: unset;
-        animation-duration: 0.6s;
-        animation-name: slideModal;
+        .success, .warning {
+            margin-right: 5px;
+            display: flex;
+            flex: none;
+        }
     }
 
     @keyframes slideModal {
@@ -543,6 +626,11 @@ LessonFeedback {
         flex-flow: row nowrap;
         justify-content: space-evenly;
         margin-bottom: 3em;
+
+        @media only screen and (max-width: $sm-phone) {
+            flex-flow: column;
+            align-items: center;
+        }
     }
 
     .feedback-icon {
@@ -615,6 +703,10 @@ LessonFeedback {
 
         &:hover {
             cursor: pointer;
+        }
+
+        @media only screen and (max-width: $sm-phone) {
+            margin: 10px;
         }
     }
 
