@@ -139,6 +139,8 @@ module.exports = (env) => {
                 short_name: projectConfiguration.SITE_SHORT_NAME,
                 description: projectConfiguration.SITE_DESCRIPTION,
                 background_color: projectConfiguration.BACKGROUND_COLOR,
+                theme_color: projectConfiguration.BACKGROUND_COLOR,
+                start_url: "/",
                 icons: [
                     {
                       src: projectConfiguration.FAVICON_PATH,
@@ -155,7 +157,7 @@ module.exports = (env) => {
                     },
                     {
                       src: projectConfiguration.FAVICON_PATH,
-                      sizes: [96],
+                      sizes: [512],
                       destination: path.join("icons", "android"),
                     }
                 ]
