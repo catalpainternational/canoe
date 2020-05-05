@@ -40,7 +40,11 @@
             Please wait...
         </div>
         <div id="service-worker-notsupported" hidden>
-            Your browser does not support serviceworkers
+            Please update your browser
+        </div>
+        <div id="service-worker-failed" onclick="location.reload()" hidden>
+            Sorry, please click to try again<br />
+            Deskulpa, favor koko fali
         </div>
     </div>
     <App>
@@ -49,8 +53,9 @@
         html, body {
             height: 100%;
         }
-        #service-worker-loading, #service-worker-notsupported {
+        #preapp-messages div {
             padding-top: 100px;
+            height: 100%;
         }
         #preapp-messages {
             height: 100%;
