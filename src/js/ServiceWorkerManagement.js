@@ -1,13 +1,8 @@
 /* ServiceWorkerManagement module
- *
- *
  */
 import { Workbox } from "workbox-window";
 import {
-    setServiceWorkerState,
     saySWIsControlling,
-    saySWIsRedundant,
-    saySWIsWaitingForUpdate,
     saySWIsNotSupported,
 } from "ReduxImpl/Store";
 import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
