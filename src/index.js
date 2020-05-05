@@ -1,33 +1,33 @@
 import "babel-polyfill";
 
 import { store } from "ReduxImpl/Store";
-import { initializeServiceWorker } from "js/ServiceWorkerManagement"
+import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 
 let storeState = store.getState();
 
-store.subscribe( () => {
+store.subscribe(() => {
     const newStoreState = store.getState();
-    if(newStoreState.serviceWorker === storeState.serviceWorker) {
+    if (newStoreState.serviceWorkerState === storeState.serviceWorkerState) {
         return;
     }
 
-    switch(newStoreState.serviceWorker) {
+    switch (newStoreState.serviceWorkerState) {
         case "install-failed":
             // show a retry message
             document.querySelector("#service-worker-loading").hidden = true;
             document.querySelector("#service-worker-notsupported").hidden = true;
             document.querySelector("#service-worker-failed").hidden = false;
             break;
-        case "notsupported":
+        case "notSupported":
             document.querySelector("#service-worker-loading").hidden = true;
             document.querySelector("#service-worker-notsupported").hidden = false;
             break;
         case "controlling":
             // hide the loading splash
             document.querySelector("#preapp-messages").hidden = true;
-            import(/* webpackChunkName: "app" */ "./app.js")
+            import(/* webpackChunkName: "app" */ "./app.js");
             break;
-        case "update-waiting":
+        case "waitingForUpdate":
             // TODO should we reload? it might interrupt something
             // should we prompt the user?
             window.location.reload(true);

@@ -47,7 +47,23 @@ export const changeLanguage = (language) => {
     store.dispatch({ type: LANGUAGE_CHANGE, language: language });
 };
 
-export const serviceWorkerEvent = event_type => {
+export const saySWIsControlling = () => {
+    store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: "controlling" });
+};
+
+export const saySWIsRedundant = () => {
+    store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: "redundant" });
+};
+
+export const saySWIsWaitingForUpdate = () => {
+    store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: "waitingForUpdate" });
+};
+
+export const saySWIsNotSupported = () => {
+    store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: "notSupported" });
+};
+
+export const setServiceWorkerState = event_type => {
     store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: event_type });
 };
 

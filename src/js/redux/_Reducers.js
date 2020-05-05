@@ -123,7 +123,7 @@ const signalBrowserSupport = (state = false, action) => {
     }
 };
 
-const serviceWorker = (state = "unknown", action) => {
+const setServiceWorkerState = (state = "unknown", action) => {
     switch (action.type) {
         case SERVICE_WORKER_EVENT:
             switch (action.event_type) {
@@ -131,10 +131,10 @@ const serviceWorker = (state = "unknown", action) => {
                     return "controlling";
                 case "redundant":
                     return state === "controlling" ? "update-waiting" : "install-failed"
-                case "update-waiting":
-                    return "update-waiting";
-                case "notsupported":
-                    return "notsupported";
+                case "waitingForUpdate":
+                    return "waitingForUpdate";
+                case "notSupported":
+                    return "notSupported";
                 default:
                     return "unknown";
             }
@@ -153,5 +153,5 @@ export const reducers = combineReducers({
     lessons: addLesson,
     language: changeLanguage,
     isBrowserSupported: signalBrowserSupport,
-    serviceWorker: serviceWorker,
+    serviceWorkerState: setServiceWorkerState,
 });

@@ -1,74 +1,73 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title><%= htmlWebpackPlugin.options.title %></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <% if (htmlWebpackPlugin.options.include_ga) { %>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.ga_tag%>"
+        ></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
 
-<head>
-    <meta charset="utf-8">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <% if (htmlWebpackPlugin.options.include_ga) { %>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<%= htmlWebpackPlugin.options.ga_tag%>"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag(
-            'config',
-            '<%= htmlWebpackPlugin.options.ga_tag %>',
-            {
+            gtag("config", "<%= htmlWebpackPlugin.options.ga_tag %>", {
                 send_page_view: false,
                 custom_map: {
-                    dimension1: 'User Id',
-                    dimension2: 'Groups',
-                    dimension3: 'Lesson',
-                    dimension4: 'Question',
-                    dimension5: 'Answer',
-                    metric1: 'Is a Correct Answer',
-                }
+                    dimension1: "User Id",
+                    dimension2: "Groups",
+                    dimension3: "Lesson",
+                    dimension4: "Question",
+                    dimension5: "Answer",
+                    metric1: "Is a Correct Answer",
+                },
+            });
+        </script>
+        <% } %>
+    </head>
+
+    <body>
+        <div id="preapp-messages">
+            <img inline src="src/img/site_logo_white.svg" />
+            <div id="service-worker-loading">
+                Favor hein...<br />
+                Please wait...
+            </div>
+            <div id="service-worker-notsupported" hidden>
+                Please update your browser
+            </div>
+            <div id="service-worker-failed" onclick="location.reload()" hidden>
+                Sorry, please click to try again<br />
+                Deskulpa, favor koko fali
+            </div>
+        </div>
+        <App> </App>
+        <style>
+            html,
+            body {
+                height: 100%;
             }
-        );
-    </script>
-    <% } %>
-</head>
-
-<body>
-    <div id="preapp-messages">
-        <img inline src="src/img/site_logo_white.svg">
-        <div id="service-worker-loading">
-            Favor hein...<br />
-            Please wait...
-        </div>
-        <div id="service-worker-notsupported" hidden>
-            Please update your browser
-        </div>
-        <div id="service-worker-failed" onclick="location.reload()" hidden>
-            Sorry, please click to try again<br />
-            Deskulpa, favor koko fali
-        </div>
-    </div>
-    <App>
-    </App>
-    <style>
-        html, body {
-            height: 100%;
-        }
-        #preapp-messages div {
-            padding-top: 100px;
-            height: 100%;
-        }
-        #preapp-messages {
-            height: 100%;
-            margin: -8px;
-            width: auto;
-            background-color: #13BF97;
-            padding: 30px;
-            font-family: Verdana;
-            font-size: xx-large;
-            color: white;
-            text-align: center;
-        }
-    </style>
-</body>
-
+            #preapp-messages div {
+                padding-top: 100px;
+                height: 100%;
+            }
+            #preapp-messages {
+                height: 100%;
+                margin: -8px;
+                width: auto;
+                background-color: #13bf97;
+                padding: 30px;
+                font-family: Verdana;
+                font-size: xx-large;
+                color: white;
+                text-align: center;
+            }
+        </style>
+    </body>
 </html>
