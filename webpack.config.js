@@ -8,6 +8,10 @@ const { InjectManifest } = require("workbox-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
 const WebpackPwaManifest = require("webpack-pwa-manifest");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+
 
 // default environment configuration
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
@@ -40,6 +44,12 @@ module.exports = (env) => {
         context: __dirname,
         mode: "development",
         devtool: "inline-source-map",
+        optimization: {
+            minimizer: [
+                new TerserPlugin(),
+                new OptimizeCSSAssetsPlugin({}),
+            ],
+        },
         entry: {
             canoe: path.resolve(__dirname, "src", "index.js"),
         },
@@ -76,8 +86,9 @@ module.exports = (env) => {
                 {
                     test: /\.s[ac]ss$/i,
                     use: [
-                        // Creates `style` nodes from JS strings
-                        "style-loader",
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                        },
                         // Translates CSS into CommonJS
                         "css-loader",
                         // Compiles Sass to CSS
@@ -168,6 +179,7 @@ module.exports = (env) => {
                 gettext: ["Translation", "gettext"],
                 ngettext: ["Translation", "ngettext"],
             }),
+            new MiniCssExtractPlugin(),
         ],
     };
 
