@@ -16,14 +16,11 @@ export async function initializeServiceWorker() {
 
     const wb = new Workbox("/sw.js");
 
-    wb.addEventListener("externalactivated", () => {
-        serviceWorkerEvent("externalactivated")
-    });
-
-    wb.register();
-
-    navigator.serviceWorker.ready.then(sw=>{
-        serviceWorkerEvent("installed")
+    wb.controlling.then(sw => {
+        // This happens:
+        // a fresh first time visit once the sw is in control
+        // a refresh when there is an active sw to take control
+        serviceWorkerEvent("controlling")
 
         function checkForNewVersion() {
             console.log("checking for new version");
@@ -34,6 +31,21 @@ export async function initializeServiceWorker() {
 
         const swUpdatePoller = window.setInterval(checkForNewVersion, SW_UPDATE_INTERVAL);
     });
+
+
+    wb.addEventListener("externalinstalled", (e) => {
+        // workbox detects a new service worker installed ready for activation ( sometimes )
+        serviceWorkerEvent("update-waiting")
+    });
+
+    wb.addEventListener("redundant", (e) => {
+        // This happens:
+        // when service worker fails to install
+        // when a new service worker takes over control ( sometimes )
+        serviceWorkerEvent("redundant")
+    });
+
+    wb.register();
 
     window.addEventListener("beforeinstallprompt", async (e) => {
         e.preventDefault();

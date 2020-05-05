@@ -162,9 +162,13 @@
 
     overflow-y: auto;
     min-height: calc(100vh - (#{$bottom-menu-height-no-footer} * 6));
-    max-width: 40em;
+    max-width: $tablet;
 
     background-color: $white;
+
+    @media only screen and (min-width: $tablet-plus) {
+        margin: auto;
+    }
 }
 
 .notification-card {
