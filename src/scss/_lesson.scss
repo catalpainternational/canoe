@@ -329,6 +329,10 @@ LessonContent .content {
         width: 100%;
     }
 
+    p.error-message {
+        color: red;
+    }
+
     .bottom-buttons {
         display: flex;
         justify-content: space-between;
