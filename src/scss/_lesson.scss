@@ -221,6 +221,7 @@ LessonFrame {
     }
 
     .card-container {
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
@@ -233,6 +234,7 @@ LessonFrame {
         margin: 0 10px 1.5em;
         padding: 30px;
 
+        width: 100%;
         max-width: $tablet;
         background-color: $white;
         border-radius: 30px;
@@ -720,12 +722,8 @@ LessonComplete {
 
     .background {
         position: absolute;
-    }
-
-    .overlay {
-        margin-top: 20%;
-        margin-left: auto;
-        margin-right: auto;
+        top: -1em;
+        left: -1em;
     }
 
     .complete {
