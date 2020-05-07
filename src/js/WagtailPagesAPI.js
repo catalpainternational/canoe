@@ -89,7 +89,7 @@ const _getOrFetchWagtailPageById = async (pageId) => {
 const _ensureHomeExists = async () => {
     const manifest = await getOrFetchManifest();
     const homePagePaths = getHomePathsInManifest(manifest);
-    for (const homePagePath in homePagePaths) {
+    for (const homePagePath of homePagePaths) {
         await getOrFetchWagtailPage(homePagePath);
     }
 };
