@@ -82,7 +82,7 @@ export const getHome = () => {
     const language = getLanguage();
     let home = null;
     if (language === "tet") {
-        home = store.getState().home.en;
+        home = store.getState().home.tet;
     } else {
         home = store.getState().home.en;
     }
