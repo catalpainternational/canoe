@@ -134,13 +134,13 @@ LessonPage .content-wrapper {
     .sticky {
         position: fixed;
         top: 0;
-        border: 1px solid #C9D6DE;
+        border: 1px solid #c9d6de;
         width: 100%;
         background-color: #f5f4f0;
         z-index: 1;
         left: 0;
         padding-left: 55px;
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
     }
 
     .sticky.lesson-header {
@@ -210,56 +210,43 @@ LessonPage .description {
     }
 }
 
-LessonComplete, LessonModuleComplete, LessonFeedback {
-    LessonFrame {
-        .frame-background {
-            min-height: auto;
-        }
-
-        .card-frame {
-            min-height: auto;
-        }
-    }
-}
-
 LessonFrame {
+    $screen-height-minus-top-menu: calc(100vh - #{$top-menu-height});
+
     .frame-background {
-        height: calc(100vh - #{$top-menu-height-no-footer});
-        margin-top: -#{$top-menu-height};
-        padding-top: calc(#{$top-menu-height} - 10px);
+        min-height: $screen-height-minus-top-menu;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: stretch;
     }
 
     .card-container {
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
         align-items: center;
+
         height: 100%;
     }
 
     .card-frame {
-        margin: 0 10px #{$bottom-menu-height-no-footer};
+        margin: 0 10px 1.5em;
         padding: 30px;
+
+        width: 100%;
+        max-width: $tablet;
+        background-color: $white;
         border-radius: 30px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
 
-        overflow-y: auto;
-        height: calc(100vh - (#{$bottom-menu-height-no-footer} * 6));
-        max-width: $tablet;
-
-        background-color: $white;
-
         @media only screen and (min-width: $tablet-plus) {
-            margin: auto;
+            margin: 0 auto 1.5em;
         }
     }
 }
 
 LessonObjective .objective {
-    height: calc(100vh - #{$top-menu-height-no-footer});//55px);
-    margin-top: -#{$top-menu-height};
-    padding-top: calc(#{$top-menu-height} - 10px);
-
     h3 {
         margin-bottom: 15px;
         margin-top: 5px;
@@ -316,8 +303,6 @@ LessonObjective .objective {
 }
 
 LessonContent .content {
-    margin-top: -#{$top-menu-height};
-    padding-top: $top-menu-height;
     padding-bottom: $bottom-menu-height-no-footer;
 
     raw {
@@ -363,34 +348,36 @@ LessonContent .content {
 }
 
 LessonContent div.content-wrapper {
-    min-height: calc(100vh - #{$top-menu-height-no-footer} - 30px - 40px - #{$bottom-menu-height-no-footer});
-    padding-bottom: 30px;
-    border-radius: 30px;
-    background-color: $gray-10;
     flex-direction: column;
     padding-top: 30px;
     display: flex;
 }
 
-LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
+LessonTest,
+TestSingleAnswer,
+TestMultipleAnswer,
+TestPopupModal {
     .answer {
+        width: 100%;
         flex: 1;
         display: flex;
         flex-direction: column;
 
         h4 {
+            align-self: start;
             margin: 0 0 1.5em 0;
             font-weight: 100;
             font-size: 1em;
             color: $gray-3;
         }
-        
+
         button {
             width: 90px;
             align-self: center;
         }
 
         .answers-block {
+            align-self: start;
             flex: 1;
         }
 
@@ -400,10 +387,9 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
     }
 
     .test {
-        overflow: auto;
-        margin-top: -#{$top-menu-height};
-        padding-top: calc(#{$top-menu-height} - 10px);
-        padding-bottom: 10px;
+        h3 {
+            align-self: start;
+        }
 
         @media only screen and (max-width: $sm-phone) {
             margin-bottom: 1rem;
@@ -418,6 +404,7 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
         }
 
         ol {
+            align-self: start;
             flex: 1;
 
             li {
@@ -466,7 +453,9 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
                     }
                 }
 
-                .pendingAnswer, .success, .warning {
+                .pendingAnswer,
+                .success,
+                .warning {
                     height: 15px;
                     width: 18px;
                     margin-right: 5px;
@@ -481,7 +470,7 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
                 }
 
                 .checkbox {
-                    content: ''; 
+                    content: "";
                     box-sizing: border-box;
                     height: 25px;
                     width: 25px;
@@ -547,7 +536,7 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
         display: flex;
         flex-direction: column;
         align-items: center;
-            
+
         & > div {
             flex-direction: row;
             align-items: start;
@@ -568,7 +557,8 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
             margin-bottom: 15px;
         }
 
-        .success, .warning {
+        .success,
+        .warning {
             margin-right: 5px;
             display: flex;
             flex: none;
@@ -586,7 +576,7 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
     }
 
     .test.showElement:after {
-        content: '';
+        content: "";
         position: fixed;
         width: 100%;
         height: 100%;
@@ -597,14 +587,6 @@ LessonTest, TestSingleAnswer, TestMultipleAnswer, TestPopupModal {
 }
 
 LessonModuleComplete {
-    .module-complete-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-        height: 100%;
-    }
-
     .body {
         text-align: center;
 
@@ -631,14 +613,9 @@ LessonModuleComplete {
 LessonFeedback {
     .feedback-buttons {
         display: flex;
-        flex-flow: row nowrap;
+        flex-flow: row wrap;
         justify-content: space-evenly;
         margin-bottom: 3em;
-
-        @media only screen and (max-width: $sm-phone) {
-            flex-flow: column;
-            align-items: center;
-        }
     }
 
     .feedback-icon {
@@ -657,6 +634,7 @@ LessonFeedback {
             color: $gray-3;
             letter-spacing: 0.8px;
             text-transform: capitalize;
+            text-align: center;
             border: none;
             padding: 0;
             font-family: "GalanoGrotesqueAlt";
@@ -688,7 +666,6 @@ LessonFeedback {
     .thank-you-container.btn-primary {
         margin-top: 2em;
     }
-
 
     button.feedback {
         height: 5.687em;
@@ -744,14 +721,9 @@ LessonComplete {
     }
 
     .background {
-        margin: -30px 0 0 -30px;
         position: absolute;
-    }
-
-    .overlay {
-        margin-top: 20%;
-        margin-left: auto;
-        margin-right: auto;
+        top: -1em;
+        left: -1em;
     }
 
     .complete {

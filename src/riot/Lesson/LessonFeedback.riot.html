@@ -1,46 +1,48 @@
 <LessonFeedback>
     <LessonFrame>
-        <div class="card-container">
-            <template if="{!state.madeFeedbackDecision}">
-                <div class="feedback-icon">
-                    <div class="sun"></div>
-                    <h2 translate>FEEDBACK</h2>
+        <template if="{!state.madeFeedbackDecision}">
+            <div class="feedback-icon">
+                <div class="sun"></div>
+                <h2 translate>FEEDBACK</h2>
+            </div>
+            <div class="feedback-container">
+                <h3 translate>Are you enjoying this lesson?</h3>
+                <div class="feedback-buttons">
+                    <button class="feedback" onclick="{clickedThisLessonIsFine}">
+                        <span class="neutral-smiley"></span>
+                    </button>
+                    <button class="feedback" onclick="{clickedThisLessonIsGood}">
+                        <span class="smiling-smiley"></span>
+                    </button>
+                    <button class="feedback" onclick="{clickedThisLessonIsGreat}">
+                        <span class="thrilled-smiley"></span>
+                    </button>
                 </div>
-                <div class="feedback-container">
-                    <h3 translate>Are you enjoying this lesson?</h3>
-                    <div class="feedback-buttons">
-                        <button class="feedback" onclick="{clickedThisLessonIsFine}">
-                            <span class="neutral-smiley"></span>
-                        </button>
-                        <button class="feedback" onclick="{clickedThisLessonIsGood}">
-                            <span class="smiling-smiley"></span>
-                        </button>
-                        <button class="feedback" onclick="{clickedThisLessonIsGreat}">
-                            <span class="thrilled-smiley"></span>
-                        </button>
-                    </div>
-                    <p translate>
-                        Let us know what you think of this lesson. We value your feedback and treat
-                        all feedback as confidential.
-                    </p>
-                </div>
-                <button class="btn-primary no-thanks" onclick="{clickedNoThanks}" translate>No thanks</button>
-            </template>
-            <template if="{state.madeFeedbackDecision}">
-                <div class="feedback-icon">
-                    <div class="sun"></div>
-                    <h2 translate>FEEDBACK</h2>
-                </div>
-                <div class="thank-you-container">
-                    <h3 translate>Thank you!</h3>
-                    <div class="smiling-smiley"></div>
-                    <p translate>
-                        We appreciate your feedback and always endeavor to improve your experience.
-                    </p>
-                </div>
-                <button class="btn-primary thank-you-container" onclick="{clickedContinue}" translate>Continue</button>
-            </template>
-        </div>
+                <p translate>
+                    Let us know what you think of this lesson. We value your feedback and treat all
+                    feedback as confidential.
+                </p>
+            </div>
+            <button class="btn-primary no-thanks" onclick="{clickedNoThanks}" translate>
+                No thanks
+            </button>
+        </template>
+        <template if="{state.madeFeedbackDecision}">
+            <div class="feedback-icon">
+                <div class="sun"></div>
+                <h2 translate>FEEDBACK</h2>
+            </div>
+            <div class="thank-you-container">
+                <h3 translate>Thank you!</h3>
+                <div class="smiling-smiley"></div>
+                <p translate>
+                    We appreciate your feedback and always endeavor to improve your experience.
+                </p>
+            </div>
+            <button class="btn-primary thank-you-container" onclick="{clickedContinue}" translate>
+                Continue
+            </button>
+        </template>
     </LessonFrame>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
@@ -49,31 +51,31 @@
 
         export default {
             components: {
-                lessonframe: LessonFrame
+                lessonframe: LessonFrame,
             },
 
             state: {
-                madeFeedbackDecision: false
+                madeFeedbackDecision: false,
             },
 
             clickedThisLessonIsFine() {
                 this.sendFeedback("bad");
                 this.update({
-                    madeFeedbackDecision: true
+                    madeFeedbackDecision: true,
                 });
             },
 
             clickedThisLessonIsGood() {
                 this.sendFeedback("fine");
                 this.update({
-                    madeFeedbackDecision: true
+                    madeFeedbackDecision: true,
                 });
             },
 
             clickedThisLessonIsGreat() {
                 this.sendFeedback("great");
                 this.update({
-                    madeFeedbackDecision: true
+                    madeFeedbackDecision: true,
                 });
             },
 
@@ -97,9 +99,9 @@
 
                 logLessonFeedback({
                     lesson,
-                    feedback
+                    feedback,
                 });
-            }
+            },
         };
     </script>
 </LessonFeedback>
