@@ -57,11 +57,12 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
+        import { getMostRecentCompletion, isTheCourseComplete } from "Actions/completion";
         import {
-            getMostRecentCompletion,
-            isTheCourseComplete,
-        } from "Actions/completion";
-        import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
+            getOrFetchManifest,
+            getOrFetchWagtailPage,
+            getHomePagePathInCurrentLanguage,
+        } from "js/WagtailPagesAPI";
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons } from "js/utilities";
         import {
@@ -119,7 +120,8 @@
 
             async renderProfilePage() {
                 const manifest = await getOrFetchManifest();
-                const homePage = await getOrFetchWagtailPage(manifest.home);
+                const homePagePath = getHomePagePathInCurrentLanguage(manifest);
+                const homePage = await getOrFetchWagtailPage(homePagePath);
                 const courses = homePage.courses;
                 const lastWorkedOnCourse = this.getCurrentCourse(courses);
 
