@@ -8,6 +8,7 @@ import {
     getHome,
     getCourse,
     getLesson,
+    getLanguage,
 } from "ReduxImpl/Store";
 
 async function token_authed_fetch(url) {
@@ -92,6 +93,12 @@ const _ensureHomeExists = async () => {
     for (const homePagePath of homePagePaths) {
         await getOrFetchWagtailPage(homePagePath);
     }
+};
+
+export const getHomePagePathInCurrentLanguage = (manifest) => {
+    const { home: homes } = manifest;
+    const currentLanguage = getLanguage();
+    return homes[currentLanguage];
 };
 
 export const getHomePathsInManifest = (manifest) => {

@@ -2,7 +2,7 @@ import {
     fetchPage,
     getOrFetchWagtailPage,
     getOrFetchManifest,
-    getHomePage,
+    getHomePagePathInCurrentLanguage,
 } from "js/WagtailPagesAPI.js";
 
 const IS_SETTINGS_NOTIFICATIONS_OR_PROFILE = /#([A-Za-z]+)/;
@@ -46,7 +46,8 @@ export const getPage = async () => {
             },
         };
     } else {
-        page = await getHomePage();
+        const pageUrl = getHomePagePathInCurrentLanguage(manifest);
+        page = await getOrFetchWagtailPage(pageUrl);
     }
 
     return page;
