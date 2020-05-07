@@ -43,8 +43,16 @@ const addHome = (state = {}, action) => {
     switch (action.type) {
         case ADDED_HOME_PAGE:
             const home = action.home;
+
+            let languageCode = null;
+            if (home.meta.slug.includes("tdt")) {
+                languageCode = "tet";
+            } else {
+                languageCode = "en";
+            }
+
             const newHome = {
-                tet: {
+                [languageCode]: {
                     id: home.id,
                     type: home.meta.type,
                     title: home.title,
@@ -137,7 +145,7 @@ const serviceWorker = (state = "unknown", action) => {
                 case "controlling":
                     return "controlling";
                 case "redundant":
-                    return state === "controlling" ? "update-waiting" : "install-failed"
+                    return state === "controlling" ? "update-waiting" : "install-failed";
                 case "update-waiting":
                     return "update-waiting";
                 case "notsupported":
@@ -148,8 +156,7 @@ const serviceWorker = (state = "unknown", action) => {
         default:
             return state;
     }
-}
-
+};
 
 export const reducers = combineReducers({
     manifest: updateManifest,

@@ -29,6 +29,9 @@ export const storeWagtailPage = (wagtailPage) => {
         case "elearning_content.LessonPage":
             store.dispatch({ type: ADDED_LESSON_PAGE, lesson: wagtailPage });
             break;
+        case "wagtailtrans.TranslatableSiteRootPage":
+            // Ignore the i18nized site's root.
+            return;
         default:
             throw new Error(`${wagtailPage.meta.type} is an unreckognized page type.`);
     }
@@ -79,9 +82,9 @@ export const getHome = () => {
     const language = getLanguage();
     let home = null;
     if (language === "tet") {
-        home = store.getState().home.tet;
+        home = store.getState().home.en;
     } else {
-        home = store.getState().home.tet;
+        home = store.getState().home.en;
     }
     return home;
 };
