@@ -49,10 +49,8 @@ export class SiteDownloader {
     async requestTheSitesPagesAndImages() {
         const manifest = await getOrFetchManifest();
 
-        const manifestsPageUrls = new Set([
-            ...getHomePathsInManifest(manifest),
-            ...Object.values(manifest.pages),
-        ]);
+        const homePagePaths = getHomePathsInManifest(manifest);
+        const manifestsPageUrls = new Set([...homePagePaths, ...Object.values(manifest.pages)]);
         const manifestsMediaUrls = new Set(getImageUrls(manifest.images));
 
         const cachedPageUrls = await getCachedUrlsAndDeleteCruft(
