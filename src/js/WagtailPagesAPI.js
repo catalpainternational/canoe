@@ -111,6 +111,16 @@ export const getHomePage = async () => {
     return home;
 };
 
+export const getCoursesOldStyleJSON = async (newHomePage) => {
+    const { courseIds } = newHomePage;
+    const courses = [];
+    for (const courseId of courseIds) {
+        const course = await _getOrFetchWagtailPageById(courseId);
+        courses.push(course);
+    }
+    return courses;
+};
+
 export const getCourseById = async (courseId) => {
     await _getOrFetchWagtailPageById(courseId);
     // Until we can switch to a flatter data representation, this ensures the
