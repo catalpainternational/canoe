@@ -263,13 +263,6 @@
     width: 35px;
 }
 
-.notification-card .financial,
-.notification-card .leadership,
-.notification-card .digital {
-    height: 20px;
-    width: 20px;
-}
-
 .arrow {
     @extend %mask-icons-shared;
     -webkit-mask-image: url("../img/arrow.svg");
