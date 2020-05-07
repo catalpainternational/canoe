@@ -155,26 +155,6 @@
     background-image: url("../img/clock.svg");
 }
 
-.people {
-    @extend %lesson-card-shared;
-    background-image: url("../img/people.svg");
-}
-
-.cards {
-    @extend %lesson-card-shared;
-    background-image: url("../img/cards.svg");
-}
-
-.video {
-    @extend %lesson-card-shared;
-    background-image: url("../img/video.svg");
-}
-
-.quiz {
-    @extend %lesson-card-shared;
-    background-image: url("../img/bubbles.svg");
-}
-
 .warning {
     @extend %icons-shared;
     background-image: url("../img/warning.svg");
@@ -281,28 +261,6 @@
     -webkit-mask-position: center;
     height: 35px;
     width: 35px;
-}
-
-.financial {
-    @extend %courses-icon-shared;
-    -webkit-mask-image: url("../img/financial.svg");
-}
-
-.leadership {
-    @extend %courses-icon-shared;
-    -webkit-mask-image: url("../img/leadership.svg");
-}
-
-.digital {
-    @extend %courses-icon-shared;
-    -webkit-mask-image: url("../img/digital.svg");
-}
-
-.notification-card .financial,
-.notification-card .leadership,
-.notification-card .digital {
-    height: 20px;
-    width: 20px;
 }
 
 .arrow {
