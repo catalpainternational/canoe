@@ -18,15 +18,15 @@
     </div>
     <div class="content-wrapper">
         <h5 class="section-title" translate>Your courses</h5>
-        <CoursePromoWithLinkToNextLesson
+        <CoursePromo
             each="{course in state.courses}"
             course="{course}"
-        ></CoursePromoWithLinkToNextLesson>
+        ></CoursePromo>
     </div>
 
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
-        import CoursePromoWithLinkToNextLesson from "RiotTags/Components/CoursePromoWithLinkToNextLesson.riot.html";
+        import CoursePromo from "RiotTags/Components/CoursePromo.riot.html";
 
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons } from "js/utilities";
@@ -51,7 +51,7 @@
 
             components: {
                 continuelearningbutton: ContinueLearningButton,
-                coursepromowithlinktonextlesson: CoursePromoWithLinkToNextLesson,
+                coursepromo: CoursePromo,
             },
 
             onMounted(props, state) {
