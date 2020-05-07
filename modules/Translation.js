@@ -4,6 +4,13 @@ import { store } from "ReduxImpl/Store";
 
 var i18n = gettext_js();
 
+// gettext.js seems to behave wrong when passed a nplurals 1 translation set
+// A temporary fix pending further investigation is to
+// iterate over all array value tranlsations adding a fake n=2 message
+Object.values(tetumTranslations).filter(Array.isArray).forEach((arr) => {
+    arr.push(arr[0]);
+});
+
 i18n.loadJSON(tetumTranslations, "messages");
 
 export function gettext(msgid /* , extra */) {
