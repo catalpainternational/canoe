@@ -18,13 +18,6 @@ export const getAllLessons = (courses) => {
     return lessons;
 };
 
-export const getHomePageId = (homePageUrl) => {
-    const urlsPieces = homePageUrl.split("/");
-    const pageIdPiece = urlsPieces[urlsPieces.length - 2];
-    const pageId = Number(pageIdPiece);
-    return pageId;
-};
-
 export const getLastWorkedOnCourse = async () => {
     const lastCompletion = getMostRecentCompletion();
     if (lastCompletion === null) {
