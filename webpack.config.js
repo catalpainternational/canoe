@@ -13,10 +13,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 
-// default environment configuration
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
-
-// default project configuration
 const defaultProjectConfiguration = require("./canoe-project-default.js");
 
 module.exports = (env) => {

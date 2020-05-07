@@ -1,9 +1,11 @@
 <BasicCard>
     <h3 if="{ props.card.header }">{ props.card.header }</h3>
 
-    <ImageWrapper if="{ props.card.image.id }" 
-        id="{ props.card.image.id }" 
-        alt="{ props.card.image.alt }">
+    <ImageWrapper
+        if="{ props.card.image.id }"
+        imageId="{ props.card.image.id }"
+        alt="{ props.card.image.alt }"
+    >
     </ImageWrapper>
 
     <div class="richtext" />
@@ -12,8 +14,9 @@
         import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
         export default {
             components: {
-                imagewrapper: ImageWrapper
+                imagewrapper: ImageWrapper,
             },
+
             setInnerHTML() {
                 this.$(".richtext").innerHTML = this.props.card.content;
             },

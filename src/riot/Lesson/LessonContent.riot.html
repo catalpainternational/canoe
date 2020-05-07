@@ -1,45 +1,45 @@
 <LessonContent>
-    <div class="content background-blue-1" if="{state.cardIdx < props.lessonContent.cards.length}">
-        <div class="content-wrapper">
-            <Raw
-                if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"
-                html="{props.lessonContent.cards[state.cardIdx].content}"
-            />
-            <BasicCard
-                if="{props.lessonContent.cards[state.cardIdx].tag === 'basic'}"
-                card="{props.lessonContent.cards[state.cardIdx]}"
-            />
-            <Media
-                if="{props.lessonContent.cards[state.cardIdx].tag === 'media'}"
-                media="{props.lessonContent.cards[state.cardIdx]}"
-            />
-
-            <div class="bottom-buttons">
-                <div>
-                    <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
-                </div>
-                <div>
-                    <button
-                        class="btn-primary"
-                        onclick="{nextContentPage}"
-                        if="{state.cardIdx < props.lessonContent.cards.length - 1}"
-                        translate
-                    >
-                        Next
-                    </button>
-                    <button
-                        class="btn-primary"
-                        onclick="{completeContentModal}"
-                        if="{state.cardIdx === props.lessonContent.cards.length - 1}"
-                        translate
-                    >
-                        Finish
-                    </button>
-                </div>
+    <LessonFrame
+        if="{state.cardIdx < props.lessonContent.cards.length}"
+        extraStyleClasses="content"
+    >
+        <Raw
+            if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"
+            html="{props.lessonContent.cards[state.cardIdx].content}"
+        />
+        <BasicCard
+            if="{props.lessonContent.cards[state.cardIdx].tag === 'basic'}"
+            card="{props.lessonContent.cards[state.cardIdx]}"
+        />
+        <Media
+            if="{props.lessonContent.cards[state.cardIdx].tag === 'media'}"
+            media="{props.lessonContent.cards[state.cardIdx]}"
+        />
+        <div class="bottom-buttons">
+            <div>
+                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
             </div>
-            <p class="card-number">{ cardNumberMessage() }</p>
+            <div>
+                <button
+                    class="btn-primary"
+                    onclick="{nextContentPage}"
+                    if="{state.cardIdx < props.lessonContent.cards.length - 1}"
+                    translate
+                >
+                    Next
+                </button>
+                <button
+                    class="btn-primary"
+                    onclick="{completeContentModal}"
+                    if="{state.cardIdx === props.lessonContent.cards.length - 1}"
+                    translate
+                >
+                    Finish
+                </button>
+            </div>
         </div>
-    </div>
+        <p class="card-number">{ cardNumberMessage() }</p>
+    </LessonFrame>
     <LessonModuleComplete
         if="{state.cardIdx === props.lessonContent.cards.length}"
         lessonId="{props.lesson.id}"
@@ -50,6 +50,7 @@
 
     <script>
         import LessonModuleComplete from "RiotTags/Lesson/LessonModuleComplete.riot.html";
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import Raw from "RiotTags/Components/Raw.riot.html";
         import Media from "RiotTags/Components/Media.riot.html";
         import BasicCard from "RiotTags/Components/BasicCard.riot.html";
@@ -69,6 +70,7 @@
                 media: Media,
                 basiccard: BasicCard,
                 raw: Raw,
+                lessonframe: LessonFrame,
             },
 
             onBeforeMount(props, state) {
