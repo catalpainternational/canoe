@@ -1,9 +1,5 @@
 import { getMostRecentCompletion } from "Actions/completion";
-import {
-    getOrFetchManifest,
-    getOrFetchWagtailPage,
-    getHomePagePathInCurrentLanguage,
-} from "js/WagtailPagesAPI";
+import { getHomePage } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
 
 export const alertAppIsOffline = () => {
@@ -28,9 +24,7 @@ export const getLastWorkedOnCourse = async () => {
         return null;
     }
 
-    const manifest = await getOrFetchManifest();
-    const homePagePath = getHomePagePathInCurrentLanguage(manifest);
-    const homePage = await getOrFetchWagtailPage(homePagePath);
+    const homePage = await getHomePage();
     const courses = homePage.courses;
     const lastWorkedOnCourse = courses.find(
         (course) => course.data.slug === lastCompletion.courseSlug

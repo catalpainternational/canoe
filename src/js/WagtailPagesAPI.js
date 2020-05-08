@@ -112,10 +112,10 @@ export const getHomePathsInManifest = (manifest) => {
 };
 
 export const getHomePage = async () => {
-    await _ensureHomeExists();
-
-    const home = getHome();
-    return home;
+    const manifest = await getOrFetchManifest();
+    const homePagePath = getHomePagePathInCurrentLanguage(manifest);
+    const homePage = await getOrFetchWagtailPage(homePagePath);
+    return homePage;
 };
 
 export const getCourseById = async (courseId) => {

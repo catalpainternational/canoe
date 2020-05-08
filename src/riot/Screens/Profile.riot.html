@@ -59,9 +59,7 @@
 
         import { getMostRecentCompletion, isTheCourseComplete } from "Actions/completion";
         import {
-            getOrFetchManifest,
-            getOrFetchWagtailPage,
-            getHomePagePathInCurrentLanguage,
+            getHomePage
         } from "js/WagtailPagesAPI";
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons } from "js/utilities";
@@ -119,9 +117,7 @@
             },
 
             async renderProfilePage() {
-                const manifest = await getOrFetchManifest();
-                const homePagePath = getHomePagePathInCurrentLanguage(manifest);
-                const homePage = await getOrFetchWagtailPage(homePagePath);
+                const homePage = await getHomePage();
                 const courses = homePage.courses;
                 const lastWorkedOnCourse = this.getCurrentCourse(courses);
 
