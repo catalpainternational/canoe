@@ -1,7 +1,9 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { getOrFetchManifest } from "js/WagtailPagesAPI";
 
-const RENDITION_FORMAT = "width-800|format-webp";
+const RENDITION_FILTER_SPEC_DEFAULT = 'width-800|format-webp';
+const RENDITION_FILTER_SPEC_SAFARI = 'width-600|format-jpeg';
+
 
 export class MissingImageError extends Error {
     constructor(message) {
@@ -18,17 +20,14 @@ export const getImagePath = async (imageId) => {
     if (!image) {
         throw new MissingImageError(`Image with ID, ${imageId}, doesn't exist.`);
     }
-    return _getRenditionUrl(image);
+    return _getRenditionUrl(image, true);
 };
 
 export function getImageUrls(images) {
-    return Object.values(images).map(_getRenditionUrlWithoutDomain);
-}
-
-export const _getRenditionUrlWithoutDomain = (renditions) => {
-    return `/media/${renditions[RENDITION_FORMAT]}`;
+    return Object.values(images).map((url) => _getRenditionUrl(url));
 };
 
-function _getRenditionUrl(renditions) {
-    return `${BACKEND_BASE_URL}/media/${renditions[RENDITION_FORMAT]}`;
-}
+function _getRenditionUrl(renditions, includeDomain=false) {
+    const filter_spec = navigator.userAgent.match(/Safari/g) ? RENDITION_FILTER_SPEC_SAFARI : RENDITION_FILTER_SPEC_DEFAULT;
+    return `${includeDomain ? BACKEND_BASE_URL : ""}/media/${renditions[filter_spec]}`;
+};
