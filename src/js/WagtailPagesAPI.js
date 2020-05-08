@@ -87,15 +87,7 @@ const _getOrFetchWagtailPageById = async (pageId) => {
     return getOrFetchWagtailPage(pagePath);
 };
 
-const _ensureHomeExists = async () => {
-    const manifest = await getOrFetchManifest();
-    const homePagePaths = getHomePathsInManifest(manifest);
-    for (const homePagePath of homePagePaths) {
-        await getOrFetchWagtailPage(homePagePath);
-    }
-};
-
-export const getHomePagePathInCurrentLanguage = (manifest) => {
+const _getHomePathInCurrentLanguage = (manifest) => {
     const { home: homes } = manifest;
     const currentLanguage = getLanguage();
     return homes[currentLanguage];
@@ -113,7 +105,7 @@ export const getHomePathsInManifest = (manifest) => {
 
 export const getHomePage = async () => {
     const manifest = await getOrFetchManifest();
-    const homePagePath = getHomePagePathInCurrentLanguage(manifest);
+    const homePagePath = _getHomePathInCurrentLanguage(manifest);
     const homePage = await getOrFetchWagtailPage(homePagePath);
     return homePage;
 };
