@@ -59,10 +59,7 @@
 
         import { getMostRecentCompletion, isTheCourseComplete } from "Actions/completion";
         import {
-            getOrFetchManifest,
-            getOrFetchWagtailPage,
-            getCoursesOldStyleJSON,
-            getHomePage,
+            getHomePage
         } from "js/WagtailPagesAPI";
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons } from "js/utilities";
@@ -121,7 +118,7 @@
 
             async renderProfilePage() {
                 const homePage = await getHomePage();
-                const courses = await getCoursesOldStyleJSON(homePage);
+                const courses = homePage.courses;
                 const lastWorkedOnCourse = this.getCurrentCourse(courses);
 
                 this.update({

@@ -8,6 +8,7 @@ import {
     getHome,
     getCourse,
     getLesson,
+    getLanguage,
 } from "ReduxImpl/Store";
 
 async function token_authed_fetch(url) {
@@ -86,12 +87,10 @@ const _getOrFetchWagtailPageById = async (pageId) => {
     return getOrFetchWagtailPage(pagePath);
 };
 
-const _ensureHomeExists = async () => {
-    const manifest = await getOrFetchManifest();
-    const homePagePaths = getHomePathsInManifest(manifest);
-    for (const homePagePath of homePagePaths) {
-        await getOrFetchWagtailPage(homePagePath);
-    }
+const _getHomePathInCurrentLanguage = (manifest) => {
+    const { home: homes } = manifest;
+    const currentLanguage = getLanguage();
+    return homes[currentLanguage];
 };
 
 export const getHomePathsInManifest = (manifest) => {
@@ -105,20 +104,10 @@ export const getHomePathsInManifest = (manifest) => {
 };
 
 export const getHomePage = async () => {
-    await _ensureHomeExists();
-
-    const home = getHome();
-    return home;
-};
-
-export const getCoursesOldStyleJSON = async (newHomePage) => {
-    const { courseIds } = newHomePage;
-    const courses = [];
-    for (const courseId of courseIds) {
-        const course = await _getOrFetchWagtailPageById(courseId);
-        courses.push(course);
-    }
-    return courses;
+    const manifest = await getOrFetchManifest();
+    const homePagePath = _getHomePathInCurrentLanguage(manifest);
+    const homePage = await getOrFetchWagtailPage(homePagePath);
+    return homePage;
 };
 
 export const getCourseById = async (courseId) => {
