@@ -48,12 +48,7 @@
             alertIfRequestWasMadeOffline,
             alertIfBrowserBlocksNotifications,
         } from "js/ErrorChecks";
-        import { getBrowserVersion } from "js/DjangoPushNotifications";
-
-        const inAppelflap = () => {
-            const foundAppelflap = navigator.languages.find((word) => /^ep-[a-j]{4,5}$/.test(word));
-            return !!foundAppelflap;
-        };
+        import { getPlatform } from "js/PlatformDetection";
 
         export default {
             state: {
@@ -127,10 +122,12 @@
             },
 
             shouldShowAddToHomeScreen() {
-                const { name } = getBrowserVersion(navigator.userAgent);
-                const inSafari = name === "Safari";
-                const inPWAMode = window.matchMedia("(display-mode: standalone)").matches;
-                return !(inSafari || inPWAMode || inAppelflap());
+                const { browser, inAppelflap, inPWAMode } = getPlatform();
+                return !(
+                    browser.name === "Safari" ||
+                    inPWAMode ||
+                    inAppelflap
+                );
             },
 
             onMounted() {

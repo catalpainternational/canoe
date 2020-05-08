@@ -1,6 +1,7 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { getBrowserVersion, urlBase64ToUint8Array } from "js/DjangoPushNotifications";
+import { getPlatform } from "js/PlatformDetection";
+import { urlBase64ToUint8Array } from "js/DjangoPushNotifications";
 import { alertIfRequestWasMadeOffline } from "js/ErrorChecks";
 
 const APPLICATION_SERVER_KEY = `${process.env.APPLICATION_SERVER_KEY}`;
@@ -74,7 +75,7 @@ const getApplicationID = () => {
 const formatSubscriptionForServer = notificationSubscription => {
     const endpointParts = notificationSubscription.endpoint.split("/");
     const registrationID = endpointParts.pop();
-    const browser = getBrowserVersion(navigator.userAgent);
+    const { browser } = getPlatform();
 
     const subscriptionPostJSON = {
         browser: browser.name.toUpperCase(),
