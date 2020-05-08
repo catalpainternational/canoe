@@ -78,17 +78,6 @@ export const isBrowserSupported = () => {
     return store.getState().isBrowserSupported;
 };
 
-export const getHome = () => {
-    const language = getLanguage();
-    let home = null;
-    if (language === "tet") {
-        home = store.getState().home.tet;
-    } else {
-        home = store.getState().home.en;
-    }
-    return home;
-};
-
 export const getCourse = (courseId) => {
     const course = store.getState().courses[courseId];
     return course;

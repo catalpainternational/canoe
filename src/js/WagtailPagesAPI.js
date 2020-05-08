@@ -5,7 +5,6 @@ import {
     getWagtailPageFromStore,
     getManifestFromStore,
     storeManifest,
-    getHome,
     getCourse,
     getLesson,
     getLanguage,
