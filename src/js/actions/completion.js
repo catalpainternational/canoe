@@ -129,9 +129,9 @@ export const isTheCourseComplete = (courseSlug, coursesLessons) => {
 const isCourseInTheCurrentLanguage = (courseSlug) => {
     const currentLanguage = getLanguage();
     if (currentLanguage === "en") {
-        return !courseSlug.includes("tdt");
+        return !courseSlug.includes("tet");
     } else {
-        return courseSlug.includes("tdt");
+        return courseSlug.includes("tet");
     }
 };
 

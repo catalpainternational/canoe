@@ -45,7 +45,7 @@ const addHome = (state = {}, action) => {
             const home = action.home;
 
             let languageCode = null;
-            if (home.meta.slug.includes("tdt")) {
+            if (home.meta.slug.includes("tet")) {
                 languageCode = "tet";
             } else {
                 languageCode = "en";
