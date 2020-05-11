@@ -3,6 +3,7 @@ import {
     getOrFetchWagtailPage,
     getOrFetchManifest,
     getHomePage,
+    getWagtailPage,
 } from "js/WagtailPagesAPI.js";
 
 const IS_SETTINGS_NOTIFICATIONS_OR_PROFILE = /#([A-Za-z]+)/;
@@ -21,8 +22,6 @@ const getPreviewPageUrl = (queryString) => {
 };
 
 export const getPage = async () => {
-    const manifest = await getOrFetchManifest();
-
     const wagtailPageMatch = window.location.hash.match(IS_WAGTAIL_PAGE);
     const wagtailPreviewMatch = window.location.search.match(IS_PAGE_PREVIEW);
     const appPageMatch = window.location.hash.match(IS_SETTINGS_NOTIFICATIONS_OR_PROFILE);
@@ -32,8 +31,7 @@ export const getPage = async () => {
 
     if (wagtailPageMatch) {
         const pageId = wagtailPageMatch[1];
-        const pageUrl = manifest.pages[pageId];
-        page = await getOrFetchWagtailPage(pageUrl);
+        page = await getWagtailPage(pageId);
     } else if (wagtailPreviewMatch) {
         const queryString = wagtailPreviewMatch[1];
         pageUrl = getPreviewPageUrl(queryString);
@@ -49,6 +47,7 @@ export const getPage = async () => {
         page = await getHomePage();
     }
 
+    console.log("Got page.");
     return page;
 };
 

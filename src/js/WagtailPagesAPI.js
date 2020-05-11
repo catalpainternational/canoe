@@ -102,6 +102,28 @@ export const getHomePathsInManifest = (manifest) => {
     return homePaths;
 };
 
+export const getWagtailPage = async (pageId) => {
+    const manifest = await getOrFetchManifest();
+    const pageUrl = manifest.pages[pageId];
+    let page = await getOrFetchWagtailPage(pageUrl);
+
+    const currentLanguage = getLanguage();
+    const translationInfo = page.data.translations;
+
+    // If Canoe ever adds three or more languages, the rest of the function must
+    // change.
+
+    const translationLanguage = Object.keys(translationInfo)[0];
+    if (currentLanguage !== translationLanguage) {
+        return page;
+    }
+
+    const translationPageId = translationInfo[translationLanguage];
+    const pathToTranslation = manifest.pages[translationPageId];
+    page = await getOrFetchWagtailPage(pathToTranslation);
+    return page;
+};
+
 export const getHomePage = async () => {
     const manifest = await getOrFetchManifest();
     const homePagePath = _getHomePathInCurrentLanguage(manifest);
