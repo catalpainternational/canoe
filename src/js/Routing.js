@@ -3,8 +3,8 @@ import {
     getOrFetchWagtailPage,
     getOrFetchManifest,
     getHomePage,
-    getWagtailPage,
 } from "js/WagtailPagesAPI.js";
+import { getLanguage } from "ReduxImpl/Store";
 
 const IS_SETTINGS_NOTIFICATIONS_OR_PROFILE = /#([A-Za-z]+)/;
 const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
@@ -21,6 +21,37 @@ const getPreviewPageUrl = (queryString) => {
     return apiURL;
 };
 
+const routeToTranslation = (translationPageId) => {
+    const [, section, cardNumber] = parseURLHash();
+    const translatedPageUrl = `#${translationPageId}`;
+    if (section) {
+        translatedPageUrl += section;
+    }
+    if (cardNumber) {
+        translatedPageUrl += cardNumber;
+    }
+    window.location = translatedPageUrl;
+};
+
+export const getWagtailPageOrRouteToTranslation = async (pageId) => {
+    const manifest = await getOrFetchManifest();
+    const pageUrl = manifest.pages[pageId];
+    let page = await getOrFetchWagtailPage(pageUrl);
+
+    const currentLanguage = getLanguage();
+    const translationInfo = page.data.translations;
+
+    // If Canoe ever adds three or more languages, the rest of the function must
+    // change.
+
+    const translationLanguage = Object.keys(translationInfo)[0];
+    if (currentLanguage !== translationLanguage) {
+        return page;
+    }
+    const translationPageId = translationInfo[translationLanguage];
+    routeToTranslation(translationPageId);
+};
+
 export const getPage = async () => {
     const wagtailPageMatch = window.location.hash.match(IS_WAGTAIL_PAGE);
     const wagtailPreviewMatch = window.location.search.match(IS_PAGE_PREVIEW);
@@ -31,7 +62,7 @@ export const getPage = async () => {
 
     if (wagtailPageMatch) {
         const pageId = wagtailPageMatch[1];
-        page = await getWagtailPage(pageId);
+        page = await getWagtailPageOrRouteToTranslation(pageId);
     } else if (wagtailPreviewMatch) {
         const queryString = wagtailPreviewMatch[1];
         pageUrl = getPreviewPageUrl(queryString);
