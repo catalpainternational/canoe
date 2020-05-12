@@ -8,7 +8,15 @@ import {
     getCourse,
     getLesson,
     getLanguage,
+    changeLanguage,
 } from "ReduxImpl/Store";
+
+class APIMissingPageError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "MissingPageError";
+    }
+}
 
 async function token_authed_fetch(url) {
     const token = getAuthenticationToken();
@@ -22,7 +30,7 @@ async function token_authed_fetch(url) {
     });
 
     if (!response.ok) {
-        throw new Error(response.status);
+        throw new APIMissingPageError(`fetch("${url}") responded with a ${response.status}`);
     }
 
     const pagesResponseJSON = await response.json();
@@ -86,12 +94,6 @@ const _getOrFetchWagtailPageById = async (pageId) => {
     return getOrFetchWagtailPage(pagePath);
 };
 
-const _getHomePathInCurrentLanguage = (manifest) => {
-    const { home: homes } = manifest;
-    const currentLanguage = getLanguage();
-    return homes[currentLanguage];
-};
-
 export const getHomePathsInManifest = (manifest) => {
     const { home: homes } = manifest;
     const homePaths = [];
@@ -102,11 +104,30 @@ export const getHomePathsInManifest = (manifest) => {
     return homePaths;
 };
 
+const _getNextAvailableHomePage = async (manifestHomes) => {
+    const languageCodes = Object.keys(manifestHomes);
+    if (languageCodes.length === 0) {
+        throw new Error(`The manifest lacks HomePages`);
+    }
+    const nextLanguage = languageCodes[0];
+    const homePagePath = manifestHomes[nextLanguage];
+    const homePage = await getOrFetchWagtailPage(homePagePath);
+    changeLanguage(nextLanguage);
+    return homePage;
+};
+
 export const getHomePage = async () => {
     const manifest = await getOrFetchManifest();
-    const homePagePath = _getHomePathInCurrentLanguage(manifest);
-    const homePage = await getOrFetchWagtailPage(homePagePath);
-    return homePage;
+    const { home: homes } = manifest;
+    const currentLanguage = getLanguage();
+    const homePagePath = homes[currentLanguage];
+
+    if (homePagePath) {
+        const homePage = await getOrFetchWagtailPage(homePagePath);
+        return homePage;
+    } else {
+        return _getNextAvailableHomePage(homes);
+    }
 };
 
 export const getCourseById = async (courseId) => {
