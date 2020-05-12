@@ -52,15 +52,11 @@
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons } from "js/utilities";
         import {
-            getNumberOfCompletedLessons,
-            getNumberOfCompletedLessonsFor,
-        } from "js/LearningStatistics";
-        import {
             isComplete,
             getMostRecentCompletion,
             isTheCourseComplete,
         } from "Actions/completion";
-        import { getNumberOfCompleteLessons } from "js/LearningStatistics";
+        import { countCompleteLessonsInCourse } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
 
         export default {
@@ -87,11 +83,13 @@
             },
 
             continueLearningMessage() {
+                const { slug: courseSlug } = this.state.currentCourse.data;
+                const lessonSlugs = this.state.currentCourse.lessons.map((lesson) => lesson.slug);
                 return ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
                     this.state.currentCourse.data.lessons_count -
-                        getNumberOfCompletedLessonsFor(this.state.currentCourse),
+                        countCompleteLessonsInCourse(courseSlug, lessonSlugs),
                     this.state.currentCourse.data.title
                 );
             },
@@ -100,7 +98,10 @@
                 // displays how many lessons are complete and how many lessons are in the current course
                 const courseSlug = course.data.slug;
                 const lessonSlugs = course.lessons.map((lesson) => lesson.slug);
-                const numberOfCompleteLessons = getNumberOfCompleteLessons(courseSlug, lessonSlugs);
+                const numberOfCompleteLessons = countCompleteLessonsInCourse(
+                    courseSlug,
+                    lessonSlugs
+                );
 
                 return ngettext(
                     "%1 / %2 lesson complete",
@@ -143,14 +144,6 @@
                         return true;
                     }
                 }
-            },
-
-            getPercentOfLessonsCompleted() {
-                const percentage =
-                    (getNumberOfCompletedLessons(this.state.courses) /
-                        getAllLessons(this.state.courses).length) *
-                    100;
-                return Math.round(percentage) || 0;
             },
 
             isCurrentCourseInProgress(aCourse) {

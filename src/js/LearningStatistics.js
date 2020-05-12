@@ -1,18 +1,18 @@
-import { countComplete } from "Actions/completion";
 import { countNumberOfCompleteLessons } from "Actions/completion";
 
-export const getNumberOfCompletedLessons = (courses) => {
+export const countCompleteLessonsInCourse = (course, lessons) => {
+    return countNumberOfCompleteLessons(course, lessons);
+};
+
+export const countCompleteLessonsInCourses = (courses) => {
     let numberOfCompletedLessons = 0;
+
     for (const course of courses) {
-        numberOfCompletedLessons += getNumberOfCompletedLessonsFor(course);
+        const { lessons } = course;
+        const { slug: courseSlug } = course.data;
+        const lessonSlugs = lessons.map((lesson) => lesson.slug);
+
+        numberOfCompletedLessons += countCompleteLessonsInCourse(courseSlug, lessonSlugs);
     }
     return numberOfCompletedLessons;
-};
-
-export const getNumberOfCompletedLessonsFor = (course) => {
-    return countComplete(course.data.slug);
-};
-
-export const getNumberOfCompleteLessons = (course, lessons) => {
-    return countNumberOfCompleteLessons(course, lessons);
 };

@@ -30,7 +30,7 @@
     </div>
 
     <script>
-        import { getNumberOfCompleteLessons } from "js/LearningStatistics";
+        import { countCompleteLessonsInCourse } from "js/LearningStatistics";
         import { isComplete } from "Actions/completion";
         import Card from "RiotTags/Components/Card.riot.html";
 
@@ -53,7 +53,7 @@
                 const courseSlug = this.props.wagtailPage.data.slug;
                 const lessonSlugs = this.props.wagtailPage.lessons.map((lesson) => lesson.slug);
                 return (
-                    getNumberOfCompleteLessons(this.props.wagtailPage.data.slug, lessonSlugs) +
+                    countCompleteLessonsInCourse(this.props.wagtailPage.data.slug, lessonSlugs) +
                     " / " +
                     this.props.wagtailPage.data.lessons_count
                 );

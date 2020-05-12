@@ -25,8 +25,8 @@
                                 { courseLessonsCompletedMessage(course) }
                             </p>
                             <progress
-                                if="{getNumberOfCompletedLessonsFor(course) > 0}"
-                                value="{getNumberOfCompletedLessonsFor(course)}"
+                                if="{countCompleteLessonsIn(course) > 0}"
+                                value="{countCompleteLessonsIn(course)}"
                                 max="{course.lessons.length}"
                             ></progress>
                         </div>
@@ -39,7 +39,7 @@
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
                         <span class="checkmark-circle-blue"></span>
-                        <h3>{getNumberOfCompletedLessons()}</h3>
+                        <h3>{countCompleteLessonsTotal()}</h3>
                         <h5 translate>lessons completed so far</h5>
                     </div>
                 </div>
@@ -57,16 +57,13 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
-        import {
-            getMostRecentCompletion,
-            isTheCourseComplete,
-        } from "Actions/completion";
+        import { getMostRecentCompletion, isTheCourseComplete } from "Actions/completion";
         import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons, getHomePageId } from "js/utilities";
         import {
-            getNumberOfCompletedLessons,
-            getNumberOfCompletedLessonsFor,
+            countCompleteLessonsInCourse,
+            countCompleteLessonsInCourses,
         } from "js/LearningStatistics";
 
         export default {
@@ -95,23 +92,23 @@
                 return lastWorkedOnCourse;
             },
 
-            getNumberOfCompletedLessons() {
-                return getNumberOfCompletedLessons(this.state.courses);
+            countCompleteLessonsTotal() {
+                return countCompleteLessonsInCourses(this.state.courses);
             },
 
-            getNumberOfCompletedLessonsFor(course) {
-                return getNumberOfCompletedLessonsFor(course);
+            countCompleteLessonsIn(course) {
+                return countCompleteLessonsInCourses([course]);
             },
 
             getNumberOfLessonsLeft() {
                 return (
-                    getAllLessons(this.state.courses).length - this.getNumberOfCompletedLessons()
+                    getAllLessons(this.state.courses).length - this.countCompleteLessonsTotal()
                 );
             },
 
             getPercentOfLessonsCompleted() {
                 const percentage =
-                    (getNumberOfCompletedLessons(this.state.courses) /
+                    (this.countCompleteLessonsTotal() /
                         getAllLessons(this.state.courses).length) *
                     100;
                 return Math.round(percentage) || 0;
@@ -137,7 +134,7 @@
                 // displays how many lessons of the total in a course have been completed
                 return gettext(
                     "%1 out of %2 completed",
-                    this.getNumberOfCompletedLessonsFor(course),
+                    this.countCompleteLessonsIn(course),
                     course.lessons.length
                 );
             },
