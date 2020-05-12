@@ -50,7 +50,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
 
         import { getUsername } from "js/AuthenticationUtilities";
-        import { getAllLessons } from "js/utilities";
+        import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
         import {
             isComplete,
             getMostRecentCompletion,
@@ -83,8 +83,9 @@
             },
 
             continueLearningMessage() {
-                const { slug: courseSlug } = this.state.currentCourse.data;
-                const lessonSlugs = this.state.currentCourse.lessons.map((lesson) => lesson.slug);
+                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(
+                    this.state.currentCourse
+                );
                 return ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
@@ -96,8 +97,7 @@
 
             courseProgressMessage(course) {
                 // displays how many lessons are complete and how many lessons are in the current course
-                const courseSlug = course.data.slug;
-                const lessonSlugs = course.lessons.map((lesson) => lesson.slug);
+                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
                 const numberOfCompleteLessons = countCompleteLessonsInCourse(
                     courseSlug,
                     lessonSlugs

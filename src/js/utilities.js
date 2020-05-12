@@ -39,3 +39,13 @@ export const getLastWorkedOnCourse = async () => {
     );
     return lastWorkedOnCourse;
 };
+
+export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
+    const { slug: courseSlug } = wagtailCoursePage.data;
+    const lessons = wagtailCoursePage.lessons;
+    const lessonSlugs = lessons.map((lesson) => lesson.slug);
+    return {
+        courseSlug,
+        lessonSlugs,
+    };
+};
