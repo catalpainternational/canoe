@@ -123,10 +123,9 @@ export const getHomePage = async () => {
     const homePagePath = homes[currentLanguage];
 
     if (homePagePath) {
-        const homePage = await getOrFetchWagtailPage(homePagePath);
-        return homePage;
+        return await getOrFetchWagtailPage(homePagePath);
     } else {
-        return _getNextAvailableHomePage(homes);
+        return await _getNextAvailableHomePage(homes);
     }
 };
 
