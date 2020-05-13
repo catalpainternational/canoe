@@ -6,7 +6,7 @@
     <template if="{isBrowserSupported()}">
         <OnlineOrOffline></OnlineOrOffline>
         <Toast></Toast>
-      
+
         <Authentication if="{!isUserLoggedIn()}"></Authentication>
 
         <DataDownload if="{isUserLoggedIn()}"></DataDownload>
@@ -138,7 +138,7 @@
             },
 
             storeListener(previousStoreState, storeState) {
-                if(previousStoreState.language != storeState.language) {
+                if (previousStoreState.language != storeState.language) {
                     this.update();
                 }
             },

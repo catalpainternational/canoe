@@ -25,10 +25,10 @@ const routeToTranslation = (translationPageId) => {
     const [, section, cardNumber] = parseURLHash();
     const translatedPageUrl = `#${translationPageId}`;
     if (section) {
-        translatedPageUrl += section;
+        translatedPageUrl += `/${section}/`;
     }
     if (cardNumber) {
-        translatedPageUrl += cardNumber;
+        translatedPageUrl += `${cardNumber}`;
     }
     window.location = translatedPageUrl;
 };
@@ -50,6 +50,7 @@ export const getWagtailPageOrRouteToTranslation = async (pageId) => {
     }
     const translationPageId = translationInfo[translationLanguage];
     routeToTranslation(translationPageId);
+    return page;
 };
 
 export const getPage = async () => {
