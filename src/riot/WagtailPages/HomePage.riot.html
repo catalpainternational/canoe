@@ -53,8 +53,8 @@
         import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
         import {
             isComplete,
-            getMostRecentCompletion,
-            isTheCourseComplete,
+            getLatestCompletion,
+            isCurrentCourseInProgress,
         } from "Actions/completion";
         import { countCompleteLessonsInCourse } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
@@ -117,12 +117,12 @@
             },
 
             getCurrentCourse(courses) {
-                const lastCompletion = getMostRecentCompletion();
-                if (lastCompletion === null) {
+                const latestCompletion = getLatestCompletion(courses);
+                if (latestCompletion === null) {
                     return null;
                 }
                 const lastWorkedOnCourse = courses.find(
-                    (course) => course.data.slug === lastCompletion.courseSlug
+                    (course) => course.data.slug === latestCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
             },
@@ -147,7 +147,7 @@
             },
 
             isCurrentCourseInProgress(aCourse) {
-                return !isTheCourseComplete(aCourse.data.slug, aCourse.lessons);
+                return isCurrentCourseInProgress(aCourse);
             },
 
             isLessonComplete(course, lesson) {

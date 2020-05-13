@@ -8,6 +8,7 @@
 import { storeCompletion, getCompletions } from "./actions_store";
 import { ON_ACTION_CHANGE, ON_COMPLETION_CHANGE } from "js/Events";
 import { intersection } from "js/SetMethods";
+import { getCourseAndLessonSlugs } from "../utilities";
 
 const courses = new Map();
 
@@ -113,19 +114,27 @@ export const countNumberOfCompleteLessons = (courseSlug, lessonSlugs) => {
     return numCompletedLessons;
 };
 
-export const isTheCourseComplete = (courseSlug, coursesLessons) => {
-    const numberOfCoursesCompletions = countComplete(courseSlug);
-    const numberOfCoursesLessons = coursesLessons.size || coursesLessons.length;
-    return numberOfCoursesCompletions === numberOfCoursesLessons;
+const isTheCourseComplete = (courseSlug, lessonSlugs) => {
+    const numberOfCompleteLessons = countNumberOfCompleteLessons(courseSlug, lessonSlugs);
+    const numberOfLessonsInCourse = lessonSlugs.length;
+    return numberOfCompleteLessons === numberOfLessonsInCourse;
 };
 
-export function getMostRecentCompletion() {
+export const isCurrentCourseInProgress = (aWagtailCourse) => {
+    const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(aWagtailCourse);
+    return !isTheCourseComplete(courseSlug, lessonSlugs);
+};
+
+export const getLatestCompletion = (wagtailCourses) => {
     let latest = null;
-    for (const [courseSlug, courseMap] of courses.entries()) {
-        if (isTheCourseComplete(courseSlug, courseMap)) {
-            continue;
+
+    for (const course of wagtailCourses) {
+        const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
+        if (isTheCourseComplete(courseSlug, lessonSlugs)) {
+            return;
         }
 
+        const courseMap = courses.get(courseSlug);
         for (const [lessonSlug, lessonMap] of courseMap.entries()) {
             for (const [sectionSlug, completionDate] of lessonMap.entries()) {
                 if (latest === null || latest.completionDate < completionDate) {
@@ -135,4 +144,4 @@ export function getMostRecentCompletion() {
         }
     }
     return latest;
-}
+};
