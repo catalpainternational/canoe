@@ -69,7 +69,7 @@ export const login = async usernameAndPassword => {
     // Browsers refuse to set secure cookies from non https locations
     setCookie(JWT_TOKEN_STORAGE_KEY, token,
         window.location.protocol === "https:" ? ["secure"] : [],
-        {"max-age": 3e8, samesite: "strict"}
+        {"max-age": 3e8, samesite: "lax"}
     );
     localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
