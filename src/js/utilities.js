@@ -1,6 +1,7 @@
 import { getMostRecentCompletion } from "Actions/completion";
 import { getHomePage } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
+import { getLanguage } from "ReduxImpl/Store";
 
 export const alertAppIsOffline = () => {
     dispatchToastEvent("You are offline.");
@@ -30,4 +31,16 @@ export const getLastWorkedOnCourse = async () => {
         (course) => course.data.slug === lastCompletion.courseSlug
     );
     return lastWorkedOnCourse;
+};
+
+export const isCourseInTheCurrentLanguage = (courseSlug) => {
+    const currentLanguage = getLanguage();
+    switch (currentLanguage) {
+        case "en":
+            return !courseSlug.includes("tet");
+        case "tet":
+            return courseSlug.includes("tet");
+        default:
+            throw new Error(`Courses in ${currentLanguage} don't exist.`);
+    }
 };

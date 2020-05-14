@@ -8,7 +8,7 @@
 import { storeCompletion, getCompletions } from "./actions_store";
 import { ON_ACTION_CHANGE, ON_COMPLETION_CHANGE } from "js/Events";
 import { intersection } from "js/SetMethods";
-import { getLanguage } from "ReduxImpl/Store";
+import { isCourseInTheCurrentLanguage } from "js/utilities";
 
 const courses = new Map();
 
@@ -124,15 +124,6 @@ export const isTheCourseComplete = (courseSlug, coursesLessons) => {
     const numberOfCoursesCompletions = countComplete(courseSlug);
     const numberOfCoursesLessons = coursesLessons.size || coursesLessons.length;
     return numberOfCoursesCompletions === numberOfCoursesLessons;
-};
-
-const isCourseInTheCurrentLanguage = (courseSlug) => {
-    const currentLanguage = getLanguage();
-    if (currentLanguage === "en") {
-        return !courseSlug.includes("tet");
-    } else {
-        return courseSlug.includes("tet");
-    }
 };
 
 export function getMostRecentCompletion() {
