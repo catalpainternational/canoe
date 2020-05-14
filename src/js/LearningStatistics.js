@@ -5,7 +5,7 @@
 import { getCourseAndLessonSlugs } from "js/utilities";
 import {
     isTheCourseComplete,
-    countCompleteLessonsInCourse as countCompleteLessons_completion,
+    countCompleteLessonsInCourse as actions_countCompleteLessons,
     getLatestCompletionInCourse,
     getLatestInCompletionArray,
 } from "Actions/completion";
@@ -36,7 +36,7 @@ export const getLatestCompletion = (wagtailCourses) => {
 };
 
 export const countCompleteLessonsInCourse = (courseSlug, lessonSlugs) => {
-    return countCompleteLessons_completion(courseSlug, lessonSlugs);
+    return actions_countCompleteLessons(courseSlug, lessonSlugs);
 };
 
 export const countCompleteLessonsInCourses = (wagtailCourses) => {
