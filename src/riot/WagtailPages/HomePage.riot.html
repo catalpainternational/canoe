@@ -4,11 +4,11 @@
         <div class="header-box">
             <div class="left-block">
                 <h3>{ greetingMessage() }</h3>
-                <h6 if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}">
+                <h6 if="{state.currentCourse && isCourseInProgress(state.currentCourse)}">
                     { continueLearningMessage() }
                 </h6>
                 <ContinueLearningButton
-                    if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
+                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
                     class="profile header-text"
                     background="home-background-image"
                 ></ContinueLearningButton>
@@ -55,7 +55,7 @@
         import {
             countCompleteLessonsInCourse,
             getLatestCompletion,
-            isCurrentCourseInProgress,
+            isCourseInProgress,
         } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
 
@@ -146,8 +146,8 @@
                 }
             },
 
-            isCurrentCourseInProgress(aCourse) {
-                return isCurrentCourseInProgress(aCourse);
+            isCourseInProgress(aCourse) {
+                return isCourseInProgress(aCourse);
             },
 
             isLessonComplete(course, lesson) {

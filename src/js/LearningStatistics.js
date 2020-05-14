@@ -10,7 +10,7 @@ import {
     getLatestInCompletionArray,
 } from "Actions/completion";
 
-export const isCurrentCourseInProgress = (aWagtailCourse) => {
+export const isCourseInProgress = (aWagtailCourse) => {
     const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(aWagtailCourse);
     return !isTheCourseComplete(courseSlug, lessonSlugs);
 };

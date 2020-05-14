@@ -5,7 +5,7 @@
                 <h3 translate>Overall progress</h3>
                 <h6>{ percentLessonsCompleteMessage() }</h6>
                 <ContinueLearningButton
-                    if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
+                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
                 ></ContinueLearningButton>
             </div>
             <span class="report-card"></span>
@@ -64,7 +64,7 @@
             countCompleteLessonsInCourse,
             countCompleteLessonsInCourses,
             getLatestCompletion,
-            isCurrentCourseInProgress,
+            isCourseInProgress,
         } from "js/LearningStatistics";
 
         export default {
@@ -78,8 +78,8 @@
                 continuelearningbutton: ContinueLearningButton,
             },
 
-            isCurrentCourseInProgress(aCourse) {
-                return isCurrentCourseInProgress(aCourse);
+            isCourseInProgress(aCourse) {
+                return isCourseInProgress(aCourse);
             },
 
             getCurrentCourse(courses) {
