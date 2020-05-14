@@ -87,22 +87,12 @@ export function isComplete(course, lesson, section) {
 }
 
 export const isTheCourseComplete = (courseSlug, lessonSlugs) => {
-    const numberOfCompleteLessons = countNumberOfCompleteLessons(courseSlug, lessonSlugs);
+    const numberOfCompleteLessons = countCompleteLessonsInCourse(courseSlug, lessonSlugs);
     const numberOfLessonsInCourse = lessonSlugs.length;
     return numberOfCompleteLessons === numberOfLessonsInCourse;
 };
 
-export const getLatestInCompletionArray = (completionArray) => {
-    let latest = null;
-    for (const completion of completionArray) {
-        if (!latest || completion.completionDate > latest) {
-            latest = completion;
-        }
-    }
-    return latest;
-};
-
-export const countNumberOfCompleteLessons = (courseSlug, lessonSlugs) => {
+export const countCompleteLessonsInCourse = (courseSlug, lessonSlugs) => {
     const courseMap = getCourseMap(courseSlug);
     const lessonsInCourseMap = new Set(courseMap.keys());
     const liveLessons = new Set(lessonSlugs);
@@ -126,6 +116,16 @@ export const getLatestCompletionInCourse = (courseSlug) => {
             if (latest === null || latest.completionDate < completionDate) {
                 latest = { courseSlug, lessonSlug, sectionSlug, completionDate };
             }
+        }
+    }
+    return latest;
+};
+
+export const getLatestInCompletionArray = (completionArray) => {
+    let latest = null;
+    for (const completion of completionArray) {
+        if (!latest || completion.completionDate > latest) {
+            latest = completion;
         }
     }
     return latest;

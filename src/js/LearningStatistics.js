@@ -1,7 +1,11 @@
+/*
+    LearningStatistics is the interface between Canoe and Actions/completion.
+*/
+
 import { getCourseAndLessonSlugs } from "js/utilities";
 import {
     isTheCourseComplete,
-    countNumberOfCompleteLessons,
+    countCompleteLessonsInCourse as countCompleteLessons_completion,
     getLatestCompletionInCourse,
     getLatestInCompletionArray,
 } from "Actions/completion";
@@ -32,7 +36,7 @@ export const getLatestCompletion = (wagtailCourses) => {
 };
 
 export const countCompleteLessonsInCourse = (courseSlug, lessonSlugs) => {
-    return countNumberOfCompleteLessons(courseSlug, lessonSlugs);
+    return countCompleteLessons_completion(courseSlug, lessonSlugs);
 };
 
 export const countCompleteLessonsInCourses = (wagtailCourses) => {
