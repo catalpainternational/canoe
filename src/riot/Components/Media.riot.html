@@ -1,9 +1,6 @@
-<media>
+<Media>
     <div>
-        <p>{state.cached ? 'This video will play offline.' : 'This video is not yet available offline.'}</p>
-    </div>
-
-    <div>
+        <div class="speaker"></div>
         <audio if="{props.media.media_type === 'audio'}" controls crossorigin="anonymous">
             <source
                 each="{source in props.media.sources}"
@@ -25,8 +22,12 @@
                 src="{prefixUrlWithBaseUrl(source.src)}"
                 type="{ source.type }"
             />
-            <span translate>Your browser does not support the video tag.</span>
+            <span translate>Your browser does not support the video element.</span>
         </video>
+    </div>
+    <div>
+        <p if="{props.media.media_type === 'video'}">{state.cached ? 'This video will play offline.' : 'This video is not yet available offline.'}</p>
+        <p if="{props.media.media_type === 'audio'}">{state.cached ? 'This audio will play offline.' : 'This audio is not yet available offline.'}</p>
     </div>
 
     <script>
@@ -69,4 +70,4 @@
             }
         };
     </script>
-</media>
+</Media>

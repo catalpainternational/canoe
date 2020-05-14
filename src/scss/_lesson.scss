@@ -305,13 +305,17 @@ LessonObjective .objective {
 LessonContent .content {
     padding-bottom: $bottom-menu-height-no-footer;
 
-    raw {
+    raw, media {
         flex: 1;
     }
 
     img.richtext-image {
         margin: 1em 0;
         width: 100%;
+    }
+
+    p {
+        font-size: 14px;
     }
 
     p.error-message {
@@ -332,6 +336,10 @@ LessonContent .content {
         left: unset;
         width: 80px;
         height: 50px;
+    }
+
+    .speaker {
+        margin: 30px auto;
     }
 
     .btn-primary {
