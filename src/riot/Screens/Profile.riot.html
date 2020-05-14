@@ -57,13 +57,14 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
-        import { getLatestCompletion, isCurrentCourseInProgress } from "Actions/completion";
         import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons, getHomePageId } from "js/utilities";
         import {
             countCompleteLessonsInCourse,
             countCompleteLessonsInCourses,
+            getLatestCompletion,
+            isCurrentCourseInProgress,
         } from "js/LearningStatistics";
 
         export default {

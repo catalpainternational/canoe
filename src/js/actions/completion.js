@@ -8,7 +8,6 @@
 import { storeCompletion, getCompletions } from "./actions_store";
 import { ON_ACTION_CHANGE, ON_COMPLETION_CHANGE } from "js/Events";
 import { intersection } from "js/SetMethods";
-import { getCourseAndLessonSlugs } from "../utilities";
 
 const courses = new Map();
 
@@ -87,16 +86,21 @@ export function isComplete(course, lesson, section) {
     }
 }
 
-export function countComplete(courseSlug) {
-    const courseMap = getCourseMap(courseSlug);
-    let numCompletedLessons = 0;
-    for (const lessonMap of courseMap.values()) {
-        if (isLessonComplete(lessonMap)) {
-            numCompletedLessons += 1;
+export const isTheCourseComplete = (courseSlug, lessonSlugs) => {
+    const numberOfCompleteLessons = countNumberOfCompleteLessons(courseSlug, lessonSlugs);
+    const numberOfLessonsInCourse = lessonSlugs.length;
+    return numberOfCompleteLessons === numberOfLessonsInCourse;
+};
+
+export const getLatestInCompletionArray = (completionArray) => {
+    let latest = null;
+    for (const completion of completionArray) {
+        if (!latest || completion.completionDate > latest) {
+            latest = completion;
         }
     }
-    return numCompletedLessons;
-}
+    return latest;
+};
 
 export const countNumberOfCompleteLessons = (courseSlug, lessonSlugs) => {
     const courseMap = getCourseMap(courseSlug);
@@ -114,32 +118,13 @@ export const countNumberOfCompleteLessons = (courseSlug, lessonSlugs) => {
     return numCompletedLessons;
 };
 
-const isTheCourseComplete = (courseSlug, lessonSlugs) => {
-    const numberOfCompleteLessons = countNumberOfCompleteLessons(courseSlug, lessonSlugs);
-    const numberOfLessonsInCourse = lessonSlugs.length;
-    return numberOfCompleteLessons === numberOfLessonsInCourse;
-};
-
-export const isCurrentCourseInProgress = (aWagtailCourse) => {
-    const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(aWagtailCourse);
-    return !isTheCourseComplete(courseSlug, lessonSlugs);
-};
-
-export const getLatestCompletion = (wagtailCourses) => {
+export const getLatestCompletionInCourse = (courseSlug) => {
+    const courseMap = courses.get(courseSlug);
     let latest = null;
-
-    for (const course of wagtailCourses) {
-        const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
-        if (isTheCourseComplete(courseSlug, lessonSlugs)) {
-            return;
-        }
-
-        const courseMap = courses.get(courseSlug);
-        for (const [lessonSlug, lessonMap] of courseMap.entries()) {
-            for (const [sectionSlug, completionDate] of lessonMap.entries()) {
-                if (latest === null || latest.completionDate < completionDate) {
-                    latest = { courseSlug, lessonSlug, sectionSlug, completionDate };
-                }
+    for (const [lessonSlug, lessonMap] of courseMap.entries()) {
+        for (const [sectionSlug, completionDate] of lessonMap.entries()) {
+            if (latest === null || latest.completionDate < completionDate) {
+                latest = { courseSlug, lessonSlug, sectionSlug, completionDate };
             }
         }
     }

@@ -51,12 +51,12 @@
 
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
+        import { isComplete } from "Actions/completion";
         import {
-            isComplete,
+            countCompleteLessonsInCourse,
             getLatestCompletion,
             isCurrentCourseInProgress,
-        } from "Actions/completion";
-        import { countCompleteLessonsInCourse } from "js/LearningStatistics";
+        } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
 
         export default {

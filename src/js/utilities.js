@@ -1,4 +1,4 @@
-import { getLatestCompletion } from "Actions/completion";
+import { getLatestCompletion } from "js/LearningStatistics";
 import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
 
