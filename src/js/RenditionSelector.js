@@ -12,7 +12,7 @@ export class MissingImageError extends Error {
     }
 }
 
-export const getImagePath = async (imageId) => {
+export const getImageUrl = async (imageId) => {
     const manifest = await getOrFetchManifest();
     const images = manifest.images;
     const image = images[imageId];
@@ -23,9 +23,29 @@ export const getImagePath = async (imageId) => {
     return getRenditionUrl(image);
 };
 
-export function getImageUrls(images) {
-    return Object.values(images).map(getRenditionUrlWithoutDomain);
+export function getImagePaths(images) {
+    return Object.values(images).map(getRenditionPath);
 }
+
+const getRenditionUrl = (renditions) => {
+    return `${BACKEND_BASE_URL}${getRenditionPath(renditions)}`;
+};
+
+const getRenditionPath = (renditions) => {
+    return `/media/${getRendition(renditions)}`;
+};
+
+const getRendition = (renditions) => {
+    const renditionType = getPlatformSpecificRendition();
+    const rendition = renditions[renditionType];
+    if (!rendition) {
+        throw new MissingImageError(
+            `${renditionType} image doesn't exist.
+            Renditions: ${JSON.stringify(renditions)}`
+        );
+    }
+    return rendition;
+};
 
 const getPlatformSpecificRendition = () => {
     const { browser } = getPlatform();
@@ -37,27 +57,3 @@ const getPlatformSpecificRendition = () => {
     }
     return renditionType;
 };
-
-const getRenditionUrlWithoutDomain = (renditions) => {
-    const renditionType = getPlatformSpecificRendition();
-    const renditionPath = renditions[renditionType];
-    if (!renditionPath) {
-        throw new MissingImageError(
-            `${renditionType} image doesn't exist.
-            Renditions: ${JSON.stringify(renditions)}`
-        );
-    }
-    return `/media/${renditionPath}`;
-};
-
-function getRenditionUrl(renditions) {
-    const renditionType = getPlatformSpecificRendition();
-    const renditionPath = renditions[renditionType];
-    if (!renditionPath) {
-        throw new MissingImageError(
-            `${renditionType} image doesn't exist.
-            Renditions: ${JSON.stringify(renditions)}`
-        );
-    }
-    return `${BACKEND_BASE_URL}/media/${renditionPath}`;
-}
