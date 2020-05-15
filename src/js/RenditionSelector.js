@@ -1,9 +1,9 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { getOrFetchManifest } from "js/WagtailPagesAPI";
+import { getPlatform } from "js/PlatformDetection";
 
-const RENDITION_FILTER_SPEC_DEFAULT = 'width-800|format-webp';
-const RENDITION_FILTER_SPEC_SAFARI = 'width-600|format-jpeg';
-
+const WEBP_RENDITION = "width-800|format-webp";
+const JPEG_RENDITION = "width-600|format-jpeg";
 
 export class MissingImageError extends Error {
     constructor(message) {
@@ -20,35 +20,42 @@ export const getImagePath = async (imageId) => {
     if (!image) {
         throw new MissingImageError(`Image with ID, ${imageId}, doesn't exist.`);
     }
-    return _getRenditionUrl(image, true);
+    return getRenditionUrl(image);
 };
 
 export function getImageUrls(images) {
-    return Object.values(images).map((url) => _getRenditionUrl(url));
-};
-
-function _getRenditionUrl(renditions, includeDomain=false) {
-    const filter_spec = navigator.userAgent.match(/Safari/g) ? RENDITION_FILTER_SPEC_SAFARI : RENDITION_FILTER_SPEC_DEFAULT;
-    return `${includeDomain ? BACKEND_BASE_URL : ""}/media/${renditions[filter_spec]}`;
-    return Object.values(images).map(_getRenditionUrlWithoutDomain);
+    return Object.values(images).map(getRenditionUrlWithoutDomain);
 }
 
-export const _getRenditionUrlWithoutDomain = (renditions) => {
-    const renditionPath = renditions[RENDITION_FORMAT];
+const getPlatformSpecificRendition = () => {
+    const { browser } = getPlatform();
+    let renditionType = "";
+    if (browser.name === "Safari") {
+        renditionType = JPEG_RENDITION;
+    } else {
+        renditionType = JPEG_RENDITION;
+    }
+    return renditionType;
+};
+
+const getRenditionUrlWithoutDomain = (renditions) => {
+    const renditionType = getPlatformSpecificRendition();
+    const renditionPath = renditions[renditionType];
     if (!renditionPath) {
         throw new MissingImageError(
-            `${RENDITION_FORMAT} image doesn't exist.
+            `${renditionType} image doesn't exist.
             Renditions: ${JSON.stringify(renditions)}`
         );
     }
     return `/media/${renditionPath}`;
 };
 
-function _getRenditionUrl(renditions) {
-    const renditionPath = renditions[RENDITION_FORMAT];
+function getRenditionUrl(renditions) {
+    const renditionType = getPlatformSpecificRendition();
+    const renditionPath = renditions[renditionType];
     if (!renditionPath) {
         throw new MissingImageError(
-            `${RENDITION_FORMAT} image doesn't exist.
+            `${renditionType} image doesn't exist.
             Renditions: ${JSON.stringify(renditions)}`
         );
     }
