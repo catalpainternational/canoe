@@ -9,7 +9,7 @@ const USER_GROUPS_STORAGE_KEY = "userGroups";
 const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
     // sets name=value cookie
     // sets keyOnlyAttributes provided eg ['secure', 'samesite']
-    // sets value attributes provided eg {expires: 'Tue 19 Jan 2038 03:14:07 GMT'}
+    // sets value attributes provided eg {max-age: 3e8} to set expiry to 10 years in the future.
     // and potentially does vastly different things, because it does not escape inputs.
     document.cookie = Object.entries(attributes).reduce(
         (cookieString, keyValue) => `${cookieString};${keyValue[0]}=${keyValue[1]}`,
@@ -69,7 +69,7 @@ export const login = async usernameAndPassword => {
     // Browsers refuse to set secure cookies from non https locations
     setCookie(JWT_TOKEN_STORAGE_KEY, token,
         window.location.protocol === "https:" ? ["secure"] : [],
-        {expires: "Tue 19 Jan 2038 03:14:07 GMT", samesite: "strict"}
+        {"max-age": 3e8, samesite: "lax"}
     );
     localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
