@@ -36,19 +36,22 @@ const routeToTranslation = (translationPageId) => {
 export const getWagtailPageOrRouteToTranslation = async (pageId) => {
     const manifest = await getOrFetchManifest();
     const pageUrl = manifest.pages[pageId];
-    let page = await getOrFetchWagtailPage(pageUrl);
+    const page = await getOrFetchWagtailPage(pageUrl);
 
     const currentLanguage = getLanguage();
     const translationInfo = page.data.translations;
 
-    // If Canoe ever adds three or more languages, the rest of the function must
-    // change.
-
-    const translationLanguage = Object.keys(translationInfo)[0];
-    if (currentLanguage !== translationLanguage) {
+    const translationsLangCodes = Objects.keys(translationInfo);
+    // The default case:
+    // The page you're viewing is in the current language, which means the
+    // page's translations should lack the current language. Return the page.
+    if (!translationsLangCodes.includes(currentLanguage)) {
         return page;
     }
-    const translationPageId = translationInfo[translationLanguage];
+
+    // Otherwise, we want the page in the current language. Grab it from the
+    // incorrect page's translations.
+    const translationPageId = translationInfo[currentLanguage];
     routeToTranslation(translationPageId);
     return page;
 };
@@ -79,7 +82,6 @@ export const getPage = async () => {
         page = await getHomePage();
     }
 
-    console.log("Got page.");
     return page;
 };
 
