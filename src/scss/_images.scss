@@ -345,3 +345,8 @@
     @extend %stat-icon-shared;
     background-image: url("../img/speaker.svg");
 }
+
+.film {
+    @extend %stat-icon-shared;
+    background-image: url("../img/film.svg");
+}

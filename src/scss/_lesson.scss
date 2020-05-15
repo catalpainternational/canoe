@@ -307,6 +307,18 @@ LessonContent .content {
 
     raw, media {
         flex: 1;
+        text-align: center;
+    }
+
+    audio {
+        min-width: 250px;
+        width: 70%;
+        margin-bottom: 10%;
+        margin-top: 20%;
+    }
+
+    video {
+        margin: 10% 0 0;
     }
 
     img.richtext-image {
@@ -314,8 +326,17 @@ LessonContent .content {
         width: 100%;
     }
 
+    h3.media-title {
+        font-size: 24px;
+        margin-top: 10%;
+    }
+
     p {
         font-size: 14px;
+    }
+
+    p.media-description {
+        font-size: 18px;
     }
 
     p.error-message {
@@ -338,8 +359,8 @@ LessonContent .content {
         height: 50px;
     }
 
-    .speaker {
-        margin: 30px auto;
+    .speaker, .film {
+        margin: 0 auto;
     }
 
     .btn-primary {
