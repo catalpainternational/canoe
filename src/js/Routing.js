@@ -41,7 +41,7 @@ export const getWagtailPageOrRouteToTranslation = async (pageId) => {
     const currentLanguage = getLanguage();
     const translationInfo = page.data.translations;
 
-    const translationsLangCodes = Objects.keys(translationInfo);
+    const translationsLangCodes = Object.keys(translationInfo);
     // The default case:
     // The page you're viewing is in the current language, which means the
     // page's translations should lack the current language. Return the page.
