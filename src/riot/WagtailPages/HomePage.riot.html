@@ -4,11 +4,11 @@
         <div class="header-box">
             <div class="left-block">
                 <h3>{ greetingMessage() }</h3>
-                <h6 if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}">
+                <h6 if="{state.currentCourse && isCourseInProgress(state.currentCourse)}">
                     { continueLearningMessage() }
                 </h6>
                 <ContinueLearningButton
-                    if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
+                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
                     class="profile header-text"
                     background="home-background-image"
                 ></ContinueLearningButton>
@@ -51,12 +51,12 @@
 
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
+        import { isComplete } from "Actions/completion";
         import {
-            isComplete,
-            getMostRecentCompletion,
-            isTheCourseComplete,
-        } from "Actions/completion";
-        import { countCompleteLessonsInCourse } from "js/LearningStatistics";
+            countCompleteLessonsInCourse,
+            getLatestCompletion,
+            isCourseInProgress,
+        } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
 
         export default {
@@ -117,12 +117,12 @@
             },
 
             getCurrentCourse(courses) {
-                const lastCompletion = getMostRecentCompletion();
-                if (lastCompletion === null) {
+                const latestCompletion = getLatestCompletion(courses);
+                if (latestCompletion === null) {
                     return null;
                 }
                 const lastWorkedOnCourse = courses.find(
-                    (course) => course.data.slug === lastCompletion.courseSlug
+                    (course) => course.data.slug === latestCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
             },
@@ -146,8 +146,8 @@
                 }
             },
 
-            isCurrentCourseInProgress(aCourse) {
-                return !isTheCourseComplete(aCourse.data.slug, aCourse.lessons);
+            isCourseInProgress(aCourse) {
+                return isCourseInProgress(aCourse);
             },
 
             isLessonComplete(course, lesson) {

@@ -1,4 +1,4 @@
-import { getMostRecentCompletion } from "Actions/completion";
+import { getLatestCompletion } from "js/LearningStatistics";
 import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
 
@@ -26,16 +26,12 @@ export const getHomePageId = (homePageUrl) => {
 };
 
 export const getLastWorkedOnCourse = async () => {
-    const lastCompletion = getMostRecentCompletion();
-    if (lastCompletion === null) {
-        return null;
-    }
-
     const manifest = await getOrFetchManifest();
     const homePage = await getOrFetchWagtailPage(manifest.home);
     const courses = homePage.courses;
+    const latestCompletion = getLatestCompletion(courses);
     const lastWorkedOnCourse = courses.find(
-        (course) => course.data.slug === lastCompletion.courseSlug
+        (course) => course.data.slug === latestCompletion.courseSlug
     );
     return lastWorkedOnCourse;
 };

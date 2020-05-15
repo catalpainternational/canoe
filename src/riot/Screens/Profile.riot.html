@@ -5,7 +5,7 @@
                 <h3 translate>Overall progress</h3>
                 <h6>{ percentLessonsCompleteMessage() }</h6>
                 <ContinueLearningButton
-                    if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
+                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
                 ></ContinueLearningButton>
             </div>
             <span class="report-card"></span>
@@ -57,13 +57,14 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
-        import { getMostRecentCompletion, isTheCourseComplete } from "Actions/completion";
         import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons, getHomePageId } from "js/utilities";
         import {
             countCompleteLessonsInCourse,
             countCompleteLessonsInCourses,
+            getLatestCompletion,
+            isCourseInProgress,
         } from "js/LearningStatistics";
 
         export default {
@@ -77,17 +78,17 @@
                 continuelearningbutton: ContinueLearningButton,
             },
 
-            isCurrentCourseInProgress(aCourse) {
-                return !isTheCourseComplete(aCourse.data.slug, aCourse.lessons);
+            isCourseInProgress(aCourse) {
+                return isCourseInProgress(aCourse);
             },
 
             getCurrentCourse(courses) {
-                const lastCompletion = getMostRecentCompletion();
-                if (lastCompletion === null) {
+                const latestCompletion = getLatestCompletion(courses);
+                if (latestCompletion === null) {
                     return null;
                 }
                 const lastWorkedOnCourse = courses.find(
-                    (course) => course.data.slug === lastCompletion.courseSlug
+                    (course) => course.data.slug === latestCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
             },
@@ -101,15 +102,12 @@
             },
 
             getNumberOfLessonsLeft() {
-                return (
-                    getAllLessons(this.state.courses).length - this.countCompleteLessonsTotal()
-                );
+                return getAllLessons(this.state.courses).length - this.countCompleteLessonsTotal();
             },
 
             getPercentOfLessonsCompleted() {
                 const percentage =
-                    (this.countCompleteLessonsTotal() /
-                        getAllLessons(this.state.courses).length) *
+                    (this.countCompleteLessonsTotal() / getAllLessons(this.state.courses).length) *
                     100;
                 return Math.round(percentage) || 0;
             },
