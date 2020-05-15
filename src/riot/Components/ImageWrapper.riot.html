@@ -11,7 +11,7 @@
     </p>
 
     <script>
-        import { MissingImageError, getImagePath } from "js/RenditionSelector";
+        import { MissingImageError, getImageUrl } from "js/RenditionSelector";
 
         export default {
             state: {
@@ -24,7 +24,7 @@
                 let imagePath = "";
 
                 try {
-                    imagePath = await getImagePath(imageId);
+                    imagePath = await getImageUrl(imageId);
                 } catch (error) {
                     if (!(error instanceof MissingImageError)) {
                         throw error;
