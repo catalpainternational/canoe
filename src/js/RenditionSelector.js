@@ -33,7 +33,7 @@ const getPlatformSpecificRendition = () => {
     if (browser.name === "Safari") {
         renditionType = JPEG_RENDITION;
     } else {
-        renditionType = JPEG_RENDITION;
+        renditionType = WEBP_RENDITION;
     }
     return renditionType;
 };
