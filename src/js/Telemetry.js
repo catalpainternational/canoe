@@ -1,5 +1,4 @@
 import {
-    initializeGoogleAnalytics,
     logPageView,
     logNotificationReceived,
     logClickedPlayOnVideo,
@@ -8,26 +7,25 @@ import {
 } from 'js/GoogleAnalytics';
 import { ON_PLAY_VIDEO, ON_ANSWERED_TEST_QUESTION } from 'js/Events';
 
-export default {
-    onMounted() {
-        setGoogleAnalyticsGlobalDimensions();
+export function setTelemetry() {
+    setGoogleAnalyticsGlobalDimensions();
 
-        window.addEventListener('hashchange', () => {
-            logPageView(window.location.hash);
-        });
+    window.addEventListener('hashchange', () => {
+        logPageView(window.location.hash);
+    });
 
-        navigator.serviceWorker.addEventListener('message', (event) => {
-            const type = event.data;
-            logNotificationReceived(type);
-        });
+    navigator.serviceWorker.addEventListener('message', (event) => {
+        const type = event.data;
+        logNotificationReceived(type);
+    });
 
-        window.addEventListener(ON_PLAY_VIDEO, (event) => {
-            const videoTitle = event.detail;
-            logClickedPlayOnVideo(videoTitle);
-        });
+    window.addEventListener(ON_PLAY_VIDEO, (event) => {
+        const videoTitle = event.detail;
+        logClickedPlayOnVideo(videoTitle);
+    });
 
-        window.addEventListener(ON_ANSWERED_TEST_QUESTION, (event) => {
-            logATestAnswer(event.detail);
-        });
-    }
+    window.addEventListener(ON_ANSWERED_TEST_QUESTION, (event) => {
+        logATestAnswer(event.detail);
+        debugger;
+    });
 }

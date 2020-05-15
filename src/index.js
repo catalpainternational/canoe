@@ -1,7 +1,8 @@
 import "babel-polyfill";
 
 import { store } from "ReduxImpl/Store";
-import { initializeServiceWorker } from "js/ServiceWorkerManagement"
+import { initializeServiceWorker } from "js/ServiceWorkerManagement";
+import { setTelemetry } from "js/Telemetry";
 
 let storeState = store.getState();
 
@@ -40,3 +41,5 @@ store.subscribe( () => {
 });
 
 initializeServiceWorker();
+
+setTelemetry();
