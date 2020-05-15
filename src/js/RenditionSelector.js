@@ -30,4 +30,27 @@ export function getImageUrls(images) {
 function _getRenditionUrl(renditions, includeDomain=false) {
     const filter_spec = navigator.userAgent.match(/Safari/g) ? RENDITION_FILTER_SPEC_SAFARI : RENDITION_FILTER_SPEC_DEFAULT;
     return `${includeDomain ? BACKEND_BASE_URL : ""}/media/${renditions[filter_spec]}`;
+    return Object.values(images).map(_getRenditionUrlWithoutDomain);
+}
+
+export const _getRenditionUrlWithoutDomain = (renditions) => {
+    const renditionPath = renditions[RENDITION_FORMAT];
+    if (!renditionPath) {
+        throw new MissingImageError(
+            `${RENDITION_FORMAT} image doesn't exist.
+            Renditions: ${JSON.stringify(renditions)}`
+        );
+    }
+    return `/media/${renditionPath}`;
 };
+
+function _getRenditionUrl(renditions) {
+    const renditionPath = renditions[RENDITION_FORMAT];
+    if (!renditionPath) {
+        throw new MissingImageError(
+            `${RENDITION_FORMAT} image doesn't exist.
+            Renditions: ${JSON.stringify(renditions)}`
+        );
+    }
+    return `${BACKEND_BASE_URL}/media/${renditionPath}`;
+}
