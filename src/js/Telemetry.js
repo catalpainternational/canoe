@@ -26,6 +26,5 @@ export function setTelemetry() {
 
     window.addEventListener(ON_ANSWERED_TEST_QUESTION, (event) => {
         logATestAnswer(event.detail);
-        debugger;
     });
 }
