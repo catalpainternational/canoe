@@ -4,6 +4,7 @@ import {
     getOrFetchManifest,
     getHomePage,
 } from "js/WagtailPagesAPI.js";
+import { getLanguage } from "ReduxImpl/Store";
 
 const IS_SETTINGS_NOTIFICATIONS_OR_PROFILE = /#([A-Za-z]+)/;
 const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
@@ -20,9 +21,42 @@ const getPreviewPageUrl = (queryString) => {
     return apiURL;
 };
 
-export const getPage = async () => {
-    const manifest = await getOrFetchManifest();
+const routeToTranslation = (translationPageId) => {
+    const [, section, cardNumber] = parseURLHash();
+    const translatedPageUrl = `#${translationPageId}`;
+    if (section) {
+        translatedPageUrl += `/${section}/`;
+    }
+    if (cardNumber) {
+        translatedPageUrl += `${cardNumber}`;
+    }
+    window.location = translatedPageUrl;
+};
 
+export const getWagtailPageOrRouteToTranslation = async (pageId) => {
+    const manifest = await getOrFetchManifest();
+    const pageUrl = manifest.pages[pageId];
+    const page = await getOrFetchWagtailPage(pageUrl);
+
+    const currentLanguage = getLanguage();
+    const translationInfo = page.data.translations;
+
+    const translationsLangCodes = Object.keys(translationInfo);
+    // The default case:
+    // The page you're viewing is in the current language, which means the
+    // page's translations should lack the current language. Return the page.
+    if (!translationsLangCodes.includes(currentLanguage)) {
+        return page;
+    }
+
+    // Otherwise, we want the page in the current language. Grab it from the
+    // incorrect page's translations.
+    const translationPageId = translationInfo[currentLanguage];
+    routeToTranslation(translationPageId);
+    return page;
+};
+
+export const getPage = async () => {
     const wagtailPageMatch = window.location.hash.match(IS_WAGTAIL_PAGE);
     const wagtailPreviewMatch = window.location.search.match(IS_PAGE_PREVIEW);
     const appPageMatch = window.location.hash.match(IS_SETTINGS_NOTIFICATIONS_OR_PROFILE);
@@ -32,8 +66,7 @@ export const getPage = async () => {
 
     if (wagtailPageMatch) {
         const pageId = wagtailPageMatch[1];
-        const pageUrl = manifest.pages[pageId];
-        page = await getOrFetchWagtailPage(pageUrl);
+        page = await getWagtailPageOrRouteToTranslation(pageId);
     } else if (wagtailPreviewMatch) {
         const queryString = wagtailPreviewMatch[1];
         pageUrl = getPreviewPageUrl(queryString);
