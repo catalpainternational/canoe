@@ -36,6 +36,8 @@
             addToCache,
             deleteItemFromCache
         } from "js/cacheManager/cacheManager.js";
+        import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
+        import { ON_PLAY_VIDEO } from "js/Events";
 
         export default {
             state: {
@@ -47,6 +49,11 @@
                 if (!this.state.cached) {
                     this.toggleAvailableOffline();
                 }
+
+                window.addEventListener(ON_PLAY_VIDEO, event => {
+                    const videoTitle = event.detail;
+                    logClickedPlayOnVideo(videoTitle);
+                });
             },
 
             async getCacheInfo() {

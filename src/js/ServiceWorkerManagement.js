@@ -5,6 +5,7 @@
 import { Workbox } from "workbox-window";
 import { serviceWorkerEvent } from "ReduxImpl/Store";
 const SW_UPDATE_INTERVAL = 1000 * 10 * 60 * 4;
+import { logNotificationReceived } from "js/GoogleAnalytics"
 import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
 
 
@@ -54,5 +55,10 @@ export async function initializeServiceWorker() {
         window.addEventListener(ON_ADD_TO_HOME_SCREEN, async () => {
             deferredPrompt.prompt();
         });
+    });
+
+    navigator.serviceWorker.addEventListener('message', (event) => {
+        const type = event.data;
+        logNotificationReceived(type);
     });
 }
