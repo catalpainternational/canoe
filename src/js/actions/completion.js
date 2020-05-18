@@ -86,18 +86,13 @@ export function isComplete(course, lesson, section) {
     }
 }
 
-export function countComplete(courseSlug) {
-    const courseMap = getCourseMap(courseSlug);
-    let numCompletedLessons = 0;
-    for (const lessonMap of courseMap.values()) {
-        if (isLessonComplete(lessonMap)) {
-            numCompletedLessons += 1;
-        }
-    }
-    return numCompletedLessons;
-}
+export const isTheCourseComplete = (courseSlug, lessonSlugs) => {
+    const numberOfCompleteLessons = countCompleteLessonsInCourse(courseSlug, lessonSlugs);
+    const numberOfLessonsInCourse = lessonSlugs.length;
+    return numberOfCompleteLessons === numberOfLessonsInCourse;
+};
 
-export const countNumberOfCompleteLessons = (courseSlug, lessonSlugs) => {
+export const countCompleteLessonsInCourse = (courseSlug, lessonSlugs) => {
     const courseMap = getCourseMap(courseSlug);
     const lessonsInCourseMap = new Set(courseMap.keys());
     const liveLessons = new Set(lessonSlugs);
@@ -113,26 +108,25 @@ export const countNumberOfCompleteLessons = (courseSlug, lessonSlugs) => {
     return numCompletedLessons;
 };
 
-export const isTheCourseComplete = (courseSlug, coursesLessons) => {
-    const numberOfCoursesCompletions = countComplete(courseSlug);
-    const numberOfCoursesLessons = coursesLessons.size || coursesLessons.length;
-    return numberOfCoursesCompletions === numberOfCoursesLessons;
-};
-
-export function getMostRecentCompletion() {
+export const getLatestCompletionInCourse = (courseSlug) => {
+    const courseMap = courses.get(courseSlug);
     let latest = null;
-    for (const [courseSlug, courseMap] of courses.entries()) {
-        if (isTheCourseComplete(courseSlug, courseMap)) {
-            continue;
-        }
-
-        for (const [lessonSlug, lessonMap] of courseMap.entries()) {
-            for (const [sectionSlug, completionDate] of lessonMap.entries()) {
-                if (latest === null || latest.completionDate < completionDate) {
-                    latest = { courseSlug, lessonSlug, sectionSlug, completionDate };
-                }
+    for (const [lessonSlug, lessonMap] of courseMap.entries()) {
+        for (const [sectionSlug, completionDate] of lessonMap.entries()) {
+            if (latest === null || latest.completionDate < completionDate) {
+                latest = { courseSlug, lessonSlug, sectionSlug, completionDate };
             }
         }
     }
     return latest;
-}
+};
+
+export const getLatestInCompletionArray = (completionArray) => {
+    let latest = null;
+    for (const completion of completionArray) {
+        if (!latest || completion.completionDate > latest) {
+            latest = completion;
+        }
+    }
+    return latest;
+};
