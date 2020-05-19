@@ -3,7 +3,11 @@
         <div class="speaker"></div>
         <h3 class="media-title">{props.media.title}</h3>
         <p class="media-description">{props.media.description}</p>
-        <audio controls crossorigin="anonymous">
+        <audio 
+            controls 
+            crossorigin="anonymous" 
+            onplay="{ (event) => storeAnalytics(event) }"
+        >
             <source
                 src="{prefixUrlWithBaseUrl(props.media.sources[0].src)}"
                 type="{props.media.sources[0].type}"
@@ -19,6 +23,7 @@
             crossorigin="anonymous"
             controls="true"
             preload="auto"
+            onplay="{ (event) => storeAnalytics(event) }"
         >
             <!-- if preload set to none the video will not actually be requested, if set to auto it is requested -->
             <source
@@ -39,6 +44,7 @@
             addToCache,
             deleteItemFromCache
         } from "js/cacheManager/cacheManager.js";
+        import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
         export default {
             state: {
@@ -50,6 +56,11 @@
                 if (!this.state.cached) {
                     this.toggleAvailableOffline();
                 }
+            },
+
+            storeAnalytics(event) {
+                const videoTitle = event.detail;
+                logClickedPlayOnVideo(videoTitle);
             },
 
             async getCacheInfo() {

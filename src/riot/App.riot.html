@@ -34,7 +34,6 @@
             <Profile if="{state.contentType === 'profile'}"></Profile>
 
             <BottomMenu contentType="{state.contentType}"></BottomMenu>
-            <Telemetry></Telemetry>
             <PushSubscription></PushSubscription>
         </template>
     </template>
@@ -44,10 +43,10 @@
         import { getPage } from "js/Routing";
         import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
         import { isBrowserSupported, isSiteDownloaded } from "ReduxImpl/Store";
+        import { logPageView } from "js/GoogleAnalytics";
 
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
-        import Telemetry from "RiotTags/Components/Telemetry.riot.html";
         import DataDownload from "RiotTags/Components/DataDownload.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
         import Toast from "RiotTags/Components/Toast.riot.html";
@@ -96,7 +95,6 @@
                 notifications: Notifications,
                 profile: Profile,
                 settings: Settings,
-                telemetry: Telemetry,
                 datadownload: DataDownload,
                 pushsubscription: PushSubscription,
                 changebrowser: ChangeBrowser,
@@ -123,6 +121,7 @@
                 window.addEventListener("hashchange", () => {
                     if (this.isUserLoggedIn()) {
                         this.route();
+                        logPageView(window.location.hash);
                         scrollToFirstUnfinishedContent();
                     }
                 });
