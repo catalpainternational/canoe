@@ -46,6 +46,11 @@ export async function initializeServiceWorker() {
         serviceWorkerEvent("redundant")
     });
 
+    wb.addEventListener("message", (event) => {
+        const type = event.data;
+        logNotificationReceived(type);
+    });
+
     wb.register();
 
     window.addEventListener("beforeinstallprompt", async (e) => {
@@ -57,8 +62,4 @@ export async function initializeServiceWorker() {
         });
     });
 
-    navigator.serviceWorker.addEventListener('message', (event) => {
-        const type = event.data;
-        logNotificationReceived(type);
-    });
 }
