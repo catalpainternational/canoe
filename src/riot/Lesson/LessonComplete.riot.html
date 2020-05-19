@@ -30,9 +30,8 @@
     </LessonFrame>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
-        import { countComplete } from "Actions/completion";
         import { getACoursesLessons } from "js/WagtailPagesAPI";
-        import { getNumberOfCompleteLessons } from "js/LearningStatistics";
+        import { countCompleteLessonsInCourse } from "js/LearningStatistics";
 
         export default {
             components: {
@@ -55,7 +54,7 @@
 
             isCourseComplete() {
                 return (
-                    getNumberOfCompleteLessons(this.props.course.slug, this.state.lessonSlugs) ===
+                    countCompleteLessonsInCourse(this.props.course.slug, this.state.lessonSlugs) ===
                     this.props.course.lessons_count
                 );
             },

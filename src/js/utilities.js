@@ -1,5 +1,5 @@
-import { getMostRecentCompletion } from "Actions/completion";
 import { getHomePage } from "js/WagtailPagesAPI";
+import { getLatestCompletion } from "js/LearningStatistics";
 import { dispatchToastEvent } from "js/Events";
 import { getLanguage } from "ReduxImpl/Store";
 
@@ -20,15 +20,11 @@ export const getAllLessons = (courses) => {
 };
 
 export const getLastWorkedOnCourse = async () => {
-    const lastCompletion = getMostRecentCompletion();
-    if (lastCompletion === null) {
-        return null;
-    }
-
     const homePage = await getHomePage();
     const courses = homePage.courses;
+    const latestCompletion = getLatestCompletion(courses);
     const lastWorkedOnCourse = courses.find(
-        (course) => course.data.slug === lastCompletion.courseSlug
+        (course) => course.data.slug === latestCompletion.courseSlug
     );
     return lastWorkedOnCourse;
 };
@@ -43,4 +39,14 @@ export const isCourseInTheCurrentLanguage = (courseSlug) => {
         default:
             throw new Error(`Courses in ${currentLanguage} don't exist.`);
     }
+};
+
+export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
+    const { slug: courseSlug } = wagtailCoursePage.data;
+    const lessons = wagtailCoursePage.lessons;
+    const lessonSlugs = lessons.map((lesson) => lesson.slug);
+    return {
+        courseSlug,
+        lessonSlugs,
+    };
 };

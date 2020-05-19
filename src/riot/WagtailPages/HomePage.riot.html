@@ -4,11 +4,11 @@
         <div class="header-box">
             <div class="left-block">
                 <h3>{ greetingMessage() }</h3>
-                <h6 if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}">
+                <h6 if="{state.currentCourse && isCourseInProgress(state.currentCourse)}">
                     { continueLearningMessage() }
                 </h6>
                 <ContinueLearningButton
-                    if="{state.currentCourse && isCurrentCourseInProgress(state.currentCourse)}"
+                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
                     class="profile header-text"
                     background="home-background-image"
                 ></ContinueLearningButton>
@@ -50,17 +50,13 @@
         import Card from "RiotTags/Components/Card.riot.html";
 
         import { getUsername } from "js/AuthenticationUtilities";
-        import { getAllLessons } from "js/utilities";
+        import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
+        import { isComplete } from "Actions/completion";
         import {
-            getNumberOfCompletedLessons,
-            getNumberOfCompletedLessonsFor,
+            countCompleteLessonsInCourse,
+            getLatestCompletion,
+            isCourseInProgress,
         } from "js/LearningStatistics";
-        import {
-            isComplete,
-            getMostRecentCompletion,
-            isTheCourseComplete,
-        } from "Actions/completion";
-        import { getNumberOfCompleteLessons } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
 
         export default {
@@ -87,20 +83,25 @@
             },
 
             continueLearningMessage() {
+                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(
+                    this.state.currentCourse
+                );
                 return ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
                     this.state.currentCourse.data.lessons_count -
-                        getNumberOfCompletedLessonsFor(this.state.currentCourse),
+                        countCompleteLessonsInCourse(courseSlug, lessonSlugs),
                     this.state.currentCourse.data.title
                 );
             },
 
             courseProgressMessage(course) {
                 // displays how many lessons are complete and how many lessons are in the current course
-                const courseSlug = course.data.slug;
-                const lessonSlugs = course.lessons.map((lesson) => lesson.slug);
-                const numberOfCompleteLessons = getNumberOfCompleteLessons(courseSlug, lessonSlugs);
+                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
+                const numberOfCompleteLessons = countCompleteLessonsInCourse(
+                    courseSlug,
+                    lessonSlugs
+                );
 
                 return ngettext(
                     "%1 / %2 lesson complete",
@@ -116,12 +117,12 @@
             },
 
             getCurrentCourse(courses) {
-                const lastCompletion = getMostRecentCompletion();
-                if (lastCompletion === null) {
+                const latestCompletion = getLatestCompletion(courses);
+                if (latestCompletion === null) {
                     return null;
                 }
                 const lastWorkedOnCourse = courses.find(
-                    (course) => course.data.slug === lastCompletion.courseSlug
+                    (course) => course.data.slug === latestCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
             },
@@ -145,16 +146,8 @@
                 }
             },
 
-            getPercentOfLessonsCompleted() {
-                const percentage =
-                    (getNumberOfCompletedLessons(this.state.courses) /
-                        getAllLessons(this.state.courses).length) *
-                    100;
-                return Math.round(percentage) || 0;
-            },
-
-            isCurrentCourseInProgress(aCourse) {
-                return !isTheCourseComplete(aCourse.data.slug, aCourse.lessons);
+            isCourseInProgress(aCourse) {
+                return isCourseInProgress(aCourse);
             },
 
             isLessonComplete(course, lesson) {
