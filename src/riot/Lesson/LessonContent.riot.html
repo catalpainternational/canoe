@@ -57,7 +57,6 @@
 
         import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
         import { setComplete } from "Actions/completion";
-        import { dispatchPlayVideoEvent } from "js/Events";
 
         export default {
             state: {
@@ -123,18 +122,8 @@
                 this.state.iframes = this.$$("iframe");
             },
 
-            notifyGoogleAnalyticsIfVideoIsPlaying() {
-                for (const iframe of this.state.iframes) {
-                    if (document.activeElement === iframe) {
-                        const videoUrl = iframe.src;
-                        dispatchPlayVideoEvent(videoUrl);
-                    }
-                }
-            },
-
             onUpdated() {
                 this.checkForPlayableVideos();
-                window.onblur = this.notifyGoogleAnalyticsIfVideoIsPlaying;
             },
         };
     </script>
