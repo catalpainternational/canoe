@@ -58,9 +58,9 @@
                 }
             },
 
-            storeAnalytics(event) {
-                const mediaPath = event.srcElement.baseURI;
-                logClickedPlayOnVideo(mediaPath);
+            storeAnalytics() {
+                const mediaTitle = this.props.media.title;
+                logClickedPlayOnVideo(mediaTitle);
             },
 
             async getCacheInfo() {
