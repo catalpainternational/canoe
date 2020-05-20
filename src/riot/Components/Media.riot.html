@@ -1,5 +1,5 @@
 <Media>
-    <div if="{props.media.sources[0].type === 'audio/mpeg'}">
+    <div if="{props.media.media_type === 'audio'}">
         <div class="speaker"></div>
         <h3 class="media-title">{props.media.title}</h3>
         <p class="media-description">{props.media.description}</p>
@@ -16,7 +16,7 @@
         </audio>
         <p>{state.cached ? 'This audio will play offline.' : 'This audio is not yet available offline.'}</p>
     </div>
-    <div if="{props.media.sources[0].type === 'video/mp4'}">
+    <div if="{props.media.media_type === 'video'}">
         <div class="film"></div>
         <video
             width="100%"
@@ -59,8 +59,8 @@
             },
 
             storeAnalytics(event) {
-                const videoTitle = event.detail;
-                logClickedPlayOnVideo(videoTitle);
+                const mediaPath = event.srcElement.baseURI;
+                logClickedPlayOnVideo(mediaPath);
             },
 
             async getCacheInfo() {
