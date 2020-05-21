@@ -340,3 +340,28 @@
     @include feedback-icons;
     -webkit-mask-image: url("../img/thrilled.png");
 }
+
+%logos-shared {
+    @extend %icons-shared;
+    display: inline-block;
+    height: 50px;
+    background-position: center;
+}    
+
+.australian-aid {
+    @extend %logos-shared;
+    background-image: url("../img/australian_aid.svg");
+    width: 70px;
+}
+
+.catalpa-logo {
+    @extend %logos-shared;
+    background-image: url("../img/catalpa_logo.svg");
+    width: 50px;
+}
+
+.maluk-timor-logo {
+    @extend %logos-shared;
+    background-image: url("../img/maluk_timor_logo.png");
+    width: 60px;
+}
