@@ -81,7 +81,6 @@
             onBeforeMount(props, state) {
                 state.cardIdx = getLessonCardIdx();
                 window.addEventListener("hashchange", this.hashChanged);
-                console.log(this.props.lessonContent.cards[state.cardIdx].media_type)
             },
 
             onBeforeUnmount(props, state) {

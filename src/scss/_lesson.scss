@@ -305,7 +305,7 @@ LessonObjective .objective {
 LessonContent .content {
     padding-bottom: $bottom-menu-height-no-footer;
 
-    VideoCard, AudioCard, raw, media {
+    VideoCard, AudioCard, raw {
         flex: 1;
         text-align: center;
     }
