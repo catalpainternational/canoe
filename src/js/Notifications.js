@@ -7,7 +7,7 @@ import { alertIfRequestWasMadeOffline } from "js/ErrorChecks";
 const APPLICATION_SERVER_KEY = `${process.env.APPLICATION_SERVER_KEY}`;
 const NOTIFICATION_ID_KEY = "notificationRegistrationId";
 
-const storeRegistrationId = registrationId => {
+const storeRegistrationId = (registrationId) => {
     localStorage.setItem(NOTIFICATION_ID_KEY, registrationId);
 };
 
@@ -19,15 +19,15 @@ const deleteStoredRegistrationId = () => {
     localStorage.removeItem(NOTIFICATION_ID_KEY);
 };
 
-const fetchNotificationSubscription = async registrationId => {
+const fetchNotificationSubscription = async (registrationId) => {
     const token = getAuthenticationToken();
     const notificationsApiUrl = `${BACKEND_BASE_URL}/notifications/subscribe/${registrationId}/`;
     const fetchOptions = {
         mode: "cors",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `JWT ${token}`
-        }
+            Authorization: `JWT ${token}`,
+        },
     };
     const response = await fetch(notificationsApiUrl, fetchOptions);
 
@@ -39,17 +39,17 @@ const fetchNotificationSubscription = async registrationId => {
     return subscriptionOnServer;
 };
 
-const postNotificationSubscription = async subscriptionData => {
+const postNotificationSubscription = async (subscriptionData) => {
     const token = getAuthenticationToken();
 
     const response = await fetch(`${BACKEND_BASE_URL}/notifications/subscribe/`, {
         mode: "cors",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `JWT ${token}`
+            Authorization: `JWT ${token}`,
         },
         method: "POST",
-        body: JSON.stringify(subscriptionData)
+        body: JSON.stringify(subscriptionData),
     });
 
     if (!response.ok) {
@@ -60,10 +60,10 @@ const postNotificationSubscription = async subscriptionData => {
     return postedSubscription;
 };
 
-const pushManagerSubscribesToNotifications = async registration => {
+const pushManagerSubscribesToNotifications = async (registration) => {
     const notificationSubscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(APPLICATION_SERVER_KEY)
+        applicationServerKey: urlBase64ToUint8Array(APPLICATION_SERVER_KEY),
     });
     return notificationSubscription;
 };
@@ -72,7 +72,7 @@ const getApplicationID = () => {
     return BACKEND_BASE_URL.replace(new RegExp("http[s]?://"), "");
 };
 
-const formatSubscriptionForServer = notificationSubscription => {
+const formatSubscriptionForServer = (notificationSubscription) => {
     const endpointParts = notificationSubscription.endpoint.split("/");
     const registrationID = endpointParts.pop();
     const { browser } = getPlatform();
@@ -90,13 +90,13 @@ const formatSubscriptionForServer = notificationSubscription => {
         ),
         name: `${browser.name} ${Math.floor(Math.random() * 1e9)}`,
         registration_id: registrationID,
-        application_id: getApplicationID()
+        application_id: getApplicationID(),
     };
 
     return subscriptionPostJSON;
 };
 
-const turnOnNotifications = async swRegistration => {
+const turnOnNotifications = async (swRegistration) => {
     const notificationSubscription = await pushManagerSubscribesToNotifications(swRegistration);
     const subscriptionPostJSON = formatSubscriptionForServer(notificationSubscription);
     return await postNotificationSubscription(subscriptionPostJSON);
@@ -134,6 +134,12 @@ export const isSubscribedToNotifications = async () => {
     const localRegistrationID = getStoredRegistrationId();
 
     if (localRegistrationID === null || !hasPermissionToNotify()) {
+        return false;
+    }
+
+    const swRegistration = await navigator.serviceWorker.ready;
+    const pushSubscription = await swRegistration.pushManager.getSubscription();
+    if (!pushSubscription) {
         return false;
     }
 
