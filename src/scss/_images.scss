@@ -348,20 +348,20 @@
     background-position: center;
 }    
 
-.australian-aid {
+.logo-a {
     @extend %logos-shared;
-    background-image: url("../img/australian_aid.svg");
+    background-image: url("../img/logo_a.png");
+    width: 60px;
+}
+
+.logo-b {
+    @extend %logos-shared;
+    background-image: url("../img/logo_b.svg");
     width: 70px;
 }
 
-.catalpa-logo {
+.logo-c {
     @extend %logos-shared;
-    background-image: url("../img/catalpa_logo.svg");
+    background-image: url("../img/logo_c.svg");
     width: 50px;
-}
-
-.maluk-timor-logo {
-    @extend %logos-shared;
-    background-image: url("../img/maluk_timor_logo.png");
-    width: 60px;
 }
