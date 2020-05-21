@@ -14,7 +14,8 @@
             />
             <span translate>Your browser does not support the audio element.</span>
         </audio>
-        <p>{state.cached ? 'This audio will play offline.' : 'This audio is not yet available offline.'}</p>
+        <p if={state.cached} translate>This audio will play offline.</p>
+        <p if={!state.cached} translate>This audio is not available offline.</p>
     </div>
 
     <script>

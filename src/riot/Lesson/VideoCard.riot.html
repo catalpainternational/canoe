@@ -17,7 +17,8 @@
         </video>
         <h3 class="media-title">{props.media.title}</h3>
         <p class="media-description">{props.media.description}</p>
-        <p>{state.cached ? 'This video will play offline.' : 'This video is not yet available offline.'}</p>
+        <p if={state.cached} translate>This video will play offline.</p>
+        <p if={!state.cached} translate>This video is not available offline.</p>
     </div>
 
     <script>
