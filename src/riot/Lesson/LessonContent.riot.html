@@ -15,6 +15,10 @@
             if="{props.lessonContent.cards[state.cardIdx].tag === 'media'}"
             media="{props.lessonContent.cards[state.cardIdx]}"
         />
+        <QuoteCard
+            if="{props.lessonContent.cards[state.cardIdx].tag === 'quote'}"
+            card="{props.lessonContent.cards[state.cardIdx]}"
+        />
         <div class="bottom-buttons">
             <div>
                 <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
@@ -54,6 +58,7 @@
         import Raw from "RiotTags/Components/Raw.riot.html";
         import Media from "RiotTags/Components/Media.riot.html";
         import BasicCard from "RiotTags/Components/BasicCard.riot.html";
+        import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
 
         import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
         import { setComplete } from "Actions/completion";
@@ -69,6 +74,7 @@
                 lessonmodulecomplete: LessonModuleComplete,
                 media: Media,
                 basiccard: BasicCard,
+                quotecard: QuoteCard,
                 raw: Raw,
                 lessonframe: LessonFrame,
             },

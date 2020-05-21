@@ -305,8 +305,26 @@ LessonObjective .objective {
 LessonContent .content {
     padding-bottom: $bottom-menu-height-no-footer;
 
-    raw {
+    raw, quotecard {
         flex: 1;
+    }
+
+    quotecard {
+        margin: 20px 10px;
+        letter-spacing: 1px;
+        font-size: 1.125em;
+
+        & span {
+            color: $blue-1;
+            font-size: 1.75em;
+            font-weight: 500;
+            margin: 3px;
+        }
+
+        & p {
+            margin-top: 34px;
+            font-size: 1em;
+        }
     }
 
     img.richtext-image {
