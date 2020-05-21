@@ -1,22 +1,5 @@
-<Media>
-    <div if="{props.media.media_type === 'audio'}">
-        <div class="speaker"></div>
-        <h3 class="media-title">{props.media.title}</h3>
-        <p class="media-description">{props.media.description}</p>
-        <audio 
-            controls 
-            crossorigin="anonymous" 
-            onplay="{ (event) => storeAnalytics(event) }"
-        >
-            <source
-                src="{prefixUrlWithBaseUrl(props.media.sources[0].src)}"
-                type="{props.media.sources[0].type}"
-            />
-            <span translate>Your browser does not support the audio element.</span>
-        </audio>
-        <p>{state.cached ? 'This audio will play offline.' : 'This audio is not yet available offline.'}</p>
-    </div>
-    <div if="{props.media.media_type === 'video'}">
+<VideoCard>
+    <div>
         <div class="film"></div>
         <video
             width="100%"
@@ -83,4 +66,4 @@
             }
         };
     </script>
-</Media>
+</VideoCard>

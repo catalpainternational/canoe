@@ -1,0 +1,66 @@
+<AudioCard>
+    <div>
+        <div class="speaker"></div>
+        <h3 class="media-title">{props.media.title}</h3>
+        <p class="media-description">{props.media.description}</p>
+        <audio 
+            controls 
+            crossorigin="anonymous" 
+            onplay="{ (event) => storeAnalytics(event) }"
+        >
+            <source
+                src="{prefixUrlWithBaseUrl(props.media.sources[0].src)}"
+                type="{props.media.sources[0].type}"
+            />
+            <span translate>Your browser does not support the audio element.</span>
+        </audio>
+        <p>{state.cached ? 'This audio will play offline.' : 'This audio is not yet available offline.'}</p>
+    </div>
+
+    <script>
+        import { BACKEND_BASE_URL } from "js/urls";
+        import {
+            isItemCached,
+            addToCache,
+            deleteItemFromCache
+        } from "js/cacheManager/cacheManager.js";
+        import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
+
+        export default {
+            state: {
+                cached: false
+            },
+
+            async onMounted(props, state) {
+                await this.getCacheInfo();
+                if (!this.state.cached) {
+                    this.toggleAvailableOffline();
+                }
+            },
+
+            storeAnalytics() {
+                const mediaTitle = this.props.media.title;
+                logClickedPlayOnVideo(mediaTitle);
+            },
+
+            async getCacheInfo() {
+                const url = this.prefixUrlWithBaseUrl(this.props.media.sources[0].src);
+                const cached = await isItemCached(url);
+                this.update({ cached });
+            },
+
+            async toggleAvailableOffline(e) {
+                const url = this.prefixUrlWithBaseUrl(this.props.media.sources[0].src);
+                const action = this.state.cached
+                    ? deleteItemFromCache(url, "media-cache")
+                    : addToCache(url, "media-cache");
+                await action;
+                this.getCacheInfo();
+            },
+
+            prefixUrlWithBaseUrl(url) {
+                return `${BACKEND_BASE_URL}${url}`;
+            }
+        };
+    </script>
+</AudioCard>
