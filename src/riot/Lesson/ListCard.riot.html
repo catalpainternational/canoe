@@ -4,11 +4,4 @@
         <span>{ props.card.isNumbered ? props.card.content.indexOf(item) + 1 : "•" }</span>
         {item}
     </p>
-    <script>
-        export default {
-            onMounted(props, state) {
-                console.log(this.props.card)
-            },
-        };
-    </script>
 </ListCard>
