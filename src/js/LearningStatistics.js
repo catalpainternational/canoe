@@ -1,18 +1,50 @@
-import { countComplete } from "Actions/completion";
-import { countNumberOfCompleteLessons } from "Actions/completion";
+/*
+    LearningStatistics is the interface between Canoe and Actions/completion.
+*/
 
-export const getNumberOfCompletedLessons = (courses) => {
+import { getCourseAndLessonSlugs } from "js/utilities";
+import {
+    isTheCourseComplete,
+    countCompleteLessonsInCourse as countCompleteLessonsImpl,
+    getLatestCompletionInCourse,
+    getLatestInCompletionArray,
+} from "Actions/completion";
+
+export const isCourseInProgress = (aWagtailCourse) => {
+    const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(aWagtailCourse);
+    return !isTheCourseComplete(courseSlug, lessonSlugs);
+};
+
+export const getLatestCompletion = (wagtailCourses) => {
+    const latestCompletions = [];
+    for (const course of wagtailCourses) {
+        const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
+
+        if (isTheCourseComplete(courseSlug, lessonSlugs)) {
+            continue;
+        }
+
+        const latestInCourse = getLatestCompletionInCourse(courseSlug);
+        if (!latestInCourse) {
+            continue;
+        }
+        latestCompletions.push(latestInCourse);
+    }
+
+    const latestCompletion = getLatestInCompletionArray(latestCompletions);
+    return latestCompletion;
+};
+
+export const countCompleteLessonsInCourse = (courseSlug, lessonSlugs) => {
+    return countCompleteLessonsImpl(courseSlug, lessonSlugs);
+};
+
+export const countCompleteLessonsInCourses = (wagtailCourses) => {
     let numberOfCompletedLessons = 0;
-    for (const course of courses) {
-        numberOfCompletedLessons += getNumberOfCompletedLessonsFor(course);
+
+    for (const course of wagtailCourses) {
+        const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
+        numberOfCompletedLessons += countCompleteLessonsInCourse(courseSlug, lessonSlugs);
     }
     return numberOfCompletedLessons;
-};
-
-export const getNumberOfCompletedLessonsFor = (course) => {
-    return countComplete(course.data.slug);
-};
-
-export const getNumberOfCompleteLessons = (course, lessons) => {
-    return countNumberOfCompleteLessons(course, lessons);
 };

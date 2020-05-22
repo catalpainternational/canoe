@@ -25,8 +25,7 @@ export function getPlatform() {
 };
 
 function inAppelflap() {
-    const foundAppelflap = navigator.languages.find((word) => /^ep-[a-j]{4,5}$/.test(word));
-    return !!foundAppelflap;
+    return navigator.userAgent.startsWith("io.catalpa.canoe.");
 };
 
 function inPWAMode() {
