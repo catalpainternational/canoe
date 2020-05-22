@@ -305,7 +305,7 @@ LessonObjective .objective {
 LessonContent .content {
     padding-bottom: $bottom-menu-height-no-footer;
 
-    raw, quotecard {
+    raw, quotecard, listcard {
         flex: 1;
     }
 
@@ -324,6 +324,20 @@ LessonContent .content {
         & p {
             margin-top: 34px;
             font-size: 1em;
+        }
+    }
+
+    listcard {
+        width: 100%; 
+        
+        p {
+            font-size: 1em;
+        }
+
+        span {
+            margin-right: 7px;
+            color: $blue-1;
+            font-weight: 600;
         }
     }
 
