@@ -1,12 +1,17 @@
-import { fetchPage, fetchImage, getOrFetchManifest } from "js/WagtailPagesAPI";
+import {
+    fetchPage,
+    fetchImage,
+    getOrFetchManifest,
+    getHomePathsInManifest,
+} from "js/WagtailPagesAPI";
 import { storeWagtailPage } from "ReduxImpl/Store";
 import { dispatchToastEvent } from "js/Events";
 import { leftDifference } from "js/SetMethods";
-import { getImageUrls } from "js/RenditionSelector"
+import { getImagePaths } from "js/RenditionSelector";
 
-const trimDomain = urlWithDomain => urlWithDomain.replace(/^.*\/\/[^\/]+/, "");
+const trimDomain = (urlWithDomain) => urlWithDomain.replace(/^.*\/\/[^\/]+/, "");
 
-const addCachedPageToRedux = async cacheKeyRequest => {
+const addCachedPageToRedux = async (cacheKeyRequest) => {
     const pagesCache = await caches.open("pages-cache");
     const cachedPage = await pagesCache.match(cacheKeyRequest);
     if (!cachedPage) {
@@ -44,8 +49,9 @@ export class SiteDownloader {
     async requestTheSitesPagesAndImages() {
         const manifest = await getOrFetchManifest();
 
-        const manifestsPageUrls = new Set([manifest.home, ...Object.values(manifest.pages)]);
-        const manifestsMediaUrls = new Set(getImageUrls(manifest.images));
+        const homePagePaths = getHomePathsInManifest(manifest);
+        const manifestsPageUrls = new Set([...homePagePaths, ...Object.values(manifest.pages)]);
+        const manifestsMediaUrls = new Set(getImagePaths(manifest.images));
 
         const cachedPageUrls = await getCachedUrlsAndDeleteCruft(
             this.PAGES_CACHE,
