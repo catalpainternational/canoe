@@ -1,6 +1,7 @@
+import { getHomePage } from "js/WagtailPagesAPI";
 import { getLatestCompletion } from "js/LearningStatistics";
-import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
+import { getLanguage } from "ReduxImpl/Store";
 import { BACKEND_BASE_URL } from "js/urls";
 
 export const alertAppIsOffline = () => {
@@ -19,16 +20,8 @@ export const getAllLessons = (courses) => {
     return lessons;
 };
 
-export const getHomePageId = (homePageUrl) => {
-    const urlsPieces = homePageUrl.split("/");
-    const pageIdPiece = urlsPieces[urlsPieces.length - 2];
-    const pageId = Number(pageIdPiece);
-    return pageId;
-};
-
 export const getLastWorkedOnCourse = async () => {
-    const manifest = await getOrFetchManifest();
-    const homePage = await getOrFetchWagtailPage(manifest.home);
+    const homePage = await getHomePage();
     const courses = homePage.courses;
     const latestCompletion = getLatestCompletion(courses);
     const lastWorkedOnCourse = courses.find(
@@ -37,8 +30,21 @@ export const getLastWorkedOnCourse = async () => {
     return lastWorkedOnCourse;
 };
 
+export const isCourseInTheCurrentLanguage = (courseSlug) => {
+    const currentLanguage = getLanguage();
+    switch (currentLanguage) {
+        case "en":
+            return !courseSlug.includes("tet");
+        case "tet":
+            return courseSlug.includes("tet");
+        default:
+            throw new Error(`Courses in ${currentLanguage} don't exist.`);
+    }
+};
+
 export const getMediaUrl = (mediaPath) => {
     return `${BACKEND_BASE_URL}${mediaPath}`;
+};
 
 export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
     const { slug: courseSlug } = wagtailCoursePage.data;

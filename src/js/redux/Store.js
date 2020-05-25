@@ -29,6 +29,9 @@ export const storeWagtailPage = (wagtailPage) => {
         case "elearning_content.LessonPage":
             store.dispatch({ type: ADDED_LESSON_PAGE, lesson: wagtailPage });
             break;
+        case "wagtailtrans.TranslatableSiteRootPage":
+            // Ignore the i18nized site's root.
+            return;
         default:
             throw new Error(`${wagtailPage.meta.type} is an unreckognized page type.`);
     }
@@ -47,7 +50,7 @@ export const changeLanguage = (language) => {
     store.dispatch({ type: LANGUAGE_CHANGE, language: language });
 };
 
-export const serviceWorkerEvent = event_type => {
+export const serviceWorkerEvent = (event_type) => {
     store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: event_type });
 };
 
@@ -84,4 +87,3 @@ export const getLesson = (lessonId) => {
     const lesson = store.getState().lessons[lessonId];
     return lesson;
 };
-
