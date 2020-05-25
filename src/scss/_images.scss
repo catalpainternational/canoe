@@ -178,7 +178,7 @@
 
 .notifications-image {
     @extend %icons-shared;
-    background-image: url("../img/notifications_header.svg");
+    background-image: $notificationHeader;
     height: 154px;
     width: 150px;
 }
