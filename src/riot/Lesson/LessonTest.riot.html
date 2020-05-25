@@ -48,7 +48,8 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
         import { getLessonCardIdx } from "js/Routing";
-        import { dispatchTestAnswerEvent } from "js/Events";
+        import { logATestAnswer } from "js/GoogleAnalytics"
+        import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
 
         export default {
             state: {
@@ -73,6 +74,10 @@
                 state.cards = cards;
                 state.cardIdx = getLessonCardIdx();
                 window.addEventListener("hashchange", this.hashChanged);
+                
+                window.addEventListener(ON_ANSWERED_TEST_QUESTION, event => {
+                    logATestAnswer(event.detail);
+                });
             },
 
             onMounted(props, state) {

@@ -7,7 +7,6 @@ export const ON_LOG_OUT = `${APP_NAME}.auth.loggedOut`;
 export const ON_ADD_TO_HOME_SCREEN = `${APP_NAME}.sw.addToHomeScreen`;
 export const ON_COMPLETION_CHANGE = `${APP_NAME}.completions.change`;
 export const ON_ACTION_CHANGE = `${APP_NAME}.actions.change`;
-export const ON_PLAY_VIDEO = `${APP_NAME}.videos.clickedPlay`;
 export const ON_ANSWERED_TEST_QUESTION = `${APP_NAME}.tests.answeredQuestion`;
 export const ON_TOAST_REQUESTED = `${APP_NAME}.toast.requestedAlert`;
 
@@ -29,11 +28,6 @@ export const dispatchLoggedOutEvent = () => {
 export const dispatchInstallAppEvent = () => {
     const installAppEvent = new Event(ON_ADD_TO_HOME_SCREEN);
     dispatchEvent(installAppEvent);
-};
-
-export const dispatchPlayVideoEvent = videoUrl => {
-    const playVideoEvent = new CustomEvent(ON_PLAY_VIDEO, { detail: videoUrl });
-    dispatchEvent(playVideoEvent);
 };
 
 export const dispatchTestAnswerEvent = eventData => {

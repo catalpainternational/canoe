@@ -1,6 +1,7 @@
 import { getLatestCompletion } from "js/LearningStatistics";
 import { getOrFetchManifest, getOrFetchWagtailPage } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
+import { BACKEND_BASE_URL } from "js/urls";
 
 export const alertAppIsOffline = () => {
     dispatchToastEvent("You are offline.");
@@ -35,6 +36,9 @@ export const getLastWorkedOnCourse = async () => {
     );
     return lastWorkedOnCourse;
 };
+
+export const getMediaUrl = (mediaPath) => {
+    return `${BACKEND_BASE_URL}${mediaPath}`;
 
 export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
     const { slug: courseSlug } = wagtailCoursePage.data;

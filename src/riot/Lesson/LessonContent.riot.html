@@ -11,8 +11,12 @@
             if="{props.lessonContent.cards[state.cardIdx].tag === 'basic'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
         />
-        <Media
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'media'}"
+        <AudioCard
+            if="{props.lessonContent.cards[state.cardIdx].media_type === 'audio'}"
+            media="{props.lessonContent.cards[state.cardIdx]}"
+        />
+        <VideoCard
+            if="{props.lessonContent.cards[state.cardIdx].media_type === 'video'}"
             media="{props.lessonContent.cards[state.cardIdx]}"
         />
         <QuoteCard
@@ -56,13 +60,13 @@
         import LessonModuleComplete from "RiotTags/Lesson/LessonModuleComplete.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import Raw from "RiotTags/Components/Raw.riot.html";
-        import Media from "RiotTags/Components/Media.riot.html";
         import BasicCard from "RiotTags/Components/BasicCard.riot.html";
+        import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
+        import AudioCard from "RiotTags/Lesson/AudioCard.riot.html";
         import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
 
         import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
         import { setComplete } from "Actions/completion";
-        import { dispatchPlayVideoEvent } from "js/Events";
 
         export default {
             state: {
@@ -72,11 +76,12 @@
 
             components: {
                 lessonmodulecomplete: LessonModuleComplete,
-                media: Media,
                 basiccard: BasicCard,
                 quotecard: QuoteCard,
                 raw: Raw,
                 lessonframe: LessonFrame,
+                videocard: VideoCard,
+                audiocard: AudioCard,
             },
 
             onBeforeMount(props, state) {
@@ -129,18 +134,8 @@
                 this.state.iframes = this.$$("iframe");
             },
 
-            notifyGoogleAnalyticsIfVideoIsPlaying() {
-                for (const iframe of this.state.iframes) {
-                    if (document.activeElement === iframe) {
-                        const videoUrl = iframe.src;
-                        dispatchPlayVideoEvent(videoUrl);
-                    }
-                }
-            },
-
             onUpdated() {
                 this.checkForPlayableVideos();
-                window.onblur = this.notifyGoogleAnalyticsIfVideoIsPlaying;
             },
         };
     </script>
