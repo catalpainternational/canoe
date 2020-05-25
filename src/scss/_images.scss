@@ -314,6 +314,16 @@
     width: 30px;
 }
 
+.incorrect-flag {
+    @extend %icons-shared;
+    background-image: url("../img/incorrect_flag.svg");
+}
+
+.correct-flag {
+    @extend %icons-shared;
+    background-image: url("../img/correct_flag.svg");
+}
+
 @mixin feedback-icons {
     height: 50px;
     width: 41px;
@@ -339,4 +349,39 @@
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("../img/thrilled.png");
+}
+
+.speaker {
+    @extend %stat-icon-shared;
+    background-image: url("../img/speaker.svg");
+}
+
+.film {
+    @extend %stat-icon-shared;
+    background-image: url("../img/film.svg");
+}
+
+%logos-shared {
+    @extend %icons-shared;
+    display: inline-block;
+    height: 50px;
+    background-position: center;
+}    
+
+.logo-a {
+    @extend %logos-shared;
+    background-image: url("../img/logo_a.png");
+    width: 60px;
+}
+
+.logo-b {
+    @extend %logos-shared;
+    background-image: url("../img/logo_b.svg");
+    width: 70px;
+}
+
+.logo-c {
+    @extend %logos-shared;
+    background-image: url("../img/logo_c.svg");
+    width: 50px;
 }

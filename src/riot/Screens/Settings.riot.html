@@ -29,7 +29,11 @@
             </button>
 
             <button class="btn-secondary" onclick="{logout}" translate>Log out</button>
-
+            <div class="logo">
+                <span class="logo-a"></span>
+                <span class="logo-b"></span>
+                <span class="logo-c"></span>
+            </div>
             <!-- <CacheDisplay></CacheDisplay> -->
         </div>
     </div>
@@ -53,7 +57,7 @@
         export default {
             state: {
                 browserSupportsNotifications: false,
-                isSubscribedToNotifications: true,
+                isSubscribedToNotifications: false,
                 disableNotificationsButton: false,
                 canAddToHomeScreen: false,
             },

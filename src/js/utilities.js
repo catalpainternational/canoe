@@ -2,6 +2,7 @@ import { getHomePage } from "js/WagtailPagesAPI";
 import { getLatestCompletion } from "js/LearningStatistics";
 import { dispatchToastEvent } from "js/Events";
 import { getLanguage } from "ReduxImpl/Store";
+import { BACKEND_BASE_URL } from "js/urls";
 
 export const alertAppIsOffline = () => {
     dispatchToastEvent("You are offline.");
@@ -39,6 +40,10 @@ export const isCourseInTheCurrentLanguage = (courseSlug) => {
         default:
             throw new Error(`Courses in ${currentLanguage} don't exist.`);
     }
+};
+
+export const getMediaUrl = (mediaPath) => {
+    return `${BACKEND_BASE_URL}${mediaPath}`;
 };
 
 export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
