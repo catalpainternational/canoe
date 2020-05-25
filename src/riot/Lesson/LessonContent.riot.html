@@ -23,6 +23,10 @@
             if="{props.lessonContent.cards[state.cardIdx].tag === 'quote'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
         />
+        <ListCard
+            if="{props.lessonContent.cards[state.cardIdx].tag === 'list'}"
+            card="{props.lessonContent.cards[state.cardIdx]}"
+        />
         <div class="bottom-buttons">
             <div>
                 <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
@@ -64,6 +68,7 @@
         import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
         import AudioCard from "RiotTags/Lesson/AudioCard.riot.html";
         import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
+        import ListCard from "RiotTags/Lesson/ListCard.riot.html";
 
         import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
         import { setComplete } from "Actions/completion";
@@ -78,6 +83,7 @@
                 lessonmodulecomplete: LessonModuleComplete,
                 basiccard: BasicCard,
                 quotecard: QuoteCard,
+                listcard: ListCard,
                 raw: Raw,
                 lessonframe: LessonFrame,
                 videocard: VideoCard,
