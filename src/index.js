@@ -1,7 +1,7 @@
 import "babel-polyfill";
 
 import { store } from "ReduxImpl/Store";
-import { initializeServiceWorker } from "js/ServiceWorkerManagement"
+import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 
 let storeState = store.getState();
 
