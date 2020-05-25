@@ -314,6 +314,16 @@
     width: 30px;
 }
 
+.incorrect-flag {
+    @extend %icons-shared;
+    background-image: url("../img/incorrect_flag.svg");
+}
+
+.correct-flag {
+    @extend %icons-shared;
+    background-image: url("../img/correct_flag.svg");
+}
+
 @mixin feedback-icons {
     height: 50px;
     width: 41px;
