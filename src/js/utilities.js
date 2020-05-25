@@ -39,6 +39,7 @@ export const getLastWorkedOnCourse = async () => {
 
 export const getMediaUrl = (mediaPath) => {
     return `${BACKEND_BASE_URL}${mediaPath}`;
+};
 
 export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
     const { slug: courseSlug } = wagtailCoursePage.data;
