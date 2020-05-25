@@ -1,5 +1,5 @@
 // Custom events go here (prepend the app name to the event).
-const APP_NAME = "olgeta";
+const APP_NAME = "canoe";
 
 export const ON_REQUEST_SITE_DOWNLOAD = `${APP_NAME}.app.download`;
 export const ON_LOG_IN = `${APP_NAME}.auth.loggedIn`;

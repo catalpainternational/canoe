@@ -4,7 +4,7 @@ import { installTranslationPlugin } from "RiotTranslationPlugin";
 
 import App from "RiotTags/App.riot.html";
 import { store, changeLanguage } from "ReduxImpl/Store";
-import "./scss/olgeta.scss";
+import "./scss/canoe.scss";
 
 changeLanguage('tet');
 
