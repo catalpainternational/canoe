@@ -8,7 +8,6 @@
 import { storeCompletion, getCompletions } from "./actions_store";
 import { ON_ACTION_CHANGE, ON_COMPLETION_CHANGE } from "js/Events";
 import { intersection } from "js/SetMethods";
-import { isCourseInTheCurrentLanguage } from "js/utilities";
 
 const courses = new Map();
 
