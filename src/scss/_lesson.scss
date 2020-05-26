@@ -716,15 +716,11 @@ LessonFeedback {
     .thank-you-container {
         @include feedback-containers;
 
-        .smiling-smiley {
-            height: 4em;
-            width: 4em;
-            margin-bottom: 2em;
+        .correct-flag {
+            height: 6em;
+            width: 6em;
+            margin: auto;
         }
-    }
-
-    .thank-you-container.btn-primary {
-        margin-top: 2em;
     }
 
     button.feedback {
