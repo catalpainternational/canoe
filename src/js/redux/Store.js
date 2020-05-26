@@ -48,6 +48,9 @@ export const storeSiteDownloadedIs = (trueOrFalse) => {
 
 export const changeLanguage = (language) => {
     store.dispatch({ type: LANGUAGE_CHANGE, language: language });
+
+    const LANGUAGE_STORAGE_KEY = "userLanguage";
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
 };
 
 export const serviceWorkerEvent = (event_type) => {

@@ -3,10 +3,15 @@ import { installReduxPlugin } from "ReduxImpl/RiotReduxPlugin";
 import { installTranslationPlugin } from "RiotTranslationPlugin";
 
 import App from "RiotTags/App.riot.html";
-import { store, changeLanguage } from "ReduxImpl/Store";
+import { store, changeLanguage, getLanguage } from "ReduxImpl/Store";
 import "./scss/canoe.scss";
 
-if (navigator.language.includes("en")) {
+const LANGUAGE_STORAGE_KEY = "userLanguage";
+const storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+
+if (!!storedLanguage) {
+    changeLanguage(storedLanguage);
+} else if (navigator.language.includes("en")) {
     changeLanguage("en");
 } else {
     changeLanguage("tet");
