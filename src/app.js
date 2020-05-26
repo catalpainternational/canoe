@@ -6,7 +6,11 @@ import App from "RiotTags/App.riot.html";
 import { store, changeLanguage } from "ReduxImpl/Store";
 import "./scss/canoe.scss";
 
-changeLanguage('tet');
+if (navigator.language.includes("en")) {
+    changeLanguage("en");
+} else {
+    changeLanguage("tet");
+}
 
 riot.install(function (component) {
     // all components will pass through here
