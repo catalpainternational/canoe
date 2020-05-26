@@ -3,7 +3,7 @@ import { installReduxPlugin } from "ReduxImpl/RiotReduxPlugin";
 import { installTranslationPlugin } from "RiotTranslationPlugin";
 
 import App from "RiotTags/App.riot.html";
-import { store, changeLanguage, getLanguage } from "ReduxImpl/Store";
+import { store, changeLanguage } from "ReduxImpl/Store";
 import "./scss/canoe.scss";
 
 const LANGUAGE_STORAGE_KEY = "userLanguage";
