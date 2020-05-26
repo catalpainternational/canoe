@@ -250,8 +250,8 @@ msgid "Start lesson"
 msgstr "Hahú lisaun"
 
 #: ./src/riot/Lesson/LessonFeedback.riot.html:35
-msgid "Thank you!"
-msgstr "Obrigado!"
+msgid "Successfully sent!"
+msgstr "Avaliasaun manda ona ho susesu!"
 
 #: ./src/riot/Screens/Authentication.riot.html:8
 msgid "Username"
@@ -263,10 +263,9 @@ msgstr "haree hotu"
 
 #: ./src/riot/Lesson/LessonFeedback.riot.html:37
 msgid ""
-"We appreciate your feedback and always endeavor to improve your experience."
+"Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience."
 msgstr ""
-"Ami apresia ita-nia sujestaun no kontinua esforsu atu hadi'ak ita nia "
-"eisperiensia uza aplikasaun ne'e. "
+"Obrigada fahe ona ita-nia hanoin kona-ba aprendizajen ho app ne'e. Ita-nia avaliasaun importante ba ami. Ami servisu atu kontinua halo diak liu tan ita-nia esperiensia uza app ne'e."
 
 #: ./src/riot/Screens/ChangeBrowser.riot.html:5
 msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
