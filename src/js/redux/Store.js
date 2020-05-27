@@ -68,18 +68,18 @@ export const storeSiteDownloadedIs = (trueOrFalse) => {
     store.dispatch({ type: SITE_DOWNLOADED, siteIsDownloaded: trueOrFalse });
 };
 
+export const changeLanguage = (language) => {
+    store.dispatch({ type: LANGUAGE_CHANGE, language: language });
+
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+};
+
 export const serviceWorkerEvent = (event_type) => {
     store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: event_type });
 };
 
 export const getLanguage = () => {
     return store.getState().language;
-};
-
-export const changeLanguage = (language) => {
-    store.dispatch({ type: LANGUAGE_CHANGE, language: language });
-
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
 };
 
 export const storeBrowserSupport = (trueOrFalse) => {
