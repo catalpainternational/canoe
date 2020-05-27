@@ -15,11 +15,10 @@ import {
 
 const LANGUAGE_STORAGE_KEY = "userLanguage";
 
-export const getInitialLanguage = () => {
+const getInitialLanguage = () => {
     const storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
 
     if (!!storedLanguage) {
-        localStorage.setItem(LANGUAGE_STORAGE_KEY, storedLanguage);
         return storedLanguage;
     } else if (navigator.language.includes("en")) {
         localStorage.setItem(LANGUAGE_STORAGE_KEY, "en");
