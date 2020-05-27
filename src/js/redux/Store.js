@@ -13,8 +13,37 @@ import {
     SERVICE_WORKER_EVENT,
 } from "./_Reducers";
 
+export const changeLanguage = (language) => {
+    store.dispatch({ type: LANGUAGE_CHANGE, language: language });
+
+    const LANGUAGE_STORAGE_KEY = "userLanguage";
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+};
+
+export const LANGUAGE_STORAGE_KEY = "userLanguage";
+
+export const getInitialLanguage = () => {
+    const storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+
+    if (!!storedLanguage) {
+        changeLanguage(storedLanguage);
+        return storedLanguage;
+    } else if (navigator.language.includes("en")) {
+        changeLanguage("en");
+        return "en";
+    } else {
+        changeLanguage("tet");
+        return "tet";
+    }
+};
+
+const initialStoreState = {
+    language: getInitialLanguage(),
+};
+
 export const store = createStore(
     reducers,
+    initialStoreState,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
@@ -44,13 +73,6 @@ export const storeManifest = (manifest) => {
 
 export const storeSiteDownloadedIs = (trueOrFalse) => {
     store.dispatch({ type: SITE_DOWNLOADED, siteIsDownloaded: trueOrFalse });
-};
-
-export const changeLanguage = (language) => {
-    store.dispatch({ type: LANGUAGE_CHANGE, language: language });
-
-    const LANGUAGE_STORAGE_KEY = "userLanguage";
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
 };
 
 export const serviceWorkerEvent = (event_type) => {

@@ -6,17 +6,6 @@ import App from "RiotTags/App.riot.html";
 import { store, changeLanguage } from "ReduxImpl/Store";
 import "./scss/canoe.scss";
 
-const LANGUAGE_STORAGE_KEY = "userLanguage";
-const storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-
-if (!!storedLanguage) {
-    changeLanguage(storedLanguage);
-} else if (navigator.language.includes("en")) {
-    changeLanguage("en");
-} else {
-    changeLanguage("tet");
-}
-
 riot.install(function (component) {
     // all components will pass through here
     installTranslationPlugin(component);
