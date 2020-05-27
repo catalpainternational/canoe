@@ -13,26 +13,19 @@ import {
     SERVICE_WORKER_EVENT,
 } from "./_Reducers";
 
-export const changeLanguage = (language) => {
-    store.dispatch({ type: LANGUAGE_CHANGE, language: language });
-
-    const LANGUAGE_STORAGE_KEY = "userLanguage";
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-};
-
-export const LANGUAGE_STORAGE_KEY = "userLanguage";
+const LANGUAGE_STORAGE_KEY = "userLanguage";
 
 export const getInitialLanguage = () => {
     const storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
 
     if (!!storedLanguage) {
-        changeLanguage(storedLanguage);
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, storedLanguage);
         return storedLanguage;
     } else if (navigator.language.includes("en")) {
-        changeLanguage("en");
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, "en");
         return "en";
     } else {
-        changeLanguage("tet");
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, "tet");
         return "tet";
     }
 };
@@ -81,6 +74,12 @@ export const serviceWorkerEvent = (event_type) => {
 
 export const getLanguage = () => {
     return store.getState().language;
+};
+
+export const changeLanguage = (language) => {
+    store.dispatch({ type: LANGUAGE_CHANGE, language: language });
+
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
 };
 
 export const storeBrowserSupport = (trueOrFalse) => {
