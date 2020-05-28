@@ -11,6 +11,10 @@ Authentication > div {
         margin-bottom: 20px;
     }
 
+    .site-logo, .login-image {
+        flex: none;
+    }
+
     .eye {
         position: absolute;
         top: 3px;
