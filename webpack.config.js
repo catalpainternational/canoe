@@ -59,13 +59,12 @@ module.exports = (env) => {
             contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
-            modules: ["node_modules", path.resolve(__dirname, "modules")],
+            modules: [path.resolve(__dirname, "src"), "node_modules"],
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
                 js: path.resolve(__dirname, "src/js"),
                 ReduxImpl: path.resolve(__dirname, "src/js/redux"),
                 Actions: path.resolve(__dirname, "src/js/actions"),
-                OverrideSass: path.resolve(__dirname, "src", "overrides"),
             },
         },
         module: {
@@ -175,8 +174,8 @@ module.exports = (env) => {
                 maximumFileSizeToCacheInBytes: 4000000,
             }),
             new webpack.ProvidePlugin({
-                gettext: ["Translation", "gettext"],
-                ngettext: ["Translation", "ngettext"],
+                gettext: ["js/Translation", "gettext"],
+                ngettext: ["js/Translation", "ngettext"],
             }),
             new MiniCssExtractPlugin(),
         ],
@@ -184,7 +183,9 @@ module.exports = (env) => {
 
     const productionWebpackConfig = env && env.PRODUCTION ? require("./webpack.prod.js") : {};
 
-    const config = merge(
+    const config = merge.strategy({
+	'resolve.modules': 'prepend'
+    })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,
         environmentConfiguration.WEBPACK_CONFIG,

@@ -1,6 +1,6 @@
 import * as riot from "riot";
 import { installReduxPlugin } from "ReduxImpl/RiotReduxPlugin";
-import { installTranslationPlugin } from "RiotTranslationPlugin";
+import { installTranslationPlugin } from "riot/RiotTranslationPlugin";
 
 import App from "RiotTags/App.riot.html";
 import { store, changeLanguage } from "ReduxImpl/Store";

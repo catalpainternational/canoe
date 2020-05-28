@@ -24,14 +24,12 @@
             </div>
             <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}" translate>Login</button>
         </form>
-        <div class="logo">
-            <span class="logo-a"></span>
-            <span class="logo-b"></span>
-            <span class="logo-c"></span>
-        </div>
+
+		<div is="logos" class="logo">
     </div>
 
     <script>
+        import Logos from "riot/Components/Logos.riot.html";
         import { alertIfRequestWasMadeOffline } from "js/ErrorChecks";
         import { login } from "js/AuthenticationUtilities";
 
@@ -40,6 +38,9 @@
                 errorExplanation: null,
                 isLoginButtonDisabled: false,
                 isShowingPassword: false
+            },
+            components: {
+                logos: Logos,
             },
 
             getUsernameAndPasswordFromForm() {
