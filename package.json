@@ -1,9 +1,9 @@
 {
-    "name": "olgeta",
+    "name": "canoe",
     "version": "1.0.0",
-    "description": "Solomon Islands e-learning",
+    "description": "An online learning platform.",
     "main": "index.js",
-    "repository": "https://github.com/catalpainternational/olgeta",
+    "repository": "https://github.com/catalpainternational/canoe",
     "author": "Catalpa International",
     "license": "MIT",
     "private": true,
