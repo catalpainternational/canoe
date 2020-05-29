@@ -57,11 +57,12 @@ export async function updateIdb() {
     // get server actions and ensure we have them in idb
     try{
         const actions = await getActions();
-        const results = await Promise.all(actions.map(ensureAction));
-        if (results.some(v => v)) {
-            // let things know that actions have been updated
-            window.dispatchEvent(new CustomEvent(ON_ACTION_CHANGE));
-            console.info('Retrieved and applied some server actions');
+        // const results = await Promise.all(actions.map(ensureAction));
+        for (const action of actions) {
+            ensureAction(action).then(() => {
+                window.dispatchEvent(new CustomEvent(ON_ACTION_CHANGE));
+                console.info('Retrieved and applied some server actions');
+            }).catch((error) => console.error(error));
         }
     } catch (e) {
         console.error(e);
