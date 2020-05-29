@@ -6,12 +6,11 @@ const fs = require("fs");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { InjectManifest } = require("workbox-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
+const HtmlWebpackInlineSVGPlugin = require("html-webpack-inline-svg-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
 const defaultProjectConfiguration = require("./canoe-project-default.js");
@@ -42,17 +41,14 @@ module.exports = (env) => {
         mode: "development",
         devtool: "inline-source-map",
         optimization: {
-            minimizer: [
-                new TerserPlugin(),
-                new OptimizeCSSAssetsPlugin({}),
-            ],
+            minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})],
         },
         entry: {
             canoe: path.resolve(__dirname, "src", "index.js"),
         },
         output: {
             filename: "[name]-[contenthash].js",
-            chunkFilename: '[name]-[contenthash].bundle.js',
+            chunkFilename: "[name]-[contenthash].bundle.js",
             path: path.resolve(__dirname, "dist"),
         },
         devServer: {
@@ -138,7 +134,7 @@ module.exports = (env) => {
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
                 ga_tag: environmentConfiguration.GA_TAG,
             }),
-            new HtmlWebpackInlineSVGPlugin({runPreEmit: true}),
+            new HtmlWebpackInlineSVGPlugin({ runPreEmit: true }),
             new WebpackPwaManifest({
                 inject: true,
                 ios: true,
@@ -150,24 +146,24 @@ module.exports = (env) => {
                 start_url: "/",
                 icons: [
                     {
-                      src: projectConfiguration.FAVICON_PATH,
-                      sizes: [120],
-                      destination: path.join("icons", "ios"),
-                      ios: true,
-                      manifest: false
+                        src: projectConfiguration.FAVICON_PATH,
+                        sizes: [120],
+                        destination: path.join("icons", "ios"),
+                        ios: true,
+                        manifest: false,
                     },
                     {
-                      src: projectConfiguration.FAVICON_PATH,
-                      size: [120],
-                      destination: path.join("icons", "ios"),
-                      ios: "startup"
+                        src: projectConfiguration.FAVICON_PATH,
+                        size: [120],
+                        destination: path.join("icons", "ios"),
+                        ios: "startup",
                     },
                     {
-                      src: projectConfiguration.FAVICON_PATH,
-                      sizes: [512],
-                      destination: path.join("icons", "android"),
-                    }
-                ]
+                        src: projectConfiguration.FAVICON_PATH,
+                        sizes: [512],
+                        destination: path.join("icons", "android"),
+                    },
+                ],
             }),
             new InjectManifest({
                 swSrc: path.resolve(__dirname, "src/sw.js"),
@@ -184,7 +180,7 @@ module.exports = (env) => {
     const productionWebpackConfig = env && env.PRODUCTION ? require("./webpack.prod.js") : {};
 
     const config = merge.strategy({
-	'resolve.modules': 'prepend'
+        "resolve.modules": "prepend",
     })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,

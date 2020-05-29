@@ -14,7 +14,6 @@
                 <p translate>Would you like to receive app notifications?</p>
             </div>
 
-
             <LanguageSelector></LanguageSelector>
 
             <button
@@ -29,7 +28,7 @@
 
             <button class="btn-secondary" onclick="{logout}" translate>Log out</button>
 
-			<div is="logos" class="logo">
+            <div is="logos" class="logo" />
 
             <!-- <CacheDisplay></CacheDisplay> -->
         </div>
@@ -126,11 +125,7 @@
 
             shouldShowAddToHomeScreen() {
                 const { browser, inAppelflap, inPWAMode } = getPlatform();
-                return !(
-                    browser.name === "Safari" ||
-                    inPWAMode ||
-                    inAppelflap
-                );
+                return !(browser.name === "Safari" || inPWAMode || inAppelflap);
             },
 
             onMounted() {
