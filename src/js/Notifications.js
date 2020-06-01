@@ -3,6 +3,7 @@ import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { getPlatform } from "js/PlatformDetection";
 import { urlBase64ToUint8Array } from "js/DjangoPushNotifications";
 import { alertIfRequestWasMadeOffline } from "js/ErrorChecks";
+import { logUnsubscribedFromNotifications } from "js/GoogleAnalytics";
 
 const APPLICATION_SERVER_KEY = `${process.env.APPLICATION_SERVER_KEY}`;
 const NOTIFICATION_ID_KEY = "notificationRegistrationId";
@@ -128,6 +129,8 @@ export const unsubscribeFromNotifications = async () => {
         deleteStoredRegistrationId();
         subscription.unsubscribe();
     }
+
+    logUnsubscribedFromNotifications();
 };
 
 export const isSubscribedToNotifications = async () => {

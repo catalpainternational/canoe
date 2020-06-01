@@ -41,6 +41,7 @@ LanguageSelector #language {
     margin-bottom: 20%;
     border: 0.5px solid $gray-6;
     background-color: $white;
+    padding-left: 10px;
 
     &:hover {
         cursor: pointer;
