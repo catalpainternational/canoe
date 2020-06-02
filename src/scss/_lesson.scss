@@ -1,6 +1,6 @@
 @import "~OverrideSass/themables";
 
-.lesson-frame {
+.replace-this-with-lessonframe {
     h2 {
         margin-bottom: 30px;
         margin-top: 0;
@@ -31,6 +31,7 @@
             margin-bottom: 5px;
             margin-top: 0;
             font-size: 14px;
+            color: $gray-2;
         }
 
         p {
@@ -41,10 +42,6 @@
     .card-footer {
         justify-content: space-between;
         display: flex;
-
-        @media only screen and (max-width: 374px) {
-            justify-content: left;
-        }
     }
 }
 
@@ -59,7 +56,7 @@
             font-size: 10px;
             color: $gray-1;
 
-            @media only screen and (max-width: 374px) {
+            @media only screen and (max-width: $sm-phone) {
                 line-height: 1.25;
             }
         }
@@ -114,24 +111,64 @@
     }
 }
 
-LessonPage .lesson-frame {
+LessonPage .replace-this-with-lessonframe {
     margin-top: -#{$top-menu-height};
     padding-top: $top-menu-height;
+}
+
+LessonPage .unit h5 {
+    width: 100%;
+    margin: 5px 0;
+    font-weight: 400;
 }
 
 LessonPage .content-wrapper {
     border-radius: 30px 30px 0 0;
     background-color: $gray-10;
     padding-top: 30px;
+
+    .arrow-gray {
+        display: none;
+    }
+
+    .sticky {
+        position: fixed;
+        top: 0;
+        border: 1px solid #c9d6de;
+        width: 100%;
+        background-color: #f5f4f0;
+        z-index: 1;
+        left: 0;
+        padding-left: 55px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    .sticky.lesson-header {
+        h2 {
+            font-size: 16px;
+            line-height: 15px;
+            padding-bottom: 0;
+        }
+
+        h5 {
+            font-size: 10px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .arrow-gray {
+            margin: 10px 0 0 15px;
+            display: block;
+        }
+    }
+
+    .sticky.lesson-header + .duration {
+        margin-top: $sticky-header-offset;
+    }
 }
 
-LessonPage .section-title h5 {
-    min-width: 150px;
-}
-
-LessonPage .section-title .unit h5 {
-    width: 100%;
-    margin-top: 0;
+LessonPage h2 {
+    border-bottom: none;
 }
 
 LessonPage .hide {
@@ -141,61 +178,75 @@ LessonPage .hide {
 LessonPage .content-wrapper .duration {
     align-items: center;
     display: flex;
-    border-bottom: 1px solid #d5dbdf;
-    
+    border-bottom: 1px solid $gray-6;
+    border-top: 1px solid $gray-6;
+
     span {
         margin: 5px;
     }
 
     p {
-        font-size: 10px;
-        margin-right: 10px;
+        font-size: 12px;
+        margin: 3px 10px 3px;
     }
 }
 
-LessonPage .lesson-frame h2 {
-    margin-bottom: 0;
+LessonPage .replace-this-with-lessonframe h2 {
+    margin-bottom: 10px;
 }
 
 LessonPage .description {
-    font-size: 15px;
-    margin-bottom: 0;
+    p {
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+
+    a {
+        font-size: 12px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
 
 LessonFrame {
+    $screen-height-minus-top-menu: calc(100vh - #{$top-menu-height});
+
     .frame-background {
-        height: calc(100vh - #{$top-menu-height});
-        margin-top: -#{$top-menu-height};
-        padding-top: calc(#{$top-menu-height} - 10px);
+        min-height: $screen-height-minus-top-menu;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: stretch;
     }
 
     .card-container {
+        position: relative;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: space-evenly;
         align-items: center;
+
         height: 100%;
     }
 
     .card-frame {
-        margin: 0 auto #{$bottom-menu-height};
+        margin: 0 10px 1.5em;
         padding: 30px;
+
+        width: 100%;
+        max-width: $tablet;
+        background-color: $white;
         border-radius: 30px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
 
-        overflow-y: auto;
-        height: calc(100vh - (#{$bottom-menu-height} * 3));
-        max-width: 40em;
-
-        background-color: $white;
+        @media only screen and (min-width: $tablet-plus) {
+            margin: 0 auto 1.5em;
+        }
     }
 }
 
 LessonObjective .objective {
-    height: calc(100vh - #{$top-menu-height});
-    margin-top: -#{$top-menu-height};
-    padding-top: calc(#{$top-menu-height} - 10px);
-
     h3 {
         margin-bottom: 15px;
         margin-top: 5px;
@@ -225,7 +276,7 @@ LessonObjective .objective {
 
     .card-number {
         font-size: 12px;
-        margin-bottom: 0;
+        margin-bottom: -15px;
         flex: 0;
     }
 
@@ -234,6 +285,7 @@ LessonObjective .objective {
         justify-content: space-between;
         flex-direction: row;
         width: 100%;
+        margin-bottom: 15px;
 
         .arrow-gray {
             display: inline-block;
@@ -251,125 +303,354 @@ LessonObjective .objective {
 }
 
 LessonContent .content {
-    margin-top: -#{$top-menu-height};
-    padding-top: $top-menu-height;
+    padding-bottom: $bottom-menu-height-no-footer;
 
     raw {
         flex: 1;
+    }
+
+    basiccard, quotecard, listcard, VideoCard, AudioCard  {
+        flex: 1;
+        text-align: center;
+    }
+
+    audio {
+        min-width: 250px;
+        width: 70%;
+        margin-bottom: 10%;
+        margin-top: 20%;
+    }
+
+    video {
+        margin: 10% 0 0;
+    }
+
+    quotecard {
+        margin: 20px 10px;
+        letter-spacing: 1px;
+        font-size: 1.125em;
+
+        & span {
+            color: $blue-1;
+            font-size: 1.75em;
+            font-weight: 500;
+            margin: 3px;
+        }
+
+        & p {
+            margin-top: 34px;
+            font-size: 1em;
+        }
+    }
+
+    listcard {
+        width: 100%; 
+        
+        p {
+            font-size: 1em;
+        }
+
+        span {
+            margin-right: 7px;
+            color: $blue-1;
+            font-weight: 600;
+        }
     }
 
     img.richtext-image {
         margin: 1em 0;
         width: 100%;
     }
+
+    h3.media-title {
+        font-size: 24px;
+        margin-top: 10%;
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    p.media-description {
+        font-size: 18px;
+    }
+
+    p.error-message {
+        color: red;
+    }
+
+    .bottom-buttons {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .arrow-gray {
+        display: inline-block;
+        position: relative;
+        left: unset;
+        width: 80px;
+        height: 50px;
+    }
+
+    .speaker, .film {
+        margin: 0 auto;
+    }
+
+    .btn-primary {
+        min-width: 90px;
+        font-size: 12px;
+    }
+
+    .card-number {
+        font-size: 12px;
+        margin-bottom: -15px;
+        flex: 0;
+        text-align: center;
+    }
 }
 
-LessonContent .content-wrapper {
-    border-radius: 30px 30px 0 0;
-    background-color: $gray-10;
+LessonContent div.content-wrapper {
     flex-direction: column;
     padding-top: 30px;
     display: flex;
 }
 
-LessonTest .test {
-    overflow: auto;
-    margin-top: -#{$top-menu-height};
-    padding-top: calc(#{$top-menu-height} - 10px);
+LessonTest,
+TestSingleAnswer,
+TestMultipleAnswer,
+TestPopupModal {
+    .answer {
+        width: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
 
-    @media only screen and (max-width: 374px) {
-        margin-bottom: 1rem;
+        h4 {
+            align-self: start;
+            margin: 0 0 1.5em 0;
+            font-weight: 100;
+            font-size: 1em;
+            color: $gray-3;
+        }
+
+        button {
+            width: 90px;
+            align-self: center;
+        }
+
+        .answers-block {
+            align-self: start;
+            flex: 1;
+        }
+
+        .bold {
+            font-weight: 650;
+        }
     }
 
-    ol {
-        flex: 1;
+    .test {
+        h3 {
+            align-self: start;
+        }
 
-        li {
-            flex-direction: column;
-            margin-bottom: 10px;
-            display: flex;
+        @media only screen and (max-width: $sm-phone) {
+            margin-bottom: 1rem;
+        }
 
-            & > div {
-                align-items: center;
+        h3 {
+            margin-bottom: 0.3em;
+        }
+
+        button {
+            flex: end;
+        }
+
+        ol {
+            align-self: start;
+            flex: 1;
+
+            li {
+                flex-direction: column;
+                margin-bottom: 15px;
                 display: flex;
 
-                p {
-                    flex-shrink: 1;
-                    margin: 0;
-                }
-            }
-
-            & > div:nth-child(2) {
-                padding-left: 35px;
-
-                p {
-                    margin-left: 5px;
-                }
-            }
-
-            .radio {
-                background-color: $white;
-                border-radius: 50%;
-                margin-right: 10px;
-                position: relative;
-                border: $border;
-                flex-shrink: 0;
-                height: 23px;
-                width: 23px;
-
                 & > div {
+                    align-items: center;
+                    display: flex;
+
+                    p {
+                        flex-shrink: 1;
+                        margin: 0;
+                    }
+                }
+
+                & > div:nth-child(2) {
+                    padding-left: 35px;
+
+                    p {
+                        margin-left: 5px;
+                    }
+                }
+
+                .radio {
+                    background-color: $white;
                     border-radius: 50%;
+                    margin-right: 10px;
+                    position: relative;
+                    border: $border;
+                    flex-shrink: 0;
+                    height: 23px;
+                    width: 23px;
+
+                    & > div {
+                        border-radius: 50%;
+                        position: absolute;
+                        margin: auto;
+                        height: 11px;
+                        width: 11px;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        top: 0;
+                    }
+                }
+
+                .pendingAnswer,
+                .success,
+                .warning {
+                    height: 15px;
+                    width: 18px;
+                    margin-right: 5px;
+                    display: inline-block;
                     position: absolute;
-                    margin: auto;
-                    height: 11px;
-                    width: 11px;
-                    bottom: 0;
-                    right: 0;
-                    left: 0;
-                    top: 0;
+                    margin-left: 4px;
                 }
+
+                .pendingAnswer {
+                    background-color: $blue-1;
+                    border-radius: 10px;
+                }
+
+                .checkbox {
+                    content: "";
+                    box-sizing: border-box;
+                    height: 25px;
+                    width: 25px;
+                    border: 1px solid $gray-5;
+                    border-radius: 3px;
+                    margin-right: 15px;
+                    flex: none;
+                }
+            }
+
+            li:hover {
+                cursor: pointer;
+            }
+
+            li.selected {
+                .radio {
+                    & > div {
+                        background-color: $green-1;
+                    }
+                }
+            }
+
+            li.selected.wrong {
+                .radio {
+                    border: 2px solid $red-2;
+                    height: 21px;
+                    width: 21px;
+
+                    & > div {
+                        background-color: $red-2;
+                    }
+                }
+            }
+
+            li:last-child {
+                margin-bottom: 0;
             }
         }
 
-        li:hover {
-            cursor: pointer;
+        .btn-primary {
+            font-size: 12px;
         }
 
-        li.selected {
-            .radio {
-                & > div {
-                    background-color: $green-1;
-                }
-            }
+        .card-number {
+            font-size: 12px;
+            margin-bottom: -15px;
+            flex: 0;
+            text-align: center;
+        }
+    }
+
+    .popup-modal {
+        position: fixed;
+        bottom: 0px;
+        background-color: white;
+        width: 100%;
+        text-align: center;
+        height: 300px;
+        border-radius: 30px 30px 0px 0px;
+        box-shadow: 0px 0px 10px 5px $gray-3;
+        animation-duration: 0.6s;
+        animation-name: slideModal;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        & > div {
+            flex-direction: row;
+            align-items: start;
+            display: flex;
         }
 
-        li.selected.wrong {
-            .radio {
-                border: 2px solid $red-2;
-                height: 21px;
-                width: 21px;
-
-                & > div {
-                    background-color: $red-2;
-                }
-            }
+        h2 {
+            margin: 0;
         }
 
-        li:last-child {
-            margin-bottom: 0;
+        button {
+            margin-top: 15px;
         }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .correct-flag,
+        .incorrect-flag {
+            width: 50px;
+            height: 50px;
+            margin-top: 10px;
+        }
+    }
+
+    @keyframes slideModal {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0%);
+        }
+    }
+
+    .test.showElement:after {
+        content: "";
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba(black, 0.4);
     }
 }
 
 LessonModuleComplete {
-    .module-complete-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-        height: 100%;
-    }
-
     .body {
         text-align: center;
 
@@ -394,10 +675,94 @@ LessonModuleComplete {
 }
 
 LessonFeedback {
-    .feedback-radio {
+    .feedback-buttons {
         display: flex;
-        flex-flow: row nowrap;
+        flex-flow: row wrap;
         justify-content: space-evenly;
+        margin-bottom: 3em;
+    }
+
+    .feedback-icon {
+        display: flex;
+        flex-flow: column nowrap;
+
+        .sun {
+            height: 3em;
+            width: 3em;
+            margin: auto;
+        }
+
+        h2 {
+            font-size: 1em;
+            font-weight: 500;
+            color: $gray-3;
+            letter-spacing: 0.8px;
+            text-transform: capitalize;
+            text-align: center;
+            border: none;
+            padding: 0;
+            font-family: "GalanoGrotesqueAlt";
+        }
+    }
+
+    @mixin feedback-containers {
+        text-align: center;
+
+        h3 {
+            margin-bottom: 2em;
+        }
+    }
+
+    .feedback-container {
+        @include feedback-containers;
+    }
+
+    .thank-you-container {
+        @include feedback-containers;
+
+        .correct-flag {
+            height: 6em;
+            width: 6em;
+            margin: auto;
+        }
+    }
+
+    button.feedback {
+        height: 5.687em;
+        width: 5.687em;
+        border-radius: 50%;
+        border: 2px solid $gray-6;
+        margin: 0 10px;
+        background-color: white;
+
+        &:focus {
+            border: 2px solid $blue-1;
+            -webkit-box-shadow: inset 0 1px 1px $gray-6, inset 0 2px 2px $gray-6,
+                inset 0 4px 4px $gray-6, inset 0 8px 8px $gray-6;
+            outline: 0;
+        }
+
+        &.border-blue-1 {
+            border-color: 2px solid $blue-1;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        @media only screen and (max-width: $sm-phone) {
+            margin: 10px;
+        }
+    }
+
+    button.no-thanks {
+        color: $blue-1;
+        box-shadow: none;
+        background: none;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 }
 
@@ -416,14 +781,9 @@ LessonComplete {
     }
 
     .background {
-        margin: -30px 0 0 -30px;
         position: absolute;
-    }
-
-    .overlay {
-        margin-top: 20%;
-        margin-left: auto;
-        margin-right: auto;
+        top: -1em;
+        left: -1em;
     }
 
     .complete {

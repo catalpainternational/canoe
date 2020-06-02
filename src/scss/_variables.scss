@@ -1,39 +1,51 @@
 /* Color pallete */
-$blue-1: #04788E;
-$blue-2: #00B8AD;
+$blue-1: #04788e;
+$blue-2: #00b8ad;
 
-$brown: #744D4D;
+$notifications-banner-orange: #FBBF34;
+$profile-banner-green: #129a62;
 
-$gray-1: #2A3942;
-$gray-2: #3F525E;
+$brown: #744d4d;
+
+$tan: #f5f4f0;
+
+$gray-1: #2a3942;
+$gray-2: #3f525e;
 $gray-3: #596973;
-$gray-4: #82939E;
-$gray-5: #A0AFB8;
-$gray-6: #C9D6DE;
-$gray-7: #D9E2E7;
-$gray-8: #E8EEF1;
-$gray-9: #F4F8FA;
-$gray-10: #FAFDFF;
+$gray-4: #82939e;
+$gray-5: #a0afb8;
+$gray-6: #c9d6de;
+$gray-7: #d9e2e7;
+$gray-8: #e8eef1;
+$gray-9: #f4f8fa;
+$gray-10: #fafdff;
 
-$green-1: #007B56;
-$green-2: #10B584;
-$green-3: #F4FFFC;
+$green-1: #007b56;
+$green-2: #10b584;
+$green-3: #f4fffc;
 
-$orange-1: #F66400;
-$orange-2: #F67C36;
+$orange-1: #f66400;
+$orange-2: #f67c36;
 
-$pink-1: #8A0079;
-$pink-2: #C300AB;
+$pink-1: #8a0079;
+$pink-2: #c300ab;
 
-$purple: #6F6CAC;
+$purple: #6f6cac;
 
-$red-1: #DE3011;
-$red-2: #FF694D;
+$red-1: #de3011;
+$red-2: #ff694d;
 
-$white: #FFFFFF;
+$white: #ffffff;
 
 /* Layout */
 $bottom-menu-height: 65px;
 $top-menu-height: 65px;
-
+$top-menu-height-no-footer: 55px;
+$bottom-menu-height-no-footer: 25px;
+$sticky-header-offset: 95px;
 $border: 1px solid $gray-8;
+
+// Breakpoints
+$sm-phone: 374px;
+$tablet: 600px;
+$tablet-plus: 680px;

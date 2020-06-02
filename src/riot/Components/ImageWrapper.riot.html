@@ -1,0 +1,38 @@
+<ImageWrapper>
+    <img
+        if="{state.imagePath}"
+        alt="{props.alt}"
+        class="richtext-image"
+        crossorigin="anonymous"
+        src="{state.imagePath}"
+    />
+    <p class="error-message" if="{!state.imagePath}">
+        Error: image {props.imageId}, "{props.alt}", is missing.
+    </p>
+
+    <script>
+        import { MissingImageError, getImageUrl } from "js/RenditionSelector";
+
+        export default {
+            state: {
+                imagePath: "",
+            },
+
+            async onMounted(props, state) {
+                const { imageId } = props;
+
+                let imagePath = "";
+
+                try {
+                    imagePath = await getImageUrl(imageId);
+                } catch (error) {
+                    if (!(error instanceof MissingImageError)) {
+                        throw error;
+                    }
+                }
+
+                this.update({ imagePath });
+            },
+        };
+    </script>
+</ImageWrapper>

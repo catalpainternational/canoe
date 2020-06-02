@@ -11,7 +11,7 @@
     background-position: center;
     height: 20px;
     width: 87px;
-    
+
     &.white {
         background-image: $logoWhite;
     }
@@ -155,26 +155,6 @@
     background-image: url("../img/clock.svg");
 }
 
-.people {
-    @extend %lesson-card-shared;
-    background-image: url("../img/people.svg");
-}
-
-.cards {
-    @extend %lesson-card-shared;
-    background-image: url("../img/cards.svg");
-}
-
-.video {
-    @extend %lesson-card-shared;
-    background-image: url("../img/video.svg");
-}
-
-.quiz {
-    @extend %lesson-card-shared;
-    background-image: url("../img/bubbles.svg");
-}
-
 .warning {
     @extend %icons-shared;
     background-image: url("../img/warning.svg");
@@ -196,6 +176,13 @@
     max-width: 200px;
 }
 
+.notifications-image {
+    @extend %icons-shared;
+    background-image: $notificationHeader;
+    height: 154px;
+    width: 150px;
+}
+
 .login-image {
     @extend %icons-shared;
     background-image: $loginImage;
@@ -203,6 +190,13 @@
     max-width: 250px;
     height: 190px;
     width: 100%;
+}
+
+.eye {
+    @extend %icons-shared;
+    background-image: url("../img/eye.svg");
+    height: 25px;
+    width: 25px;
 }
 
 .profile-background-image {
@@ -234,12 +228,11 @@
     padding-top: 60px;
     height: 78%;
     width: 100%;
-    background-color: $blue-1;
 
-    @media only screen and (min-width: 660px) {
+    @media only screen and (min-width: $tablet) {
         background-image: none;
         height: 120%;
-    };
+    }
 }
 
 .confetti {
@@ -268,28 +261,6 @@
     -webkit-mask-position: center;
     height: 35px;
     width: 35px;
-}
-
-.financial {
-    @extend %courses-icon-shared;
-    -webkit-mask-image: url("../img/financial.svg");
-}
-
-.leadership {
-    @extend %courses-icon-shared;
-    -webkit-mask-image: url("../img/leadership.svg");
-}
-
-.digital {
-    @extend %courses-icon-shared;
-    -webkit-mask-image: url("../img/digital.svg");
-}
-
-.notification-card .financial,
-.notification-card .leadership,
-.notification-card .digital {
-    height: 20px;
-    width: 20px;
 }
 
 .arrow {
@@ -341,4 +312,76 @@
     -webkit-mask-image: url("../img/banking_and_finance.svg");
     height: 24px;
     width: 30px;
+}
+
+.incorrect-flag {
+    @extend %icons-shared;
+    background-image: url("../img/incorrect_flag.svg");
+}
+
+.correct-flag {
+    @extend %icons-shared;
+    background-image: url("../img/correct_flag.svg");
+}
+
+@mixin feedback-icons {
+    height: 50px;
+    width: 41px;
+    background-color: $blue-1;
+    display: block;
+    margin: auto;
+    margin-top: 0.5em;
+}
+
+.neutral-smiley {
+    @extend %mask-icons-shared;
+    @include feedback-icons;
+    -webkit-mask-image: url("../img/neutral.png");
+}
+
+.smiling-smiley {
+    @extend %mask-icons-shared;
+    @include feedback-icons;
+    -webkit-mask-image: url("../img/smile.png");
+}
+
+.thrilled-smiley {
+    @extend %mask-icons-shared;
+    @include feedback-icons;
+    -webkit-mask-image: url("../img/thrilled.png");
+}
+
+.speaker {
+    @extend %stat-icon-shared;
+    background-image: url("../img/speaker.svg");
+}
+
+.film {
+    @extend %stat-icon-shared;
+    background-image: url("../img/film.svg");
+}
+
+%logos-shared {
+    @extend %icons-shared;
+    display: inline-block;
+    height: 50px;
+    background-position: center;
+}
+
+.logo-a {
+    @extend %logos-shared;
+    background-image: $logoA;
+    width: 60px;
+}
+
+.logo-b {
+    @extend %logos-shared;
+    background-image: $logoB;
+    width: 70px;
+}
+
+.logo-c {
+    @extend %logos-shared;
+    background-image: $logoC;
+    width: 50px;
 }

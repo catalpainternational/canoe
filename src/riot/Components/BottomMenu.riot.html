@@ -1,7 +1,29 @@
 <BottomMenu>
-    <footer>
+    <footer if="{!state.isObjective && !state.isContent && !state.isTest}">
         <a class="courses-icon { props.contentType === 'HomePage' ? 'active' : ''}" href="#"></a>
         <a class="notifications-icon { props.contentType === 'notifications' ? 'active' : ''}" href="#notifications"></a>
         <a class="profile-icon { props.contentType === 'profile' ? 'active' : ''}" href="#profile"></a>
     </footer>
+
+    <script>
+        import { parseURLHash } from 'js/Routing';
+
+        export default {
+            onBeforeMount(props, state) {
+                this.updateState();
+            },
+
+            onBeforeUpdate(props, state) {
+                this.updateState();
+            },
+
+            updateState() {
+                const [afterTheHash, lessonModule] = parseURLHash();
+                this.state.lessonModule = lessonModule;
+                this.state.isObjective = this.state.lessonModule === 'objectives';
+                this.state.isContent = this.state.lessonModule === 'content';
+                this.state.isTest = this.state.lessonModule === 'test';
+            }
+        }
+    </script>
 </BottomMenu>

@@ -1,0 +1,38 @@
+<TestSingleAnswer class="answer">
+    <ol>
+        <li
+            class="{answer === state.selectedAnswer ? 'selected' : ''} {answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
+            each="{answer in props.card.answers}"
+            onclick="{() => selectAnswer(answer)}"
+        >
+            <div>
+                <div class="radio">
+                    <div></div>
+                </div>
+                <p>{answer.text}</p>
+            </div>
+        </li>
+    </ol>
+
+    <script>
+        import { dispatchTestAnswerEvent } from "js/Events";
+
+        export default {
+            state: {
+                selectedAnswer: {}
+            },
+
+            selectAnswer(answer) {
+                this.update({ selectedAnswer: answer });
+                const eventData = {
+                    lesson: this.props.lessonName,
+                    question: this.props.card.question,
+                    answer: answer.text,
+                    isAnswerCorrect: answer.correct
+                };
+                dispatchTestAnswerEvent(eventData);
+                this.props.toggleModal(true, answer, answer.correct);
+            },
+        }
+    </script>
+</TestSingleAnswer>

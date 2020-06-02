@@ -1,12 +1,22 @@
 import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls.js";
 import { getAuthenticationToken } from "js/AuthenticationUtilities.js";
-
 import {
     storeWagtailPage,
     getWagtailPageFromStore,
     getManifestFromStore,
-    storeManifest
+    storeManifest,
+    getCourse,
+    getLesson,
+    getLanguage,
+    changeLanguage,
 } from "ReduxImpl/Store";
+
+class APIMissingPageError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "MissingPageError";
+    }
+}
 
 async function token_authed_fetch(url) {
     const token = getAuthenticationToken();
@@ -15,12 +25,12 @@ async function token_authed_fetch(url) {
         mode: "cors",
         headers: {
             "Content-Type": "text/json",
-            Authorization: `JWT ${token}`
-        }
+            Authorization: `JWT ${token}`,
+        },
     });
 
     if (!response.ok) {
-        throw new Error(response.status);
+        throw new APIMissingPageError(`fetch("${url}") responded with a ${response.status}`);
     }
 
     const pagesResponseJSON = await response.json();
@@ -41,14 +51,14 @@ export async function fetchPage(path) {
     return pageMetadata;
 }
 
-export const fetchImage = async path => {
+export const fetchImage = async (url) => {
     return new Promise((resolve, reject) => {
         const image = new Image();
         // Workbox only caches crossorigin images.
         image.crossOrigin = "anonymous";
         image.onload = () => resolve(image.height);
         image.onerror = reject;
-        image.src = `${BACKEND_BASE_URL}${path}`;
+        image.src = `${BACKEND_BASE_URL}${url}`;
     });
 };
 
@@ -63,7 +73,7 @@ export const getOrFetchManifest = async () => {
     return manifest;
 };
 
-export const getOrFetchWagtailPage = async path => {
+export const getOrFetchWagtailPage = async (path) => {
     const pathPieces = path.split("/");
     const secondToLastPiece = pathPieces[pathPieces.length - 2];
     const pageId = Number(secondToLastPiece);
@@ -76,4 +86,89 @@ export const getOrFetchWagtailPage = async path => {
     const wagtailPage = await fetchPage(path);
     storeWagtailPage(wagtailPage);
     return wagtailPage;
+};
+
+const _getOrFetchWagtailPageById = async (pageId) => {
+    const manifest = await getOrFetchManifest();
+    const pagePath = manifest.pages[pageId];
+    return getOrFetchWagtailPage(pagePath);
+};
+
+export const getHomePathsInManifest = (manifest) => {
+    const { home: homes } = manifest;
+    const homePaths = [];
+    for (const languageCode in homes) {
+        const homePagePath = homes[languageCode];
+        homePaths.push(homePagePath);
+    }
+    return homePaths;
+};
+
+const _getNextAvailableHomePage = async (manifestHomes) => {
+    const languageCodes = Object.keys(manifestHomes);
+    if (languageCodes.length === 0) {
+        throw new Error(`The manifest lacks HomePages`);
+    }
+    const nextLanguage = languageCodes[0];
+    const homePagePath = manifestHomes[nextLanguage];
+    const homePage = await getOrFetchWagtailPage(homePagePath);
+    changeLanguage(nextLanguage);
+    return homePage;
+};
+
+export const getHomePage = async () => {
+    const manifest = await getOrFetchManifest();
+    const { home: homes } = manifest;
+    const currentLanguage = getLanguage();
+    const homePagePath = homes[currentLanguage];
+
+    if (homePagePath) {
+        return await getOrFetchWagtailPage(homePagePath);
+    } else {
+        return await _getNextAvailableHomePage(homes);
+    }
+};
+
+export const getCourseById = async (courseId) => {
+    await _getOrFetchWagtailPageById(courseId);
+    // Until we can switch to a flatter data representation, this ensures the
+    // store has the course.
+
+    const course = getCourse(courseId);
+    if (!course) {
+        throw new Error(`Course ${courseId} doesn't exist.`);
+    }
+    return course;
+};
+
+export const getLessonById = async (lessonId) => {
+    await _getOrFetchWagtailPageById(lessonId);
+    // Until we can switch to a flatter data representation, this ensures the
+    // store has the lesson.
+
+    const lesson = getLesson(lessonId);
+    if (!lesson) {
+        throw new Error(`Lesson ${lessonId} doesn't exist.`);
+    }
+    return lesson;
+};
+
+export const getACoursesLessons = async (courseId) => {
+    const course = await getCourseById(courseId);
+    const lessonIds = course.lessonIds;
+    const lessons = [];
+
+    for (const lessonId of lessonIds) {
+        const lesson = await getLessonById(lessonId);
+        lessons.push(lesson);
+    }
+
+    return lessons;
+};
+
+export const getALessonsCourse = async (lessonId) => {
+    const lesson = await getLessonById(lessonId);
+    const parentCourseId = lesson.parentId;
+    const parentCourse = await getCourseById(parentCourseId);
+    return parentCourse;
 };

@@ -2,7 +2,7 @@ HomePage .course-header {
     margin-top: 30px;
 
     &:first-child {
-        margin-top: 10px;
+        margin: 10px 0;
     }
 }
 
@@ -13,6 +13,7 @@ HomePage .content-wrapper {
         color: $gray-2;
         font-weight: 900;
         font-size: 16px;
+        margin-bottom: 5px;
     }
 
     h3:first-child {
@@ -20,46 +21,28 @@ HomePage .content-wrapper {
     }
 }
 
-HomePage div.content-wrapper {
-    margin-left: 0;
-    margin-right: 0;
+h5.section-title {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 20px 0 10px 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
 }
 
-.section-title {
-    h5 {
-        text-transform: uppercase;
-        font-size: 14px;
-        font-weight: 400;
-        width: 180px;
-        margin-right: 5px;
-        margin-bottom: 10px;
-    }
-
-    Profile & h5 {
-        width: 300px;
-    }
-
-    div {
-        display: flex;
-        flex-direction: row; 
-        width: 100%
-    }
-
-    span {
-        width: 100%;
-    }
-
-    hr {
-        width: 100%; 
-        border: 0.5px solid $gray-6; 
-        margin-top: 30px;
-    }
+h5.section-title:after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid $gray-6;
+    margin-left: 0.8em;
 }
 
 HomePage .header {
-    margin-top: 0;
-    padding: 20px 30px 0 45px;
-    height: 180px;
+    padding: 0px 30px 0 45px;
+    height: 181px;
+    margin-top: -65px;
+    padding-top: 65px;
     
     h3 { 
         color: white;
@@ -69,12 +52,15 @@ HomePage .header {
 
     h6 {
         margin: 0px 10px 20px 0px;
+        font-weight: 400;
     }
 
     .header-box {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        max-width: $tablet;
+        margin: auto;
     }
 }
 
@@ -85,10 +71,10 @@ HomePage .header:after {
     height: 20px;
     border-radius: 0 0 50% 50%;
     position: absolute;
-    top: 200px;
+    top: 245px;
     left: 0;
 
-    @media only screen and (min-width: 660px) {
+    @media only screen and (min-width: $tablet) {
         display: none;
     };
 }
@@ -104,4 +90,14 @@ HomePage .left-block {
     max-width: 200px;
     overflow: overlay;
     margin-top: 10px;
+}
+
+HomePage div.content-wrapper {	
+    border-radius: 30px 30px 0 0;
+
+    @media only screen and (max-width: $tablet) {
+        margin-left: 0;	
+        margin-right: 0;
+        border-radius: 0px;
+    }
 }

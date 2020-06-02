@@ -1,41 +1,34 @@
-<media>
+<VideoCard>
     <div>
-        <p>{state.cached ? 'This video will play offline.' : 'This video is not yet available offline.'}</p>
-    </div>
-
-    <div>
-        <audio if="{props.media.media_type === 'audio'}" controls crossorigin="anonymous">
-            <source
-                each="{source in props.media.sources}"
-                src="{prefixUrlWithBaseUrl(source.src)}"
-                type="{source.type}"
-            />
-            Your browser does not support the audio element.
-        </audio>
+        <div class="film"></div>
         <video
-            if="{props.media.media_type === 'video'}"
             width="100%"
             crossorigin="anonymous"
             controls="true"
             preload="auto"
+            onplay="{ (event) => storeAnalytics(event) }"
         >
             <!-- if preload set to none the video will not actually be requested, if set to auto it is requested -->
             <source
-                each="{source in props.media.sources}"
-                src="{prefixUrlWithBaseUrl(source.src)}"
-                type="{ source.type }"
+                src="{getMediaUrl(props.media.sources[0].src)}"
+                type="{props.media.sources[0].type}"
             />
-            Your browser does not support the video tag.
+            <span translate>Your browser does not support the video element.</span>
         </video>
+        <h3 class="media-title">{props.media.title}</h3>
+        <p class="media-description">{props.media.description}</p>
+        <p if={state.cached} translate>This video will play offline.</p>
+        <p if={!state.cached} translate>This video is not available offline.</p>
     </div>
 
     <script>
-        import { BACKEND_BASE_URL } from "../js/urls";
+        import { getMediaUrl } from "js/utilities";
         import {
             isItemCached,
             addToCache,
             deleteItemFromCache
-        } from "../js/cacheManager/cacheManager.js";
+        } from "js/cacheManager/cacheManager.js";
+        import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
         export default {
             state: {
@@ -49,24 +42,29 @@
                 }
             },
 
+            getMediaUrl(mediaPath) {
+                return getMediaUrl(mediaPath);
+            },
+
+            storeAnalytics() {
+                const mediaTitle = this.props.media.title;
+                logClickedPlayOnVideo(mediaTitle);
+            },
+
             async getCacheInfo() {
-                const url = this.prefixUrlWithBaseUrl(this.props.media.sources[0].src);
+                const url = getMediaUrl(this.props.media.sources[0].src);
                 const cached = await isItemCached(url);
                 this.update({ cached });
             },
 
             async toggleAvailableOffline(e) {
-                const url = this.prefixUrlWithBaseUrl(this.props.media.sources[0].src);
+                const url = getMediaUrl(this.props.media.sources[0].src);
                 const action = this.state.cached
                     ? deleteItemFromCache(url, "media-cache")
                     : addToCache(url, "media-cache");
                 await action;
                 this.getCacheInfo();
             },
-
-            prefixUrlWithBaseUrl(url) {
-                return `${BACKEND_BASE_URL}${url}`;
-            }
         };
     </script>
-</media>
+</VideoCard>

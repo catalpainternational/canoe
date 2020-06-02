@@ -1,9 +1,16 @@
 <Notifications>
     <div class="notifications">
-        <div class="content-wrapper">
-            <h3>Latest notifications</h3>
+        <div class="notifications-header">
+            <div class="left-block">
+                <h3 translate>Latest notifications</h3>
+            </div>
+            <span class="notifications-image"></span>
+        </div>
 
-            <p if="{state.notifications.length === 0}">No notifications.</p>
+        <div class="content-wrapper">
+            <p if="{state.notifications.length === 0}" translate>No notifications.</p>
+
+            <h5 if="{state.notifications.length > 0}" class="section-title" translate>Notifications</h5>
 
             <ol class="notification-list">
                 <li
@@ -11,7 +18,6 @@
                     class="notification-card {markOldNotifications(index)}"
                 >
                     <div class="notification-header">
-                        <!-- <span class="financial background-blue-1"></span> -->
                         <h6>{notification.title}</h6>
                     </div>
 
@@ -20,20 +26,24 @@
                     </div>
 
                     <div class="notification-footer">
-                        <div class="action">
-                            <!-- <span class="arrow-blue"></span>
-                        <p>Start lesson</p> -->
-                        </div>
+                        <a
+                            class="action"
+                            href="#{state.currentCourse && state.currentCourse.data.id}"
+                        >
+                            <span class="arrow-blue"></span>
+                            <p translate>Start lesson</p>
+                        </a>
                         <div>
                             <p>{showTimeAgoFromNow(notification.timestamp)}</p>
                         </div>
                     </div>
                 </li>
-            </ul>
+            </ol>
         </div>
     </div>
 
     <script>
+        import { getLastWorkedOnCourse } from "js/utilities";
         import { getNotifications } from "js/Notifications";
         import dayjs from "dayjs";
         import relativeTime from "dayjs/plugin/relativeTime";
@@ -42,12 +52,15 @@
 
         export default {
             state: {
-                notifications: []
+                notifications: [],
+                currentCourse: null
             },
 
             async refreshNotifications() {
+                const currentCourse = await getLastWorkedOnCourse();
                 this.update({
-                    notifications: await getNotifications()
+                    notifications: await getNotifications(),
+                    currentCourse
                 });
             },
 

@@ -1,9 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="640px" height="679px" viewBox="0 0 640 679" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
-    <title>Shape</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M639.924086,26.1590698 C601.010785,9.32774754 558.094699,0 513,0 C433.486319,0 371.158398,22.4219758 304.779782,77.0019624 C261,113 211,128 147,128 C90,128 49.1306616,139.342138 0.195992341,162.026414 C0.0653307803,172.675471 0,335.333333 0,650 C73,669.333333 179.666667,679 320,679 C460.333333,679 567,669.333333 640,650 L639.924086,26.1590698 Z" id="Shape" fill="#1495AC"></path>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="679"><path d="M639.924 26.16C601.01 9.328 558.095 0 513 0c-79.514 0-141.842 22.422-208.22 77.002C261 113 211 128 147 128 90 128 49.13 139.342.196 162.026L0 650c73 19.333 179.667 29 320 29s247-9.667 320-29l-.076-623.84z" fill="#1495ac" fill-rule="evenodd"/></svg>

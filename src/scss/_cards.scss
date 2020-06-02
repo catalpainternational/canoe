@@ -46,17 +46,17 @@
         background-color: white;
         padding: 0px 20px 20px 20px;
 
-        @media only screen and (max-width: 374px) {
+        @media only screen and (max-width: $sm-phone) {
             flex-wrap: wrap;
         }
     }
 
     div.status,
-    div.duration,
-    div.type {
+    div.duration {
         align-items: center;
         display: flex;
         border-bottom: none;
+        border-top: none;
 
         & > span {
             margin-right: 5px;
@@ -90,13 +90,15 @@
     .status.btn-start-lesson {
         border-radius: 10px;
         max-width: 110px;
-        border: 1px solid #04788E;
+        border: 1px solid $blue-1;
         box-sizing: border-box;
         background-color: rgba(4, 120, 142, 0.07);
         padding: 5px;
 
         p {
             font-size: 10px;
+            line-height: 10px;
+            font-weight: 600;
         }
     }
 
@@ -105,10 +107,11 @@
         max-width: 100px;
         padding: 3px;
         border-radius: 5px;
-    }
 
-    div.type {
-        margin-left: 10px;
+        p {
+            line-height: 10px;
+            font-weight: 600;
+        }
     }
 }
 
@@ -148,27 +151,24 @@
     }
 }
 
-.break-card-footer {
-    @media only screen and (max-width: 374px) {
-        flex-basis: 100%;
-        height: 0;
-    }
-}
-
 .carousel-card {
     display: flex;
     flex-direction: column;
 
-    margin: 0 10px #{$bottom-menu-height};
+    margin: 0 10px #{$bottom-menu-height-no-footer};
     padding: 30px;
     border-radius: 30px;
     box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
 
     overflow-y: auto;
-    min-height: calc(100vh - (#{$bottom-menu-height} * 3));
-    max-width: 40em;
+    min-height: calc(100vh - (#{$bottom-menu-height-no-footer} * 6));
+    max-width: $tablet;
 
     background-color: $white;
+
+    @media only screen and (min-width: $tablet-plus) {
+        margin: auto;
+    }
 }
 
 .notification-card {
@@ -189,7 +189,7 @@
     }
 
     .notification-body {
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
 
     .notification-footer {

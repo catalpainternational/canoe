@@ -27,58 +27,63 @@
     >
     </LessonTest>
 
-    <div
-        class="lesson-frame background-blue-1"
-        if="{state.hash == null}"
-    >
+    <div class="replace-this-with-lessonframe background-blue-1" if="{state.hash == null}">
         <div class="content-wrapper">
-            <div class="section-title">
-                <div class="unit">
-                    <h5>Lesson - {props.wagtailPage.course.title}</h5>
+            {grabLessonHeaderReference()}
+            <div class="lesson-header">
+                <div>
+                    <a class="arrow-gray" onclick="{backToCoursePage}"></a>
                 </div>
+                <div class="section-title">
+                    <div class="unit">
+                        <h5>{ lessonTitleMessage() }</h5>
+                    </div>
+                </div>
+                <h2>{props.wagtailPage.title}</h2>
             </div>
 
-            <h2>{props.wagtailPage.title}</h2>
-            
             <div class="duration">
                 <span class="clock"></span>
-                <p>
-                    {props.wagtailPage.objective.duration + props.wagtailPage.content.duration +
-                    props.wagtailPage.test.duration} mins
-                </p>
+                <p>{ durationOfLessonMessage() }</p>
             </div>
+            <div class="description">
+                <p>{props.wagtailPage.data.description}</p>
+                <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">
+                    {props.wagtailPage.data.long_description}
+                </p>
 
-            <p if="{props.wagtailPage.data.long_description}" class="description">{props.wagtailPage.data.long_description}</p>
-            <p if="{!props.wagtailPage.data.long_description}" class="description">{props.wagtailPage.data.description}</p>
-
-            <div class="hide">
-                <div class="jobs-card">
-                    <div class="jobs-body">
-                        <h5>Jobs that use these skills</h5>
-                        <div>
-                            <div each="{job in props.wagtailPage.data.jobs}">
-                                <div>
-                                    <span
-                                        class="{job.className} background-{props.wagtailPage.course.colour}"
-                                    ></span>
+                <div if="{state.showLongDescription}" class="hide">
+                    <div class="jobs-card">
+                        <div class="jobs-body">
+                            <h5 translate>Jobs that use these skills</h5>
+                            <div>
+                                <div each="{job in props.wagtailPage.data.jobs}">
+                                    <div>
+                                        <span
+                                            class="{job.className} background-{props.wagtailPage.course.colour}"
+                                        ></span>
+                                    </div>
+                                    <p>{job.text}</p>
                                 </div>
-                                <p>{job.text}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <h3>Ok, let's get started</h3>
+                <a
+                    if="{props.wagtailPage.data.long_description && state.showLongDescription}"
+                    onclick="{toggleLessonDescription}"
+                    translate
+                    >See less</a
+                >
+                <a
+                    if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
+                    onclick="{toggleLessonDescription}"
+                    translate
+                    >See more</a
+                >
             </div>
-
-            <div class="section-title">
-                <div>
-                    <h5>Lesson Activities</h5>
-                    <span>
-                        <hr>
-                    </span>
-                </div>
-            </div>
+            <h5 class="section-title" translate>Lesson Activities</h5>
 
             <Card
                 title="1. {props.wagtailPage.objective.title}"
@@ -126,7 +131,9 @@
 
         export default {
             state: {
-                hash: ""
+                hash: "",
+                showLongDescription: false,
+                header: null
             },
 
             objectivesModule: "objectives",
@@ -142,17 +149,84 @@
 
             onBeforeMount(props, state) {
                 state.hash = getHash()[1];
-
                 window.addEventListener("hashchange", this.hashChanged);
+            },
+
+            onMounted(props, state) {
+                window.addEventListener("scroll", this.stickyHeader);
+                this.disableBlockedLessonModules();
+            },
+
+            onUpdated() {
+                this.disableBlockedLessonModules();
             },
 
             onBeforeUnmount(props, state) {
                 window.removeEventListener("hashchange", this.hashChanged);
             },
 
+            onUnmounted() {
+                window.removeEventListener("scroll", this.stickyHeader);
+            },
+
+            lessonTitleMessage () {
+                // display the title of the lesson
+                return gettext(
+                    "Lesson - %1",
+                    this.props.wagtailPage.course.title
+                );
+            },
+
             hashChanged() {
                 this.update({
                     hash: getHash()[1]
+                });
+
+                if (this.state.hash) {
+                    window.removeEventListener("scroll", this.stickyHeader);
+                } else {
+                    window.addEventListener("scroll", this.stickyHeader);
+                }
+            },
+
+            durationOfLessonMessage() {
+                // the total duration of the lesson in minutes
+                return gettext(
+                    "%1 mins", 
+                    this.props.wagtailPage.objective.duration + this.props.wagtailPage.content.duration +
+                    this.props.wagtailPage.test.duration
+                );
+            },
+
+            grabLessonHeaderReference() {
+                // "Why does this code exist?", you ask. We ran into a bug where
+                // `this.state.header` lost its dom reference, which broke the
+                // sticky header.
+                //
+                // Let's say you're on the lesson overview. When you flip from
+                // to and from a section (objectives, content, or test), the
+                // overview DOM unmounts and mounts. The lesson header in the
+                // newly mounted DOM is different from `this.state.header`.
+                // `this.state.header` refers to the header in the now-unmounted
+                // DOM. So, flipping between overview and a section broke the
+                // sticky header because the new DOM's header never became
+                // sticky.
+                //
+                // `grabLessonHeaderReference` fires whenever the overview DOM
+                // mounts. It always grabs the freshest lesson header reference.
+                // With the fresh reference, `stickyHeader` always makes the
+                // the right header sticky. Problem solved.
+                this.state.header = document.getElementsByClassName("lesson-header")[0];
+                this.state.headerOffsetTop = this.state.header.offsetTop;
+            },
+
+            backToCoursePage() {
+                location.hash = "#" + this.props.wagtailPage.course.id;
+            },
+
+            toggleLessonDescription() {
+                this.update({
+                    showLongDescription: !this.state.showLongDescription
                 });
             },
 
@@ -162,6 +236,14 @@
                     this.props.wagtailPage.data.slug,
                     section
                 );
+            },
+
+            stickyHeader() {
+                if (window.pageYOffset > this.state.headerOffsetTop) {
+                    this.state.header.classList.add("sticky");
+                } else {
+                    this.state.header.classList.remove("sticky");
+                }
             },
 
             disableBlockedLessonModules() {
@@ -178,14 +260,6 @@
                 for (const card of cardsToDisable) {
                     card.classList.add("disabled");
                 }
-            },
-
-            onMounted() {
-                this.disableBlockedLessonModules();
-            },
-
-            onUpdated() {
-                this.disableBlockedLessonModules();
             }
         };
     </script>

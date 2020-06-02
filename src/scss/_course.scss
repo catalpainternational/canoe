@@ -7,7 +7,7 @@
 }
 
 .course-header {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     display: flex;
 
     & > span {
@@ -22,14 +22,16 @@
         h3 {
             margin: 0;
             font-size: 30px;
+            line-height: 30px;
         }
 
         & > div {
             display: flex;
 
             p {
-                margin: 0;
+                margin: 5px 0;
                 flex: 1;
+                font-size: 14px;
 
                 &.bottom-border {
                     border-bottom: 1px solid;
@@ -52,8 +54,51 @@
 
         span {
             margin-left: 5px;
+            margin-bottom: 3px;
         }
     }
+
+    .arrow-gray {
+        display: none;
+    }
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  border: 1px solid #C9D6DE;
+  width: 100%;
+  background-color: #f5f4f0;
+  z-index: 1;
+  left: 0;
+  padding-left: 55px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+}
+
+.sticky.course-header {
+    h3 {
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    p.bottom-border {
+        border: none;
+    }
+
+    @media only screen and (max-width: 600px) {
+        p {
+            margin-top: 5px;
+        }
+    }
+
+    .arrow-gray {
+        margin: 10px 0 0 15px;
+        display: block;
+    }
+}
+
+.sticky.course-header + .section-title {
+    padding-top: $sticky-header-offset;
 }
 
 CoursePage .course {

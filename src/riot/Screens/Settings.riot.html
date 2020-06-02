@@ -1,8 +1,9 @@
 <Settings>
     <div class="settings">
         <div class="content-wrapper">
-            <h3>Your settings</h3>
-            <div class="notifications-toggle">
+            <h3 translate>Your settings</h3>
+
+            <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
                     onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"
@@ -10,34 +11,58 @@
                     <input type="checkbox" />
                     <div class="slider"></div>
                 </div>
-                <p>Would you like to receive app notifications?</p>
+                <p translate>Would you like to receive app notifications?</p>
             </div>
+
+            <h4 translate>Language</h4>
+
+            <LanguageSelector></LanguageSelector>
+
             <button
-                if="{!state.appIsInstalled}"
+                if="{state.canAddToHomeScreen}"
                 class="btn-secondary"
                 onclick="{promptUserToInstallApp}"
+                translate
+                translation-comment="This button adds an icon to the device homescreen"
             >
                 Add to Home Screen
             </button>
-            <button class="btn-secondary" onclick="{logout}">Log out</button>
 
+            <button class="btn-secondary" onclick="{logout}" translate>Log out</button>
+            <div class="logo">
+                <span class="logo-a"></span>
+                <span class="logo-b"></span>
+                <span class="logo-c"></span>
+            </div>
             <!-- <CacheDisplay></CacheDisplay> -->
         </div>
     </div>
     <script>
+        import LanguageSelector from "RiotTags/Components/LanguageSelector.riot.html";
         import { logout } from "js/AuthenticationUtilities";
-        import { subscribe, unsubscribe, isSubscribedToNotifications } from "js/Notifications";
+        import {
+            supportsPushManager,
+            subscribeToNotifications,
+            unsubscribeFromNotifications,
+            isSubscribedToNotifications,
+        } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
-        import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
+        // import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
+        import {
+            alertIfRequestWasMadeOffline,
+            alertIfBrowserBlocksNotifications,
+        } from "js/ErrorChecks";
+        import { getPlatform } from "js/PlatformDetection";
 
         export default {
             state: {
-                isSubscribedToNotifications: true,
+                browserSupportsNotifications: false,
+                isSubscribedToNotifications: false,
                 disableNotificationsButton: false,
-                appIsInstalled: false
+                canAddToHomeScreen: false,
             },
             components: {
-                cachedisplay: CacheDisplay
+                languageselector: LanguageSelector,
             },
 
             logout() {
@@ -45,26 +70,18 @@
             },
 
             async refreshSettings() {
-                // These updates must remain separate. Riot doesn't update state
-                // values independently.
-                //
-                //   this.update({
-                //       appIsInstalled: this.isAppInstalledToHomeScreen(),
-                //       isSubscribedToNotifications: await isSubscribedToNotifications()
-                //   })
-                //
-                // When in the same update as isSubscribedToNotifications,
-                // appIsInstalled resolves only after
-                // isSubscribedToNotifications's "await" resolves. On slow
-                // connections, when the "Add To Home Screen" button should
-                // hide, the button remains visible. With these cases in mind,
-                // we update appIsInstalled separately so that the button hides
-                // immediately.
+                this.update({
+                    canAddToHomeScreen: this.shouldShowAddToHomeScreen(),
+                });
+
+                const browserSupportsNotifications = await supportsPushManager();
+
+                if (!browserSupportsNotifications) {
+                    return;
+                }
 
                 this.update({
-                    appIsInstalled: this.isAppInstalledToHomeScreen()
-                });
-                this.update({
+                    browserSupportsNotifications,
                     isSubscribedToNotifications: await isSubscribedToNotifications(),
                 });
             },
@@ -74,12 +91,8 @@
                     this.update({ disableNotificationsButton: true });
                     await subscribeOrUnsubscribe();
                 } catch (error) {
-                    if (isAppOffline(error)) {
-                        alertAppIsOffline();
-                    } else if (error instanceof DOMException && error.name === "NotAllowedError") {
-                        alert(
-                            "Your browser blocks notifications. Allow notifications in your browser settings."
-                        );
+                    if (alertIfRequestWasMadeOffline(error)) {
+                    } else if (alertIfBrowserBlocksNotifications(error)) {
                     } else {
                         throw error;
                     }
@@ -89,17 +102,20 @@
             },
 
             async subscribe() {
-                await this.disableNotificationsButtonAnd(subscribe);
+                await this.disableNotificationsButtonAnd(subscribeToNotifications);
                 this.refreshSettings();
             },
 
             async unsubscribe() {
-                const wantsToUnsubscribe = confirm(
-                    `Olgeta uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?`
+                // warns the user that this site ( name goes in %1 ) will not be able to send you notifications if you turn this off
+                const message = gettext(
+                    `%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?`,
+                    `${process.env.SITE_NAME}`
                 );
+                const wantsToUnsubscribe = confirm(message);
 
                 if (wantsToUnsubscribe) {
-                    await this.disableNotificationsButtonAnd(unsubscribe);
+                    await this.disableNotificationsButtonAnd(unsubscribeFromNotifications);
                     this.refreshSettings();
                 }
             },
@@ -109,8 +125,13 @@
                 this.refreshSettings();
             },
 
-            isAppInstalledToHomeScreen() {
-                return window.matchMedia("(display-mode: standalone)").matches;
+            shouldShowAddToHomeScreen() {
+                const { browser, inAppelflap, inPWAMode } = getPlatform();
+                return !(
+                    browser.name === "Safari" ||
+                    inPWAMode ||
+                    inAppelflap
+                );
             },
 
             onMounted() {

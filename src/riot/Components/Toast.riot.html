@@ -1,0 +1,30 @@
+<Toast>
+    <p id="snackbar">{state.toastMessage}</p>
+    <script>
+        import { ON_TOAST_REQUESTED } from "js/Events";
+
+        const TOAST_TIMEOUT_MS = 2500;
+
+        export default {
+            state: {
+                toastMessage: ""
+            },
+
+            showToast() {
+                const toast = document.getElementById("snackbar");
+                toast.className = "show";
+                setTimeout(function() {
+                    toast.className = toast.className.replace("show", "");
+                }, TOAST_TIMEOUT_MS);
+            },
+
+            onMounted() {
+                window.addEventListener(ON_TOAST_REQUESTED, toastEvent => {
+                    const toastMessage = toastEvent.detail;
+                    this.update({ toastMessage });
+                    this.showToast();
+                });
+            }
+        };
+    </script>
+</Toast>

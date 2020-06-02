@@ -1,18 +1,18 @@
-import { countComplete } from "Actions/completion";
-
-export const isAppOffline = error => {
-    if (error instanceof TypeError && error.message === "Failed to fetch") {
-        return true;
-    } else {
-        return false;
-    }
-};
+import { getHomePage } from "js/WagtailPagesAPI";
+import { getLatestCompletion } from "js/LearningStatistics";
+import { dispatchToastEvent } from "js/Events";
+import { getLanguage } from "ReduxImpl/Store";
+import { BACKEND_BASE_URL } from "js/urls";
 
 export const alertAppIsOffline = () => {
-    alert("You are not connected to the internet.");
+    dispatchToastEvent("You are offline.");
 };
 
-export const getAllLessons = courses => {
+export const alertAppIsOnline = () => {
+    dispatchToastEvent("You are online.");
+};
+
+export const getAllLessons = (courses) => {
     let lessons = [];
     for (const course of courses) {
         lessons = lessons.concat(course.lessons);
@@ -20,21 +20,38 @@ export const getAllLessons = courses => {
     return lessons;
 };
 
-export const getNumberOfCompletedLessons = courses => {
-    let numberOfCompletedLessons = 0;
-    for (const course of courses) {
-        numberOfCompletedLessons += getNumberOfCompletedLessonsFor(course);
+export const getLastWorkedOnCourse = async () => {
+    const homePage = await getHomePage();
+    const courses = homePage.courses;
+    const latestCompletion = getLatestCompletion(courses);
+    const lastWorkedOnCourse = courses.find(
+        (course) => course.data.slug === latestCompletion.courseSlug
+    );
+    return lastWorkedOnCourse;
+};
+
+export const isCourseInTheCurrentLanguage = (courseSlug) => {
+    const currentLanguage = getLanguage();
+    switch (currentLanguage) {
+        case "en":
+            return !courseSlug.includes("tet");
+        case "tet":
+            return courseSlug.includes("tet");
+        default:
+            throw new Error(`Courses in ${currentLanguage} don't exist.`);
     }
-    return numberOfCompletedLessons;
 };
 
-export const getNumberOfCompletedLessonsFor = course => {
-    return countComplete(course.data.slug);
+export const getMediaUrl = (mediaPath) => {
+    return `${BACKEND_BASE_URL}${mediaPath}`;
 };
 
-export const getHomePageId = homePageUrl => {
-    const urlsPieces = homePageUrl.split("/");
-    const pageIdPiece = urlsPieces[urlsPieces.length - 2];
-    const pageId = Number(pageIdPiece);
-    return pageId;
+export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
+    const { slug: courseSlug } = wagtailCoursePage.data;
+    const lessons = wagtailCoursePage.lessons;
+    const lessonSlugs = lessons.map((lesson) => lesson.slug);
+    return {
+        courseSlug,
+        lessonSlugs,
+    };
 };
