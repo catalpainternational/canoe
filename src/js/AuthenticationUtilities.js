@@ -21,9 +21,9 @@ const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
     );
 };
 
-const getCookie = name => {
+const getCookie = (name) => {
     const cookieStrings = document.cookie.split(`; `);
-    const cookieValue = cookieStrings.find(tokenString => {
+    const cookieValue = cookieStrings.find((tokenString) => {
         const [key] = tokenString.split("=");
         return key === name;
     });
@@ -35,17 +35,17 @@ const getCookie = name => {
     return cookieValue.split("=")[1];
 };
 
-const deleteCookie = name => {
+const deleteCookie = (name) => {
     document.cookie = `${name}=; expired=${new Date(0)}`;
 };
 
-const fetchAuthToken = async usernameAndPassword => {
+const fetchAuthToken = async (usernameAndPassword) => {
     const response = await fetch(`${BACKEND_BASE_URL}/token-auth/`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(usernameAndPassword)
+        body: JSON.stringify(usernameAndPassword),
     });
 
     if (!response.ok) {
@@ -56,7 +56,7 @@ const fetchAuthToken = async usernameAndPassword => {
     return responseJSON;
 };
 
-export const login = async usernameAndPassword => {
+export const login = async (usernameAndPassword) => {
     let response = null;
 
     try {
@@ -68,9 +68,11 @@ export const login = async usernameAndPassword => {
     const { token, username, userId, groups } = response;
 
     // Browsers refuse to set secure cookies from non https locations
-    setCookie(JWT_TOKEN_STORAGE_KEY, token,
+    setCookie(
+        JWT_TOKEN_STORAGE_KEY,
+        token,
         window.location.protocol === "https:" ? ["secure"] : [],
-        {"max-age": 3e8, samesite: "lax"}
+        { "max-age": 3e8, samesite: "lax" }
     );
     localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
