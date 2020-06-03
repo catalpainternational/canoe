@@ -305,12 +305,16 @@ LessonObjective .objective {
 LessonContent .content {
     padding-bottom: $bottom-menu-height-no-footer;
 
-    raw {
+    raw, basiccard, quotecard, listcard, VideoCard, AudioCard  {
         flex: 1;
+        width: 100%;
     }
 
-    basiccard, quotecard, listcard, VideoCard, AudioCard  {
-        flex: 1;
+    basiccard, quotecard, listcard {
+        text-align: left;
+    }
+
+    VideoCard, AudioCard {
         text-align: center;
     }
 
@@ -330,11 +334,19 @@ LessonContent .content {
         letter-spacing: 1px;
         font-size: 1.125em;
 
+        h3 {
+            margin: 0 20px;
+        }
+
         & span {
             color: $blue-1;
             font-size: 1.75em;
             font-weight: 500;
             margin: 3px;
+        }
+
+        & > div {
+            text-align: right;
         }
 
         & p {
