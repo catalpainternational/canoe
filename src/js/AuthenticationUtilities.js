@@ -1,5 +1,6 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { dispatchLoggedOutEvent, dispatchSiteDownloadEvent } from "js/Events";
+import { unsubscribeFromNotifications } from "js/Notifications";
 
 const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
@@ -81,6 +82,7 @@ export const login = async usernameAndPassword => {
 export const logout = async () => {
     deleteCookie(JWT_TOKEN_STORAGE_KEY);
     localStorage.clear();
+    unsubscribeFromNotifications();
     dispatchLoggedOutEvent();
 };
 
