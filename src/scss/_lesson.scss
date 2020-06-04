@@ -335,18 +335,19 @@ LessonContent .content {
         font-size: 1.125em;
 
         h3 {
-            margin: 0 20px;
+            margin: -20px 20px;
         }
 
         & span {
             color: $blue-1;
             font-size: 1.75em;
             font-weight: 500;
-            margin: 3px;
+            margin: 0 3px;
         }
 
         & > div {
             text-align: right;
+            line-height: 0.1;
         }
 
         & p {
