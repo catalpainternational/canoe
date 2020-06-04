@@ -679,7 +679,7 @@ LessonFeedback {
         display: flex;
         flex-flow: row wrap;
         justify-content: space-evenly;
-        margin-bottom: 3em;
+        margin: 2em 0;
     }
 
     .feedback-icon {
@@ -707,10 +707,6 @@ LessonFeedback {
 
     @mixin feedback-containers {
         text-align: center;
-
-        h3 {
-            margin-bottom: 2em;
-        }
     }
 
     .feedback-container {
