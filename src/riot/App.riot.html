@@ -30,7 +30,8 @@
                 wagtailPage="{state.wagtailPage}"
             ></LessonPage>
             <Settings if="{state.contentType === 'settings'}"></Settings>
-            <Notifications if="{state.contentType === 'notifications'}"></Notifications>
+            <References if="{state.contentType === 'references'}"></References>
+            <!--<Notifications if="{state.contentType === 'notifications'}"></Notifications>-->
             <Profile if="{state.contentType === 'profile'}"></Profile>
 
             <BottomMenu contentType="{state.contentType}"></BottomMenu>
@@ -54,6 +55,7 @@
 
         import Authentication from "RiotTags/Screens/Authentication.riot.html";
         import Notifications from "RiotTags/Screens/Notifications.riot.html";
+        import References from "RiotTags/Screens/References.riot.html";
         import Profile from "RiotTags/Screens/Profile.riot.html";
         import Settings from "RiotTags/Screens/Settings.riot.html";
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
@@ -93,6 +95,7 @@
                 coursepage: CoursePage,
                 lessonpage: LessonPage,
                 notifications: Notifications,
+                references: References,
                 profile: Profile,
                 settings: Settings,
                 datadownload: DataDownload,

@@ -7,6 +7,7 @@ import {
 import { getLanguage } from "ReduxImpl/Store";
 
 const IS_SETTINGS_NOTIFICATIONS_OR_PROFILE = /#([A-Za-z]+)/;
+const IS_SETTINGS_REFERENCES_OR_PROFILE = /#([A-Za-z]+)/;
 const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
 const IS_PAGE_PREVIEW = /^\?(.+)/;
 
@@ -59,7 +60,7 @@ export const getWagtailPageOrRouteToTranslation = async (pageId) => {
 export const getPage = async () => {
     const wagtailPageMatch = window.location.hash.match(IS_WAGTAIL_PAGE);
     const wagtailPreviewMatch = window.location.search.match(IS_PAGE_PREVIEW);
-    const appPageMatch = window.location.hash.match(IS_SETTINGS_NOTIFICATIONS_OR_PROFILE);
+    const appPageMatch = window.location.hash.match(IS_SETTINGS_REFERENCES_OR_PROFILE);
 
     let page = null;
     let pageUrl = null;
