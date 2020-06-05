@@ -17,6 +17,7 @@
         </div>
     </div>
     <div class="content-wrapper">
+        <TagList></TagList>
         <h5 class="section-title" translate>Your courses</h5>
         <div class="course" each="{course in props.wagtailPage.courses}">
             <div class="course-header">
@@ -48,6 +49,7 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
+        import TagList from "RiotTags/Components/TagList.riot.html";
 
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
@@ -68,6 +70,7 @@
 
             components: {
                 card: Card,
+                taglist: TagList,
                 continuelearningbutton: ContinueLearningButton,
             },
 

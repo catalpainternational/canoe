@@ -10,3 +10,20 @@ footer {
     width: 100%;
     bottom: 0;
 }
+
+taglist {
+    .tag {
+        border-radius: 30px;
+        background-color: $gray-8;
+        padding: 10px 15px;
+        margin: 5px;
+        display: inline-block;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 10px;
+        font-weight: 200;
+        margin: 0;
+    }
+}
