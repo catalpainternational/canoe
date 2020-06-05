@@ -74,10 +74,27 @@
     background-image: url("../img/references.svg");
     height: 20px; // temp
     margin-bottom: 20px; // temp
+}
 
-    &.active {
-        background-image: url("../img/notifications_active.svg");
-    }
+.filter-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/filter.svg");
+    height: 20px; // temp
+    margin-bottom: 20px; // temp
+}
+
+.search-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/magnifier.svg");
+    height: 20px; // temp
+    margin-bottom: 20px; // temp
+}
+
+.favorite-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/star.svg");
+    height: 20px; // temp
+    margin-bottom: 20px; // temp
 }
 
 .checkmark-circle {

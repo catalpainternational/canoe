@@ -61,7 +61,7 @@
                 this.state.isSectionList =
                     this.props.contentType === "LessonPage" && !this.state.isCard;
                 this.state.isBasePage =
-                    this.state.isProfile || this.state.isNotifications || this.state.isSettings || this.state.isReferences;
+                    this.state.isProfile || this.state.isNotifications || this.state.isSettings; // add  || this.state.isReferences here to remove back arrow from top left corner
 
                 if (this.state.isProfile) {
                     this.state.color = "profile-green";
