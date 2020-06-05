@@ -20,7 +20,7 @@
 @import "login";
 @import "home";
 @import "toast";
-@import "tags";
+@import "references";
 
 /* General */
 body {
@@ -44,7 +44,8 @@ div.content-wrapper {
 
 .notifications,
 .profile,
-.settings {
+.settings,
+.references {
     padding-top: 65px;
     margin-top: -65px;
     background-color: $tan;
