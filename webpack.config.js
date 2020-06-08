@@ -65,6 +65,7 @@ module.exports = (env) => {
         },
         module: {
             rules: [
+                { test: /\.hbs$/, loader: "handlebars-loader" },
                 {
                     test: /\.riot.html$/,
                     exclude: /node_modules/,
@@ -129,10 +130,13 @@ module.exports = (env) => {
             new webpack.DefinePlugin(processEnvironment),
             new HtmlWebpackPlugin({
                 title: projectConfiguration.SITE_NAME,
-                template: path.resolve(__dirname, "src/index.html"),
+                template: path.resolve(__dirname, "src/index.hbs"),
                 favicon: projectConfiguration.FAVICON_PATH,
+                favicon_path: path.basename(projectConfiguration.FAVICON_PATH),
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
                 ga_tag: environmentConfiguration.GA_TAG,
+                theme_color: projectConfiguration.THEME_COLOR,
+                background_color: projectConfiguration.BACKGROUND_COLOR,
             }),
             new HtmlWebpackInlineSVGPlugin({ runPreEmit: true }),
             new WebpackPwaManifest({
