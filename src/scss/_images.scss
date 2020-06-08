@@ -76,19 +76,9 @@
     margin-bottom: 20px;
 }
 
-.filter-icon {
-    @extend %bottom-nav-shared;
-    background-image: url("../img/filter.svg");
-}
-
 .search-icon {
     @extend %bottom-nav-shared;
     background-image: url("../img/magnifier.svg");
-}
-
-.favorite-icon {
-    @extend %bottom-nav-shared;
-    background-image: url("../img/star.svg");
 }
 
 .checkmark-circle {
