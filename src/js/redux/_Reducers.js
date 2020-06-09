@@ -79,7 +79,6 @@ const addCourse = (state = {}, action) => {
                     type: course.meta.type,
                     title: course.title,
                     slug: course.data.slug,
-                    color: course.data.colour,
                     icon: course.data.icon,
                     parentId: course.meta.parent.id,
                     lessonIds: course.lessons.map((lesson) => lesson.id),
