@@ -8,12 +8,12 @@
         <TagList
             tags="{listOfTags}"
             onTagClick="{onTagClick}"
-            selectedTags="{selectedTags}"
+            selectedTags="{state.selectedTags}"
         >
         </TagList>
         <div each="{article in props.wagtailPage}">
-            <!-- add to card: if="{!state.selectedTags || state.selectedTags.includes(article.tags)}" -->
             <Card
+                if="{ isReferenceArticleVisible(article) }"
                 title="{article.title}"
                 description="{article.tags}"
             >
@@ -51,6 +51,18 @@
                     this.state.selectedTags.push(clickedTag);
                 }
                 this.update();
+            },
+
+            isReferenceArticleVisible(article) {
+                if (this.state.selectedTags.length === 0) {
+                    return true;
+                 } else {
+                    for (let i = 0; i < this.state.selectedTags.length; i++ ) {
+                        if (article.tags.includes(this.state.selectedTags[i])) {
+                            return true;
+                        }
+                    }
+                }
             },
 
             toggleSearch() {
