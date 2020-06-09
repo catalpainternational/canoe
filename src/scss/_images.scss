@@ -79,6 +79,11 @@
 .search-icon {
     @extend %bottom-nav-shared;
     background-image: url("../img/magnifier.svg");
+
+    &.active {
+        // background-image: url("../img/notifications_active.svg");
+        background-color: pink;
+    }
 }
 
 .checkmark-circle {

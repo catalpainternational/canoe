@@ -1,9 +1,10 @@
 <References>
     <div class="content-wrapper">
         <div class="references-bar">
-            <span class="references-icon"></span>
-            <h3 translate>Quick references</h3>
-            <a class="search-icon {state.searchOpen && 'active' }" onclick="{toggleSearch}"></a>
+            <span if="{!state.searchOpen}" class="references-icon"></span>
+            <h3 if="{!state.searchOpen}" translate>Quick references</h3>
+            <input if="{state.searchOpen}" type="text" oninput="{console.log('input!')}" />
+            <a class="{!state.searchOpen ? 'search-icon active' : 'cross'}" onclick="{toggleSearch}"></a>
         </div>
         <TagList
             tags="{listOfTags}"
@@ -16,6 +17,7 @@
                 if="{ isReferenceArticleVisible(article) }"
                 title="{article.title}"
                 description="{article.tags}"
+                link="references?"
             >
             </Card>
         </div>

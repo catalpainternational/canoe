@@ -4,19 +4,20 @@ References .content-wrapper {
     padding-top: 1.875em;
 
     .references-icon,
-    .search-icon {
+    .search-icon,
+    .cross {
         display: inline-block;
         margin: 0.1875em 0.4em 0;
-        width: 1.25em;
-        height: 1.25em;
-
-        &.active {
-            background-color: pink;
-        }
+        width: 1.5em;
+        height: 1.5em;
 
         &:hover {
             cursor: pointer;
         }
+    }
+    
+    .cross {
+        background-color: pink;
     }
 
     .references-bar {
@@ -33,6 +34,16 @@ References .content-wrapper {
         display: inline-block;
         margin: 0;
         flex: 1;
+    }
+
+    input {
+        flex: 1;
+        padding: 0.625em;
+        font-size: 1.1em;
+        font-weight: 300;
+        background-color: $tan;
+        border: 1px solid $gray-5;
+        border-radius: 0.1875em;
     }
 }
 
