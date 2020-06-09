@@ -3,26 +3,58 @@
         <div class="references-bar">
             <span class="references-icon"></span>
             <h3>Quick references</h3>
-            <a class="search-icon {state.iconActive == 'search-icon' ? 'active' : ''}" onclick="{markActive}"></a>
+            <a class="search-icon {state.searchOpen && 'active' }" onclick="{toggleSearch}"></a>
         </div>
-        <TagList></TagList>
-        <h4>Cards go here</h4>
+        <TagList
+            tags="{listOfTags}"
+            onTagClick="{onTagClick}"
+            selectedTags="{selectedTags}"
+        >
+        </TagList>
+        <div each="{article in props.wagtailPage}">
+            <!-- add to card: if="{!state.selectedTags || state.selectedTags.includes(article.tags)}" -->
+            <Card
+                title="{article.title}"
+                description="{article.tags}"
+            >
+            </Card>
+        </div>
     </div>
 
     <script>
         import TagList from "RiotTags/Components/TagList.riot.html";
+        import Card from "RiotTags/Components/Card.riot.html";
 
         export default {
             state: {
-                iconActive: null,
+                searchOpen: false,
+                selectedTags: [],
             },
         
             components: {
                 taglist: TagList,
+                card: Card,
             },
 
-            markActive(e) {
-                this.update({ iconActive: e.srcElement.className });
+            listOfTags: [
+                "first",
+                "second",
+                "third",
+                "no matches",
+            ],
+            
+            onTagClick(clickedTag) {
+                if (this.state.selectedTags.includes(clickedTag)) {
+                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
+                    this.state.selectedTags.splice(tagIndex, 1);
+                } else {
+                    this.state.selectedTags.push(clickedTag);
+                }
+                this.update();
+            },
+
+            toggleSearch() {
+                this.update({ searchOpen: !this.state.searchOpen });
             }
         }
     

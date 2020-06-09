@@ -13,6 +13,10 @@ References .content-wrapper {
         &.active {
             background-color: pink;
         }
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     .references-bar {
@@ -37,6 +41,18 @@ taglist {
         margin: 0.5em;
         display: inline-block;
         box-shadow: 0 0.1875em 0.1875em 0 $gray-5;
+
+        &.selected {
+            background-color: $blue-1;
+            
+            p {
+                color: white;
+            }
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     p {
@@ -47,7 +63,7 @@ taglist {
     }
 
     .tag-container {
-        margin: 0.5em 0;
+        margin: 0.5em 0 1.5em;
         padding-bottom: 0.5em;
         width: 100%;
         border-bottom: 1px solid $gray-6;

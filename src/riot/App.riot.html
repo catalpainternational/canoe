@@ -30,7 +30,10 @@
                 wagtailPage="{state.wagtailPage}"
             ></LessonPage>
             <Settings if="{state.contentType === 'settings'}"></Settings>
-            <References if="{state.contentType === 'references'}"></References>
+            <References 
+                if="{state.contentType === 'references'}"
+                wagtailPage="{articleTitleTags}"
+            ></References>
             <Profile if="{state.contentType === 'profile'}"></Profile>
 
             <BottomMenu contentType="{state.contentType}"></BottomMenu>
@@ -101,6 +104,17 @@
                 toast: Toast,
                 onlineoroffline: OnlineOrOffline,
             },
+
+            articleTitleTags: [
+                { title: "All About COVID-19", tags: ["first", "second"] },
+                { title: "Covid-19 Triage", tags: ["first", "second"] },
+                { title: "Palliative & Supportive Care in COVID-19", tags: ["third"]},
+                { title: "COVID-19: Flattening the Curve", tags: ["first", "third"]},
+                { title: "COVID-19: Triage Setup", tags: [] },
+                { title: "Case Management of COVID-19", tags: ["third", "second"]},
+                { title: "Limited PPE in COVID-19", tags: ["second"]},
+                { title: "Personal Protective Equipment (PPE) in COVID-19", tags: ["first"]},
+            ],
 
             onMounted() {
                 // After authenticating, the app downloads its materials.
