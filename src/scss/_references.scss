@@ -20,10 +20,13 @@ References .content-wrapper {
     }
 
     .references-bar {
-        height: 3em;
+        height: 2.5em;
         display: flex;
         flex-direction: row;
-        border-bottom: 1px solid $gray-6;
+    }
+
+    .section-title {
+        margin: 0.3125em 0;
     }
 
     h3 {
@@ -38,7 +41,7 @@ taglist {
         border-radius: 1.875em;
         background-color: $gray-6;
         padding: 0.625em 0.9375em;
-        margin: 0.5em;
+        margin: 0.5em 1em 0.5em 0;
         display: inline-block;
         box-shadow: 0 0.1875em 0.1875em 0 $gray-5;
 
@@ -63,7 +66,7 @@ taglist {
     }
 
     .tag-container {
-        margin: 0.5em 0 1.5em;
+        margin: 0.5em 0 1em;
         padding-bottom: 0.5em;
         width: 100%;
         border-bottom: 1px solid $gray-6;

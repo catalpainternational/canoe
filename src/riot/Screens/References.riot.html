@@ -2,9 +2,10 @@
     <div class="content-wrapper">
         <div class="references-bar">
             <span class="references-icon"></span>
-            <h3>Quick references</h3>
+            <h3 translate>Quick references</h3>
             <a class="search-icon {state.searchOpen && 'active' }" onclick="{toggleSearch}"></a>
         </div>
+        <h5 class="section-title" translate>Filter by topic</h5>
         <TagList
             tags="{listOfTags}"
             onTagClick="{onTagClick}"
@@ -37,10 +38,10 @@
             },
 
             listOfTags: [
-                "first",
-                "second",
-                "third",
-                "no matches",
+                "covid",
+                "triage",
+                "symptoms",
+                "treatment",
             ],
             
             onTagClick(clickedTag) {
