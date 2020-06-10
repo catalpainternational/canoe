@@ -3,7 +3,7 @@
         <div class="references-bar">
             <span if="{!state.searchOpen}" class="references-icon"></span>
             <h3 if="{!state.searchOpen}" translate>Quick references</h3>
-            <input if="{state.searchOpen}" id="search" type="text" oninput="{getSearchQuery}" />
+            <input if="{state.searchOpen}" id="search" type="text" />
             <a class="{!state.searchOpen ? 'search-icon active' : 'cross'}" onclick="{toggleSearch}"></a>
         </div>
         <TagList
@@ -58,11 +58,25 @@
 
             getSearchQuery(){
                 const query = this.$("#search");
-
-                console.log(query.value);
+                if (!this.state.searchOpen) {
+                    return false;
+                } else if (query.value.length < 3){
+                    return false;
+                } else {
+                    return query.value;
+                }
             },
 
             isReferenceArticleVisible(article) {
+                const query = this.getSearchQuery();
+                if (query) {
+                    if (article.title.includes(query)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }// else 
+                
                 if (this.state.selectedTags.length === 0) {
                     return true;
                  } else {
@@ -76,8 +90,10 @@
 
             toggleSearch() {
                 this.update({ searchOpen: !this.state.searchOpen });
-                const query = this.$("#search");
-                query.focus();
+                if (this.state.searchOpen) {
+                    const query = this.$("#search");
+                    query.focus();
+                }
             }
         }
     
