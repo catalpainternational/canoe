@@ -3,7 +3,7 @@
         <div class="references-bar">
             <span if="{!state.searchOpen}" class="references-icon"></span>
             <h3 if="{!state.searchOpen}" translate>Quick references</h3>
-            <input if="{state.searchOpen}" type="text" oninput="{console.log('input!')}" />
+            <input if="{state.searchOpen}" id="search" type="text" oninput="{getSearchQuery}" />
             <a class="{!state.searchOpen ? 'search-icon active' : 'cross'}" onclick="{toggleSearch}"></a>
         </div>
         <TagList
@@ -14,10 +14,11 @@
         </TagList>
         <div each="{article in props.wagtailPage}">
             <Card
-                if="{ isReferenceArticleVisible(article) }"
+                if="{isReferenceArticleVisible(article)}"
                 title="{article.title}"
                 description="{article.tags}"
                 link="references?"
+                showFooter="{false}"
             >
             </Card>
         </div>
@@ -55,6 +56,12 @@
                 this.update();
             },
 
+            getSearchQuery(){
+                const query = this.$("#search");
+
+                console.log(query.value);
+            },
+
             isReferenceArticleVisible(article) {
                 if (this.state.selectedTags.length === 0) {
                     return true;
@@ -69,6 +76,8 @@
 
             toggleSearch() {
                 this.update({ searchOpen: !this.state.searchOpen });
+                const query = this.$("#search");
+                query.focus();
             }
         }
     

@@ -15,7 +15,7 @@ References .content-wrapper {
             cursor: pointer;
         }
     }
-    
+
     .cross {
         background-color: pink;
     }
@@ -44,6 +44,10 @@ References .content-wrapper {
         background-color: $tan;
         border: 1px solid $gray-5;
         border-radius: 0.1875em;
+
+        &:focus {
+            outline: none;
+        }
     }
 }
 
@@ -58,7 +62,7 @@ taglist {
 
         &.selected {
             background-color: $blue-1;
-            
+
             p {
                 color: white;
             }
