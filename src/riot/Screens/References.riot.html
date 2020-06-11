@@ -1,10 +1,11 @@
 <References>
     <div class="content-wrapper">
         <div class="references-bar">
-            <span if="{!state.searchOpen}" class="references-icon"></span>
+            <span if="{!state.searchOpen}" class="references-icon title"></span>
             <h3 if="{!state.searchOpen}" translate>Quick references</h3>
             <input if="{state.searchOpen}" id="search" type="text" />
-            <a class="{!state.searchOpen ? 'search-icon active' : 'cross'}" onclick="{toggleSearch}"></a>
+            <span if="{state.searchOpen}" class="search-icon active"></span>
+            <a class="{!state.searchOpen ? 'search-icon' : 'cross gray'}" onclick="{toggleSearch}"></a>
         </div>
         <TagList
             tags="{listOfTags}"

@@ -3,21 +3,34 @@ References .content-wrapper {
     background-color: $gray-10;
     padding-top: 1.875em;
 
-    .references-icon,
-    .search-icon,
     .cross {
-        display: inline-block;
-        margin: 0.1875em 0.4em 0;
-        width: 1.5em;
-        height: 1.5em;
+        margin-left: 0.75em;
+        margin-top: 0.25em;
 
         &:hover {
             cursor: pointer;
         }
     }
 
-    .cross {
-        background-color: pink;
+    .search-icon {
+        width: 1.25em;
+        margin-top: 0.25em;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &.active {
+            position: absolute;
+            margin: 0.5em;
+        }
+    }
+
+    .references-icon {
+        width: 1.875em;
+        height: 1.875em;
+        margin-right: 0.75em;
+        margin-bottom: 0;
     }
 
     .references-bar {
@@ -38,7 +51,7 @@ References .content-wrapper {
 
     input {
         flex: 1;
-        padding: 0.625em;
+        padding: 0 2em;
         font-size: 1.1em;
         font-weight: 300;
         background-color: $tan;

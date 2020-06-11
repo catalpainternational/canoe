@@ -71,9 +71,15 @@
 
 .references-icon {
     @extend %bottom-nav-shared;
-    background-image: url("../img/references.svg");
-    height: 20px;
-    margin-bottom: 20px;
+    background-image: url("../img/clipboard.svg");
+
+    &.active {
+        background-image: url("../img/clipboard_active.svg");
+    }
+
+    &.title {
+        background-image: url("../img/clipboard_active_title.svg");
+    }
 }
 
 .search-icon {
@@ -81,8 +87,7 @@
     background-image: url("../img/magnifier.svg");
 
     &.active {
-        // background-image: url("../img/notifications_active.svg");
-        background-color: pink;
+        background-image: url("../img/magnifier_active.svg");
     }
 }
 
@@ -105,6 +110,12 @@
     background-image: url("../img/cross.svg");
     height: 10px;
     width: 12px;
+
+    &.gray {
+        background-image: url("../img/cross_gray.svg");
+        width: 1em;
+        height: 1em;
+    }
 }
 
 %stat-icon-shared {

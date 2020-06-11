@@ -9,4 +9,14 @@ footer {
     display: flex;
     width: 100%;
     bottom: 0;
+
+    .references-icon {
+        height: 23px;
+        margin-bottom: 20px;
+
+        &.active {
+            height: 53px;
+            margin-bottom: -7px;
+        }
+    }
 }

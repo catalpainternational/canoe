@@ -76,7 +76,7 @@ HomePage .header:after {
 
     @media only screen and (min-width: $tablet) {
         display: none;
-    };
+    }
 }
 
 HomePage .btn-continue-learning .arrow {
@@ -99,5 +99,10 @@ HomePage div.content-wrapper {
         margin-left: 0;	
         margin-right: 0;
         border-radius: 0px;
+    }
+
+    .tag-container {
+        border-bottom: unset;
+        padding: 0;
     }
 }
