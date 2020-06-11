@@ -4,4 +4,4 @@
 - first release as a submodule
 
 ## 1.1
-- WIP
+- Quick References
