@@ -1,27 +1,14 @@
 <TagList>
+    <h5 class="section-title" translate>Filter by topic</h5>
     <div class="tag-container">
-        <a class="tag" href="#?COVID-19">
-            <p>COVID-19</p>
-        </a>
-        <a class="tag" href="#?Triage">
-            <p>Triage</p>
-        </a>
-        <a class="tag" href="#?Symptoms">
-            <p>Symptoms</p>
-        </a>
-        <a class="tag" href="#?Cases">
-            <p>Cases</p>
-        </a>
-        <a class="tag" href="#?Prevention">
-            <p>Prevention</p>
-        </a>
-        <a class="tag" href="#?Screening">
-            <p>Screening</p>
+        <a  
+            each="{tag in props.tags}"
+            class="tag {props.selectedTags && props.selectedTags.includes(tag) ? 'selected' : ''}" 
+            onclick="{e => { 
+                props.onTagClick(e.srcElement.innerText)
+            }}"
+        >
+            <p>{tag}</p>
         </a>
     </div>
-    <script>
-    export default {
-
-    }
-    </script>
 </TagList>
