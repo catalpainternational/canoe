@@ -1,0 +1,30 @@
+<References>
+    <div class="content-wrapper">
+        <div class="references-bar">
+            <span class="references-icon"></span>
+            <h3>Quick references</h3>
+            <a class="search-icon {state.iconActive == 'search-icon' ? 'active' : ''}" onclick="{markActive}"></a>
+        </div>
+        <TagList></TagList>
+        <h4>Cards go here</h4>
+    </div>
+
+    <script>
+        import TagList from "RiotTags/Components/TagList.riot.html";
+
+        export default {
+            state: {
+                iconActive: null,
+            },
+        
+            components: {
+                taglist: TagList,
+            },
+
+            markActive(e) {
+                this.update({ iconActive: e.srcElement.className });
+            }
+        }
+    
+    </script>
+</References>

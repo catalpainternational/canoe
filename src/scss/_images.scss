@@ -69,6 +69,18 @@
     }
 }
 
+.references-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/references.svg");
+    height: 20px;
+    margin-bottom: 20px;
+}
+
+.search-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/magnifier.svg");
+}
+
 .checkmark-circle {
     @extend %icons-shared;
     background-image: url("../img/checkmark_circle.svg");
