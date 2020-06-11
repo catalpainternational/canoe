@@ -3,10 +3,11 @@
         <div class="references-bar">
             <span if="{!state.searchOpen}" class="references-icon title"></span>
             <h3 if="{!state.searchOpen}" translate>Quick references</h3>
-            <input if="{state.searchOpen}" id="search" type="text" />
+            <input if="{state.searchOpen}" id="search" type="text" oninput="{onSearchInput}" />
             <span if="{state.searchOpen}" class="search-icon active"></span>
             <a class="{!state.searchOpen ? 'search-icon' : 'cross gray'}" onclick="{toggleSearch}"></a>
         </div>
+        <p class="search-text" if="{state.searchOpen && !state.query}" translate>Enter at least 3 characters</p>
         <TagList
             tags="{listOfTags}"
             onTagClick="{onTagClick}"
@@ -33,6 +34,7 @@
             state: {
                 searchOpen: false,
                 selectedTags: [],
+                query: '',
             },
         
             components: {
@@ -57,26 +59,27 @@
                 this.update();
             },
 
-            getSearchQuery(){
+            onSearchInput() {
                 const query = this.$("#search");
-                if (!this.state.searchOpen) {
-                    return false;
-                } else if (query.value.length < 3){
-                    return false;
+                if (query.value.length > 2) {
+                    this.update({ query: query.value });
                 } else {
-                    return query.value;
+                    this.update({ query: '' });
                 }
+                this.update();
             },
 
             isReferenceArticleVisible(article) {
-                const query = this.getSearchQuery();
-                if (query) {
-                    if (article.title.includes(query)) {
+                if (this.state.query) {
+                    const lowercaseTitle = article.title.toLowerCase();
+                    const lowercaseQuery = this.state.query.toLowerCase();
+                    
+                    if (lowercaseTitle.includes(lowercaseQuery)) {
                         return true;
                     } else {
                         return false;
                     }
-                }// else 
+                }
                 
                 if (this.state.selectedTags.length === 0) {
                     return true;
@@ -94,6 +97,8 @@
                 if (this.state.searchOpen) {
                     const query = this.$("#search");
                     query.focus();
+                } else {
+                    this.update({ query: '' });
                 }
             }
         }

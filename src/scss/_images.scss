@@ -113,7 +113,7 @@
 
     &.gray {
         background-image: url("../img/cross_gray.svg");
-        width: 1em;
+        min-width: 1em;
         height: 1em;
     }
 }

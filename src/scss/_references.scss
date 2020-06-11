@@ -51,7 +51,7 @@ References .content-wrapper {
 
     input {
         flex: 1;
-        padding: 0 2em;
+        padding-left: 2em;
         font-size: 1.1em;
         font-weight: 300;
         background-color: $tan;
@@ -61,6 +61,11 @@ References .content-wrapper {
         &:focus {
             outline: none;
         }
+    }
+
+    .search-text {
+        font-size: 0.9em;
+        margin: 0;
     }
 }
 
