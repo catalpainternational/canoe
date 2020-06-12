@@ -18,11 +18,10 @@
     </div>
     <div class="content-wrapper">
         <TagList
-                tags="{listOfTags}"
-                onTagClick="{onTagClick}"
-                selectedTags="{state.selectedTags}"
-            >
-        </TagList>
+            tags="{props.listOfTags}"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
         <h5 class="section-title" translate>Your courses</h5>
         <div class="course" each="{course in props.wagtailPage.courses}">
             <div class="course-header">
@@ -170,6 +169,10 @@
             isLessonComplete(course, lesson) {
                 return isComplete(course.data.slug, lesson.slug);
             },
+
+            onTagClick() {
+                console.log("clicked tag")
+            }
         };
     </script>
 </HomePage>

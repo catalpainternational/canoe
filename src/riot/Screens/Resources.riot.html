@@ -9,16 +9,16 @@
         </div>
         <p class="search-text" if="{state.searchOpen && !state.query}" translate>Enter at least 3 characters</p>
         <TagList
-            tags="{listOfTags}"
+            tags="{props.listOfTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         >
         </TagList>
-        <div each="{article in props.wagtailPage}">
+        <div each="{article in props.dummyArticles}">
             <Card
                 if="{isResourceArticleVisible(article)}"
                 title="{article.title}"
-                description="{article.tags}"
+                description="{article.description}"
                 link="resource?"
                 showFooter="{false}"
             >
@@ -41,13 +41,6 @@
                 taglist: TagList,
                 card: Card,
             },
-
-            listOfTags: [
-                "covid",
-                "triage",
-                "symptoms",
-                "treatment",
-            ],
             
             onTagClick(clickedTag) {
                 if (this.state.selectedTags.includes(clickedTag)) {
@@ -70,9 +63,9 @@
 
             isResourceArticleVisible(article) {
                 const query = this.state.query;
-                const lowercaseTitle = article.title.toLowerCase();
+                const lowercaseArticle = article.title.toLowerCase().concat(article.description.toLowerCase());
                 const lowercaseQuery = query.toLowerCase();
-                const isQueryMatch = !query || lowercaseTitle.includes(lowercaseQuery);
+                const isQueryMatch = !query || lowercaseArticle.includes(lowercaseQuery);
 
                 const tagsList = this.state.selectedTags;
                 const hasTagMatch = () => {
@@ -86,7 +79,7 @@
                 const isTagMatch = (tagsList.length === 0) || hasTagMatch();
 
                 const showArticle = isQueryMatch && isTagMatch;
-                
+
                 return showArticle;
             },
 
