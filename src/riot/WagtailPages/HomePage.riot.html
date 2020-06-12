@@ -22,8 +22,7 @@
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
-        <h5 class="section-title" translate>Your courses</h5>
-        <div class="course" each="{course in props.wagtailPage.courses}">
+        <div class="course" each="{course in props.wagtailPage.courses}" if="{isCourseVisible(course.data.tags)}">
             <div class="course-header">
                 <div>
                     <a href="#{course.data.id}"> 
@@ -47,8 +46,7 @@
                 isCompleted="{isLessonComplete(course, state.nextLesson[course.data.id])}"
                 isComingSoon="{state.nextLesson[course.data.id].coming_soon}"
                 showFooter="{true}"
-            >
-            </Card>
+            ></Card>
         </div>
     </div>
 
@@ -72,6 +70,7 @@
                 nextLesson: {},
                 courses: [],
                 currentCourse: null,
+                selectedTags: [],
             },
 
             components: {
@@ -79,13 +78,6 @@
                 continuelearningbutton: ContinueLearningButton,
                 taglist: TagList,
             },
-
-            listOfTags: [
-                "covid",
-                "triage",
-                "symptoms",
-                "treatment",
-            ],
 
             onBeforeMount(props, state) {
                 const courses = props.wagtailPage.courses;
@@ -170,8 +162,29 @@
                 return isComplete(course.data.slug, lesson.slug);
             },
 
-            onTagClick() {
-                console.log("clicked tag")
+            onTagClick(clickedTag) {
+                if (this.state.selectedTags.includes(clickedTag)) {
+                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
+                    this.state.selectedTags.splice(tagIndex, 1);
+                } else {
+                    this.state.selectedTags.push(clickedTag);
+                }
+                this.update();
+            },
+
+            isCourseVisible(courseTags) {
+                const tagsList = this.state.selectedTags;
+                const hasTagMatch = () => {
+                    for (let i = 0; i < tagsList.length; i++ ) {
+                        if (courseTags.includes(tagsList[i])) {
+                            return true;
+                        } 
+                    }
+                    return false;
+                }
+                const isTagMatch = (tagsList.length === 0) || hasTagMatch();
+
+                return isTagMatch;
             }
         };
     </script>

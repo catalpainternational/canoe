@@ -16,7 +16,6 @@
                 contentType="{state.contentType}"
                 wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
             ></TopMenu>
-
             <HomePage
                 if="{state.contentType === 'HomePage'}"
                 wagtailPage="{state.wagtailPage}"
@@ -31,13 +30,12 @@
                 wagtailPage="{state.wagtailPage}"
             ></LessonPage>
             <Settings if="{state.contentType === 'settings'}"></Settings>
-            <Resources 
+            <Resources
                 if="{state.contentType === 'resources'}"
                 dummyArticles="{articleDummy}"
                 listOfTags="{listOfTags}"
             ></Resources>
             <Profile if="{state.contentType === 'profile'}"></Profile>
-
             <BottomMenu contentType="{state.contentType}"></BottomMenu>
             <PushSubscription></PushSubscription>
         </template>
@@ -108,19 +106,19 @@
             },
 
             articleDummy: [
-                { title: "All About COVID-19", description: "this is the description for covid 19 and other such diseases", tags: ["covid", "symptoms"] },
+                { title: "All About COVID-19", description: "this is the description for covid 19 and other such diseases", tags: ["COVID-19", "symptoms"] },
                 { title: "Covid-19 Triage", description: "here is another example description", tags: ["symptoms"] },
-                { title: "Palliative & Supportive Care in COVID-19", description: "yet another description with more detail about the palliative care",  tags: ["triage"]},
-                { title: "COVID-19: Flattening the Curve", description: "", tags: ["covid", "triage"]},
+                { title: "Palliative & Supportive Care in COVID-19", description: "yet another description with more detail about the palliative care",  tags: ["Triage"]},
+                { title: "COVID-19: Flattening the Curve", description: "", tags: ["COVID-19", "Triage"]},
                 { title: "COVID-19: Triage Setup", description: "A description that is particularly long and goes on to a second line but not a third probably", tags: [] },
                 { title: "Case Management of COVID-19", description: "short description", tags: ["treatment"]},
-                { title: "Limited PPE in COVID-19", description: "all about protective equipment for health care providers",  tags: ["covid"]},
-                { title: "Personal Protective Equipment (PPE) in COVID-19", description: "", tags: ["symptoms", "covid"]},
+                { title: "Limited PPE in COVID-19", description: "all about protective equipment for health care providers",  tags: ["COVID-19"]},
+                { title: "Personal Protective Equipment (PPE) in COVID-19", description: "", tags: ["symptoms", "COVID-19"]},
             ],
 
             listOfTags: [
-                "covid",
-                "triage",
+                "COVID-19",
+                "Triage",
                 "symptoms",
                 "treatment",
             ],

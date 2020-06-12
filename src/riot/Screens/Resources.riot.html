@@ -12,8 +12,7 @@
             tags="{props.listOfTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
-        >
-        </TagList>
+        ></TagList>
         <div each="{article in props.dummyArticles}">
             <Card
                 if="{isResourceArticleVisible(article)}"
