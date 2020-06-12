@@ -1,8 +1,8 @@
-<References>
+<Resources>
     <div class="content-wrapper">
-        <div class="references-bar">
-            <span if="{!state.searchOpen}" class="references-icon title"></span>
-            <h3 if="{!state.searchOpen}" translate>Quick references</h3>
+        <div class="resources-bar">
+            <span if="{!state.searchOpen}" class="resources-icon title"></span>
+            <h3 if="{!state.searchOpen}" translate>Resources</h3>
             <input if="{state.searchOpen}" id="search" type="text" oninput="{onSearchInput}" />
             <span if="{state.searchOpen}" class="search-icon active"></span>
             <a class="{!state.searchOpen ? 'search-icon' : 'cross gray'}" onclick="{toggleSearch}"></a>
@@ -16,10 +16,10 @@
         </TagList>
         <div each="{article in props.wagtailPage}">
             <Card
-                if="{isReferenceArticleVisible(article)}"
+                if="{isResourceArticleVisible(article)}"
                 title="{article.title}"
                 description="{article.tags}"
-                link="references?"
+                link="resource?"
                 showFooter="{false}"
             >
             </Card>
@@ -68,7 +68,7 @@
                 }
             },
 
-            isReferenceArticleVisible(article) {
+            isResourceArticleVisible(article) {
                 const query = this.state.query;
                 const lowercaseTitle = article.title.toLowerCase();
                 const lowercaseQuery = query.toLowerCase();
@@ -102,4 +102,4 @@
         }
     
     </script>
-</References>
+</Resources>
