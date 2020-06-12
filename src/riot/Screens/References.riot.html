@@ -60,36 +60,34 @@
             },
 
             onSearchInput() {
-                const query = this.$("#search");
-                if (query.value.length > 2) {
-                    this.update({ query: query.value });
+                const queryElement = this.$("#search");
+                if (queryElement.value.length > 2) {
+                    this.update({ query: queryElement.value });
                 } else {
                     this.update({ query: '' });
                 }
-                this.update();
             },
 
             isReferenceArticleVisible(article) {
-                if (this.state.query) {
-                    const lowercaseTitle = article.title.toLowerCase();
-                    const lowercaseQuery = this.state.query.toLowerCase();
-                    
-                    if (lowercaseTitle.includes(lowercaseQuery)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                
-                if (this.state.selectedTags.length === 0) {
-                    return true;
-                 } else {
-                    for (let i = 0; i < this.state.selectedTags.length; i++ ) {
-                        if (article.tags.includes(this.state.selectedTags[i])) {
+                const query = this.state.query;
+                const lowercaseTitle = article.title.toLowerCase();
+                const lowercaseQuery = query.toLowerCase();
+                const isQueryMatch = !query || lowercaseTitle.includes(lowercaseQuery);
+
+                const tagsList = this.state.selectedTags;
+                const hasTagMatch = () => {
+                    for (let i = 0; i < tagsList.length; i++ ) {
+                        if (article.tags.includes(tagsList[i])) {
                             return true;
-                        }
+                        } 
                     }
+                    return false;
                 }
+                const isTagMatch = (tagsList.length === 0) || hasTagMatch();
+
+                const showArticle = isQueryMatch && isTagMatch;
+                
+                return showArticle;
             },
 
             toggleSearch() {
