@@ -26,16 +26,18 @@
                 this.setImagePath(props, state);
             },
 
-            setImagePath(props) {
+            async setImagePath(props) {
                 const { imageId } = props;
-                if (this.state.imageId !== imageId) {
-                    getImageUrl(imageId).then(imagePath => {
-                        this.update({imagePath, imageId});
-                    }).catch(error => {
-                        if (!(error instanceof MissingImageError)) {
-                            throw error;
-                        }
-                    });
+                if (this.state.imageId === imageId) {
+                    return;
+                }
+                try {
+                    const imagePath = await getImageUrl(imageId);
+                    this.update({imagePath, imageId});
+                } catch (error) {
+                    if (!(error instanceof MissingImageError)) {
+                        throw error;
+                    }
                 }
             }
         };
