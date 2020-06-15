@@ -25,6 +25,12 @@
                         Back to Courses
                     </button>
                 </template>
+                <Card
+                    title="{"Resources"}"
+                    description="{"Click to view related resources"}"
+                    link="resources"
+                    showFooter="{false}"
+                ></Card>
             </div>
         </template>
     </LessonFrame>
@@ -32,10 +38,12 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { getACoursesLessons } from "js/WagtailPagesAPI";
         import { countCompleteLessonsInCourse } from "js/LearningStatistics";
+        import Card from "RiotTags/Components/Card.riot.html";
 
         export default {
             components: {
                 lessonframe: LessonFrame,
+                card: Card,
             },
 
             state: {
