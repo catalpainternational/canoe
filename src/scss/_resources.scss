@@ -3,33 +3,6 @@ Resources .content-wrapper {
     background-color: $gray-10;
     padding-top: 1.875em;
 
-    .cross {
-        margin-left: 0.75em;
-        margin-top: 0.25em;
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    .search-icon {
-        width: 1.25em;
-        margin-top: 0.25em;
-
-        &:hover {
-            cursor: pointer;
-        }
-
-        &.active {
-            position: absolute;
-            margin: 0.5em;
-
-            &:hover {
-                cursor: unset;
-            }
-        }
-    }
-
     .resources-icon {
         width: 1.875em;
         height: 1.875em;
@@ -38,7 +11,7 @@ Resources .content-wrapper {
     }
 
     .resources-bar {
-        height: 2.5em;
+        height: 2em;
         display: flex;
         flex-direction: row;
     }
@@ -52,25 +25,6 @@ Resources .content-wrapper {
         margin: 0;
         flex: 1;
     }
-
-    input {
-        flex: 1;
-        padding-left: 2em;
-        font-size: 1.1em;
-        font-weight: 300;
-        background-color: $tan;
-        border: 1px solid $gray-5;
-        border-radius: 0.1875em;
-
-        &:focus {
-            outline: none;
-        }
-    }
-
-    .search-text {
-        font-size: 0.9em;
-        margin: 0;
-    }
 }
 
 taglist {
@@ -78,7 +32,7 @@ taglist {
         border-radius: 1.875em;
         background-color: $gray-6;
         padding: 0.625em 0.9375em;
-        margin: 0.5em 1em 0.5em 0;
+        margin: 0.7em 0.7em 0 0;
         display: inline-block;
         box-shadow: 0 0.1875em 0.1875em 0 $gray-5;
 
@@ -103,9 +57,55 @@ taglist {
     }
 
     .tag-container {
-        margin: 0.5em 0 1em;
-        padding-bottom: 0.5em;
         width: 100%;
-        border-bottom: 1px solid $gray-6;
+    }
+}
+
+searchbar {
+    input {
+        width: 95%;
+        font-size: 1.1em;
+        font-weight: 300;
+        background-color: $tan;
+        border: none;
+        border-radius: 0.1875em;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .search-text {
+        font-size: 0.8em;
+        margin: 0;
+        flex: none;
+    }
+
+    .search-icon {
+        width: 1em;
+        height: 1em;
+        position: relative;
+        flex: none;
+        margin-left: 0.5em;
+    }
+
+    div.form-group {
+        border: 1px solid $gray-5;
+        margin-bottom: 1em;
+        margin-top: 1em;
+        border-radius: 5px;
+        padding: 5px 10px;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+    }
+
+    label {
+        flex: none;
+        font-size: 0.8em;
+
+        &.hide {
+            display: none;
+        }
     }
 }

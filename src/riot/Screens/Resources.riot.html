@@ -1,18 +1,19 @@
 <Resources>
     <div class="content-wrapper">
         <div class="resources-bar">
-            <span if="{!state.searchOpen}" class="resources-icon title"></span>
-            <h3 if="{!state.searchOpen}" translate>Resources</h3>
-            <input if="{state.searchOpen}" id="search" type="text" oninput="{onSearchInput}" />
-            <span if="{state.searchOpen}" class="search-icon active"></span>
-            <a class="{!state.searchOpen ? 'search-icon' : 'cross gray'}" onclick="{toggleSearch}"></a>
+            <span class="resources-icon title"></span>
+            <h3 translate>Resources</h3>
         </div>
-        <p class="search-text" if="{state.searchOpen && !state.query}" translate>Enter at least 3 characters</p>
         <TagList
             tags="{props.listOfTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
+        <SearchBar
+            typing="{state.typing}"
+            onSearchInput="{onSearchInput}"
+            shortQuery="{!state.query}"
+        ></SearchBar>
         <div each="{article in props.dummyArticles}">
             <Card
                 if="{isResourceArticleVisible(article)}"
@@ -28,17 +29,19 @@
     <script>
         import TagList from "RiotTags/Components/TagList.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
+        import SearchBar from "RiotTags/Components/SearchBar.riot.html";
 
         export default {
             state: {
-                searchOpen: false,
                 selectedTags: [],
                 query: '',
+                typing: false,
             },
         
             components: {
                 taglist: TagList,
                 card: Card,
+                searchbar: SearchBar,
             },
             
             onTagClick(clickedTag) {
@@ -53,6 +56,12 @@
 
             onSearchInput() {
                 const queryElement = this.$("#search");
+                if (queryElement.value.length > 0) {
+                    this.update({ typing: true });
+                } else {
+                    this.update({ typing: false });
+                }
+
                 if (queryElement.value.length > 2) {
                     this.update({ query: queryElement.value });
                 } else {
@@ -81,16 +90,6 @@
 
                 return showArticle;
             },
-
-            toggleSearch() {
-                this.update({ searchOpen: !this.state.searchOpen });
-                if (this.state.searchOpen) {
-                    const query = this.$("#search");
-                    query.focus();
-                } else {
-                    this.update({ query: '' });
-                }
-            }
         }
     
     </script>
