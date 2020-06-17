@@ -5,10 +5,7 @@
             <h3 translate>Resources</h3>
         </div>
         <SearchBar
-            typing="{state.typing}"
-            onSearchInput="{onSearchInput}"
-            hasSearchQuery="{state.hasSearchQuery}"
-            query="{state.query}"
+            submitQuery="{submitQuery}"
         ></SearchBar>
         <TagList
             tags="{state.listOfTags}"
@@ -66,19 +63,8 @@
                 this.update();
             },
 
-            onSearchInput() {
-                const queryElement = this.$("#search");
-                if (queryElement.value.length > 0) {
-                    this.update({ hasSearchQuery: true });
-                } else {
-                    this.update({ hasSearchQuery: false });
-                }
-
-                if (queryElement.value.length > 2) {
-                    this.update({ query: queryElement.value });
-                } else {
-                    this.update({ query: "" });
-                }
+            submitQuery(query) {
+                this.update({ query });
             },
 
             isResourceArticleVisible(article) {
