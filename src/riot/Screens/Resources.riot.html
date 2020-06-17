@@ -4,16 +4,16 @@
             <span class="resources-icon title"></span>
             <h3 translate>Resources</h3>
         </div>
-        <TagList
-            tags="{props.listOfTags}"
-            onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"
-        ></TagList>
         <SearchBar
             typing="{state.typing}"
             onSearchInput="{onSearchInput}"
             shortQuery="{!state.query}"
         ></SearchBar>
+        <TagList
+            tags="{props.listOfTags}"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
         <div each="{article in props.dummyArticles}">
             <Card
                 if="{isResourceArticleVisible(article)}"
