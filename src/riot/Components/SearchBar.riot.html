@@ -1,8 +1,8 @@
 <SearchBar>
     <div class="form-group">
-        <p class="search-text" if="{props.typing && props.shortQuery}" translate>Enter at least 3 characters</p>
+        <p class="search-text" if="{props.hasSearchQuery && !props.query}" translate>Enter at least 3 characters</p>
         <input id="search" type="text" oninput="{props.onSearchInput}"/>
-        <label class="{props.longQuery ? 'hide' : ''}" for="search" translate></label>
+        <label class="{props.hasSearchQuery ? 'hide' : ''}" for="search" translate></label>
         <span class="search-icon"></span>
     </div>
 </SearchBar>

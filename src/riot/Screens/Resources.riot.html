@@ -7,8 +7,8 @@
         <SearchBar
             typing="{state.typing}"
             onSearchInput="{onSearchInput}"
-            shortQuery="{!state.query}"
-            longQuery="{state.query}"
+            hasSearchQuery="{state.hasSearchQuery}"
+            query="{state.query}"
         ></SearchBar>
         <TagList
             tags="{props.listOfTags}"
@@ -37,6 +37,7 @@
                 selectedTags: [],
                 query: '',
                 typing: false,
+                hasSearchQuery: false,
             },
         
             components: {
@@ -58,9 +59,9 @@
             onSearchInput() {
                 const queryElement = this.$("#search");
                 if (queryElement.value.length > 0) {
-                    this.update({ typing: true });
+                    this.update({ hasSearchQuery: true });
                 } else {
-                    this.update({ typing: false });
+                    this.update({ hasSearchQuery: false });
                 }
 
                 if (queryElement.value.length > 2) {
