@@ -22,7 +22,7 @@
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
-        <div class="course" each="{course in props.wagtailPage.courses}" if="{isCourseVisible(course.data.tags)}">
+        <div class="course" each="{course in props.wagtailPage.courses}" if="{isCourseVisible(course.tags)}">
             <div class="course-header">
                 <div>
                     <a href="#{course.data.id}"> 
@@ -177,17 +177,20 @@
 
             isCourseVisible(courseTags) {
                 const tagsList = this.state.selectedTags;
+                if (tagsList.length === 0) {
+                    return true;
+                }
+
                 const hasTagMatch = () => {
-                    for (let i = 0; i < tagsList.length; i++ ) {
-                        if (courseTags.includes(tagsList[i])) {
+                    for (const tag of tagsList) {
+                        if (courseTags.includes(tag)) {
                             return true;
                         } 
                     }
                     return false;
                 }
-                const isTagMatch = (tagsList.length === 0) || hasTagMatch();
 
-                return isTagMatch;
+                return hasTagMatch();
             }
         };
     </script>
