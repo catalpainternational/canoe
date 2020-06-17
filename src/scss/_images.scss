@@ -85,10 +85,6 @@
 .search-icon {
     @extend %bottom-nav-shared;
     background-image: url("../img/magnifier.svg");
-
-    &.active {
-        background-image: url("../img/magnifier_active.svg");
-    }
 }
 
 .checkmark-circle {
