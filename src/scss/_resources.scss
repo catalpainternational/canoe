@@ -116,5 +116,9 @@ searchbar {
         &:before {
             content: 'Search';
         }
+
+        &.hide:before {
+            content: '';
+        }
     }
 }
