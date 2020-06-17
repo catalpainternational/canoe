@@ -89,7 +89,7 @@ searchbar {
         height: 1em;
         position: relative;
         flex: none;
-        margin-left: 0.5em;
+        margin-right: 0.5em;
     }
 
     div.form-group {
@@ -101,16 +101,20 @@ searchbar {
         padding: 0.3125em 0.625em;
         align-items: center;
         display: flex;
-        flex-direction: row;
+        flex-direction: row-reverse;
         background-color: $gray-9;
+    }
+
+    input:focus + label:before {
+        content: '';
     }
 
     label {
         flex: none;
         font-size: 0.8em;
 
-        &.hide {
-            display: none;
+        &:before {
+            content: 'Search';
         }
     }
 }
