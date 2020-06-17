@@ -79,6 +79,7 @@ searchbar {
         font-size: 0.8em;
         margin: 0;
         flex: none;
+        color: $gray-4;
     }
 
     .search-icon {
@@ -90,11 +91,12 @@ searchbar {
     }
 
     div.form-group {
-        border: 1px solid $gray-5;
+        border: 0.0625em solid $gray-5;
+        box-shadow: inset 0 0.125em 0.1875em 0 rgba(42,57,66,0.1);
         margin-bottom: 1em;
         margin-top: 1em;
-        border-radius: 5px;
-        padding: 5px 10px;
+        border-radius: 0.3125em;
+        padding: 0.3125em 0.625em;
         align-items: center;
         display: flex;
         flex-direction: row;
