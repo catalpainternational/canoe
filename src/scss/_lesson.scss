@@ -787,6 +787,16 @@ LessonComplete {
             width: 100%;
             margin-bottom: 10px;
         }
+
+        .btn-secondary {
+            margin-top: 1em;
+        }
+
+        @media only screen and (max-width: $sm-phone) {
+            h2 {
+                font-size: 1.9em;
+            }
+        }
     }
 
     .background {
