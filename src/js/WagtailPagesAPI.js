@@ -129,6 +129,27 @@ export const getHomePage = async () => {
     }
 };
 
+export const getResources = async () => {
+    const manifest = await getOrFetchManifest();
+    const { resourcesRoot: resourcesRootInfo } = manifest;
+    const currentLanguage = getLanguage();
+    const resourcesRootPath = resourcesRootInfo[currentLanguage];
+    const resourcesRoot = await getOrFetchWagtailPage(resourcesRootPath);
+
+    const resources = [];
+    for (const childPageId of resourcesRoot.data.children) {
+        const childPage = await _getOrFetchWagtailPageById(childPageId);
+        resources.push(childPage);
+    }
+    return resources;
+};
+
+export const getTagsFromPages = (pagesWithTags) => {
+    const eachArticlesTags = pagesWithTags.map((page) => page.tags);
+    const setOfTags = new Set(eachArticlesTags.flat());
+    return Array.from(setOfTags);
+};
+
 export const getCourseById = async (courseId) => {
     await _getOrFetchWagtailPageById(courseId);
     // Until we can switch to a flatter data representation, this ensures the

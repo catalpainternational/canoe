@@ -18,7 +18,7 @@
     </div>
     <div class="content-wrapper">
         <TagList
-            tags="{props.listOfTags}"
+            tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
@@ -64,6 +64,7 @@
             isCourseInProgress,
         } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
+        import { getTagsFromPages } from "js/WagtailPagesAPI";
 
         export default {
             state: {
@@ -71,6 +72,7 @@
                 courses: [],
                 currentCourse: null,
                 selectedTags: [],
+                listOfTags: [],
             },
 
             components: {
@@ -87,6 +89,7 @@
                 });
 
                 this.state.courses = courses;
+                this.state.listOfTags = getTagsFromPages(courses);
                 this.state.currentCourse = lastWorkedOnCourse;
             },
 
@@ -149,7 +152,7 @@
                         lesson.id === lastLesson.id
                     ) {
                         this.state.nextLesson[course.data.id] = lesson;
-                        return true;
+                        break;
                     }
                 }
             },
