@@ -70,6 +70,7 @@ searchbar {
         background-color: $tan;
         border: none;
         border-radius: 0.1875em;
+        background-color: inherit;
 
         &:focus {
             outline: none;
@@ -101,6 +102,7 @@ searchbar {
         align-items: center;
         display: flex;
         flex-direction: row;
+        background-color: $gray-9;
     }
 
     label {
