@@ -19,7 +19,6 @@
             <HomePage
                 if="{state.contentType === 'HomePage'}"
                 wagtailPage="{state.wagtailPage}"
-                listOfTags="{listOfTags}"
             ></HomePage>
             <CoursePage
                 if="{state.contentType === 'CoursePage'}"
@@ -32,7 +31,6 @@
             <Settings if="{state.contentType === 'settings'}"></Settings>
             <Resources
                 if="{state.contentType === 'resources'}"
-                dummyArticles="{articleDummy}"
                 listOfTags="{listOfTags}"
             ></Resources>
             <Profile if="{state.contentType === 'profile'}"></Profile>
@@ -104,24 +102,6 @@
                 toast: Toast,
                 onlineoroffline: OnlineOrOffline,
             },
-
-            articleDummy: [
-                { title: "All About COVID-19", description: "this is the description for covid 19 and other such diseases", tags: ["COVID-19", "symptoms"] },
-                { title: "Covid-19 Triage", description: "here is another example description", tags: ["symptoms"] },
-                { title: "Palliative & Supportive Care in COVID-19", description: "yet another description with more detail about the palliative care",  tags: ["Triage"]},
-                { title: "COVID-19: Flattening the Curve", description: "", tags: ["COVID-19", "Triage"]},
-                { title: "COVID-19: Triage Setup", description: "A description that is particularly long and goes on to a second line but not a third probably", tags: [] },
-                { title: "Case Management of COVID-19", description: "short description", tags: ["treatment"]},
-                { title: "Limited PPE in COVID-19", description: "all about protective equipment for health care providers",  tags: ["COVID-19"]},
-                { title: "Personal Protective Equipment (PPE) in COVID-19", description: "", tags: ["symptoms", "COVID-19"]},
-            ],
-
-            listOfTags: [
-                "COVID-19",
-                "Triage",
-                "symptoms",
-                "treatment",
-            ],
 
             onMounted() {
                 // After authenticating, the app downloads its materials.

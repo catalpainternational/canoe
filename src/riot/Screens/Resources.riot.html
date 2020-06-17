@@ -8,11 +8,11 @@
             submitQuery="{submitQuery}"
         ></SearchBar>
         <TagList
-            tags="{props.listOfTags}"
+            tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
-        <div each="{article in props.dummyArticles}">
+        <div each="{article in state.articles}">
             <Card
                 if="{isResourceArticleVisible(article)}"
                 title="{article.title}"
@@ -29,20 +29,30 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
 
+        import { getResources, getTagsFromPages } from "js/WagtailPagesAPI";
+
         export default {
             state: {
                 selectedTags: [],
-                query: '',
+                query: "",
                 typing: false,
                 hasSearchQuery: false,
+                articles: [],
+                listOfTags: [],
             },
-        
+
             components: {
                 taglist: TagList,
                 card: Card,
                 searchbar: SearchBar,
             },
-            
+
+            async onMounted() {
+                const articles = await getResources();
+                const listOfTags = getTagsFromPages(articles);
+                this.update({ articles, listOfTags });
+            },
+
             onTagClick(clickedTag) {
                 if (this.state.selectedTags.includes(clickedTag)) {
                     const tagIndex = this.state.selectedTags.indexOf(clickedTag);
@@ -59,26 +69,27 @@
 
             isResourceArticleVisible(article) {
                 const query = this.state.query;
-                const lowercaseArticle = article.title.toLowerCase().concat(article.description.toLowerCase());
+                const lowercaseArticle = article.title
+                    .toLowerCase()
+                    .concat(article.description.toLowerCase());
                 const lowercaseQuery = query.toLowerCase();
                 const isQueryMatch = !query || lowercaseArticle.includes(lowercaseQuery);
 
                 const tagsList = this.state.selectedTags;
                 const hasTagMatch = () => {
-                    for (let i = 0; i < tagsList.length; i++ ) {
+                    for (let i = 0; i < tagsList.length; i++) {
                         if (article.tags.includes(tagsList[i])) {
                             return true;
-                        } 
+                        }
                     }
                     return false;
-                }
-                const isTagMatch = (tagsList.length === 0) || hasTagMatch();
+                };
+                const isTagMatch = tagsList.length === 0 || hasTagMatch();
 
                 const showArticle = isQueryMatch && isTagMatch;
 
                 return showArticle;
             },
-        }
-    
+        };
     </script>
 </Resources>
