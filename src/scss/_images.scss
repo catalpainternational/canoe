@@ -20,11 +20,8 @@
 .cog {
     @extend %icons-shared;
     background-image: url("../img/cog.svg");
-    position: absolute;
     height: 40px;
-    right: -10px;
     width: 40px;
-    top: 20px;
 
     &.white {
         background-image: url("../img/cog_white.svg");

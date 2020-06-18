@@ -1,15 +1,21 @@
 <TopMenu>
     <header class="background-{state.color}">
-        <a
-            if="{!state.isCard && !state.isSectionList && !state.isCourse && !state.isBasePage && !state.isHome}"
-            class="{state.isSettings ? 'arrow-gray' : 'arrow-white'}"
-            onclick="{goBack}"
-        ></a>
-        <a if="{state.isSectionList}" class="arrow-white" onclick="{backToCoursePage}"></a>
-        <a if="{state.isCourse}" class="arrow-white" onclick="{backToHome}"></a>
-        <a if="{state.isCard}" class="cross close-btn" onclick="{backToLessonPage}"></a>
-        <a if="{!state.isHome}" class="site-logo {state.isSettings ? '' : 'white'}" href="#"></a>
-        <a if="{!state.isSettings}" class="cog white" href="#settings"></a>
+        <div class="top-menu-container">
+            <a
+                if="{!state.isCard && !state.isSectionList && !state.isCourse && !state.isBasePage && !state.isHome}"
+                class="{state.isSettings ? 'arrow-gray' : 'arrow-white'}"
+                onclick="{goBack}"
+            ></a>
+            <a if="{state.isSectionList}" class="arrow-white" onclick="{backToCoursePage}"></a>
+            <a if="{state.isCourse}" class="arrow-white" onclick="{backToHome}"></a>
+            <a if="{state.isCard}" class="cross close-btn" onclick="{backToLessonPage}"></a>
+            <a
+                if="{!state.isHome}"
+                class="site-logo {state.isSettings ? '' : 'white'}"
+                href="#"
+            ></a>
+            <a if="{!state.isSettings}" class="cog white" href="#settings"></a>
+        </div>
     </header>
 
     <script>
@@ -69,6 +75,8 @@
                     this.state.color = "notifications-orange";
                 } else if (this.state.isHome || this.state.isCard) {
                     this.state.color = "blue-1";
+                } else if (this.state.isSettings) {
+                    this.state.color = "settings-tan";
                 } else {
                     this.state.color = "";
                 }
