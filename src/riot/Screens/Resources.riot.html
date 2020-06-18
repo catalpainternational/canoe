@@ -7,9 +7,7 @@
             <span class="resources-icon title"></span>
             <h3 translate>Resources</h3>
         </div>
-        <SearchBar
-            submitQuery="{submitQuery}"
-        ></SearchBar>
+        <SearchBar submitQuery="{submitQuery}"></SearchBar>
         <TagList
             tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
@@ -32,7 +30,12 @@
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
         import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
 
-        import { getResources, getTagsFromPages } from "js/WagtailPagesAPI";
+        import { getResources } from "js/WagtailPagesAPI";
+        import {
+            getTagsFromPages,
+            doPageTagsMatchSelections,
+            doesQueryMatchSearchContent,
+        } from "js/SearchAndFiltering";
 
         export default {
             state: {
@@ -72,27 +75,19 @@
 
             isResourceArticleVisible(article) {
                 this.state.articleContent = article;
-                console.log(article)
-                const query = this.state.query;
-                const lowercaseArticle = article.title
-                    .toLowerCase()
-                    .concat(article.description.toLowerCase());
-                const lowercaseQuery = query.toLowerCase();
-                const isQueryMatch = !query || lowercaseArticle.includes(lowercaseQuery);
+                console.log(article);
 
-                const tagsList = this.state.selectedTags;
-                const hasTagMatch = () => {
-                    for (let i = 0; i < tagsList.length; i++) {
-                        if (article.tags.includes(tagsList[i])) {
-                            return true;
-                        }
-                    }
-                    return false;
-                };
-                const isTagMatch = tagsList.length === 0 || hasTagMatch();
+                const { query } = this.state;
+                const isQueryMatch = doesQueryMatchSearchContent(
+                    query,
+                    article.title,
+                    article.description
+                );
+
+                const { selectedTags } = this.state;
+                const isTagMatch = doPageTagsMatchSelections(article.tags, selectedTags);
 
                 const showArticle = isQueryMatch && isTagMatch;
-
                 return showArticle;
             },
         };
