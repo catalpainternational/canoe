@@ -61,13 +61,13 @@
                 this.state.isHome = this.props.contentType === "HomePage";
                 this.state.isCourse = this.props.contentType === "CoursePage";
                 this.state.isNotifications = this.props.contentType === "notifications";
-                this.state.isReferences = this.props.contentType === "references";
+                this.state.isResources = this.props.contentType === "resources";
                 this.state.isProfile = this.props.contentType === "profile";
                 this.state.isSettings = this.props.contentType === "settings";
                 this.state.isSectionList =
                     this.props.contentType === "LessonPage" && !this.state.isCard;
                 this.state.isBasePage =
-                    this.state.isProfile || this.state.isNotifications || this.state.isSettings; // add  || this.state.isReferences here to remove back arrow from top left corner
+                    this.state.isProfile || this.state.isResources || this.state.isSettings;
 
                 if (this.state.isProfile) {
                     this.state.color = "profile-green";

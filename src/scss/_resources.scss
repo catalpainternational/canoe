@@ -1,0 +1,124 @@
+Resources .content-wrapper {
+    border-radius: 1.875em 1.875em 0 0;
+    background-color: $gray-10;
+    padding-top: 1.875em;
+
+    .resources-icon {
+        width: 1.875em;
+        height: 1.875em;
+        margin-right: 0.75em;
+        margin-bottom: 0;
+    }
+
+    .resources-bar {
+        height: 2em;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .section-title {
+        margin: 0.3125em 0;
+    }
+
+    h3 {
+        display: inline-block;
+        margin: 0;
+        flex: 1;
+    }
+}
+
+taglist {
+    .tag {
+        border-radius: 1.875em;
+        background-color: $gray-6;
+        padding: 0.625em 0.9375em;
+        margin: 0.7em 0.7em 0 0;
+        display: inline-block;
+        box-shadow: 0 0.1875em 0.1875em 0 $gray-5;
+
+        &.selected {
+            background-color: $blue-1;
+
+            p {
+                color: white;
+            }
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    p {
+        font-size: 0.875em;
+        line-height: 0.625em;
+        font-weight: 200;
+        margin: 0;
+    }
+
+    .tag-container {
+        width: 100%;
+        margin-bottom: 1.1em;
+    }
+}
+
+searchbar {
+    input {
+        width: 95%;
+        font-size: 1.1em;
+        font-weight: 300;
+        background-color: $tan;
+        border: none;
+        border-radius: 0.1875em;
+        background-color: inherit;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .search-text {
+        font-size: 0.8em;
+        margin: 0;
+        flex: none;
+        color: $gray-4;
+    }
+
+    .search-icon {
+        width: 1em;
+        height: 1em;
+        position: relative;
+        flex: none;
+        margin-right: 0.5em;
+    }
+
+    div.form-group {
+        border: 0.0625em solid $gray-5;
+        box-shadow: inset 0 0.125em 0.1875em 0 rgba(42,57,66,0.1);
+        margin-bottom: 0.4em;
+        margin-top: 1em;
+        border-radius: 0.3125em;
+        padding: 0.3125em 0.625em;
+        align-items: center;
+        display: flex;
+        flex-direction: row-reverse;
+        background-color: $gray-9;
+    }
+
+    input:focus + label:before {
+        content: '';
+    }
+
+    label {
+        flex: none;
+        font-size: 0.8em;
+
+        &:before {
+            content: 'Search';
+        }
+
+        &.hide:before {
+            content: '';
+        }
+    }
+}

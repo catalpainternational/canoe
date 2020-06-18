@@ -16,7 +16,6 @@
                 contentType="{state.contentType}"
                 wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
             ></TopMenu>
-
             <HomePage
                 if="{state.contentType === 'HomePage'}"
                 wagtailPage="{state.wagtailPage}"
@@ -30,12 +29,10 @@
                 wagtailPage="{state.wagtailPage}"
             ></LessonPage>
             <Settings if="{state.contentType === 'settings'}"></Settings>
-            <References 
-                if="{state.contentType === 'references'}"
-                wagtailPage="{articleTitleTags}"
-            ></References>
+            <Resources
+                if="{state.contentType === 'resources'}"
+            ></Resources>
             <Profile if="{state.contentType === 'profile'}"></Profile>
-
             <BottomMenu contentType="{state.contentType}"></BottomMenu>
             <PushSubscription></PushSubscription>
         </template>
@@ -56,7 +53,7 @@
         import OnlineOrOffline from "RiotTags/Components/OnlineOrOffline.riot.html";
 
         import Authentication from "RiotTags/Screens/Authentication.riot.html";
-        import References from "RiotTags/Screens/References.riot.html";
+        import Resources from "RiotTags/Screens/Resources.riot.html";
         import Profile from "RiotTags/Screens/Profile.riot.html";
         import Settings from "RiotTags/Screens/Settings.riot.html";
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
@@ -95,7 +92,7 @@
                 homepage: HomePage,
                 coursepage: CoursePage,
                 lessonpage: LessonPage,
-                references: References,
+                resources: Resources,
                 profile: Profile,
                 settings: Settings,
                 datadownload: DataDownload,
@@ -104,17 +101,6 @@
                 toast: Toast,
                 onlineoroffline: OnlineOrOffline,
             },
-
-            articleTitleTags: [
-                { title: "All About COVID-19", tags: ["covid", "symptoms"] },
-                { title: "Covid-19 Triage", tags: ["symptoms"] },
-                { title: "Palliative & Supportive Care in COVID-19", tags: ["triage"]},
-                { title: "COVID-19: Flattening the Curve", tags: ["covid", "triage"]},
-                { title: "COVID-19: Triage Setup", tags: [] },
-                { title: "Case Management of COVID-19", tags: ["treatment"]},
-                { title: "Limited PPE in COVID-19", tags: ["covid"]},
-                { title: "Personal Protective Equipment (PPE) in COVID-19", tags: ["symptoms", "covid"]},
-            ],
 
             onMounted() {
                 // After authenticating, the app downloads its materials.
