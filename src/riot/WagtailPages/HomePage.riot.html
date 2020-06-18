@@ -68,7 +68,7 @@
             isCourseInProgress,
         } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
-        import { getTagsFromPages, doPagesTagsMatchSelections } from "js/SearchAndFiltering";
+        import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
 
         export default {
             state: {
@@ -181,7 +181,7 @@
 
             isCourseVisible(courseTags) {
                 const { selectedTags } = this.state;
-                return doPagesTagsMatchSelections(courseTags, selectedTags);
+                return doPageTagsMatchSelections(courseTags, selectedTags);
             },
         };
     </script>
