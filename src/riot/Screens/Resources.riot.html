@@ -1,5 +1,8 @@
 <Resources>
-    <div class="content-wrapper">
+    <!-- <LessonContent
+        lessonContent="{state.articleContent}"
+    ></LessonContent> -->
+    <div class="content-wrapper" if="{state.hash == null}">
         <div class="resources-bar">
             <span class="resources-icon title"></span>
             <h3 translate>Resources</h3>
@@ -17,10 +20,9 @@
                 if="{isResourceArticleVisible(article)}"
                 title="{article.title}"
                 description="{article.description}"
-                link="resource?"
+                link="{article.id}"
                 showFooter="{false}"
-            >
-            </Card>
+            ></Card>
         </div>
     </div>
 
@@ -28,6 +30,7 @@
         import TagList from "RiotTags/Components/TagList.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
+        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
 
         import { getResources, getTagsFromPages } from "js/WagtailPagesAPI";
 
@@ -37,12 +40,14 @@
                 query: "",
                 articles: [],
                 listOfTags: [],
+                articleContent: {},
             },
 
             components: {
                 taglist: TagList,
                 card: Card,
                 searchbar: SearchBar,
+                lessoncontent: LessonContent,
             },
 
             async onMounted() {
@@ -66,6 +71,8 @@
             },
 
             isResourceArticleVisible(article) {
+                this.state.articleContent = article;
+                console.log(article)
                 const query = this.state.query;
                 const lowercaseArticle = article.title
                     .toLowerCase()
