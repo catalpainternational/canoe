@@ -18,13 +18,11 @@
     </div>
     <div class="content-wrapper">
         <TagList
-                tags="{listOfTags}"
-                onTagClick="{onTagClick}"
-                selectedTags="{state.selectedTags}"
-            >
-        </TagList>
-        <h5 class="section-title" translate>Your courses</h5>
-        <div class="course" each="{course in props.wagtailPage.courses}">
+            tags="{state.listOfTags}"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
+        <div class="course" each="{course in props.wagtailPage.courses}" if="{isCourseVisible(course.tags)}">
             <div class="course-header">
                 <div>
                     <a href="#{course.data.id}"> 
@@ -48,8 +46,7 @@
                 isCompleted="{isLessonComplete(course, state.nextLesson[course.data.id])}"
                 isComingSoon="{state.nextLesson[course.data.id].coming_soon}"
                 showFooter="{true}"
-            >
-            </Card>
+            ></Card>
         </div>
     </div>
 
@@ -67,12 +64,15 @@
             isCourseInProgress,
         } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
+        import { getTagsFromPages } from "js/WagtailPagesAPI";
 
         export default {
             state: {
                 nextLesson: {},
                 courses: [],
                 currentCourse: null,
+                selectedTags: [],
+                listOfTags: [],
             },
 
             components: {
@@ -80,13 +80,6 @@
                 continuelearningbutton: ContinueLearningButton,
                 taglist: TagList,
             },
-
-            listOfTags: [
-                "covid",
-                "triage",
-                "symptoms",
-                "treatment",
-            ],
 
             onBeforeMount(props, state) {
                 const courses = props.wagtailPage.courses;
@@ -96,6 +89,7 @@
                 });
 
                 this.state.courses = courses;
+                this.state.listOfTags = getTagsFromPages(courses);
                 this.state.currentCourse = lastWorkedOnCourse;
             },
 
@@ -158,7 +152,7 @@
                         lesson.id === lastLesson.id
                     ) {
                         this.state.nextLesson[course.data.id] = lesson;
-                        return true;
+                        break;
                     }
                 }
             },
@@ -170,6 +164,34 @@
             isLessonComplete(course, lesson) {
                 return isComplete(course.data.slug, lesson.slug);
             },
+
+            onTagClick(clickedTag) {
+                if (this.state.selectedTags.includes(clickedTag)) {
+                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
+                    this.state.selectedTags.splice(tagIndex, 1);
+                } else {
+                    this.state.selectedTags.push(clickedTag);
+                }
+                this.update();
+            },
+
+            isCourseVisible(courseTags) {
+                const tagsList = this.state.selectedTags;
+                if (tagsList.length === 0) {
+                    return true;
+                }
+
+                const hasTagMatch = () => {
+                    for (const tag of tagsList) {
+                        if (courseTags.includes(tag)) {
+                            return true;
+                        } 
+                    }
+                    return false;
+                }
+
+                return hasTagMatch();
+            }
         };
     </script>
 </HomePage>
