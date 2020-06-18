@@ -1,7 +1,4 @@
 <Resources>
-    <!-- <LessonContent
-        lessonContent="{state.articleContent}"
-    ></LessonContent> -->
     <div class="content-wrapper" if="{state.hash == null}">
         <div class="resources-bar">
             <span class="resources-icon title"></span>
@@ -28,7 +25,6 @@
         import TagList from "RiotTags/Components/TagList.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
-        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
 
         import { getResources } from "js/WagtailPagesAPI";
         import {
@@ -50,7 +46,6 @@
                 taglist: TagList,
                 card: Card,
                 searchbar: SearchBar,
-                lessoncontent: LessonContent,
             },
 
             async onMounted() {
@@ -75,7 +70,6 @@
 
             isResourceArticleVisible(article) {
                 this.state.articleContent = article;
-                console.log(article);
 
                 const { query } = this.state;
                 const isQueryMatch = doesQueryMatchSearchContent(

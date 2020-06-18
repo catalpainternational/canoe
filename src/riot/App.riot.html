@@ -151,7 +151,6 @@
             async route() {
                 const page = await getPage();
                 const pageModel = getWagtailPageModelName(page);
-                console.log(pageModel)
 
                 this.update({
                     wagtailPage: page,
