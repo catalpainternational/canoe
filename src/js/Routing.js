@@ -102,6 +102,12 @@ export const parseURLHash = () => {
     return afterTheHash.split("/");
 };
 
+export const parseURLQuery = () => {
+    const currentHash = parseURLHash();
+    const queryString = currentHash[0].split("?")[1];
+    return queryString;
+}
+
 export function getLessonCardIdx() {
     return parseInt(location.hash.split("/")[2]) - 1;
 }

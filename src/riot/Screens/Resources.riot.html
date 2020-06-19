@@ -4,7 +4,7 @@
             <span class="resources-icon title"></span>
             <h3 translate>Resources</h3>
         </div>
-        <SearchBar submitQuery="{submitQuery}"></SearchBar>
+        <SearchBar query="{state.query}" submitQuery="{submitQuery}"></SearchBar>
         <TagList
             tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
@@ -26,6 +26,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
 
+        import { parseURLQuery } from 'js/Routing';
         import { getResources } from "js/WagtailPagesAPI";
         import {
             getTagsFromPages,
@@ -51,25 +52,46 @@
             async onMounted() {
                 const articles = await getResources();
                 const listOfTags = getTagsFromPages(articles);
+
+                const queryStringFromURI = parseURLQuery();
+                const urlParams = new URLSearchParams(queryStringFromURI);
+                const query = urlParams.get("qs");
+                if (!!query) {
+                    this.update({ query: decodeURIComponent(query) });
+                }
+
                 this.update({ articles, listOfTags });
+                
+                // for (param in urlParams.getAll("filter")) {
+                    // if param is in listOfTags, add to selectedTags
+                // }
             },
 
             onTagClick(clickedTag) {
                 if (this.state.selectedTags.includes(clickedTag)) {
                     const tagIndex = this.state.selectedTags.indexOf(clickedTag);
                     this.state.selectedTags.splice(tagIndex, 1);
+                    // and remove tag from uri
                 } else {
                     this.state.selectedTags.push(clickedTag);
+                    // and add tag to uri
                 }
                 this.update();
             },
 
             submitQuery(query) {
+                // add/update query in uri
+                const queryStringFromURI = parseURLQuery();
+                const urlParams = new URLSearchParams(queryStringFromURI);
+                const encodedQuery = encodeURIComponent(query);
+                urlParams.set("qs", encodedQuery);
+                // this is close but not quite working....
+                // window.history.replaceState({}, '', `${location.pathname}?${urlParams}`);
                 this.update({ query });
             },
 
             isResourceArticleVisible(article) {
-                this.state.articleContent = article;
+                this.state.articleContent = article; // I think this can be removed
 
                 const { query } = this.state;
                 const isQueryMatch = doesQueryMatchSearchContent(
