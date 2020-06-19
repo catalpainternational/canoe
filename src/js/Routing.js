@@ -5,6 +5,7 @@ import {
     getHomePage,
 } from "js/WagtailPagesAPI.js";
 import { getLanguage } from "ReduxImpl/Store";
+import { PageLacksTranslationDataError } from "js/Errors";
 
 const IS_SETTINGS_RESOURCES_OR_PROFILE = /#([A-Za-z]+)/;
 const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
@@ -40,6 +41,12 @@ export const getWagtailPageOrRouteToTranslation = async (pageId) => {
 
     const currentLanguage = getLanguage();
     const translationInfo = page.data.translations;
+
+    if (!translationInfo) {
+        throw new PageLacksTranslationDataError(
+            "Routable page objects must have a `.data.translations`"
+        );
+    }
 
     const translationsLangCodes = Object.keys(translationInfo);
     // The default case:
