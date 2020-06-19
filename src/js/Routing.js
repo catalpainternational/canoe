@@ -33,6 +33,13 @@ const routeToTranslation = (translationPageId) => {
     window.location = translatedPageUrl;
 };
 
+class PageLacksTranslationDataError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "PageLacksTranslationDataError";
+    }
+}
+
 export const getWagtailPageOrRouteToTranslation = async (pageId) => {
     const manifest = await getOrFetchManifest();
     const pageUrl = manifest.pages[pageId];
@@ -40,6 +47,12 @@ export const getWagtailPageOrRouteToTranslation = async (pageId) => {
 
     const currentLanguage = getLanguage();
     const translationInfo = page.data.translations;
+
+    if (!translationInfo) {
+        throw new PageLacksTranslationDataError(
+            "Routable page objects must have a `.data.translations`"
+        );
+    }
 
     const translationsLangCodes = Object.keys(translationInfo);
     // The default case:
