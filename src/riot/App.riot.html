@@ -32,6 +32,10 @@
             <Resources
                 if="{state.contentType === 'resources'}"
             ></Resources>
+            <ResourceArticle
+                if="{state.contentType === 'QuickReferencePage'}"
+                wagtailPage="{state.wagtailPage}"
+            ></ResourceArticle>
             <Profile if="{state.contentType === 'profile'}"></Profile>
             <BottomMenu contentType="{state.contentType}"></BottomMenu>
             <PushSubscription></PushSubscription>
@@ -61,6 +65,7 @@
         import HomePage from "RiotTags/WagtailPages/HomePage.riot.html";
         import CoursePage from "RiotTags/WagtailPages/CoursePage.riot.html";
         import LessonPage from "RiotTags/WagtailPages/LessonPage.riot.html";
+        import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
 
         const scrollToFirstUnfinishedContent = () => {
             const ongoingCards = document.getElementsByClassName("ongoing");
@@ -100,6 +105,7 @@
                 changebrowser: ChangeBrowser,
                 toast: Toast,
                 onlineoroffline: OnlineOrOffline,
+                resourcearticle: ResourceArticle,
             },
 
             onMounted() {

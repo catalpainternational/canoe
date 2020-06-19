@@ -22,11 +22,15 @@
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
-        <div class="course" each="{course in props.wagtailPage.courses}" if="{isCourseVisible(course.tags)}">
+        <div
+            class="course"
+            each="{course in props.wagtailPage.courses}"
+            if="{isCourseVisible(course.tags)}"
+        >
             <div class="course-header">
                 <div>
-                    <a href="#{course.data.id}"> 
-                        <h3>{course.data.title}</h3> 
+                    <a href="#{course.data.id}">
+                        <h3>{course.data.title}</h3>
                     </a>
                     <div>
                         <p>{ courseProgressMessage(course) }</p>
@@ -64,7 +68,7 @@
             isCourseInProgress,
         } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
-        import { getTagsFromPages } from "js/WagtailPagesAPI";
+        import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
 
         export default {
             state: {
@@ -176,22 +180,9 @@
             },
 
             isCourseVisible(courseTags) {
-                const tagsList = this.state.selectedTags;
-                if (tagsList.length === 0) {
-                    return true;
-                }
-
-                const hasTagMatch = () => {
-                    for (const tag of tagsList) {
-                        if (courseTags.includes(tag)) {
-                            return true;
-                        } 
-                    }
-                    return false;
-                }
-
-                return hasTagMatch();
-            }
+                const { selectedTags } = this.state;
+                return doPageTagsMatchSelections(courseTags, selectedTags);
+            },
         };
     </script>
 </HomePage>
