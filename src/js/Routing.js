@@ -5,6 +5,7 @@ import {
     getHomePage,
 } from "js/WagtailPagesAPI.js";
 import { getLanguage } from "ReduxImpl/Store";
+import { PageLacksTranslationDataError } from "js/Errors";
 
 const IS_SETTINGS_RESOURCES_OR_PROFILE = /#([A-Za-z]+)/;
 const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
@@ -32,13 +33,6 @@ const routeToTranslation = (translationPageId) => {
     }
     window.location = translatedPageUrl;
 };
-
-class PageLacksTranslationDataError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "PageLacksTranslationDataError";
-    }
-}
 
 export const getWagtailPageOrRouteToTranslation = async (pageId) => {
     const manifest = await getOrFetchManifest();

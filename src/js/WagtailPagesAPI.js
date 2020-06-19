@@ -10,13 +10,7 @@ import {
     getLanguage,
     changeLanguage,
 } from "ReduxImpl/Store";
-
-class APIMissingPageError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "MissingPageError";
-    }
-}
+import { APIMissingPageError } from "js/Errors";
 
 async function token_authed_fetch(url) {
     const token = getAuthenticationToken();
@@ -117,11 +111,11 @@ const _getNextAvailablePageImpl = async (pagePathByLangCode, pageTypeString) => 
 };
 
 const _getNextAvailableHomePage = async (manifestHomes) => {
-    return _getNextAvailablePageImpl(manifestHomes, "HomePage")
+    return _getNextAvailablePageImpl(manifestHomes, "HomePage");
 };
 
 const _getNextAvailableResourcesRoot = async (resourcesRootInfo) => {
-    return _getNextAvailablePageImpl(resourcesRootInfo, "ResourcesRoot")
+    return _getNextAvailablePageImpl(resourcesRootInfo, "ResourcesRoot");
 };
 
 export const getHomePage = async () => {
