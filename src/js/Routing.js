@@ -102,7 +102,7 @@ export const parseURLHash = () => {
     return afterTheHash.split("/");
 };
 
-export const parseURLQuery = () => {
+export const getSearchQueryFromUrl = () => {
     const currentHash = parseURLHash();
     const queryString = currentHash[0].split("?")[1];
     return queryString;

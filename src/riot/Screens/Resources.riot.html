@@ -4,7 +4,11 @@
             <span class="resources-icon title"></span>
             <h3 translate>Resources</h3>
         </div>
-        <SearchBar query="{state.query}" submitQuery="{submitQuery}"></SearchBar>
+        <SearchBar 
+            if="{state.articles.length > 0}"
+            query="{state.query}" 
+            submitQuery="{submitQuery}"
+        ></SearchBar>
         <TagList
             tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
@@ -19,6 +23,7 @@
                 showFooter="{false}"
             ></Card>
         </div>
+        <p if="{state.articles == 0}" translate>There are no resource articles yet. Check back soon!</p>
     </div>
 
     <script>
@@ -26,7 +31,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
 
-        import { parseURLQuery, parseURLHash } from 'js/Routing';
+        import { getSearchQueryFromUrl, parseURLHash } from 'js/Routing';
         import { getResources } from "js/WagtailPagesAPI";
         import {
             getTagsFromPages,
@@ -53,7 +58,7 @@
                 const articles = await getResources();
                 const listOfTags = getTagsFromPages(articles);
 
-                const queryStringFromURI = parseURLQuery();
+                const queryStringFromURI = getSearchQueryFromUrl();
                 const urlParams = new URLSearchParams(queryStringFromURI);
                 const query = urlParams.get("qs");
                 if (!!query) {
@@ -81,7 +86,7 @@
 
             submitQuery(query) {
                 // add/update query in uri
-                const queryStringFromURI = parseURLQuery();
+                const queryStringFromURI = getSearchQueryFromUrl();
                 const urlParams = new URLSearchParams(queryStringFromURI);
                 const encodedQuery = encodeURIComponent(query);
                 
