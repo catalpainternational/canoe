@@ -99,7 +99,7 @@
                 this.state.articleContent = article; // I think this can be removed
 
                 const { query } = this.state;
-                const isQueryMatch = doesQueryMatchSearchContent(
+                const isQueryMatch = query.length < 3 ? 'true' : doesQueryMatchSearchContent(
                     query,
                     article.title,
                     article.description

@@ -18,7 +18,7 @@ export const doPageTagsMatchSelections = (pageTags, selectedTags) => {
 };
 
 export const doesQueryMatchSearchContent = (query, ...searchableStrings) => {
-    if (!query || query.length < 3) {
+    if (!query) {
         return true;
     }
     const lowercaseQuery = query.toLowerCase();
