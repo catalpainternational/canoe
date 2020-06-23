@@ -10,7 +10,7 @@
             submitQuery="{submitQuery}"
         ></SearchBar>
         <TagList
-            tags="{state.listOfTags}"
+            tags="{state.listOfAllTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
@@ -44,7 +44,7 @@
                 selectedTags: [],
                 query: "",
                 articles: [],
-                listOfTags: [],
+                listOfAllTags: [],
                 articleContent: {},
             },
 
@@ -56,7 +56,8 @@
 
             async onMounted() {
                 const articles = await getResources();
-                const listOfTags = getTagsFromPages(articles);
+                const listOfAllTags = getTagsFromPages(articles);
+                this.update({ articles, listOfAllTags });
 
                 const queryStringFromURI = getSearchQueryFromUrl();
                 const urlParams = new URLSearchParams(queryStringFromURI);
@@ -65,39 +66,55 @@
                     this.update({ query: decodeURIComponent(query) });
                 }
 
-                this.update({ articles, listOfTags });
-                
-                // for (param in urlParams.getAll("filter")) {
-                    // if param is in listOfTags, add to selectedTags
-                // }
+                const filter = urlParams.getAll("filter");
+                if (filter.length > 0) {
+                    for (var i=0; i < filter.length; ++i) {
+                        if (listOfAllTags.includes(filter[i])){
+                            this.onTagClick(decodeURIComponent(filter[i]));
+                        }
+                    }
+                }
             },
 
             onTagClick(clickedTag) {
+                const queryStringFromURI = getSearchQueryFromUrl();
+                const urlParams = new URLSearchParams(queryStringFromURI);
+                
                 if (this.state.selectedTags.includes(clickedTag)) {
                     const tagIndex = this.state.selectedTags.indexOf(clickedTag);
                     this.state.selectedTags.splice(tagIndex, 1);
-                    // and remove tag from uri
+                    this.update();
+                    
+                    if (this.state.selectedTags.length > 0) {
+                        for (var i=0; i < this.state.selectedTags.length; ++i ) {
+                            const encodedTag = this.state.selectedTags[i].toLowerCase();
+                            urlParams.set("filter", encodedTag);
+                        }
+                        this.replaceUrlQuery(urlParams);
+                    } else {
+                        urlParams.delete("filter");
+                        this.replaceUrlQuery(urlParams);
+                    }
+
                 } else {
                     this.state.selectedTags.push(clickedTag);
-                    // and add tag to uri
+                    urlParams.append("filter", encodeURIComponent(clickedTag));
+                    this.replaceUrlQuery(urlParams);
                 }
                 this.update();
             },
 
             submitQuery(query) {
-                // add/update query in uri
                 const queryStringFromURI = getSearchQueryFromUrl();
                 const urlParams = new URLSearchParams(queryStringFromURI);
                 const encodedQuery = encodeURIComponent(query);
                 
                 urlParams.set("qs", encodedQuery);
-                window.history.replaceState({}, '', `${location.pathname}#resources?${urlParams}`);
+                this.replaceUrlQuery(urlParams);
                 this.update({ query });
             },
 
             isResourceArticleVisible(article) {
-                this.state.articleContent = article; // I think this can be removed
-
                 const { query } = this.state;
                 const isQueryMatch = query.length < 3 ? 'true' : doesQueryMatchSearchContent(
                     query,
@@ -106,11 +123,16 @@
                 );
 
                 const { selectedTags } = this.state;
-                const isTagMatch = doPageTagsMatchSelections(article.tags, selectedTags);
+                const lowercaseArticleTags = article.tags.map(tag => tag.toLowerCase());
+                const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
 
                 const showArticle = isQueryMatch && isTagMatch;
                 return showArticle;
             },
+
+            replaceUrlQuery(urlParams) {
+                window.history.replaceState({}, '', `${location.pathname}#resources?${urlParams}`);
+            }
         };
     </script>
 </Resources>
