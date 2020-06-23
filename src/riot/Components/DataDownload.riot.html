@@ -7,13 +7,14 @@
         import { initialiseCompletions } from "Actions/completion.js";
         import { closeAndDeleteDB } from "Actions/actions_idb";
         import { dispatchLoggedInEvent } from "js/Events";
+        import { isGuestUser } from "js/AuthenticationUtilities";
 
         const EVERY_FIVE_MINUTES = 1000 * 60 * 5;
 
         export default {
             state: {
                 pagesPoller: null,
-                completionPoller: null
+                completionPoller: null,
             },
 
             onMounted() {
@@ -36,14 +37,15 @@
             },
 
             async prepDataForAppLaunch() {
-                await this.startCompletionsService();
+                if (!isGuestUser()) {
+                    await this.startCompletionsService();
+                    this.state.pagesPoller = window.setInterval(
+                        this.pollForWebpageChanges,
+                        EVERY_FIVE_MINUTES
+                    );
+                }
                 this.pollForWebpageChanges();
-
                 this.state.completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
-                this.state.pagesPoller = window.setInterval(
-                    this.pollForWebpageChanges,
-                    EVERY_FIVE_MINUTES
-                );
 
                 storeSiteDownloadedIs(true);
                 dispatchLoggedInEvent();
@@ -54,7 +56,7 @@
                 window.clearInterval(this.state.pagesPoller);
                 storeSiteDownloadedIs(false);
                 await closeAndDeleteDB();
-            }
+            },
         };
     </script>
 </DataDownload>

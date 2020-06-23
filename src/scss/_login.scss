@@ -1,10 +1,14 @@
-Authentication > div {
+Login > div {
+    $content-width: 18.75em;
+    $background-color: $tan;
+    $button-color: $blue-1;
+
     min-height: 100vh;
     flex-direction: column;
     align-items: center;
     display: flex;
     padding: 20px;
-    background-color: $tan;
+    background-color: $background-color;
 
     span.site-logo {
         margin-bottom: 20px;
@@ -31,8 +35,16 @@ Authentication > div {
         max-width: 400px;
     }
 
+    LoginForm {
+        max-width: $content-width;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        margin-bottom: 1em;
+    }
+
     form {
-        max-width: 300px;
         width: 100%;
 
         h3 {
@@ -79,16 +91,25 @@ Authentication > div {
                 cursor: pointer;
             }
         }
+    }
 
-        div.login-help {
-            width: 100%;
-            display: block;
+    .extra-button-space {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
 
-            a {
-                margin-top: 2em;
-                display: block;
-                text-align: center;
-            }
+        max-width: $content-width;
+        width: 100%;
+
+        button {
+            font-size: 0.875em;
+            text-align: left;
+
+            color: $button-color;
+            background-color: $background-color;
+            border: none;
+
+            margin-top: 1em;
         }
     }
 

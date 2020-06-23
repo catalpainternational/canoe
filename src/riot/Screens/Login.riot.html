@@ -1,0 +1,110 @@
+<Login>
+    <div class="modal-background">
+        <span class="site-logo"></span>
+        <span class="login-image"></span>
+
+        <LoginForm loginFunction="{login}"></LoginForm>
+
+        <div class="extra-button-space">
+            <button onclick="{toggleLoginHelpModal}" translate>Forgot username or password?</button>
+            <button
+                if="{state.isLoginAsGuestAvailable}"
+                onclick="{toggleLoginAsGuestModal}"
+                translate
+            >
+                Login as a guest
+            </button>
+        </div>
+
+        <div is="logos" class="logo"></div>
+    </div>
+
+    <PopupModal if="{state.showLoginHelpModal}">
+        <span class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></span>
+        <h2 class="header-no-image">Need help?</h2>
+        <ContactInformation toggleLoginHelpModal="{toggleLoginHelpModal}"></ContactInformation>
+    </PopupModal>
+
+    <PopupModal if="{state.showGuestLoginModal}">
+        <span class="cross gray close-btn" onclick="{toggleLoginAsGuestModal}"></span>
+        <h2 class="header-no-image">You're logging in as a guest</h2>
+        <p>
+            No learning progress will be saved while you are logged in as a guest. If you would like
+            to create an account, please
+            <a onclick="{switchToContactUsModal}">send us a message</a>.
+        </p>
+        <button class="btn-primary" onclick="{loginAsGuest}" translate>
+            Login as a guest
+        </button>
+    </PopupModal>
+
+    <script>
+        import LoginForm from "RiotTags/Components/LoginForm.riot.html";
+        import PopupModal from "RiotTags/Components/PopupModal.riot.html";
+        import ContactInformation from "RiotTags/Components/ContactInformation.riot.html";
+        import Logos from "RiotTags/Components/Logos.riot.html";
+
+        import { login } from "js/AuthenticationUtilities";
+
+        const GUEST_USERNAME = process.env.GUEST_USERNAME && `${process.env.GUEST_USERNAME}`;
+        const GUEST_PASSWORD = process.env.GUEST_PASSWORD && `${process.env.GUEST_PASSWORD}`;
+
+        export default {
+            state: {
+                showLoginHelpModal: false,
+                showGuestLoginModal: false,
+                isLoginAsGuestAvailable: false,
+            },
+
+            components: {
+                popupmodal: PopupModal,
+                contactinformation: ContactInformation,
+                loginform: LoginForm,
+                logos: Logos,
+            },
+
+            onBeforeMount(props, state) {
+                state.isLoginAsGuestAvailable = !!GUEST_USERNAME && !!GUEST_PASSWORD;
+            },
+
+            async loginAsGuest(event) {
+                event.preventDefault();
+                const usernameAndPassword = {
+                    username: GUEST_USERNAME,
+                    password: GUEST_PASSWORD,
+                };
+                await this.login(usernameAndPassword);
+            },
+
+            async login(usernameAndPassword) {
+                await login(usernameAndPassword);
+            },
+
+            fadePageBehindModal() {
+                const modalBackground = this.$(".modal-background");
+                modalBackground.classList.toggle("fade");
+            },
+
+            switchToContactUsModal() {
+                this.toggleLoginAsGuestModal();
+                this.toggleLoginHelpModal();
+            },
+
+            toggleLoginHelpModal() {
+                this.fadePageBehindModal();
+                const { showLoginHelpModal } = this.state;
+                this.update({
+                    showLoginHelpModal: !showLoginHelpModal,
+                });
+            },
+
+            toggleLoginAsGuestModal() {
+                this.fadePageBehindModal();
+                const { showGuestLoginModal } = this.state;
+                this.update({
+                    showGuestLoginModal: !showGuestLoginModal,
+                });
+            },
+        };
+    </script>
+</Login>
