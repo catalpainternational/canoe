@@ -1,17 +1,57 @@
 <SearchBar>
     <div class="form-group">
-        <p class="search-text" if="{props.query.length < 3 && props.query.length > 0}" translate>Enter at least 3 characters</p>
-        <input id="search" type="text" value="{props.query}" oninput="{onSearchInput}"/>
+        <p class="search-text" if="{state.query.length < 3 && state.query.length > 0}" translate>
+            Enter at least 3 characters
+        </p>
+        <input id="search" type="text" value="" oninput="{onSearchInput}" />
         <label class="{props.query ? 'hide' : ''}" for="search" translate></label>
         <span class="search-icon"></span>
     </div>
 
     <script>
+        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
+
+        const SEARCH_QUERY_KEY = "qs";
+
         export default {
+            state: {
+                query: "",
+            },
+
+            onMounted(props, state) {
+                const queryStringFromURI = getSearchQueryFromUrl();
+                const urlParams = new URLSearchParams(queryStringFromURI);
+                const encodedQuery = urlParams.get(SEARCH_QUERY_KEY);
+                if (!encodedQuery) {
+                    return;
+                }
+                this.update({ query: decodeURIComponent(encodedQuery) });
+            },
+
             onSearchInput() {
                 const queryElement = this.$("#search");
+                const query = queryElement.value;
+                this.updateUrlWithQuery(query);
+                this.update({ query });
                 this.props.submitQuery(queryElement.value);
-            }
-        }
+            },
+
+            updateUrlWithQuery(query) {
+                const queryStringFromURI = getSearchQueryFromUrl();
+                const urlParams = new URLSearchParams(queryStringFromURI);
+
+                if (query.length > 0) {
+                    const encodedQuery = encodeURIComponent(query);
+                    urlParams.set(SEARCH_QUERY_KEY, encodedQuery);
+                    this.replaceUrlQuery(urlParams);
+                } else {
+                    urlParams.delete(SEARCH_QUERY_KEY);
+                }
+            },
+
+            replaceUrlQuery(urlParams) {
+                window.location.hash = `#resources?${urlParams}`;
+            },
+        };
     </script>
 </SearchBar>

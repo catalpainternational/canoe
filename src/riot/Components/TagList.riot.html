@@ -1,13 +1,76 @@
 <TagList>
     <div class="tag-container">
-        <a  
+        <a
             each="{tag in props.tags}"
-            class="tag {props.selectedTags && props.selectedTags.includes(tag) ? 'selected' : ''}" 
+            class="tag {state.selectedTags.has(tag) ? 'selected' : ''}"
             onclick="{e => { 
-                props.onTagClick(e.srcElement.innerText)
+                onTagClick(e.srcElement.innerText)
             }}"
         >
             <p>{tag}</p>
         </a>
     </div>
+    <script>
+        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
+
+        const getUrlSearchParams = () => {
+            const queryStringFromURI = getSearchQueryFromUrl();
+            const urlParams = new URLSearchParams(queryStringFromURI);
+            return urlParams;
+        };
+
+        const TAGS_URL_KEY = "filter";
+
+        export default {
+            state: {
+                selectedTags: new Set(),
+            },
+
+            onMounted(props, state) {
+                const filters = this.getTagsFromUrl();
+                if (filters.length === 0) {
+                    return;
+                }
+
+                for (const encodedFilter of filters) {
+                    if (props.tags.includes(encodedFilter)) {
+                        this.onTagClick(decodeURIComponent(encodedFilter));
+                    }
+                }
+            },
+
+            onUpdated(props, state) {
+                const { selectedTags } = this.state;
+                this.updateUrlWith(selectedTags);
+            },
+
+            updateUrlWith(selectedTags) {
+                const urlParams = getUrlSearchParams();
+                urlParams.delete(TAGS_URL_KEY);
+                for (const selectedTag of selectedTags) {
+                    urlParams.append(TAGS_URL_KEY, selectedTag);
+                }
+                window.location.hash = `#resources?${urlParams}`;
+            },
+
+            getTagsFromUrl() {
+                const urlParams = getUrlSearchParams();
+                const filters = urlParams.getAll("filter");
+                return filters;
+            },
+
+            onTagClick(clickedTag) {
+                const { selectedTags } = this.state;
+
+                if (selectedTags.has(clickedTag)) {
+                    selectedTags.delete(clickedTag);
+                } else {
+                    selectedTags.add(clickedTag);
+                }
+                this.update({
+                    selectedTags,
+                });
+            },
+        };
+    </script>
 </TagList>

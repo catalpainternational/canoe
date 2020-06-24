@@ -4,15 +4,10 @@
             <span class="resources-icon title"></span>
             <h3 translate>Resources</h3>
         </div>
-        <SearchBar 
-            if="{state.articles.length > 0}"
-            query="{state.query}" 
-            submitQuery="{submitQuery}"
-        ></SearchBar>
+        <SearchBar if="{state.articles.length > 0}" submitQuery="{submitQuery}"></SearchBar>
         <TagList
-            tags="{state.listOfAllTags}"
+            tags="{state.allTags}"
             onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"
         ></TagList>
         <div each="{article in state.articles}">
             <Card
@@ -23,7 +18,9 @@
                 showFooter="{false}"
             ></Card>
         </div>
-        <p if="{state.articles == 0}" translate>There are no resource articles yet. Check back soon!</p>
+        <p if="{state.articles == 0}" translate>
+            There are no resource articles yet. Check back soon!
+        </p>
     </div>
 
     <script>
@@ -31,7 +28,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
 
-        import { getSearchQueryFromUrl, parseURLHash } from 'js/Routing';
+        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
         import { getResources } from "js/WagtailPagesAPI";
         import {
             getTagsFromPages,
@@ -42,9 +39,9 @@
         export default {
             state: {
                 selectedTags: [],
-                query: "",
                 articles: [],
-                listOfAllTags: [],
+                query: "",
+                allTags: [],
                 articleContent: {},
             },
 
@@ -56,74 +53,34 @@
 
             async onMounted() {
                 const articles = await getResources();
-                const listOfAllTags = getTagsFromPages(articles);
-                this.update({ articles, listOfAllTags });
-
-                const queryStringFromURI = getSearchQueryFromUrl();
-                const urlParams = new URLSearchParams(queryStringFromURI);
-                const query = urlParams.get("qs");
-                if (!!query) {
-                    this.update({ query: decodeURIComponent(query) });
-                }
-
-                const filter = urlParams.getAll("filter");
-                if (filter.length > 0) {
-                    for (var i=0; i < filter.length; ++i) {
-                        if (listOfAllTags.includes(filter[i])){
-                            this.onTagClick(decodeURIComponent(filter[i]));
-                        }
-                    }
-                }
+                const allTags = getTagsFromPages(articles);
+                this.update({ articles, allTags });
             },
 
             onTagClick(clickedTag) {
-                const queryStringFromURI = getSearchQueryFromUrl();
-                const urlParams = new URLSearchParams(queryStringFromURI);
-                
-                if (this.state.selectedTags.includes(clickedTag)) {
-                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
-                    this.state.selectedTags.splice(tagIndex, 1);
-                    this.update();
-                    
-                    if (this.state.selectedTags.length > 0) {
-                        for (var i=0; i < this.state.selectedTags.length; ++i ) {
-                            const encodedTag = this.state.selectedTags[i].toLowerCase();
-                            urlParams.set("filter", encodedTag);
-                        }
-                        this.replaceUrlQuery(urlParams);
-                    } else {
-                        urlParams.delete("filter");
-                        this.replaceUrlQuery(urlParams);
-                    }
+                let { selectedTags } = this.state;
 
+                if (selectedTags.includes(clickedTag)) {
+                    selectedTags = selectedTags.filter((tag) => tag !== clickedTag);
                 } else {
-                    this.state.selectedTags.push(clickedTag);
-                    urlParams.append("filter", encodeURIComponent(clickedTag));
-                    this.replaceUrlQuery(urlParams);
+                    selectedTags.push(clickedTag);
                 }
-                this.update();
+                this.update({ selectedTags });
             },
 
             submitQuery(query) {
-                const queryStringFromURI = getSearchQueryFromUrl();
-                const urlParams = new URLSearchParams(queryStringFromURI);
-                const encodedQuery = encodeURIComponent(query);
-                
-                urlParams.set("qs", encodedQuery);
-                this.replaceUrlQuery(urlParams);
                 this.update({ query });
             },
 
             isResourceArticleVisible(article) {
                 const { query } = this.state;
-                const isQueryMatch = query.length < 3 ? 'true' : doesQueryMatchSearchContent(
-                    query,
-                    article.title,
-                    article.description
-                );
+                const isQueryMatch =
+                    query.length < 3
+                        ? true
+                        : doesQueryMatchSearchContent(query, article.title, article.description);
 
                 const { selectedTags } = this.state;
-                const lowercaseArticleTags = article.tags.map(tag => tag.toLowerCase());
+                const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
                 const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
 
                 const showArticle = isQueryMatch && isTagMatch;
@@ -131,8 +88,8 @@
             },
 
             replaceUrlQuery(urlParams) {
-                window.history.replaceState({}, '', `${location.pathname}#resources?${urlParams}`);
-            }
+                window.history.replaceState({}, "", `${location.pathname}#resources?${urlParams}`);
+            },
         };
     </script>
 </Resources>
