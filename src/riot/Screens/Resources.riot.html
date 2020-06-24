@@ -4,11 +4,12 @@
             <span class="resources-icon title"></span>
             <h3 translate>Resources</h3>
         </div>
-        <SearchBar if="{state.articles.length > 0}" submitQuery="{submitQuery}"></SearchBar>
-        <TagList
-            tags="{state.allTags}"
-            onTagClick="{onTagClick}"
-        ></TagList>
+        <SearchBar
+            if="{state.articles.length > 0}"
+            query="{state.query}"
+            submitQuery="{submitQuery}"
+        ></SearchBar>
+        <TagList tags="{state.allTags}" onTagClick="{onTagClick}"></TagList>
         <div each="{article in state.articles}">
             <Card
                 if="{isResourceArticleVisible(article)}"
@@ -73,22 +74,24 @@
             },
 
             isResourceArticleVisible(article) {
+                console.log(`Checking if "${article.title}" is visible.`);
                 const { query } = this.state;
+                const { selectedTags } = this.state;
+                const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
+
                 const isQueryMatch =
                     query.length < 3
                         ? true
-                        : doesQueryMatchSearchContent(query, article.title, article.description);
-
-                const { selectedTags } = this.state;
-                const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
+                        : doesQueryMatchSearchContent(
+                              query,
+                              article.title,
+                              article.description,
+                              ...lowercaseArticleTags
+                          );
                 const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
 
                 const showArticle = isQueryMatch && isTagMatch;
                 return showArticle;
-            },
-
-            replaceUrlQuery(urlParams) {
-                window.history.replaceState({}, "", `${location.pathname}#resources?${urlParams}`);
             },
         };
     </script>

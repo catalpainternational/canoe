@@ -31,6 +31,7 @@
                 if (filters.length === 0) {
                     return;
                 }
+                console.log(`TagList: ${filters}`);
 
                 for (const encodedFilter of filters) {
                     if (props.tags.includes(encodedFilter)) {
@@ -70,6 +71,7 @@
                 this.update({
                     selectedTags,
                 });
+                this.props.onTagClick(clickedTag);
             },
         };
     </script>

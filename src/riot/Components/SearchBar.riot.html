@@ -3,8 +3,8 @@
         <p class="search-text" if="{state.query.length < 3 && state.query.length > 0}" translate>
             Enter at least 3 characters
         </p>
-        <input id="search" type="text" value="" oninput="{onSearchInput}" />
-        <label class="{props.query ? 'hide' : ''}" for="search" translate></label>
+        <input id="search" type="text" value="{state.query}" oninput="{onSearchInput}" />
+        <label class="{state.query ? 'hide' : ''}" for="search" translate></label>
         <span class="search-icon"></span>
     </div>
 
@@ -19,21 +19,40 @@
             },
 
             onMounted(props, state) {
-                const queryStringFromURI = getSearchQueryFromUrl();
-                const urlParams = new URLSearchParams(queryStringFromURI);
-                const encodedQuery = urlParams.get(SEARCH_QUERY_KEY);
+                if (props.query) {
+                    // Resources passes in its query so that this onMounted
+                    // won't re-submit a query, which refreshes Resources, which
+                    // re-mounts this tag and calls its onMounted, which
+                    // re-submits a query, and so on.
+                    return;
+                }
+
+                const encodedQuery = this.getEncodedQueryFromUrl();
                 if (!encodedQuery) {
                     return;
                 }
-                this.update({ query: decodeURIComponent(encodedQuery) });
+                console.log(`SearchBar: ${encodedQuery}`);
+                const query = decodeURIComponent(encodedQuery);
+                this.submitQuery(query);
             },
 
             onSearchInput() {
                 const queryElement = this.$("#search");
                 const query = queryElement.value;
                 this.updateUrlWithQuery(query);
+                this.submitQuery(query);
+            },
+
+            submitQuery(query) {
                 this.update({ query });
-                this.props.submitQuery(queryElement.value);
+                this.props.submitQuery(query);
+            },
+
+            getEncodedQueryFromUrl() {
+                const queryStringFromURI = getSearchQueryFromUrl();
+                const urlParams = new URLSearchParams(queryStringFromURI);
+                const encodedQuery = urlParams.get(SEARCH_QUERY_KEY);
+                return encodedQuery;
             },
 
             updateUrlWithQuery(query) {
@@ -43,10 +62,11 @@
                 if (query.length > 0) {
                     const encodedQuery = encodeURIComponent(query);
                     urlParams.set(SEARCH_QUERY_KEY, encodedQuery);
-                    this.replaceUrlQuery(urlParams);
                 } else {
                     urlParams.delete(SEARCH_QUERY_KEY);
                 }
+
+                this.replaceUrlQuery(urlParams);
             },
 
             replaceUrlQuery(urlParams) {
