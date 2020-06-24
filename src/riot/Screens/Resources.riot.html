@@ -57,7 +57,7 @@
             async onMounted() {
                 const articles = await getResources();
                 const listOfAllTags = getTagsFromPages(articles);
-                this.update({ articles, listOfAllTags });
+                this.update({ articles, listOfAllTags, selectedTags: [] });
 
                 const queryStringFromURI = getSearchQueryFromUrl();
                 const urlParams = new URLSearchParams(queryStringFromURI);
@@ -69,14 +69,14 @@
                 const filter = urlParams.getAll("filter");
                 if (filter.length > 0) {
                     for (var i=0; i < filter.length; ++i) {
-                        if (listOfAllTags.includes(filter[i])){
-                            this.onTagClick(decodeURIComponent(filter[i]));
+                        if (listOfAllTags.includes(filter[i])) {
+                            this.onTagClick(decodeURIComponent(filter[i]), true);
                         }
                     }
                 }
             },
 
-            onTagClick(clickedTag) {
+            onTagClick(clickedTag, isFromUrlQuery) {
                 const queryStringFromURI = getSearchQueryFromUrl();
                 const urlParams = new URLSearchParams(queryStringFromURI);
                 
@@ -99,7 +99,8 @@
                 } else {
                     this.state.selectedTags.push(clickedTag);
                     urlParams.append("filter", encodeURIComponent(clickedTag));
-                    this.replaceUrlQuery(urlParams);
+                    !isFromUrlQuery && this.replaceUrlQuery(urlParams);
+                    this.update();
                 }
                 this.update();
             },
