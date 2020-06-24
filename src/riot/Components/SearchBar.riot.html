@@ -1,17 +1,40 @@
 <SearchBar>
     <div class="form-group">
-        <p class="search-text" if="{props.query.length < 3 && props.query.length > 0}" translate>Enter at least 3 characters</p>
-        <input id="search" type="text" value="{props.query}" oninput="{onSearchInput}"/>
-        <label class="{props.query ? 'hide' : ''}" for="search" translate></label>
+        <p class="search-text" if="{state.query.length < 3 && state.query.length > 0}" translate>
+            Enter at least 3 characters
+        </p>
+        <input id="search" type="text" value="{state.query}" oninput="{onSearchInput}" />
+        <label class="{state.query ? 'hide' : ''}" for="search" translate></label>
         <span class="search-icon"></span>
     </div>
 
     <script>
+        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
+        import { checkUrlForQuery, updateUrlWithQuery } from "js/SearchAndFiltering";
+
+        const SEARCH_QUERY_KEY = "qs";
+
         export default {
+            state: {
+                query: "",
+            },
+
+            onMounted(props, state) {
+                const query = checkUrlForQuery();
+                this.update({ query });
+            },
+
             onSearchInput() {
                 const queryElement = this.$("#search");
-                this.props.submitQuery(queryElement.value);
-            }
-        }
+                const query = queryElement.value;
+                updateUrlWithQuery(query);
+                this.submitQuery(query);
+            },
+
+            submitQuery(query) {
+                this.update({ query });
+                this.props.submitQuery(query);
+            },
+        };
     </script>
 </SearchBar>
