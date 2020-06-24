@@ -23,6 +23,10 @@
                 <p class="error-message">{state.errorExplanation}</p>
             </div>
             <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}" translate>Login</button>
+        <div class="login-help">
+            <a onclick="{showLoginHelpMessage}" translate>Forgot username/password?</a>
+            <p if="{state.isShowingHelpMessage}" translate>For help logging in, call 867-5309</p>
+        </div>
         </form>
         <div class="logo">
             <span class="logo-a"></span>
@@ -39,7 +43,8 @@
             state: {
                 errorExplanation: null,
                 isLoginButtonDisabled: false,
-                isShowingPassword: false
+                isShowingPassword: false,
+                isShowingHelpMessage: false,
             },
 
             getUsernameAndPasswordFromForm() {
@@ -98,6 +103,12 @@
                         errorExplanation: null
                     });
                 }
+            },
+            
+            showLoginHelpMessage() {
+                this.update({
+                    isShowingHelpMessage: !this.state.isShowingHelpMessage
+                });
             }
         };
     </script>

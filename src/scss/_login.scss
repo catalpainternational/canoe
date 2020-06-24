@@ -74,6 +74,23 @@ Authentication > div {
                 cursor: pointer;
             }
         }
+
+        div.login-help {
+            width: 100%;
+            display: block;
+
+            a {
+                margin-top: 2em;
+                display: block;
+                text-align: center;
+            }
+
+            p {
+                font-size: 1em;
+                text-align: center;
+                margin: 0.5em 0;
+            }
+        }
     }
 
     input {
