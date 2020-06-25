@@ -1,4 +1,5 @@
 import { intersection } from "js/SetMethods";
+import { parseURLHash } from "js/Routing";
 
 const SEARCH_QUERY_KEY = "qs";
 const TAGS_URL_KEY = "filter";
