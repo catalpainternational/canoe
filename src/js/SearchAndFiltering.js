@@ -42,7 +42,6 @@ export const checkUrlForQuery = () => {
     if (!encodedQuery) {
         return "";
     }
-    console.log(`SearchBar: ${encodedQuery}`);
     const query = decodeURIComponent(encodedQuery);
     return query;
 };
