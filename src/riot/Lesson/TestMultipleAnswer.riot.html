@@ -18,6 +18,7 @@
     </div>
     <h4 if="{state.visibleAnswers.length > 0}" translate>Find and check all correct answers and uncheck incorrect answers</h4>
     <button
+        if="{!props.isCourseTest}"
         class="btn-primary"
         onclick="{showResults}"
         disabled="{state.hiddenAnswers.length === 0 && state.visibleAnswers.length === 0}"

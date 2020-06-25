@@ -1,0 +1,183 @@
+<CourseTest>
+    <LessonFrame extraStyleClasses="test">
+        <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
+        <TestSingleAnswer
+            if="{state.isSingleAnswer}"
+            isCourseTest="{true}"
+            card="{state.cards[state.cardIdx]}"
+        ></TestSingleAnswer>
+        <TestMultipleAnswer
+            if="{!state.isSingleAnswer}"
+            isCourseTest="{true}"
+            card="{state.cards[state.cardIdx]}"
+        ></TestMultipleAnswer>
+        <!-- <p class="card-number">{ cardNumberMessage() }</p> -->
+        <p class="card-number">1 of 3</p>
+        <div class="bottom-buttons">
+            <div>
+                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{previousQuestion}"></a>
+            </div>
+            <div>
+                <button
+                    class="btn-primary"
+                    onclick="{nextQuestion}"
+                    if="{state.cardIdx < state.cards.length - 1}"
+                    translate
+                >
+                    Next question
+                </button>
+                <button
+                    class="btn-primary"
+                    onclick="{submitAnswers}"
+                    if="{state.cardIdx === state.cards.length - 1}"
+                    translate
+                >
+                    Submit answers
+                </button>
+            </div>
+        </div>
+    </LessonFrame>
+    <LessonComplete
+        if="{state.cardIdx === state.cards.length + 1}"
+        course="{props.course}"
+        title="{props.title}"
+    >
+    </LessonComplete>
+
+    <script>
+        import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
+        import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
+        import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+
+        import { getLessonCardIdx } from "js/Routing";
+        import { logATestAnswer } from "js/GoogleAnalytics"
+        import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
+
+        export default {
+            state: {
+                cards: [
+                    { 
+                        answers: [
+                            { correct: true, text: 'this is correct' }, 
+                            { correct: false, text: 'incorrect' }
+                        ],
+                        question: 'will it keep raining?' 
+                    }, { 
+                        answers: [
+                            { correct: true, text: 'correct time' }, 
+                            { correct: true, text: 'correct too' }, 
+                            { correct: false, text: 'incorrect' }
+                        ],
+                        question: 'what time is it?' 
+                    },
+                ],
+                cardIdx: 0,
+                isSingleAnswer: true,
+                selectedAnswer: {},
+            },
+
+            components: {
+                lessoncomplete: LessonComplete,
+                testsingleanswer: TestSingleAnswer,
+                testmultipleanswer: TestMultipleAnswer,
+                lessonframe: LessonFrame,
+            },
+
+            onBeforeMount(props, state) {
+                // const { cards } = cards;
+                // state.cards = cards;
+                // state.cardIdx = getLessonCardIdx();
+                window.addEventListener("hashchange", this.hashChanged);
+                
+                window.addEventListener(ON_ANSWERED_TEST_QUESTION, event => {
+                    logATestAnswer(event.detail);
+                });
+            },
+
+            onMounted(props, state) {
+                const card = this.state.cards[this.state.cardIdx];
+                if (!card) {
+                    return;
+                }
+                const correctAnswers = card.answers.filter((answer) => answer.correct);
+                this.update({
+                    isSingleAnswer: correctAnswers.length === 1,
+                });
+            },
+
+            onBeforeUnmount(props, state) {
+                window.removeEventListener("hashchange", this.hashChanged);
+            },
+
+            hashChanged() {
+                const cardIdx = getLessonCardIdx();
+                const card = this.state.cards[cardIdx];
+                let isSingleAnswer = null;
+                if (card) {
+                    const correctAnswers = card.answers.filter((answer) => answer.correct);
+                    isSingleAnswer = correctAnswers.length === 1;
+                }
+
+                this.update({
+                    cardIdx,
+                    isSingleAnswer,
+                });
+            },
+
+            goBack() {
+                window.history.back();
+            },
+
+            submitAnswers() {
+                console.log('submit answers')
+            },
+
+            nextQuestion() {
+                console.log('next question')
+            },
+
+            previousQuestion() {
+                console.log('previous question')
+            },
+
+            // cardNumberMessage() {
+            //     // display the number of the current card out of the total number of cards
+            //     return gettext("%1 of %2", this.state.cardIdx + 1, this.props.test.cards.length);
+            // },
+
+            selectAnswer(answer) {
+                this.update({ selectedAnswer: answer });
+                const eventData = {
+                    lesson: this.props.lesson.title,
+                    question: this.state.cards[this.state.cardIdx].question,
+                    answer: answer.text,
+                    isAnswerCorrect: answer.correct,
+                };
+                dispatchTestAnswerEvent(eventData);
+                // this.toggleModal(true);
+            },
+
+            nextTestCard() {
+                // this.toggleModal(false);
+                window.scroll(0, 0);
+                this.state.selectedAnswer = {};
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
+            },
+
+            completePage() {
+                // this.toggleModal(false);
+                setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
+                location.hash = getLessonModuleHash(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
+            },
+        };
+    </script>
+</CourseTest>

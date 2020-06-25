@@ -15,6 +15,7 @@
                     </div>
                 </div>
             </div>
+            <button class="btn-secondary" onclick="{goToCourse}">Take course test</button>
             <h5 class="section-title" translate>Your lessons</h5>
             <Card
                 each="{lesson in props.wagtailPage.lessons}"
@@ -35,10 +36,12 @@
         import { isComplete } from "Actions/completion";
         import { getCourseAndLessonSlugs } from "js/utilities";
         import Card from "RiotTags/Components/Card.riot.html";
+        // import CourseTest from "RiotTags/Lesson/CourseTest.riot.html";
 
         export default {
             components: {
                 card: Card,
+                // coursetest: CourseTest,
             },
 
             onMounted(props, state) {
@@ -70,6 +73,10 @@
                 } else {
                     this.state.header.classList.remove("sticky");
                 }
+            },
+
+            goToCourse() {
+                location.hash = "#course-test";
             },
 
             isLessonComplete(lesson) {
