@@ -9,8 +9,10 @@
     </div>
 
     <script>
-        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
-        import { checkUrlForQuery, updateUrlWithQuery } from "js/SearchAndFiltering";
+        import {
+            checkUrlForSearchBarQuery,
+            updateUrlWithSearchBarQuery,
+        } from "js/SearchAndFiltering";
 
         const SEARCH_QUERY_KEY = "qs";
 
@@ -20,14 +22,14 @@
             },
 
             onMounted(props, state) {
-                const query = checkUrlForQuery();
+                const query = checkUrlForSearchBarQuery();
                 this.update({ query });
             },
 
             onSearchInput() {
                 const queryElement = this.$("#search");
                 const query = queryElement.value;
-                updateUrlWithQuery(query);
+                updateUrlWithSearchBarQuery(query);
                 this.submitQuery(query);
             },
 

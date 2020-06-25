@@ -1,5 +1,4 @@
 import { intersection } from "js/SetMethods";
-import { getSearchQueryFromUrl } from "js/Routing";
 
 const SEARCH_QUERY_KEY = "qs";
 const TAGS_URL_KEY = "filter";
@@ -30,13 +29,19 @@ export const doesQueryMatchSearchContent = (query, ...searchableStrings) => {
     return searchIndex.includes(lowercaseQuery);
 };
 
+const getQueryStringFromUrl = () => {
+    const currentHash = parseURLHash();
+    const queryString = currentHash[0].split("?")[1];
+    return queryString;
+};
+
 const getUrlSearchParams = () => {
-    const queryStringFromURI = getSearchQueryFromUrl();
+    const queryStringFromURI = getQueryStringFromUrl();
     const urlParams = new URLSearchParams(queryStringFromURI);
     return urlParams;
 };
 
-export const checkUrlForQuery = () => {
+export const checkUrlForSearchBarQuery = () => {
     const urlParams = getUrlSearchParams();
     const encodedQuery = urlParams.get(SEARCH_QUERY_KEY);
     if (!encodedQuery) {
@@ -46,7 +51,7 @@ export const checkUrlForQuery = () => {
     return query;
 };
 
-export const updateUrlWithQuery = (query) => {
+export const updateUrlWithSearchBarQuery = (query) => {
     const urlParams = getUrlSearchParams();
 
     if (query.length > 0) {
@@ -60,7 +65,7 @@ export const updateUrlWithQuery = (query) => {
     window.location.hash = `#resources?${urlParams}`;
 };
 
-export const getFiltersFromUrl = () => {
+export const checkUrlForFilters = () => {
     const urlParams = getUrlSearchParams();
     const filters = urlParams.getAll("filter");
     return filters;
@@ -72,7 +77,7 @@ export const updateUrlWithFilters = (selectedFilters) => {
     for (const selectedFilter of selectedFilters) {
         urlParams.append(TAGS_URL_KEY, selectedFilter);
     }
-    // Unlike `updateUrlWithQuery`, this doesn't need debouncing. We click tags
-    // much less than the search bar submits queries.
+    // Unlike `updateUrlWithSearchBarQuery`, this doesn't need debouncing. We
+    // click tags much less than the search bar submits queries.
     window.location.hash = `#resources?${urlParams}`;
 };

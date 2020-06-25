@@ -25,13 +25,12 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
 
-        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
         import { getResources } from "js/WagtailPagesAPI";
         import {
             getTagsFromPages,
             doPageTagsMatchSelections,
             doesQueryMatchSearchContent,
-            checkUrlForQuery,
+            checkUrlForSearchBarQuery,
         } from "js/SearchAndFiltering";
 
         export default {
@@ -52,7 +51,11 @@
             async onMounted() {
                 const articles = await getResources();
                 const allTags = getTagsFromPages(articles);
-                const query = checkUrlForQuery();
+                // Resources has to pull the search query from the URL. If the
+                // SearchBar gives Resources the query that the SearchBar
+                // pulled, resources mounts two SearchBars. I think this
+                // double-mounting is a RiotJS bug.
+                const query = checkUrlForSearchBarQuery();
                 this.update({ articles, allTags, query });
             },
 

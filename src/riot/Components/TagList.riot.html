@@ -11,8 +11,7 @@
         </a>
     </div>
     <script>
-        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
-        import { getFiltersFromUrl, updateUrlWithFilters } from "js/SearchAndFiltering";
+        import { checkUrlForFilters, updateUrlWithFilters } from "js/SearchAndFiltering";
 
         export default {
             state: {
@@ -20,7 +19,7 @@
             },
 
             onMounted(props, state) {
-                const filters = getFiltersFromUrl();
+                const filters = checkUrlForFilters();
                 if (filters.length === 0) {
                     return;
                 }
