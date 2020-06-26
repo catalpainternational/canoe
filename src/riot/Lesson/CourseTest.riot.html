@@ -5,26 +5,29 @@
             if="{state.isSingleAnswer}"
             isCourseTest="{true}"
             card="{state.cards[state.cardIdx]}"
+            recordAnswer="{recordAnswer}"
         ></TestSingleAnswer>
         <TestMultipleAnswer
             if="{!state.isSingleAnswer}"
             isCourseTest="{true}"
             card="{state.cards[state.cardIdx]}"
+            recordAnswer="{recordAnswer}"
         ></TestMultipleAnswer>
         <!-- <p class="card-number">{ cardNumberMessage() }</p> -->
         <p class="card-number">1 of 3</p>
         <div class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{previousQuestion}"></a>
+                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
             </div>
             <div>
                 <button
                     class="btn-primary"
                     onclick="{nextQuestion}"
                     if="{state.cardIdx < state.cards.length - 1}"
+                    disabled="{noAnswerSelected}"
                     translate
                 >
-                    Next question
+                    Next
                 </button>
                 <button
                     class="btn-primary"
@@ -41,6 +44,7 @@
         if="{state.cardIdx === state.cards.length + 1}"
         course="{props.course}"
         title="{props.title}"
+        isCourseTest="{true}"
     >
     </LessonComplete>
 
@@ -50,7 +54,7 @@
         import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
-        import { getLessonCardIdx } from "js/Routing";
+        import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
         import { logATestAnswer } from "js/GoogleAnalytics"
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
 
@@ -74,7 +78,7 @@
                 ],
                 cardIdx: 0,
                 isSingleAnswer: true,
-                selectedAnswer: {},
+                allSelectedAnswers: [],
             },
 
             components: {
@@ -135,10 +139,16 @@
 
             nextQuestion() {
                 console.log('next question')
+                window.scroll(0, 0);
+                location.hash = getLessonModuleHash(
+                    'test',
+                    this.props.module,
+                    this.state.cardIdx
+                );
             },
 
-            previousQuestion() {
-                console.log('previous question')
+            recordAnswer(answer) {
+                this.state.allSelectedAnswers
             },
 
             // cardNumberMessage() {
@@ -146,22 +156,18 @@
             //     return gettext("%1 of %2", this.state.cardIdx + 1, this.props.test.cards.length);
             // },
 
-            selectAnswer(answer) {
-                this.update({ selectedAnswer: answer });
-                const eventData = {
-                    lesson: this.props.lesson.title,
-                    question: this.state.cards[this.state.cardIdx].question,
-                    answer: answer.text,
-                    isAnswerCorrect: answer.correct,
-                };
-                dispatchTestAnswerEvent(eventData);
-                // this.toggleModal(true);
+            sendAnswersToGoogle(allSelectedAnswers) {
+                // const eventData = {
+                //     lesson: this.props.lesson.title,
+                //     question: this.state.cards[this.state.cardIdx].question,
+                //     answer: answer.text,
+                //     isAnswerCorrect: answer.correct,
+                // };
+                // dispatchTestAnswerEvent(eventData);
             },
 
             nextTestCard() {
-                // this.toggleModal(false);
                 window.scroll(0, 0);
-                this.state.selectedAnswer = {};
                 location.hash = getLessonModuleHash(
                     this.props.lesson.id,
                     this.props.module,
@@ -170,7 +176,6 @@
             },
 
             completePage() {
-                // this.toggleModal(false);
                 setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
                 location.hash = getLessonModuleHash(
                     this.props.lesson.id,

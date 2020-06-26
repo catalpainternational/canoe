@@ -15,7 +15,6 @@
                     </div>
                 </div>
             </div>
-            <button class="btn-secondary" onclick="{goToCourse}">Take course test</button>
             <h5 class="section-title" translate>Your lessons</h5>
             <Card
                 each="{lesson in props.wagtailPage.lessons}"
@@ -28,6 +27,7 @@
                 showFooter="{true}"
             >
             </Card>
+            <button class="btn-secondary" onclick="{goToCourse}">Take course test</button>
         </div>
     </div>
 

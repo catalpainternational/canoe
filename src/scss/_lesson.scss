@@ -584,6 +584,18 @@ TestPopupModal {
                 }
             }
 
+            li.selected.pending {
+                .radio {
+                    border: 2px solid $blue-1;
+                    height: 21px;
+                    width: 21px;
+
+                    & > div {
+                        background-color: $blue-1;
+                    }
+                }
+            }
+
             li:last-child {
                 margin-bottom: 0;
             }

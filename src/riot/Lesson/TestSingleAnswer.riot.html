@@ -1,7 +1,7 @@
 <TestSingleAnswer class="answer">
     <ol>
         <li
-            class="{answer === state.selectedAnswer ? 'selected' : ''} {answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
+            class="{answer === state.selectedAnswer ? 'selected' : ''} {props.isCourseTest ? 'pending' : answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
             each="{answer in props.card.answers}"
             onclick="{() => selectAnswer(answer)}"
         >
@@ -31,7 +31,8 @@
                     isAnswerCorrect: answer.correct
                 };
                 dispatchTestAnswerEvent(eventData);
-                this.props.toggleModal(true, answer, answer.correct);
+                !this.props.isCourseTest && this.props.toggleModal(true, answer, answer.correct);
+                this.props.isCourseTest && this.props.recordAnswer(answer, this.props.card.question);
             },
         }
     </script>
