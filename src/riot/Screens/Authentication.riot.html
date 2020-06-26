@@ -23,10 +23,11 @@
                 <p class="error-message">{state.errorExplanation}</p>
             </div>
             <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}" translate>Login</button>
-        <div class="login-help">
-            <a onclick="{showLoginHelpMessage}" translate>Forgot username/password?</a>
-            <p if="{state.isShowingHelpMessage}" translate>For help logging in, call 867-5309</p>
-        </div>
+            <div class="login-help">
+                <a onclick="{showLoginHelpMessage}" translate>Forgot username/password?</a>
+                <p if="{state.isShowingHelpMessage}" translate>For help logging in, call </p>
+                <a if="{state.isShowingHelpMessage}" class="telephone-number" id="telephone-number" onclick="{(e) => callHelpNumber(e)}"></a>
+            </div>
         </form>
         <div class="logo">
             <span class="logo-a"></span>
@@ -95,6 +96,11 @@
                         isLoginButtonDisabled: false
                     });
                 }
+            },
+
+            callHelpNumber(e) {
+                const phoneElement = this.$("#telephone-number");
+                console.log(e);
             },
 
             clearError() {
