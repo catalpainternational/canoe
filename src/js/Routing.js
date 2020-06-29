@@ -93,8 +93,8 @@ export const getPage = async () => {
 };
 
 export const getPreviewQueryFromURL = () => {
-    const querystring = window.location.search.replace(/^\?/, "");
-    return querystring;
+    const queryString = window.location.search.replace(/^\?/, "");
+    return queryString;
 };
 
 export const parseURLHash = () => {

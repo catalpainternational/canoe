@@ -1,8 +1,8 @@
 <SearchBar>
     <div class="form-group">
-        <p class="search-text" if="{props.query.length < 3 && props.query.length > 0}" translate>Enter at least 3 characters</p>
-        <input id="search" type="text" value="{props.query}" oninput="{onSearchInput}"/>
-        <label class="{props.query ? 'hide' : ''}" for="search" translate></label>
+        <p class="search-text" if="{props.searchString.length < 3 && props.searchString.length > 0}" translate>Enter at least 3 characters</p>
+        <input id="search" type="text" value="{props.searchString}" oninput="{onSearchInput}"/>
+        <label class="{props.searchString ? 'hide' : ''}" for="search" translate></label>
         <span class="search-icon"></span>
     </div>
 
@@ -10,7 +10,7 @@
         export default {
             onSearchInput() {
                 const queryElement = this.$("#search");
-                this.props.submitQuery(queryElement.value);
+                this.props.submitSearch(queryElement.value);
             }
         }
     </script>
