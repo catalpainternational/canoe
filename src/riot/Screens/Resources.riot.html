@@ -86,9 +86,10 @@
                     this.update();
                     
                     if (this.state.selectedTags.length > 0) {
+                        urlParams.delete("filter");
                         for (var i=0; i < this.state.selectedTags.length; ++i ) {
                             const encodedTag = this.state.selectedTags[i].toLowerCase();
-                            urlParams.set("filter", encodedTag);
+                            urlParams.append("filter", encodedTag);
                         }
                         this.replaceUrlQuery(urlParams);
                     } else {
