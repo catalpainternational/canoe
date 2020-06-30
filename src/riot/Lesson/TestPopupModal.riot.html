@@ -11,14 +11,14 @@
     </div>
 
     <script>
-        import { getLessonModuleHash } from "js/Routing";
+        import { getNextCardsUrl } from "js/Routing";
         import { setComplete } from "Actions/completion";
 
         export default {
             nextTestCard() {
                 this.props.toggleModal(false, {});
                 window.scroll(0, 0);
-                location.hash = getLessonModuleHash(
+                location.hash = getNextCardsUrl(
                     this.props.lesson.id,
                     this.props.module,
                     this.props.cardIdx
@@ -28,7 +28,7 @@
             completePage() {
                 this.props.toggleModal(false, {});
                 setComplete(this.props.courseSlug, this.props.lesson.slug, this.props.module);
-                location.hash = getLessonModuleHash(
+                location.hash = getNextCardsUrl(
                     this.props.lesson.id,
                     this.props.module,
                     this.props.cardIdx
