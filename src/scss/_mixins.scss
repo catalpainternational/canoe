@@ -1,8 +1,7 @@
 @mixin screen-banner-styles {
     margin-top: -65px;
-    padding-top: 65px;
     height: 30vh;
-    padding: 0 1em;
+    padding: 65px 1em 0 1em;
 
     .header-box {
         display: flex;
