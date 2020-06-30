@@ -103,7 +103,6 @@ const addLesson = (state = {}, action) => {
                     short_description: lesson.data.description,
                     long_description: lesson.data.long_description,
                     duration: lesson.data.duration,
-                    jobs: lesson.data.jobs,
                     coming_soon: lesson.data.coming_soon,
                     objectives: lesson.objective,
                     content: lesson.content,
