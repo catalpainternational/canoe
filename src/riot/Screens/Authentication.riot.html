@@ -24,7 +24,7 @@
             </div>
             <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}" translate>Login</button>
             <div class="login-help">
-                <a onclick="{showLoginHelpMessage}" translate>Forgot username/password?</a>
+                <a onclick="{toggleLoginHelpModal}" translate>Forgot username/password?</a>
             </div>
         </form>
         <div class="logo">
@@ -34,7 +34,9 @@
         </div>
     </div>
     <PopupModal if="{state.showModal}">
-        <h3>this is text in the modal</h3>
+        <span class="warning"></span>
+        <h2>Need help?</h2>
+        <button onclick="{toggleLoginHelpModal}" class="btn-primary">Close</button>
     </PopupModal>
 
     <script>
@@ -117,7 +119,7 @@
                 }
             },
             
-            showLoginHelpMessage() {
+            toggleLoginHelpModal() {
                 this.update({
                     showModal: !this.state.showModal
                 });

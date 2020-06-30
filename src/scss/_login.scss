@@ -88,10 +88,6 @@ Authentication > div {
                 
                 &.telephone-number {
                     margin-top: 0;
-
-                    &::after {
-                        content: $helpPhoneNumber;
-                    }
                 }
             }
 
