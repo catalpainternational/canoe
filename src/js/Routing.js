@@ -93,14 +93,20 @@ export const getPage = async () => {
 };
 
 export const getPreviewQueryFromURL = () => {
-    const querystring = window.location.search.replace(/^\?/, "");
-    return querystring;
+    const queryString = window.location.search.replace(/^\?/, "");
+    return queryString;
 };
 
 export const parseURLHash = () => {
     const afterTheHash = window.location.hash.substr(1);
     return afterTheHash.split("/");
 };
+
+export const getSearchQueryFromUrl = () => {
+    const currentHash = parseURLHash();
+    const queryString = currentHash[0].split("?")[1];
+    return queryString;
+}
 
 export function getLessonCardIdx() {
     return parseInt(location.hash.split("/")[2]) - 1;
