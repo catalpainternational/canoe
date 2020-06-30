@@ -1,6 +1,6 @@
 @mixin screen-banner-styles {
     margin-top: -65px;
-    height: 30vh;
+    height: 180px;
     padding: 65px 1em 0 1em;
 
     .header-box {
@@ -17,7 +17,7 @@
         height: 20px;
         border-radius: 0 0 50% 50%;
         position: absolute;
-        top: 235px;
+        top: 245px;
         left: 0;
     
         @media only screen and (min-width: $tablet) {
