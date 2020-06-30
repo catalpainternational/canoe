@@ -39,7 +39,7 @@ h5.section-title:after {
 }
 
 HomePage .header {
-    padding: 0px 30px 0 45px;
+    padding: 0 30px 0 45px;
     height: 181px;
     margin-top: -65px;
     padding-top: 65px;
@@ -51,7 +51,7 @@ HomePage .header {
     }
 
     h6 {
-        margin: 0px 10px 20px 0px;
+        margin: 0 10px 20px 0;
         font-weight: 400;
     }
 
@@ -98,6 +98,6 @@ HomePage div.content-wrapper {
     @media only screen and (max-width: $tablet) {
         margin-left: 0;	
         margin-right: 0;
-        border-radius: 0px;
+        border-radius: 0;
     }
 }
