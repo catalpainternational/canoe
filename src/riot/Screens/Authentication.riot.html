@@ -1,5 +1,5 @@
 <Authentication>
-    <div>
+    <div class="modal-background">
         <span class="site-logo"></span>
         <span class="login-image"></span>
         <form onsubmit="{loginUser}">
@@ -25,8 +25,6 @@
             <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}" translate>Login</button>
             <div class="login-help">
                 <a onclick="{showLoginHelpMessage}" translate>Forgot username/password?</a>
-                <p if="{state.isShowingHelpMessage}" translate>For help logging in, call </p>
-                <a if="{state.isShowingHelpMessage}" class="telephone-number" id="telephone-number" onclick="{(e) => callHelpNumber(e)}"></a>
             </div>
         </form>
         <div class="logo">
@@ -35,17 +33,25 @@
             <span class="logo-c"></span>
         </div>
     </div>
+    <PopupModal if="{state.showModal}">
+        <h3>this is text in the modal</h3>
+    </PopupModal>
 
     <script>
         import { alertIfRequestWasMadeOffline } from "js/Errors";
         import { login } from "js/AuthenticationUtilities";
+        import PopupModal from "RiotTags/Components/PopupModal.riot.html";
 
         export default {
             state: {
                 errorExplanation: null,
                 isLoginButtonDisabled: false,
                 isShowingPassword: false,
-                isShowingHelpMessage: false,
+                showModal: false,
+            },
+
+            components: {
+                popupmodal: PopupModal,
             },
 
             getUsernameAndPasswordFromForm() {
@@ -113,8 +119,14 @@
             
             showLoginHelpMessage() {
                 this.update({
-                    isShowingHelpMessage: !this.state.isShowingHelpMessage
+                    showModal: !this.state.showModal
                 });
+                const modalBackground = this.$(".modal-background");
+                if (this.state.showModal) {
+                    modalBackground.classList.add("showElement");
+                } else {
+                    modalBackground.classList.remove("showElement");
+                }
             }
         };
     </script>
