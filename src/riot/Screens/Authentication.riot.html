@@ -1,5 +1,5 @@
 <Authentication>
-    <div class="modal-background">
+    <div class="modal-background" onclick="{state.showModal ? {toggleLoginHelpModal} : ''}">
         <span class="site-logo"></span>
         <span class="login-image"></span>
         <form onsubmit="{loginUser}">
@@ -24,7 +24,7 @@
             </div>
             <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}" translate>Login</button>
             <div class="login-help">
-                <a onclick="{toggleLoginHelpModal}" translate>Forgot username/password?</a>
+                <a onclick="{toggleLoginHelpModal}" translate>Forgot username or password?</a>
             </div>
         </form>
         <div class="logo">
@@ -34,9 +34,11 @@
         </div>
     </div>
     <PopupModal if="{state.showModal}">
-        <span class="warning"></span>
-        <h2>Need help?</h2>
-        <button onclick="{toggleLoginHelpModal}" class="btn-primary">Close</button>
+        <span class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></span>
+        <h2 class="header-no-image">Need help?</h2>
+        <p>Send us a message on WhatsApp and we'll help you get logged in.</p>
+        <button class="btn-primary" onclick="{sendWhatsAppMessage}">Send message</button>
+        <p class="note">If you don't have WhatsApp installed, send a SMS text to [phone number]</p>
     </PopupModal>
 
     <script>
@@ -55,6 +57,14 @@
             components: {
                 popupmodal: PopupModal,
             },
+
+            // onMounted() {
+            //     window.addEventListener("hideModalOnClick", this.closeModalOnClick);
+            // },
+
+            // onUnmounted() {
+            //     window.removeEventListener("hideModalOnClick", this.closeModalOnClick);
+            // },
 
             getUsernameAndPasswordFromForm() {
                 const usernameInput = this.$("#username");
@@ -106,11 +116,6 @@
                 }
             },
 
-            callHelpNumber(e) {
-                const phoneElement = this.$("#telephone-number");
-                console.log(e);
-            },
-
             clearError() {
                 if (this.state.errorExplanation) {
                     this.update({
@@ -118,17 +123,40 @@
                     });
                 }
             },
+
+            closeModalOnClick() {
+                const modalElement = this.$("#modal");
+
+                window.onclick = (e) => {
+                    if (e.target !== modalElement) {
+                        this.update({
+                            showModal: !this.state.showModal
+                        });
+                        const modalBackground = this.$(".modal-background");
+                        modalBackground.classList.remove("fade");
+                    }
+                }
+            },
             
             toggleLoginHelpModal() {
                 this.update({
                     showModal: !this.state.showModal
                 });
+
                 const modalBackground = this.$(".modal-background");
                 if (this.state.showModal) {
-                    modalBackground.classList.add("showElement");
+                    modalBackground.classList.add("fade");
+                    // window.addEventListener("hideModalOnClick", this.closeModalOnClick());
                 } else {
-                    modalBackground.classList.remove("showElement");
+                    modalBackground.classList.remove("fade");
+                    // window.removeEventListener("hideModalOnClick", this.closeModalOnClick());
                 }
+            },
+
+            sendWhatsAppMessage() {
+                const whatsAppNumber = "https://wa.me/19787602338?text=I%20need%20help%20accessing%20my%20account";
+                window.open(whatsAppNumber, '_blank');
+                // timor phone code: 670
             }
         };
     </script>
