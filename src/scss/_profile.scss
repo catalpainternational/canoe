@@ -30,8 +30,10 @@
 .profile-header {
     @include screen-banner-styles;
     background-color: $profile-banner-green;
-    margin-top: -65px;
-    padding-top: 65px;
+
+    &:after {
+        background: $profile-banner-green;
+    }
 }
 
 Profile .background-gray-2 {

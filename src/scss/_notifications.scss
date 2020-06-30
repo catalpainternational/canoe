@@ -14,8 +14,10 @@
     .notifications-header {
         @include screen-banner-styles;
         background-color: $notifications-banner-orange;
-        margin-top: -65px;
-        padding-top: 65px;
+
+        &:after {
+            background: $notifications-banner-orange;
+        }
     }
 
     .left-block {
