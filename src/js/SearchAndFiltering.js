@@ -3,7 +3,7 @@ import { intersection } from "js/SetMethods";
 export const getTagsFromPages = (pagesWithTags) => {
     const eachArticlesTags = pagesWithTags.map((page) => page.tags);
     const setOfTags = new Set(eachArticlesTags.flat());
-    return Array.from(setOfTags);
+    return Array.from(setOfTags).map(tag => tag.toLowerCase());
 };
 
 export const doPageTagsMatchSelections = (pageTags, selectedTags) => {

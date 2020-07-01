@@ -1,33 +1,16 @@
 <SearchBar>
     <div class="form-group">
-        <p class="search-text" if="{state.hasSearchQuery && !state.query}" translate>Enter at least 3 characters</p>
-        <input id="search" type="text" oninput="{onSearchInput}"/>
-        <label class="{state.hasSearchQuery ? 'hide' : ''}" for="search" translate></label>
+        <p class="search-text" if="{props.searchString.length < 3 && props.searchString.length > 0}" translate>Enter at least 3 characters</p>
+        <input id="search" type="text" value="{props.searchString}" oninput="{onSearchInput}"/>
+        <label class="{props.searchString ? 'hide' : ''}" for="search" translate></label>
         <span class="search-icon"></span>
     </div>
 
     <script>
         export default {
-            state: {
-                hasSearchQuery: false,
-                query: '',
-            },
-
             onSearchInput() {
                 const queryElement = this.$("#search");
-                if (queryElement.value.length > 0) {
-                    this.update({ hasSearchQuery: true });
-                } else {
-                    this.update({ hasSearchQuery: false });
-                }
-
-                if (queryElement.value.length > 2) {
-                    this.update({ query: queryElement.value });
-                } else {
-                    this.update({ query: '' });
-                }
-
-                this.props.submitQuery(this.state.query);
+                this.props.submitSearch(queryElement.value);
             }
         }
     </script>

@@ -4,7 +4,7 @@
             each="{tag in props.tags}"
             class="tag {props.selectedTags && props.selectedTags.includes(tag) ? 'selected' : ''}" 
             onclick="{e => { 
-                props.onTagClick(e.srcElement.innerText)
+                props.onTagClick(e.srcElement.innerText, false)
             }}"
         >
             <p>{tag}</p>

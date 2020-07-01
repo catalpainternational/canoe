@@ -63,54 +63,6 @@
     }
 }
 
-.jobs-card {
-    border: 1px solid #d5dbdf;
-    border-radius: 8px;
-
-    margin-bottom: 15px;
-
-    h5 {
-        margin-top: 0;
-        margin-bottom: 1rem;
-    }
-
-    p {
-        font-size: 0.8rem;
-        line-height: 1.4;
-    }
-
-    .jobs-body {
-        padding: 1.1rem;
-    }
-
-    .jobs-body > div {
-        flex-wrap: wrap;
-        display: flex;
-        width: 100%;
-
-        & > div {
-            flex-direction: column;
-            align-items: center;
-            display: flex;
-            width: 33%;
-
-            & > div {
-                justify-content: center;
-                border-radius: 25px;
-                align-items: center;
-                border: $border;
-                display: flex;
-                height: 50px;
-                width: 50px;
-            }
-
-            & > p {
-                text-align: center;
-            }
-        }
-    }
-}
-
 LessonPage .replace-this-with-lessonframe {
     margin-top: -#{$top-menu-height};
     padding-top: $top-menu-height;
@@ -169,10 +121,6 @@ LessonPage .content-wrapper {
     .sticky.lesson-header + .duration {
         margin-top: $sticky-header-offset;
     }
-}
-
-LessonPage .hide {
-    display: $hideInCanoe;
 }
 
 LessonPage .content-wrapper .duration {
@@ -330,29 +278,36 @@ LessonContent .content {
     }
 
     quotecard {
-        margin: 20px 10px;
-        letter-spacing: 1px;
+        margin-top: 1em;
         font-size: 1.125em;
 
+        .quote-container {
+            display: flex;
+            flex-direction: row;
+            margin-top: 2em;
+        }
+
         h3 {
-            margin: -1.25em 1.25em;
-        }
-
-        & span {
-            color: $blue-1;
-            font-size: 1.75em;
             font-weight: 500;
-            margin: 0 0.1875em;
+            flex: 1;
+            margin: 0;
         }
 
-        & > div {
-            text-align: right;
-            line-height: 0.1;
+        span {
+            color: $blue-1;
+            margin: -0.1em 0.1em;
+            align-self: flex-start;
+            font-size: 1.7em;
+
+            &:last-of-type { 
+                align-self: flex-end;
+            }
         }
 
         & p {
             margin-top: 34px;
             font-size: 1em;
+            margin-left: 1em;
         }
     }
 
