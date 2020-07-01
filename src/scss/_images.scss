@@ -291,50 +291,6 @@
     width: 13px;
 }
 
-%jobs-shared {
-    @extend %mask-icons-shared;
-    width: 20px;
-}
-
-.business_owner {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/briefcase.svg");
-    height: 18px;
-}
-
-.builder {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/hammer.svg");
-    height: 18px;
-}
-
-.engineer {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/rulers.svg");
-    height: 20px;
-}
-
-.tourism_hospitality_retail_manager {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/tourism_hospitality_retail.svg");
-    width: 30px;
-    height: 30px;
-}
-
-.communications_and_marketing_specialist {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/communications_and_marketing.svg");
-    height: 26px;
-    width: 30px;
-}
-
-.banking_and_finance_associate {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/banking_and_finance.svg");
-    height: 24px;
-    width: 30px;
-}
-
 .incorrect-flag {
     @extend %icons-shared;
     background-image: url("../img/incorrect_flag.svg");

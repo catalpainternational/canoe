@@ -52,25 +52,6 @@
                 <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">
                     {props.wagtailPage.data.long_description}
                 </p>
-
-                <div if="{state.showLongDescription}" class="hide">
-                    <div class="jobs-card">
-                        <div class="jobs-body">
-                            <h5 translate>Jobs that use these skills</h5>
-                            <div>
-                                <div each="{job in props.wagtailPage.data.jobs}">
-                                    <div>
-                                        <span
-                                            class="{job.className} background-blue-1"
-                                        ></span>
-                                    </div>
-                                    <p>{job.text}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <a
                     if="{props.wagtailPage.data.long_description && state.showLongDescription}"
                     onclick="{toggleLessonDescription}"

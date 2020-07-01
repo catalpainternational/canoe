@@ -18,6 +18,7 @@
     </div>
     <div class="content-wrapper">
         <TagList
+            if="{state.listOfTags.length > 0}"
             tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
@@ -181,7 +182,8 @@
 
             isCourseVisible(courseTags) {
                 const { selectedTags } = this.state;
-                return doPageTagsMatchSelections(courseTags, selectedTags);
+                const lowercaseCourseTags = courseTags.map(tag => tag.toLowerCase())
+                return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
             },
         };
     </script>
