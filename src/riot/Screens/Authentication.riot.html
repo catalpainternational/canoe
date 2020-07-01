@@ -36,15 +36,14 @@
     <PopupModal if="{state.showModal}">
         <span class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></span>
         <h2 class="header-no-image">Need help?</h2>
-        <p>Send us a message on WhatsApp and we'll help you get logged in.</p>
-        <button class="btn-primary" onclick="{sendWhatsAppMessage}">Send message</button>
-        <p class="note">If you don't have WhatsApp installed, send a SMS text to [phone number]</p>
+        <ContactInformation></ContactInformation>
     </PopupModal>
 
     <script>
         import { alertIfRequestWasMadeOffline } from "js/Errors";
         import { login } from "js/AuthenticationUtilities";
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
+        import ContactInformation from "RiotTags/Components/ContactInformation.riot.html";
 
         export default {
             state: {
@@ -56,6 +55,7 @@
 
             components: {
                 popupmodal: PopupModal,
+                contactinformation: ContactInformation,
             },
 
             // onMounted() {
@@ -124,19 +124,19 @@
                 }
             },
 
-            closeModalOnClick() {
-                const modalElement = this.$("#modal");
+            // closeModalOnClick() {
+            //     const modalElement = this.$("#modal");
 
-                window.onclick = (e) => {
-                    if (e.target !== modalElement) {
-                        this.update({
-                            showModal: !this.state.showModal
-                        });
-                        const modalBackground = this.$(".modal-background");
-                        modalBackground.classList.remove("fade");
-                    }
-                }
-            },
+            //     window.onclick = (e) => {
+            //         if (e.target !== modalElement) {
+            //             this.update({
+            //                 showModal: !this.state.showModal
+            //             });
+            //             const modalBackground = this.$(".modal-background");
+            //             modalBackground.classList.remove("fade");
+            //         }
+            //     }
+            // },
             
             toggleLoginHelpModal() {
                 this.update({
@@ -152,12 +152,6 @@
                     // window.removeEventListener("hideModalOnClick", this.closeModalOnClick());
                 }
             },
-
-            sendWhatsAppMessage() {
-                const whatsAppNumber = "https://wa.me/19787602338?text=I%20need%20help%20accessing%20my%20account";
-                window.open(whatsAppNumber, '_blank');
-                // timor phone code: 670
-            }
         };
     </script>
 </Authentication>
