@@ -60,14 +60,6 @@
                 contactinformation: ContactInformation,
             },
 
-            // onMounted() {
-            //     window.addEventListener("hideModalOnClick", this.closeModalOnClick);
-            // },
-
-            // onUnmounted() {
-            //     window.removeEventListener("hideModalOnClick", this.closeModalOnClick);
-            // },
-
             getUsernameAndPasswordFromForm() {
                 const usernameInput = this.$("#username");
                 const passwordInput = this.$("#password");
@@ -125,20 +117,6 @@
                     });
                 }
             },
-
-            // closeModalOnClick() {
-            //     const modalElement = this.$("#modal");
-
-            //     window.onclick = (e) => {
-            //         if (e.target !== modalElement) {
-            //             this.update({
-            //                 showModal: !this.state.showModal
-            //             });
-            //             const modalBackground = this.$(".modal-background");
-            //             modalBackground.classList.remove("fade");
-            //         }
-            //     }
-            // },
             
             toggleLoginHelpModal() {
                 this.update({
@@ -148,10 +126,8 @@
                 const modalBackground = this.$(".modal-background");
                 if (this.state.showModal) {
                     modalBackground.classList.add("fade");
-                    // window.addEventListener("hideModalOnClick", this.closeModalOnClick());
                 } else {
                     modalBackground.classList.remove("fade");
-                    // window.removeEventListener("hideModalOnClick", this.closeModalOnClick());
                 }
             },
         };
