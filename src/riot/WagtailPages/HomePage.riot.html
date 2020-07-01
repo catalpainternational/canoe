@@ -182,7 +182,8 @@
 
             isCourseVisible(courseTags) {
                 const { selectedTags } = this.state;
-                return doPageTagsMatchSelections(courseTags, selectedTags);
+                const lowercaseCourseTags = courseTags.map(tag => tag.toLowerCase())
+                return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
             },
         };
     </script>
