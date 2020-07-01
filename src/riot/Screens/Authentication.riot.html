@@ -36,7 +36,9 @@
     <PopupModal if="{state.showModal}">
         <span class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></span>
         <h2 class="header-no-image">Need help?</h2>
-        <ContactInformation></ContactInformation>
+        <ContactInformation
+            toggleLoginHelpModal="{toggleLoginHelpModal}"
+        ></ContactInformation>
     </PopupModal>
 
     <script>

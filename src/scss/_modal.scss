@@ -1,12 +1,12 @@
 .modal {
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
     background-color: white;
     width: 100%;
     text-align: center;
-    height: 300px;
-    border-radius: 30px 30px 0px 0px;
-    box-shadow: 0px 0px 10px 5px $gray-3;
+    height: 18.75em;
+    border-radius: 30px 30px 0 0;
+    box-shadow: 0 0 10px 5px $gray-3;
     animation-duration: 0.6s;
     animation-name: slideModal;
     display: flex;
@@ -25,19 +25,19 @@
     }
 
     button {
-        margin-top: 15px;
+        margin-top: 1em;
     }
 
     p {
-        margin: 0 0 15px;
-        padding: 0 10px;
+        margin: 0 0 1em;
+        padding: 0 0.625em;
     }
 
     .correct-flag,
     .incorrect-flag {
-        width: 50px;
-        height: 50px;
-        margin-top: 10px;
+        width: 3.125em;
+        height: 3.125em;
+        margin-top: 0.625em;
     }
 
     .cross.close-btn {
@@ -48,11 +48,23 @@
 
     .header-no-image {
         margin-top: 1em;
+        font-size: 1.5em;
     }
 
-    .note {
-        margin-top: 1.6em;
-        font-size: 0.9em;
+    .custom-contact-container {
+        button {
+            margin-top: 0;
+        }
+    
+        p {
+            font-size: 1.1em;
+        }
+
+        .sm-note {
+            margin-top: 3em;
+            margin-bottom: 0.5em;
+            font-size: 0.9em;
+        }
     }
 }
 
