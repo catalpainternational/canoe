@@ -16,23 +16,30 @@
         export default {
             state: {
                 imagePath: "",
+                imageId: "",
+            },
+            onUpdated(props, state) {
+                this.setImagePath(props, state);
             },
 
-            async onMounted(props, state) {
+            onMounted(props, state) {
+                this.setImagePath(props, state);
+            },
+
+            async setImagePath(props) {
                 const { imageId } = props;
-
-                let imagePath = "";
-
+                if (this.state.imageId === imageId) {
+                    return;
+                }
                 try {
-                    imagePath = await getImageUrl(imageId);
+                    const imagePath = await getImageUrl(imageId);
+                    this.update({imagePath, imageId});
                 } catch (error) {
                     if (!(error instanceof MissingImageError)) {
                         throw error;
                     }
                 }
-
-                this.update({ imagePath });
-            },
+            }
         };
     </script>
 </ImageWrapper>

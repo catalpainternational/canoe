@@ -43,6 +43,17 @@ export const logNotificationReceived = (type) => {
     });
 };
 
+export const logUnsubscribedFromNotifications = () => {
+    if (!isGoogleAnalyticsAvailable()) {
+        return;
+    }
+
+    gtag("event", "Unsubscribed", {
+        event_category: "Notifications",
+        ...getUserAndGroupDimensions(),
+    });
+};
+
 export const logClickedPlayOnVideo = (videoUrl) => {
     if (!isGoogleAnalyticsAvailable()) {
         return;
