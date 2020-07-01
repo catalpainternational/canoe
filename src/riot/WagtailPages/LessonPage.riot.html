@@ -128,10 +128,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
 
         import { isComplete } from "Actions/completion";
-
-        const getHash = () => {
-            return location.hash.split("/");
-        };
+        import { getHash } from "js/Routing";
 
         export default {
             state: {

@@ -1,5 +1,5 @@
 <BottomMenu>
-    <footer if="{!state.isObjective && !state.isContent && !state.isTest && !state.isCourseTest}">
+    <footer if="{!state.isObjective && !state.isContent && !state.isTest && !state.isEvaluation}">
         <a class="courses-icon { props.contentType === 'HomePage' ? 'active' : ''}" href="#"></a>
         <a class="profile-icon { props.contentType === 'profile' ? 'active' : ''}" href="#profile"></a>
         <a class="resources-icon { props.contentType === 'resources' ? 'active' : ''}" href="#resources"></a>
@@ -23,7 +23,7 @@
                 this.state.isObjective = this.state.lessonModule === 'objectives';
                 this.state.isContent = this.state.lessonModule === 'content';
                 this.state.isTest = this.state.lessonModule === 'test';
-                this.state.isCourseTest = location.hash === '#course-test';
+                this.state.isEvaluation = this.state.lessonModule === 'evaluation';
             }
         }
     </script>

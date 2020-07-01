@@ -109,3 +109,7 @@ export function getLessonCardIdx() {
 export function getLessonModuleHash(lessonId, lessonModule, lessonCardIdx) {
     return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx + 2);
 }
+
+export function getHash() {
+    return location.hash.split("/");
+}

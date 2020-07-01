@@ -102,6 +102,10 @@
         }
     }
 
+    .status.start-eval {
+        min-width: 135px;
+    }
+
     .status.done {
         background-color: $gray-7;
         max-width: 100px;

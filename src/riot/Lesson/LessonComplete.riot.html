@@ -19,7 +19,7 @@
                         <p>{ lessonCompleteMessage() }</p>
                     </div>
                     <button class="btn-primary" onclick="{goToCourseTest}" translate>
-                        Course Test
+                        Take course evaluation
                     </button>
                 </template>
                 <template if="{props.isCourseTest}">
@@ -84,7 +84,7 @@
             },
 
             goToCourseTest() {
-                location.hash = "#course-test";
+                location.hash = `#${this.props.course.id}/evaluation/1`
             },
 
             lessonCompleteMessage() {

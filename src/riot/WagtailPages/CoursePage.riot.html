@@ -1,5 +1,5 @@
 <CoursePage>
-    <div class="course background-blue-1">
+    <div if="{state.hash == null}" class="course background-blue-1">
         <div class="content-wrapper">
             <div class="course-header">
                 <div>
@@ -25,23 +25,67 @@
                 isCompleted="{isLessonComplete(lesson)}"
                 isComingSoon="{lesson.coming_soon}"
                 showFooter="{true}"
-            >
-            </Card>
-            <button class="btn-secondary" onclick="{goToCourse}">Take course test</button>
+            ></Card>
+            <h5 class="section-title" translate>Course evaluation</h5>
+            <Card
+                title="{'Course evaluation'}"
+                description="{'this is the course eval description'}"
+                duration="{15}"
+                link="{props.wagtailPage.id}/evaluation/1"
+                isCompleted="{false}"
+                isComingSoon="{false}"
+                showFooter="{true}"
+                isEvaluation="{true}"
+            ></Card>
         </div>
     </div>
+    <CourseTest 
+        if="{state.hash === evalModule}"
+        course="{props.wagtailPage}"
+        module="evaluation"
+        cards="{evalCards}"
+    ></CourseTest>
 
     <script>
         import { countCompleteLessonsInCourse } from "js/LearningStatistics";
         import { isComplete } from "Actions/completion";
         import { getCourseAndLessonSlugs } from "js/utilities";
+        import { getLessonModuleHash, getHash } from "js/Routing";
         import Card from "RiotTags/Components/Card.riot.html";
-        // import CourseTest from "RiotTags/Lesson/CourseTest.riot.html";
+        import CourseTest from "RiotTags/Lesson/CourseTest.riot.html";
 
         export default {
+            state: {
+                hash: "",
+            },
+
             components: {
                 card: Card,
-                // coursetest: CourseTest,
+                coursetest: CourseTest,
+            },
+
+            evalModule: "evaluation",
+
+            evalCards: [
+                { 
+                    answers: [
+                        { correct: true, text: 'this is correct' }, 
+                        { correct: false, text: 'incorrect' }
+                    ],
+                    question: 'will it keep raining?' 
+                }, { 
+                    answers: [
+                        { correct: true, text: 'correct time' }, 
+                        { correct: true, text: 'correct too' }, 
+                        { correct: false, text: 'incorrect' }
+                    ],
+                    question: 'what time is it?' 
+                },
+            ],
+
+            onBeforeMount(props, state) {
+                state.hash = getHash()[1];
+                window.addEventListener("hashchange", this.hashChanged);
             },
 
             onMounted(props, state) {
@@ -50,8 +94,24 @@
                 window.addEventListener("scroll", this.stickyHeader);
             },
 
+            onBeforeUnmount(props, state) {
+                window.removeEventListener("hashchange", this.hashChanged);
+            },
+
             onUnmounted() {
                 window.removeEventListener("scroll", this.stickyHeader);
+            },
+
+            hashChanged() {
+                this.update({
+                    hash: getHash()[1]
+                });
+
+                if (this.state.hash) {
+                    window.removeEventListener("scroll", this.stickyHeader);
+                } else {
+                    window.addEventListener("scroll", this.stickyHeader);
+                }
             },
 
             getCourseProgress() {
@@ -73,10 +133,6 @@
                 } else {
                     this.state.header.classList.remove("sticky");
                 }
-            },
-
-            goToCourse() {
-                location.hash = "#course-test";
             },
 
             isLessonComplete(lesson) {
