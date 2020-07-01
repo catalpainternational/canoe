@@ -170,6 +170,7 @@
 .report-card {
     @extend %icons-shared;
     background-image: url("~img/report_card.svg");
+    background-position: center;
     height: 200px;
     max-width: 200px;
 }
@@ -177,8 +178,9 @@
 .notifications-image {
     @extend %icons-shared;
     background-image: url("~img/notifications_header.svg");
-    height: 154px;
-    width: 150px;
+    background-position: center;
+    height: 145px;
+    width: 118px;
 }
 
 .login-image {
@@ -212,7 +214,6 @@
     z-index: 2;
     height: 142px;
     width: 84px;
-    margin-right: 30px;
     display: inline-block;
 }
 

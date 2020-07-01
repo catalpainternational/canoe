@@ -39,10 +39,7 @@ h5.section-title:after {
 }
 
 HomePage .header {
-    padding: 0px 30px 0 45px;
-    height: 181px;
-    margin-top: -65px;
-    padding-top: 65px;
+    @include screen-banner-styles;
     
     h3 { 
         color: white;
@@ -51,32 +48,13 @@ HomePage .header {
     }
 
     h6 {
-        margin: 0px 10px 20px 0px;
+        margin: 0 10px 20px 0;
         font-weight: 400;
-    }
-
-    .header-box {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        max-width: $tablet;
-        margin: auto;
     }
 }
 
 HomePage .header:after {
-    content: '';
     background: #1696ac;
-    width: 100%;
-    height: 20px;
-    border-radius: 0 0 50% 50%;
-    position: absolute;
-    top: 245px;
-    left: 0;
-
-    @media only screen and (min-width: $tablet) {
-        display: none;
-    };
 }
 
 HomePage .btn-continue-learning .arrow {
@@ -98,6 +76,6 @@ HomePage div.content-wrapper {
     @media only screen and (max-width: $tablet) {
         margin-left: 0;	
         margin-right: 0;
-        border-radius: 0px;
+        border-radius: 0;
     }
 }
