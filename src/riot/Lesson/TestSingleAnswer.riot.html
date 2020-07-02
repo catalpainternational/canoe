@@ -31,8 +31,9 @@
                     isAnswerCorrect: answer.correct
                 };
                 dispatchTestAnswerEvent(eventData);
-                !this.props.isCourseTest && this.props.toggleModal(true, answer, answer.correct);
-                this.props.isCourseTest && this.props.recordAnswer(answer, this.props.card.question);
+                this.props.isCourseTest ? 
+                    this.props.recordAnswer(answer) :
+                    this.props.toggleModal(true, answer, answer.correct);
             },
         }
     </script>

@@ -41,11 +41,11 @@
     </LessonFrame>
     <LessonComplete
         if="{state.cardIdx === state.cards.length + 1}"
-        course="{props.course}"
-        title="{props.course.title}"
+        course="{props.wagtailPage.course}"
+        title="{props.wagtailPage.course.title}"
         isCourseTest="{true}"
-    >
-    </LessonComplete>
+    ></LessonComplete>
+    <!-- add CourseTestComplete page, pass and fail -->
 
     <script>
         import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
@@ -78,9 +78,11 @@
 
                 window.addEventListener("hashchange", this.hashChanged);
                 
-                window.addEventListener(ON_ANSWERED_TEST_QUESTION, event => {
-                    logATestAnswer(event.detail);
-                });
+                // window.addEventListener(ON_ANSWERED_TEST_QUESTION, event => {
+                //     logATestAnswer(event.detail);
+                // });
+
+                window.removeEventListener("scroll", this.stickyHeader);
             },
 
             onMounted(props, state) {
@@ -92,6 +94,7 @@
                 this.update({
                     isSingleAnswer: correctAnswers.length === 1,
                 });
+                console.log(props.wagtailPage)
             },
 
             onBeforeUnmount(props, state) {
@@ -116,6 +119,7 @@
             previousTestCard() {
                 window.history.back();
                 // change to prev card
+                this.retrieveAnswer()
             },
 
             submitAnswers() {
@@ -123,16 +127,28 @@
             },
 
             nextTestCard() {
+                // record answers of current card
+                // storeAnswers();
                 window.scroll(0, 0);
                 location.hash = getLessonModuleHash(
-                    this.props.course.id,
+                    this.props.wagtailPage.course.id,
                     this.props.module,
                     this.state.cardIdx
                 );
             },
 
-            recordAnswer(answer) {
-                this.state.allSelectedAnswers
+            recordAnswer(answers) {
+                // take from temp answers, replace whatever is in temp storage
+                console.log(answers)
+            },
+
+            retrieveAnswer() {
+                console.log('this was the answer')
+                // pull from permanent answers, put into temp answers
+            },
+
+            storeAnswers() {
+                // this.state.temporaryAnswers add to permanent answers
             },
 
             cardNumberMessage() {
@@ -142,7 +158,7 @@
 
             sendAnswersToGoogle(allSelectedAnswers) {
                 // const eventData = {
-                //     lesson: this.props.course.title,
+                //     lesson: this.props.wagtailPage.course.title,
                 //     question: this.state.cards[this.state.cardIdx].question,
                 //     answer: answer.text,
                 //     isAnswerCorrect: answer.correct,
@@ -152,9 +168,9 @@
 
             completePage() {
                 console.log('completed')
-                // setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
+                // setComplete(this.props.wagtailPage.course.slug, this.props.lesson.slug, this.props.module);
                 // location.hash = getLessonModuleHash(
-                //     this.props.course.id,
+                //     this.props.wagtailPage.course.id,
                 //     this.props.module,
                 //     this.state.cardIdx
                 // );

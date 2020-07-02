@@ -2,13 +2,14 @@
     <header class="background-{state.color}">
         <div class="top-menu-container">
             <a
-                if="{!state.isCard && !state.isSectionList && !state.isCourse && !state.isBasePage && !state.isHome}"
+                if="{!state.isCard && !state.isSectionList && !state.isCourse && !state.isBasePage && !state.isHome && !state.isCourseTest}"
                 class="{state.isSettings ? 'arrow-gray' : 'arrow-white'}"
                 onclick="{goBack}"
             ></a>
             <a if="{state.isSectionList}" class="arrow-white" onclick="{backToCoursePage}"></a>
-            <a if="{state.isCourse}" class="arrow-white" onclick="{backToHome}"></a>
-            <a if="{state.isCard}" class="cross close-btn" onclick="{backToLessonPage}"></a>
+            <a if="{state.isCourse && !state.isCourseTest}" class="arrow-white" onclick="{backToHome}"></a>
+            <a if="{state.isCard || state.isCourseTest}" class="cross close-btn" onclick="{backToLessonPage}"></a>
+
             <a
                 if="{!state.isHome}"
                 class="site-logo {state.isSettings ? '' : 'white'}"
@@ -39,7 +40,7 @@
             },
 
             backToLessonPage() {
-                location.hash = "#" + this.props.wagtailPage.data.id;
+                this.state.isCourseTest ? location.hash = "#40" : location.hash = "#" + this.props.wagtailPage.data.id;
             },
 
             backToHome() {
@@ -56,6 +57,7 @@
                 this.state.isObjective = this.state.lessonModule === "objectives";
                 this.state.isContent = this.state.lessonModule === "content";
                 this.state.isTest = this.state.lessonModule === "test";
+                this.state.isCourseTest = this.state.lessonModule === "evaluation";
                 this.state.isCard =
                     this.state.isTest || this.state.isContent || this.state.isObjective;
                 this.state.isHome = this.props.contentType === "HomePage";

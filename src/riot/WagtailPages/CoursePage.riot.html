@@ -41,7 +41,7 @@
     </div>
     <CourseTest 
         if="{state.hash === evalModule}"
-        course="{props.wagtailPage}"
+        wagtailPage="{props.wagtailPage}"
         module="evaluation"
         cards="{evalCards}"
     ></CourseTest>
@@ -69,8 +69,10 @@
             evalCards: [
                 { 
                     answers: [
+                        { correct: false, text: 'incorrect' },
                         { correct: true, text: 'this is correct' }, 
-                        { correct: false, text: 'incorrect' }
+                        { correct: false, text: 'Another incorrect answer' },
+                        { correct: false, text: 'Another incorrect answer here it is a bit longer' },
                     ],
                     question: 'will it keep raining?' 
                 }, { 
@@ -80,7 +82,15 @@
                         { correct: false, text: 'incorrect' }
                     ],
                     question: 'what time is it?' 
-                },
+                }, {
+                    answers: [
+                        { correct: false, text: 'ba dum dum dum' },
+                        { correct: true, text: 'dee ba da' },
+                        { correct: false, text: 'ba dum dum dum' },
+                        { correct: true, text: 'dee ba da' }
+                    ],
+                    question: 'What does Karen sing?'
+                }
             ],
 
             onBeforeMount(props, state) {

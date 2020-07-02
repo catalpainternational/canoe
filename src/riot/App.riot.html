@@ -14,7 +14,7 @@
         <template if="{isUserLoggedIn() && isSiteDownloaded()}">
             <TopMenu
                 contentType="{state.contentType}"
-                wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
+                wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : state.isCourseTest ? state.wagtailPage : ''}"
             ></TopMenu>
             <HomePage
                 if="{state.contentType === 'HomePage'}"

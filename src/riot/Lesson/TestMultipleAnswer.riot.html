@@ -73,7 +73,7 @@
                     this.state.hiddenAnswers.push(answer);
                 }
                 this.update();
-                this.props.isCourseTest && this.props.recordAnswer(answer, this.props.card.question);
+                this.props.isCourseTest && this.props.recordAnswer(this.state.hiddenAnswers);
             },
         }
     </script>

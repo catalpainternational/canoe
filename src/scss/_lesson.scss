@@ -492,15 +492,19 @@ TestPopupModal {
                 .warning {
                     height: 15px;
                     width: 18px;
-                    margin-right: 5px;
                     display: inline-block;
                     position: absolute;
-                    margin-left: 4px;
+                    margin-left: 5px;
                 }
 
                 .pendingAnswer {
                     background-color: $blue-1;
-                    border-radius: 10px;
+                    border-radius: 15px;
+                    width: 15px;
+                }
+
+                .warning {
+                    margin-left: 4px;
                 }
 
                 .checkbox {
