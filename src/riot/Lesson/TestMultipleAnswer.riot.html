@@ -18,7 +18,7 @@
     </div>
     <h4 if="{state.visibleAnswers.length > 0}" translate>Find and check all correct answers and uncheck incorrect answers</h4>
     <button
-        if="{!props.isCourseTest}"
+        if="{!props.isCourseExam}"
         class="btn-primary"
         onclick="{showResults}"
         disabled="{state.hiddenAnswers.length === 0 && state.visibleAnswers.length === 0}"
@@ -73,7 +73,7 @@
                     this.state.hiddenAnswers.push(answer);
                 }
                 this.update();
-                this.props.isCourseTest && this.props.recordAnswer(this.state.hiddenAnswers);
+                this.props.isCourseExam && this.props.recordAnswer(this.state.hiddenAnswers);
             },
         }
     </script>

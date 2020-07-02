@@ -12,10 +12,10 @@
                 <span class="checkmark-circle"></span>
                 <p translate>completed</p>
             </div>
-            <div if="{!props.isCompleted}" class="status btn-start-lesson {props.isEvaluation ?'start-eval' : ''}">
+            <div if="{!props.isCompleted}" class="status btn-start-lesson {props.isExam ?'start-exam' : ''}">
                 <span class="arrow-blue"></span>
-                <p if="{!props.isEvaluation}" translate>start lesson</p>
-                <p if="{props.isEvaluation}" class="start-eval" translate>start evaluation</p>
+                <p if="{!props.isExam}" translate>start lesson</p>
+                <p if="{props.isExam}" class="start-exam" translate>start exam</p>
             </div>
             <div if="{props.duration}" class="duration">
                 <span class="clock"></span>

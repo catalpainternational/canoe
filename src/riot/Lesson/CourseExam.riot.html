@@ -1,15 +1,15 @@
-<CourseTest>
+<CourseExam>
     <LessonFrame if="{state.cardIdx < state.cards.length}" id="test" extraStyleClasses="test">
         <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
         <TestSingleAnswer
             if="{state.isSingleAnswer}"
-            isCourseTest="{true}"
+            isCourseExam="{true}"
             card="{state.cards[state.cardIdx]}"
             recordAnswer="{recordAnswer}"
         ></TestSingleAnswer>
         <TestMultipleAnswer
             if="{!state.isSingleAnswer}"
-            isCourseTest="{true}"
+            isCourseExam="{true}"
             card="{state.cards[state.cardIdx]}"
             recordAnswer="{recordAnswer}"
         ></TestMultipleAnswer>
@@ -43,9 +43,9 @@
         if="{state.cardIdx === state.cards.length + 1}"
         course="{props.wagtailPage.course}"
         title="{props.wagtailPage.course.title}"
-        isCourseTest="{true}"
+        isCourseExam="{true}"
     ></LessonComplete>
-    <!-- add CourseTestComplete page, pass and fail -->
+    <!-- add CourseExamComplete page, pass and fail -->
 
     <script>
         import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
@@ -77,10 +77,6 @@
                 state.cardIdx = getLessonCardIdx();
 
                 window.addEventListener("hashchange", this.hashChanged);
-                
-                // window.addEventListener(ON_ANSWERED_TEST_QUESTION, event => {
-                //     logATestAnswer(event.detail);
-                // });
 
                 window.removeEventListener("scroll", this.stickyHeader);
             },
@@ -94,7 +90,6 @@
                 this.update({
                     isSingleAnswer: correctAnswers.length === 1,
                 });
-                console.log(props.wagtailPage)
             },
 
             onBeforeUnmount(props, state) {
@@ -114,6 +109,7 @@
                     cardIdx,
                     isSingleAnswer,
                 });
+                window.removeEventListener("scroll", this.stickyHeader);
             },
 
             previousTestCard() {
@@ -127,28 +123,29 @@
             },
 
             nextTestCard() {
-                // record answers of current card
                 // storeAnswers();
                 window.scroll(0, 0);
                 location.hash = getLessonModuleHash(
-                    this.props.wagtailPage.course.id,
+                    this.props.wagtailPage.data.id,
                     this.props.module,
                     this.state.cardIdx
                 );
             },
 
             recordAnswer(answers) {
-                // take from temp answers, replace whatever is in temp storage
+                // take from question tag, replace whatever is in temp storage
+                console.log('temporary answers')
                 console.log(answers)
             },
 
             retrieveAnswer() {
-                console.log('this was the answer')
+                console.log('retrieving previous answer')
                 // pull from permanent answers, put into temp answers
             },
 
             storeAnswers() {
-                // this.state.temporaryAnswers add to permanent answers
+                console.log('answers stored')
+                // take temp answers to permanent answers
             },
 
             cardNumberMessage() {
@@ -158,7 +155,7 @@
 
             sendAnswersToGoogle(allSelectedAnswers) {
                 // const eventData = {
-                //     lesson: this.props.wagtailPage.course.title,
+                //     lesson: this.props.wagtailPage.title,
                 //     question: this.state.cards[this.state.cardIdx].question,
                 //     answer: answer.text,
                 //     isAnswerCorrect: answer.correct,
@@ -170,11 +167,11 @@
                 console.log('completed')
                 // setComplete(this.props.wagtailPage.course.slug, this.props.lesson.slug, this.props.module);
                 // location.hash = getLessonModuleHash(
-                //     this.props.wagtailPage.course.id,
+                //     this.props.wagtailPage.id,
                 //     this.props.module,
                 //     this.state.cardIdx
                 // );
             },
         };
     </script>
-</CourseTest>
+</CourseExam>
