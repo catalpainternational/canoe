@@ -159,7 +159,7 @@ HonorCode {
         display: inline-block;
         position: absolute;
         margin-left: -32px;
-        margin-top: 6px;
+        margin-top: 8px;
     }
 
     .code {
@@ -168,6 +168,7 @@ HonorCode {
         padding: 10px;
 
         h3,
+        h4,
         p {
             margin: 8px 0;
         }
@@ -184,5 +185,7 @@ HonorCode {
 
     label {
         color: $gray-3;
+        font-size: 1.2em;
+        font-weight: 500;
     }
 }
