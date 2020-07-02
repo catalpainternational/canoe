@@ -253,16 +253,24 @@ LessonObjective .objective {
 LessonContent .content {
     padding-bottom: $bottom-menu-height-no-footer;
 
-    raw, basiccard, quotecard, listcard, VideoCard, AudioCard  {
+    raw,
+    basiccard,
+    quotecard,
+    listcard,
+    VideoCard,
+    AudioCard {
         flex: 1;
         width: 100%;
     }
 
-    basiccard, quotecard, listcard {
+    basiccard,
+    quotecard,
+    listcard {
         text-align: left;
     }
 
-    VideoCard, AudioCard {
+    VideoCard,
+    AudioCard {
         text-align: center;
     }
 
@@ -299,7 +307,7 @@ LessonContent .content {
             align-self: flex-start;
             font-size: 1.7em;
 
-            &:last-of-type { 
+            &:last-of-type {
                 align-self: flex-end;
             }
         }
@@ -312,8 +320,8 @@ LessonContent .content {
     }
 
     listcard {
-        width: 100%; 
-        
+        width: 100%;
+
         p {
             font-size: 1em;
         }
@@ -363,7 +371,8 @@ LessonContent .content {
         height: 50px;
     }
 
-    .speaker, .film {
+    .speaker,
+    .film {
         margin: 0 auto;
     }
 
@@ -386,7 +395,7 @@ LessonContent div.content-wrapper {
     display: flex;
 }
 
-LessonTest, 
+LessonTest,
 CourseExam,
 TestSingleAnswer,
 TestMultipleAnswer,
@@ -751,7 +760,7 @@ LessonComplete {
     h2 {
         border-bottom: none;
     }
-    
+
     .congratulations-container {
         display: flex;
         flex-flow: column nowrap;
