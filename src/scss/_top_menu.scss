@@ -1,18 +1,18 @@
 header {
-    height: $top-menu-height;
-    justify-content: center;
-    align-items: center;
-    padding-right: 15px;
-    position: relative;
-    padding-left: 15px;
-    display: flex;
+    width: 100%;
 
-    @media only screen and (min-width: $tablet-plus) {
+    .top-menu-container {
+        position: relative;
+        height: $top-menu-height;
         max-width: $tablet;
+
+        padding-right: 15px;
+        padding-left: 15px;
         margin: auto;
     }
 
-    a.site-logo, a.site-logo.white {
+    a.site-logo,
+    a.site-logo.white {
         position: absolute;
         margin: auto;
         bottom: 0;
@@ -21,17 +21,24 @@ header {
         top: 0;
     }
 
-    a.arrow-gray, a.arrow-white {
+    a.arrow-gray,
+    a.arrow-white {
         margin-left: 15px;
+        top: 20px;
+        left: 0;
     }
 
     a.close-btn {
         margin-left: 15px;
         position: absolute;
+        top: 28px;
         left: 0;
     }
 
     a.cog {
+        position: absolute;
+        right: -10px;
+        top: 20px;
         margin-right: 15px;
     }
 

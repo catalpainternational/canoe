@@ -16,6 +16,7 @@
         title="{props.wagtailPage.title}"
         lesson="{props.wagtailPage.data}"
         course="{props.wagtailPage.course}"
+        isLessonPage="{true}"
     ></LessonContent>
     <LessonTest
         if="{state.hash === testModule}"
@@ -51,25 +52,6 @@
                 <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">
                     {props.wagtailPage.data.long_description}
                 </p>
-
-                <div if="{state.showLongDescription}">
-                    <div class="jobs-card">
-                        <div class="jobs-body">
-                            <h5 translate>Jobs that use these skills</h5>
-                            <div>
-                                <div each="{job in props.wagtailPage.data.jobs}">
-                                    <div>
-                                        <span
-                                            class="{job.className} background-{props.wagtailPage.course.colour}"
-                                        ></span>
-                                    </div>
-                                    <p>{job.text}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <a
                     if="{props.wagtailPage.data.long_description && state.showLongDescription}"
                     onclick="{toggleLessonDescription}"
@@ -92,6 +74,7 @@
                 link="{props.wagtailPage.id}/{objectivesModule}/1"
                 isCompleted="{isModuleComplete(objectivesModule)}"
                 type="cards"
+                showFooter="{true}"
             >
             </Card>
 
@@ -102,6 +85,7 @@
                 link="{props.wagtailPage.id}/{contentModule}/1"
                 isCompleted="{isModuleComplete(contentModule)}"
                 type="video"
+                showFooter="{true}"
             >
             </Card>
 
@@ -112,6 +96,7 @@
                 link="{props.wagtailPage.id}/{testModule}/1"
                 isCompleted="{isModuleComplete(testModule)}"
                 type="quiz"
+                showFooter="{true}"
             >
             </Card>
         </div>

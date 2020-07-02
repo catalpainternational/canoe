@@ -10,13 +10,7 @@ import {
     getLanguage,
     changeLanguage,
 } from "ReduxImpl/Store";
-
-class APIMissingPageError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "MissingPageError";
-    }
-}
+import { APIMissingPageError } from "js/Errors";
 
 async function token_authed_fetch(url) {
     const token = getAuthenticationToken();
@@ -104,16 +98,24 @@ export const getHomePathsInManifest = (manifest) => {
     return homePaths;
 };
 
-const _getNextAvailableHomePage = async (manifestHomes) => {
-    const languageCodes = Object.keys(manifestHomes);
+const _getNextAvailablePageImpl = async (pagePathByLangCode, pageTypeString) => {
+    const languageCodes = Object.keys(pagePathByLangCode);
     if (languageCodes.length === 0) {
-        throw new Error(`The manifest lacks HomePages`);
+        throw new Error(`The manifest lacks ${pageTypeString}s`);
     }
     const nextLanguage = languageCodes[0];
-    const homePagePath = manifestHomes[nextLanguage];
-    const homePage = await getOrFetchWagtailPage(homePagePath);
+    const pagePath = pagePathByLangCode[nextLanguage];
+    const page = await getOrFetchWagtailPage(pagePath);
     changeLanguage(nextLanguage);
-    return homePage;
+    return page;
+};
+
+const _getNextAvailableHomePage = async (manifestHomes) => {
+    return _getNextAvailablePageImpl(manifestHomes, "HomePage");
+};
+
+const _getNextAvailableResourcesRoot = async (resourcesRootInfo) => {
+    return _getNextAvailablePageImpl(resourcesRootInfo, "ResourcesRoot");
 };
 
 export const getHomePage = async () => {
@@ -127,6 +129,27 @@ export const getHomePage = async () => {
     } else {
         return await _getNextAvailableHomePage(homes);
     }
+};
+
+export const getResources = async () => {
+    const manifest = await getOrFetchManifest();
+    const { resourcesRoot: resourcesRootInfo } = manifest;
+    const currentLanguage = getLanguage();
+    const resourcesRootPath = resourcesRootInfo[currentLanguage];
+
+    let resourcesRoot = null;
+    if (resourcesRootPath) {
+        resourcesRoot = await getOrFetchWagtailPage(resourcesRootPath);
+    } else {
+        resourcesRoot = await _getNextAvailableResourcesRoot(resourcesRootInfo);
+    }
+
+    const resources = [];
+    for (const childPageId of resourcesRoot.data.children) {
+        const childPage = await _getOrFetchWagtailPageById(childPageId);
+        resources.push(childPage);
+    }
+    return resources;
 };
 
 export const getCourseById = async (courseId) => {

@@ -16,7 +16,6 @@
                 contentType="{state.contentType}"
                 wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
             ></TopMenu>
-
             <HomePage
                 if="{state.contentType === 'HomePage'}"
                 wagtailPage="{state.wagtailPage}"
@@ -30,9 +29,14 @@
                 wagtailPage="{state.wagtailPage}"
             ></LessonPage>
             <Settings if="{state.contentType === 'settings'}"></Settings>
-            <Notifications if="{state.contentType === 'notifications'}"></Notifications>
+            <Resources
+                if="{state.contentType === 'resources' || state.contentType === 'ResourcesRoot'}"
+            ></Resources>
+            <ResourceArticle
+                if="{state.contentType === 'ResourceArticle'}"
+                wagtailPage="{state.wagtailPage}"
+            ></ResourceArticle>
             <Profile if="{state.contentType === 'profile'}"></Profile>
-
             <BottomMenu contentType="{state.contentType}"></BottomMenu>
             <PushSubscription></PushSubscription>
         </template>
@@ -53,7 +57,7 @@
         import OnlineOrOffline from "RiotTags/Components/OnlineOrOffline.riot.html";
 
         import Authentication from "RiotTags/Screens/Authentication.riot.html";
-        import Notifications from "RiotTags/Screens/Notifications.riot.html";
+        import Resources from "RiotTags/Screens/Resources.riot.html";
         import Profile from "RiotTags/Screens/Profile.riot.html";
         import Settings from "RiotTags/Screens/Settings.riot.html";
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
@@ -61,6 +65,7 @@
         import HomePage from "RiotTags/WagtailPages/HomePage.riot.html";
         import CoursePage from "RiotTags/WagtailPages/CoursePage.riot.html";
         import LessonPage from "RiotTags/WagtailPages/LessonPage.riot.html";
+        import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
 
         const scrollToFirstUnfinishedContent = () => {
             const ongoingCards = document.getElementsByClassName("ongoing");
@@ -92,7 +97,7 @@
                 homepage: HomePage,
                 coursepage: CoursePage,
                 lessonpage: LessonPage,
-                notifications: Notifications,
+                resources: Resources,
                 profile: Profile,
                 settings: Settings,
                 datadownload: DataDownload,
@@ -100,6 +105,7 @@
                 changebrowser: ChangeBrowser,
                 toast: Toast,
                 onlineoroffline: OnlineOrOffline,
+                resourcearticle: ResourceArticle,
             },
 
             onMounted() {

@@ -1,0 +1,13 @@
+<TagList>
+    <div class="tag-container">
+        <a  
+            each="{tag in props.tags}"
+            class="tag {props.selectedTags && props.selectedTags.includes(tag) ? 'selected' : ''}" 
+            onclick="{e => { 
+                props.onTagClick(e.srcElement.innerText, false)
+            }}"
+        >
+            <p>{tag}</p>
+        </a>
+    </div>
+</TagList>
