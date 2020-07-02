@@ -748,6 +748,10 @@ LessonFeedback {
 }
 
 LessonComplete {
+    h2 {
+        border-bottom: none;
+    }
+    
     .congratulations-container {
         display: flex;
         flex-flow: column nowrap;
@@ -777,6 +781,11 @@ LessonComplete {
         left: -1em;
     }
 
+    .incorrect-flag {
+        height: 150px;
+        width: 150px;
+    }
+
     .congratulations {
         flex-direction: column;
         text-align: center;
@@ -794,34 +803,6 @@ LessonComplete {
         p {
             margin-bottom: 40px;
             margin-top: 0;
-        }
-    }
-}
-
-CourseExam {
-    .card-number {
-        font-size: 12px;
-        margin-bottom: -15px;
-        flex: 0;
-    }
-
-    .bottom-buttons {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        width: 100%;
-        margin-bottom: 15px;
-
-        .arrow-gray {
-            display: inline-block;
-            position: relative;
-            left: unset;
-            width: 80px;
-            height: 50px;
-        }
-
-        .btn-primary {
-            min-width: 160px;
         }
     }
 }

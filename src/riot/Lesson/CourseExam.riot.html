@@ -40,10 +40,11 @@
         <p class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
     <LessonComplete
-        if="{state.cardIdx === state.cards.length + 1}"
-        course="{props.wagtailPage.course}"
-        title="{props.wagtailPage.course.title}"
-        isCourseExam="{true}"
+        if="{state.cardIdx === state.cards.length}"
+        course="{props.wagtailPage.data}"
+        title="{props.wagtailPage.title}"
+        isExamComplete="{true}"
+        passedExam="{false}"
     ></LessonComplete>
 
     <script>
@@ -59,7 +60,8 @@
             state: {
                 cardIdx: 0,
                 isSingleAnswer: true,
-                isAnswerSelected: false
+                isAnswerSelected: false,
+                cards: [],
             },
 
             components: {
@@ -117,6 +119,7 @@
 
             submitAnswers() {
                 console.log('submit answers')
+                this.nextTestCard();
             },
 
             nextTestCard() {

@@ -111,3 +111,31 @@ CoursePage .content-wrapper {
     background-color: $gray-10;
     padding-top: 30px;
 }
+
+CourseExam {
+    .card-number {
+        font-size: 12px;
+        margin-bottom: -15px;
+        flex: 0;
+    }
+
+    .bottom-buttons {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        width: 100%;
+        margin-bottom: 15px;
+
+        .arrow-gray {
+            display: inline-block;
+            position: relative;
+            left: unset;
+            width: 80px;
+            height: 50px;
+        }
+
+        .btn-primary {
+            min-width: 160px;
+        }
+    }
+}
