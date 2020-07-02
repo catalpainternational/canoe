@@ -22,7 +22,7 @@
                     class="btn-primary"
                     onclick="{nextTestCard}"
                     if="{state.cardIdx < state.cards.length - 1}"
-                    disabled="{noAnswerSelected}"
+                    disabled="{!state.isAnswerSelected}"
                     translate
                 >
                     Next
@@ -45,7 +45,6 @@
         title="{props.wagtailPage.course.title}"
         isCourseExam="{true}"
     ></LessonComplete>
-    <!-- add CourseExamComplete page, pass and fail -->
 
     <script>
         import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
@@ -54,14 +53,13 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
         import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
-        import { logATestAnswer } from "js/GoogleAnalytics"
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
 
         export default {
             state: {
                 cardIdx: 0,
                 isSingleAnswer: true,
-                allSelectedAnswers: [],
+                isAnswerSelected: false
             },
 
             components: {
@@ -72,13 +70,11 @@
             },
 
             onBeforeMount(props, state) {
-                const cards = props.cards; // may need to re-add { cards }
+                const cards = props.cards;
                 state.cards = cards;
                 state.cardIdx = getLessonCardIdx();
 
                 window.addEventListener("hashchange", this.hashChanged);
-
-                window.removeEventListener("scroll", this.stickyHeader);
             },
 
             onMounted(props, state) {
@@ -116,6 +112,7 @@
                 window.history.back();
                 // change to prev card
                 this.retrieveAnswer()
+                this.update({ isAnswerSelected: true });
             },
 
             submitAnswers() {
@@ -130,11 +127,12 @@
                     this.props.module,
                     this.state.cardIdx
                 );
+                this.update({ isAnswerSelected: false });
             },
 
             recordAnswer(answers) {
+                this.update({ isAnswerSelected: true });
                 // take from question tag, replace whatever is in temp storage
-                console.log('temporary answers')
                 console.log(answers)
             },
 
@@ -153,24 +151,11 @@
                 return gettext("%1 of %2", this.state.cardIdx + 1, this.props.cards.length);
             },
 
-            sendAnswersToGoogle(allSelectedAnswers) {
-                // const eventData = {
-                //     lesson: this.props.wagtailPage.title,
-                //     question: this.state.cards[this.state.cardIdx].question,
-                //     answer: answer.text,
-                //     isAnswerCorrect: answer.correct,
-                // };
-                // dispatchTestAnswerEvent(eventData);
+            sendAnswersToGoogle() {
             },
 
             completePage() {
                 console.log('completed')
-                // setComplete(this.props.wagtailPage.course.slug, this.props.lesson.slug, this.props.module);
-                // location.hash = getLessonModuleHash(
-                //     this.props.wagtailPage.id,
-                //     this.props.module,
-                //     this.state.cardIdx
-                // );
             },
         };
     </script>

@@ -7,8 +7,8 @@
                 onclick="{goBack}"
             ></a>
             <a if="{state.isSectionList}" class="arrow-white" onclick="{backToCoursePage}"></a>
-            <a if="{state.isCourse && !state.isCourseExam}" class="arrow-white" onclick="{backToHome}"></a>
-            <a if="{state.isCard || state.isCourseExam}" class="cross close-btn" onclick="{backToLessonPage}"></a>
+            <a if="{state.isCourse}" class="arrow-white" onclick="{backToHome}"></a>
+            <a if="{state.isCard}" class="cross close-btn" onclick="{backToLessonPage}"></a>
 
             <a
                 if="{!state.isHome}"
@@ -40,7 +40,7 @@
             },
 
             backToLessonPage() {
-                this.state.isCourseExam ? location.hash = "#40" : location.hash = "#" + this.props.wagtailPage.data.id;
+                location.hash = "#" + this.props.wagtailPage.data.id;
             },
 
             backToHome() {
