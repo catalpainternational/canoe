@@ -1,16 +1,10 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { getOrFetchManifest } from "js/WagtailPagesAPI";
 import { getPlatform } from "js/PlatformDetection";
+import { MissingImageError } from "js/Errors";
 
 const WEBP_RENDITION = "width-800|format-webp";
 const JPEG_RENDITION = "width-600|format-jpeg";
-
-export class MissingImageError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "MissingImageError";
-    }
-}
 
 export const getImageUrl = async (imageId) => {
     const manifest = await getOrFetchManifest();

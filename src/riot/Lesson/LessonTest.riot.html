@@ -28,14 +28,12 @@
     ></TestPopupModal>
     <LessonFeedback
         if="{state.cardIdx === state.cards.length}"
-        backgroundColor="{props.course.colour}"
         lessonName="{props.lesson.title}"
     ></LessonFeedback>
     <LessonComplete
         if="{state.cardIdx === state.cards.length + 1}"
         course="{props.course}"
         title="{props.title}"
-        backgroundColor="{props.course.colour}"
     >
     </LessonComplete>
 
@@ -48,7 +46,7 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
         import { getLessonCardIdx } from "js/Routing";
-        import { logATestAnswer } from "js/GoogleAnalytics"
+        import { logATestAnswer } from "js/GoogleAnalytics";
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
 
         export default {
@@ -74,8 +72,8 @@
                 state.cards = cards;
                 state.cardIdx = getLessonCardIdx();
                 window.addEventListener("hashchange", this.hashChanged);
-                
-                window.addEventListener(ON_ANSWERED_TEST_QUESTION, event => {
+
+                window.addEventListener(ON_ANSWERED_TEST_QUESTION, (event) => {
                     logATestAnswer(event.detail);
                 });
             },
@@ -108,10 +106,6 @@
                     cardIdx,
                     isSingleAnswer,
                 });
-            },
-
-            goBack() {
-                window.history.back();
             },
 
             cardNumberMessage() {
@@ -177,7 +171,7 @@
                 this.toggleModal(false);
                 window.scroll(0, 0);
                 this.state.selectedAnswer = {};
-                location.hash = getLessonModuleHash(
+                location.hash = getNextCardsUrl(
                     this.props.lesson.id,
                     this.props.module,
                     this.state.cardIdx
@@ -187,7 +181,7 @@
             completePage() {
                 this.toggleModal(false);
                 setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
-                location.hash = getLessonModuleHash(
+                location.hash = getNextCardsUrl(
                     this.props.lesson.id,
                     this.props.module,
                     this.state.cardIdx

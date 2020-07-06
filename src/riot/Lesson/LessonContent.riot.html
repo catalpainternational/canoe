@@ -1,6 +1,6 @@
 <LessonContent>
     <LessonFrame
-        if="{state.cardIdx < props.lessonContent.cards.length}"
+        if="{!props.isLessonPage || state.cardIdx < props.lessonContent.cards.length}"
         extraStyleClasses="content"
     >
         <Raw
@@ -27,7 +27,7 @@
             if="{props.lessonContent.cards[state.cardIdx].tag === 'list'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
         />
-        <div class="bottom-buttons">
+        <div if="{props.isLessonPage}" class="bottom-buttons">
             <div>
                 <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
             </div>
@@ -50,10 +50,10 @@
                 </button>
             </div>
         </div>
-        <p class="card-number">{ cardNumberMessage() }</p>
+        <p if="{props.isLessonPage}" class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
     <LessonModuleComplete
-        if="{state.cardIdx === props.lessonContent.cards.length}"
+        if="{props.isLessonPage && state.cardIdx === props.lessonContent.cards.length}"
         lessonId="{props.lesson.id}"
         module="{props.module}"
         nextModule="{props.nextModule}"
@@ -70,7 +70,7 @@
         import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
         import ListCard from "RiotTags/Lesson/ListCard.riot.html";
 
-        import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
+        import { getLessonCardIdx, getNextCardsUrl, getPreviousCardsUrl } from "js/Routing";
         import { setComplete } from "Actions/completion";
 
         export default {
@@ -91,7 +91,7 @@
             },
 
             onBeforeMount(props, state) {
-                state.cardIdx = getLessonCardIdx();
+                state.cardIdx = props.isLessonPage ? getLessonCardIdx() : '0';
                 window.addEventListener("hashchange", this.hashChanged);
             },
 
@@ -106,7 +106,11 @@
             },
 
             goBack() {
-                window.history.back();
+                location.hash = getPreviousCardsUrl(
+                    this.props.lesson.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
             },
 
             cardNumberMessage() {
@@ -120,7 +124,7 @@
 
             nextContentPage() {
                 window.scroll(0, 0);
-                location.hash = getLessonModuleHash(
+                location.hash = getNextCardsUrl(
                     this.props.lesson.id,
                     this.props.module,
                     this.state.cardIdx
@@ -129,7 +133,7 @@
 
             completeContentModal() {
                 setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
-                location.hash = getLessonModuleHash(
+                location.hash = getNextCardsUrl(
                     this.props.lesson.id,
                     this.props.module,
                     this.state.cardIdx

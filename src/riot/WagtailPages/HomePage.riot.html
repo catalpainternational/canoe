@@ -17,12 +17,22 @@
         </div>
     </div>
     <div class="content-wrapper">
-        <h5 class="section-title" translate>Your courses</h5>
-        <div class="course" each="{course in props.wagtailPage.courses}">
+        <TagList
+            if="{state.listOfTags.length > 0}"
+            tags="{state.listOfTags}"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
+        <div
+            class="course"
+            each="{course in props.wagtailPage.courses}"
+            if="{isCourseVisible(course.tags)}"
+        >
             <div class="course-header">
-                <span class="background-{course.data.colour}"></span>
                 <div>
-                    <a href="#{course.data.id}"> <h3>{course.data.title}</h3> </a>
+                    <a href="#{course.data.id}">
+                        <h3>{course.data.title}</h3>
+                    </a>
                     <div>
                         <p>{ courseProgressMessage(course) }</p>
                         <a href="#{course.data.id}">
@@ -40,14 +50,15 @@
                 link="{state.nextLesson[course.data.id].id}"
                 isCompleted="{isLessonComplete(course, state.nextLesson[course.data.id])}"
                 isComingSoon="{state.nextLesson[course.data.id].coming_soon}"
-            >
-            </Card>
+                showFooter="{true}"
+            ></Card>
         </div>
     </div>
 
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
+        import TagList from "RiotTags/Components/TagList.riot.html";
 
         import { getUsername } from "js/AuthenticationUtilities";
         import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
@@ -58,17 +69,21 @@
             isCourseInProgress,
         } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
+        import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
 
         export default {
             state: {
                 nextLesson: {},
                 courses: [],
                 currentCourse: null,
+                selectedTags: [],
+                listOfTags: [],
             },
 
             components: {
                 card: Card,
                 continuelearningbutton: ContinueLearningButton,
+                taglist: TagList,
             },
 
             onBeforeMount(props, state) {
@@ -79,6 +94,7 @@
                 });
 
                 this.state.courses = courses;
+                this.state.listOfTags = getTagsFromPages(courses);
                 this.state.currentCourse = lastWorkedOnCourse;
             },
 
@@ -141,7 +157,7 @@
                         lesson.id === lastLesson.id
                     ) {
                         this.state.nextLesson[course.data.id] = lesson;
-                        return true;
+                        break;
                     }
                 }
             },
@@ -152,6 +168,22 @@
 
             isLessonComplete(course, lesson) {
                 return isComplete(course.data.slug, lesson.slug);
+            },
+
+            onTagClick(clickedTag) {
+                if (this.state.selectedTags.includes(clickedTag)) {
+                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
+                    this.state.selectedTags.splice(tagIndex, 1);
+                } else {
+                    this.state.selectedTags.push(clickedTag);
+                }
+                this.update();
+            },
+
+            isCourseVisible(courseTags) {
+                const { selectedTags } = this.state;
+                const lowercaseCourseTags = courseTags.map(tag => tag.toLowerCase())
+                return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
             },
         };
     </script>
