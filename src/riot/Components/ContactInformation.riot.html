@@ -14,7 +14,6 @@
             sendWhatsAppMessage() {
                 const whatsAppHref = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
                 window.open(whatsAppHref, "_blank");
-                // timor phone code: 670
                 this.props.toggleLoginHelpModal();
             },
 
