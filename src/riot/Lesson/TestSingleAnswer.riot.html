@@ -1,7 +1,7 @@
 <TestSingleAnswer class="answer">
     <ol>
         <li
-            class="{answer === state.selectedAnswer ? 'selected' : ''} {props.isCourseExam ? 'pending' : answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
+            class="{answer === state.selectedAnswer && howToStyleThe(answer)}"
             each="{answer in props.card.answers}"
             onclick="{() => selectAnswer(answer)}"
         >
@@ -19,7 +19,17 @@
 
         export default {
             state: {
-                selectedAnswer: {}
+                selectedAnswer: {},
+            },
+
+            howToStyleThe(answer) {
+                if (this.props.isCourseExam) {
+                    return "selected-pending";
+                } else if (!answer.correct) {
+                    return "selected-wrong";
+                } else {
+                    return "selected";
+                }
             },
 
             selectAnswer(answer) {
@@ -28,13 +38,13 @@
                     lesson: this.props.lessonName,
                     question: this.props.card.question,
                     answer: answer.text,
-                    isAnswerCorrect: answer.correct
+                    isAnswerCorrect: answer.correct,
                 };
                 dispatchTestAnswerEvent(eventData);
-                this.props.isCourseExam ? 
-                    this.props.recordAnswer(answer) :
-                    this.props.toggleModal(true, answer, answer.correct);
+                this.props.isCourseExam
+                    ? this.props.recordAnswer(answer)
+                    : this.props.toggleModal(true, answer, answer.correct);
             },
-        }
+        };
     </script>
 </TestSingleAnswer>

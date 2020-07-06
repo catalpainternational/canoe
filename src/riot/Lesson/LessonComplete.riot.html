@@ -4,7 +4,7 @@
         <template if="{state.lessonSlugs.length}">
             <div class="congratulations-container">
                 <div class="report-card overlay"></div>
-                <template if="{!isCourseComplete() && !props.isCourseExam}">
+                <template if="{!isCourseComplete() && !props.isCourseExamFinished}">
                     <div>
                         <h2 translate>Congratulations!</h2>
                         <p>{ lessonCompleteMessage() }</p>
@@ -13,7 +13,7 @@
                         Next Lesson
                     </button>
                 </template>
-                <template if="{isCourseComplete() && !props.isCourseExam}">
+                <template if="{isCourseComplete() && !props.isCourseExamFinished}">
                     <div>
                         <h2 translate>Congratulations!</h2>
                         <p>{ lessonCompleteMessage() }</p>
@@ -22,7 +22,7 @@
                         Take course exam
                     </button>
                 </template>
-                <template if="{props.isCourseExam}">
+                <template if="{props.isCourseExamFinished}">
                     <div>
                         <h2 translate>Amazing work!</h2>
                         <h3 translate>You've completed the course</h3>
@@ -84,7 +84,7 @@
             },
 
             goToCourseExam() {
-                location.hash = `#${this.props.course.id}/exam/1`
+                location.hash = `#${this.props.course.id}/exam/1`;
             },
 
             lessonCompleteMessage() {

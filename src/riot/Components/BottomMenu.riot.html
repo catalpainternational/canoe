@@ -1,12 +1,18 @@
 <BottomMenu>
-    <footer if="{!state.isObjective && !state.isContent && !state.isTest && !state.isExam}">
+    <footer if="{state.showBottomMenu}">
         <a class="courses-icon { props.contentType === 'HomePage' ? 'active' : ''}" href="#"></a>
-        <a class="profile-icon { props.contentType === 'profile' ? 'active' : ''}" href="#profile"></a>
-        <a class="resources-icon { props.contentType === 'resources' ? 'active' : ''}" href="#resources"></a>
+        <a
+            class="profile-icon { props.contentType === 'profile' ? 'active' : ''}"
+            href="#profile"
+        ></a>
+        <a
+            class="resources-icon { props.contentType === 'resources' ? 'active' : ''}"
+            href="#resources"
+        ></a>
     </footer>
 
     <script>
-        import { parseURLHash } from 'js/Routing';
+        import { parseURLHash } from "js/Routing";
 
         export default {
             onBeforeMount(props, state) {
@@ -20,11 +26,16 @@
             updateState() {
                 const [afterTheHash, lessonModule] = parseURLHash();
                 this.state.lessonModule = lessonModule;
-                this.state.isObjective = this.state.lessonModule === 'objectives';
-                this.state.isContent = this.state.lessonModule === 'content';
-                this.state.isTest = this.state.lessonModule === 'test';
-                this.state.isExam = this.state.lessonModule === 'exam';
-            }
-        }
+                this.state.isObjective = this.state.lessonModule === "objectives";
+                this.state.isContent = this.state.lessonModule === "content";
+                this.state.isTest = this.state.lessonModule === "test";
+                this.state.isExam = this.state.lessonModule === "exam";
+                this.state.showBottomMenu =
+                    !this.state.isObjective &&
+                    !this.state.isContent &&
+                    !this.state.isTest &&
+                    !this.state.isExam;
+            },
+        };
     </script>
 </BottomMenu>

@@ -116,7 +116,7 @@ export function getNextCardsUrl(lessonId, lessonModule, lessonCardIdx) {
     return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx + 2);
 }
 
-export function getHash() {
+export function getHashPieces() {
     return location.hash.split("/");
 }
 

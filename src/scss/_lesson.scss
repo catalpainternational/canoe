@@ -305,7 +305,7 @@ LessonContent .content {
             align-self: flex-start;
             font-size: 1.7em;
 
-            &:last-of-type { 
+            &:last-of-type {
                 align-self: flex-end;
             }
         }
@@ -394,7 +394,7 @@ LessonContent div.content-wrapper {
     display: flex;
 }
 
-LessonTest, 
+LessonTest,
 CourseExam,
 TestSingleAnswer,
 TestMultipleAnswer,
@@ -539,7 +539,7 @@ TestPopupModal {
                 }
             }
 
-            li.selected.wrong {
+            li.selected-wrong {
                 .radio {
                     border: 2px solid $red-2;
                     height: 21px;
@@ -551,7 +551,7 @@ TestPopupModal {
                 }
             }
 
-            li.selected.pending {
+            li.selected-pending {
                 .radio {
                     border: 2px solid $blue-1;
                     height: 21px;

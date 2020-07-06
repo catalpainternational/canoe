@@ -50,7 +50,7 @@
         import { countCompleteLessonsInCourse } from "js/LearningStatistics";
         import { isComplete } from "Actions/completion";
         import { getCourseAndLessonSlugs } from "js/utilities";
-        import { getLessonModuleHash, getHash } from "js/Routing";
+        import { getLessonModuleHash, getHashPieces } from "js/Routing";
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
@@ -67,34 +67,39 @@
             examModule: "exam",
 
             examCards: [
-                { 
+                {
                     answers: [
-                        { correct: false, text: 'incorrect' },
-                        { correct: true, text: 'this is correct' }, 
-                        { correct: false, text: 'Another incorrect answer' },
-                        { correct: false, text: 'Another incorrect answer here it is a bit longer' },
+                        { correct: false, text: "incorrect" },
+                        { correct: true, text: "this is correct" },
+                        { correct: false, text: "Another incorrect answer" },
+                        {
+                            correct: false,
+                            text: "Another incorrect answer here it is a bit longer",
+                        },
                     ],
-                    question: 'will it keep raining?' 
-                }, { 
+                    question: "will it keep raining?",
+                },
+                {
                     answers: [
-                        { correct: true, text: 'correct time' }, 
-                        { correct: true, text: 'correct too' }, 
-                        { correct: false, text: 'incorrect' }
+                        { correct: true, text: "correct time" },
+                        { correct: true, text: "correct too" },
+                        { correct: false, text: "incorrect" },
                     ],
-                    question: 'what time is it?' 
-                }, {
+                    question: "what time is it?",
+                },
+                {
                     answers: [
-                        { correct: false, text: 'ba dum dum dum' },
-                        { correct: true, text: 'dee ba da' },
-                        { correct: false, text: 'ba dum dum dum' },
-                        { correct: true, text: 'dee ba da' }
+                        { correct: false, text: "ba dum dum dum" },
+                        { correct: true, text: "dee ba da" },
+                        { correct: false, text: "ba dum dum dum" },
+                        { correct: true, text: "dee ba da" },
                     ],
-                    question: 'What does Karen sing?'
-                }
+                    question: "What does Karen sing?",
+                },
             ],
 
             onBeforeMount(props, state) {
-                state.hash = getHash()[1];
+                state.hash = getHashPieces()[1];
                 window.addEventListener("hashchange", this.hashChanged);
             },
 
@@ -114,7 +119,7 @@
 
             hashChanged() {
                 this.update({
-                    hash: getHash()[1]
+                    hash: getHashPieces()[1],
                 });
 
                 if (this.state.hash) {
