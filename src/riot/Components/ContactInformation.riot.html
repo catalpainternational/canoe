@@ -7,22 +7,22 @@
     </div>
 
     <script>
-        const phoneNumber = "19787602338";
+        const phoneNumber = "19788675309";
         const encodedMessage = encodeURIComponent("I need help accessing my account");
 
         export default {
             sendWhatsAppMessage() {
                 const whatsAppHref = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-                window.open(whatsAppHref, '_blank');
+                window.open(whatsAppHref, "_blank");
                 // timor phone code: 670
                 this.props.toggleLoginHelpModal();
             },
 
             sendSmsMessage() {
                 const smsHref = `sms:${phoneNumber}?&body=${encodedMessage}`;
-                window.open(smsHref, '_blank');
+                window.open(smsHref, "_blank");
                 this.props.toggleLoginHelpModal();
-            }
-        }
+            },
+        };
     </script>
 </ContactInformation>
