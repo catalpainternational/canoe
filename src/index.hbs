@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>{{ htmlWebpackPlugin.options.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {{#if htmlWebpackPlugin.options.include_ga }}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ htmlWebpackPlugin.options.ga_tag }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+
+        gtag("config", "{{ htmlWebpackPlugin.options.ga_tag }}", {
+            send_page_view: false,
+            custom_map: {
+                dimension1: "User Id",
+                dimension2: "Groups",
+                dimension3: "Lesson",
+                dimension4: "Question",
+                dimension5: "Answer",
+                metric1: "Is a Correct Answer",
+            },
+        });
+    </script>
+    {{/if}}
+</head>
+
+<body>
+    <div id="preapp-messages">
+        <img src="{{ htmlWebpackPlugin.options.favicon_path }}" />
+
+        <div id="service-worker-loading">
+            {{> $index_partials/please_wait.hbs}}
+        </div>
+        <div id="service-worker-notsupported" hidden>
+            {{> $index_partials/update_browser.hbs}}
+        </div>
+        <div id="service-worker-failed" onclick="location.reload()" hidden>
+            {{> $index_partials/try_again.hbs}}
+        </div>
+    </div>
+    <App> </App>
+    <style>
+        html {
+            height: 100%;
+
+            background-color: {
+                    {
+                    htmlWebpackPlugin.options.background_color
+                }
+            }
+
+            ;
+        }
+
+        #preapp-messages div {
+            padding-top: 100px;
+            height: 100%;
+        }
+
+        #preapp-messages {
+            height: 100%;
+            margin: -8px;
+            width: auto;
+
+            color: {
+                    {
+                    htmlWebpackPlugin.options.theme_color
+                }
+            }
+
+            ;
+            padding: 30px;
+            font-family: Verdana;
+            font-size: xx-large;
+            text-align: center;
+        }
+
+        #preapp-messages img {
+            margin: 10px 10px 10px 10px;
+            max-height: 100px;
+        }
+    </style>
+</body>
+
+</html>

@@ -1,5 +1,3 @@
-@import "~OverrideSass/themables";
-
 %icons-shared {
     background-repeat: no-repeat;
     background-size: contain;
@@ -7,28 +5,28 @@
 
 .site-logo {
     @extend %icons-shared;
-    background-image: $logoStandard;
+    background-image: url("~img/site_logo.svg");
     background-position: center;
     height: 20px;
     width: 87px;
 
     &.white {
-        background-image: $logoWhite;
+        background-image: url("~img/site_logo_white.svg");
     }
 }
 
 .cog {
     @extend %icons-shared;
-    background-image: url("../img/cog.svg");
+    background-image: url("~img/cog.svg");
     height: 40px;
     width: 40px;
 
     &.white {
-        background-image: url("../img/cog_white.svg");
+        background-image: url("~img/cog_white.svg");
     }
 
     &.active {
-        background-image: url("../img/cog_active.svg");
+        background-image: url("~img/cog_active.svg");
     }
 }
 
@@ -41,28 +39,28 @@
 
 .courses-icon {
     @extend %bottom-nav-shared;
-    background-image: url("../img/courses.svg");
+    background-image: url("~img/courses.svg");
 
     &.active {
-        background-image: url("../img/courses_active.svg");
+        background-image: url("~img/courses_active.svg");
     }
 }
 
 .profile-icon {
     @extend %bottom-nav-shared;
-    background-image: url("../img/profile.svg");
+    background-image: url("~img/profile.svg");
 
     &.active {
-        background-image: url("../img/profile_active.svg");
+        background-image: url("~img/profile_active.svg");
     }
 }
 
 .notifications-icon {
     @extend %bottom-nav-shared;
-    background-image: url("../img/notifications.svg");
+    background-image: url("~img/notifications.svg");
 
     &.active {
-        background-image: url("../img/notifications_active.svg");
+        background-image: url("~img/notifications_active.svg");
     }
 }
 
@@ -86,21 +84,21 @@
 
 .checkmark-circle {
     @extend %icons-shared;
-    background-image: url("../img/checkmark_circle.svg");
+    background-image: url("~img/checkmark_circle.svg");
     height: 14px;
     width: 12px;
 }
 
 .checkmark {
     @extend %icons-shared;
-    background-image: url("../img/checkmark.svg");
+    background-image: url("~img/checkmark.svg");
     height: 10px;
     width: 12px;
 }
 
 .cross {
     @extend %icons-shared;
-    background-image: url("../img/cross.svg");
+    background-image: url("~img/cross.svg");
     height: 10px;
     width: 12px;
 
@@ -119,17 +117,17 @@
 
 .checkmark-circle-blue {
     @extend %stat-icon-shared;
-    background-image: url("../img/checkmark_circle_blue.svg");
+    background-image: url("~img/checkmark_circle_blue.svg");
 }
 
 .road-sign {
     @extend %stat-icon-shared;
-    background-image: url("../img/road_sign.svg");
+    background-image: url("~img/road_sign.svg");
 }
 
 .plant {
     @extend %icons-shared;
-    background-image: url("../img/plant.svg");
+    background-image: url("~img/plant.svg");
     height: 50px;
     width: 45px;
 }
@@ -150,17 +148,17 @@
 
 .arrow-white {
     @extend %arrow-shared;
-    background-image: url("../img/arrow_white.svg");
+    background-image: url("~img/arrow_white.svg");
 }
 
 .arrow-gray {
     @extend %arrow-shared;
-    background-image: url("../img/arrow_gray.svg");
+    background-image: url("~img/arrow_gray.svg");
 }
 
 .arrow-blue {
     @extend %icons-shared;
-    background-image: url("../img/arrow_blue.svg");
+    background-image: url("~img/arrow_blue.svg");
     height: 10px;
     width: 13px;
 }
@@ -173,40 +171,42 @@
 
 .clock {
     @extend %lesson-card-shared;
-    background-image: url("../img/clock.svg");
+    background-image: url("~img/clock.svg");
 }
 
 .warning {
     @extend %icons-shared;
-    background-image: url("../img/warning.svg");
+    background-image: url("~img/warning.svg");
     height: 16px;
     width: 15px;
 }
 
 .success {
     @extend %icons-shared;
-    background-image: url("../img/success.svg");
+    background-image: url("~img/success.svg");
     height: 18px;
     width: 15px;
 }
 
 .report-card {
     @extend %icons-shared;
-    background-image: url("../img/report_card.svg");
+    background-image: url("~img/report_card.svg");
+    background-position: center;
     height: 200px;
     max-width: 200px;
 }
 
 .notifications-image {
     @extend %icons-shared;
-    background-image: $notificationHeader;
-    height: 154px;
-    width: 150px;
+    background-image: url("~img/notifications_header.svg");
+    background-position: center;
+    height: 145px;
+    width: 118px;
 }
 
 .login-image {
     @extend %icons-shared;
-    background-image: $loginImage;
+    background-image: url("~img/login_image.svg");
     background-position: center;
     max-width: 250px;
     height: 190px;
@@ -215,14 +215,14 @@
 
 .eye {
     @extend %icons-shared;
-    background-image: url("../img/eye.svg");
+    background-image: url("~img/eye.svg");
     height: 25px;
     width: 25px;
 }
 
 .profile-background-image {
     @extend %icons-shared;
-    background-image: url("../img/profile_image.svg");
+    background-image: url("~img/profile_image.svg");
     background-position: center;
     height: 185px;
     width: 280px;
@@ -230,18 +230,17 @@
 
 .home-background-image {
     @extend %icons-shared;
-    background-image: $homeBackgroundImage;
+    background-image: url("~img/home_header_figure.svg");
     background-position: center;
     z-index: 2;
     height: 142px;
     width: 84px;
-    margin-right: 30px;
     display: inline-block;
 }
 
 .wave {
     @extend %icons-shared;
-    background-image: url("../img/home_header_wave.svg");
+    background-image: url("~img/home_header_wave.svg");
     z-index: -1;
     position: absolute;
     background-position-x: 50%;
@@ -258,7 +257,7 @@
 
 .confetti {
     @extend %icons-shared;
-    background-image: url("../img/confetti.svg");
+    background-image: url("~img/confetti.svg");
     height: 45%;
     width: 60%;
     max-width: 300px;
@@ -266,7 +265,7 @@
 
 .sun {
     @extend %icons-shared;
-    background-image: url("../img/sun.svg");
+    background-image: url("~img/sun.svg");
     height: 100px;
     width: 100px;
 }
@@ -286,19 +285,19 @@
 
 .arrow {
     @extend %mask-icons-shared;
-    -webkit-mask-image: url("../img/arrow.svg");
+    -webkit-mask-image: url("~img/arrow.svg");
     height: 10px;
     width: 13px;
 }
 
 .incorrect-flag {
     @extend %icons-shared;
-    background-image: url("../img/incorrect_flag.svg");
+    background-image: url("~img/incorrect_flag.svg");
 }
 
 .correct-flag {
     @extend %icons-shared;
-    background-image: url("../img/correct_flag.svg");
+    background-image: url("~img/correct_flag.svg");
 }
 
 @mixin feedback-icons {
@@ -313,29 +312,29 @@
 .neutral-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("../img/neutral.png");
+    -webkit-mask-image: url("~img/neutral.png");
 }
 
 .smiling-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("../img/smile.png");
+    -webkit-mask-image: url("~img/smile.png");
 }
 
 .thrilled-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("../img/thrilled.png");
+    -webkit-mask-image: url("~img/thrilled.png");
 }
 
 .speaker {
     @extend %stat-icon-shared;
-    background-image: url("../img/speaker.svg");
+    background-image: url("~img/speaker.svg");
 }
 
 .film {
     @extend %stat-icon-shared;
-    background-image: url("../img/film.svg");
+    background-image: url("~img/film.svg");
 }
 
 %logos-shared {
@@ -347,18 +346,18 @@
 
 .logo-a {
     @extend %logos-shared;
-    background-image: $logoA;
+    background-image: url("~img/logo_a.png");
     width: 60px;
 }
 
 .logo-b {
     @extend %logos-shared;
-    background-image: $logoB;
+    background-image: url("~img/logo_b.svg");
     width: 70px;
 }
 
 .logo-c {
     @extend %logos-shared;
-    background-image: $logoC;
+    background-image: url("~img/logo_c.svg");
     width: 50px;
 }
