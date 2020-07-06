@@ -14,8 +14,6 @@
                 <p translate>Would you like to receive app notifications?</p>
             </div>
 
-            <h4 translate>Language</h4>
-
             <LanguageSelector></LanguageSelector>
 
             <button
@@ -29,16 +27,15 @@
             </button>
 
             <button class="btn-secondary" onclick="{logout}" translate>Log out</button>
-            <div class="logo">
-                <span class="logo-a"></span>
-                <span class="logo-b"></span>
-                <span class="logo-c"></span>
-            </div>
+
+            <div is="logos" class="logo" />
+
             <!-- <CacheDisplay></CacheDisplay> -->
         </div>
     </div>
     <script>
-        import LanguageSelector from "RiotTags/Components/LanguageSelector.riot.html";
+        import LanguageSelector from "riot/Components/LanguageSelector.riot.html";
+        import Logos from "riot/Components/Logos.riot.html";
         import { logout } from "js/AuthenticationUtilities";
         import {
             supportsPushManager,
@@ -63,6 +60,7 @@
             },
             components: {
                 languageselector: LanguageSelector,
+                logos: Logos,
             },
 
             logout() {
@@ -127,11 +125,7 @@
 
             shouldShowAddToHomeScreen() {
                 const { browser, inAppelflap, inPWAMode } = getPlatform();
-                return !(
-                    browser.name === "Safari" ||
-                    inPWAMode ||
-                    inAppelflap
-                );
+                return !(browser.name === "Safari" || inPWAMode || inAppelflap);
             },
 
             onMounted() {

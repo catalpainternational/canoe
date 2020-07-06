@@ -112,6 +112,10 @@ export function getLessonCardIdx() {
     return parseInt(location.hash.split("/")[2]) - 1;
 }
 
-export function getLessonModuleHash(lessonId, lessonModule, lessonCardIdx) {
+export function getNextCardsUrl(lessonId, lessonModule, lessonCardIdx) {
     return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx + 2);
 }
+
+export const getPreviousCardsUrl = (lessonId, lessonModule, lessonCardIdx) => {
+    return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx);
+};

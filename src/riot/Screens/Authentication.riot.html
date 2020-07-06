@@ -15,33 +15,38 @@
             <div class="icon-box crossout">
                 <a onclick="{showPassword}">
                     <span class="eye"></span>
-                    <span class="password-placement">{state.isShowingPassword ? 'Hide' : 'Show'} Password</span>
+                    <span class="password-placement"
+                        >{state.isShowingPassword ? 'Hide' : 'Show'} Password</span
+                    >
                 </a>
             </div>
             <div if="{state.errorExplanation}">
                 <span class="warning"></span>
                 <p class="error-message">{state.errorExplanation}</p>
             </div>
-            <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}" translate>Login</button>
+            <button
+                class="btn-primary"
+                type="submit"
+                disabled="{state.isLoginButtonDisabled}"
+                translate
+            >
+                Login
+            </button>
             <div class="login-help">
                 <a onclick="{toggleLoginHelpModal}" translate>Forgot username or password?</a>
             </div>
         </form>
-        <div class="logo">
-            <span class="logo-a"></span>
-            <span class="logo-b"></span>
-            <span class="logo-c"></span>
-        </div>
+
+        <div is="logos" class="logo" />
     </div>
     <PopupModal if="{state.showModal}">
         <span class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></span>
         <h2 class="header-no-image">Need help?</h2>
-        <ContactInformation
-            toggleLoginHelpModal="{toggleLoginHelpModal}"
-        ></ContactInformation>
+        <ContactInformation toggleLoginHelpModal="{toggleLoginHelpModal}"></ContactInformation>
     </PopupModal>
 
     <script>
+        import Logos from "riot/Components/Logos.riot.html";
         import { alertIfRequestWasMadeOffline } from "js/Errors";
         import { login } from "js/AuthenticationUtilities";
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
@@ -58,6 +63,7 @@
             components: {
                 popupmodal: PopupModal,
                 contactinformation: ContactInformation,
+                logos: Logos,
             },
 
             getUsernameAndPasswordFromForm() {
@@ -66,7 +72,7 @@
 
                 const usernameAndPassword = {
                     username: usernameInput.value,
-                    password: passwordInput.value
+                    password: passwordInput.value,
                 };
                 return usernameAndPassword;
             },
@@ -83,7 +89,7 @@
                     eyeIcon.classList.add("crossout");
                 }
                 this.update({
-                    isShowingPassword: !this.state.isShowingPassword
+                    isShowingPassword: !this.state.isShowingPassword,
                 });
             },
 
@@ -93,19 +99,19 @@
                 const usernameAndPassword = this.getUsernameAndPasswordFromForm();
                 try {
                     this.update({
-                        isLoginButtonDisabled: true
+                        isLoginButtonDisabled: true,
                     });
                     await login(usernameAndPassword);
                 } catch (error) {
                     if (alertIfRequestWasMadeOffline(error)) {
                     } else if (error.message === "400") {
                         this.update({
-                            errorExplanation: "Invalid login credentials"
+                            errorExplanation: "Invalid login credentials",
                         });
                     }
                 } finally {
                     this.update({
-                        isLoginButtonDisabled: false
+                        isLoginButtonDisabled: false,
                     });
                 }
             },
@@ -113,14 +119,14 @@
             clearError() {
                 if (this.state.errorExplanation) {
                     this.update({
-                        errorExplanation: null
+                        errorExplanation: null,
                     });
                 }
             },
-            
+
             toggleLoginHelpModal() {
                 this.update({
-                    showModal: !this.state.showModal
+                    showModal: !this.state.showModal,
                 });
 
                 const modalBackground = this.$(".modal-background");
