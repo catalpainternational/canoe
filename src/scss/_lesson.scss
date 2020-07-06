@@ -1,5 +1,3 @@
-@import "~OverrideSass/themables";
-
 .replace-this-with-lessonframe {
     h2 {
         margin-bottom: 30px;
@@ -313,7 +311,8 @@ LessonContent .content {
         }
 
         & p {
-            margin-top: 34px;
+            padding-top: 2em;
+            margin-left: 0.35em;
             font-size: 1em;
             margin-left: 1em;
         }

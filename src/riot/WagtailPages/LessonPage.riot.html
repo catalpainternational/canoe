@@ -115,7 +115,7 @@
             state: {
                 hash: "",
                 showLongDescription: false,
-                header: null
+                header: null,
             },
 
             objectivesModule: "objectives",
@@ -126,7 +126,7 @@
                 lessonobjective: LessonObjective,
                 lessoncontent: LessonContent,
                 lessontest: LessonTest,
-                card: Card
+                card: Card,
             },
 
             onBeforeMount(props, state) {
@@ -151,17 +151,14 @@
                 window.removeEventListener("scroll", this.stickyHeader);
             },
 
-            lessonTitleMessage () {
+            lessonTitleMessage() {
                 // display the title of the lesson
-                return gettext(
-                    "Lesson - %1",
-                    this.props.wagtailPage.course.title
-                );
+                return gettext("Lesson - %1", this.props.wagtailPage.course.title);
             },
 
             hashChanged() {
                 this.update({
-                    hash: getHash()[1]
+                    hash: getHash()[1],
                 });
 
                 if (this.state.hash) {
@@ -174,9 +171,10 @@
             durationOfLessonMessage() {
                 // the total duration of the lesson in minutes
                 return gettext(
-                    "%1 mins", 
-                    this.props.wagtailPage.objective.duration + this.props.wagtailPage.content.duration +
-                    this.props.wagtailPage.test.duration
+                    "%1 mins",
+                    this.props.wagtailPage.objective.duration +
+                        this.props.wagtailPage.content.duration +
+                        this.props.wagtailPage.test.duration
                 );
             },
 
@@ -208,7 +206,7 @@
 
             toggleLessonDescription() {
                 this.update({
-                    showLongDescription: !this.state.showLongDescription
+                    showLongDescription: !this.state.showLongDescription,
                 });
             },
 
@@ -242,7 +240,7 @@
                 for (const card of cardsToDisable) {
                     card.classList.add("disabled");
                 }
-            }
+            },
         };
     </script>
 </LessonPage>

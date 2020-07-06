@@ -6,12 +6,11 @@ const fs = require("fs");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { InjectManifest } = require("workbox-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlWebpackInlineSVGPlugin = require('html-webpack-inline-svg-plugin');
+const HtmlWebpackInlineSVGPlugin = require("html-webpack-inline-svg-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
 const defaultProjectConfiguration = require("./canoe-project-default.js");
@@ -42,34 +41,31 @@ module.exports = (env) => {
         mode: "development",
         devtool: "inline-source-map",
         optimization: {
-            minimizer: [
-                new TerserPlugin(),
-                new OptimizeCSSAssetsPlugin({}),
-            ],
+            minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})],
         },
         entry: {
             canoe: path.resolve(__dirname, "src", "index.js"),
         },
         output: {
             filename: "[name]-[contenthash].js",
-            chunkFilename: '[name]-[contenthash].bundle.js',
+            chunkFilename: "[name]-[contenthash].bundle.js",
             path: path.resolve(__dirname, "dist"),
         },
         devServer: {
             contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
-            modules: ["node_modules", path.resolve(__dirname, "modules")],
+            modules: [path.resolve(__dirname, "src"), "node_modules"],
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
                 js: path.resolve(__dirname, "src/js"),
                 ReduxImpl: path.resolve(__dirname, "src/js/redux"),
                 Actions: path.resolve(__dirname, "src/js/actions"),
-                OverrideSass: path.resolve(__dirname, "src", "overrides"),
             },
         },
         module: {
             rules: [
+                { test: /\.hbs$/, loader: "handlebars-loader" },
                 {
                     test: /\.riot.html$/,
                     exclude: /node_modules/,
@@ -134,12 +130,15 @@ module.exports = (env) => {
             new webpack.DefinePlugin(processEnvironment),
             new HtmlWebpackPlugin({
                 title: projectConfiguration.SITE_NAME,
-                template: path.resolve(__dirname, "src/index.html"),
+                template: path.resolve(__dirname, "src/index.hbs"),
                 favicon: projectConfiguration.FAVICON_PATH,
+                favicon_path: path.basename(projectConfiguration.FAVICON_PATH),
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
                 ga_tag: environmentConfiguration.GA_TAG,
+                theme_color: projectConfiguration.THEME_COLOR,
+                background_color: projectConfiguration.BACKGROUND_COLOR,
             }),
-            new HtmlWebpackInlineSVGPlugin({runPreEmit: true}),
+            new HtmlWebpackInlineSVGPlugin({ runPreEmit: true }),
             new WebpackPwaManifest({
                 inject: true,
                 ios: true,
@@ -151,32 +150,32 @@ module.exports = (env) => {
                 start_url: "/",
                 icons: [
                     {
-                      src: projectConfiguration.FAVICON_PATH,
-                      sizes: [120],
-                      destination: path.join("icons", "ios"),
-                      ios: true,
-                      manifest: false
+                        src: projectConfiguration.FAVICON_PATH,
+                        sizes: [120],
+                        destination: path.join("icons", "ios"),
+                        ios: true,
+                        manifest: false,
                     },
                     {
-                      src: projectConfiguration.FAVICON_PATH,
-                      size: [120],
-                      destination: path.join("icons", "ios"),
-                      ios: "startup"
+                        src: projectConfiguration.FAVICON_PATH,
+                        size: [120],
+                        destination: path.join("icons", "ios"),
+                        ios: "startup",
                     },
                     {
-                      src: projectConfiguration.FAVICON_PATH,
-                      sizes: [512],
-                      destination: path.join("icons", "android"),
-                    }
-                ]
+                        src: projectConfiguration.FAVICON_PATH,
+                        sizes: [512],
+                        destination: path.join("icons", "android"),
+                    },
+                ],
             }),
             new InjectManifest({
                 swSrc: path.resolve(__dirname, "src/sw.js"),
                 maximumFileSizeToCacheInBytes: 4000000,
             }),
             new webpack.ProvidePlugin({
-                gettext: ["Translation", "gettext"],
-                ngettext: ["Translation", "ngettext"],
+                gettext: ["js/Translation", "gettext"],
+                ngettext: ["js/Translation", "ngettext"],
             }),
             new MiniCssExtractPlugin(),
         ],
@@ -184,7 +183,9 @@ module.exports = (env) => {
 
     const productionWebpackConfig = env && env.PRODUCTION ? require("./webpack.prod.js") : {};
 
-    const config = merge(
+    const config = merge.strategy({
+        "resolve.modules": "prepend",
+    })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,
         environmentConfiguration.WEBPACK_CONFIG,

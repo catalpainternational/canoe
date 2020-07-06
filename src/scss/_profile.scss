@@ -30,6 +30,10 @@
 .profile-header {
     @include screen-banner-styles;
     background-color: $profile-banner-green;
+
+    &:after {
+        background: $profile-banner-green;
+    }
 }
 
 Profile .background-gray-2 {
@@ -46,6 +50,10 @@ Profile .left-block {
         margin-top: 10px;
         margin-bottom: 10px;
     }
+}
+
+Profile .content-wrapper {
+    padding-top: 20px;
 }
 
 .report-card {
