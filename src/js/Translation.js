@@ -1,5 +1,5 @@
 import gettext_js from "gettext.js/dist/gettext.esm.js";
-import tetumTranslations from "../locale/json/tet.json";
+import tetumTranslations from "../../locale/json/tet.json";
 import { store, getLanguage } from "ReduxImpl/Store";
 
 var i18n = gettext_js();

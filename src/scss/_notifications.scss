@@ -4,7 +4,6 @@
         margin-bottom: 20px;
         margin-top: 0;
         color: white;
-        width: 50px;
     }
 
     .notification-list {
@@ -14,14 +13,20 @@
     .notifications-header {
         @include screen-banner-styles;
         background-color: $notifications-banner-orange;
-        margin-top: -65px;
-        padding-top: 65px;
+
+        &:after {
+            background: $notifications-banner-orange;
+        }
     }
 
     .left-block {
         z-index: 1;
         min-width: 150px;
     }
+}
+
+Notifications .content-wrapper {
+    padding-top: 20px;
 }
 
 .notification-card {
