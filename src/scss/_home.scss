@@ -41,8 +41,6 @@ h5.section-title:after {
 HomePage .header {
     padding: 0px 30px 0 45px;
     height: 181px;
-    margin-top: -65px;
-    padding-top: 65px;
     
     h3 { 
         color: white;
@@ -76,7 +74,7 @@ HomePage .header:after {
 
     @media only screen and (min-width: $tablet) {
         display: none;
-    };
+    }
 }
 
 HomePage .btn-continue-learning .arrow {

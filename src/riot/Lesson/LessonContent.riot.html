@@ -1,6 +1,6 @@
 <LessonContent>
     <LessonFrame
-        if="{state.cardIdx < props.lessonContent.cards.length}"
+        if="{!props.isLessonPage || state.cardIdx < props.lessonContent.cards.length}"
         extraStyleClasses="content"
     >
         <Raw
@@ -27,7 +27,7 @@
             if="{props.lessonContent.cards[state.cardIdx].tag === 'list'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
         />
-        <div class="bottom-buttons">
+        <div if="{props.isLessonPage}" class="bottom-buttons">
             <div>
                 <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
             </div>
@@ -50,10 +50,10 @@
                 </button>
             </div>
         </div>
-        <p class="card-number">{ cardNumberMessage() }</p>
+        <p if="{props.isLessonPage}" class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
     <LessonModuleComplete
-        if="{state.cardIdx === props.lessonContent.cards.length}"
+        if="{props.isLessonPage && state.cardIdx === props.lessonContent.cards.length}"
         lessonId="{props.lesson.id}"
         module="{props.module}"
         nextModule="{props.nextModule}"
@@ -91,7 +91,7 @@
             },
 
             onBeforeMount(props, state) {
-                state.cardIdx = getLessonCardIdx();
+                state.cardIdx = props.isLessonPage ? getLessonCardIdx() : '0';
                 window.addEventListener("hashchange", this.hashChanged);
             },
 

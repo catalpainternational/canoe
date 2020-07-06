@@ -20,11 +20,8 @@
 .cog {
     @extend %icons-shared;
     background-image: url("../img/cog.svg");
-    position: absolute;
     height: 40px;
-    right: -10px;
     width: 40px;
-    top: 20px;
 
     &.white {
         background-image: url("../img/cog_white.svg");
@@ -69,6 +66,24 @@
     }
 }
 
+.resources-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/clipboard.svg");
+
+    &.active {
+        background-image: url("../img/clipboard_active.svg");
+    }
+
+    &.title {
+        background-image: url("../img/clipboard_active_title.svg");
+    }
+}
+
+.search-icon {
+    @extend %bottom-nav-shared;
+    background-image: url("../img/magnifier.svg");
+}
+
 .checkmark-circle {
     @extend %icons-shared;
     background-image: url("../img/checkmark_circle.svg");
@@ -88,6 +103,12 @@
     background-image: url("../img/cross.svg");
     height: 10px;
     width: 12px;
+
+    &.gray {
+        background-image: url("../img/cross_gray.svg");
+        min-width: 1em;
+        height: 1em;
+    }
 }
 
 %stat-icon-shared {
@@ -268,50 +289,6 @@
     -webkit-mask-image: url("../img/arrow.svg");
     height: 10px;
     width: 13px;
-}
-
-%jobs-shared {
-    @extend %mask-icons-shared;
-    width: 20px;
-}
-
-.business_owner {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/briefcase.svg");
-    height: 18px;
-}
-
-.builder {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/hammer.svg");
-    height: 18px;
-}
-
-.engineer {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/rulers.svg");
-    height: 20px;
-}
-
-.tourism_hospitality_retail_manager {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/tourism_hospitality_retail.svg");
-    width: 30px;
-    height: 30px;
-}
-
-.communications_and_marketing_specialist {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/communications_and_marketing.svg");
-    height: 26px;
-    width: 30px;
-}
-
-.banking_and_finance_associate {
-    @extend %jobs-shared;
-    -webkit-mask-image: url("../img/banking_and_finance.svg");
-    height: 24px;
-    width: 30px;
 }
 
 .incorrect-flag {

@@ -50,6 +50,12 @@ export const storeWagtailPage = (wagtailPage) => {
         case "elearning_content.LessonPage":
             store.dispatch({ type: ADDED_LESSON_PAGE, lesson: wagtailPage });
             break;
+        case "elearning_content.ResourcesRoot":
+            // Ignore the ResourcesRoot' root.
+            return;
+        case "elearning_content.ResourceArticle":
+            // Ignore ResourceArticle.
+            return;
         case "wagtailtrans.TranslatableSiteRootPage":
             // Ignore the i18nized site's root.
             return;

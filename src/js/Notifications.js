@@ -2,7 +2,7 @@ import { BACKEND_BASE_URL } from "js/urls";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { getPlatform } from "js/PlatformDetection";
 import { urlBase64ToUint8Array } from "js/DjangoPushNotifications";
-import { alertIfRequestWasMadeOffline } from "js/ErrorChecks";
+import { alertIfRequestWasMadeOffline } from "js/Errors";
 import { logUnsubscribedFromNotifications } from "js/GoogleAnalytics";
 
 const APPLICATION_SERVER_KEY = `${process.env.APPLICATION_SERVER_KEY}`;

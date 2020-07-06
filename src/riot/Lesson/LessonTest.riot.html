@@ -28,14 +28,12 @@
     ></TestPopupModal>
     <LessonFeedback
         if="{state.cardIdx === state.cards.length}"
-        backgroundColor="{props.course.colour}"
         lessonName="{props.lesson.title}"
     ></LessonFeedback>
     <LessonComplete
         if="{state.cardIdx === state.cards.length + 1}"
         course="{props.course}"
         title="{props.title}"
-        backgroundColor="{props.course.colour}"
     >
     </LessonComplete>
 

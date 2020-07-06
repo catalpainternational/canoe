@@ -1,0 +1,16 @@
+<ResourceArticle>
+    <LessonContent
+        lessonContent="{props.wagtailPage.cards}"
+        title="{props.wagtailPage.title}"
+        isLessonPage="{false}"
+    ></LessonContent>
+    <script>
+        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
+
+        export default {
+            components: {
+                lessoncontent: LessonContent,
+            },
+        }
+    </script>
+</ResourceArticle>

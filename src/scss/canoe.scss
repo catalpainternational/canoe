@@ -20,6 +20,7 @@
 @import "login";
 @import "home";
 @import "toast";
+@import "resources";
 
 /* General */
 body {
@@ -41,11 +42,8 @@ div.content-wrapper {
     }
 }
 
-.notifications,
 .profile,
 .settings {
-    padding-top: 65px;
-    margin-top: -65px;
     background-color: $tan;
 }
 
@@ -102,6 +100,9 @@ div.content-wrapper {
 }
 .background-notifications-orange {
     background-color: $notifications-banner-orange;
+}
+.background-settings-tan {
+    background-color: $settings-background-tan;
 }
 .background-orange-1 {
     background-color: #f66400;
