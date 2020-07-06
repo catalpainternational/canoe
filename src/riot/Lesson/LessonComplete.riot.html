@@ -3,7 +3,9 @@
         <div class="{props.isExamComplete && !props.passedExam ? '' : 'confetti background'}"></div>
         <template if="{state.lessonSlugs.length}">
             <div class="congratulations-container">
-                <div class="{props.isExamComplete && !props.passedExam ? 'incorrect-flag' : 'report-card overlay'}"></div>
+                <div
+                    class="{props.isExamComplete && !props.passedExam ? 'incorrect-flag' : 'report-card overlay'}"
+                ></div>
                 <template if="{!isCourseComplete() && !props.isExamComplete}">
                     <div>
                         <h2 translate>Congratulations!</h2>
@@ -17,7 +19,9 @@
                     <div>
                         <h2 translate>Good job!</h2>
                         <p>{ lessonCompleteMessage() }</p>
-                        <p translate>Take the exam now to complete the course "{props.course.title}"</p>
+                        <p translate>
+                            Take the exam now to complete the course "{props.course.title}"
+                        </p>
                     </div>
                     <button class="btn-primary" onclick="{goToCourseExam}" translate>
                         Take Exam
@@ -31,7 +35,8 @@
                         <h2 translate>Amazing work!</h2>
                         <h3 translate>You've completed the course</h3>
                         <p translate>
-                            You passed this exam with a score of 85%. If you would like to improve your score you can retake this exam.
+                            You passed this exam with a score of 85%. If you would like to improve
+                            your score you can retake this exam.
                         </p>
                     </div>
                     <button class="btn-primary" onclick="{goHome}" translate>
@@ -45,7 +50,8 @@
                     <div>
                         <h2 translate>Not quite!</h2>
                         <p translate>
-                            You failed the exam with a score of 45%. You can retake this exam now or later.
+                            You did not pass the exam with a score of 45%. You can retake this exam
+                            now or later.
                         </p>
                     </div>
                     <button class="btn-primary" onclick="{goToCourseExam}" translate>
@@ -102,7 +108,7 @@
             },
 
             goToCourseExam() {
-                location.hash = `#${this.props.course.id}/exam/0`
+                location.hash = `#${this.props.course.id}/exam/0`;
             },
 
             lessonCompleteMessage() {
