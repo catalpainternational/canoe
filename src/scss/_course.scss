@@ -35,7 +35,7 @@
 
                 &.bottom-border {
                     border-bottom: 1px solid;
-                    border-color: #c9d6de;
+                    border-color: $gray-6;
                     padding-bottom: 5px;
                 }
             }
@@ -66,9 +66,9 @@
 .sticky {
     position: fixed;
     top: 0;
-    border: 1px solid #c9d6de;
+    border: 1px solid $gray-6;
     width: 100%;
-    background-color: #f5f4f0;
+    background-color: $tan;
     z-index: 1;
     left: 0;
     padding-left: 55px;

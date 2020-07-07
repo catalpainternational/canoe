@@ -1,8 +1,5 @@
 <Card>
-    <a
-        class="{props.isCompleted ? 'done': props.isDisabled? 'disabled' : 'ongoing'} lesson card"
-        href="#{props.link}"
-    >
+    <a class="{howToStyle()} lesson card" href="#{props.link}">
         <div class="card-body">
             <h4>{props.title}</h4>
             <div if="{props.isCompleted}" class="white-check"></div>
@@ -17,7 +14,7 @@
             </div>
             <div
                 if="{!props.isCompleted}"
-                class="status btn-start-lesson {props.isExam ?'start-exam' : ''}"
+                class="status btn-start-lesson {props.isExam ? 'start-exam' : ''}"
             >
                 <span class="arrow-blue"></span>
                 <p if="{!props.isExam}" translate>start lesson</p>
@@ -31,6 +28,16 @@
     </a>
     <script>
         export default {
+            howToStyle() {
+                if (this.props.isCompleted) {
+                    return "done";
+                } else if (this.props.isDisabled) {
+                    return "disabled";
+                } else {
+                    return "ongoing";
+                }
+            },
+
             durationMessage() {
                 // the number of minutes it will take to complete the objective, content, test, or lesson
                 return ngettext("%1 min", "%1 mins", this.props.duration, this.props.duration);
