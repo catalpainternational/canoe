@@ -256,7 +256,8 @@ LessonContent .content {
     quotecard,
     listcard,
     VideoCard,
-    AudioCard {
+    AudioCard,
+    PdfCard {
         flex: 1;
         width: 100%;
     }
@@ -305,7 +306,7 @@ LessonContent .content {
             align-self: flex-start;
             font-size: 1.7em;
 
-            &:last-of-type { 
+            &:last-of-type {
                 align-self: flex-end;
             }
         }

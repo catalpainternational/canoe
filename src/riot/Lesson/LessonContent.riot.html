@@ -23,10 +23,11 @@
             if="{props.lessonContent.cards[state.cardIdx].tag === 'quote'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
         />
-        <ListCard
+        <!-- <ListCard
             if="{props.lessonContent.cards[state.cardIdx].tag === 'list'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
-        />
+        /> -->
+        <PdfCard if="{state.isPdf}" />
         <div if="{props.isLessonPage}" class="bottom-buttons">
             <div>
                 <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
@@ -69,6 +70,7 @@
         import AudioCard from "RiotTags/Lesson/AudioCard.riot.html";
         import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
         import ListCard from "RiotTags/Lesson/ListCard.riot.html";
+        import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
 
         import { getLessonCardIdx, getNextCardsUrl, getPreviousCardsUrl } from "js/Routing";
         import { setComplete } from "Actions/completion";
@@ -77,6 +79,7 @@
             state: {
                 cardIdx: 0,
                 iframes: [],
+                isPdf: true,
             },
 
             components: {
@@ -88,11 +91,13 @@
                 lessonframe: LessonFrame,
                 videocard: VideoCard,
                 audiocard: AudioCard,
+                pdfcard: PdfCard,
             },
 
             onBeforeMount(props, state) {
-                state.cardIdx = props.isLessonPage ? getLessonCardIdx() : '0';
+                state.cardIdx = props.isLessonPage ? getLessonCardIdx() : "0";
                 window.addEventListener("hashchange", this.hashChanged);
+                console.log(this.props.lessonContent.cards[0]);
             },
 
             onBeforeUnmount(props, state) {
