@@ -36,7 +36,7 @@
                 </button>
                 <button
                     class="btn-primary"
-                    onclick="{submitAnswers}"
+                    onclick="{nextExamCard}"
                     if="{state.cardIdx === state.cards.length - 1}"
                     translate
                 >
@@ -47,10 +47,10 @@
         <p class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
     <LessonComplete
-        if="{state.cardIdx === state.cards.length + 1}"
+        if="{state.cardIdx === state.cards.length}"
         course="{props.wagtailPage.data}"
         title="{props.wagtailPage.title}"
-        passedExam="{true}"
+        passedExam="{false}"
         isCourseExamFinished="{true}"
     ></LessonComplete>
 
@@ -126,17 +126,10 @@
                     this.props.module,
                     this.state.cardIdx
                 );
-                // this.retrieveAnswer();
                 this.update({ isAnswerSelected: true });
             },
 
-            submitAnswers() {
-                console.log("submit answers");
-                this.nextTestCard();
-            },
-
             nextExamCard() {
-                // storeAnswers();
                 window.scroll(0, 0);
                 location.hash = getNextCardsUrl(
                     this.props.wagtailPage.id,
@@ -148,29 +141,12 @@
 
             recordAnswer(answers) {
                 this.update({ isAnswerSelected: true });
-                // take from question tag, replace whatever is in temp storage
                 console.log(answers);
-            },
-
-            retrieveAnswer() {
-                console.log("retrieving previous answer");
-                // pull from permanent answers, put into temp answers
-            },
-
-            storeAnswers() {
-                console.log("answers stored");
-                // take temp answers to permanent answers
             },
 
             cardNumberMessage() {
                 // display the number of the current card out of the total number of cards
                 return gettext("%1 of %2", this.state.cardIdx + 1, this.props.cards.length);
-            },
-
-            sendAnswersToGoogle() {},
-
-            completePage() {
-                console.log("completed");
             },
         };
     </script>

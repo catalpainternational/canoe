@@ -7,7 +7,12 @@
                 onclick="{goBack}"
             ></a>
             <a if="{state.isSectionList}" class="arrow-white" onclick="{backToCoursePage}"></a>
-            <a if="{state.isCourse}" class="arrow-white" onclick="{backToHome}"></a>
+            <a if="{state.isCourseExam}" class="arrow-white" onclick="{backToCourse}"></a>
+            <a
+                if="{state.isCourse && !state.isCourseExam}"
+                class="arrow-white"
+                onclick="{backToHome}"
+            ></a>
             <a if="{state.isCard}" class="cross close-btn" onclick="{backToLessonPage}"></a>
 
             <a
@@ -51,6 +56,10 @@
                 location.hash = "#" + this.props.wagtailPage.course.id;
             },
 
+            backToCourse() {
+                location.hash = "#" + parseURLHash()[0];
+            },
+
             updateState() {
                 const [afterTheHash, lessonModule] = parseURLHash();
                 this.state.lessonModule = lessonModule;
@@ -75,8 +84,7 @@
                     !this.state.isSectionList &&
                     !this.state.isCourse &&
                     !this.state.isBasePage &&
-                    !this.state.isHome &&
-                    !this.state.isCourseExam;
+                    !this.state.isHome;
 
                 if (this.state.isProfile) {
                     this.state.color = "profile-green";

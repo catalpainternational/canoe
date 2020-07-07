@@ -1,10 +1,12 @@
 <LessonComplete>
     <LessonFrame>
-        <div class="{props.isExamComplete && !props.passedExam ? '' : 'confetti background'}"></div>
+        <div
+            class="{props.isCourseExamFinished && !props.passedExam ? '' : 'confetti background'}"
+        ></div>
         <template if="{state.lessonSlugs.length}">
             <div class="congratulations-container">
                 <div
-                    class="{props.isExamComplete && !props.passedExam ? 'incorrect-flag' : 'report-card overlay'}"
+                    class="{props.isCourseExamFinished && !props.passedExam ? 'incorrect-flag' : 'report-card overlay'}"
                 ></div>
                 <template if="{!isCourseComplete() && !props.isCourseExamFinished}">
                     <div>
@@ -46,7 +48,7 @@
                         View Resources
                     </button>
                 </template>
-                <template if="{props.isExamComplete && !props.passedExam}">
+                <template if="{props.isCourseExamFinished && !props.passedExam}">
                     <div>
                         <h2 translate>Not quite!</h2>
                         <p translate>
