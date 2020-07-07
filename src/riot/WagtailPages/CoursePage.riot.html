@@ -121,6 +121,10 @@
                 window.removeEventListener("hashchange", this.hashChanged);
             },
 
+            onBeforeUnmount(props, state) {
+                window.removeEventListener("hashchange", this.hashChanged);
+            },
+
             onUnmounted() {
                 window.removeEventListener("scroll", this.stickyHeader);
             },
