@@ -51,7 +51,7 @@
         import { countCompleteLessonsInCourse } from "js/LearningStatistics";
         import { isComplete, isTheCourseComplete } from "Actions/completion";
         import { getCourseAndLessonSlugs } from "js/utilities";
-        import { getLessonModuleHash, getHash } from "js/Routing";
+        import { getHashPieces } from "js/Routing";
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
@@ -100,7 +100,7 @@
             ],
 
             onBeforeMount(props, state) {
-                state.hash = getHash()[1];
+                state.hash = getHashPieces()[1];
                 window.addEventListener("hashchange", this.hashChanged);
             },
 
@@ -123,7 +123,7 @@
 
             hashChanged() {
                 this.update({
-                    hash: getHash()[1],
+                    hash: getHashPieces()[1],
                 });
 
                 if (this.state.hash) {

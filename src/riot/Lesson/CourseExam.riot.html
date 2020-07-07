@@ -22,12 +22,12 @@
         ></TestMultipleAnswer>
         <div class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{previousTestCard}"></a>
+                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{previousExamCard}"></a>
             </div>
             <div>
                 <button
                     class="btn-primary"
-                    onclick="{nextTestCard}"
+                    onclick="{nextExamCard}"
                     if="{state.cardIdx < state.cards.length - 1}"
                     disabled="{!state.isAnswerSelected}"
                     translate
@@ -47,11 +47,11 @@
         <p class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
     <LessonComplete
-        if="{state.cardIdx === state.cards.length}"
+        if="{state.cardIdx === state.cards.length + 1}"
         course="{props.wagtailPage.data}"
         title="{props.wagtailPage.title}"
-        isExamComplete="{true}"
         passedExam="{true}"
+        isCourseExamFinished="{true}"
     ></LessonComplete>
 
     <script>
@@ -61,7 +61,7 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import HonorCode from "RiotTags/Lesson/HonorCode.riot.html";
 
-        import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
+        import { getLessonCardIdx, getPreviousCardsUrl, getNextCardsUrl } from "js/Routing";
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
 
         export default {
@@ -119,10 +119,14 @@
                 window.removeEventListener("scroll", this.stickyHeader);
             },
 
-            previousTestCard() {
-                window.history.back();
-                // change to prev card
-                this.retrieveAnswer();
+            previousExamCard() {
+                window.scroll(0, 0);
+                location.hash = getPreviousCardsUrl(
+                    this.props.wagtailPage.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
+                // this.retrieveAnswer();
                 this.update({ isAnswerSelected: true });
             },
 
@@ -131,11 +135,11 @@
                 this.nextTestCard();
             },
 
-            nextTestCard() {
+            nextExamCard() {
                 // storeAnswers();
                 window.scroll(0, 0);
-                location.hash = getLessonModuleHash(
-                    this.props.wagtailPage.data.id,
+                location.hash = getNextCardsUrl(
+                    this.props.wagtailPage.id,
                     this.props.module,
                     this.state.cardIdx
                 );

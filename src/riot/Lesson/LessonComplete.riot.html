@@ -6,7 +6,7 @@
                 <div
                     class="{props.isExamComplete && !props.passedExam ? 'incorrect-flag' : 'report-card overlay'}"
                 ></div>
-                <template if="{!isCourseComplete() && !props.isExamComplete}">
+                <template if="{!isCourseComplete() && !props.isCourseExamFinished}">
                     <div>
                         <h2 translate>Congratulations!</h2>
                         <p>{ lessonCompleteMessage() }</p>
@@ -15,7 +15,7 @@
                         Next Lesson
                     </button>
                 </template>
-                <template if="{isCourseComplete() && !props.isExamComplete}">
+                <template if="{isCourseComplete() && !props.isCourseExamFinished}">
                     <div>
                         <h2 translate>Good job!</h2>
                         <p>{ lessonCompleteMessage() }</p>
@@ -30,7 +30,7 @@
                         Back to Course
                     </button>
                 </template>
-                <template if="{props.isExamComplete && props.passedExam}">
+                <template if="{props.isCourseExamFinished && props.passedExam}">
                     <div>
                         <h2 translate>Amazing work!</h2>
                         <h3 translate>You've completed the course</h3>

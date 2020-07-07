@@ -2,7 +2,7 @@
     <header class="background-{state.color}">
         <div class="top-menu-container">
             <a
-                if="{!state.isCard && !state.isSectionList && !state.isCourse && !state.isBasePage && !state.isHome && !state.isCourseExam}"
+                if="{state.showBackArrow}"
                 class="{state.isSettings ? 'arrow-gray' : 'arrow-white'}"
                 onclick="{goBack}"
             ></a>
@@ -70,6 +70,13 @@
                     this.props.contentType === "LessonPage" && !this.state.isCard;
                 this.state.isBasePage =
                     this.state.isProfile || this.state.isResources || this.state.isSettings;
+                this.state.showBackArrow =
+                    !this.state.isCard &&
+                    !this.state.isSectionList &&
+                    !this.state.isCourse &&
+                    !this.state.isBasePage &&
+                    !this.state.isHome &&
+                    !this.state.isCourseExam;
 
                 if (this.state.isProfile) {
                     this.state.color = "profile-green";
