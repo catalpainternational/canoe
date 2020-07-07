@@ -1,0 +1,161 @@
+<CourseExam>
+    <LessonFrame if="{state.cardIdx < state.cards.length}" id="test" extraStyleClasses="test">
+        <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
+        <TestSingleAnswer
+            if="{state.isSingleAnswer}"
+            isCourseExam="{true}"
+            card="{state.cards[state.cardIdx]}"
+            recordAnswer="{recordAnswer}"
+        ></TestSingleAnswer>
+        <TestMultipleAnswer
+            if="{!state.isSingleAnswer}"
+            isCourseExam="{true}"
+            card="{state.cards[state.cardIdx]}"
+            recordAnswer="{recordAnswer}"
+        ></TestMultipleAnswer>
+        <div class="bottom-buttons">
+            <div>
+                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{previousExamCard}"></a>
+            </div>
+            <div>
+                <button
+                    class="btn-primary"
+                    onclick="{nextExamCard}"
+                    if="{state.cardIdx < state.cards.length - 1}"
+                    disabled="{!state.isAnswerSelected}"
+                    translate
+                >
+                    Next
+                </button>
+                <button
+                    class="btn-primary"
+                    onclick="{submitAnswers}"
+                    if="{state.cardIdx === state.cards.length - 1}"
+                    translate
+                >
+                    Submit answers
+                </button>
+            </div>
+        </div>
+        <p class="card-number">{ cardNumberMessage() }</p>
+    </LessonFrame>
+    <LessonComplete
+        if="{state.cardIdx === state.cards.length + 1}"
+        course="{props.wagtailPage.course}"
+        title="{props.wagtailPage.course.title}"
+        isCourseExamFinished="{true}"
+    ></LessonComplete>
+
+    <script>
+        import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
+        import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
+        import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+
+        import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
+        import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
+
+        export default {
+            state: {
+                cardIdx: 0,
+                isSingleAnswer: true,
+                isAnswerSelected: false,
+            },
+
+            components: {
+                lessoncomplete: LessonComplete,
+                testsingleanswer: TestSingleAnswer,
+                testmultipleanswer: TestMultipleAnswer,
+                lessonframe: LessonFrame,
+            },
+
+            onBeforeMount(props, state) {
+                const cards = props.cards;
+                state.cards = cards;
+                state.cardIdx = getLessonCardIdx();
+
+                window.addEventListener("hashchange", this.hashChanged);
+            },
+
+            onMounted(props, state) {
+                const card = this.state.cards[this.state.cardIdx];
+                if (!card) {
+                    return;
+                }
+                const correctAnswers = card.answers.filter((answer) => answer.correct);
+                this.update({
+                    isSingleAnswer: correctAnswers.length === 1,
+                });
+            },
+
+            onBeforeUnmount(props, state) {
+                window.removeEventListener("hashchange", this.hashChanged);
+            },
+
+            hashChanged() {
+                const cardIdx = getLessonCardIdx();
+                const card = this.state.cards[cardIdx];
+                let isSingleAnswer = null;
+                if (card) {
+                    const correctAnswers = card.answers.filter((answer) => answer.correct);
+                    isSingleAnswer = correctAnswers.length === 1;
+                }
+
+                this.update({
+                    cardIdx,
+                    isSingleAnswer,
+                });
+                window.removeEventListener("scroll", this.stickyHeader);
+            },
+
+            previousExamCard() {
+                window.history.back();
+                // change to prev card
+                this.retrieveAnswer();
+                this.update({ isAnswerSelected: true });
+            },
+
+            submitAnswers() {
+                console.log("submit answers");
+            },
+
+            nextExamCard() {
+                // storeAnswers();
+                window.scroll(0, 0);
+                location.hash = getLessonModuleHash(
+                    this.props.wagtailPage.data.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
+                this.update({ isAnswerSelected: false });
+            },
+
+            recordAnswer(answers) {
+                this.update({ isAnswerSelected: true });
+                // take from question tag, replace whatever is in temp storage
+                console.log(answers);
+            },
+
+            retrieveAnswer() {
+                console.log("retrieving previous answer");
+                // pull from permanent answers, put into temp answers
+            },
+
+            storeAnswers() {
+                console.log("answers stored");
+                // take temp answers to permanent answers
+            },
+
+            cardNumberMessage() {
+                // display the number of the current card out of the total number of cards
+                return gettext("%1 of %2", this.state.cardIdx + 1, this.props.cards.length);
+            },
+
+            sendAnswersToGoogle() {},
+
+            completePage() {
+                console.log("completed");
+            },
+        };
+    </script>
+</CourseExam>

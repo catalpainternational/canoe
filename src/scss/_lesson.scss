@@ -305,7 +305,7 @@ LessonContent .content {
             align-self: flex-start;
             font-size: 1.7em;
 
-            &:last-of-type { 
+            &:last-of-type {
                 align-self: flex-end;
             }
         }
@@ -395,6 +395,7 @@ LessonContent div.content-wrapper {
 }
 
 LessonTest,
+CourseExam,
 TestSingleAnswer,
 TestMultipleAnswer,
 TestPopupModal {
@@ -538,7 +539,7 @@ TestPopupModal {
                 }
             }
 
-            li.selected.wrong {
+            li.selected-wrong {
                 .radio {
                     border: 2px solid $red-2;
                     height: 21px;
@@ -546,6 +547,18 @@ TestPopupModal {
 
                     & > div {
                         background-color: $red-2;
+                    }
+                }
+            }
+
+            li.selected-pending {
+                .radio {
+                    border: 2px solid $blue-1;
+                    height: 21px;
+                    width: 21px;
+
+                    & > div {
+                        background-color: $blue-1;
                     }
                 }
             }
@@ -789,6 +802,34 @@ LessonComplete {
         p {
             margin-bottom: 40px;
             margin-top: 0;
+        }
+    }
+}
+
+CourseExam {
+    .card-number {
+        font-size: 12px;
+        margin-bottom: -15px;
+        flex: 0;
+    }
+
+    .bottom-buttons {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        width: 100%;
+        margin-bottom: 15px;
+
+        .arrow-gray {
+            display: inline-block;
+            position: relative;
+            left: unset;
+            width: 80px;
+            height: 50px;
+        }
+
+        .btn-primary {
+            min-width: 160px;
         }
     }
 }
