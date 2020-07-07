@@ -1,6 +1,9 @@
 <CourseExam>
     <LessonFrame if="{state.cardIdx === -1}">
-        <HonorCode courseId="{props.wagtailPage.data.id}"></HonorCode>
+        <HonorCode
+            courseId="{props.wagtailPage.data.id}"
+            minimumScore="{state.minimumScore}"
+        ></HonorCode>
     </LessonFrame>
     <LessonFrame
         if="{state.cardIdx > -1 && state.cardIdx < state.cards.length}"
@@ -50,8 +53,10 @@
         if="{state.cardIdx === state.cards.length}"
         course="{props.wagtailPage.data}"
         title="{props.wagtailPage.title}"
-        passedExam="{false}"
+        passedExam="{state.passedExam}"
         isCourseExamFinished="{true}"
+        finalScore="{state.finalScore}"
+        minimumScore="{state.minimumScore}"
     ></LessonComplete>
 
     <script>
@@ -70,6 +75,9 @@
                 isSingleAnswer: true,
                 isAnswerSelected: false,
                 cards: [],
+                minimumScore: "75%",
+                finalScore: "80%",
+                passedExam: true,
             },
 
             components: {

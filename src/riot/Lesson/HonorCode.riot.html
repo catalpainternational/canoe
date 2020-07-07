@@ -1,7 +1,7 @@
 <HonorCode>
     <div>
         <h3 translate>Course exam</h3>
-        <p translate>To pass this exam you need to score 80% or higher.</p>
+        <p>{ minimumScoreMessage() }</p>
     </div>
     <div class="code">
         <h4 translate>Code of conduct</h4>
@@ -45,6 +45,14 @@
 
             goToCourseOverview() {
                 location.hash = "#" + this.props.courseId;
+            },
+
+            minimumScoreMessage() {
+                // message for what percent a user must score to pass the exam
+                return gettext(
+                    "To pass this exam you need to score %1 or higher.",
+                    this.props.minimumScore
+                );
             },
         };
     </script>

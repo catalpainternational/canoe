@@ -28,11 +28,11 @@
             ></Card>
             <h5 class="section-title" translate>Course exam</h5>
             <Card
-                title="{'Title of Exam'}"
-                description="{'this is the course exam description'}"
-                duration="{15}"
+                title="{state.courseExamTitle}"
+                description="{state.courseExamDescription}"
+                duration="{state.courseExamDuration}"
                 link="{props.wagtailPage.id}/exam/0"
-                isCompleted="{false}"
+                isCompleted="{state.isCourseExamComplete}"
                 isComingSoon="{false}"
                 showFooter="{true}"
                 isExam="{true}"
@@ -58,6 +58,10 @@
         export default {
             state: {
                 hash: "",
+                courseExamTitle: "Title of Exam",
+                courseExamDescription: "this is the course exam description",
+                courseExamDuration: "525,600",
+                isCourseExamComplete: false,
             },
 
             components: {

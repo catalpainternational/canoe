@@ -21,9 +21,7 @@
                     <div>
                         <h2 translate>Good job!</h2>
                         <p>{ lessonCompleteMessage() }</p>
-                        <p translate>
-                            Take the exam now to complete the course "{props.course.title}"
-                        </p>
+                        <p>{ takeCourseExamMessage() }</p>
                     </div>
                     <button class="btn-primary" onclick="{goToCourseExam}" translate>
                         Take Exam
@@ -36,10 +34,7 @@
                     <div>
                         <h2 translate>Amazing work!</h2>
                         <h3 translate>You've completed the course</h3>
-                        <p translate>
-                            You passed this exam with a score of 85%. If you would like to improve
-                            your score you can retake this exam.
-                        </p>
+                        <p>{ passedExamMessage() }</p>
                     </div>
                     <button class="btn-primary" onclick="{goHome}" translate>
                         Back to Courses
@@ -51,10 +46,7 @@
                 <template if="{props.isCourseExamFinished && !props.passedExam}">
                     <div>
                         <h2 translate>Not quite!</h2>
-                        <p translate>
-                            You did not pass the exam with a score of 45%. You can retake this exam
-                            now or later.
-                        </p>
+                        <p>{ failedExamMessage() }</p>
                     </div>
                     <button class="btn-primary" onclick="{goToCourseExam}" translate>
                         Retake Exam
@@ -116,6 +108,31 @@
             lessonCompleteMessage() {
                 // message on completion of a lesson %1 is replaced by the lesson title
                 return gettext('You just completed the lesson "%1"', this.props.title);
+            },
+
+            takeCourseExamMessage() {
+                // message on completion of lesson and prompt to take course exam
+                return gettext(
+                    'Take the exam now to complete the course "%1"',
+                    this.props.course.title
+                );
+            },
+
+            passedExamMessage() {
+                // message when user passed the exam
+                return gettext(
+                    "You passed this exam with a score of %1. If you would like to improve your score you can retake this exam.",
+                    this.props.finalScore
+                );
+            },
+
+            failedExamMessage() {
+                // message when user did not pass exam
+                return gettext(
+                    "You did not pass this assessment because you only scored %1 and you need to reach %2 to pass. You can retake this exam now or later.",
+                    this.props.finalScore,
+                    this.props.minimumScore
+                );
             },
         };
     </script>
