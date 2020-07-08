@@ -1,5 +1,5 @@
 <Authentication>
-    <div>
+    <div class="modal-background">
         <span class="site-logo"></span>
         <span class="login-image"></span>
         <form onsubmit="{loginUser}">
@@ -32,23 +32,37 @@
             >
                 Login
             </button>
+            <div class="login-help">
+                <a onclick="{toggleLoginHelpModal}" translate>Forgot username or password?</a>
+            </div>
         </form>
 
         <div is="logos" class="logo" />
     </div>
+    <PopupModal if="{state.showModal}">
+        <span class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></span>
+        <h2 class="header-no-image">Need help?</h2>
+        <ContactInformation toggleLoginHelpModal="{toggleLoginHelpModal}"></ContactInformation>
+    </PopupModal>
 
     <script>
         import Logos from "riot/Components/Logos.riot.html";
         import { alertIfRequestWasMadeOffline } from "js/Errors";
         import { login } from "js/AuthenticationUtilities";
+        import PopupModal from "RiotTags/Components/PopupModal.riot.html";
+        import ContactInformation from "riot/Components/ContactInformation.riot.html";
 
         export default {
             state: {
                 errorExplanation: null,
                 isLoginButtonDisabled: false,
                 isShowingPassword: false,
+                showModal: false,
             },
+
             components: {
+                popupmodal: PopupModal,
+                contactinformation: ContactInformation,
                 logos: Logos,
             },
 
@@ -107,6 +121,19 @@
                     this.update({
                         errorExplanation: null,
                     });
+                }
+            },
+
+            toggleLoginHelpModal() {
+                this.update({
+                    showModal: !this.state.showModal,
+                });
+
+                const modalBackground = this.$(".modal-background");
+                if (this.state.showModal) {
+                    modalBackground.classList.add("fade");
+                } else {
+                    modalBackground.classList.remove("fade");
                 }
             },
         };
