@@ -26,37 +26,41 @@
                 isComingSoon="{lesson.coming_soon}"
                 showFooter="{true}"
             ></Card>
-            <h5 class="section-title" translate>Course exam</h5>
-            <Card
-                title="{'Exam for Current Course'}"
-                description="{'this is the course exam description'}"
-                duration="{15}"
-                link="{props.wagtailPage.id}/exam/1"
-                isCompleted="{false}"
-                isComingSoon="{false}"
-                showFooter="{true}"
-                isExam="{true}"
-            ></Card>
+            <template if="{state.examCards.length > 0}">
+                <h5 class="section-title" translate>Course exam</h5>
+                <Card
+                    title="{`${props.wagtailPage.title}'s Course Exam`}"
+                    description="{'this is the course exam description'}"
+                    duration="{15}"
+                    link="{props.wagtailPage.id}/exam/1"
+                    isCompleted="{false}"
+                    isComingSoon="{false}"
+                    showFooter="{true}"
+                    isExam="{true}"
+                ></Card>
+            </template>
         </div>
     </div>
     <CourseExam
-        if="{state.hash === examModule}"
+        if="{state.hash === EXAM_MODULE && state.examCards.length > 0}"
         wagtailPage="{props.wagtailPage}"
         module="exam"
-        cards="{examCards}"
+        cards="{state.examCards}"
     ></CourseExam>
 
     <script>
+        import Card from "RiotTags/Components/Card.riot.html";
+        import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
+
         import { countCompleteLessonsInCourse } from "js/LearningStatistics";
         import { isComplete } from "Actions/completion";
         import { getCourseAndLessonSlugs } from "js/utilities";
-        import { getLessonModuleHash, getHashPieces } from "js/Routing";
-        import Card from "RiotTags/Components/Card.riot.html";
-        import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
+        import { getHashPieces } from "js/Routing";
 
         export default {
             state: {
                 hash: "",
+                examCards: [],
             },
 
             components: {
@@ -64,39 +68,7 @@
                 courseexam: CourseExam,
             },
 
-            examModule: "exam",
-
-            examCards: [
-                {
-                    answers: [
-                        { correct: false, text: "incorrect" },
-                        { correct: true, text: "this is correct" },
-                        { correct: false, text: "Another incorrect answer" },
-                        {
-                            correct: false,
-                            text: "Another incorrect answer here it is a bit longer",
-                        },
-                    ],
-                    question: "will it keep raining?",
-                },
-                {
-                    answers: [
-                        { correct: true, text: "correct time" },
-                        { correct: true, text: "correct too" },
-                        { correct: false, text: "incorrect" },
-                    ],
-                    question: "what time is it?",
-                },
-                {
-                    answers: [
-                        { correct: false, text: "ba dum dum dum" },
-                        { correct: true, text: "dee ba da" },
-                        { correct: false, text: "ba dum dum dum" },
-                        { correct: true, text: "dee ba da" },
-                    ],
-                    question: "What does Karen sing?",
-                },
-            ],
+            EXAM_MODULE: "exam",
 
             onBeforeMount(props, state) {
                 state.hash = getHashPieces()[1];
@@ -104,6 +76,13 @@
             },
 
             onMounted(props, state) {
+                const { exam } = props.wagtailPage;
+                const examCards = exam.map((card) => {
+                    const { question, answers } = card.value;
+                    return { question, answers };
+                });
+                this.update({ examCards });
+
                 state.header = document.getElementsByClassName("course-header")[0];
                 state.headerOffsetTop = state.header.offsetTop;
                 window.addEventListener("scroll", this.stickyHeader);
