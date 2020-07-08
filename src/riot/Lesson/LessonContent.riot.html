@@ -23,11 +23,14 @@
             if="{props.lessonContent.cards[state.cardIdx].tag === 'quote'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
         />
-        <!-- <ListCard
+        <ListCard
             if="{props.lessonContent.cards[state.cardIdx].tag === 'list'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
-        /> -->
-        <PdfCard if="{state.isPdf}" />
+        />
+        <PdfCard
+            if="{props.lessonContent.cards[state.cardIdx].tag === 'pdf'}"
+            card="{props.lessonContent.cards[state.cardIdx]}"
+        />
         <div if="{props.isLessonPage}" class="bottom-buttons">
             <div>
                 <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
@@ -79,7 +82,6 @@
             state: {
                 cardIdx: 0,
                 iframes: [],
-                isPdf: true,
             },
 
             components: {
@@ -97,7 +99,6 @@
             onBeforeMount(props, state) {
                 state.cardIdx = props.isLessonPage ? getLessonCardIdx() : "0";
                 window.addEventListener("hashchange", this.hashChanged);
-                console.log(this.props.lessonContent.cards[0]);
             },
 
             onBeforeUnmount(props, state) {
