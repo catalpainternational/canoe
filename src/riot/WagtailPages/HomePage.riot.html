@@ -25,32 +25,17 @@
         ></TagList>
         <div
             class="course"
-            each="{course in props.wagtailPage.courses}"
+            each="{course in state.sortedListOfCourses}"
             if="{isCourseVisible(course.tags)}"
         >
-            <div class="course-header">
-                <div>
-                    <a href="#{course.data.id}">
-                        <h3>{course.data.title}</h3>
-                    </a>
-                    <div>
-                        <p>{ courseProgressMessage(course) }</p>
-                        <a href="#{course.data.id}">
-                            <p class="text-purple" translate>view all</p>
-                            <span class="arrow background-purple"></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
             <Card
-                if="{state.nextLesson[course.data.id]}"
-                title="{state.nextLesson[course.data.id].title}"
-                description="{state.nextLesson[course.data.id].description}"
-                duration="{state.nextLesson[course.data.id].duration}"
-                link="{state.nextLesson[course.data.id].id}"
-                isCompleted="{isLessonComplete(course, state.nextLesson[course.data.id])}"
+                title="{course.data.title}"
+                link="{course.data.id}"
+                description="{courseProgressMessage(course)}"
+                isCompleted="{isCourseComplete(course)}"
                 isComingSoon="{state.nextLesson[course.data.id].coming_soon}"
                 showFooter="{true}"
+                type="course"
             ></Card>
         </div>
     </div>
@@ -78,6 +63,7 @@
                 currentCourse: null,
                 selectedTags: [],
                 listOfTags: [],
+                sortedListOfCourses: [],
             },
 
             components: {
@@ -96,6 +82,27 @@
                 this.state.courses = courses;
                 this.state.listOfTags = getTagsFromPages(courses);
                 this.state.currentCourse = lastWorkedOnCourse;
+
+                this.sortCourses(courses);
+            },
+
+            sortCourses(courses) {
+                const completedCourses = [];
+                const incompleteCourses = [];
+
+                courses.map((course) => {
+                    if (this.isCourseComplete(course)) {
+                        completedCourses.unshift(course);
+                    } else {
+                        incompleteCourses.unshift(course);
+                    }
+                });
+
+                incompleteCourses.reverse();
+                completedCourses.reverse();
+
+                const sortedCourses = incompleteCourses.concat(completedCourses);
+                this.state.sortedListOfCourses = sortedCourses;
             },
 
             continueLearningMessage() {
@@ -124,6 +131,18 @@
                     "%1 / %2 lessons complete",
                     numberOfCompleteLessons,
                     course.data.lessons_count
+                );
+            },
+
+            isCourseComplete(course) {
+                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
+                const numberOfCompleteLessons = countCompleteLessonsInCourse(
+                    courseSlug,
+                    lessonSlugs
+                );
+
+                return (
+                    countCompleteLessonsInCourse(courseSlug, lessonSlugs) === course.lessons.length
                 );
             },
 
@@ -182,7 +201,7 @@
 
             isCourseVisible(courseTags) {
                 const { selectedTags } = this.state;
-                const lowercaseCourseTags = courseTags.map(tag => tag.toLowerCase())
+                const lowercaseCourseTags = courseTags.map((tag) => tag.toLowerCase());
                 return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
             },
         };
