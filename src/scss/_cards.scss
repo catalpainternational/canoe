@@ -39,6 +39,10 @@
             grid-row: 2;
             grid-column: 1 / 7;
         }
+
+        @media only screen and (max-width: $sm-phone) {
+            padding: 15px;
+        }
     }
 
     .card-footer {
@@ -48,6 +52,7 @@
 
         @media only screen and (max-width: $sm-phone) {
             flex-wrap: wrap;
+            padding: 0px 15px 15px 15px;
         }
     }
 
@@ -84,6 +89,10 @@
         p {
             font-size: 10px;
             margin-right: 10px;
+
+            @media only screen and (max-width: $sm-phone) {
+                margin-right: 0;
+            }
         }
     }
 
