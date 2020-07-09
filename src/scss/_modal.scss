@@ -30,7 +30,7 @@
 
     p {
         margin: 0 0 1em;
-        padding: 0 0.625em;
+        padding: 0 1.3em;
     }
 
     .correct-flag,
@@ -41,13 +41,11 @@
     }
 
     .cross.close-btn {
-        position: absolute;
-        top: 1.5em;
-        right: 1.5em;
+        align-self: flex-end;
+        margin: 1.5em 1.5em 0.5em;
     }
 
     .header-no-image {
-        margin-top: 1em;
         font-size: 1.5em;
     }
 
@@ -55,7 +53,7 @@
         button {
             margin-top: 0;
         }
-    
+
         p {
             font-size: 1.1em;
         }
@@ -64,6 +62,11 @@
             margin-top: 3em;
             margin-bottom: 0.5em;
             font-size: 0.9em;
+        }
+
+        .sms-link {
+            font-size: 1.2em;
+            margin-left: 0.4em;
         }
     }
 }

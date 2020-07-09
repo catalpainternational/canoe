@@ -10,7 +10,8 @@ Authentication > div {
         margin-bottom: 20px;
     }
 
-    .site-logo, .login-image {
+    .site-logo,
+    .login-image {
         flex: none;
     }
 
@@ -46,6 +47,10 @@ Authentication > div {
             border-radius: 5px;
             padding: 5px 10px;
             display: flex;
+
+            &.password {
+                margin-bottom: 10px;
+            }
         }
 
         div:not(.form-group) {
@@ -68,7 +73,7 @@ Authentication > div {
             width: 30px;
             height: 30px;
             position: relative;
-            margin-bottom: 25%;
+            margin-bottom: 30px;
 
             &:hover {
                 cursor: pointer;
@@ -116,7 +121,7 @@ Authentication > div {
 
 .crossout:before {
     position: absolute;
-    content: '';
+    content: "";
     left: 0;
     top: 50%;
     right: 0;
@@ -141,7 +146,8 @@ ChangeBrowser div {
         margin: 10px;
     }
 
-    .site-logo, .login-image {
+    .site-logo,
+    .login-image {
         display: block;
     }
 }
