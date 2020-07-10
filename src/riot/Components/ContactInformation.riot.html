@@ -1,0 +1,27 @@
+<ContactInformation>
+    <div class="custom-contact-container">
+        <p>Send us a message and we'll help you log in</p>
+        <button class="btn-primary" onclick="{sendWhatsAppMessage}">Send WhatsApp</button>
+        <p class="sm-note">Don't have WhatsApp?</p>
+        <button class="btn-secondary" onclick="{sendSmsMessage}">Send SMS</button>
+    </div>
+
+    <script>
+        const phoneNumber = "19788675309";
+        const encodedMessage = encodeURIComponent("I need help accessing my account");
+
+        export default {
+            sendWhatsAppMessage() {
+                const whatsAppHref = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+                window.open(whatsAppHref, "_blank");
+                this.props.toggleLoginHelpModal();
+            },
+
+            sendSmsMessage() {
+                const smsHref = `sms:${phoneNumber}?&body=${encodedMessage}`;
+                window.open(smsHref, "_blank");
+                this.props.toggleLoginHelpModal();
+            },
+        };
+    </script>
+</ContactInformation>
