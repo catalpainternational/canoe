@@ -30,14 +30,13 @@
             <h5 class="section-title" translate>Course exam</h5>
             <Card
                 title="{state.courseExamTitle}"
-                description="{state.courseExamDescription}"
-                duration="{state.courseExamDuration}"
                 link="{props.wagtailPage.id}/exam/0"
                 isCompleted="{state.isCourseExamComplete}"
                 isComingSoon="{false}"
                 showFooter="{true}"
                 isExam="{true}"
                 isDisabled="{!state.isCourseComplete}"
+                type="exam"
             ></Card>
         </div>
     </div>
