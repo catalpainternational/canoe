@@ -35,7 +35,6 @@
                     isCompleted="{state.isCourseExamComplete}"
                     isComingSoon="{false}"
                     showFooter="{true}"
-                    isExam="{true}"
                     isDisabled="{!state.isCourseComplete}"
                     type="exam"
                 ></Card>
@@ -50,12 +49,13 @@
     ></CourseExam>
 
     <script>
+        import Card from "RiotTags/Components/Card.riot.html";
+        import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
+
         import { countCompleteLessonsInCourse } from "js/LearningStatistics";
         import { isComplete, isTheCourseComplete } from "Actions/completion";
         import { getCourseAndLessonSlugs } from "js/utilities";
         import { getHashPieces } from "js/Routing";
-        import Card from "RiotTags/Components/Card.riot.html";
-        import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
         export default {
             state: {
