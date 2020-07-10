@@ -1,0 +1,62 @@
+<CourseOverview>
+    <CoursePage
+        if="{state.hash == null}"
+        wagtailPage="{props.wagtailPage}"
+        examCards="{state.examCards}"
+    ></CoursePage>
+    <CourseExam
+        if="{state.hash === EXAM_MODULE && state.examCards.length > 0}"
+        wagtailPage="{props.wagtailPage}"
+        module="exam"
+        cards="{state.examCards}"
+    ></CourseExam>
+    <script>
+        import CoursePage from "RiotTags/WagtailPages/CoursePage.riot.html";
+        import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
+        import { getHashPieces } from "js/Routing";
+
+        export default {
+            state: {
+                examCards: [],
+                hash: "",
+            },
+
+            components: {
+                coursepage: CoursePage,
+                courseexam: CourseExam,
+            },
+
+            onBeforeMount(props, state) {
+                state.hash = getHashPieces()[1];
+                window.addEventListener("hashchange", this.hashChanged);
+            },
+
+            onBeforeUnmount(props, state) {
+                window.removeEventListener("hashchange", this.hashChanged);
+            },
+
+            onMounted(props, state) {
+                const { exam } = props.wagtailPage;
+                const examCards = exam.map((card) => {
+                    const { question, answers } = card.value;
+                    return { question, answers };
+                });
+                this.update({ examCards });
+            },
+
+            EXAM_MODULE: "exam",
+
+            hashChanged() {
+                this.update({
+                    hash: getHashPieces()[1],
+                });
+
+                if (this.state.hash) {
+                    window.removeEventListener("scroll", this.stickyHeader);
+                } else {
+                    window.addEventListener("scroll", this.stickyHeader);
+                }
+            },
+        };
+    </script>
+</CourseOverview>

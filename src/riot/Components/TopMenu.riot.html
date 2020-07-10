@@ -1,14 +1,12 @@
 <TopMenu>
     <header class="background-{state.color}">
         <div class="top-menu-container">
+            <a if="{state.showBackArrow}" class="arrow-white" onclick="{backToRelavantPage}"></a>
             <a
-                if="{state.showBackArrow}"
-                class="{state.isSettings ? 'arrow-gray' : 'arrow-white'}"
-                onclick="{goBack}"
+                if="{state.isCard || state.isCourseExam}"
+                class="cross close-btn"
+                onclick="{state.isCard ? backToLessonPage : backToCourse}"
             ></a>
-            <a if="{state.isSectionList}" class="arrow-white" onclick="{backToCoursePage}"></a>
-            <a if="{state.isCourse}" class="arrow-white" onclick="{backToHome}"></a>
-            <a if="{state.isCard}" class="cross close-btn" onclick="{backToLessonPage}"></a>
 
             <a
                 if="{!state.isHome}"
@@ -51,6 +49,20 @@
                 location.hash = "#" + this.props.wagtailPage.course.id;
             },
 
+            backToCourse() {
+                location.hash = "#" + parseURLHash()[0];
+            },
+
+            backToRelavantPage() {
+                if (this.state.goToPreviousPage) {
+                    this.goBack();
+                } else if (this.state.isSectionList) {
+                    this.backToCoursePage();
+                } else if (this.state.isCourse) {
+                    this.backToHome();
+                }
+            },
+
             updateState() {
                 const [afterTheHash, lessonModule] = parseURLHash();
                 this.state.lessonModule = lessonModule;
@@ -70,13 +82,16 @@
                     this.props.contentType === "LessonPage" && !this.state.isCard;
                 this.state.isBasePage =
                     this.state.isProfile || this.state.isResources || this.state.isSettings;
-                this.state.showBackArrow =
+                this.state.goToPreviousPage =
                     !this.state.isCard &&
                     !this.state.isSectionList &&
                     !this.state.isCourse &&
                     !this.state.isBasePage &&
-                    !this.state.isHome &&
-                    !this.state.isCourseExam;
+                    !this.state.isHome;
+                this.state.showBackArrow =
+                    this.state.goToPreviousPage ||
+                    this.state.isSectionList ||
+                    (this.state.isCourse && !this.state.isCourseExam);
 
                 if (this.state.isProfile) {
                     this.state.color = "profile-green";

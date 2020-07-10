@@ -1,0 +1,59 @@
+<HonorCode>
+    <div>
+        <h3 translate>Course exam</h3>
+        <p>{ minimumScoreMessage() }</p>
+    </div>
+    <div class="code">
+        <h4 translate>Code of conduct</h4>
+        <p translate>
+            You’re about to start a course exam. Do you promise that you will complete this exam on
+            your own, without assistance from anyone?
+        </p>
+        <div onclick="{agreeToCode}">
+            <span class="checkbox"></span>
+            <span if="{state.hasAgreed}" class="checkmark"></span>
+            <label>Yes, I agree</label>
+        </div>
+    </div>
+    <div>
+        <button
+            class="btn-primary"
+            onclick="{goToCourseExam}"
+            disabled="{!state.hasAgreed}"
+            translate
+        >
+            Start Exam
+        </button>
+        <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
+            Back to Course
+        </button>
+    </div>
+
+    <script>
+        export default {
+            state: {
+                hasAgreed: false,
+            },
+
+            agreeToCode() {
+                this.update({ hasAgreed: !this.state.hasAgreed });
+            },
+
+            goToCourseExam() {
+                location.hash = `#${this.props.courseId}/exam/1`;
+            },
+
+            goToCourseOverview() {
+                location.hash = "#" + this.props.courseId;
+            },
+
+            minimumScoreMessage() {
+                // message for what percent a user must score to pass the exam
+                return gettext(
+                    "To pass this exam you need to score %1 or higher.",
+                    this.props.minimumScore
+                );
+            },
+        };
+    </script>
+</HonorCode>

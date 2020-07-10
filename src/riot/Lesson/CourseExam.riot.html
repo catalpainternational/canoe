@@ -1,5 +1,15 @@
 <CourseExam>
-    <LessonFrame if="{state.cardIdx < state.cards.length}" id="test" extraStyleClasses="test">
+    <LessonFrame if="{state.cardIdx === -1}">
+        <HonorCode
+            courseId="{props.wagtailPage.data.id}"
+            minimumScore="{state.minimumScore}"
+        ></HonorCode>
+    </LessonFrame>
+    <LessonFrame
+        if="{state.cardIdx > -1 && state.cardIdx < state.cards.length}"
+        id="test"
+        extraStyleClasses="test"
+    >
         <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
         <TestSingleAnswer
             if="{state.isSingleAnswer}"
@@ -29,7 +39,7 @@
                 </button>
                 <button
                     class="btn-primary"
-                    onclick="{submitAnswers}"
+                    onclick="{nextExamCard}"
                     if="{state.cardIdx === state.cards.length - 1}"
                     translate
                 >
@@ -40,10 +50,13 @@
         <p class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
     <LessonComplete
-        if="{state.cardIdx === state.cards.length + 1}"
-        course="{props.wagtailPage.course}"
-        title="{props.wagtailPage.course.title}"
+        if="{state.cardIdx === state.cards.length}"
+        course="{props.wagtailPage.data}"
+        title="{props.wagtailPage.title}"
+        passedExam="{state.passedExam}"
         isCourseExamFinished="{true}"
+        finalScore="{state.finalScore}"
+        minimumScore="{state.minimumScore}"
     ></LessonComplete>
 
     <script>
@@ -51,8 +64,9 @@
         import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
         import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+        import HonorCode from "RiotTags/Lesson/HonorCode.riot.html";
 
-        import { getLessonCardIdx, getLessonModuleHash } from "js/Routing";
+        import { getLessonCardIdx, getPreviousCardsUrl, getNextCardsUrl } from "js/Routing";
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
 
         export default {
@@ -60,6 +74,10 @@
                 cardIdx: 0,
                 isSingleAnswer: true,
                 isAnswerSelected: false,
+                cards: [],
+                minimumScore: "75%",
+                finalScore: "80%",
+                passedExam: true,
             },
 
             components: {
@@ -67,6 +85,7 @@
                 testsingleanswer: TestSingleAnswer,
                 testmultipleanswer: TestMultipleAnswer,
                 lessonframe: LessonFrame,
+                honorcode: HonorCode,
             },
 
             onBeforeMount(props, state) {
@@ -109,21 +128,19 @@
             },
 
             previousExamCard() {
-                window.history.back();
-                // change to prev card
-                this.retrieveAnswer();
+                window.scroll(0, 0);
+                location.hash = getPreviousCardsUrl(
+                    this.props.wagtailPage.id,
+                    this.props.module,
+                    this.state.cardIdx
+                );
                 this.update({ isAnswerSelected: true });
             },
 
-            submitAnswers() {
-                console.log("submit answers");
-            },
-
             nextExamCard() {
-                // storeAnswers();
                 window.scroll(0, 0);
-                location.hash = getLessonModuleHash(
-                    this.props.wagtailPage.data.id,
+                location.hash = getNextCardsUrl(
+                    this.props.wagtailPage.id,
                     this.props.module,
                     this.state.cardIdx
                 );
@@ -132,29 +149,11 @@
 
             recordAnswer(answers) {
                 this.update({ isAnswerSelected: true });
-                // take from question tag, replace whatever is in temp storage
-                console.log(answers);
-            },
-
-            retrieveAnswer() {
-                console.log("retrieving previous answer");
-                // pull from permanent answers, put into temp answers
-            },
-
-            storeAnswers() {
-                console.log("answers stored");
-                // take temp answers to permanent answers
             },
 
             cardNumberMessage() {
                 // display the number of the current card out of the total number of cards
                 return gettext("%1 of %2", this.state.cardIdx + 1, this.props.cards.length);
-            },
-
-            sendAnswersToGoogle() {},
-
-            completePage() {
-                console.log("completed");
             },
         };
     </script>

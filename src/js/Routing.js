@@ -116,10 +116,10 @@ export function getNextCardsUrl(lessonId, lessonModule, lessonCardIdx) {
     return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx + 2);
 }
 
+export function getPreviousCardsUrl(lessonId, lessonModule, lessonCardIdx) {
+    return "#" + lessonId + "/" + lessonModule + "/" + lessonCardIdx;
+}
+
 export function getHashPieces() {
     return location.hash.split("/");
 }
-
-export const getPreviousCardsUrl = (lessonId, lessonModule, lessonCardIdx) => {
-    return "#" + lessonId + "/" + lessonModule + "/" + lessonCardIdx;
-};

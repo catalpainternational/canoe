@@ -1,7 +1,8 @@
 .replace-this-with-lessonframe {
     h2 {
-        margin-bottom: 30px;
         margin-top: 0;
+        margin-bottom: 10px;
+        padding-bottom: 0;
     }
 
     h3 {
@@ -81,6 +82,12 @@ LessonPage .content-wrapper {
         display: none;
     }
 
+    p {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        font-size: 1em;
+    }
+
     h2 {
         border-bottom: none;
     }
@@ -88,9 +95,9 @@ LessonPage .content-wrapper {
     .sticky {
         position: fixed;
         top: 0;
-        border: 1px solid #c9d6de;
+        border: 1px solid $gray-6;
         width: 100%;
-        background-color: #f5f4f0;
+        background-color: $tan;
         z-index: 1;
         left: 0;
         padding-left: 55px;
@@ -101,13 +108,10 @@ LessonPage .content-wrapper {
         h2 {
             font-size: 16px;
             line-height: 15px;
-            padding-bottom: 0;
         }
 
-        h5 {
-            font-size: 10px;
-            margin-top: 5px;
-            margin-bottom: 5px;
+        p {
+            font-size: 0.8em;
         }
 
         .arrow-gray {
@@ -135,10 +139,6 @@ LessonPage .content-wrapper .duration {
         font-size: 12px;
         margin: 3px 10px 3px;
     }
-}
-
-LessonPage .replace-this-with-lessonframe h2 {
-    margin-bottom: 10px;
 }
 
 LessonPage .description {
@@ -692,6 +692,10 @@ LessonFeedback {
 }
 
 LessonComplete {
+    h2 {
+        border-bottom: none;
+    }
+
     .congratulations-container {
         display: flex;
         flex-flow: column nowrap;
@@ -719,6 +723,11 @@ LessonComplete {
         position: absolute;
         top: -1em;
         left: -1em;
+    }
+
+    .incorrect-flag {
+        height: 150px;
+        width: 150px;
     }
 
     .congratulations {
