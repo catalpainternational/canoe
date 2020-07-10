@@ -20,10 +20,10 @@
                 if="{state.contentType === 'HomePage'}"
                 wagtailPage="{state.wagtailPage}"
             ></HomePage>
-            <CoursePage
+            <CourseOverview
                 if="{state.contentType === 'CoursePage'}"
                 wagtailPage="{state.wagtailPage}"
-            ></CoursePage>
+            ></CourseOverview>
             <LessonPage
                 if="{state.contentType === 'LessonPage'}"
                 wagtailPage="{state.wagtailPage}"
@@ -63,7 +63,7 @@
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
 
         import HomePage from "RiotTags/WagtailPages/HomePage.riot.html";
-        import CoursePage from "RiotTags/WagtailPages/CoursePage.riot.html";
+        import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonPage from "RiotTags/WagtailPages/LessonPage.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
 
@@ -95,7 +95,7 @@
                 topmenu: TopMenu,
                 bottommenu: BottomMenu,
                 homepage: HomePage,
-                coursepage: CoursePage,
+                courseoverview: CourseOverview,
                 lessonpage: LessonPage,
                 resources: Resources,
                 profile: Profile,
