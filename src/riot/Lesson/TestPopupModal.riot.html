@@ -1,20 +1,40 @@
 <TestPopupModal>
-    <div id="modal" class="popup-modal">
+    <PopupModal>
         <span class="{ props.isQuestionComplete ? 'correct-flag' : 'incorrect-flag'}"></span>
         <h2>{ props.isQuestionComplete ? correctTitleMessage(props.selectedAnswer) : incorrectTitleMessage(props.selectedAnswer) }</h2>
         <div>
             <p>{ props.isQuestionComplete ? correctTextMessage(props.selectedAnswer) : incorrectTextMessage(props.selectedAnswer) }</p>
         </div>
-        <button if="{props.isQuestionComplete && !props.isLastQuestion}" class="btn-primary" onclick="{ nextTestCard }" translate>Next</button>
-        <button if="{props.isQuestionComplete && props.isLastQuestion}" class="btn-primary" onclick="{ completePage }" translate>Finish</button>
-        <button if="{!props.isQuestionComplete}" class="btn-primary btn-wrong" onclick="{ () => props.toggleModal(false, {}) }" translate>Try again</button>
-    </div>
+        <button 
+            if="{props.isQuestionComplete && !props.isLastQuestion}" 
+            class="btn-primary" 
+            onclick="{ nextTestCard }" 
+            translate
+        >Next</button>
+        <button 
+            if="{props.isQuestionComplete && props.isLastQuestion}" 
+            class="btn-primary" 
+            onclick="{ completePage }" 
+            translate
+        >Finish</button>
+        <button 
+            if="{!props.isQuestionComplete}" 
+            class="btn-primary btn-wrong" 
+            onclick="{ () => props.toggleModal(false, {}) }" 
+            translate
+        >Try again</button>
+    </PopupModal>
 
     <script>
         import { getNextCardsUrl } from "js/Routing";
         import { setComplete } from "Actions/completion";
+        import PopupModal from "RiotTags/Components/PopupModal.riot.html";
 
         export default {
+            components: {
+                popupmodal: PopupModal,
+            },
+
             nextTestCard() {
                 this.props.toggleModal(false, {});
                 window.scroll(0, 0);

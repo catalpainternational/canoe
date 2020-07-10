@@ -1,5 +1,5 @@
 <LessonTest>
-    <LessonFrame if="{state.cardIdx < state.cards.length}" id="test" extraStyleClasses="test">
+    <LessonFrame if="{state.cardIdx < state.cards.length}" id="test" extraStyleClasses="test modal-background">
         <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
         <TestSingleAnswer
             if="{state.isSingleAnswer}"
@@ -121,9 +121,9 @@
                 });
                 const testElement = this.$(".test");
                 if (showModal) {
-                    testElement.classList.add("showElement");
+                    testElement.classList.add("fade");
                 } else {
-                    testElement.classList.remove("showElement");
+                    testElement.classList.remove("fade");
                 }
             },
 

@@ -1,0 +1,15 @@
+<PdfCard>
+    <h3>{props.card.title}</h3>
+    <a href="{getMediaUrl(props.card.url)}" target="_blank" translate
+        >Download this PDF to your device</a
+    >
+    <script>
+        import { getMediaUrl } from "js/utilities";
+
+        export default {
+            getMediaUrl(documentPath) {
+                return `${getMediaUrl(documentPath)}`;
+            },
+        };
+    </script>
+</PdfCard>
