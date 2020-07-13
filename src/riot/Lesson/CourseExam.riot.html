@@ -1,27 +1,29 @@
 <CourseExam>
-    <LessonFrame if="{state.cardIdx === -1}">
+    <LessonFrame if="{isAtHonorCode(state.cardIdx)}">
         <HonorCode
             courseId="{props.wagtailPage.data.id}"
-            minimumScore="{state.minimumScore}"
+            minimumScore="{MINIMUM_SCORE}"
         ></HonorCode>
     </LessonFrame>
     <LessonFrame
-        if="{state.cardIdx > -1 && state.cardIdx < state.cards.length}"
+        if="{state.cardIdx >= 0 && state.cardIdx < props.cards.length && state.card}"
         id="test"
         extraStyleClasses="test"
     >
-        <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
+        <h3>{state.cardIdx + 1}. {state.card.question}</h3>
         <TestSingleAnswer
-            if="{state.isSingleAnswer}"
+            if="{state.card.type === SINGLE_CHOICE}"
             isCourseExam="{true}"
-            card="{state.cards[state.cardIdx]}"
+            card="{state.card}"
             recordAnswer="{recordAnswer}"
+            savedAnswer="{state.currentAnswer.answers}"
         ></TestSingleAnswer>
         <TestMultipleAnswer
-            if="{!state.isSingleAnswer}"
+            if="{state.card.type !== SINGLE_CHOICE}"
             isCourseExam="{true}"
-            card="{state.cards[state.cardIdx]}"
+            card="{state.card}"
             recordAnswer="{recordAnswer}"
+            savedAnswer="{state.currentAnswer.answers}"
         ></TestMultipleAnswer>
         <div class="bottom-buttons">
             <div>
@@ -29,18 +31,19 @@
             </div>
             <div>
                 <button
+                    if="{state.cardIdx < props.cards.length - 1}"
                     class="btn-primary"
                     onclick="{nextExamCard}"
-                    if="{state.cardIdx < state.cards.length - 1}"
-                    disabled="{!state.isAnswerSelected}"
+                    disabled="{Object.keys(state.currentAnswer).length === 0}"
                     translate
                 >
                     Next
                 </button>
                 <button
+                    if="{state.cardIdx === props.cards.length - 1}"
                     class="btn-primary"
                     onclick="{nextExamCard}"
-                    if="{state.cardIdx === state.cards.length - 1}"
+                    disabled="{Object.keys(state.currentAnswer).length === 0}"
                     translate
                 >
                     Submit answers
@@ -49,18 +52,16 @@
         </div>
         <p class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
-    <LessonComplete
-        if="{state.cardIdx === state.cards.length}"
+    <ExamResults
+        if="{isAtResults(state.cardIdx)}"
         course="{props.wagtailPage.data}"
         title="{props.wagtailPage.title}"
-        passedExam="{state.passedExam}"
-        isCourseExamFinished="{true}"
-        finalScore="{state.finalScore}"
-        minimumScore="{state.minimumScore}"
-    ></LessonComplete>
+        finalScore="{calculateFinalScore()}"
+        minimumScore="{MINIMUM_SCORE}"
+    ></ExamResults>
 
     <script>
-        import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
+        import ExamResults from "RiotTags/Lesson/ExamResults.riot.html";
         import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
         import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
@@ -68,87 +69,119 @@
 
         import { getLessonCardIdx, getPreviousCardsUrl, getNextCardsUrl } from "js/Routing";
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
+        import { URLDoesntExist, ExamIsMissingAnAnswer } from "js/Errors";
+        import { saveExamAnswer, loadExamAnswer, tallyFinalScore } from "js/LearningStatistics";
 
         export default {
             state: {
                 cardIdx: 0,
-                isSingleAnswer: true,
-                isAnswerSelected: false,
-                cards: [],
-                minimumScore: "75%",
-                finalScore: "80%",
-                passedExam: true,
+                card: null,
+                currentAnswer: {},
             },
 
             components: {
-                lessoncomplete: LessonComplete,
+                examresults: ExamResults,
                 testsingleanswer: TestSingleAnswer,
                 testmultipleanswer: TestMultipleAnswer,
                 lessonframe: LessonFrame,
                 honorcode: HonorCode,
             },
 
+            MINIMUM_SCORE: 75,
+            SINGLE_CHOICE: "single_choice",
+            SECTION: "exam",
+
             onBeforeMount(props, state) {
-                const cards = props.cards;
-                state.cards = cards;
-                state.cardIdx = getLessonCardIdx();
-
-                window.addEventListener("hashchange", this.hashChanged);
-            },
-
-            onMounted(props, state) {
-                const card = this.state.cards[this.state.cardIdx];
-                if (!card) {
-                    return;
-                }
-                const correctAnswers = card.answers.filter((answer) => answer.correct);
-                this.update({
-                    isSingleAnswer: correctAnswers.length === 1,
-                });
+                window.addEventListener("hashchange", this.onHashChange);
             },
 
             onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
+                window.removeEventListener("hashchange", this.onHashChange);
             },
 
-            hashChanged() {
-                const cardIdx = getLessonCardIdx();
-                const card = this.state.cards[cardIdx];
-                let isSingleAnswer = null;
-                if (card) {
-                    const correctAnswers = card.answers.filter((answer) => answer.correct);
-                    isSingleAnswer = correctAnswers.length === 1;
-                }
+            onMounted(props, state) {
+                this.onHashChange();
+            },
 
+            onHashChange() {
+                this.renderAnExamScreen();
+                window.scroll(0, 0);
+            },
+
+            renderAnExamScreen() {
+                const cardIdx = getLessonCardIdx();
                 this.update({
                     cardIdx,
-                    isSingleAnswer,
                 });
-                window.removeEventListener("scroll", this.stickyHeader);
+
+                if (this.isAtHonorCode(cardIdx) || this.isAtResults(cardIdx)) {
+                    return;
+                }
+
+                const card = this.getCard(cardIdx);
+                const previousAnswer = loadExamAnswer(card.id);
+                const currentAnswer = previousAnswer || {};
+
+                this.update({
+                    card,
+                    currentAnswer,
+                });
+            },
+
+            isAtHonorCode(cardIdx) {
+                return cardIdx === -1;
+            },
+
+            isAtResults(cardIdx) {
+                const { cards } = this.props;
+                return cardIdx === cards.length;
+            },
+
+            getCard(cardIdx) {
+                const { cards } = this.props;
+                const card = cards[cardIdx];
+                if (!card) {
+                    throw new URLDoesntExist(
+                        `Cannot find exam question at ${window.location.hash}`
+                    );
+                }
+                return card;
+            },
+
+            recordAnswer(response) {
+                console.assert(
+                    response.hasOwnProperty("answers") && response.hasOwnProperty("isCorrect")
+                );
+                const { card } = this.state;
+                saveExamAnswer(card.id, response);
+
+                this.update({ currentAnswer: response });
             },
 
             previousExamCard() {
-                window.scroll(0, 0);
-                location.hash = getPreviousCardsUrl(
-                    this.props.wagtailPage.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
-                this.update({ isAnswerSelected: true });
+                const { wagtailPage } = this.props;
+                const { cardIdx } = this.state;
+                location.hash = getPreviousCardsUrl(wagtailPage.id, this.SECTION, cardIdx);
             },
 
             nextExamCard() {
-                window.scroll(0, 0);
-                location.hash = getNextCardsUrl(
-                    this.props.wagtailPage.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
-                this.update({ isAnswerSelected: false });
+                const { wagtailPage } = this.props;
+                const { cardIdx, card, currentAnswer } = this.state;
+                saveExamAnswer(card.id, currentAnswer);
+                location.hash = getNextCardsUrl(wagtailPage.id, this.SECTION, cardIdx);
             },
 
-            recordAnswer(answers) {
-                this.update({ isAnswerSelected: true });
+            calculateFinalScore() {
+                const { cards } = this.props;
+                const listOfExamQuestions = cards.map((card) => card.id);
+                try {
+                    return tallyFinalScore(listOfExamQuestions);
+                } catch (err) {
+                    if (err instanceof ExamIsMissingAnAnswer) {
+                        return 0;
+                    }
+                    throw err;
+                }
             },
 
             cardNumberMessage() {

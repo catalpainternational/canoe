@@ -7,7 +7,6 @@
     <CourseExam
         if="{state.hash === EXAM_MODULE && state.examCards.length > 0}"
         wagtailPage="{props.wagtailPage}"
-        module="exam"
         cards="{state.examCards}"
     ></CourseExam>
     <script>
@@ -26,6 +25,8 @@
                 courseexam: CourseExam,
             },
 
+            EXAM_MODULE: "exam",
+
             onBeforeMount(props, state) {
                 state.hash = getHashPieces()[1];
                 window.addEventListener("hashchange", this.hashChanged);
@@ -38,13 +39,12 @@
             onMounted(props, state) {
                 const { exam } = props.wagtailPage;
                 const examCards = exam.map((card) => {
-                    const { question, answers } = card.value;
-                    return { question, answers };
+                    const { id, type, value } = card;
+                    const { question, answers } = value;
+                    return { id, type, question, answers };
                 });
                 this.update({ examCards });
             },
-
-            EXAM_MODULE: "exam",
 
             hashChanged() {
                 this.update({

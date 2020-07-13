@@ -22,6 +22,19 @@
                 selectedAnswer: {},
             },
 
+            onMounted(props, state) {
+                this.restoreSavedAnswer();
+            },
+
+            restoreSavedAnswer() {
+                const { savedAnswer } = this.props;
+                if (!savedAnswer) {
+                    return;
+                }
+                const selectedAnswer = savedAnswer[0];
+                this.update({ selectedAnswer });
+            },
+
             howToStyleThe(answer) {
                 if (this.props.isCourseExam) {
                     return "selected-pending";
@@ -41,9 +54,18 @@
                     isAnswerCorrect: answer.correct,
                 };
                 dispatchTestAnswerEvent(eventData);
-                this.props.isCourseExam
-                    ? this.props.recordAnswer(answer)
-                    : this.props.toggleModal(true, answer, answer.correct);
+
+                const { isCourseExam } = this.props;
+                if (isCourseExam) {
+                    const isCorrect = this.gradeAnswer(answer);
+                    this.props.recordAnswer({ isCorrect, answers: [answer] });
+                } else {
+                    this.props.toggleModal(true, answer, answer.correct);
+                }
+            },
+
+            gradeAnswer(answer) {
+                return answer.correct;
             },
         };
     </script>
