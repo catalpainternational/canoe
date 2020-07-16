@@ -1,326 +1,323 @@
-# 
+#
 # Translators:
 # Peter Coward <peter@catalpa.io>, 2020
 # Gabriela <gabriela@catalpa.io>, 2020
 # Julia da Costa <julia@catalpa.io>, 2020
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Canoe\n"
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Last-Translator: Julia da Costa <julia@catalpa.io>, 2020\n"
 "Language-Team: Tetum (Tetun) (https://www.transifex.com/catalpa/teams/108836/tet/)\n"
-"Content-Type: text/plain; charset=UTF-8\n"
 "Language: tet\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#, fuzzy
+msgid "%1 / %2 lesson complete"
+msgid_plural "%1 / %2 lessons complete"
+msgstr[0] "%2 / %1 lisaun kompletu"
+
 #. the number of lessons completed in a course
-#: src/riot/WagtailPages/CoursePage.riot.html:84
 msgid "%1 lesson complete"
 msgid_plural "%1 lessons complete"
 msgstr[0] "%1 lisaun kompletu"
 
-#. the number of minutes it will take to complete the objective, content,
-#. test, or lesson
-#: src/riot/Components/Card.riot.html:34
+#. the number of minutes it will take to complete the objective, content, test, or lesson
 msgid "%1 min"
 msgid_plural "%1 mins"
-msgstr[0] "%1 minutu "
+msgstr[0] "minutu %1"
 
 #. the total duration of the lesson in minutes
-#: src/riot/WagtailPages/LessonPage.riot.html:202
 msgid "%1 mins"
-msgstr "%1 minutu"
+msgstr "minutu %1"
 
 #. display the number of the current card out of the total number of cards
-#: src/riot/Lesson/LessonContent.riot.html:89
-#: src/riot/Lesson/LessonObjective.riot.html:57
-#: src/riot/Lesson/LessonTest.riot.html:104
 msgid "%1 of %2"
 msgstr "%1 husi %2"
 
 #. displays how many lessons of the total in a course have been completed
-#: src/riot/Screens/Profile.riot.html:152
 msgid "%1 out of %2 completed"
 msgstr "%1 husi %2 kompletu ona"
 
-#. displays how many lessons are complete and how many lessons are in the
-#. current course
-#: src/riot/WagtailPages/HomePage.riot.html:107
-msgid "%2 / %1 lesson complete"
-msgid_plural "%2 / %1 lessons complete"
-msgstr[0] "%2 / %1 lisaun kompletu"
+#. warns the user that this site ( name goes in %1 ) will not be able to send you notifications if you turn this off
+msgid "%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
+msgstr ""
 
 #. This button adds an icon to the device homescreen
-#: ./src/riot/Screens/Settings.riot.html:21
 msgid "Add to Home Screen"
 msgstr "Aumenta ba pájina prinsipál"
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:15
+msgid "all"
+msgstr ""
+
 msgid "Amazing work!"
 msgstr "Parabéns! Serbisu diak loos!"
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:10
 msgid "Are you enjoying this lesson?"
 msgstr "Ita gosta lisaun ne'e?"
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:20
 msgid "Back to Courses"
 msgstr "Fila fali ba lisaun"
 
-#: ./src/riot/Lesson/LessonModuleComplete.riot.html:14
 msgid "Back to lesson overview"
 msgstr "Fila fali ba sumáriu husi lisaun "
 
-#: ./src/riot/Components/Card.riot.html:6
+msgid "Check"
+msgstr ""
+
+msgid "Check answers"
+msgstr ""
+
 msgid "Coming Soon!"
 msgstr "Lisaun tuir mai!"
 
-#: ./src/riot/Components/Card.riot.html:13
 msgid "completed"
 msgstr "Kompleta ona"
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:8
 msgid "Congratulations!"
 msgstr "Parabéns! "
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:41
+msgid "Content"
+msgstr "Konteúdu"
+
 msgid "Continue"
 msgstr "Kontinua"
 
-#: ./src/riot/Components/ContinueLearningButton.riot.html:5
 msgid "Continue learning"
 msgstr "Kontinua aprende"
 
-#: ./src/riot/Lesson/LessonTest.riot.html:19
-msgid "Correct answer. Well done!"
-msgstr "Resposta loos. Serbisu diak!"
-
-#: ./src/riot/WagtailPages/CoursePage.riot.html:10
 msgid "Course"
-msgstr "Lisaun"
+msgstr "Kursu"
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:32
-#: ./src/riot/Lesson/LessonFeedback.riot.html:7
+msgid "Download this PDF to your device"
+msgstr ""
+
+msgid "Enter at least 3 characters"
+msgstr ""
+
 msgid "FEEDBACK"
 msgstr "Komentáriu"
 
-#: ./src/riot/Lesson/LessonContent.riot.html:26
-#: ./src/riot/Lesson/LessonObjective.riot.html:13
-#: ./src/riot/Lesson/LessonTest.riot.html:36
+msgid "Find and check all correct answers and uncheck incorrect answers"
+msgstr ""
+
 msgid "Finish"
 msgstr "Remata"
 
-#: ./src/riot/Lesson/LessonModuleComplete.riot.html:7
+msgid "Forgot username or password?"
+msgstr ""
+
+msgid "Great"
+msgstr "Di'ak tebes!"
+
 msgid "Great job!"
-msgstr "Serbisu diak tebes!"
+msgstr "Serbisu di'ak tebes!"
 
 #. displays percentage of completed lessons in all courses combined
-#: src/riot/Screens/Profile.riot.html:161
 msgid "Great work %1! You have completed %2% of your overall coursework"
 msgstr "Parabéns %1! Ita kompleta ona  %2% husi ita nian lisaun tomak "
 
 #. Greet the user with their username
-#: src/riot/WagtailPages/HomePage.riot.html:118
 msgid "Hi %1"
 msgstr "Olá %1"
 
-#: ./src/riot/Screens/ChangeBrowser.riot.html:6
 msgid "In the meantime please use Safari."
 msgstr "Iha tempu leet, favór uza Safari"
 
-#: ./src/riot/Lesson/LessonTest.riot.html:23
-msgid "Incorrect answer. Try again."
-msgstr "Resposta la loos. Favor koko fila fali. "
-
-#: ./src/riot/WagtailPages/LessonPage.riot.html:58
-msgid "Jobs that use these skills"
-msgstr "Serbisu ne'ebé uza abilidade hirak ne'e"
-
-#: ./src/riot/Lesson/LessonModuleComplete.riot.html:13
 msgid "Keep going"
 msgstr "Favór kontinua nafatin"
 
-#: ./src/riot/Screens/Settings.riot.html:17
 msgid "Language"
 msgstr "Lian"
 
-#: ./src/riot/Screens/Notifications.riot.html:5
 msgid "Latest notifications"
 msgstr "Notifikasaun ikus liu"
 
-#: ./src/riot/Screens/Profile.riot.html:44
 msgid "Learning statistics"
 msgstr "Estatístika aprendizajen "
 
 #. display the title of the lesson
-#: src/riot/WagtailPages/LessonPage.riot.html:182
 msgid "Lesson - %1"
 msgstr "Lisaun - %1"
 
-#: ./src/riot/WagtailPages/LessonPage.riot.html:89
 msgid "Lesson Activities"
 msgstr "Atividade sira husi lisaun"
 
-#: ./src/riot/Screens/Profile.riot.html:55
 msgid "lessons completed so far"
 msgstr "Lisaun ne'ebé kompleta ona to'o agora"
 
-#: ./src/riot/Screens/Profile.riot.html:63
 msgid "lessons remaining to finish your study"
 msgstr "Lisaun ne'ebé sei presiza atu kompleta hodi remata ita-nia estudu"
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:22
-msgid ""
-"Let us know what you think of this lesson. We value your feedback and treat\n"
-"all feedback as confidential."
-msgstr ""
-"Favór fó ita-nia sujestaun kona ba lisaun ida ne'e. Ami apresia tebes ita "
-"nia sujestaun no sei rai ida ne'e hanesan konfidensiál.   "
+msgid "Let us know what you think of this lesson. We value your feedback and treat all feedback as confidential."
+msgstr "Favor fó hatene ami ita-nia opiniaun kona-ba lisaun ne'e. Ami apresia ita-nia komentáriu no konsidera ida-ne'e konfidensiál"
 
-#: ./src/riot/Screens/Settings.riot.html:31
 msgid "Log out"
 msgstr "Sai"
 
-#: ./src/riot/Screens/Authentication.riot.html:25
-#: ./src/riot/Screens/Authentication.riot.html:6
 msgid "Login"
 msgstr "Tama"
 
-#: ./src/riot/Lesson/LessonContent.riot.html:18
-#: ./src/riot/Lesson/LessonObjective.riot.html:12
-#: ./src/riot/Lesson/LessonTest.riot.html:29
+msgid "Login as a guest"
+msgstr ""
+
 msgid "Next"
 msgstr "Tuir mai"
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:11
 msgid "Next Lesson"
 msgstr "Lisaun tuir mai"
 
-#: ./src/riot/Screens/Notifications.riot.html:11
 msgid "No notifications."
 msgstr "La iha notifikasaun. "
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:27
 msgid "No thanks"
 msgstr "Lae, Obrigado. "
 
-#: ./src/riot/Screens/Notifications.riot.html:15
 msgid "Notifications"
 msgstr "Notifikasaun"
 
-#: ./src/riot/Lesson/LessonObjective.riot.html:5
 msgid "Objectives"
 msgstr "Objetivu"
 
-#: ./src/riot/Screens/Profile.riot.html:5
+msgid "Oops"
+msgstr ""
+
 msgid "Overall progress"
 msgstr "Progresu tomak"
 
-#: ./src/riot/Screens/Authentication.riot.html:12
 msgid "Password"
 msgstr "Seña "
 
-#: ./src/riot/Screens/Profile.riot.html:14
 msgid "Progress by course"
 msgstr "Progresu bazeia ba kursu "
 
-#: ./src/riot/WagtailPages/LessonPage.riot.html:73
+msgid "Read the question more carefully!"
+msgstr "Koko lee didi'ak ninia pergunta"
+
+msgid "Resources"
+msgstr ""
+
 msgid "See less"
 msgstr "Haree ouituan"
 
-#: ./src/riot/WagtailPages/LessonPage.riot.html:79
 msgid "See more"
 msgstr "Haree liután"
 
-#: src/js/SiteDownloader.js:82
 msgid "Site download is complete!"
 msgstr "Kompletu ona download sítiu ida ne'e!"
 
-#: src/js/SiteDownloader.js:69
 msgid "Site is downloading."
 msgstr "Sítiu ne'e grava hela."
 
-#: ./src/riot/Components/Card.riot.html:17
-msgid "start lesson"
+#, fuzzy
+msgid "start %1"
 msgstr "hahú lisaun"
 
-#: ./src/riot/Screens/Notifications.riot.html:41
-msgid "Start lesson"
-msgstr "Hahú lisaun"
+msgid "Start Activity"
+msgstr "Hahu Atividade"
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:35
+msgid "Start Course"
+msgstr "Komesa kursu"
+
+msgid "Start lesson"
+msgstr "Komesa lisaun"
+
+msgid "Start Lesson"
+msgstr "Komesa lisaun"
+
 msgid "Successfully sent!"
 msgstr "Avaliasaun manda ona ho susesu!"
 
-#: ./src/riot/Screens/Authentication.riot.html:8
+msgid "Test"
+msgstr ""
+
+msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
+msgstr "Obrigado ba ita-nia komentáriu. Ita-nia opiniaun importante mai ami. Ami sei servisu maka'as atu hadia ita-nia esperensia."
+
+msgid "There are no resource articles yet. Check back soon!"
+msgstr ""
+
+msgid "This audio is not available offline."
+msgstr ""
+
+msgid "This audio will play offline."
+msgstr ""
+
+msgid "This video is not available offline."
+msgstr ""
+
+msgid "This video will play offline."
+msgstr ""
+
+msgid "Try again"
+msgstr "Koko fila fali"
+
 msgid "Username"
 msgstr "Uzuáriu"
 
-#: ./src/riot/WagtailPages/HomePage.riot.html:38
-msgid "view all"
-msgstr "haree hotu"
-
-#: ./src/riot/Lesson/LessonFeedback.riot.html:37
-msgid ""
-"Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience."
+msgid "View Resources"
 msgstr ""
-"Obrigada fahe ona ita-nia hanoin kona-ba aprendizajen ho app ne'e. Ita-nia avaliasaun importante ba ami. Ami servisu atu kontinua halo diak liu tan ita-nia esperiensia uza app ne'e."
 
-#: ./src/riot/Screens/ChangeBrowser.riot.html:5
 msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
-msgstr ""
-"Ami husu deskulpa! Ami sei aumenta suporta balun ba Asteroid uza ho Chrome "
-"iha iOS."
+msgstr "Ami husu deskulpa! Ami sei aumenta suporta balun ba Asteroid uza ho Chrome iha iOS."
 
-#: ./src/riot/Screens/Settings.riot.html:14
+msgid "Well done, keep it up!"
+msgstr "Kapás, kontinua nafatin!"
+
 msgid "Would you like to receive app notifications?"
 msgstr "Ita hakarak simu notifikasaun husi aplikasaun ne'e? "
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:17
 msgid "You are eligible to receive a printed certificate for this course."
 msgstr "Ita kualifika atu simu certifikadu ba kursu ida ne'e. "
 
 #. message on completion of a lesson %1 is replaced by the lesson title
-#: src/riot/Lesson/LessonComplete.riot.html:47
 msgid "You just completed the lesson, \"%1\""
 msgstr "Ita foin halo remata lisaun,\" 1 %1 \""
 
-#: src/riot/WagtailPages/HomePage.riot.html:98
 msgid "You only have %1 lesson left to finish %2."
 msgid_plural "You only have %1 lessons left to finish %2."
 msgstr[0] "Ita hela deit lisaun %1 atu remata %2."
 
 #. message to say what module is next ( %1 is content or test )
-#: src/riot/Lesson/LessonModuleComplete.riot.html:48
 msgid "You're ready to start the %1."
 msgstr "Ita prontu atu hahú %1"
 
 #. message on completing objectives, content or test ( %1 )
-#: src/riot/Lesson/LessonModuleComplete.riot.html:40
 msgid "You've completed the %1"
 msgstr "Ita kompleta ona %1"
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:16
 msgid "You've completed the course"
 msgstr "Ita kompleta ona kursu"
 
-#: ./src/riot/Media.riot.html:13
 msgid "Your browser does not support the audio element."
 msgstr "Ita-nia navegadór la suporta komponente audiu nian."
 
-#: ./src/riot/Media.riot.html:28
-msgid "Your browser does not support the video tag."
-msgstr "iIta-nia navegadór la suporta komponente vídeo nian. "
+#, fuzzy
+msgid "Your browser does not support the video element."
+msgstr "Ita-nia navegadór la suporta komponente audiu nian."
 
-#: ./src/riot/WagtailPages/HomePage.riot.html:21
-msgid "Your courses"
-msgstr "Ita-nia kursu"
-
-#: ./src/riot/WagtailPages/CoursePage.riot.html:20
 msgid "Your lessons"
 msgstr "Ita-nia lisaun"
 
-#: ./src/riot/Screens/Settings.riot.html:4
 msgid "Your settings"
 msgstr "Ita-nia konfigurasaun"
+
+#~ msgid "Correct answer. Well done!"
+#~ msgstr "Resposta loos. Serbisu diak!"
+
+#~ msgid "Incorrect answer. Try again."
+#~ msgstr "Resposta la loos. Favor koko fila fali. "
+
+#~ msgid "Jobs that use these skills"
+#~ msgstr "Serbisu ne'ebé uza abilidade hirak ne'e"
+
+#~ msgid "view all"
+#~ msgstr "haree hotu"
+
+#~ msgid "Your browser does not support the video tag."
+#~ msgstr "iIta-nia navegadór la suporta komponente vídeo nian. "
+
+#~ msgid "Your courses"
+#~ msgstr "Ita-nia kursu"
