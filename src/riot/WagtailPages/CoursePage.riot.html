@@ -35,7 +35,7 @@
                     isCompleted="{state.isCourseExamComplete}"
                     isComingSoon="{false}"
                     showFooter="{true}"
-                    isDisabled="{!state.isCourseComplete}"
+                    isDisabled="{examDisabled()}"
                     type="exam"
                 ></Card>
             </template>
@@ -49,6 +49,7 @@
         import { countCompleteLessonsInCourse } from "js/LearningStatistics";
         import { isComplete, isTheCourseComplete } from "Actions/completion";
         import { getCourseAndLessonSlugs } from "js/utilities";
+        import { isGuestUser } from "js/AuthenticationUtilities";
 
         export default {
             components: {
@@ -92,6 +93,11 @@
 
             isLessonComplete(lesson) {
                 return isComplete(this.props.wagtailPage.data.slug, lesson.slug);
+            },
+
+            examDisabled() {
+                // exams are enabled if you are a guest user, or you have completed the course
+                return !(this.state.isCourseComplete || isGuestUser());
             },
 
             numberOfLessonsCompleteMessage() {
