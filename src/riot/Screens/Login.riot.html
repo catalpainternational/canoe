@@ -20,13 +20,13 @@
     </div>
 
     <PopupModal if="{state.showLoginHelpModal}" toggleModal="{toggleLoginHelpModal}">
-        <span class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></span>
+        <div class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></div>
         <h2 class="header-no-image">Need help?</h2>
         <ContactInformation toggleLoginHelpModal="{toggleLoginHelpModal}"></ContactInformation>
     </PopupModal>
 
     <PopupModal if="{state.showGuestLoginModal}" toggleModal="{toggleLoginAsGuestModal}">
-        <span class="cross gray close-btn" onclick="{toggleLoginAsGuestModal}"></span>
+        <div class="cross gray close-btn" onclick="{toggleLoginAsGuestModal}"></div>
         <h2 class="header-no-image">You're logging in as a guest</h2>
         <p>
             No learning progress will be saved while you are logged in as a guest. If you would like
@@ -41,7 +41,7 @@
     <script>
         import LoginForm from "RiotTags/Components/LoginForm.riot.html";
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
-        import ContactInformation from "RiotTags/Components/ContactInformation.riot.html";
+        import ContactInformation from "riot/Components/ContactInformation.riot.html";
         import Logos from "RiotTags/Components/Logos.riot.html";
 
         import { login } from "js/AuthenticationUtilities";
