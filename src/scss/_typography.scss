@@ -204,9 +204,9 @@ ul, ol {
 
 // lists within lists
 ul ul, ul ol, ol ul, ol ol {
-    line-height: 18px;
-    margin-left: 10px;
-    font-size: 10px;
+    line-height: 1.125;
+    margin-left: .625em;
+    font-size: .625em;
 
     @media only screen and (max-width: $tablet) {
         font-size: 0.8em;
