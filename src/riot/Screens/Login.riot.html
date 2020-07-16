@@ -19,13 +19,13 @@
         <div is="logos" class="logo"></div>
     </div>
 
-    <PopupModal if="{state.showLoginHelpModal}">
+    <PopupModal if="{state.showLoginHelpModal}" toggleModal="{toggleLoginHelpModal}">
         <span class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></span>
         <h2 class="header-no-image">Need help?</h2>
         <ContactInformation toggleLoginHelpModal="{toggleLoginHelpModal}"></ContactInformation>
     </PopupModal>
 
-    <PopupModal if="{state.showGuestLoginModal}">
+    <PopupModal if="{state.showGuestLoginModal}" toggleModal="{toggleLoginAsGuestModal}">
         <span class="cross gray close-btn" onclick="{toggleLoginAsGuestModal}"></span>
         <h2 class="header-no-image">You're logging in as a guest</h2>
         <p>
