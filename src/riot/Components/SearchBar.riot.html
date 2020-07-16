@@ -2,7 +2,7 @@
     <div class="form-group">
         <p class="search-text" if="{props.searchString.length < 3 && props.searchString.length > 0}" translate>Enter at least 3 characters</p>
         <input id="search" type="text" value="{props.searchString}" oninput="{onSearchInput}"/>
-        <label class="{props.searchString ? 'hide' : ''}" for="search" translate></label>
+        <label class="{props.searchString ? 'hide' : ''}" for="search"></label>
         <span class="search-icon"></span>
     </div>
 
