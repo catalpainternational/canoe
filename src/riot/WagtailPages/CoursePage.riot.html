@@ -7,7 +7,7 @@
                         <a class="arrow-gray" onclick="{backToHome}"></a>
                     </div>
                     <div>
-                        <p translate>Course</p>
+                        <p>{ TRANSLATIONS.course }</p>
                     </div>
                     <h3>{props.wagtailPage.data.title}</h3>
                     <div>
@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <h5 class="section-title" translate>Your lessons</h5>
+            <h5 class="section-title">{ TRANSLATIONS.your_lessons }</h5>
             <Card
                 each="{lesson in props.wagtailPage.lessons}"
                 title="{lesson.title}"
@@ -38,6 +38,10 @@
         import Card from "RiotTags/Components/Card.riot.html";
 
         export default {
+            TRANSLATIONS: {
+                your_lessons: gettext('Your lessons'),
+                course: gettext('Course'),
+            },
             components: {
                 card: Card,
             },

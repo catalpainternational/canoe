@@ -27,11 +27,11 @@ msgstr[0] "%1 lisaun kompletu"
 #. the number of minutes it will take to complete the objective, content, test, or lesson
 msgid "%1 min"
 msgid_plural "%1 mins"
-msgstr[0] "%1 minutu "
+msgstr[0] "minutu %1"
 
 #. the total duration of the lesson in minutes
 msgid "%1 mins"
-msgstr "%1 minutu"
+msgstr "minutu %1"
 
 #. display the number of the current card out of the total number of cards
 msgid "%1 of %2"
@@ -79,6 +79,9 @@ msgstr "Kompleta ona"
 msgid "Congratulations!"
 msgstr "Parabéns! "
 
+msgid "Content"
+msgstr "Konteúdu"
+
 msgid "Continue"
 msgstr "Kontinua"
 
@@ -86,7 +89,7 @@ msgid "Continue learning"
 msgstr "Kontinua aprende"
 
 msgid "Course"
-msgstr "Lisaun"
+msgstr "Kursu"
 
 msgid "Download this PDF to your device"
 msgstr ""
@@ -106,12 +109,11 @@ msgstr "Remata"
 msgid "Forgot username or password?"
 msgstr ""
 
-#, fuzzy
 msgid "Great"
-msgstr "Serbisu diak tebes!"
+msgstr "Di'ak tebes!"
 
 msgid "Great job!"
-msgstr "Serbisu diak tebes!"
+msgstr "Serbisu di'ak tebes!"
 
 #. displays percentage of completed lessons in all courses combined
 msgid "Great work %1! You have completed %2% of your overall coursework"
@@ -149,11 +151,8 @@ msgstr "Lisaun ne'ebé kompleta ona to'o agora"
 msgid "lessons remaining to finish your study"
 msgstr "Lisaun ne'ebé sei presiza atu kompleta hodi remata ita-nia estudu"
 
-#, fuzzy
-msgid ""
-"Let us know what you think of this lesson. We value your feedback and treat all\n"
-"feedback as confidential."
-msgstr "Favór fó ita-nia sujestaun kona ba lisaun ida ne'e. Ami apresia tebes ita nia sujestaun no sei rai ida ne'e hanesan konfidensiál.   "
+msgid "Let us know what you think of this lesson. We value your feedback and treat all feedback as confidential."
+msgstr "Favor fó hatene ami ita-nia opiniaun kona-ba lisaun ne'e. Ami apresia ita-nia komentáriu no konsidera ida-ne'e konfidensiál"
 
 msgid "Log out"
 msgstr "Sai"
@@ -195,7 +194,7 @@ msgid "Progress by course"
 msgstr "Progresu bazeia ba kursu "
 
 msgid "Read the question more carefully!"
-msgstr ""
+msgstr "Koko lee didi'ak ninia pergunta"
 
 msgid "Resources"
 msgstr ""
@@ -212,18 +211,30 @@ msgstr "Kompletu ona download sítiu ida ne'e!"
 msgid "Site is downloading."
 msgstr "Sítiu ne'e grava hela."
 
-msgid "start {props.type}"
-msgstr ""
+#, fuzzy
+msgid "start %1"
+msgstr "hahú lisaun"
+
+msgid "Start Activity"
+msgstr "Hahu Atividade"
+
+msgid "Start Course"
+msgstr "Komesa kursu"
 
 msgid "Start lesson"
-msgstr "Hahú lisaun"
+msgstr "Komesa lisaun"
+
+msgid "Start Lesson"
+msgstr "Komesa lisaun"
 
 msgid "Successfully sent!"
 msgstr "Avaliasaun manda ona ho susesu!"
 
-#, fuzzy
+msgid "Test"
+msgstr ""
+
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
-msgstr "Obrigada fahe ona ita-nia hanoin kona-ba aprendizajen ho app ne'e. Ita-nia avaliasaun importante ba ami. Ami servisu atu kontinua halo diak liu tan ita-nia esperiensia uza app ne'e."
+msgstr "Obrigado ba ita-nia komentáriu. Ita-nia opiniaun importante mai ami. Ami sei servisu maka'as atu hadia ita-nia esperensia."
 
 msgid "There are no resource articles yet. Check back soon!"
 msgstr ""
@@ -241,7 +252,7 @@ msgid "This video will play offline."
 msgstr ""
 
 msgid "Try again"
-msgstr ""
+msgstr "Koko fila fali"
 
 msgid "Username"
 msgstr "Uzuáriu"
@@ -253,7 +264,7 @@ msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
 msgstr "Ami husu deskulpa! Ami sei aumenta suporta balun ba Asteroid uza ho Chrome iha iOS."
 
 msgid "Well done, keep it up!"
-msgstr ""
+msgstr "Kapás, kontinua nafatin!"
 
 msgid "Would you like to receive app notifications?"
 msgstr "Ita hakarak simu notifikasaun husi aplikasaun ne'e? "
@@ -301,9 +312,6 @@ msgstr "Ita-nia konfigurasaun"
 
 #~ msgid "Jobs that use these skills"
 #~ msgstr "Serbisu ne'ebé uza abilidade hirak ne'e"
-
-#~ msgid "start lesson"
-#~ msgstr "hahú lisaun"
 
 #~ msgid "view all"
 #~ msgstr "haree hotu"
