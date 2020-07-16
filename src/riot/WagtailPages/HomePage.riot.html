@@ -73,7 +73,9 @@
             },
 
             onBeforeMount(props, state) {
-                const courses = props.wagtailPage.courses;
+                // only show courses with lessons
+                const courses = props.wagtailPage.courses.filter(course => course.lessons.length);
+
                 const lastWorkedOnCourse = this.getCurrentCourse(courses);
                 courses.forEach((course) => {
                     this.getNextLesson(course);
