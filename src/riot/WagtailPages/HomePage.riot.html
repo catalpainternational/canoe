@@ -45,7 +45,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
 
-        import { getUsername } from "js/AuthenticationUtilities";
+        import { getCapitalizedUsername } from "js/AuthenticationUtilities";
         import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
         import { isComplete } from "Actions/completion";
         import {
@@ -150,7 +150,7 @@
 
             greetingMessage() {
                 // Greet the user with their username
-                return gettext("Hi %1", getUsername());
+                return gettext("Hi %1", getCapitalizedUsername());
             },
 
             getCurrentCourse(courses) {
