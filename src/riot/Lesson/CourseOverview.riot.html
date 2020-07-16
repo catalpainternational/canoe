@@ -36,7 +36,15 @@
             },
 
             onMounted(props, state) {
-                const { exam } = props.wagtailPage;
+                this.renderExam();
+            },
+
+            renderExam() {
+                const { exam } = this.props.wagtailPage;
+                if (!exam) {
+                    return;
+                }
+
                 const examCards = exam.map((card) => {
                     const { question, answers } = card.value;
                     return { question, answers };

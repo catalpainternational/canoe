@@ -1,0 +1,61 @@
+HonorCode {
+    text-align: center;
+
+    $insideBoxLeftMargin: 1.25em;
+
+    p.score-explanation {
+        font-size: 1.1em;
+    }
+
+    .code {
+        text-align: left;
+        border: 1px solid $gray-7;
+        border-radius: 8px;
+        padding: 10px;
+
+        h3,
+        h4,
+        p {
+            margin: 0.5em $insideBoxLeftMargin;
+        }
+    }
+
+    button {
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    div {
+        margin: 1em 0;
+    }
+
+    div.i-agree-container {
+        margin-left: $insideBoxLeftMargin; 
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+
+        p {
+            color: $gray-3;
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-left: 0.5em;
+            padding-top: .25em;
+        }
+
+        .checkbox {
+            border: 1px solid $gray-5;
+            border-radius: 3px;
+            padding-right: 25px;
+            height: 25px;
+        }
+
+        .checkmark {
+            height: 15px;
+            width: 18px;
+            display: inline-block;
+            position: absolute;
+            margin-left: 0.25em;
+        }
+    }
+}
