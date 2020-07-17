@@ -37,7 +37,7 @@
                 >
             </div>
 
-            <h5 class="section-title">{ TRANSLATIONS.lesson_activities }</h5>
+            <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
 
             <Card
                 title="1. {props.wagtailPage.objective.title}"
@@ -89,7 +89,7 @@
             },
 
             TRANSLATIONS: {
-                lesson_activities: gettext("Lesson Activities"),
+                lesson_activities: () => gettext('Lesson Activities'),
             },
 
             OBJECTIVES: "objectives",
