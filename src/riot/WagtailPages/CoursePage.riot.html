@@ -7,7 +7,7 @@
                         <a class="arrow-gray" onclick="{backToHome}"></a>
                     </div>
                     <div>
-                        <p>{ TRANSLATIONS.course }</p>
+                        <p>{ TRANSLATIONS.course() }</p>
                     </div>
                     <h3>{props.wagtailPage.data.title}</h3>
                     <div>
@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <h5 class="section-title">{ TRANSLATIONS.your_lessons }</h5>
+            <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
             <Card
                 each="{lesson in props.wagtailPage.lessons}"
                 title="{lesson.title}"
@@ -28,7 +28,7 @@
                 type="lesson"
             ></Card>
             <template if="{props.examCards.length > 0}">
-                <h5 class="section-title">{ TRANSLATIONS.course_exam }</h5>
+                <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <Card
                     title="{ courseExamTitle() }"
                     link="{props.wagtailPage.id}/exam/0"
@@ -53,9 +53,9 @@
 
         export default {
             TRANSLATIONS: {
-                your_lessons: gettext('Your lessons'),
-                course: gettext('Course'),
-                course_exam: gettext('Course exam'),
+                your_lessons: () => gettext('Your lessons'),
+                course:  () => gettext('Course'),
+                course_exam: () => gettext('Course exam'),
             },
             components: {
                 card: Card,

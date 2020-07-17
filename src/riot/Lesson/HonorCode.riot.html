@@ -8,12 +8,12 @@
     <div class="code">
         <h4 translate>Code of conduct</h4>
         <p>
-            { TRANSLATIONS.promise }
+            { TRANSLATIONS.promise() }
         </p>
         <div class="i-agree-container" onclick="{agreeToCode}">
             <span class="checkbox"></span>
             <span if="{state.hasAgreed}" class="checkmark"></span>
-            <p>{ TRANSLATIONS.agree }</p>
+            <p>{ TRANSLATIONS.agree() }</p>
         </div>
     </div>
     <div>
@@ -35,8 +35,8 @@
 
         export default {
             TRANSLATIONS: {
-                promise: gettext('You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?'),
-                agree: gettext('Yes, I agree'),
+                promise: () => gettext('You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?'),
+                agree: () => gettext('Yes, I agree'),
             },
 
             components: {
