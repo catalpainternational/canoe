@@ -674,10 +674,6 @@ LessonFeedback {
         &:hover {
             cursor: pointer;
         }
-
-        @media only screen and (max-width: $sm-phone) {
-            margin: 10px;
-        }
     }
 
     button.no-thanks {
@@ -689,6 +685,27 @@ LessonFeedback {
             cursor: pointer;
         }
     }
+
+    // Pedro needs smaller buttons at 441px. Better to target an industry
+    // breakpoint and add the extra pixels.
+    @media only screen and (max-width: calc(#{$lg-phone} + 27px)) {
+        button.feedback {
+            height: 5em;
+            width: 5em;
+            margin: 0;
+        }
+    }
+
+    @media screen and (max-width: $sm-phone) {
+        h3 {
+            padding-bottom: 0;
+        }
+
+        button.feedback {
+            margin: 0.25em 1em;
+        }
+    }
+
 }
 
 LessonComplete,
