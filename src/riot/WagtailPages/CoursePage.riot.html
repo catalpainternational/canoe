@@ -28,9 +28,9 @@
                 type="lesson"
             ></Card>
             <template if="{props.examCards.length > 0}">
-                <h5 class="section-title" translate>Course exam</h5>
+                <h5 class="section-title">{ TRANSLATIONS.course_exam }</h5>
                 <Card
-                    title="{`${props.wagtailPage.title}'s Course Exam`}"
+                    title="{ courseExamTitle() }"
                     link="{props.wagtailPage.id}/exam/0"
                     isCompleted="{isExamComplete(props.wagtailPage.id)}"
                     isComingSoon="{false}"
@@ -55,6 +55,7 @@
             TRANSLATIONS: {
                 your_lessons: gettext('Your lessons'),
                 course: gettext('Course'),
+                course_exam: gettext('Course exam'),
             },
             components: {
                 card: Card,
@@ -118,6 +119,11 @@
                     this.getCourseProgress()
                 );
             },
+
+            courseExamTitle() {
+                let p = gettext("%1's Course Exam", this.props.wagtailPage.title);
+                return p;
+            }
         };
     </script>
 </CoursePage>
