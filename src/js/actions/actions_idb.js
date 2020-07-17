@@ -75,6 +75,9 @@ export async function db() {
 }
 
 export async function closeAndDeleteDB() {
+    if (!_db) {
+        return;
+    }
     _db.close();
     _db = null;
     return await deleteDB(action_store_name);
