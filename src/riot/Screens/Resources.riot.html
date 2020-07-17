@@ -4,16 +4,8 @@
             <span class="resources-icon title"></span>
             <h3 translate>Resources</h3>
         </div>
-        <SearchBar 
-            if="{state.articles.length > 0}"
-            searchString="{state.searchString}" 
-            submitSearch="{submitSearch}"
-        ></SearchBar>
-        <TagList
-            tags="{state.listOfAllTags}"
-            onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"
-        ></TagList>
+        <SearchBar if="{state.articles.length > 0}" submitQuery="{submitQuery}"></SearchBar>
+        <TagList tags="{state.allTags}" filterArticles="{filterArticles}"></TagList>
         <div each="{article in state.articles}">
             <Card
                 if="{isResourceArticleVisible(article)}"
@@ -23,7 +15,9 @@
                 showFooter="{false}"
             ></Card>
         </div>
-        <p if="{state.articles == 0}" translate>There are no resource articles yet. Check back soon!</p>
+        <p if="{state.articles == 0}" translate>
+            There are no resource articles yet. Check back soon!
+        </p>
     </div>
 
     <script>
@@ -31,20 +25,20 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
 
-        import { getSearchQueryFromUrl, parseURLHash } from 'js/Routing';
         import { getResources } from "js/WagtailPagesAPI";
         import {
             getTagsFromPages,
             doPageTagsMatchSelections,
             doesQueryMatchSearchContent,
+            checkUrlForSearchBarQuery,
         } from "js/SearchAndFiltering";
 
         export default {
             state: {
-                selectedTags: [],
-                searchString: "",
+                selectedTags: new Set(),
                 articles: [],
-                listOfAllTags: [],
+                query: "",
+                allTags: [],
                 articleContent: {},
             },
 
@@ -56,84 +50,49 @@
 
             async onMounted() {
                 const articles = await getResources();
-                const listOfAllTags = getTagsFromPages(articles);
-                this.update({ articles, listOfAllTags, selectedTags: [] });
-
-                const urlParams = this.generateUrlParams();
-
-                const query = urlParams.get("qs");
-                if (!!query) {
-                    this.update({ searchString: decodeURIComponent(query) });
-                }
-
-                const filter = urlParams.getAll("filter");
-                if (filter.length > 0) {
-                    for (var i=0; i < filter.length; ++i) {
-                        if (listOfAllTags.includes(filter[i])) {
-                            this.onTagClick(decodeURIComponent(filter[i]), true);
-                        }
-                    }
-                }
+                const allTags = getTagsFromPages(articles);
+                // Resources has to pull the search query from the URL. If the
+                // SearchBar gives Resources the query that the SearchBar
+                // pulled, resources mounts two SearchBars. I think this
+                // double-mounting is a RiotJS bug.
+                const query = checkUrlForSearchBarQuery();
+                this.update({ articles, allTags, query });
             },
 
-            generateUrlParams() {
-                const queryStringFromUrl = getSearchQueryFromUrl();
-                return new URLSearchParams(queryStringFromUrl);
-            },
+            filterArticles(clickedFilter) {
+                let { selectedTags } = this.state;
 
-            onTagClick(clickedTag, isFromUrl) {
-                const urlParams = this.generateUrlParams();
-                
-                if (this.state.selectedTags.includes(clickedTag)) {
-                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
-                    this.state.selectedTags.splice(tagIndex, 1);
-                    urlParams.delete("filter");
-                    
-                    if (this.state.selectedTags.length > 0) {
-                        for (var i=0; i < this.state.selectedTags.length; ++i ) {
-                            const encodedTag = encodeURIComponent(this.state.selectedTags[i].toLowerCase());
-                            urlParams.append("filter", encodedTag);
-                        }
-                    }
-                    this.replaceUrlQuery(urlParams);
-
+                if (selectedTags.has(clickedFilter)) {
+                    selectedTags.delete(clickedFilter);
                 } else {
-                    this.state.selectedTags.push(clickedTag);
-                    urlParams.append("filter", encodeURIComponent(clickedTag));
-                    !isFromUrl && this.replaceUrlQuery(urlParams);
-                    this.update();
+                    selectedTags.add(clickedFilter);
                 }
-                this.update();
+                this.update({ selectedTags });
             },
 
-            submitSearch(searchString) {
-                const urlParams = this.generateUrlParams();
-                const encodedQuery = encodeURIComponent(searchString);
-                
-                urlParams.set("qs", encodedQuery);
-                this.replaceUrlQuery(urlParams);
-                this.update({ searchString });
+            submitQuery(query) {
+                this.update({ query });
             },
 
             isResourceArticleVisible(article) {
-                const { searchString } = this.state;
-                const isQueryMatch = searchString.length < 3 ? 'true' : doesQueryMatchSearchContent(
-                    searchString,
-                    article.title,
-                    article.description
-                );
-
+                const { query } = this.state;
                 const { selectedTags } = this.state;
-                const lowercaseArticleTags = article.tags.map(tag => tag.toLowerCase());
+                const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
+
+                const isQueryMatch =
+                    query.length < 3
+                        ? true
+                        : doesQueryMatchSearchContent(
+                              query,
+                              article.title,
+                              article.description,
+                              ...lowercaseArticleTags
+                          );
                 const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
 
                 const showArticle = isQueryMatch && isTagMatch;
                 return showArticle;
             },
-
-            replaceUrlQuery(urlParams) {
-                window.history.replaceState({}, '', `${location.pathname}#resources?${urlParams}`);
-            }
         };
     </script>
 </Resources>

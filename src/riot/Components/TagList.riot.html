@@ -1,13 +1,54 @@
 <TagList>
     <div class="tag-container">
-        <a  
+        <a
             each="{tag in props.tags}"
-            class="tag {props.selectedTags && props.selectedTags.includes(tag) ? 'selected' : ''}" 
+            class="tag {state.selectedTags.has(tag) ? 'selected' : ''}"
             onclick="{e => { 
-                props.onTagClick(e.srcElement.innerText, false)
+                onTagClick(e.srcElement.innerText)
             }}"
         >
             <p>{tag}</p>
         </a>
     </div>
+    <script>
+        import { checkUrlForFilters, updateUrlWithFilters } from "js/SearchAndFiltering";
+
+        export default {
+            state: {
+                selectedTags: new Set(),
+            },
+
+            onMounted(props, state) {
+                const filters = checkUrlForFilters();
+                if (filters.length === 0) {
+                    return;
+                }
+
+                for (const encodedFilter of filters) {
+                    if (props.tags.includes(encodedFilter)) {
+                        this.onTagClick(decodeURIComponent(encodedFilter));
+                    }
+                }
+            },
+
+            onUpdated(props, state) {
+                const { selectedTags } = this.state;
+                updateUrlWithFilters(selectedTags);
+            },
+
+            onTagClick(clickedTag) {
+                const { selectedTags } = this.state;
+
+                if (selectedTags.has(clickedTag)) {
+                    selectedTags.delete(clickedTag);
+                } else {
+                    selectedTags.add(clickedTag);
+                }
+                this.update({
+                    selectedTags,
+                });
+                this.props.filterArticles(clickedTag);
+            },
+        };
+    </script>
 </TagList>
