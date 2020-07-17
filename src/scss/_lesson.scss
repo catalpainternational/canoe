@@ -1,7 +1,8 @@
 .replace-this-with-lessonframe {
     h2 {
-        margin-bottom: 30px;
         margin-top: 0;
+        margin-bottom: 10px;
+        padding-bottom: 0;
     }
 
     h3 {
@@ -81,6 +82,12 @@ LessonPage .content-wrapper {
         display: none;
     }
 
+    p {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        font-size: 1em;
+    }
+
     h2 {
         border-bottom: none;
     }
@@ -88,9 +95,9 @@ LessonPage .content-wrapper {
     .sticky {
         position: fixed;
         top: 0;
-        border: 1px solid #c9d6de;
+        border: 1px solid $gray-6;
         width: 100%;
-        background-color: #f5f4f0;
+        background-color: $tan;
         z-index: 1;
         left: 0;
         padding-left: 55px;
@@ -101,13 +108,10 @@ LessonPage .content-wrapper {
         h2 {
             font-size: 16px;
             line-height: 15px;
-            padding-bottom: 0;
         }
 
-        h5 {
-            font-size: 10px;
-            margin-top: 5px;
-            margin-bottom: 5px;
+        p {
+            font-size: 0.8em;
         }
 
         .arrow-gray {
@@ -135,10 +139,6 @@ LessonPage .content-wrapper .duration {
         font-size: 12px;
         margin: 3px 10px 3px;
     }
-}
-
-LessonPage .replace-this-with-lessonframe h2 {
-    margin-bottom: 10px;
 }
 
 LessonPage .description {
@@ -396,6 +396,7 @@ LessonContent div.content-wrapper {
 }
 
 LessonTest,
+CourseExam,
 TestSingleAnswer,
 TestMultipleAnswer,
 TestPopupModal {
@@ -536,7 +537,7 @@ TestPopupModal {
                 }
             }
 
-            li.selected.wrong {
+            li.selected-wrong {
                 .radio {
                     border: 2px solid $red-2;
                     height: 21px;
@@ -544,6 +545,18 @@ TestPopupModal {
 
                     & > div {
                         background-color: $red-2;
+                    }
+                }
+            }
+
+            li.selected-pending {
+                .radio {
+                    border: 2px solid $blue-1;
+                    height: 21px;
+                    width: 21px;
+
+                    & > div {
+                        background-color: $blue-1;
                     }
                 }
             }
@@ -678,7 +691,12 @@ LessonFeedback {
     }
 }
 
-LessonComplete {
+LessonComplete,
+ExamResults {
+    h2 {
+        border-bottom: none;
+    }
+
     .congratulations-container {
         display: flex;
         flex-flow: column nowrap;
@@ -708,6 +726,11 @@ LessonComplete {
         left: -1em;
     }
 
+    .incorrect-flag {
+        height: 150px;
+        width: 150px;
+    }
+
     .congratulations {
         flex-direction: column;
         text-align: center;
@@ -725,6 +748,34 @@ LessonComplete {
         p {
             margin-bottom: 40px;
             margin-top: 0;
+        }
+    }
+}
+
+CourseExam {
+    .card-number {
+        font-size: 12px;
+        margin-bottom: -15px;
+        flex: 0;
+    }
+
+    .bottom-buttons {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        width: 100%;
+        margin-bottom: 15px;
+
+        .arrow-gray {
+            display: inline-block;
+            position: relative;
+            left: unset;
+            width: 80px;
+            height: 50px;
+        }
+
+        .btn-primary {
+            min-width: 160px;
         }
     }
 }

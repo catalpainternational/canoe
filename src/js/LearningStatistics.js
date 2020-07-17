@@ -8,7 +8,14 @@ import {
     countCompleteLessonsInCourse as countCompleteLessonsImpl,
     getLatestCompletionInCourse,
     getLatestInCompletionArray,
+    setComplete,
 } from "Actions/completion";
+import {
+    saveExamAnswer as saveAnswer,
+    loadExamAnswer as loadAnswer,
+    tallyExamScore as tallyScore,
+} from "Actions/Exams";
+import { isComplete } from "./actions/completion";
 
 export const isCourseInProgress = (aWagtailCourse) => {
     const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(aWagtailCourse);
@@ -47,4 +54,26 @@ export const countCompleteLessonsInCourses = (wagtailCourses) => {
         numberOfCompletedLessons += countCompleteLessonsInCourse(courseSlug, lessonSlugs);
     }
     return numberOfCompletedLessons;
+};
+
+export const saveExamAnswer = (questionId, answer) => {
+    saveAnswer(questionId, answer);
+};
+
+export const loadExamAnswer = (questionId) => {
+    return loadAnswer(questionId);
+};
+
+export const tallyFinalScore = (examQuestions) => {
+    return tallyScore(examQuestions);
+};
+
+const EXAM_SLUG = "exam";
+
+export const markExamAsComplete = (courseSlug) => {
+    setComplete(courseSlug, EXAM_SLUG, EXAM_SLUG);
+};
+
+export const isExamComplete = (courseSlug) => {
+    return isComplete(courseSlug, EXAM_SLUG, EXAM_SLUG);
 };

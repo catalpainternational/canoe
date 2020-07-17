@@ -1,0 +1,96 @@
+<ExamResults>
+    <template if="{state.passedExam !== null}">
+        <LessonFrame>
+            <div class="{!state.passedExam ? '' : 'confetti background'}"></div>
+            <div class="congratulations-container">
+                <div class="{!state.passedExam ? 'incorrect-flag' : 'report-card overlay'}"></div>
+                <template if="{state.passedExam}">
+                    <div>
+                        <h2 translate>Amazing work!</h2>
+                        <h3 translate>You've completed the course</h3>
+                        <p>{ passedExamMessage() }</p>
+                    </div>
+                    <button class="btn-primary" onclick="{goHome}" translate>
+                        Back to Courses
+                    </button>
+                    <button class="btn-secondary" onclick="{goToResources}" translate>
+                        View Resources
+                    </button>
+                </template>
+                <template if="{!state.passedExam}">
+                    <div>
+                        <h2 translate>Not quite!</h2>
+                        <p>{ failedExamMessage() }</p>
+                    </div>
+                    <button class="btn-primary" onclick="{goToCourseExam}" translate>
+                        Retake Exam
+                    </button>
+                    <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
+                        Back to Course
+                    </button>
+                </template>
+            </div>
+        </LessonFrame>
+    </template>
+    <script>
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+
+        import { markExamAsComplete } from "js/LearningStatistics";
+
+        export default {
+            components: {
+                lessonframe: LessonFrame,
+            },
+
+            state: {
+                passedExam: null,
+            },
+
+            onMounted(props, state) {
+                this.calculatePassOrFail();
+            },
+
+            calculatePassOrFail() {
+                const { course, finalScore, minimumScore } = this.props;
+                const passedExam = finalScore >= minimumScore;
+                if (passedExam) {
+                    markExamAsComplete(course.slug);
+                }
+                this.update({ passedExam });
+            },
+
+            goToCourseOverview() {
+                location.hash = "#" + this.props.course.id;
+            },
+
+            goHome() {
+                location.hash = "#";
+            },
+
+            goToResources() {
+                location.hash = "#resources";
+            },
+
+            goToCourseExam() {
+                location.hash = `#${this.props.course.id}/exam/0`;
+            },
+
+            passedExamMessage() {
+                // message when user passed the exam
+                return gettext(
+                    "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam.",
+                    this.props.finalScore
+                );
+            },
+
+            failedExamMessage() {
+                // message when user did not pass exam
+                return gettext(
+                    "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later.",
+                    this.props.finalScore,
+                    this.props.minimumScore
+                );
+            },
+        };
+    </script>
+</ExamResults>

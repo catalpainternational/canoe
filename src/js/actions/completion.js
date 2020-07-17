@@ -1,7 +1,7 @@
 /* Completion module
  * The access point for interface components to set and query completion
  * of content items.
- * All interface methods should be syncronous.
+ * All interface methods should be synchronous.
  * Depends on the action_store module to persist information
  */
 

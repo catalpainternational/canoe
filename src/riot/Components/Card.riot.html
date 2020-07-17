@@ -1,5 +1,5 @@
 <Card>
-    <a class="{props.isCompleted ? 'done': 'ongoing'} lesson card" href="#{props.link}">
+    <a class="{howToStyle()} lesson card" href="#{props.link}">
         <div class="card-body">
             <h4>{props.title}</h4>
             <div if="{props.isCompleted}" class="white-check"></div>
@@ -34,6 +34,16 @@
                     lesson: gettext('Start Lesson'),
                     course: gettext('Start Course'),
                 },
+            },
+
+            howToStyle() {
+                if (this.props.isCompleted) {
+                    return "done";
+                } else if (this.props.isDisabled) {
+                    return "disabled";
+                } else {
+                    return "ongoing";
+                }
             },
 
             durationMessage() {

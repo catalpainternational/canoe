@@ -26,16 +26,30 @@
                 isComingSoon="{lesson.coming_soon}"
                 showFooter="{true}"
                 type="lesson"
-            >
-            </Card>
+            ></Card>
+            <template if="{props.examCards.length > 0}">
+                <h5 class="section-title" translate>Course exam</h5>
+                <Card
+                    title="{`${props.wagtailPage.title}'s Course Exam`}"
+                    link="{props.wagtailPage.id}/exam/0"
+                    isCompleted="{isExamComplete(props.wagtailPage.id)}"
+                    isComingSoon="{false}"
+                    showFooter="{true}"
+                    isDisabled="{examDisabled()}"
+                    type="exam"
+                ></Card>
+            </template>
         </div>
     </div>
 
     <script>
-        import { countCompleteLessonsInCourse } from "js/LearningStatistics";
-        import { isComplete } from "Actions/completion";
-        import { getCourseAndLessonSlugs } from "js/utilities";
         import Card from "RiotTags/Components/Card.riot.html";
+        import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
+
+        import { countCompleteLessonsInCourse, isExamComplete } from "js/LearningStatistics";
+        import { isComplete, isTheCourseComplete } from "Actions/completion";
+        import { getCourseAndLessonSlugs } from "js/utilities";
+        import { isGuestUser } from "js/AuthenticationUtilities";
 
         export default {
             TRANSLATIONS: {
@@ -44,11 +58,16 @@
             },
             components: {
                 card: Card,
+                courseexam: CourseExam,
             },
 
             onMounted(props, state) {
                 state.header = document.getElementsByClassName("course-header")[0];
                 state.headerOffsetTop = state.header.offsetTop;
+
+                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(this.props.wagtailPage);
+                this.update({ isCourseComplete: isTheCourseComplete(courseSlug, lessonSlugs) });
+
                 window.addEventListener("scroll", this.stickyHeader);
             },
 
@@ -79,6 +98,16 @@
 
             isLessonComplete(lesson) {
                 return isComplete(this.props.wagtailPage.data.slug, lesson.slug);
+            },
+
+            examDisabled() {
+                // exams are enabled if you are a guest user, or you have completed the course
+                return !(this.state.isCourseComplete || isGuestUser());
+            },
+
+            isExamComplete() {
+                const { wagtailPage } = this.props;
+                return isExamComplete(wagtailPage.data.slug);
             },
 
             numberOfLessonsCompleteMessage() {

@@ -111,6 +111,10 @@
         }
     }
 
+    .status.start-exam {
+        max-width: 100px;
+    }
+
     .status.done {
         background-color: $gray-7;
         max-width: 100px;

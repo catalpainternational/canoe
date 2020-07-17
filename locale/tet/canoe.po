@@ -14,6 +14,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgid " %1%  or higher."
+msgstr ""
+
 #, fuzzy
 msgid "%1 / %2 lesson complete"
 msgid_plural "%1 / %2 lessons complete"
@@ -58,6 +61,10 @@ msgstr "Parabéns! Serbisu diak loos!"
 msgid "Are you enjoying this lesson?"
 msgstr "Ita gosta lisaun ne'e?"
 
+#, fuzzy
+msgid "Back to Course"
+msgstr "Fila fali ba lisaun"
+
 msgid "Back to Courses"
 msgstr "Fila fali ba lisaun"
 
@@ -68,6 +75,9 @@ msgid "Check"
 msgstr ""
 
 msgid "Check answers"
+msgstr ""
+
+msgid "Code of conduct"
 msgstr ""
 
 msgid "Coming Soon!"
@@ -91,6 +101,10 @@ msgstr "Kontinua aprende"
 msgid "Course"
 msgstr "Kursu"
 
+#, fuzzy
+msgid "Course exam"
+msgstr "Kursu"
+
 msgid "Download this PDF to your device"
 msgstr ""
 
@@ -108,6 +122,10 @@ msgstr "Remata"
 
 msgid "Forgot username or password?"
 msgstr ""
+
+#, fuzzy
+msgid "Good job!"
+msgstr "Serbisu di'ak tebes!"
 
 msgid "Great"
 msgstr "Di'ak tebes!"
@@ -175,6 +193,9 @@ msgstr "La iha notifikasaun. "
 msgid "No thanks"
 msgstr "Lae, Obrigado. "
 
+msgid "Not quite!"
+msgstr ""
+
 msgid "Notifications"
 msgstr "Notifikasaun"
 
@@ -199,6 +220,9 @@ msgstr "Koko lee didi'ak ninia pergunta"
 msgid "Resources"
 msgstr ""
 
+msgid "Retake Exam"
+msgstr ""
+
 msgid "See less"
 msgstr "Haree ouituan"
 
@@ -221,14 +245,27 @@ msgstr "Hahu Atividade"
 msgid "Start Course"
 msgstr "Komesa kursu"
 
+msgid "Start Exam"
+msgstr ""
+
 msgid "Start lesson"
 msgstr "Komesa lisaun"
 
 msgid "Start Lesson"
 msgstr "Komesa lisaun"
 
+msgid "Submit answers"
+msgstr ""
+
 msgid "Successfully sent!"
 msgstr "Avaliasaun manda ona ho susesu!"
+
+msgid "Take Exam"
+msgstr ""
+
+#. message on completion of lesson and prompt to take course exam
+msgid "Take the exam now to complete the course \"%1\""
+msgstr ""
 
 msgid "Test"
 msgstr ""
@@ -251,6 +288,10 @@ msgstr ""
 msgid "This video will play offline."
 msgstr ""
 
+#. message for what percent a user must score to pass the exam
+msgid "To pass this exam you need to score"
+msgstr ""
+
 msgid "Try again"
 msgstr "Koko fila fali"
 
@@ -269,16 +310,30 @@ msgstr "Kapás, kontinua nafatin!"
 msgid "Would you like to receive app notifications?"
 msgstr "Ita hakarak simu notifikasaun husi aplikasaun ne'e? "
 
-msgid "You are eligible to receive a printed certificate for this course."
-msgstr "Ita kualifika atu simu certifikadu ba kursu ida ne'e. "
+#. message when user did not pass exam
+msgid "You did not pass this assessment because you only scored %1 and you need to reach %2 to pass. You can retake this exam now or later."
+msgstr ""
+
+#. message when user did not pass exam
+msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later."
+msgstr ""
 
 #. message on completion of a lesson %1 is replaced by the lesson title
-msgid "You just completed the lesson, \"%1\""
+#, fuzzy
+msgid "You just completed the lesson \"%1\""
 msgstr "Ita foin halo remata lisaun,\" 1 %1 \""
 
 msgid "You only have %1 lesson left to finish %2."
 msgid_plural "You only have %1 lessons left to finish %2."
 msgstr[0] "Ita hela deit lisaun %1 atu remata %2."
+
+#. message when user passed the exam
+msgid "You passed this exam with a score of %1. If you would like to improve your score you can retake this exam."
+msgstr ""
+
+#. message when user passed the exam
+msgid "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam."
+msgstr ""
 
 #. message to say what module is next ( %1 is content or test )
 msgid "You're ready to start the %1."
@@ -290,6 +345,11 @@ msgstr "Ita kompleta ona %1"
 
 msgid "You've completed the course"
 msgstr "Ita kompleta ona kursu"
+
+msgid ""
+"You’re about to start a course exam. Do you promise that you will complete this exam on\n"
+"your own, without assistance from anyone?"
+msgstr ""
 
 msgid "Your browser does not support the audio element."
 msgstr "Ita-nia navegadór la suporta komponente audiu nian."
@@ -303,6 +363,9 @@ msgstr "Ita-nia lisaun"
 
 msgid "Your settings"
 msgstr "Ita-nia konfigurasaun"
+
+#~ msgid "You are eligible to receive a printed certificate for this course."
+#~ msgstr "Ita kualifika atu simu certifikadu ba kursu ida ne'e. "
 
 #~ msgid "Correct answer. Well done!"
 #~ msgstr "Resposta loos. Serbisu diak!"

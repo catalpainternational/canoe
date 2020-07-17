@@ -35,7 +35,7 @@
 
                 &.bottom-border {
                     border-bottom: 1px solid;
-                    border-color: #C9D6DE;
+                    border-color: $gray-6;
                     padding-bottom: 5px;
                 }
             }
@@ -64,21 +64,21 @@
 }
 
 .sticky {
-  position: fixed;
-  top: 0;
-  border: 1px solid #C9D6DE;
-  width: 100%;
-  background-color: #f5f4f0;
-  z-index: 1;
-  left: 0;
-  padding-left: 55px;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+    position: fixed;
+    top: 0;
+    border: 1px solid $gray-6;
+    width: 100%;
+    background-color: $tan;
+    z-index: 1;
+    left: 0;
+    padding-left: 55px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
 }
 
 .sticky.course-header {
     h3 {
-      font-size: 16px;
-      line-height: 20px;
+        font-size: 16px;
+        line-height: 20px;
     }
 
     p.bottom-border {
@@ -110,4 +110,36 @@ CoursePage .content-wrapper {
     border-radius: 30px 30px 0 0;
     background-color: $gray-10;
     padding-top: 30px;
+}
+
+CourseExam {
+    .card-number {
+        font-size: 12px;
+        margin-bottom: -15px;
+        flex: 0;
+    }
+
+    .bottom-buttons {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        width: 100%;
+        margin-bottom: 15px;
+
+        .arrow-gray {
+            display: inline-block;
+            position: relative;
+            left: unset;
+            width: 80px;
+            height: 50px;
+        }
+
+        .btn-primary {
+            min-width: 160px;
+        }
+    }
+
+    div.card-container {
+        justify-content: unset;
+    }
 }

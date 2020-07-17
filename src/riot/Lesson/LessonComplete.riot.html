@@ -1,10 +1,14 @@
 <LessonComplete>
     <LessonFrame>
-        <div class="confetti background"></div>
+        <div
+            class="{props.isCourseExamFinished && !props.passedExam ? '' : 'confetti background'}"
+        ></div>
         <template if="{state.lessonSlugs.length}">
             <div class="congratulations-container">
-                <div class="report-card overlay"></div>
-                <template if="{!isCourseComplete()}">
+                <div
+                    class="{props.isCourseExamFinished && !props.passedExam ? 'incorrect-flag' : 'report-card overlay'}"
+                ></div>
+                <template if="{!isCourseComplete() && !props.isCourseExamFinished}">
                     <div>
                         <h2 translate>Congratulations!</h2>
                         <p>{ lessonCompleteMessage() }</p>
@@ -13,19 +17,42 @@
                         Next Lesson
                     </button>
                 </template>
-                <template if="{isCourseComplete()}">
+                <template if="{isCourseComplete() && !props.isCourseExamFinished}">
+                    <div>
+                        <h2 translate>Good job!</h2>
+                        <p>{ lessonCompleteMessage() }</p>
+                        <p>{ takeCourseExamMessage() }</p>
+                    </div>
+                    <button class="btn-primary" onclick="{goToCourseExam}" translate>
+                        Take Exam
+                    </button>
+                    <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
+                        Back to Course
+                    </button>
+                </template>
+                <template if="{props.isCourseExamFinished && props.passedExam}">
                     <div>
                         <h2 translate>Amazing work!</h2>
                         <h3 translate>You've completed the course</h3>
-                        <p translate>
-                            You are eligible to receive a printed certificate for this course.
-                        </p>
+                        <p>{ passedExamMessage() }</p>
                     </div>
                     <button class="btn-primary" onclick="{goHome}" translate>
                         Back to Courses
                     </button>
                     <button class="btn-secondary" onclick="{goToResources}" translate>
                         View Resources
+                    </button>
+                </template>
+                <template if="{props.isCourseExamFinished && !props.passedExam}">
+                    <div>
+                        <h2 translate>Not quite!</h2>
+                        <p>{ failedExamMessage() }</p>
+                    </div>
+                    <button class="btn-primary" onclick="{goToCourseExam}" translate>
+                        Retake Exam
+                    </button>
+                    <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
+                        Back to Course
                     </button>
                 </template>
             </div>
@@ -74,9 +101,38 @@
                 location.hash = "#resources";
             },
 
+            goToCourseExam() {
+                location.hash = `#${this.props.course.id}/exam/0`;
+            },
+
             lessonCompleteMessage() {
                 // message on completion of a lesson %1 is replaced by the lesson title
-                return gettext('You just completed the lesson, "%1"', this.props.title);
+                return gettext('You just completed the lesson "%1"', this.props.title);
+            },
+
+            takeCourseExamMessage() {
+                // message on completion of lesson and prompt to take course exam
+                return gettext(
+                    'Take the exam now to complete the course "%1"',
+                    this.props.course.title
+                );
+            },
+
+            passedExamMessage() {
+                // message when user passed the exam
+                return gettext(
+                    "You passed this exam with a score of %1. If you would like to improve your score you can retake this exam.",
+                    this.props.finalScore
+                );
+            },
+
+            failedExamMessage() {
+                // message when user did not pass exam
+                return gettext(
+                    "You did not pass this assessment because you only scored %1 and you need to reach %2 to pass. You can retake this exam now or later.",
+                    this.props.finalScore,
+                    this.props.minimumScore
+                );
             },
         };
     </script>

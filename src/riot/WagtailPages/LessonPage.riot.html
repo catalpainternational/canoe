@@ -1,27 +1,27 @@
 <LessonPage>
     <LessonObjective
-        if="{state.hash === objectivesModule}"
+        if="{state.hash === OBJECTIVES}"
         objective="{props.wagtailPage.objective}"
-        module="{objectivesModule}"
-        nextModule="{contentModule}"
+        module="{OBJECTIVES}"
+        nextModule="{CONTENT}"
         title="{props.wagtailPage.title}"
         lesson="{props.wagtailPage.data}"
         course="{props.wagtailPage.course}"
     ></LessonObjective>
     <LessonContent
-        if="{state.hash === contentModule}"
+        if="{state.hash === CONTENT}"
         lessonContent="{props.wagtailPage.content}"
-        module="{contentModule}"
-        nextModule="{testModule}"
+        module="{CONTENT}"
+        nextModule="{TEST}"
         title="{props.wagtailPage.title}"
         lesson="{props.wagtailPage.data}"
         course="{props.wagtailPage.course}"
         isLessonPage="{true}"
     ></LessonContent>
     <LessonTest
-        if="{state.hash === testModule}"
+        if="{state.hash === TEST}"
         test="{props.wagtailPage.test}"
-        module="{testModule}"
+        module="{TEST}"
         title="{props.wagtailPage.title}"
         lesson="{props.wagtailPage.data}"
         course="{props.wagtailPage.course}"
@@ -37,7 +37,7 @@
                 </div>
                 <div class="section-title">
                     <div class="unit">
-                        <h5>{ lessonTitleMessage() }</h5>
+                        <p>{ lessonTitleMessage() }</p>
                     </div>
                 </div>
                 <h2>{props.wagtailPage.title}</h2>
@@ -72,8 +72,8 @@
                 title="1. {props.wagtailPage.objective.title}"
                 description="{props.wagtailPage.objective.aim}"
                 duration="{props.wagtailPage.objective.duration}"
-                link="{props.wagtailPage.id}/{objectivesModule}/1"
-                isCompleted="{isModuleComplete(objectivesModule)}"
+                link="{props.wagtailPage.id}/{OBJECTIVES}/1"
+                isCompleted="{isModuleComplete(OBJECTIVES)}"
                 type="activity"
                 showFooter="{true}"
             >
@@ -83,8 +83,8 @@
                 title="2. {props.wagtailPage.content.title}"
                 description="{props.wagtailPage.content.aim}"
                 duration="{props.wagtailPage.content.duration}"
-                link="{props.wagtailPage.id}/{contentModule}/1"
-                isCompleted="{isModuleComplete(contentModule)}"
+                link="{props.wagtailPage.id}/{CONTENT}/1"
+                isCompleted="{isModuleComplete(CONTENT)}"
                 type="activity"
                 showFooter="{true}"
             >
@@ -94,8 +94,8 @@
                 title="3. {props.wagtailPage.test.title}"
                 description="{props.wagtailPage.test.aim}"
                 duration="{props.wagtailPage.test.duration}"
-                link="{props.wagtailPage.id}/{testModule}/1"
-                isCompleted="{isModuleComplete(testModule)}"
+                link="{props.wagtailPage.id}/{TEST}/1"
+                isCompleted="{isModuleComplete(TEST)}"
                 type="activity"
                 showFooter="{true}"
             >
@@ -110,10 +110,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
 
         import { isComplete } from "Actions/completion";
-
-        const getHash = () => {
-            return location.hash.split("/");
-        };
+        import { getHashPieces } from "js/Routing";
 
         export default {
             TRANSLATIONS: {
@@ -126,10 +123,6 @@
                 header: null,
             },
 
-            objectivesModule: "objectives",
-            contentModule: "content",
-            testModule: "test",
-
             components: {
                 lessonobjective: LessonObjective,
                 lessoncontent: LessonContent,
@@ -137,8 +130,13 @@
                 card: Card,
             },
 
+            OBJECTIVES: "objectives",
+            CONTENT: "content",
+            TEST: "test",
+
+
             onBeforeMount(props, state) {
-                state.hash = getHash()[1];
+                state.hash = getHashPieces()[1];
                 window.addEventListener("hashchange", this.hashChanged);
             },
 
@@ -166,7 +164,7 @@
 
             hashChanged() {
                 this.update({
-                    hash: getHash()[1],
+                    hash: getHashPieces()[1],
                 });
 
                 if (this.state.hash) {
