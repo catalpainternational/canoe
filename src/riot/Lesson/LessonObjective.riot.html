@@ -1,7 +1,7 @@
 <LessonObjective>
     <LessonFrame if="{state.cardIdx < props.objective.cards.length}" extraStyleClasses="objective">
         <span class="plant"></span>
-        <h3>{ TRANSLATIONS.title }</h3>
+        <h3>{ TRANSLATIONS.title() }</h3>
         <p class="center-objective">{props.objective.cards[state.cardIdx].description}</p>
         <div class="bottom-buttons">
             <div>
@@ -45,7 +45,7 @@
 
         export default {
             TRANSLATIONS: {
-                title: gettext('Objectives'),
+                title: () => gettext('Objectives'),
             },
 
             state: {
