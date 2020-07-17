@@ -131,6 +131,14 @@
                 this.state.headerOffsetTop = this.state.header.offsetTop;
             },
 
+            stickyHeader() {
+                if (window.pageYOffset > this.state.headerOffsetTop) {
+                    this.state.header.classList.add("sticky");
+                } else {
+                    this.state.header.classList.remove("sticky");
+                }
+            },
+
             backToCoursePage() {
                 location.hash = "#" + this.props.wagtailPage.course.id;
             },
@@ -147,14 +155,6 @@
                     this.props.wagtailPage.data.slug,
                     section
                 );
-            },
-
-            stickyHeader() {
-                if (window.pageYOffset > this.state.headerOffsetTop) {
-                    this.state.header.classList.add("sticky");
-                } else {
-                    this.state.header.classList.remove("sticky");
-                }
             },
 
             disableBlockedLessonModules() {
