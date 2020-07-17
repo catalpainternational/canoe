@@ -62,7 +62,7 @@
         import {
             getHomePage
         } from "js/WagtailPagesAPI";
-        import { getUsername } from "js/AuthenticationUtilities";
+        import { getCapitalizedUsername } from "js/AuthenticationUtilities";
         import { getAllLessons } from "js/utilities";
         import {
             countCompleteLessonsInCourse,
@@ -144,7 +144,7 @@
                 // displays percentage of completed lessons in all courses combined
                 return gettext(
                     "Great work %1! You have completed %2\% of your overall coursework",
-                    getUsername(),
+                    getCapitalizedUsername(),
                     this.getPercentOfLessonsCompleted()
                 );
             },

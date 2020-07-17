@@ -65,7 +65,8 @@
                     >See more</a
                 >
             </div>
-            <h5 class="section-title" translate>Lesson Activities</h5>
+
+            <h5 class="section-title">{ TRANSLATIONS.lesson_activities }</h5>
 
             <Card
                 title="1. {props.wagtailPage.objective.title}"
@@ -112,6 +113,10 @@
         import { getHashPieces } from "js/Routing";
 
         export default {
+            TRANSLATIONS: {
+                lesson_activities: gettext('Lesson Activities'),
+            },
+
             state: {
                 hash: "",
                 showLongDescription: false,

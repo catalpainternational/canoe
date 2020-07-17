@@ -18,9 +18,9 @@
                         <span class="thrilled-smiley"></span>
                     </button>
                 </div>
-                <p translate>
-                    Let us know what you think of this lesson. We value your feedback and treat all
-                    feedback as confidential.
+                <p>
+                    { TRANSLATIONS.give_feedback }
+                
                 </p>
             </div>
             <button class="btn-primary no-thanks" onclick="{clickedNoThanks}" translate>
@@ -35,8 +35,8 @@
             <div class="thank-you-container">
                 <h3 translate>Successfully sent!</h3>
                 <div class="correct-flag"></div>
-                <p translate>
-                    Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience
+                <p>
+                    { TRANSLATIONS.feedback_sent }
                 </p>
             </div>
             <button class="btn-primary thank-you-container" onclick="{clickedContinue}" translate>
@@ -50,6 +50,10 @@
         import { parseURLHash } from "js/Routing";
 
         export default {
+            TRANSLATIONS: {
+                give_feedback: gettext("Let us know what you think of this lesson. We value your feedback and treat all feedback as confidential."),
+                feedback_sent: gettext("Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"),
+            },
             components: {
                 lessonframe: LessonFrame,
             },

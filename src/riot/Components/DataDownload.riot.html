@@ -4,7 +4,7 @@
         import { fetchManifest } from "js/WagtailPagesAPI";
         import { SiteDownloader } from "js/SiteDownloader";
         import { updateApi, updateIdb } from "Actions/actions_store.js";
-        import { initialiseCompletions } from "Actions/completion.js";
+        import { initialiseCompletions, clearInMemoryCompletions } from "Actions/completion.js";
         import { closeAndDeleteDB } from "Actions/actions_idb";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
@@ -55,6 +55,7 @@
                 window.clearInterval(this.state.completionPoller);
                 window.clearInterval(this.state.pagesPoller);
                 storeSiteDownloadedIs(false);
+                clearInMemoryCompletions();
                 await closeAndDeleteDB();
             },
         };

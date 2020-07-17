@@ -104,6 +104,11 @@ export const getUsername = () => {
     return localStorage.getItem(USERNAME_STORAGE_KEY);
 };
 
+export const getCapitalizedUsername = () => {
+    const username = getUsername();
+    return username[0].toUpperCase() + username.slice(1);
+};
+
 export const isGuestUser = () => {
     return process.env.GUEST_USERNAME === getUsername();
 };

@@ -202,6 +202,17 @@ ul, ol {
     };
 }
 
+// lists within lists
+ul ul, ul ol, ol ul, ol ol {
+    line-height: 1.125;
+    margin-left: .625em;
+    font-size: .625em;
+
+    @media only screen and (max-width: $tablet) {
+        font-size: 0.8em;
+    };
+}
+
 // Text colors
 .text-blue-1 { color: #04788E; }
 .text-blue-2 { color: #00B8AD; }

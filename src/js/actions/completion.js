@@ -14,6 +14,10 @@ const courses = new Map();
 // read completion actions from idb to update in memory values
 window.addEventListener(ON_ACTION_CHANGE, initialiseCompletions);
 
+export const clearInMemoryCompletions = () => {
+    courses.clear();
+};
+
 // read completions from store and initialise
 export async function initialiseCompletions() {
     try {
