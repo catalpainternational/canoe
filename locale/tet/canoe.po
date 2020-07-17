@@ -45,9 +45,8 @@ msgstr "%1 husi %2 kompletu ona"
 msgid "%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
 msgstr ""
 
-#, fuzzy
 msgid "%1's Course Exam"
-msgstr "Kursu"
+msgstr "%1's Ezame ba Kursu"
 
 #. This button adds an icon to the device homescreen
 msgid "Add to Home Screen"
@@ -102,7 +101,7 @@ msgid "Course"
 msgstr "Kursu"
 
 msgid "Course exam"
-msgstr "Ezama Kursu"
+msgstr "Ezama ba kursu"
 
 msgid "Download this PDF to your device"
 msgstr ""
@@ -193,7 +192,7 @@ msgid "No thanks"
 msgstr "Lae, Obrigado. "
 
 msgid "Not quite!"
-msgstr "Sala"
+msgstr "Resposta ne'e ladun lo'os ida!"
 
 msgid "Notifications"
 msgstr "Notifikasaun"
@@ -220,7 +219,7 @@ msgid "Resources"
 msgstr "Rekursu"
 
 msgid "Retake Exam"
-msgstr "Halo fali"
+msgstr "Koko Foti Ezame"
 
 msgid "See less"
 msgstr "Haree ouituan"
@@ -289,7 +288,7 @@ msgstr ""
 
 #. message for what percent a user must score to pass the exam
 msgid "To pass this exam you need to score <strong>%1% or higher</strong>"
-msgstr "Passa ho <string>liu tan %1%</strong>"
+msgstr "Atu bele pasa ezame ne'e, ita tenki hetan valór <strong>%1% ka liu</strong>"
 
 msgid "Try again"
 msgstr "Koko fila fali"
@@ -310,15 +309,15 @@ msgid "Would you like to receive app notifications?"
 msgstr "Ita hakarak simu notifikasaun husi aplikasaun ne'e? "
 
 msgid "Yes, I agree"
-msgstr "Sim, hau konkorda"
+msgstr "Sim, ha'u konkorda"
 
 #. message when user did not pass exam
 msgid "You did not pass this assessment because you only scored %1 and you need to reach %2 to pass. You can retake this exam now or later."
-msgstr "La passa tambe %1 < %2"
+msgstr "Ita hetan valór %1%. Ida ne'e la to'o atu pasa ezame ne'e. Atu bele pasa ita presiza atu hetan valór %2% ka liu. Ita bele koko foti fila ezame ne'e orsida ka tempu seluk atu bele hetan valór ne'ebé diak liu."
 
 #. message when user did not pass exam
 msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later."
-msgstr "La passa tambe %1 < %2"
+msgstr "Ita hetan valór %1%. Ida ne'e la to'o atu pasa ezame ne'e. Atu bele pasa ita presiza atu hetan valór %2% ka liu. Ita bele koko foti fila ezame ne'e orsida ka tempu seluk atu bele hetan valór ne'ebé diak liu."
 
 #. message on completion of a lesson %1 is replaced by the lesson title
 #, fuzzy
@@ -331,11 +330,11 @@ msgstr[0] "Ita hela deit lisaun %1 atu remata %2."
 
 #. message when user passed the exam
 msgid "You passed this exam with a score of %1. If you would like to improve your score you can retake this exam."
-msgstr "passa"
+msgstr "Ita pasa ezame ne'e ho valór %1%. Karik hakarak hadiak liu tan ita nian valór, ita bele foti tan ezame ne'e."
 
 #. message when user passed the exam
 msgid "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam."
-msgstr "passa"
+msgstr "Ita pasa ezame ne'e ho valór %1%. Karik hakarak hadiak liu tan ita nian valór, ita bele foti tan ezame ne'e."
 
 #. message to say what module is next ( %1 is content or test )
 msgid "You're ready to start the %1."
@@ -349,7 +348,7 @@ msgid "You've completed the course"
 msgstr "Ita kompleta ona kursu"
 
 msgid "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?"
-msgstr "Primmmm"
+msgstr "Ita atu komesa ezame ba kursu ne'e. Ita promete atu halo hotu ezame ne'e mesak no la uza ema seluk nian ajuda?"
 
 msgid "Your browser does not support the audio element."
 msgstr "Ita-nia navegadór la suporta komponente audiu nian."
