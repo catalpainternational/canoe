@@ -32,7 +32,7 @@
                 <Card
                     title="{`${props.wagtailPage.title}'s Course Exam`}"
                     link="{props.wagtailPage.id}/exam/0"
-                    isCompleted="{state.isCourseExamComplete}"
+                    isCompleted="{isExamComplete(props.wagtailPage.id)}"
                     isComingSoon="{false}"
                     showFooter="{true}"
                     isDisabled="{examDisabled()}"
@@ -46,7 +46,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
-        import { countCompleteLessonsInCourse } from "js/LearningStatistics";
+        import { countCompleteLessonsInCourse, isExamComplete } from "js/LearningStatistics";
         import { isComplete, isTheCourseComplete } from "Actions/completion";
         import { getCourseAndLessonSlugs } from "js/utilities";
         import { isGuestUser } from "js/AuthenticationUtilities";
@@ -60,10 +60,11 @@
             onMounted(props, state) {
                 state.header = document.getElementsByClassName("course-header")[0];
                 state.headerOffsetTop = state.header.offsetTop;
-                window.addEventListener("scroll", this.stickyHeader);
 
                 const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(this.props.wagtailPage);
                 this.update({ isCourseComplete: isTheCourseComplete(courseSlug, lessonSlugs) });
+
+                window.addEventListener("scroll", this.stickyHeader);
             },
 
             onUnmounted() {
@@ -98,6 +99,11 @@
             examDisabled() {
                 // exams are enabled if you are a guest user, or you have completed the course
                 return !(this.state.isCourseComplete || isGuestUser());
+            },
+
+            isExamComplete() {
+                const { wagtailPage } = this.props;
+                return isExamComplete(wagtailPage.data.slug);
             },
 
             numberOfLessonsCompleteMessage() {

@@ -21,6 +21,20 @@ export class PageLacksTranslationDataError extends Error {
     }
 }
 
+export class URLDoesntExist extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "URLDoesntExist";
+    }
+}
+
+export class ExamIsMissingAnAnswer extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "ExamIsMissingAnAnswer";
+    }
+}
+
 const isAppOffline = (error) => {
     return error instanceof TypeError && error.message === "Failed to fetch";
 };
