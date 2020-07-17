@@ -51,10 +51,10 @@
             async onMounted() {
                 const articles = await getResources();
                 const allTags = getTagsFromPages(articles);
-                // Resources has to pull the search query from the URL. If the
-                // SearchBar gives Resources the query that the SearchBar
-                // pulled, resources mounts two SearchBars. I think this
-                // double-mounting is a RiotJS bug.
+                // Resources must pull the search query from the URL. Resources
+                // cannot initialize itself with the SearchBar's query because
+                // it'll mount two SearchBars. I think this double-mounting is a
+                // RiotJS bug.
                 const query = checkUrlForSearchBarQuery();
                 this.update({ articles, allTags, query });
             },
