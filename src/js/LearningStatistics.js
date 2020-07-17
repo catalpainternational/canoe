@@ -5,17 +5,17 @@
 import { getCourseAndLessonSlugs } from "js/utilities";
 import {
     isTheCourseComplete,
+    setComplete,
+    isComplete,
     countCompleteLessonsInCourse as countCompleteLessonsImpl,
     getLatestCompletionInCourse,
     getLatestInCompletionArray,
-    setComplete,
 } from "Actions/completion";
 import {
     saveExamAnswer as saveAnswer,
     loadExamAnswer as loadAnswer,
     tallyExamScore as tallyScore,
 } from "Actions/Exams";
-import { isComplete } from "./actions/completion";
 
 export const isCourseInProgress = (aWagtailCourse) => {
     const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(aWagtailCourse);
