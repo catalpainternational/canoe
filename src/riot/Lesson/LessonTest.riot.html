@@ -177,16 +177,6 @@
                     this.state.cardIdx
                 );
             },
-
-            completePage() {
-                this.toggleModal(false);
-                setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
-            },
         };
     </script>
 </LessonTest>

@@ -1,80 +1,129 @@
 <TestMultipleAnswer class="answer">
     <div class="answers-block">
-        <h4><span translate>Check </span><span class="bold" translate>all</span><span> answers that apply</span></h4>
+        <h4>
+            <span translate>Check </span><span class="bold" translate>all</span
+            ><span> answers that apply</span>
+        </h4>
         <ol>
-            <li
-                each="{answer in props.card.answers}"
-                onclick="{() => selectAnswer(answer)}"
-            >
+            <li each="{answer in props.card.answers}" onclick="{() => selectAnswer(answer)}">
                 <div>
                     <span class="checkbox"></span>
-                    <span if="{state.visibleAnswers.includes(answer) && answer.correct}" class="success"></span>
-                    <span if="{state.visibleAnswers.includes(answer) && !answer.correct}" class="warning"></span>
-                    <span if="{state.hiddenAnswers.includes(answer) && !state.visibleAnswers.includes(answer)}" class="pendingAnswer"></span>
+                    <span
+                        if="{state.visibleAnswers.has(answer) && answer.correct}"
+                        class="success"
+                    ></span>
+                    <span
+                        if="{state.visibleAnswers.has(answer) && !answer.correct}"
+                        class="warning"
+                    ></span>
+                    <span
+                        if="{state.hiddenAnswers.has(answer) && !state.visibleAnswers.has(answer)}"
+                        class="pendingAnswer"
+                    ></span>
                     <p>{answer.text}</p>
                 </div>
             </li>
         </ol>
     </div>
-    <h4 if="{state.visibleAnswers.length > 0}" translate>Find and check all correct answers and uncheck incorrect answers</h4>
+    <h4 if="{state.visibleAnswers.size > 0}" translate>
+        Find and check all correct answers and uncheck incorrect answers
+    </h4>
     <button
         if="{!props.isCourseExam}"
         class="btn-primary"
         onclick="{showResults}"
-        disabled="{state.hiddenAnswers.length === 0 && state.visibleAnswers.length === 0}"
+        disabled="{state.hiddenAnswers.size === 0 && state.visibleAnswers.size === 0}"
         translate
-    >Check answers</button>
+    >
+        Check answers
+    </button>
 
     <script>
         import { dispatchTestAnswerEvent } from "js/Events";
+        import { union } from "js/SetMethods";
 
         export default {
             state: {
-                hiddenAnswers: [],
-                visibleAnswers: [],
-                numberTotalCorrectAnswers: ''
+                hiddenAnswers: new Set(),
+                visibleAnswers: new Set(),
+                numberTotalCorrectAnswers: 0,
             },
 
-            onMounted() {
-                const numberTotalCorrectAnswers = this.props.card.answers.filter(a => a.correct).length;
-                this.update({ 
-                    numberTotalCorrectAnswers, 
-                    hiddenAnswers: [] 
-                });
+            onMounted(props, state) {
+                const { card } = props;
+                const numberTotalCorrectAnswers = card.answers.filter((a) => a.correct).length;
+                this.update({ numberTotalCorrectAnswers });
+                this.restoreSavedAnswers();
+            },
+
+            restoreSavedAnswers() {
+                const { savedAnswer } = this.props;
+
+                if (!savedAnswer) {
+                    return;
+                }
+
+                const hiddenAnswers = new Set(savedAnswer);
+                this.update({ hiddenAnswers });
             },
 
             showResults() {
-                this.state.visibleAnswers = this.state.visibleAnswers.concat(this.state.hiddenAnswers);
-                this.state.hiddenAnswers = [];
-                this.update();
+                let { visibleAnswers, hiddenAnswers } = this.state;
+                visibleAnswers = union(visibleAnswers, hiddenAnswers);
+                hiddenAnswers = new Set();
+                this.update({ visibleAnswers, hiddenAnswers });
 
-                const numberIncorrectAnswersChosen = this.state.visibleAnswers.filter(a => !a.correct).length;
-                const numberCorrectAnswersChosen = this.state.visibleAnswers.filter(a => a.correct).length;
-                const numberCorrectAnswersMissing = this.state.numberTotalCorrectAnswers - numberCorrectAnswersChosen;
-                const isQuestionComplete = numberCorrectAnswersChosen === this.state.numberTotalCorrectAnswers && numberIncorrectAnswersChosen === 0;
-                
+                const isQuestionComplete = this.gradeAnswers(Array.from(visibleAnswers));
                 this.props.toggleModal(true, {}, isQuestionComplete);
-                
+
                 if (isQuestionComplete) {
-                    this.update({ 
-                        visibleAnswers: []
+                    this.update({
+                        visibleAnswers: new Set(),
                     });
-                };
+                }
             },
 
             selectAnswer(answer) {
-                if (this.state.visibleAnswers.includes(answer)) {
-                    const visibleAnswerIndex = this.state.visibleAnswers.indexOf(answer);
-                    this.state.visibleAnswers.splice(visibleAnswerIndex, 1);
-                } else if (this.state.hiddenAnswers.includes(answer)) {
-                    const hiddenAnswerIndex = this.state.hiddenAnswers.indexOf(answer);
-                    this.state.hiddenAnswers.splice(hiddenAnswerIndex, 1);
-                } else {
-                    this.state.hiddenAnswers.push(answer);
+                this.addSelectionToAnswers(answer);
+
+                const { isCourseExam } = this.props;
+                if (isCourseExam) {
+                    this.reportAnswersToExam();
                 }
-                this.update();
-                this.props.isCourseExam && this.props.recordAnswer(this.state.hiddenAnswers);
             },
-        }
+
+            gradeAnswers(answers) {
+                console.assert(Array.isArray(answers), `"answers" must come in as an Array`);
+
+                const numberIncorrectAnswersChosen = answers.filter((a) => !a.correct).length;
+                const numberCorrectAnswersChosen = answers.filter((a) => a.correct).length;
+                const numberCorrectAnswersMissing =
+                    this.state.numberTotalCorrectAnswers - numberCorrectAnswersChosen;
+
+                const isQuestionComplete =
+                    numberCorrectAnswersChosen === this.state.numberTotalCorrectAnswers &&
+                    numberIncorrectAnswersChosen === 0;
+                return isQuestionComplete;
+            },
+
+            addSelectionToAnswers(answer) {
+                const { visibleAnswers, hiddenAnswers } = this.state;
+                if (visibleAnswers.has(answer)) {
+                    visibleAnswers.delete(answer);
+                } else if (hiddenAnswers.has(answer)) {
+                    hiddenAnswers.delete(answer);
+                } else {
+                    hiddenAnswers.add(answer);
+                }
+                this.update({ visibleAnswers, hiddenAnswers });
+            },
+
+            reportAnswersToExam() {
+                const { visibleAnswers, hiddenAnswers } = this.state;
+                const answers = Array.from(union(visibleAnswers, hiddenAnswers));
+                const isCorrect = this.gradeAnswers(answers);
+                this.props.recordAnswer({ isCorrect, answers });
+            },
+        };
     </script>
 </TestMultipleAnswer>
