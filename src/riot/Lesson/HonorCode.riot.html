@@ -1,7 +1,7 @@
 <HonorCode>
     <div>
         <h3 translate>Course exam</h3>
-        <p>{ minimumScoreMessage() }</p>
+        <p class="score-explanation">{ youMustScoreAtLeastMessage() }<strong>{minimumScoreOrHigherMessage()}</strong></p>
     </div>
     <div class="code">
         <h4 translate>Code of conduct</h4>
@@ -9,10 +9,10 @@
             You’re about to start a course exam. Do you promise that you will complete this exam on
             your own, without assistance from anyone?
         </p>
-        <div onclick="{agreeToCode}">
+        <div class="i-agree-container" onclick="{agreeToCode}">
             <span class="checkbox"></span>
             <span if="{state.hasAgreed}" class="checkmark"></span>
-            <label>Yes, I agree</label>
+            <p>Yes, I agree</p>
         </div>
     </div>
     <div>
@@ -47,12 +47,14 @@
                 location.hash = "#" + this.props.courseId;
             },
 
-            minimumScoreMessage() {
+            youMustScoreAtLeastMessage() {
                 // message for what percent a user must score to pass the exam
-                return gettext(
-                    "To pass this exam you need to score %1% or higher.",
-                    this.props.minimumScore
-                );
+                return gettext("To pass this exam you need to score");
+            },
+
+            minimumScoreOrHigherMessage() {
+                const { minimumScore } = this.props;
+                return gettext(" %1%  or higher.", minimumScore);
             },
         };
     </script>
