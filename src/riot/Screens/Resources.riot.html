@@ -5,7 +5,7 @@
             <h3 translate>Resources</h3>
         </div>
         <SearchBar if="{state.articles.length > 0}" submitQuery="{submitQuery}"></SearchBar>
-        <TagList tags="{state.allTags}" filterArticles="{filterArticles}"></TagList>
+        <TagList tags="{state.allTags}" onTagClick="{filterArticles}"></TagList>
         <div each="{article in state.articles}">
             <Card
                 if="{isResourceArticleVisible(article)}"
@@ -59,14 +59,7 @@
                 this.update({ articles, allTags, query });
             },
 
-            filterArticles(clickedFilter) {
-                let { selectedTags } = this.state;
-
-                if (selectedTags.has(clickedFilter)) {
-                    selectedTags.delete(clickedFilter);
-                } else {
-                    selectedTags.add(clickedFilter);
-                }
+            filterArticles(selectedTags) {
                 this.update({ selectedTags });
             },
 

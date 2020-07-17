@@ -21,7 +21,6 @@
             if="{state.listOfTags.length > 0}"
             tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"
         ></TagList>
         <div
             class="course"
@@ -191,14 +190,8 @@
                 return isComplete(course.data.slug, lesson.slug);
             },
 
-            onTagClick(clickedTag) {
-                if (this.state.selectedTags.includes(clickedTag)) {
-                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
-                    this.state.selectedTags.splice(tagIndex, 1);
-                } else {
-                    this.state.selectedTags.push(clickedTag);
-                }
-                this.update();
+            onTagClick(selectedTags) {
+                this.update({selectedTags});
             },
 
             isCourseVisible(courseTags) {

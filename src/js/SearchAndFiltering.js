@@ -63,7 +63,7 @@ export const updateUrlWithSearchBarQuery = (query) => {
     }
 
     // We should debounce this.
-    window.location.hash = `#resources?${urlParams}`;
+    replaceUrlQuery(urlParams);
 };
 
 export const checkUrlForFilters = () => {
@@ -78,7 +78,9 @@ export const updateUrlWithFilters = (selectedFilters) => {
     for (const selectedFilter of selectedFilters) {
         urlParams.append(TAGS_URL_KEY, selectedFilter);
     }
-    // Unlike `updateUrlWithSearchBarQuery`, this doesn't need debouncing. We
-    // click tags much less than the search bar submits queries.
-    window.location.hash = `#resources?${urlParams}`;
+    replaceUrlQuery(urlParams);
+};
+
+const replaceUrlQuery = (urlParams) => {
+    window.history.replaceState({}, "", `${location.pathname}#resources?${urlParams}`);
 };
