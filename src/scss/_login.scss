@@ -103,13 +103,14 @@ Login > div {
 
         button {
             font-size: 0.875em;
-            text-align: left;
+            text-align: center;
 
             color: $button-color;
             background-color: $background-color;
             border: none;
 
             margin-top: 1em;
+            flex: 1;
         }
     }
 
