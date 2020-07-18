@@ -21,9 +21,9 @@
                     <div>
                         <h2 translate>Good job!</h2>
                         <p>{ lessonCompleteMessage() }</p>
-                        <p>{ takeCourseExamMessage() }</p>
+                        <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
                     </div>
-                    <button class="btn-primary" onclick="{goToCourseExam}" translate>
+                    <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}" translate>
                         Take Exam
                     </button>
                     <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
@@ -34,7 +34,7 @@
                     <div>
                         <h2 translate>Amazing work!</h2>
                         <h3 translate>You've completed the course</h3>
-                        <p>{ passedExamMessage() }</p>
+                        <p if="{ courseHasExam() }">{ passedExamMessage() }</p>
                     </div>
                     <button class="btn-primary" onclick="{goHome}" translate>
                         Back to Courses
@@ -43,7 +43,7 @@
                         View Resources
                     </button>
                 </template>
-                <template if="{props.isCourseExamFinished && !props.passedExam}">
+                <template if="{ courseHasExam() }" if="{props.isCourseExamFinished && !props.passedExam}">
                     <div>
                         <h2 translate>Not quite!</h2>
                         <p>{ failedExamMessage() }</p>
@@ -80,6 +80,10 @@
                 const lessons = await getACoursesLessons(this.props.course.id);
                 const lessonSlugs = lessons.map((lesson) => lesson.slug);
                 this.update({ lessonSlugs });
+            },
+
+            courseHasExam() {
+                return this.props.course.exam_cards.length;
             },
 
             isCourseComplete() {
