@@ -23,7 +23,12 @@
                         <p>{ lessonCompleteMessage() }</p>
                         <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
                     </div>
-                    <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}" translate>
+                    <button
+                        if="{ courseHasExam() }"
+                        class="btn-primary"
+                        onclick="{goToCourseExam}"
+                        translate
+                    >
                         Take Exam
                     </button>
                     <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
@@ -34,7 +39,7 @@
                     <div>
                         <h2 translate>Amazing work!</h2>
                         <h3 translate>You've completed the course</h3>
-                        <p if="{ courseHasExam() }">{ passedExamMessage() }</p>
+                        <p>{ passedExamMessage() }</p>
                     </div>
                     <button class="btn-primary" onclick="{goHome}" translate>
                         Back to Courses
@@ -43,7 +48,9 @@
                         View Resources
                     </button>
                 </template>
-                <template if="{ courseHasExam() }" if="{props.isCourseExamFinished && !props.passedExam}">
+                <template
+                    if="{props.isCourseExamFinished && !props.passedExam}"
+                >
                     <div>
                         <h2 translate>Not quite!</h2>
                         <p>{ failedExamMessage() }</p>
@@ -83,7 +90,8 @@
             },
 
             courseHasExam() {
-                return this.props.course.exam_cards.length;
+                const { course } = this.props;
+                return course.has_exam;
             },
 
             isCourseComplete() {
