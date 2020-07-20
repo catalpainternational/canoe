@@ -24,7 +24,8 @@
                 showFooter="{false}"
             ></Card>
         </div>
-        <p if="{state.articles == 0}" translate>
+        <p if="{state.isLoading}">Loading . . .</p>
+        <p if="{!state.isLoading && state.articles == 0}" translate>
             There are no resource articles yet. Check back soon!
         </p>
     </div>
@@ -49,6 +50,7 @@
                 articles: [],
                 listOfAllTags: [],
                 articleContent: {},
+                isLoading: false,
             },
 
             components: {
@@ -58,6 +60,7 @@
             },
 
             async onMounted() {
+                this.toggleLoadingMessage();
                 const articles = await getResources();
                 const listOfAllTags = getTagsFromPages(articles);
                 this.update({ articles, listOfAllTags, selectedTags: [] });
@@ -77,6 +80,11 @@
                         }
                     }
                 }
+                this.toggleLoadingMessage();
+            },
+
+            toggleLoadingMessage() {
+                this.update({ isLoading: !this.state.isLoading });
             },
 
             generateUrlParams() {
