@@ -109,11 +109,6 @@
             line-height: 10px;
             font-weight: 600;
         }
-
-        @media only screen and (max-width: $sm-phone) {
-            width: 5em;
-            flex: none;
-        }
     }
 
     .status.start-exam {
