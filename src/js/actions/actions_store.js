@@ -14,30 +14,49 @@ import { postAction, getActions } from "./actions_api";
 import { make_uuid32 } from "./make_uuid32";
 import { ON_ACTION_CHANGE } from "../Events";
 
-export function storeCompletion(data) {
-    // create the completion object
+const COMPLETION_ACTION_TYPE = "completion";
+const EXAM_ACTION_TYPE = "exam";
+
+const storeAction = async (actionType, data) => {
     const action = {
-        type: "completion",
+        type: actionType,
         date: new Date(),
         uuid: make_uuid32(),
+        ...data,
     };
-    Object.assign(action, data);
 
-    writeAction(action).catch((err) => console.error(err));
+    try {
+        await writeAction(action);
+    } catch (err) {
+        console.error(err);
+    }
 
-    postAction(action)
-        .catch((err) => console.error(err))
-        .then((synced) => {
-            // if response is ok set the record to known in idb
-            if (synced) {
-                markActionAsSynced(action);
-            }
-        });
+    try {
+        const isActionSynched = await postAction(action);
+        // if response is ok set the record to known in idb
+        if (isActionSynched) {
+            markActionAsSynced(action);
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+export const storeExamAnswerInIDB = (data) => {
+    storeAction(EXAM_ACTION_TYPE, data).then(() => console.log(`stored: ${JSON.stringify(data)}`))
+};
+
+export const getExamAnswersFromIdb = () => {
+    return readActions(EXAM_ACTION_TYPE);
+};
+
+export function storeCompletion(data) {
+    storeAction(COMPLETION_ACTION_TYPE, data);
 }
 
 export function getCompletions() {
     // deliver from idb
-    return readActions("completion");
+    return readActions(COMPLETION_ACTION_TYPE);
 }
 
 export function updateApi() {
@@ -70,7 +89,6 @@ export async function updateIdb() {
     // get server actions and ensure we have them in idb
     try {
         const actions = await getActions();
-        // const results = await Promise.all(actions.map(ensureAction));
         for (const action of actions) {
             await ensureAction(action);
             window.dispatchEvent(new CustomEvent(ON_ACTION_CHANGE));

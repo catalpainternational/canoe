@@ -55,3 +55,18 @@ export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
         lessonSlugs,
     };
 };
+
+export const doesTheArrayContainTheObject = (theArray, theObject, matchingFunction) => {
+    // matchingFunction takes two objects as input and returns true when those
+    // objects "match".
+    if (theArray.length === 0) {
+        return false;
+    }
+
+    for (const arrayObject of theArray) {
+        if (matchingFunction(arrayObject, theObject)) {
+            return true;
+        }
+    }
+    return false;
+};

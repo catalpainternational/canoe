@@ -152,8 +152,6 @@
                 console.assert(
                     response.hasOwnProperty("answers") && response.hasOwnProperty("isCorrect")
                 );
-                const { card } = this.state;
-                saveExamAnswer(card.id, response);
 
                 this.update({ currentAnswer: response });
             },

@@ -12,14 +12,14 @@ import { intersection } from "js/SetMethods";
 const courses = new Map();
 
 // read completion actions from idb to update in memory values
-window.addEventListener(ON_ACTION_CHANGE, initialiseCompletions);
+window.addEventListener(ON_ACTION_CHANGE, pullCompletionsIntoMemory);
 
 export const clearInMemoryCompletions = () => {
     courses.clear();
 };
 
 // read completions from store and initialise
-export async function initialiseCompletions() {
+export async function pullCompletionsIntoMemory() {
     try {
         const actions = await getCompletions();
         actions.forEach((action) => {
@@ -31,11 +31,11 @@ export async function initialiseCompletions() {
     }
 }
 
-export function setComplete(course, lesson, section) {
+export function setComplete(course, lesson, section, extraDataObject = {}) {
     setCompleteInternal(course, lesson, section, new Date());
 
     // store the action ( via idb and api )
-    storeCompletion({ course, lesson, section });
+    storeCompletion({ course, lesson, section, ...extraDataObject });
 }
 
 function setCompleteInternal(course, lesson, section, date) {

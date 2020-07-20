@@ -70,8 +70,8 @@ export const tallyFinalScore = (examQuestions) => {
 
 const EXAM_SLUG = "exam";
 
-export const markExamAsComplete = (courseSlug) => {
-    setComplete(courseSlug, EXAM_SLUG, EXAM_SLUG);
+export const markExamAsComplete = (courseSlug, finalScore) => {
+    setComplete(courseSlug, EXAM_SLUG, EXAM_SLUG, { finalScore });
 };
 
 export const isExamComplete = (courseSlug) => {
