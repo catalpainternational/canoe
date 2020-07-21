@@ -170,6 +170,9 @@ msgstr "Lisaun ne'ebé sei presiza atu kompleta hodi remata ita-nia estudu"
 msgid "Let us know what you think of this lesson. We value your feedback and treat all feedback as confidential."
 msgstr "Favor fó hatene ami ita-nia opiniaun kona-ba lisaun ne'e. Ami apresia ita-nia komentáriu no konsidera ida-ne'e konfidensiál"
 
+msgid "Loading . . ."
+msgstr ""
+
 msgid "Log out"
 msgstr "Sai"
 
