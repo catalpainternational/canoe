@@ -2,7 +2,7 @@
     <div>
         <a href="#{state.currentCourse && state.currentCourse.data.id}">
             <div class="btn-continue-learning">
-                <p translate>Continue learning</p>
+                <p>{ TRANSLATIONS.continueLearning() }</p>
                 <span class="arrow background-gray-2"></span>
             </div>
         </a>
@@ -13,20 +13,24 @@
 
         export default {
             state: {
-                currentCourse: null
+                currentCourse: null,
+            },
+
+            TRANSLATIONS: {
+                continueLearning: () => gettext("Continue learning"),
             },
 
             async renderContinueLearningButton() {
                 const lastWorkedOnCourse = await getLastWorkedOnCourse();
 
                 this.update({
-                    currentCourse: lastWorkedOnCourse
+                    currentCourse: lastWorkedOnCourse,
                 });
             },
 
             onMounted() {
                 this.renderContinueLearningButton();
-            }
+            },
         };
     </script>
 </ContinueLearningButton>
