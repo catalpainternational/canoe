@@ -72,7 +72,7 @@
             },
 
             onMounted(props, state) {
-                const { header } = document.getElementsByClassName("course-header")[0];
+                const header = this.$(".course-header");
                 const { wagtailPage } = props;
                 const isCourseComplete = !isCourseInProgress(wagtailPage);
 
@@ -111,8 +111,11 @@
             },
 
             examDisabled() {
-                // exams are enabled if you are a guest user, or you have completed the course
-                return !(this.state.isCourseComplete || isGuestUser());
+                // exams are enabled if you complete all lessons, or you are a guest user.
+                const { wagtailPage: course } = this.props;
+                const { lessons_count } = course.data;
+                const isExamUnlocked = countCompleteLessonsInCourses([course]) === lessons_count - 1;
+                return !(isExamUnlocked || isGuestUser());
             },
 
             isExamComplete() {

@@ -105,7 +105,8 @@ export const getFinishedLessonSlugs = (courseSlug, liveLessonSlugs) => {
     const finishedLessons = [];
     for (const lessonSlug of liveLessonsInCourseMap) {
         const lessonMap = courseMap.get(lessonSlug);
-        if (isLessonComplete(lessonMap)) {
+        const isExamComplete = () => isComplete(courseSlug, lessonSlug, lessonSlug);
+        if (isLessonComplete(lessonMap) || isExamComplete()) {
             finishedLessons.push(lessonSlug);
         }
     }
