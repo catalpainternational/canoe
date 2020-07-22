@@ -44,12 +44,12 @@ export const getLatestCompletion = (wagtailCourses) => {
             continue;
         }
 
-        const { courseSlug } = getCourseAndLessonSlugs(course);
-        const latestInCourse = getLatestCompletionInCourse(courseSlug);
-        if (!latestInCourse) {
+        const { slug: courseSlug } = course.data;
+        const latestCompletionInCourse = getLatestCompletionInCourse(courseSlug);
+        if (!latestCompletionInCourse) {
             continue;
         }
-        latestCompletions.push(latestInCourse);
+        latestCompletions.push(latestCompletionInCourse);
     }
 
     const latestCompletion = getLatestInCompletionArray(latestCompletions);
