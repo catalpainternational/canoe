@@ -2,12 +2,11 @@
     LearningStatistics is the interface between Canoe and Actions/completion.
 */
 
-import { getCourseAndLessonSlugs } from "js/utilities";
 import {
     isTheCourseComplete,
     setComplete,
     isComplete,
-    countCompleteLessonsInCourse as countCompleteLessonsImpl,
+    getFinishedLessonSlugs,
     getLatestCompletionInCourse,
     getLatestInCompletionArray,
 } from "Actions/completion";
@@ -17,6 +16,22 @@ import {
     tallyExamScore as tallyScore,
 } from "Actions/Exams";
 
+const getCourseAndLessonSlugs = (wagtailCoursePage) => {
+    const { slug, has_exam } = wagtailCoursePage.data;
+    const lessons = wagtailCoursePage.lessons;
+
+    const courseSlug = slug;
+    const lessonSlugs = lessons.map((lesson) => lesson.slug);
+    if (has_exam) {
+        lessonSlugs.push(EXAM_SLUG);
+    }
+
+    return {
+        courseSlug,
+        lessonSlugs,
+    };
+};
+
 export const isCourseInProgress = (aWagtailCourse) => {
     const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(aWagtailCourse);
     return !isTheCourseComplete(courseSlug, lessonSlugs);
@@ -25,12 +40,11 @@ export const isCourseInProgress = (aWagtailCourse) => {
 export const getLatestCompletion = (wagtailCourses) => {
     const latestCompletions = [];
     for (const course of wagtailCourses) {
-        const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
-
-        if (isTheCourseComplete(courseSlug, lessonSlugs)) {
+        if (!isCourseInProgress(course)) {
             continue;
         }
 
+        const { courseSlug } = getCourseAndLessonSlugs(course);
         const latestInCourse = getLatestCompletionInCourse(courseSlug);
         if (!latestInCourse) {
             continue;
@@ -42,18 +56,18 @@ export const getLatestCompletion = (wagtailCourses) => {
     return latestCompletion;
 };
 
-export const countCompleteLessonsInCourse = (courseSlug, lessonSlugs) => {
-    return countCompleteLessonsImpl(courseSlug, lessonSlugs);
-};
-
 export const countCompleteLessonsInCourses = (wagtailCourses) => {
     let numberOfCompletedLessons = 0;
 
     for (const course of wagtailCourses) {
         const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
-        numberOfCompletedLessons += countCompleteLessonsInCourse(courseSlug, lessonSlugs);
+        numberOfCompletedLessons += countFinishedLessonsAmongSlugs(courseSlug, lessonSlugs);
     }
     return numberOfCompletedLessons;
+};
+
+export const countFinishedLessonsAmongSlugs = (courseSlug, slugsOfLiveLessons) => {
+    return getFinishedLessonSlugs(courseSlug, slugsOfLiveLessons).length;
 };
 
 export const saveExamAnswer = (questionId, answer) => {
