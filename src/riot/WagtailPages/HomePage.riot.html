@@ -33,7 +33,6 @@
                 link="{course.data.id}"
                 description="{courseProgressMessage(course)}"
                 isCompleted="{!isCourseInProgress(course)}"
-                isComingSoon="{state.nextLesson[course.data.id].coming_soon}"
                 showFooter="{true}"
                 type="course"
             ></Card>
@@ -58,8 +57,6 @@
 
         export default {
             state: {
-                nextLesson: {},
-                courses: [],
                 currentCourse: null,
                 selectedTags: [],
                 listOfTags: [],
@@ -72,20 +69,17 @@
                 taglist: TagList,
             },
 
-            onBeforeMount(props, state) {
-                // only show courses with lessons
-                const courses = props.wagtailPage.courses.filter((course) => course.lessons.length);
+            onMounted(props, state) {
+                const unsortedCourses = props.wagtailPage.courses.filter((course) => course.lessons.length);
 
-                const lastWorkedOnCourse = this.getCurrentCourse(courses);
-                courses.forEach((course) => {
-                    this.getNextLesson(course);
+                const currentCourse = this.getCurrentCourse(unsortedCourses);
+                const listOfTags = getTagsFromPages(unsortedCourses);
+                const sortedListOfCourses = this.sortCourses(unsortedCourses);
+                this.update({
+                    currentCourse,
+                    listOfTags,
+                    sortedListOfCourses,
                 });
-
-                this.state.courses = courses;
-                this.state.listOfTags = getTagsFromPages(courses);
-                this.state.currentCourse = lastWorkedOnCourse;
-
-                this.sortCourses(courses);
             },
 
             sortCourses(courses) {
@@ -101,7 +95,7 @@
                 });
 
                 const sortedCourses = incompleteCourses.concat(completedCourses);
-                this.state.sortedListOfCourses = sortedCourses;
+                return sortedCourses;
             },
 
             continueLearningMessage() {
@@ -147,25 +141,6 @@
                     (course) => course.data.slug === latestCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
-            },
-
-            getNextLesson(course) {
-                const lessons = course.lessons;
-                const lastLesson = lessons[lessons.length - 1];
-
-                const isUnfinishedAndIsntComingSoon = (lesson, course) => {
-                    return !isComplete(course.data.slug, lesson.slug) && !lesson.coming_soon;
-                };
-
-                for (const lesson of lessons) {
-                    if (
-                        isUnfinishedAndIsntComingSoon(lesson, course) ||
-                        lesson.id === lastLesson.id
-                    ) {
-                        this.state.nextLesson[course.data.id] = lesson;
-                        break;
-                    }
-                }
             },
 
             isCourseInProgress(aCourse) {
