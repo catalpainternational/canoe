@@ -43,7 +43,7 @@ const storeAction = async (actionType, data) => {
 };
 
 export const storeExamAnswerInIDB = (data) => {
-    storeAction(EXAM_ACTION_TYPE, data).then(() => console.log(`stored: ${JSON.stringify(data)}`))
+    storeAction(EXAM_ACTION_TYPE, data).then(() => console.log(`stored: ${JSON.stringify(data)}`));
 };
 
 export const getExamAnswersFromIdb = () => {
@@ -87,14 +87,10 @@ export function updateApi() {
 
 export async function updateIdb() {
     // get server actions and ensure we have them in idb
-    try {
-        const actions = await getActions();
-        for (const action of actions) {
-            await ensureAction(action);
-            window.dispatchEvent(new CustomEvent(ON_ACTION_CHANGE));
-            console.info("Retrieved and applied some server actions");
-        }
-    } catch (e) {
-        console.error(e);
+    const actions = await getActions();
+    for (const action of actions) {
+        await ensureAction(action);
+        window.dispatchEvent(new CustomEvent(ON_ACTION_CHANGE));
+        console.info("Retrieved and applied some server actions");
     }
 }

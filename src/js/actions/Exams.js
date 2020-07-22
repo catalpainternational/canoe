@@ -43,14 +43,10 @@ export const clearInMemoryExamAnswers = () => {
 };
 
 export const pullExamAnswersIntoMemory = async () => {
-    try {
-        const idbAnswers = await getExamAnswersFromIdb();
-        for (const idbAnswer of idbAnswers) {
-            const { questionId, answers, isCorrect } = idbAnswer;
-            storeExamAnswerInMemory(questionId, { answers, isCorrect });
-        }
-    } catch (err) {
-        console.error(`Couldn't load exam response ${questionid}`);
+    const idbAnswers = await getExamAnswersFromIdb();
+    for (const idbAnswer of idbAnswers) {
+        const { questionId, answers, isCorrect } = idbAnswer;
+        storeExamAnswerInMemory(questionId, { answers, isCorrect });
     }
 };
 
