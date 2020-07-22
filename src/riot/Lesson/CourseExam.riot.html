@@ -149,8 +149,7 @@
             },
 
             isAtResults(cardIdx) {
-                const { cards } = this.props;
-                return cardIdx === cards.length;
+                return cardIdx === this.state.cards.length;
             },
 
             getCard(cardIdx) {
