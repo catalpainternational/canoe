@@ -1,7 +1,13 @@
 import { ExamIsMissingAnAnswer } from "js/Errors";
-import { storeExamAnswerInIDB, getExamAnswersFromIdb } from "Actions/actions_store";
+import {
+    storeExamAnswerInIDB,
+    getExamAnswersFromIdb,
+    storeExamScoreInIDB,
+    getExamScoresFromIDB,
+} from "Actions/actions_store";
 
 const answers = new Map();
+const finalScores = new Map();
 
 const isUUID = (uuid) => {
     // Regex doesn't support Nil UUID.
@@ -34,12 +40,21 @@ const assertAnswerShape = (answer) => {
     console.assert(typeof isCorrect === "boolean", `The "isCorrect" property must be a boolean.`);
 };
 
+const assertExamScoreParameters = (courseSlug, finalScore) => {
+    console.assert(typeof courseSlug === "string");
+    console.assert(typeof finalScore === "number");
+};
+
 const storeExamAnswerInMemory = (questionId, answer) => {
     answers.set(questionId, answer);
 };
 
 export const clearInMemoryExamAnswers = () => {
     answers.clear();
+};
+
+export const clearInMemoryExamScores = () => {
+    finalScores.clear();
 };
 
 export const pullExamAnswersIntoMemory = async () => {
@@ -66,6 +81,41 @@ export const loadExamAnswer = (questionId) => {
         assertAnswerShape(answer);
     }
     return answer;
+};
+
+export const saveExamScore = (courseSlug, finalScore) => {
+    assertExamScoreParameters(courseSlug, finalScore);
+
+    storeExamScoreInMemory(courseSlug, finalScore);
+    storeExamScoreInIDB(courseSlug, finalScore);
+};
+
+export const getExamHighScore = (courseSlug) => {
+    if (!finalScores.has(courseSlug)) {
+        return 0;
+    }
+    const scores = finalScores.get(courseSlug);
+    return Math.max(...scores);
+};
+
+export const pullExamScoresIntoMemory = async () => {
+    const idbScores = await getExamScoresFromIDB();
+
+    for (const idbScore of idbScores) {
+        const { course, finalScore } = idbScore;
+        storeExamScoreInMemory(course, finalScore);
+    }
+};
+
+const storeExamScoreInMemory = (courseSlug, finalScore) => {
+    assertExamScoreParameters(courseSlug, finalScore);
+
+    if (!finalScores.has(courseSlug)) {
+        finalScores.set(courseSlug, [finalScore]);
+    } else {
+        const scores = finalScores.get(courseSlug);
+        finalScores.set(courseSlug, [...scores, finalScore]);
+    }
 };
 
 export const tallyExamScore = (questionIds) => {

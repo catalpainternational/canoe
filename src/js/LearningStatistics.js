@@ -14,6 +14,8 @@ import {
     saveExamAnswer as saveAnswer,
     loadExamAnswer as loadAnswer,
     tallyExamScore as tallyScore,
+    saveExamScore as saveScore,
+    getExamHighScore as getHighScore,
 } from "Actions/Exams";
 
 const getCourseAndLessonSlugs = (wagtailCoursePage) => {
@@ -80,6 +82,14 @@ export const loadExamAnswer = (questionId) => {
 
 export const tallyFinalScore = (examQuestions) => {
     return tallyScore(examQuestions);
+};
+
+export const saveExamScore = (courseSlug, finalScore) => {
+    saveScore(courseSlug, finalScore);
+};
+
+export const getExamHighScore = (courseSlug) => {
+    return getHighScore(courseSlug);
 };
 
 const EXAM_SLUG = "exam";

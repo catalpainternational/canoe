@@ -16,6 +16,7 @@ import { ON_ACTION_CHANGE } from "../Events";
 
 const COMPLETION_ACTION_TYPE = "completion";
 const EXAM_ACTION_TYPE = "exam";
+const EXAM_FINAL_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
 
 const storeAction = async (actionType, data) => {
     const action = {
@@ -43,11 +44,19 @@ const storeAction = async (actionType, data) => {
 };
 
 export const storeExamAnswerInIDB = (data) => {
-    storeAction(EXAM_ACTION_TYPE, data).then(() => console.log(`stored: ${JSON.stringify(data)}`));
+    storeAction(EXAM_ACTION_TYPE, data);
 };
 
 export const getExamAnswersFromIdb = () => {
     return readActions(EXAM_ACTION_TYPE);
+};
+
+export const storeExamScoreInIDB = (courseSlug, finalScore) => {
+    storeAction(EXAM_FINAL_SCORE_TYPE, { course: courseSlug, finalScore });
+};
+
+export const getExamScoresFromIDB = () => {
+    return readActions(EXAM_FINAL_SCORE_TYPE);
 };
 
 export function storeCompletion(data) {

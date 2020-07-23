@@ -35,7 +35,7 @@
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
-        import { markExamAsComplete } from "js/LearningStatistics";
+        import { markExamAsComplete, saveExamScore } from "js/LearningStatistics";
 
         export default {
             components: {
@@ -53,6 +53,9 @@
             calculatePassOrFail() {
                 const { course, finalScore, minimumScore } = this.props;
                 const passedExam = finalScore >= minimumScore;
+
+                saveExamScore(course.slug, finalScore);
+
                 if (passedExam) {
                     markExamAsComplete(course.slug, finalScore);
                 }
