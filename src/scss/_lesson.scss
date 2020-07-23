@@ -293,6 +293,10 @@ LessonContent .content {
             display: flex;
             flex-direction: row;
             margin-top: 2em;
+
+            &.long {
+                margin-top: 0;
+            }
         }
 
         h3 {
@@ -314,9 +318,13 @@ LessonContent .content {
 
         & p {
             padding-top: 2em;
-            margin-left: 0.35em;
             font-size: 1em;
             margin-left: 1em;
+
+            &.long {
+                padding-top: 0;
+                margin-bottom: 0;
+            }
         }
     }
 
