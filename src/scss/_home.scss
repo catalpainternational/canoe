@@ -43,6 +43,12 @@ HomePage .header {
         margin: 0 10px 20px 0;
         font-weight: 400;
     }
+
+    padding: 0 3em;
+
+    @media only screen and (max-width: $lg-phone) {
+        padding: 0 2em;
+    }
 }
 
 HomePage .header:after {
