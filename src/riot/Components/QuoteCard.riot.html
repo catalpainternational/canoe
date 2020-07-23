@@ -1,8 +1,18 @@
 <QuoteCard>
-    <div class="quote-container">
+    <div class="quote-container {styleLength()}">
         <span>"</span>
         <h3>{props.card.quote}</h3>
         <span>"</span>
     </div>
-    <p>- {props.card.attribution}</p>
+    <p class="{styleLength()}">- {props.card.attribution}</p>
+
+    <script>
+        export default {
+            styleLength() {
+                if (this.props.card.quote.length > 200) {
+                    return "long";
+                }
+            },
+        };
+    </script>
 </QuoteCard>
