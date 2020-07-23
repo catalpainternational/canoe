@@ -1,25 +1,28 @@
 <SearchBar>
     <div class="form-group">
-        <p
-            class="search-text"
-            if="{props.searchString.length < 3 && props.searchString.length > 0}"
-        >
-            { TRANSLATIONS.enterCharacters() }
-        </p>
-        <input id="search" type="text" value="{props.searchString}" oninput="{onSearchInput}" />
+        <input
+            id="search"
+            type="text"
+            value="{props.searchString}"
+            oninput="{debounce(onSearchInput, SUBMIT_AFTER_THIS_MANY_MS)}"
+        />
         <label class="{props.searchString ? 'hide' : ''}" for="search"></label>
         <span class="search-icon"></span>
     </div>
 
     <script>
+        import { debounce } from "js/utilities";
+
         export default {
-            TRANSLATIONS: {
-                enterCharacters: () => gettext("Enter at least 3 characters"),
-            },
+            SUBMIT_AFTER_THIS_MANY_MS: 250,
 
             onSearchInput() {
                 const queryElement = this.$("#search");
                 this.props.submitSearch(queryElement.value);
+            },
+
+            debounce(...args) {
+                return debounce(...args);
             },
         };
     </script>

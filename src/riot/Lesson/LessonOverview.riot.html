@@ -1,0 +1,72 @@
+<LessonOverview>
+    <LessonObjective
+        if="{state.hash === OBJECTIVES}"
+        objective="{props.wagtailPage.objective}"
+        module="{OBJECTIVES}"
+        nextModule="{CONTENT}"
+        title="{props.wagtailPage.title}"
+        lesson="{props.wagtailPage.data}"
+        course="{props.wagtailPage.course}"
+    ></LessonObjective>
+    <LessonContent
+        if="{state.hash === CONTENT}"
+        lessonContent="{props.wagtailPage.content}"
+        module="{CONTENT}"
+        nextModule="{TEST}"
+        title="{props.wagtailPage.title}"
+        lesson="{props.wagtailPage.data}"
+        course="{props.wagtailPage.course}"
+        isLessonPage="{true}"
+    ></LessonContent>
+    <LessonTest
+        if="{state.hash === TEST}"
+        test="{props.wagtailPage.test}"
+        module="{TEST}"
+        title="{props.wagtailPage.title}"
+        lesson="{props.wagtailPage.data}"
+        course="{props.wagtailPage.course}"
+    >
+    </LessonTest>
+    <LessonPage if="{!state.hash}" wagtailPage="{props.wagtailPage}"></LessonPage>
+
+    <script>
+        import LessonObjective from "RiotTags/Lesson/LessonObjective.riot.html";
+        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
+        import LessonTest from "RiotTags/Lesson/LessonTest.riot.html";
+        import LessonPage from "RiotTags/WagtailPages/LessonPage.riot.html";
+
+        import { getHashPieces } from "js/Routing";
+
+        export default {
+            state: {
+                hash: "",
+            },
+
+            components: {
+                lessonobjective: LessonObjective,
+                lessoncontent: LessonContent,
+                lessontest: LessonTest,
+                lessonpage: LessonPage,
+            },
+
+            OBJECTIVES: "objectives",
+            CONTENT: "content",
+            TEST: "test",
+
+            onBeforeMount(props, state) {
+                state.hash = getHashPieces()[1];
+                window.addEventListener("hashchange", this.hashChanged);
+            },
+
+            onBeforeUnmount(props, state) {
+                window.removeEventListener("hashchange", this.hashChanged);
+            },
+
+            hashChanged() {
+                this.update({
+                    hash: getHashPieces()[1],
+                });
+            },
+        };
+    </script>
+</LessonOverview>

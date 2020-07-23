@@ -32,8 +32,8 @@
             },
 
             async startCompletionsService() {
-                await initialiseCompletions();
                 await updateIdb();
+                await initialiseCompletions();
             },
 
             async prepDataForAppLaunch() {

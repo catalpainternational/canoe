@@ -134,14 +134,11 @@
 
             isResourceArticleVisible(article) {
                 const { searchString } = this.state;
-                const isQueryMatch =
-                    searchString.length < 3
-                        ? "true"
-                        : doesQueryMatchSearchContent(
-                              searchString,
-                              article.title,
-                              article.description
-                          );
+                const isQueryMatch = doesQueryMatchSearchContent(
+                    searchString,
+                    article.title,
+                    article.description
+                );
 
                 const { selectedTags } = this.state;
                 const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
