@@ -10,11 +10,11 @@
         <div if="{props.showFooter}" class="card-footer">
             <div if="{props.isCompleted}" class="status done">
                 <span class="checkmark-circle"></span>
-                <p>{ TRANSLATIONS.completed }</p>
+                <p>{ TRANSLATIONS.completed() }</p>
             </div>
             <div if="{!props.isCompleted}" class="status btn-start-lesson">
                 <span class="arrow-blue"></span>
-                <p>{ TRANSLATIONS.startMessages[props.type] }</p>
+                <p>{ TRANSLATIONS.startMessages[props.type]() }</p>
             </div>
             <div if="{props.duration}" class="duration">
                 <span class="clock"></span>
@@ -28,11 +28,12 @@
     <script>
         export default {
             TRANSLATIONS: {
-                completed: gettext('completed'),
+                completed: () => gettext('completed'),
                 startMessages: {
-                    activity: gettext('Start Activity'),
-                    lesson: gettext('Start Lesson'),
-                    course: gettext('Start Course'),
+                    activity: () => gettext('Start Activity'),
+                    lesson: () => gettext('Start Lesson'),
+                    course: () => gettext('Start Course'),
+                    exam: () => gettext('Start Exam'),
                 },
             },
 

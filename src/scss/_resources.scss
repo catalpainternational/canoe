@@ -25,6 +25,16 @@ Resources .content-wrapper {
         margin: 0;
         flex: 1;
     }
+
+    taglist {
+        .tag-container::after {
+            right: 10px;
+        }
+
+        .tag-container::before {
+            left: 10px;
+        }
+    }
 }
 
 taglist {
@@ -49,7 +59,11 @@ taglist {
         }
 
         &:last-child {
-            margin-right: 40px;
+            margin-right: 30px;
+        }
+
+        &:first-child {
+            margin-left: 30px;
         }
     }
 
@@ -63,16 +77,29 @@ taglist {
     .tag-container {
         overflow: auto;
         white-space: nowrap;
-        margin-bottom: 0.5em;
+        margin: 0 -30px 0.5em -30px;
     }
 
     .tag-container::after {
         content: "";
-        width: 50px;
+        width: 30px;
         height: 45px;
         position: absolute;
-        right: 30px;
+        right: 0px;
         background: linear-gradient(90deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
+
+        @media only screen and (min-width: $tablet) {
+            background: none;
+        }
+    }
+
+    .tag-container::before {
+        content: "";
+        width: 30px;
+        height: 45px;
+        position: absolute;
+        left: 0px;
+        background: linear-gradient(270deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
 
         @media only screen and (min-width: $tablet) {
             background: none;

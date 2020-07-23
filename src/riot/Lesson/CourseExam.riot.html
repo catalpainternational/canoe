@@ -175,7 +175,7 @@
                 const { cards } = this.props;
                 const listOfExamQuestions = cards.map((card) => card.id);
                 try {
-                    return tallyFinalScore(listOfExamQuestions);
+                    return Math.round(tallyFinalScore(listOfExamQuestions));
                 } catch (err) {
                     if (err instanceof ExamIsMissingAnAnswer) {
                         return 0;

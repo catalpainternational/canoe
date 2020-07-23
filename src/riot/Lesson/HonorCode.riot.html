@@ -1,18 +1,19 @@
 <HonorCode>
     <div>
         <h3 translate>Course exam</h3>
-        <p class="score-explanation">{ youMustScoreAtLeastMessage() }<strong>{minimumScoreOrHigherMessage()}</strong></p>
+        <p class="score-explanation">
+            <raw html="{ youMustScoreAtLeastMessage() }"></raw>
+        </p>
     </div>
     <div class="code">
         <h4 translate>Code of conduct</h4>
-        <p translate>
-            You’re about to start a course exam. Do you promise that you will complete this exam on
-            your own, without assistance from anyone?
+        <p>
+            { TRANSLATIONS.promise() }
         </p>
         <div class="i-agree-container" onclick="{agreeToCode}">
             <span class="checkbox"></span>
             <span if="{state.hasAgreed}" class="checkmark"></span>
-            <p>Yes, I agree</p>
+            <p>{ TRANSLATIONS.agree() }</p>
         </div>
     </div>
     <div>
@@ -30,7 +31,18 @@
     </div>
 
     <script>
+        import Raw from "RiotTags/Components/Raw.riot.html";
+
         export default {
+            TRANSLATIONS: {
+                promise: () => gettext('You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?'),
+                agree: () => gettext('Yes, I agree'),
+            },
+
+            components: {
+                raw: Raw,
+            },
+
             state: {
                 hasAgreed: false,
             },
@@ -48,13 +60,9 @@
             },
 
             youMustScoreAtLeastMessage() {
-                // message for what percent a user must score to pass the exam
-                return gettext("To pass this exam you need to score");
-            },
-
-            minimumScoreOrHigherMessage() {
                 const { minimumScore } = this.props;
-                return gettext(" %1%  or higher.", minimumScore);
+                // message for what percent a user must score to pass the exam
+                return gettext("To pass this exam you need to score <strong>%1% or higher</strong>", minimumScore);
             },
         };
     </script>

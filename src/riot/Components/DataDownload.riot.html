@@ -32,8 +32,8 @@
             },
 
             async startCompletionsService() {
-                await initialiseCompletions();
                 await updateIdb();
+                await initialiseCompletions();
             },
 
             async prepDataForAppLaunch() {
@@ -43,7 +43,11 @@
                         this.pollForWebpageChanges,
                         EVERY_FIVE_MINUTES
                     );
+                } else {
+                    // Pulls completions from the database into memory.
+                    await initialiseCompletions();
                 }
+
                 this.pollForWebpageChanges();
                 this.state.completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
 

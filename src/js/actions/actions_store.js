@@ -72,12 +72,9 @@ export async function updateIdb() {
         const actions = await getActions();
         // const results = await Promise.all(actions.map(ensureAction));
         for (const action of actions) {
-            ensureAction(action)
-                .then(() => {
-                    window.dispatchEvent(new CustomEvent(ON_ACTION_CHANGE));
-                    console.info("Retrieved and applied some server actions");
-                })
-                .catch((error) => console.error(error));
+            await ensureAction(action);
+            window.dispatchEvent(new CustomEvent(ON_ACTION_CHANGE));
+            console.info("Retrieved and applied some server actions");
         }
     } catch (e) {
         console.error(e);
