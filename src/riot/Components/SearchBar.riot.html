@@ -17,7 +17,6 @@
             SUBMIT_AFTER_THIS_MANY_MS: 250,
 
             onSearchInput() {
-                console.log("searching...");
                 const queryElement = this.$("#search");
                 this.props.submitSearch(queryElement.value);
             },
