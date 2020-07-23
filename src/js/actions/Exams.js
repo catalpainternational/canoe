@@ -41,8 +41,8 @@ const assertAnswerShape = (answer) => {
 };
 
 const assertExamScoreParameters = (courseSlug, finalScore) => {
-    console.assert(typeof courseSlug === "string");
-    console.assert(typeof finalScore === "number");
+    console.assert(typeof courseSlug === "string", `The "courseSlug" must be a string.`);
+    console.assert(typeof finalScore === "number", `The "finalScore" must be a number.`);
 };
 
 const storeExamAnswerInMemory = (questionId, answer) => {
