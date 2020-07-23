@@ -91,25 +91,26 @@ export function isComplete(course, lesson, section) {
 }
 
 export const isTheCourseComplete = (courseSlug, lessonSlugs) => {
-    const numberOfCompleteLessons = countCompleteLessonsInCourse(courseSlug, lessonSlugs);
+    const numberOfCompleteLessons = getFinishedLessonSlugs(courseSlug, lessonSlugs).length;
     const numberOfLessonsInCourse = lessonSlugs.length;
     return numberOfCompleteLessons === numberOfLessonsInCourse;
 };
 
-export const countCompleteLessonsInCourse = (courseSlug, lessonSlugs) => {
+export const getFinishedLessonSlugs = (courseSlug, liveLessonSlugs) => {
     const courseMap = getCourseMap(courseSlug);
     const lessonsInCourseMap = new Set(courseMap.keys());
-    const liveLessons = new Set(lessonSlugs);
+    const liveLessons = new Set(liveLessonSlugs);
     const liveLessonsInCourseMap = intersection(lessonsInCourseMap, liveLessons);
 
-    let numCompletedLessons = 0;
+    const finishedLessons = [];
     for (const lessonSlug of liveLessonsInCourseMap) {
-        const lessonCompletion = courseMap.get(lessonSlug);
-        if (isLessonComplete(lessonCompletion)) {
-            numCompletedLessons += 1;
+        const lessonMap = courseMap.get(lessonSlug);
+        const isExamComplete = () => isComplete(courseSlug, lessonSlug, lessonSlug);
+        if (isLessonComplete(lessonMap) || isExamComplete()) {
+            finishedLessons.push(lessonSlug);
         }
     }
-    return numCompletedLessons;
+    return finishedLessons;
 };
 
 export const getLatestCompletionInCourse = (courseSlug) => {

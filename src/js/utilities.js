@@ -46,16 +46,6 @@ export const getMediaUrl = (mediaPath) => {
     return `${BACKEND_BASE_URL}${mediaPath}`;
 };
 
-export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
-    const { slug: courseSlug } = wagtailCoursePage.data;
-    const lessons = wagtailCoursePage.lessons;
-    const lessonSlugs = lessons.map((lesson) => lesson.slug);
-    return {
-        courseSlug,
-        lessonSlugs,
-    };
-};
-
 export const doesTheArrayContainTheObject = (theArray, theObject, matchingFunction) => {
     // matchingFunction takes two objects as input and returns true when those
     // objects "match".
