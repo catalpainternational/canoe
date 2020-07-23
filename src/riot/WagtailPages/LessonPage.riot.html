@@ -1,34 +1,5 @@
 <LessonPage>
-    <LessonObjective
-        if="{state.hash === OBJECTIVES}"
-        objective="{props.wagtailPage.objective}"
-        module="{OBJECTIVES}"
-        nextModule="{CONTENT}"
-        title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage.data}"
-        course="{props.wagtailPage.course}"
-    ></LessonObjective>
-    <LessonContent
-        if="{state.hash === CONTENT}"
-        lessonContent="{props.wagtailPage.content}"
-        module="{CONTENT}"
-        nextModule="{TEST}"
-        title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage.data}"
-        course="{props.wagtailPage.course}"
-        isLessonPage="{true}"
-    ></LessonContent>
-    <LessonTest
-        if="{state.hash === TEST}"
-        test="{props.wagtailPage.test}"
-        module="{TEST}"
-        title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage.data}"
-        course="{props.wagtailPage.course}"
-    >
-    </LessonTest>
-
-    <div class="replace-this-with-lessonframe background-blue-1" if="{state.hash == null}">
+    <div class="replace-this-with-lessonframe background-blue-1">
         <div class="content-wrapper">
             {grabLessonHeaderReference()}
             <div class="lesson-header">
@@ -102,43 +73,28 @@
             </Card>
         </div>
     </div>
-
     <script>
-        import LessonObjective from "RiotTags/Lesson/LessonObjective.riot.html";
-        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
-        import LessonTest from "RiotTags/Lesson/LessonTest.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
 
         import { isComplete } from "Actions/completion";
-        import { getHashPieces } from "js/Routing";
 
         export default {
-            TRANSLATIONS: {
-                lesson_activities: () => gettext('Lesson Activities'),
-            },
-
             state: {
-                hash: "",
                 showLongDescription: false,
                 header: null,
             },
 
             components: {
-                lessonobjective: LessonObjective,
-                lessoncontent: LessonContent,
-                lessontest: LessonTest,
                 card: Card,
+            },
+
+            TRANSLATIONS: {
+                lesson_activities: () => gettext('Lesson Activities'),
             },
 
             OBJECTIVES: "objectives",
             CONTENT: "content",
             TEST: "test",
-
-
-            onBeforeMount(props, state) {
-                state.hash = getHashPieces()[1];
-                window.addEventListener("hashchange", this.hashChanged);
-            },
 
             onMounted(props, state) {
                 window.addEventListener("scroll", this.stickyHeader);
@@ -149,39 +105,8 @@
                 this.disableBlockedLessonModules();
             },
 
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
-            },
-
             onUnmounted() {
                 window.removeEventListener("scroll", this.stickyHeader);
-            },
-
-            lessonTitleMessage() {
-                // display the title of the lesson
-                return gettext("Lesson - %1", this.props.wagtailPage.course.title);
-            },
-
-            hashChanged() {
-                this.update({
-                    hash: getHashPieces()[1],
-                });
-
-                if (this.state.hash) {
-                    window.removeEventListener("scroll", this.stickyHeader);
-                } else {
-                    window.addEventListener("scroll", this.stickyHeader);
-                }
-            },
-
-            durationOfLessonMessage() {
-                // the total duration of the lesson in minutes
-                return gettext(
-                    "%1 mins",
-                    this.props.wagtailPage.objective.duration +
-                        this.props.wagtailPage.content.duration +
-                        this.props.wagtailPage.test.duration
-                );
             },
 
             grabLessonHeaderReference() {
@@ -206,6 +131,14 @@
                 this.state.headerOffsetTop = this.state.header.offsetTop;
             },
 
+            stickyHeader() {
+                if (window.pageYOffset > this.state.headerOffsetTop) {
+                    this.state.header.classList.add("sticky");
+                } else {
+                    this.state.header.classList.remove("sticky");
+                }
+            },
+
             backToCoursePage() {
                 location.hash = "#" + this.props.wagtailPage.course.id;
             },
@@ -224,14 +157,6 @@
                 );
             },
 
-            stickyHeader() {
-                if (window.pageYOffset > this.state.headerOffsetTop) {
-                    this.state.header.classList.add("sticky");
-                } else {
-                    this.state.header.classList.remove("sticky");
-                }
-            },
-
             disableBlockedLessonModules() {
                 const ongoingCards = [...document.getElementsByClassName("ongoing")];
 
@@ -246,6 +171,21 @@
                 for (const card of cardsToDisable) {
                     card.classList.add("disabled");
                 }
+            },
+
+            lessonTitleMessage() {
+                // display the title of the lesson
+                return gettext("Lesson - %1", this.props.wagtailPage.course.title);
+            },
+
+            durationOfLessonMessage() {
+                // the total duration of the lesson in minutes
+                return gettext(
+                    "%1 mins",
+                    this.props.wagtailPage.objective.duration +
+                        this.props.wagtailPage.content.duration +
+                        this.props.wagtailPage.test.duration
+                );
             },
         };
     </script>

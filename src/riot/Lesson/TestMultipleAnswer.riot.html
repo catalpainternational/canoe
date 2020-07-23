@@ -9,15 +9,15 @@
                 <div>
                     <span class="checkbox"></span>
                     <span
-                        if="{state.visibleAnswers.has(answer) && answer.correct}"
+                        if="{doesArrayIncludeAnswer(state.visibleAnswers, answer) && answer.correct}"
                         class="success"
                     ></span>
                     <span
-                        if="{state.visibleAnswers.has(answer) && !answer.correct}"
+                        if="{doesArrayIncludeAnswer(state.visibleAnswers, answer) && !answer.correct}"
                         class="warning"
                     ></span>
                     <span
-                        if="{state.hiddenAnswers.has(answer) && !state.visibleAnswers.has(answer)}"
+                        if="{doesArrayIncludeAnswer(state.hiddenAnswers, answer) && !doesArrayIncludeAnswer(state.visibleAnswers, answer)}"
                         class="pendingAnswer"
                     ></span>
                     <p>{answer.text}</p>
@@ -25,7 +25,7 @@
             </li>
         </ol>
     </div>
-    <h4 if="{state.visibleAnswers.size > 0}" translate>
+    <h4 if="{state.visibleAnswers.length > 0}" translate>
         Find and check all correct answers and uncheck incorrect answers
     </h4>
     <button
@@ -40,12 +40,16 @@
 
     <script>
         import { dispatchTestAnswerEvent } from "js/Events";
-        import { union } from "js/SetMethods";
+        import { doesTheArrayContainTheObject } from "js/utilities";
+
+        const doAnswersMatch = (left, right) => {
+            return left.text === right.text;
+        };
 
         export default {
             state: {
-                hiddenAnswers: new Set(),
-                visibleAnswers: new Set(),
+                hiddenAnswers: [],
+                visibleAnswers: [],
                 numberTotalCorrectAnswers: 0,
             },
 
@@ -53,32 +57,40 @@
                 const { card } = props;
                 const numberTotalCorrectAnswers = card.answers.filter((a) => a.correct).length;
                 this.update({ numberTotalCorrectAnswers });
-                this.restoreSavedAnswers();
+
+                this.restoreSavedAnswer();
             },
 
-            restoreSavedAnswers() {
+            restoreSavedAnswer() {
                 const { savedAnswer } = this.props;
 
                 if (!savedAnswer) {
                     return;
                 }
 
-                const hiddenAnswers = new Set(savedAnswer);
-                this.update({ hiddenAnswers });
+                const hiddenAnswers = savedAnswer;
+                this.update({
+                    hiddenAnswers,
+                });
+            },
+
+            doesArrayIncludeAnswer(answersArray, answerToCheck) {
+                return doesTheArrayContainTheObject(answersArray, answerToCheck, doAnswersMatch);
             },
 
             showResults() {
                 let { visibleAnswers, hiddenAnswers } = this.state;
-                visibleAnswers = union(visibleAnswers, hiddenAnswers);
-                hiddenAnswers = new Set();
+
+                visibleAnswers = [...visibleAnswers, ...hiddenAnswers];
+                hiddenAnswers = [];
                 this.update({ visibleAnswers, hiddenAnswers });
 
-                const isQuestionComplete = this.gradeAnswers(Array.from(visibleAnswers));
+                const isQuestionComplete = this.gradeAnswers(visibleAnswers);
                 this.props.toggleModal(true, {}, isQuestionComplete);
 
                 if (isQuestionComplete) {
                     this.update({
-                        visibleAnswers: new Set(),
+                        visibleAnswers: [],
                     });
                 }
             },
@@ -90,6 +102,31 @@
                 if (isCourseExam) {
                     this.reportAnswersToExam();
                 }
+            },
+
+            addSelectionToAnswers(answer) {
+                let { visibleAnswers, hiddenAnswers } = this.state;
+
+                if (this.doesArrayIncludeAnswer(visibleAnswers, answer)) {
+                    visibleAnswers = visibleAnswers.filter(
+                        (visible) => !doAnswersMatch(visible, answer)
+                    );
+                } else if (this.doesArrayIncludeAnswer(hiddenAnswers, answer)) {
+                    hiddenAnswers = hiddenAnswers.filter(
+                        (hidden) => !doAnswersMatch(hidden, answer)
+                    );
+                } else {
+                    hiddenAnswers.push(answer);
+                }
+
+                this.update({ visibleAnswers, hiddenAnswers });
+            },
+
+            reportAnswersToExam() {
+                const { visibleAnswers, hiddenAnswers } = this.state;
+                const answers = [...visibleAnswers, ...hiddenAnswers];
+                const isCorrect = this.gradeAnswers(answers);
+                this.props.recordAnswer({ isCorrect, answers });
             },
 
             gradeAnswers(answers) {
@@ -104,25 +141,6 @@
                     numberCorrectAnswersChosen === this.state.numberTotalCorrectAnswers &&
                     numberIncorrectAnswersChosen === 0;
                 return isQuestionComplete;
-            },
-
-            addSelectionToAnswers(answer) {
-                const { visibleAnswers, hiddenAnswers } = this.state;
-                if (visibleAnswers.has(answer)) {
-                    visibleAnswers.delete(answer);
-                } else if (hiddenAnswers.has(answer)) {
-                    hiddenAnswers.delete(answer);
-                } else {
-                    hiddenAnswers.add(answer);
-                }
-                this.update({ visibleAnswers, hiddenAnswers });
-            },
-
-            reportAnswersToExam() {
-                const { visibleAnswers, hiddenAnswers } = this.state;
-                const answers = Array.from(union(visibleAnswers, hiddenAnswers));
-                const isCorrect = this.gradeAnswers(answers);
-                this.props.recordAnswer({ isCorrect, answers });
             },
         };
     </script>

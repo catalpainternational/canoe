@@ -1,6 +1,17 @@
 import { ExamIsMissingAnAnswer } from "js/Errors";
+import { storeExamAnswerInIDB, getExamAnswersFromIdb } from "Actions/actions_store";
 
 const answers = new Map();
+
+const isUUID = (uuid) => {
+    // Regex doesn't support Nil UUID.
+    const regexUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    return uuid.match(regexUUID);
+};
+
+const assertQuestionIdShape = (questionId) => {
+    console.assert(isUUID(questionId), `The question ID must be a valid UUID: ${questionId}`);
+};
 
 const assertAnswerShape = (answer) => {
     /*
@@ -23,12 +34,33 @@ const assertAnswerShape = (answer) => {
     console.assert(typeof isCorrect === "boolean", `The "isCorrect" property must be a boolean.`);
 };
 
-export const saveExamAnswer = (questionId, answer) => {
-    assertAnswerShape(answer);
+const storeExamAnswerInMemory = (questionId, answer) => {
     answers.set(questionId, answer);
 };
 
+export const clearInMemoryExamAnswers = () => {
+    answers.clear();
+};
+
+export const pullExamAnswersIntoMemory = async () => {
+    const idbAnswers = await getExamAnswersFromIdb();
+    for (const idbAnswer of idbAnswers) {
+        const { questionId, answers, isCorrect } = idbAnswer;
+        storeExamAnswerInMemory(questionId, { answers, isCorrect });
+    }
+};
+
+export const saveExamAnswer = (questionId, answer) => {
+    assertQuestionIdShape(questionId);
+    assertAnswerShape(answer);
+
+    storeExamAnswerInMemory(questionId, answer);
+    storeExamAnswerInIDB({ questionId, ...answer });
+};
+
 export const loadExamAnswer = (questionId) => {
+    assertQuestionIdShape(questionId);
+
     const answer = answers.get(questionId);
     if (answer) {
         assertAnswerShape(answer);
@@ -38,6 +70,7 @@ export const loadExamAnswer = (questionId) => {
 
 export const tallyExamScore = (questionIds) => {
     const examAnswers = questionIds.map((questionId) => {
+        assertQuestionIdShape(questionId);
         const answer = answers.get(questionId);
         if (!answer) {
             throw new ExamIsMissingAnAnswer(

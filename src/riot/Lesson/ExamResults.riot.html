@@ -54,7 +54,7 @@
                 const { course, finalScore, minimumScore } = this.props;
                 const passedExam = finalScore >= minimumScore;
                 if (passedExam) {
-                    markExamAsComplete(course.slug);
+                    markExamAsComplete(course.slug, finalScore);
                 }
                 this.update({ passedExam });
             },

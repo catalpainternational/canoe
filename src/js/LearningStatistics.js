@@ -2,12 +2,11 @@
     LearningStatistics is the interface between Canoe and Actions/completion.
 */
 
-import { getCourseAndLessonSlugs } from "js/utilities";
 import {
     isTheCourseComplete,
     setComplete,
     isComplete,
-    countCompleteLessonsInCourse as countCompleteLessonsImpl,
+    getFinishedLessonSlugs,
     getLatestCompletionInCourse,
     getLatestInCompletionArray,
 } from "Actions/completion";
@@ -17,6 +16,22 @@ import {
     tallyExamScore as tallyScore,
 } from "Actions/Exams";
 
+const getCourseAndLessonSlugs = (wagtailCoursePage) => {
+    const { slug, has_exam } = wagtailCoursePage.data;
+    const lessons = wagtailCoursePage.lessons;
+
+    const courseSlug = slug;
+    const lessonSlugs = lessons.map((lesson) => lesson.slug);
+    if (has_exam) {
+        lessonSlugs.push(EXAM_SLUG);
+    }
+
+    return {
+        courseSlug,
+        lessonSlugs,
+    };
+};
+
 export const isCourseInProgress = (aWagtailCourse) => {
     const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(aWagtailCourse);
     return !isTheCourseComplete(courseSlug, lessonSlugs);
@@ -25,25 +40,20 @@ export const isCourseInProgress = (aWagtailCourse) => {
 export const getLatestCompletion = (wagtailCourses) => {
     const latestCompletions = [];
     for (const course of wagtailCourses) {
-        const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
-
-        if (isTheCourseComplete(courseSlug, lessonSlugs)) {
+        if (!isCourseInProgress(course)) {
             continue;
         }
 
-        const latestInCourse = getLatestCompletionInCourse(courseSlug);
-        if (!latestInCourse) {
+        const { slug: courseSlug } = course.data;
+        const latestCompletionInCourse = getLatestCompletionInCourse(courseSlug);
+        if (!latestCompletionInCourse) {
             continue;
         }
-        latestCompletions.push(latestInCourse);
+        latestCompletions.push(latestCompletionInCourse);
     }
 
     const latestCompletion = getLatestInCompletionArray(latestCompletions);
     return latestCompletion;
-};
-
-export const countCompleteLessonsInCourse = (courseSlug, lessonSlugs) => {
-    return countCompleteLessonsImpl(courseSlug, lessonSlugs);
 };
 
 export const countCompleteLessonsInCourses = (wagtailCourses) => {
@@ -51,9 +61,13 @@ export const countCompleteLessonsInCourses = (wagtailCourses) => {
 
     for (const course of wagtailCourses) {
         const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
-        numberOfCompletedLessons += countCompleteLessonsInCourse(courseSlug, lessonSlugs);
+        numberOfCompletedLessons += countFinishedLessonsAmongSlugs(courseSlug, lessonSlugs);
     }
     return numberOfCompletedLessons;
+};
+
+export const countFinishedLessonsAmongSlugs = (courseSlug, slugsOfLiveLessons) => {
+    return getFinishedLessonSlugs(courseSlug, slugsOfLiveLessons).length;
 };
 
 export const saveExamAnswer = (questionId, answer) => {
@@ -70,8 +84,8 @@ export const tallyFinalScore = (examQuestions) => {
 
 const EXAM_SLUG = "exam";
 
-export const markExamAsComplete = (courseSlug) => {
-    setComplete(courseSlug, EXAM_SLUG, EXAM_SLUG);
+export const markExamAsComplete = (courseSlug, finalScore) => {
+    setComplete(courseSlug, EXAM_SLUG, EXAM_SLUG, { finalScore });
 };
 
 export const isExamComplete = (courseSlug) => {

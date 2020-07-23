@@ -4,7 +4,8 @@
         import { fetchManifest } from "js/WagtailPagesAPI";
         import { SiteDownloader } from "js/SiteDownloader";
         import { updateApi, updateIdb } from "Actions/actions_store.js";
-        import { initialiseCompletions, clearInMemoryCompletions } from "Actions/completion.js";
+        import { pullCompletionsIntoMemory, clearInMemoryCompletions } from "Actions/completion.js";
+        import { pullExamAnswersIntoMemory, clearInMemoryExamAnswers } from "Actions/Exams";
         import { closeAndDeleteDB } from "Actions/actions_idb";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
@@ -33,7 +34,8 @@
 
             async startCompletionsService() {
                 await updateIdb();
-                await initialiseCompletions();
+                await pullCompletionsIntoMemory();
+                await pullExamAnswersIntoMemory();
             },
 
             async prepDataForAppLaunch() {
@@ -45,7 +47,8 @@
                     );
                 } else {
                     // Pulls completions from the database into memory.
-                    await initialiseCompletions();
+                    await pullCompletionsIntoMemory();
+                    await pullExamAnswersIntoMemory();
                 }
 
                 this.pollForWebpageChanges();
@@ -60,6 +63,7 @@
                 window.clearInterval(this.state.pagesPoller);
                 storeSiteDownloadedIs(false);
                 clearInMemoryCompletions();
+                clearInMemoryExamAnswers();
                 await closeAndDeleteDB();
             },
         };

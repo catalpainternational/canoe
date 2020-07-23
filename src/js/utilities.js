@@ -46,12 +46,32 @@ export const getMediaUrl = (mediaPath) => {
     return `${BACKEND_BASE_URL}${mediaPath}`;
 };
 
-export const getCourseAndLessonSlugs = (wagtailCoursePage) => {
-    const { slug: courseSlug } = wagtailCoursePage.data;
-    const lessons = wagtailCoursePage.lessons;
-    const lessonSlugs = lessons.map((lesson) => lesson.slug);
-    return {
-        courseSlug,
-        lessonSlugs,
+export const doesTheArrayContainTheObject = (theArray, theObject, matchingFunction) => {
+    // matchingFunction takes two objects as input and returns true when those
+    // objects "match".
+    if (theArray.length === 0) {
+        return false;
+    }
+
+    for (const arrayObject of theArray) {
+        if (matchingFunction(arrayObject, theObject)) {
+            return true;
+        }
+    }
+    return false;
+};
+
+// From: https://levelup.gitconnected.com/debounce-in-javascript-improve-your-applications-performance-5b01855e086
+export const debounce = (func, waitInMilliseconds) => {
+    let timeout;
+
+    return function executedFunction(...args) {
+        const later = () => {
+            timeout = null;
+            func(...args);
+        };
+
+        clearTimeout(timeout);
+        timeout = setTimeout(later, waitInMilliseconds);
     };
 };

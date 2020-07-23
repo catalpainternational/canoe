@@ -6,7 +6,7 @@
         ></HonorCode>
     </LessonFrame>
     <LessonFrame
-        if="{state.cardIdx >= 0 && state.cardIdx < props.cards.length && state.card}"
+        if="{state.cardIdx >= 0 && state.cardIdx < state.cards.length && state.card}"
         id="test"
         extraStyleClasses="test"
     >
@@ -31,7 +31,7 @@
             </div>
             <div>
                 <button
-                    if="{state.cardIdx < props.cards.length - 1}"
+                    if="{state.cardIdx < state.cards.length - 1}"
                     class="btn-primary"
                     onclick="{nextExamCard}"
                     disabled="{Object.keys(state.currentAnswer).length === 0}"
@@ -40,7 +40,7 @@
                     Next
                 </button>
                 <button
-                    if="{state.cardIdx === props.cards.length - 1}"
+                    if="{state.cardIdx === state.cards.length - 1}"
                     class="btn-primary"
                     onclick="{nextExamCard}"
                     disabled="{Object.keys(state.currentAnswer).length === 0}"
@@ -93,6 +93,14 @@
 
             onBeforeMount(props, state) {
                 window.addEventListener("hashchange", this.onHashChange);
+
+                const { cards } = props;
+                this.state.cards = cards;
+                this.shuffleCards(this.state.cards);
+
+                if (cards.length > 5) {
+                    this.state.cards = this.state.cards.slice(0, 5);
+                }
             },
 
             onBeforeUnmount(props, state) {
@@ -101,6 +109,10 @@
 
             onMounted(props, state) {
                 this.onHashChange();
+            },
+
+            shuffleCards(cards) {
+                cards.sort(() => Math.random() - 0.5);
             },
 
             onHashChange() {
@@ -122,6 +134,10 @@
                 const previousAnswer = loadExamAnswer(card.id);
                 const currentAnswer = previousAnswer || {};
 
+                this.state.cardAnswers = card.answers;
+                this.shuffleCards(this.state.cardAnswers);
+                card.answers = this.state.cardAnswers;
+
                 this.update({
                     card,
                     currentAnswer,
@@ -133,13 +149,11 @@
             },
 
             isAtResults(cardIdx) {
-                const { cards } = this.props;
-                return cardIdx === cards.length;
+                return cardIdx === this.state.cards.length;
             },
 
             getCard(cardIdx) {
-                const { cards } = this.props;
-                const card = cards[cardIdx];
+                const card = this.state.cards[cardIdx];
                 if (!card) {
                     throw new URLDoesntExist(
                         `Cannot find exam question at ${window.location.hash}`
@@ -152,8 +166,6 @@
                 console.assert(
                     response.hasOwnProperty("answers") && response.hasOwnProperty("isCorrect")
                 );
-                const { card } = this.state;
-                saveExamAnswer(card.id, response);
 
                 this.update({ currentAnswer: response });
             },
@@ -186,7 +198,7 @@
 
             cardNumberMessage() {
                 // display the number of the current card out of the total number of cards
-                return gettext("%1 of %2", this.state.cardIdx + 1, this.props.cards.length);
+                return gettext("%1 of %2", this.state.cardIdx + 1, this.state.cards.length);
             },
         };
     </script>

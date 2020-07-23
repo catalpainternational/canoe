@@ -3,7 +3,7 @@
         <div class="card-body">
             <h4>{props.title}</h4>
             <div if="{props.isCompleted}" class="white-check"></div>
-            <h5 if="{props.isComingSoon}" translate>Coming Soon!</h5>
+            <h5 if="{props.isComingSoon}">{ TRANSLATIONS.comingSoon() }</h5>
             <div if="{props.isComingSoon}" class="break-card-footer"></div>
             <p if="{props.type !== 'course'}">{props.description}</p>
         </div>
@@ -28,12 +28,13 @@
     <script>
         export default {
             TRANSLATIONS: {
-                completed: () => gettext('completed'),
+                comingSoon: () => gettext("Coming Soon!"),
+                completed: () => gettext("completed"),
                 startMessages: {
-                    activity: () => gettext('Start Activity'),
-                    lesson: () => gettext('Start Lesson'),
-                    course: () => gettext('Start Course'),
-                    exam: () => gettext('Start Exam'),
+                    activity: () => gettext("Start Activity"),
+                    lesson: () => gettext("Start Lesson"),
+                    course: () => gettext("Start Course"),
+                    exam: () => gettext("Start Exam"),
                 },
             },
 
@@ -50,9 +51,6 @@
             durationMessage() {
                 // the number of minutes it will take to complete the objective, content, test, or lesson
                 return ngettext("%1 min", "%1 mins", this.props.duration, this.props.duration);
-            },
-            startMessage(type) {
-                return gettext('start %1', type);
             },
         };
     </script>

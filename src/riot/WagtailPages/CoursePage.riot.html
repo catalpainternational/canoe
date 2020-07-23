@@ -47,9 +47,12 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
-        import { countCompleteLessonsInCourse, isExamComplete } from "js/LearningStatistics";
-        import { isComplete, isTheCourseComplete } from "Actions/completion";
-        import { getCourseAndLessonSlugs } from "js/utilities";
+        import {
+            countCompleteLessonsInCourses,
+            isCourseInProgress,
+            isExamComplete,
+        } from "js/LearningStatistics";
+        import { isComplete } from "Actions/completion";
         import { isGuestUser } from "js/AuthenticationUtilities";
 
         export default {
@@ -58,19 +61,25 @@
                 course: () => gettext("Course"),
                 course_exam: () => gettext("Course exam"),
             },
+
             components: {
                 card: Card,
                 courseexam: CourseExam,
             },
-
+          
+            state: {
+                header: null,
+                isCourseComplete: false,
+            },
+          
             highestScore: "85%",
 
             onMounted(props, state) {
-                state.header = document.getElementsByClassName("course-header")[0];
-                state.headerOffsetTop = state.header.offsetTop;
+                const header = this.$(".course-header");
+                const { wagtailPage } = props;
+                const isCourseComplete = !isCourseInProgress(wagtailPage);
 
-                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(this.props.wagtailPage);
-                this.update({ isCourseComplete: isTheCourseComplete(courseSlug, lessonSlugs) });
+                this.update({ header, isCourseComplete });
 
                 window.addEventListener("scroll", this.stickyHeader);
             },
@@ -80,9 +89,9 @@
             },
 
             getCourseProgress() {
-                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(this.props.wagtailPage);
+                const { wagtailPage } = this.props;
                 return (
-                    countCompleteLessonsInCourse(courseSlug, lessonSlugs) +
+                    countCompleteLessonsInCourses([wagtailPage]) +
                     " / " +
                     this.props.wagtailPage.data.lessons_count
                 );
@@ -93,7 +102,7 @@
             },
 
             stickyHeader() {
-                if (window.pageYOffset > this.state.headerOffsetTop) {
+                if (window.pageYOffset > this.state.header.offsetTop) {
                     this.state.header.classList.add("sticky");
                 } else {
                     this.state.header.classList.remove("sticky");
@@ -105,8 +114,11 @@
             },
 
             examDisabled() {
-                // exams are enabled if you are a guest user, or you have completed the course
-                return !(this.state.isCourseComplete || isGuestUser());
+                // exams are enabled if you complete all lessons, or you are a guest user.
+                const { wagtailPage: course } = this.props;
+                const { lessons_count } = course.data;
+                const isExamUnlocked = countCompleteLessonsInCourses([course]) === lessons_count - 1;
+                return !(isExamUnlocked || isGuestUser());
             },
 
             isExamComplete() {
