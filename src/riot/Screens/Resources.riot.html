@@ -24,9 +24,10 @@
                 showFooter="{false}"
             ></Card>
         </div>
-        <p if="{state.isLoading}">TRANSLATIONS.loading()<p>
+        <p if="{state.isLoading}">{ TRANSLATIONS.loading() }</p>
+        <p></p>
         <p if="{!state.isLoading && state.articles == 0}">
-            TRANSLATIONS.noArticlesYet()
+            { TRANSLATIONS.noArticlesYet() }
         </p>
     </div>
 
@@ -61,7 +62,8 @@
 
             TRANSLATIONS: {
                 loading: () => gettext("Loading . . ."),
-                noArticlesYet: () => gettext("There are no resource articles yet. Check back soon!"),
+                noArticlesYet: () =>
+                    gettext("There are no resource articles yet. Check back soon!"),
             },
 
             async onMounted() {
