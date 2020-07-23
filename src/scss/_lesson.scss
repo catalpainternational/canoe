@@ -96,7 +96,8 @@ LessonPage .content-wrapper {
         position: fixed;
         top: 0;
         border: 1px solid $gray-6;
-        width: 100%;
+        padding-right: 10px;
+        min-width: calc(100% - 65px);
         background-color: $tan;
         z-index: 1;
         left: 0;
