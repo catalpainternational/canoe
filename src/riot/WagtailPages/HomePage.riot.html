@@ -1,4 +1,5 @@
 <HomePage>
+    <GuestBanner if="{ state.isGuest }"></GuestBanner>
     <div class="wave"></div>
     <div class="header">
         <div class="header-box">
@@ -43,8 +44,9 @@
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
+        import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
 
-        import { getCapitalizedUsername } from "js/AuthenticationUtilities";
+        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
         import { isComplete } from "Actions/completion";
         import {
@@ -61,16 +63,22 @@
                 selectedTags: [],
                 listOfTags: [],
                 sortedListOfCourses: [],
+                isGuest: false,
             },
 
             components: {
                 card: Card,
                 continuelearningbutton: ContinueLearningButton,
                 taglist: TagList,
+                guestbanner: GuestBanner,
             },
 
             onMounted(props, state) {
-                const unsortedCourses = props.wagtailPage.courses.filter((course) => course.lessons.length);
+                const unsortedCourses = props.wagtailPage.courses.filter(
+                    (course) => course.lessons.length
+                );
+
+                this.state.isGuest = isGuestUser();
 
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
