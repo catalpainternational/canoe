@@ -1,6 +1,30 @@
 <GuestBanner>
-    <div>
+    <div if="{showBanner()}" class="{state.isBannerClosing ? 'close' : ''}">
+        <a if="{!state.isBannerClosing}" class="cross" onclick="{closeBanner}"></a>
         <p>You're logged in as a guest user</p>
         <p>No data or progress will be saved</p>
     </div>
+
+    <script>
+        import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Store";
+        import { isGuestUser } from "js/AuthenticationUtilities";
+
+        export default {
+            state: {
+                isBannerOpen: true,
+                isBannerClosing: false,
+            },
+
+            showBanner() {
+                console.log(isGuestBannerVisible());
+                return isGuestUser() && this.state.isBannerOpen;
+            },
+
+            closeBanner() {
+                toggleGuestBanner(false);
+                this.update({ isBannerClosing: true });
+                setTimeout(() => this.update({ isBannerOpen: false }), 600);
+            },
+        };
+    </script>
 </GuestBanner>

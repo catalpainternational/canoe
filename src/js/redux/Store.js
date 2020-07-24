@@ -11,6 +11,7 @@ import {
     UPDATED_BROWSER_SUPPORT,
     LANGUAGE_CHANGE,
     SERVICE_WORKER_EVENT,
+    GUEST_BANNER,
 } from "./_Reducers";
 
 const LANGUAGE_STORAGE_KEY = "userLanguage";
@@ -115,4 +116,13 @@ export const getCourse = (courseId) => {
 export const getLesson = (lessonId) => {
     const lesson = store.getState().lessons[lessonId];
     return lesson;
+};
+
+export const toggleGuestBanner = (trueOrFalse) => {
+    store.dispatch({ type: GUEST_BANNER, isGuestBannerVisible: trueOrFalse });
+};
+
+export const isGuestBannerVisible = () => {
+    console.log(store.getState().isGuestBannerVisible);
+    return store.getState().isGuestBannerVisible;
 };

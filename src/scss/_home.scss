@@ -97,22 +97,3 @@ HomePage div.content-wrapper {
         }
     }
 }
-
-GuestBanner {
-    div {
-        height: fit-content;
-        width: 100%;
-        background-color: $orange-2;
-        position: absolute;
-        top: 0;
-        padding: 0.5em;
-    }
-
-    p {
-        color: $white;
-        font-size: 0.9em;
-        text-align: center;
-        margin-top: 0.25em;
-        margin-bottom: 0.25em;
-    }
-}

@@ -9,6 +9,7 @@ export const ADDED_LESSON_PAGE = "ADDED_LESSON_PAGE";
 export const LANGUAGE_CHANGE = "LANGUAGE_CHANGED";
 export const UPDATED_BROWSER_SUPPORT = "UPDATED_BROWSER_SUPPORT";
 export const SERVICE_WORKER_EVENT = "SERVICE_WORKER_EVENT";
+export const GUEST_BANNER = "GUEST_BANNER_HIDDEN";
 
 const updateManifest = (state = {}, action) => {
     switch (action.type) {

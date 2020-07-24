@@ -43,10 +43,10 @@
     </template>
 
     <script>
-        import { isUserLoggedIn } from "js/AuthenticationUtilities";
+        import { isUserLoggedIn, isGuestUser } from "js/AuthenticationUtilities";
         import { getPage } from "js/Routing";
         import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
-        import { isBrowserSupported, isSiteDownloaded } from "ReduxImpl/Store";
+        import { isBrowserSupported, isSiteDownloaded, toggleGuestBanner } from "ReduxImpl/Store";
         import { logPageView } from "js/GoogleAnalytics";
 
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
@@ -135,6 +135,11 @@
                 if (this.isUserLoggedIn() && this.props.store.getState().siteIsDownloaded) {
                     // If user returns to site and is logged in.
                     this.route();
+                }
+
+                if (isGuestUser()) {
+                    console.log("toggle true");
+                    toggleGuestBanner(true);
                 }
             },
 
