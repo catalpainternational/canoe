@@ -31,6 +31,7 @@
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <Card
                     title="{ courseExamTitle() }"
+                    description="{isExamComplete(props.wagtailPage.id) ? `${TRANSLATIONS.highestScore()}: ${getHighestScore()}%`: ''}"
                     link="{props.wagtailPage.id}/exam/0"
                     isCompleted="{isExamComplete(props.wagtailPage.id)}"
                     isComingSoon="{false}"
@@ -46,19 +47,21 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
+        import { isComplete } from "Actions/completion";
+        import { isGuestUser } from "js/AuthenticationUtilities";
         import {
             countCompleteLessonsInCourses,
             isCourseInProgress,
             isExamComplete,
-        } from "js/LearningStatistics";
-        import { isComplete } from "Actions/completion";
-        import { isGuestUser } from "js/AuthenticationUtilities";
+        } from "js/CompletionInterface";
+        import { getExamHighScore } from "js/ExamInterface";
 
         export default {
             TRANSLATIONS: {
                 your_lessons: () => gettext("Your lessons"),
                 course: () => gettext("Course"),
                 course_exam: () => gettext("Course exam"),
+                highestScore: () => gettext("Highest score"),
             },
 
             components: {
@@ -111,16 +114,23 @@
             },
 
             examDisabled() {
-                // exams are enabled if you complete all lessons, or you are a guest user.
+                // Exams are enabled if you complete all lessons or if you are a
+                // guest user.
                 const { wagtailPage: course } = this.props;
                 const { lessons_count } = course.data;
-                const isExamUnlocked = countCompleteLessonsInCourses([course]) === lessons_count - 1;
-                return !(isExamUnlocked || isGuestUser());
+                const isExamUnlocked =
+                    countCompleteLessonsInCourses([course]) === lessons_count - 1;
+                return !isExamUnlocked && !isGuestUser();
             },
 
             isExamComplete() {
                 const { wagtailPage } = this.props;
                 return isExamComplete(wagtailPage.data.slug);
+            },
+
+            getHighestScore() {
+                const { wagtailPage } = this.props;
+                return getExamHighScore(wagtailPage.data.slug);
             },
 
             numberOfLessonsCompleteMessage() {

@@ -5,7 +5,12 @@
         import { SiteDownloader } from "js/SiteDownloader";
         import { updateApi, updateIdb } from "Actions/actions_store.js";
         import { pullCompletionsIntoMemory, clearInMemoryCompletions } from "Actions/completion.js";
-        import { pullExamAnswersIntoMemory, clearInMemoryExamAnswers } from "Actions/Exams";
+        import {
+            pullExamAnswersIntoMemory,
+            clearInMemoryExamAnswers,
+            pullExamScoresIntoMemory,
+            clearInMemoryExamScores,
+        } from "Actions/exam";
         import { closeAndDeleteDB } from "Actions/actions_idb";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
@@ -32,10 +37,15 @@
                 new SiteDownloader().requestTheSitesPagesAndImages();
             },
 
+            async pullExamDataIntoMemory() {
+                await pullExamAnswersIntoMemory();
+                await pullExamScoresIntoMemory();
+            },
+
             async startCompletionsService() {
                 await updateIdb();
                 await pullCompletionsIntoMemory();
-                await pullExamAnswersIntoMemory();
+                await this.pullExamDataIntoMemory();
             },
 
             async prepDataForAppLaunch() {
@@ -64,6 +74,7 @@
                 storeSiteDownloadedIs(false);
                 clearInMemoryCompletions();
                 clearInMemoryExamAnswers();
+                clearInMemoryExamScores();
                 await closeAndDeleteDB();
             },
         };

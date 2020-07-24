@@ -1,5 +1,5 @@
 import { getHomePage } from "js/WagtailPagesAPI";
-import { getLatestCompletion } from "js/LearningStatistics";
+import { getLatestCompletion } from "js/CompletionInterface";
 import { dispatchToastEvent } from "js/Events";
 import { getLanguage } from "ReduxImpl/Store";
 import { BACKEND_BASE_URL } from "js/urls";

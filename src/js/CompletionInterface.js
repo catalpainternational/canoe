@@ -1,5 +1,5 @@
 /*
-    LearningStatistics is the interface between Canoe and Actions/completion.
+    CompletionInterface inverts the dependency between Canoe and Actions/completion.
 */
 
 import {
@@ -10,11 +10,6 @@ import {
     getLatestCompletionInCourse,
     getLatestInCompletionArray,
 } from "Actions/completion";
-import {
-    saveExamAnswer as saveAnswer,
-    loadExamAnswer as loadAnswer,
-    tallyExamScore as tallyScore,
-} from "Actions/Exams";
 
 const getCourseAndLessonSlugs = (wagtailCoursePage) => {
     const { slug, has_exam } = wagtailCoursePage.data;
@@ -68,18 +63,6 @@ export const countCompleteLessonsInCourses = (wagtailCourses) => {
 
 export const countFinishedLessonsAmongSlugs = (courseSlug, slugsOfLiveLessons) => {
     return getFinishedLessonSlugs(courseSlug, slugsOfLiveLessons).length;
-};
-
-export const saveExamAnswer = (questionId, answer) => {
-    saveAnswer(questionId, answer);
-};
-
-export const loadExamAnswer = (questionId) => {
-    return loadAnswer(questionId);
-};
-
-export const tallyFinalScore = (examQuestions) => {
-    return tallyScore(examQuestions);
 };
 
 const EXAM_SLUG = "exam";
