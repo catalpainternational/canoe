@@ -16,8 +16,7 @@
             },
 
             showBanner() {
-                console.log(isGuestBannerVisible());
-                return isGuestUser() && this.state.isBannerOpen;
+                return isGuestUser() && isGuestBannerVisible() && this.state.isBannerOpen;
             },
 
             closeBanner() {

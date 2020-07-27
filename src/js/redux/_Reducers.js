@@ -156,6 +156,15 @@ const serviceWorker = (state = "unknown", action) => {
     }
 };
 
+const toggleGuestBannerVisibility = (state = {}, action) => {
+    switch (action.type) {
+        case GUEST_BANNER:
+            return action.isGuestBannerVisible;
+        default:
+            return state;
+    }
+};
+
 export const reducers = combineReducers({
     manifest: updateManifest,
     siteIsDownloaded: signalSiteIsDownloaded,
@@ -166,4 +175,5 @@ export const reducers = combineReducers({
     language: changeLanguage,
     isBrowserSupported: signalBrowserSupport,
     serviceWorker: serviceWorker,
+    isGuestBannerVisible: toggleGuestBannerVisibility,
 });

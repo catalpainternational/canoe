@@ -123,6 +123,5 @@ export const toggleGuestBanner = (trueOrFalse) => {
 };
 
 export const isGuestBannerVisible = () => {
-    console.log(store.getState().isGuestBannerVisible);
     return store.getState().isGuestBannerVisible;
 };
