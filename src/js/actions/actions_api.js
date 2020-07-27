@@ -1,38 +1,44 @@
-import { getAuthenticationToken } from '../AuthenticationUtilities.js';
-import { BACKEND_BASE_URL } from '../urls.js';
+import { getAuthenticationToken } from "../AuthenticationUtilities.js";
+import { BACKEND_BASE_URL } from "../urls.js";
 
-const url = `${BACKEND_BASE_URL}/progress/completions`;
+const url = `${BACKEND_BASE_URL}/progress/actions`;
+const postActionsURL = `${BACKEND_BASE_URL}/progress/post_actions`;
 
 export function postAction(action) {
-    return fetch(url, {
-        method: 'POST',
+    return fetch(postActionsURL, {
+        method: "POST",
         headers: getHeaders(),
         body: JSON.stringify(action),
-    }).then(response => {
-        return true;  
-    }).catch(err => {
-        return false;
-    });
+    })
+        .then((response) => {
+            return true;
+        })
+        .catch((err) => {
+            return false;
+        });
 }
 
 export function getActions() {
     return fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: getHeaders(),
-    }).then(response => {
-        return response.json();
-    }).then(actions => {
-        actions.forEach(action => {
-            action.date = new Date(action.date);
+    })
+        .then((response) => {
+            return response.json();
+        })
+        .then((actions) => {
+            actions.forEach((action) => {
+                action.date = new Date(action.date);
+            });
+            console.log(actions);
+            return actions;
         });
-        return actions;
-    });
 }
 
 function getHeaders() {
     const token = getAuthenticationToken();
     return {
-        'Content-Type': 'application/json',
-        'Authorization': `JWT ${token}`
-    }
+        "Content-Type": "application/json",
+        Authorization: `JWT ${token}`,
+    };
 }

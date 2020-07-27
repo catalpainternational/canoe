@@ -16,6 +16,7 @@ import { ON_ACTION_CHANGE } from "../Events";
 
 const COMPLETION_ACTION_TYPE = "completion";
 const EXAM_ACTION_TYPE = "exam";
+const EXAM_ANSWER_TYPE = `${EXAM_ACTION_TYPE}.answer`;
 const EXAM_FINAL_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
 
 const storeAction = async (actionType, data) => {
@@ -44,11 +45,11 @@ const storeAction = async (actionType, data) => {
 };
 
 export const storeExamAnswerInIDB = (data) => {
-    storeAction(EXAM_ACTION_TYPE, data);
+    storeAction(EXAM_ANSWER_TYPE, data);
 };
 
 export const getExamAnswersFromIdb = () => {
-    return readActions(EXAM_ACTION_TYPE);
+    return readActions(EXAM_ANSWER_TYPE);
 };
 
 export const storeExamScoreInIDB = (courseSlug, finalScore) => {
