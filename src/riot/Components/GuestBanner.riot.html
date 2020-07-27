@@ -20,9 +20,9 @@
             },
 
             closeBanner() {
-                toggleGuestBanner(false);
                 this.update({ isBannerClosing: true });
-                setTimeout(() => this.update({ isBannerOpen: false }), 600);
+                setTimeout(() => this.update({ isBannerOpen: false }), 500);
+                toggleGuestBanner(false);
             },
         };
     </script>
