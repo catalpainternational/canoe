@@ -158,8 +158,12 @@ searchbar {
         flex: none;
         font-size: 0.8em;
 
-        &:before {
+        &.eng:before {
             content: "Search";
+        }
+
+        &.tet:before {
+            content: "Buka";
         }
 
         &.hide:before {
