@@ -1,7 +1,7 @@
 import { getAuthenticationToken } from "../AuthenticationUtilities.js";
 import { BACKEND_BASE_URL } from "../urls.js";
 
-const url = `${BACKEND_BASE_URL}/progress/actions`;
+const getActionsURL = `${BACKEND_BASE_URL}/progress/actions`;
 const postActionsURL = `${BACKEND_BASE_URL}/progress/post_actions`;
 
 export function postAction(action) {
@@ -19,7 +19,7 @@ export function postAction(action) {
 }
 
 export function getActions() {
-    return fetch(url, {
+    return fetch(getActionsURL, {
         method: "GET",
         headers: getHeaders(),
     })
