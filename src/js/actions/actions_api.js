@@ -29,7 +29,6 @@ export function getActions() {
             actions.forEach((action) => {
                 action.date = new Date(action.date);
             });
-            console.log(actions);
             return actions;
         });
 }
