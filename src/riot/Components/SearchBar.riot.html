@@ -1,6 +1,6 @@
 <SearchBar>
     <div class="form-group">
-        <input id="search" type="text" value="{props.searchString}"
+        <input id="search" type="text" value="{props.searchString}" placeholder="{ TRANSLATIONS.search() }"
             oninput="{debounce(onSearchInput, SUBMIT_AFTER_THIS_MANY_MS)}" />
         <label class="{getLanguage()} {props.searchString ? 'hide' : ''}" for="search"></label>
         <span class="search-icon"></span>
@@ -11,6 +11,10 @@
         import { getLanguage } from "ReduxImpl/Store";
 
         export default {
+            TRANSLATIONS: {
+                search: () => gettext("Search"),
+            },
+
             SUBMIT_AFTER_THIS_MANY_MS: 250,
 
             onSearchInput() {

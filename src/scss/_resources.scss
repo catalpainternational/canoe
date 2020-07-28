@@ -150,24 +150,8 @@ searchbar {
         background-color: $gray-9;
     }
 
-    input:focus + label:before {
-        content: "";
-    }
-
     label {
         flex: none;
         font-size: 0.8em;
-
-        &.en:before {
-            content: "Search";
-        }
-
-        &.tet:before {
-            content: "Buka";
-        }
-
-        &.hide:before {
-            content: "";
-        }
     }
 }
