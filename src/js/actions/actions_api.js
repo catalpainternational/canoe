@@ -1,11 +1,10 @@
 import { getAuthenticationToken } from "../AuthenticationUtilities.js";
 import { BACKEND_BASE_URL } from "../urls.js";
 
-const getActionsURL = `${BACKEND_BASE_URL}/progress/actions`;
-const postActionsURL = `${BACKEND_BASE_URL}/progress/post_actions`;
+const ACTIONS_ENDPOINT_URL = `${BACKEND_BASE_URL}/progress/actions`;
 
 export function postAction(action) {
-    return fetch(postActionsURL, {
+    return fetch(ACTIONS_ENDPOINT_URL, {
         method: "POST",
         headers: getHeaders(),
         body: JSON.stringify(action),
@@ -19,7 +18,7 @@ export function postAction(action) {
 }
 
 export function getActions() {
-    return fetch(getActionsURL, {
+    return fetch(ACTIONS_ENDPOINT_URL, {
         method: "GET",
         headers: getHeaders(),
     })

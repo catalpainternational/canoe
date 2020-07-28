@@ -52,7 +52,7 @@ registerRoute(new RegExp(`${BACKEND_BASE_URL}/api/v2/page_preview`), new Network
 
 registerRoute(new RegExp(`${BACKEND_BASE_URL}/progress/actions`), new NetworkOnly());
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/progress/post_actions`), new NetworkOnly(), "POST");
+registerRoute(new RegExp(`${BACKEND_BASE_URL}/progress/actions`), new NetworkOnly(), "POST");
 
 registerRoute(new RegExp(`${BACKEND_BASE_URL}/notifications/subscribe*`), new NetworkOnly());
 
