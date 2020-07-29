@@ -9,7 +9,7 @@ export const ADDED_LESSON_PAGE = "ADDED_LESSON_PAGE";
 export const LANGUAGE_CHANGE = "LANGUAGE_CHANGED";
 export const UPDATED_BROWSER_SUPPORT = "UPDATED_BROWSER_SUPPORT";
 export const SERVICE_WORKER_EVENT = "SERVICE_WORKER_EVENT";
-export const GUEST_BANNER = "GUEST_BANNER_HIDDEN";
+export const GUEST_BANNER = "GUEST_BANNER_TOGGLED";
 
 const updateManifest = (state = {}, action) => {
     switch (action.type) {
@@ -156,7 +156,7 @@ const serviceWorker = (state = "unknown", action) => {
     }
 };
 
-const toggleGuestBannerVisibility = (state = {}, action) => {
+const toggleGuestBannerVisibility = (state = false, action) => {
     switch (action.type) {
         case GUEST_BANNER:
             return action.isGuestBannerVisible;

@@ -32,6 +32,7 @@ const getInitialLanguage = () => {
 
 const initialStoreState = {
     language: getInitialLanguage(),
+    isGuestBannerVisible: true,
 };
 
 export const store = createStore(
