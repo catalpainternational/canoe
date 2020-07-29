@@ -8,7 +8,7 @@
                 </div>
                 <div class="section-title">
                     <div class="unit">
-                        <p>{ lessonTitleMessage() }</p>
+                        <p class="truncate-if-long">{ lessonTitleMessage() }</p>
                     </div>
                 </div>
                 <h2>{props.wagtailPage.title}</h2>
@@ -23,53 +23,27 @@
                 <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">
                     {props.wagtailPage.data.long_description}
                 </p>
-                <a
-                    if="{props.wagtailPage.data.long_description && state.showLongDescription}"
-                    onclick="{toggleLessonDescription}"
-                    translate
-                    >See less</a
-                >
-                <a
-                    if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
-                    onclick="{toggleLessonDescription}"
-                    translate
-                    >See more</a
-                >
+                <a if="{props.wagtailPage.data.long_description && state.showLongDescription}"
+                    onclick="{toggleLessonDescription}" translate>See less</a>
+                <a if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
+                    onclick="{toggleLessonDescription}" translate>See more</a>
             </div>
 
             <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
 
-            <Card
-                title="1. {props.wagtailPage.objective.title}"
-                description="{props.wagtailPage.objective.aim}"
-                duration="{props.wagtailPage.objective.duration}"
-                link="{props.wagtailPage.id}/{OBJECTIVES}/1"
-                isCompleted="{isModuleComplete(OBJECTIVES)}"
-                type="activity"
-                showFooter="{true}"
-            >
+            <Card title="1. {props.wagtailPage.objective.title}" description="{props.wagtailPage.objective.aim}"
+                duration="{props.wagtailPage.objective.duration}" link="{props.wagtailPage.id}/{OBJECTIVES}/1"
+                isCompleted="{isModuleComplete(OBJECTIVES)}" type="activity" showFooter="{true}">
             </Card>
 
-            <Card
-                title="2. {props.wagtailPage.content.title}"
-                description="{props.wagtailPage.content.aim}"
-                duration="{props.wagtailPage.content.duration}"
-                link="{props.wagtailPage.id}/{CONTENT}/1"
-                isCompleted="{isModuleComplete(CONTENT)}"
-                type="activity"
-                showFooter="{true}"
-            >
+            <Card title="2. {props.wagtailPage.content.title}" description="{props.wagtailPage.content.aim}"
+                duration="{props.wagtailPage.content.duration}" link="{props.wagtailPage.id}/{CONTENT}/1"
+                isCompleted="{isModuleComplete(CONTENT)}" type="activity" showFooter="{true}">
             </Card>
 
-            <Card
-                title="3. {props.wagtailPage.test.title}"
-                description="{props.wagtailPage.test.aim}"
-                duration="{props.wagtailPage.test.duration}"
-                link="{props.wagtailPage.id}/{TEST}/1"
-                isCompleted="{isModuleComplete(TEST)}"
-                type="activity"
-                showFooter="{true}"
-            >
+            <Card title="3. {props.wagtailPage.test.title}" description="{props.wagtailPage.test.aim}"
+                duration="{props.wagtailPage.test.duration}" link="{props.wagtailPage.id}/{TEST}/1"
+                isCompleted="{isModuleComplete(TEST)}" type="activity" showFooter="{true}">
             </Card>
         </div>
     </div>
@@ -134,8 +108,10 @@
             stickyHeader() {
                 if (window.pageYOffset > this.state.headerOffsetTop) {
                     this.state.header.classList.add("sticky");
+                    this.state.header.children[2].classList.add("truncate-if-long");
                 } else {
                     this.state.header.classList.remove("sticky");
+                    this.state.header.children[2].classList.remove("truncate-if-long");
                 }
             },
 
@@ -183,8 +159,8 @@
                 return gettext(
                     "%1 mins",
                     this.props.wagtailPage.objective.duration +
-                        this.props.wagtailPage.content.duration +
-                        this.props.wagtailPage.test.duration
+                    this.props.wagtailPage.content.duration +
+                    this.props.wagtailPage.test.duration
                 );
             },
         };
