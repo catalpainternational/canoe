@@ -1,4 +1,5 @@
 <HomePage>
+    <GuestBanner if="{showBanner()}" closeBanner="{closeBanner}"></GuestBanner>
     <div class="wave"></div>
     <div class="header">
         <div class="header-box">
@@ -7,35 +8,18 @@
                 <h6 if="{state.currentCourse && isCourseInProgress(state.currentCourse)}">
                     { continueLearningMessage() }
                 </h6>
-                <ContinueLearningButton
-                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
-                    class="profile header-text"
-                    background="home-background-image"
-                ></ContinueLearningButton>
+                <ContinueLearningButton if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
+                    class="profile header-text" background="home-background-image"></ContinueLearningButton>
             </div>
             <span class="home-background-image"></span>
         </div>
     </div>
     <div class="content-wrapper">
-        <TagList
-            if="{state.listOfTags.length > 0}"
-            tags="{state.listOfTags}"
-            onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"
-        ></TagList>
-        <div
-            class="course"
-            each="{course in state.sortedListOfCourses}"
-            if="{isCourseVisible(course.tags)}"
-        >
-            <Card
-                title="{course.data.title}"
-                link="{course.data.id}"
-                description="{courseProgressMessage(course)}"
-                isCompleted="{!isCourseInProgress(course)}"
-                showFooter="{true}"
-                type="course"
-            ></Card>
+        <TagList if="{state.listOfTags.length > 0}" tags="{state.listOfTags}" onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"></TagList>
+        <div class="course" each="{course in state.sortedListOfCourses}" if="{isCourseVisible(course.tags)}">
+            <Card title="{course.data.title}" link="{course.data.id}" description="{courseProgressMessage(course)}"
+                isCompleted="{!isCourseInProgress(course)}" showFooter="{true}" type="course"></Card>
         </div>
     </div>
 
@@ -43,8 +27,9 @@
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
+        import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
 
-        import { getCapitalizedUsername } from "js/AuthenticationUtilities";
+        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
         import { isComplete } from "Actions/completion";
         import {
@@ -54,6 +39,7 @@
         } from "js/LearningStatistics";
         import { ON_COMPLETION_CHANGE } from "js/Events";
         import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
+        import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Store";
 
         export default {
             state: {
@@ -67,10 +53,13 @@
                 card: Card,
                 continuelearningbutton: ContinueLearningButton,
                 taglist: TagList,
+                guestbanner: GuestBanner,
             },
 
             onMounted(props, state) {
-                const unsortedCourses = props.wagtailPage.courses.filter((course) => course.lessons.length);
+                const unsortedCourses = props.wagtailPage.courses.filter(
+                    (course) => course.lessons.length
+                );
 
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
@@ -106,7 +95,7 @@
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
                     this.state.currentCourse.data.lessons_count -
-                        countCompleteLessonsInCourse(courseSlug, lessonSlugs),
+                    countCompleteLessonsInCourse(courseSlug, lessonSlugs),
                     this.state.currentCourse.data.title
                 );
             },
@@ -165,6 +154,16 @@
                 const { selectedTags } = this.state;
                 const lowercaseCourseTags = courseTags.map((tag) => tag.toLowerCase());
                 return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
+            },
+
+            showBanner() {
+                return isGuestUser() && isGuestBannerVisible();
+            },
+
+            closeBanner() {
+                toggleGuestBanner(false);
+                this.showBanner();
+                this.update();
             },
         };
     </script>
