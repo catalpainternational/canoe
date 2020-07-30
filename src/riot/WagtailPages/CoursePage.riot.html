@@ -16,28 +16,14 @@
                 </div>
             </div>
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
-            <Card
-                each="{lesson in props.wagtailPage.lessons}"
-                title="{lesson.title}"
-                description="{lesson.description}"
-                duration="{lesson.duration}"
-                link="{lesson.id}"
-                isCompleted="{isLessonComplete(lesson)}"
-                isComingSoon="{lesson.coming_soon}"
-                showFooter="{true}"
-                type="lesson"
-            ></Card>
+            <Card each="{lesson in props.wagtailPage.lessons}" title="{lesson.title}" description="{lesson.description}"
+                duration="{lesson.duration}" link="{lesson.id}" isCompleted="{isLessonComplete(lesson)}"
+                isComingSoon="{lesson.coming_soon}" showFooter="{true}" type="lesson"></Card>
             <template if="{props.examCards.length > 0}">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
-                <Card
-                    title="{ courseExamTitle() }"
-                    link="{props.wagtailPage.id}/exam/0"
-                    isCompleted="{isExamComplete(props.wagtailPage.id)}"
-                    isComingSoon="{false}"
-                    showFooter="{true}"
-                    isDisabled="{examDisabled()}"
-                    type="exam"
-                ></Card>
+                <Card title="{ courseExamTitle() }" link="{props.wagtailPage.id}/exam/0"
+                    isCompleted="{isExamComplete(props.wagtailPage.id)}" isComingSoon="{false}" showFooter="{true}"
+                    isDisabled="{examDisabled()}" type="exam"></Card>
             </template>
         </div>
     </div>
@@ -54,7 +40,7 @@
         export default {
             TRANSLATIONS: {
                 your_lessons: () => gettext('Your lessons'),
-                course:  () => gettext('Course'),
+                course: () => gettext('Course'),
                 course_exam: () => gettext('Course exam'),
             },
             components: {
@@ -92,8 +78,10 @@
             stickyHeader() {
                 if (window.pageYOffset > this.state.headerOffsetTop) {
                     this.state.header.classList.add("sticky");
+                    this.state.header.children[0].children[2].classList.add("truncate-if-long");
                 } else {
                     this.state.header.classList.remove("sticky");
+                    this.state.header.children[0].children[2].classList.remove("truncate-if-long");
                 }
             },
 

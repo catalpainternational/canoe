@@ -23,7 +23,7 @@
 
         h4 {
             grid-row: 1;
-            grid-column: 1/6;
+            grid-column: 1 / 7;
         }
 
         h5 {
@@ -142,7 +142,7 @@
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 0 50px 50px 0;
+        border-width: 0 35px 35px 0;
         right: 0;
         top: 0;
         border-color: transparent $green-2 transparent transparent;
@@ -156,8 +156,8 @@
         height: 10px;
         width: 4px;
         position: absolute;
-        right: 15px;
-        top: 8px;
+        right: 9px;
+        top: 5px;
         z-index: 1;
         border-bottom: 1.25px solid white;
         border-right: 1.25px solid white;
