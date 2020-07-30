@@ -150,20 +150,8 @@ searchbar {
         background-color: $gray-9;
     }
 
-    input:focus + label:before {
-        content: "";
-    }
-
     label {
         flex: none;
         font-size: 0.8em;
-
-        &:before {
-            content: "Search";
-        }
-
-        &.hide:before {
-            content: "";
-        }
     }
 }

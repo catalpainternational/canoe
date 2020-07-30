@@ -4,7 +4,13 @@
         import { fetchManifest } from "js/WagtailPagesAPI";
         import { SiteDownloader } from "js/SiteDownloader";
         import { updateApi, updateIdb } from "Actions/actions_store.js";
-        import { initialiseCompletions, clearInMemoryCompletions } from "Actions/completion.js";
+        import { pullCompletionsIntoMemory, clearInMemoryCompletions } from "Actions/completion.js";
+        import {
+            pullExamAnswersIntoMemory,
+            clearInMemoryExamAnswers,
+            pullExamScoresIntoMemory,
+            clearInMemoryExamScores,
+        } from "Actions/exam";
         import { closeAndDeleteDB } from "Actions/actions_idb";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
@@ -31,9 +37,15 @@
                 new SiteDownloader().requestTheSitesPagesAndImages();
             },
 
+            async pullExamDataIntoMemory() {
+                await pullExamAnswersIntoMemory();
+                await pullExamScoresIntoMemory();
+            },
+
             async startCompletionsService() {
                 await updateIdb();
-                await initialiseCompletions();
+                await pullCompletionsIntoMemory();
+                await this.pullExamDataIntoMemory();
             },
 
             async prepDataForAppLaunch() {
@@ -45,7 +57,8 @@
                     );
                 } else {
                     // Pulls completions from the database into memory.
-                    await initialiseCompletions();
+                    await pullCompletionsIntoMemory();
+                    await pullExamAnswersIntoMemory();
                 }
 
                 this.pollForWebpageChanges();
@@ -60,6 +73,8 @@
                 window.clearInterval(this.state.pagesPoller);
                 storeSiteDownloadedIs(false);
                 clearInMemoryCompletions();
+                clearInMemoryExamAnswers();
+                clearInMemoryExamScores();
                 await closeAndDeleteDB();
             },
         };

@@ -21,9 +21,16 @@
                 isComingSoon="{lesson.coming_soon}" showFooter="{true}" type="lesson"></Card>
             <template if="{props.examCards.length > 0}">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
-                <Card title="{ courseExamTitle() }" link="{props.wagtailPage.id}/exam/0"
-                    isCompleted="{isExamComplete(props.wagtailPage.id)}" isComingSoon="{false}" showFooter="{true}"
-                    isDisabled="{examDisabled()}" type="exam"></Card>
+                <Card
+                    title="{ courseExamTitle() }"
+                    description="{isExamComplete(props.wagtailPage.id) ? `${TRANSLATIONS.highestScore()}: ${getHighestScore()}%`: ''}"
+                    link="{props.wagtailPage.id}/exam/0"
+                    isCompleted="{isExamComplete(props.wagtailPage.id)}"
+                    isComingSoon="{false}"
+                    showFooter="{true}"
+                    isDisabled="{examDisabled()}"
+                    type="exam"
+                ></Card>
             </template>
         </div>
     </div>
@@ -32,28 +39,39 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
-        import { countCompleteLessonsInCourse, isExamComplete } from "js/LearningStatistics";
-        import { isComplete, isTheCourseComplete } from "Actions/completion";
-        import { getCourseAndLessonSlugs } from "js/utilities";
+        import { isComplete } from "Actions/completion";
         import { isGuestUser } from "js/AuthenticationUtilities";
+        import {
+            countCompleteLessonsInCourses,
+            isCourseInProgress,
+            isExamComplete,
+        } from "js/CompletionInterface";
+        import { getExamHighScore } from "js/ExamInterface";
 
         export default {
             TRANSLATIONS: {
-                your_lessons: () => gettext('Your lessons'),
-                course: () => gettext('Course'),
-                course_exam: () => gettext('Course exam'),
+                your_lessons: () => gettext("Your lessons"),
+                course: () => gettext("Course"),
+                course_exam: () => gettext("Course exam"),
+                highestScore: () => gettext("Highest score"),
             },
+
             components: {
                 card: Card,
                 courseexam: CourseExam,
             },
 
-            onMounted(props, state) {
-                state.header = document.getElementsByClassName("course-header")[0];
-                state.headerOffsetTop = state.header.offsetTop;
+            state: {
+                header: null,
+                isCourseComplete: false,
+            },
 
-                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(this.props.wagtailPage);
-                this.update({ isCourseComplete: isTheCourseComplete(courseSlug, lessonSlugs) });
+            onMounted(props, state) {
+                const header = this.$(".course-header");
+                const { wagtailPage } = props;
+                const isCourseComplete = !isCourseInProgress(wagtailPage);
+
+                this.update({ header, isCourseComplete });
 
                 window.addEventListener("scroll", this.stickyHeader);
             },
@@ -63,9 +81,9 @@
             },
 
             getCourseProgress() {
-                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(this.props.wagtailPage);
+                const { wagtailPage } = this.props;
                 return (
-                    countCompleteLessonsInCourse(courseSlug, lessonSlugs) +
+                    countCompleteLessonsInCourses([wagtailPage]) +
                     " / " +
                     this.props.wagtailPage.data.lessons_count
                 );
@@ -76,7 +94,7 @@
             },
 
             stickyHeader() {
-                if (window.pageYOffset > this.state.headerOffsetTop) {
+                if (window.pageYOffset > this.state.header.offsetTop) {
                     this.state.header.classList.add("sticky");
                     this.state.header.children[0].children[2].classList.add("truncate-if-long");
                 } else {
@@ -90,13 +108,23 @@
             },
 
             examDisabled() {
-                // exams are enabled if you are a guest user, or you have completed the course
-                return !(this.state.isCourseComplete || isGuestUser());
+                // Exams are enabled if you complete all lessons or if you are a
+                // guest user.
+                const { wagtailPage: course } = this.props;
+                const { lessons_count } = course.data;
+                const isExamUnlocked =
+                    countCompleteLessonsInCourses([course]) === lessons_count - 1;
+                return !isExamUnlocked && !isGuestUser();
             },
 
             isExamComplete() {
                 const { wagtailPage } = this.props;
                 return isExamComplete(wagtailPage.data.slug);
+            },
+
+            getHighestScore() {
+                const { wagtailPage } = this.props;
+                return getExamHighScore(wagtailPage.data.slug);
             },
 
             numberOfLessonsCompleteMessage() {
@@ -111,7 +139,7 @@
             courseExamTitle() {
                 let p = gettext("%1's Course Exam", this.props.wagtailPage.title);
                 return p;
-            }
+            },
         };
     </script>
 </CoursePage>

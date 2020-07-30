@@ -1,6 +1,6 @@
 <Card>
     <a class="{howToStyle()} lesson card" href="#{props.link}">
-        <div class="card-body">
+        <div class="card-body {!props.showFooter ? 'no-footer' : ''}">
             <h4 class="truncate-if-long">{props.title}</h4>
             <div if="{props.isCompleted}" class="white-check"></div>
             <h5 if="{props.isComingSoon}">{ TRANSLATIONS.comingSoon() }</h5>

@@ -1,0 +1,20 @@
+<GuestBanner>
+    <div class="{state.isBannerClosing ? 'close' : ''}">
+        <a if="{!state.isBannerClosing}" class="cross" onclick="{closingBanner}"></a>
+        <p>You're logged in as a guest user</p>
+        <p>No data or progress will be saved</p>
+    </div>
+
+    <script>
+        export default {
+            state: {
+                isBannerClosing: false,
+            },
+
+            closingBanner() {
+                this.update({ isBannerClosing: true });
+                setTimeout(() => this.props.closeBanner(), 500);
+            },
+        };
+    </script>
+</GuestBanner>
