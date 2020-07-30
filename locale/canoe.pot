@@ -5,80 +5,80 @@ msgstr ""
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Language: en\n"
 
-#: src/riot/WagtailPages/HomePage.riot.html:128
+#: src/riot/WagtailPages/HomePage.riot.html:104
 msgid "%1 / %2 lesson complete"
 msgid_plural "%1 / %2 lessons complete"
 msgstr[0] ""
 msgstr[1] ""
 
 #. the number of lessons completed in a course
-#: src/riot/WagtailPages/CoursePage.riot.html:116
+#: src/riot/WagtailPages/CoursePage.riot.html:138
 msgid "%1 lesson complete"
 msgid_plural "%1 lessons complete"
 msgstr[0] ""
 msgstr[1] ""
 
 #. the number of minutes it will take to complete the objective, content, test, or lesson
-#: src/riot/Components/Card.riot.html:52
+#: src/riot/Components/Card.riot.html:53
 msgid "%1 min"
 msgid_plural "%1 mins"
 msgstr[0] ""
 msgstr[1] ""
 
 #. the total duration of the lesson in minutes
-#: src/riot/WagtailPages/LessonPage.riot.html:179
+#: src/riot/WagtailPages/LessonPage.riot.html:183
 msgid "%1 mins"
 msgstr ""
 
 #. display the number of the current card out of the total number of cards
-#: src/riot/Lesson/CourseExam.riot.html:189
-#: src/riot/Lesson/LessonContent.riot.html:124
+#: src/riot/Lesson/CourseExam.riot.html:204
+#: src/riot/Lesson/LessonContent.riot.html:127
 #: src/riot/Lesson/LessonObjective.riot.html:85
-#: src/riot/Lesson/LessonTest.riot.html:113
+#: src/riot/Lesson/LessonTest.riot.html:112
 msgid "%1 of %2"
 msgstr ""
 
 #. displays how many lessons of the total in a course have been completed
-#: src/riot/Screens/Profile.riot.html:136
+#: src/riot/Screens/Profile.riot.html:144
 msgid "%1 out of %2 completed"
 msgstr ""
 
 #. warns the user that this site ( name goes in %1 ) will not be able to send you notifications if you turn this off
-#: src/riot/Screens/Settings.riot.html:109
+#: src/riot/Screens/Settings.riot.html:115
 msgid "%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
 msgstr ""
 
-#: src/riot/WagtailPages/CoursePage.riot.html:124
+#: src/riot/WagtailPages/CoursePage.riot.html:146
 msgid "%1's Course Exam"
 msgstr ""
 
-#. This button adds an icon to the device homescreen
-#: ./src/riot/Screens/Settings.riot.html:19
+#: src/riot/Screens/Settings.riot.html:68
 msgid "Add to Home Screen"
 msgstr ""
 
-#: ./src/riot/Lesson/TestMultipleAnswer.riot.html:4
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:57
 msgid "all"
 msgstr ""
 
-#: ./src/riot/Lesson/ExamResults.riot.html:9
-#: ./src/riot/Lesson/LessonComplete.riot.html:35
+#: src/riot/Lesson/ExamResults.riot.html:51
 msgid "Amazing work!"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:9
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:58
+msgid "answers that apply"
+msgstr ""
+
+#: src/riot/Lesson/LessonFeedback.riot.html:55
 msgid "Are you enjoying this lesson?"
 msgstr ""
 
-#: ./src/riot/Lesson/ExamResults.riot.html:28
-#: ./src/riot/Lesson/HonorCode.riot.html:28
-#: ./src/riot/Lesson/LessonComplete.riot.html:29
-#: ./src/riot/Lesson/LessonComplete.riot.html:54
+#: src/riot/Lesson/ExamResults.riot.html:57
+#: src/riot/Lesson/HonorCode.riot.html:42
+#: src/riot/Lesson/LessonComplete.riot.html:59
 msgid "Back to Course"
 msgstr ""
 
-#: ./src/riot/Lesson/ExamResults.riot.html:13
-#: ./src/riot/Lesson/LessonComplete.riot.html:39
+#: src/riot/Lesson/ExamResults.riot.html:53
 msgid "Back to Courses"
 msgstr ""
 
@@ -86,27 +86,27 @@ msgstr ""
 msgid "Back to lesson overview"
 msgstr ""
 
-#: ./src/riot/Lesson/TestMultipleAnswer.riot.html:4
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:56
 msgid "Check"
 msgstr ""
 
-#: ./src/riot/Lesson/TestMultipleAnswer.riot.html:31
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:60
 msgid "Check answers"
 msgstr ""
 
-#: ./src/riot/Lesson/HonorCode.riot.html:9
+#: src/riot/Lesson/HonorCode.riot.html:38
 msgid "Code of conduct"
 msgstr ""
 
-#: ./src/riot/Components/Card.riot.html:6
+#: src/riot/Components/Card.riot.html:31
 msgid "Coming Soon!"
 msgstr ""
 
-#: src/riot/Components/Card.riot.html:31
+#: src/riot/Components/Card.riot.html:32
 msgid "completed"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:13
+#: src/riot/Lesson/LessonComplete.riot.html:55
 msgid "Congratulations!"
 msgstr ""
 
@@ -114,57 +114,52 @@ msgstr ""
 msgid "Content"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:42
+#: src/riot/Lesson/LessonFeedback.riot.html:60
 msgid "Continue"
 msgstr ""
 
-#: ./src/riot/Components/ContinueLearningButton.riot.html:5
+#: src/riot/Components/ContinueLearningButton.riot.html:20
 msgid "Continue learning"
 msgstr ""
 
-#: src/riot/WagtailPages/CoursePage.riot.html:57
+#: src/riot/WagtailPages/CoursePage.riot.html:62
 msgid "Course"
 msgstr ""
 
-#: ./src/riot/Lesson/HonorCode.riot.html:3
-#: src/riot/WagtailPages/CoursePage.riot.html:58
+#: src/riot/Lesson/HonorCode.riot.html:37
+#: src/riot/WagtailPages/CoursePage.riot.html:63
 msgid "Course exam"
 msgstr ""
 
-#: ./src/riot/Lesson/PdfCard.riot.html:3
+#: src/riot/Lesson/PdfCard.riot.html:11
 msgid "Download this PDF to your device"
 msgstr ""
 
-#: ./src/riot/Components/SearchBar.riot.html:3
-msgid "Enter at least 3 characters"
-msgstr ""
-
-#: ./src/riot/Lesson/LessonFeedback.riot.html:33
-#: ./src/riot/Lesson/LessonFeedback.riot.html:6
+#: src/riot/Lesson/LessonFeedback.riot.html:54
 msgid "FEEDBACK"
 msgstr ""
 
-#: ./src/riot/Lesson/TestMultipleAnswer.riot.html:28
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:59
 msgid "Find and check all correct answers and uncheck incorrect answers"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonContent.riot.html:47
-#: ./src/riot/Lesson/LessonObjective.riot.html:19
-#: ./src/riot/Lesson/TestPopupModal.riot.html:14
+#: src/riot/Lesson/LessonContent.riot.html:99
+#: src/riot/Lesson/LessonObjective.riot.html:57
+#: src/riot/Lesson/TestPopupModal.riot.html:37
 msgid "Finish"
 msgstr ""
 
-#: ./src/riot/Screens/Authentication.riot.html:36
-#: ./src/riot/Screens/Login.riot.html:9
+#: src/riot/Screens/Authentication.riot.html:74
+#: src/riot/Screens/Login.riot.html:65
 msgid "Forgot username or password?"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:22
+#: src/riot/Lesson/LessonComplete.riot.html:57
 msgid "Good job!"
 msgstr ""
 
-#: src/riot/Lesson/LessonTest.riot.html:134
-#: src/riot/Lesson/TestPopupModal.riot.html:60
+#: src/riot/Lesson/LessonTest.riot.html:133
+#: src/riot/Lesson/TestPopupModal.riot.html:63
 msgid "Great"
 msgstr ""
 
@@ -173,16 +168,25 @@ msgid "Great job!"
 msgstr ""
 
 #. displays percentage of completed lessons in all courses combined
-#: src/riot/Screens/Profile.riot.html:145
+#: src/riot/Screens/Profile.riot.html:153
 msgid "Great work %1! You have completed %2% of your overall coursework"
 msgstr ""
 
 #. Greet the user with their username
-#: src/riot/WagtailPages/HomePage.riot.html:138
+#: src/riot/WagtailPages/HomePage.riot.html:114
 msgid "Hi %1"
 msgstr ""
 
-#: ./src/riot/Screens/ChangeBrowser.riot.html:6
+#: src/riot/Components/LoginForm.riot.html:44
+#: src/riot/Screens/Authentication.riot.html:73
+msgid "Hide Password"
+msgstr ""
+
+#: src/riot/WagtailPages/CoursePage.riot.html:64
+msgid "Highest score"
+msgstr ""
+
+#: src/riot/Screens/ChangeBrowser.riot.html:19
 msgid "In the meantime please use Safari."
 msgstr ""
 
@@ -190,130 +194,149 @@ msgstr ""
 msgid "Keep going"
 msgstr ""
 
-#: ./src/riot/Components/LanguageSelector.riot.html:2
+#: src/riot/Components/LanguageSelector.riot.html:19
 msgid "Language"
 msgstr ""
 
-#: ./src/riot/Screens/Notifications.riot.html:6
+#: src/riot/Screens/Notifications.riot.html:62
 msgid "Latest notifications"
 msgstr ""
 
-#: ./src/riot/Screens/Profile.riot.html:39
+#: src/riot/Screens/Profile.riot.html:88
 msgid "Learning statistics"
 msgstr ""
 
 #. display the title of the lesson
-#: src/riot/WagtailPages/LessonPage.riot.html:162
+#: src/riot/WagtailPages/LessonPage.riot.html:178
 msgid "Lesson - %1"
 msgstr ""
 
-#: src/riot/WagtailPages/LessonPage.riot.html:117
+#: src/riot/WagtailPages/LessonPage.riot.html:90
 msgid "Lesson Activities"
 msgstr ""
 
-#: ./src/riot/Screens/Profile.riot.html:45
+#: src/riot/Screens/Profile.riot.html:89
 msgid "lessons completed so far"
 msgstr ""
 
-#: ./src/riot/Screens/Profile.riot.html:53
+#: src/riot/Screens/Profile.riot.html:90
 msgid "lessons remaining to finish your study"
 msgstr ""
 
-#: src/riot/Lesson/LessonFeedback.riot.html:54
+#: src/riot/Lesson/LessonFeedback.riot.html:56
 msgid "Let us know what you think of this lesson. We value your feedback and treat all feedback as confidential."
 msgstr ""
 
-#: ./src/riot/Screens/Resources.riot.html:27
+#: src/riot/Screens/Resources.riot.html:65
 msgid "Loading . . ."
 msgstr ""
 
-#: ./src/riot/Screens/Settings.riot.html:29
+#: src/riot/Screens/Settings.riot.html:69
 msgid "Log out"
 msgstr ""
 
-#: ./src/riot/Components/LoginForm.riot.html:24
-#: ./src/riot/Components/LoginForm.riot.html:3
-#: ./src/riot/Screens/Authentication.riot.html:27
-#: ./src/riot/Screens/Authentication.riot.html:6
+#: src/riot/Components/LoginForm.riot.html:40
+#: src/riot/Screens/Authentication.riot.html:69
 msgid "Login"
 msgstr ""
 
-#: ./src/riot/Screens/Login.riot.html:10
-#: ./src/riot/Screens/Login.riot.html:36
+#: src/riot/Screens/Login.riot.html:66
+#: src/riot/Screens/Login.riot.html:72
 msgid "Login as a guest"
 msgstr ""
 
-#: ./src/riot/Lesson/CourseExam.riot.html:33
-#: ./src/riot/Lesson/LessonContent.riot.html:39
-#: ./src/riot/Lesson/LessonObjective.riot.html:11
-#: ./src/riot/Lesson/TestPopupModal.riot.html:8
+#: src/riot/Screens/Login.riot.html:67
+msgid "Need help?"
+msgstr ""
+
+#: src/riot/Lesson/CourseExam.riot.html:89
+#: src/riot/Lesson/LessonContent.riot.html:98
+#: src/riot/Lesson/LessonObjective.riot.html:55
+#: src/riot/Lesson/TestPopupModal.riot.html:36
 msgid "Next"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:16
+#: src/riot/Lesson/LessonComplete.riot.html:56
 msgid "Next Lesson"
 msgstr ""
 
-#: ./src/riot/Screens/Notifications.riot.html:13
+#: src/riot/Screens/Login.riot.html:69
+msgid ""
+"No learning progress will be saved while you are logged in as a guest. If you would like\n"
+"                    to create an account, please"
+msgstr ""
+
+#: src/riot/Screens/Notifications.riot.html:63
 msgid "No notifications."
 msgstr ""
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:26
+#: src/riot/Lesson/LessonFeedback.riot.html:58
 msgid "No thanks"
 msgstr ""
 
-#: ./src/riot/Lesson/ExamResults.riot.html:22
-#: ./src/riot/Lesson/LessonComplete.riot.html:48
+#: src/riot/Lesson/ExamResults.riot.html:55
 msgid "Not quite!"
 msgstr ""
 
-#: ./src/riot/Screens/Notifications.riot.html:15
+#: src/riot/Screens/Notifications.riot.html:64
 msgid "Notifications"
 msgstr ""
 
 #: src/riot/Lesson/LessonModuleComplete.riot.html:26
-#: src/riot/Lesson/LessonObjective.riot.html:48
+#: src/riot/Lesson/LessonObjective.riot.html:56
 msgid "Objectives"
 msgstr ""
 
-#: src/riot/Lesson/LessonTest.riot.html:148
-#: src/riot/Lesson/TestPopupModal.riot.html:70
+#: src/riot/Lesson/LessonTest.riot.html:147
+#: src/riot/Lesson/TestPopupModal.riot.html:73
 msgid "Oops"
 msgstr ""
 
-#: ./src/riot/Screens/Profile.riot.html:6
+#: src/riot/Screens/Profile.riot.html:86
 msgid "Overall progress"
 msgstr ""
 
-#: ./src/riot/Components/LoginForm.riot.html:9
-#: ./src/riot/Screens/Authentication.riot.html:12
+#: src/riot/Components/LoginForm.riot.html:42
+#: src/riot/Screens/Authentication.riot.html:71
 msgid "Password"
 msgstr ""
 
-#: ./src/riot/Screens/Profile.riot.html:16
+#: src/riot/Screens/Profile.riot.html:87
 msgid "Progress by course"
 msgstr ""
 
-#: src/riot/Lesson/LessonTest.riot.html:155
-#: src/riot/Lesson/TestPopupModal.riot.html:75
+#: src/riot/Lesson/LessonTest.riot.html:154
+#: src/riot/Lesson/TestPopupModal.riot.html:78
 msgid "Read the question more carefully!"
 msgstr ""
 
-#: ./src/riot/Screens/Resources.riot.html:5
+#: src/riot/Screens/Resources.riot.html:64
 msgid "Resources"
 msgstr ""
 
-#: ./src/riot/Lesson/ExamResults.riot.html:25
-#: ./src/riot/Lesson/LessonComplete.riot.html:51
+#: src/riot/Lesson/ExamResults.riot.html:56
 msgid "Retake Exam"
 msgstr ""
 
-#: ./src/riot/WagtailPages/LessonPage.riot.html:55
+#: src/riot/Components/SearchBar.riot.html:15
+msgid "Search"
+msgstr ""
+
+#: src/riot/WagtailPages/LessonPage.riot.html:92
 msgid "See less"
 msgstr ""
 
-#: ./src/riot/WagtailPages/LessonPage.riot.html:61
+#: src/riot/WagtailPages/LessonPage.riot.html:91
 msgid "See more"
+msgstr ""
+
+#: src/riot/Screens/Login.riot.html:71
+msgid "send us a message"
+msgstr ""
+
+#: src/riot/Components/LoginForm.riot.html:43
+#: src/riot/Screens/Authentication.riot.html:72
+msgid "Show Password"
 msgstr ""
 
 #: src/js/SiteDownloader.js:82
@@ -324,45 +347,41 @@ msgstr ""
 msgid "Site is downloading."
 msgstr ""
 
-#: src/riot/Components/Card.riot.html:55
-msgid "start %1"
-msgstr ""
-
-#: src/riot/Components/Card.riot.html:33
+#: src/riot/Components/Card.riot.html:34
 msgid "Start Activity"
 msgstr ""
 
-#: src/riot/Components/Card.riot.html:35
+#: src/riot/Components/Card.riot.html:36
 msgid "Start Course"
 msgstr ""
 
-#: ./src/riot/Lesson/HonorCode.riot.html:20
-#: src/riot/Components/Card.riot.html:36
+#: src/riot/Components/Card.riot.html:37
+#: src/riot/Lesson/HonorCode.riot.html:41
 msgid "Start Exam"
 msgstr ""
 
-#: ./src/riot/Screens/Notifications.riot.html:36
+#: src/riot/Screens/Notifications.riot.html:65
 msgid "Start lesson"
 msgstr ""
 
-#: src/riot/Components/Card.riot.html:34
+#: src/riot/Components/Card.riot.html:35
 msgid "Start Lesson"
 msgstr ""
 
-#: ./src/riot/Lesson/CourseExam.riot.html:42
+#: src/riot/Lesson/CourseExam.riot.html:90
 msgid "Submit answers"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonFeedback.riot.html:36
+#: src/riot/Lesson/LessonFeedback.riot.html:59
 msgid "Successfully sent!"
 msgstr ""
 
-#: ./src/riot/Lesson/LessonComplete.riot.html:26
+#: src/riot/Lesson/LessonComplete.riot.html:58
 msgid "Take Exam"
 msgstr ""
 
 #. message on completion of lesson and prompt to take course exam
-#: src/riot/Lesson/LessonComplete.riot.html:119
+#: src/riot/Lesson/LessonComplete.riot.html:101
 msgid "Take the exam now to complete the course \"%1\""
 msgstr ""
 
@@ -370,95 +389,88 @@ msgstr ""
 msgid "Test"
 msgstr ""
 
-#: src/riot/Lesson/LessonFeedback.riot.html:55
+#: src/riot/Lesson/LessonFeedback.riot.html:57
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
 msgstr ""
 
-#: ./src/riot/Screens/Resources.riot.html:28
+#: src/riot/Screens/Resources.riot.html:67
 msgid "There are no resource articles yet. Check back soon!"
 msgstr ""
 
-#: ./src/riot/Lesson/AudioCard.riot.html:18
+#: src/riot/Lesson/AudioCard.riot.html:31
 msgid "This audio is not available offline."
 msgstr ""
 
-#: ./src/riot/Lesson/AudioCard.riot.html:17
+#: src/riot/Lesson/AudioCard.riot.html:30
 msgid "This audio will play offline."
 msgstr ""
 
-#: ./src/riot/Lesson/VideoCard.riot.html:21
+#: src/riot/Lesson/VideoCard.riot.html:41
 msgid "This video is not available offline."
 msgstr ""
 
-#: ./src/riot/Lesson/VideoCard.riot.html:20
+#: src/riot/Lesson/VideoCard.riot.html:40
 msgid "This video will play offline."
 msgstr ""
 
 #. message for what percent a user must score to pass the exam
-#: src/riot/Lesson/HonorCode.riot.html:65
+#: src/riot/Lesson/HonorCode.riot.html:68
 msgid "To pass this exam you need to score <strong>%1% or higher</strong>"
 msgstr ""
 
-#: ./src/riot/Lesson/TestPopupModal.riot.html:20
+#: src/riot/Lesson/TestPopupModal.riot.html:38
 msgid "Try again"
 msgstr ""
 
-#: ./src/riot/Components/LoginForm.riot.html:5
-#: ./src/riot/Screens/Authentication.riot.html:8
+#: src/riot/Components/LoginForm.riot.html:41
+#: src/riot/Screens/Authentication.riot.html:70
 msgid "Username"
 msgstr ""
 
-#: ./src/riot/Lesson/ExamResults.riot.html:16
-#: ./src/riot/Lesson/LessonComplete.riot.html:42
+#: src/riot/Lesson/ExamResults.riot.html:54
 msgid "View Resources"
 msgstr ""
 
-#: ./src/riot/Screens/ChangeBrowser.riot.html:5
+#: src/riot/Screens/ChangeBrowser.riot.html:18
 msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
 msgstr ""
 
-#: src/riot/Lesson/LessonTest.riot.html:141
-#: src/riot/Lesson/TestPopupModal.riot.html:65
+#: src/riot/Lesson/LessonTest.riot.html:140
+#: src/riot/Lesson/TestPopupModal.riot.html:68
 msgid "Well done, keep it up!"
 msgstr ""
 
-#: ./src/riot/Screens/Settings.riot.html:14
+#: src/riot/Screens/Settings.riot.html:67
 msgid "Would you like to receive app notifications?"
 msgstr ""
 
-#: src/riot/Lesson/HonorCode.riot.html:39
+#: src/riot/Lesson/HonorCode.riot.html:40
 msgid "Yes, I agree"
 msgstr ""
 
 #. message when user did not pass exam
-#: src/riot/Lesson/LessonComplete.riot.html:135
-msgid "You did not pass this assessment because you only scored %1 and you need to reach %2 to pass. You can retake this exam now or later."
-msgstr ""
-
-#. message when user did not pass exam
-#: src/riot/Lesson/ExamResults.riot.html:88
+#: src/riot/Lesson/ExamResults.riot.html:102
 msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later."
 msgstr ""
 
 #. message on completion of a lesson %1 is replaced by the lesson title
-#: src/riot/Lesson/LessonComplete.riot.html:114
+#: src/riot/Lesson/LessonComplete.riot.html:96
 msgid "You just completed the lesson \"%1\""
 msgstr ""
 
-#: src/riot/WagtailPages/HomePage.riot.html:111
+#: src/riot/WagtailPages/HomePage.riot.html:91
 msgid "You only have %1 lesson left to finish %2."
 msgid_plural "You only have %1 lessons left to finish %2."
 msgstr[0] ""
 msgstr[1] ""
 
 #. message when user passed the exam
-#: src/riot/Lesson/LessonComplete.riot.html:127
-msgid "You passed this exam with a score of %1. If you would like to improve your score you can retake this exam."
+#: src/riot/Lesson/ExamResults.riot.html:94
+msgid "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam."
 msgstr ""
 
-#. message when user passed the exam
-#: src/riot/Lesson/ExamResults.riot.html:80
-msgid "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam."
+#: src/riot/Screens/Login.riot.html:68
+msgid "You're logging in as a guest"
 msgstr ""
 
 #. message to say what module is next ( %1 is content or test )
@@ -471,27 +483,26 @@ msgstr ""
 msgid "You've completed the %1"
 msgstr ""
 
-#: ./src/riot/Lesson/ExamResults.riot.html:10
-#: ./src/riot/Lesson/LessonComplete.riot.html:36
+#: src/riot/Lesson/ExamResults.riot.html:52
 msgid "You've completed the course"
 msgstr ""
 
-#: src/riot/Lesson/HonorCode.riot.html:38
+#: src/riot/Lesson/HonorCode.riot.html:39
 msgid "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?"
 msgstr ""
 
-#: ./src/riot/Lesson/AudioCard.riot.html:15
+#: src/riot/Lesson/AudioCard.riot.html:29
 msgid "Your browser does not support the audio element."
 msgstr ""
 
-#: ./src/riot/Lesson/VideoCard.riot.html:16
+#: src/riot/Lesson/VideoCard.riot.html:39
 msgid "Your browser does not support the video element."
 msgstr ""
 
-#: src/riot/WagtailPages/CoursePage.riot.html:56
+#: src/riot/WagtailPages/CoursePage.riot.html:61
 msgid "Your lessons"
 msgstr ""
 
-#: ./src/riot/Screens/Settings.riot.html:4
+#: src/riot/Screens/Settings.riot.html:66
 msgid "Your settings"
 msgstr ""
