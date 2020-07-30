@@ -17,6 +17,7 @@ GuestBanner {
         top: 0;
         padding: 0.25em;
         box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+        z-index: 3;
 
         &.close {
             animation-duration: 0.6s;
