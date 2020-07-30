@@ -70,7 +70,7 @@
         import { getLessonCardIdx, getPreviousCardsUrl, getNextCardsUrl } from "js/Routing";
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
         import { URLDoesntExist, ExamIsMissingAnAnswer } from "js/Errors";
-        import { saveExamAnswer, loadExamAnswer, tallyFinalScore } from "js/LearningStatistics";
+        import { saveExamAnswer, loadExamAnswer, tallyFinalScore } from "js/ExamInterface";
 
         export default {
             state: {
@@ -166,8 +166,6 @@
                 console.assert(
                     response.hasOwnProperty("answers") && response.hasOwnProperty("isCorrect")
                 );
-                const { card } = this.state;
-                saveExamAnswer(card.id, response);
 
                 this.update({ currentAnswer: response });
             },

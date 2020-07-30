@@ -30,13 +30,12 @@
         import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
 
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
         import { isComplete } from "Actions/completion";
         import {
-            countCompleteLessonsInCourse,
+            countCompleteLessonsInCourses,
             getLatestCompletion,
             isCourseInProgress,
-        } from "js/LearningStatistics";
+        } from "js/CompletionInterface";
         import { ON_COMPLETION_CHANGE } from "js/Events";
         import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
         import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Store";
@@ -88,25 +87,19 @@
             },
 
             continueLearningMessage() {
-                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(
-                    this.state.currentCourse
-                );
+                const { currentCourse } = this.state;
                 return ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
                     this.state.currentCourse.data.lessons_count -
-                    countCompleteLessonsInCourse(courseSlug, lessonSlugs),
+                        countCompleteLessonsInCourses([currentCourse]),
                     this.state.currentCourse.data.title
                 );
             },
 
             courseProgressMessage(course) {
                 // displays how many lessons are complete and how many lessons are in the current course
-                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
-                const numberOfCompleteLessons = countCompleteLessonsInCourse(
-                    courseSlug,
-                    lessonSlugs
-                );
+                const numberOfCompleteLessons = countCompleteLessonsInCourses([course]);
 
                 return ngettext(
                     "%1 / %2 lesson complete",
