@@ -23,31 +23,30 @@
                 <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">
                     {props.wagtailPage.data.long_description}
                 </p>
-                <a
-                    if="{props.wagtailPage.data.long_description && state.showLongDescription}"
-                    onclick="{toggleLessonDescription}"
-                    >{ TRANSLATIONS.less() }</a
-                >
-                <a
-                    if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
-                    onclick="{toggleLessonDescription}"
-                    >{ TRANSLATIONS.more() }</a
-                >
+                <a if="{props.wagtailPage.data.long_description && state.showLongDescription}"
+                    onclick="{toggleLessonDescription}">{ TRANSLATIONS.less() }</a>
+                <a if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
+                    onclick="{toggleLessonDescription}">{ TRANSLATIONS.more() }</a>
             </div>
 
             <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
 
-            <Card title="1. {props.wagtailPage.objective.title}" description="{props.wagtailPage.objective.aim}"
-                duration="{props.wagtailPage.objective.duration}" link="{props.wagtailPage.id}/{OBJECTIVES}/1"
+            <Card title="1. {props.wagtailPage.objective.title}"
+                description="{props.wagtailPage.objective.aim}"
+                duration="{props.wagtailPage.objective.duration}"
+                link="{props.wagtailPage.id}/{OBJECTIVES}/1"
                 isCompleted="{isModuleComplete(OBJECTIVES)}" type="activity" showFooter="{true}">
             </Card>
 
-            <Card title="2. {props.wagtailPage.content.title}" description="{props.wagtailPage.content.aim}"
-                duration="{props.wagtailPage.content.duration}" link="{props.wagtailPage.id}/{CONTENT}/1"
-                isCompleted="{isModuleComplete(CONTENT)}" type="activity" showFooter="{true}">
+            <Card title="2. {props.wagtailPage.content.title}"
+                description="{props.wagtailPage.content.aim}"
+                duration="{props.wagtailPage.content.duration}"
+                link="{props.wagtailPage.id}/{CONTENT}/1" isCompleted="{isModuleComplete(CONTENT)}"
+                type="activity" showFooter="{true}">
             </Card>
 
-            <Card title="3. {props.wagtailPage.test.title}" description="{props.wagtailPage.test.aim}"
+            <Card title="3. {props.wagtailPage.test.title}"
+                description="{props.wagtailPage.test.aim}"
                 duration="{props.wagtailPage.test.duration}" link="{props.wagtailPage.id}/{TEST}/1"
                 isCompleted="{isModuleComplete(TEST)}" type="activity" showFooter="{true}">
             </Card>

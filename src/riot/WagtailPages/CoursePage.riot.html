@@ -16,21 +16,17 @@
                 </div>
             </div>
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
-            <Card each="{lesson in props.wagtailPage.lessons}" title="{lesson.title}" description="{lesson.description}"
-                duration="{lesson.duration}" link="{lesson.id}" isCompleted="{isLessonComplete(lesson)}"
-                isComingSoon="{lesson.coming_soon}" showFooter="{true}" type="lesson"></Card>
+            <Card each="{lesson in props.wagtailPage.lessons}" title="{lesson.title}"
+                description="{lesson.description}" duration="{lesson.duration}" link="{lesson.id}"
+                isCompleted="{isLessonComplete(lesson)}" isComingSoon="{lesson.coming_soon}"
+                showFooter="{true}" type="lesson"></Card>
             <template if="{props.examCards.length > 0}">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
-                <Card
-                    title="{ courseExamTitle() }"
+                <Card title="{ courseExamTitle() }"
                     description="{isExamComplete(props.wagtailPage.id) ? `${TRANSLATIONS.highestScore()}: ${getHighestScore()}%`: ''}"
                     link="{props.wagtailPage.id}/exam/0"
-                    isCompleted="{isExamComplete(props.wagtailPage.id)}"
-                    isComingSoon="{false}"
-                    showFooter="{true}"
-                    isDisabled="{examDisabled()}"
-                    type="exam"
-                ></Card>
+                    isCompleted="{isExamComplete(props.wagtailPage.id)}" isComingSoon="{false}"
+                    showFooter="{true}" isDisabled="{examDisabled()}" type="exam"></Card>
             </template>
         </div>
     </div>
