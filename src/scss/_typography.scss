@@ -121,6 +121,12 @@ p.feedback-message {
     };
 }
 
+.truncate-if-long {
+    overflow: hidden;
+    white-space: nowrap;        
+    text-overflow: ellipsis;
+}
+
 .notifications-toggle p {
     font-family: "GalanoGrotesqueAlt";
     line-height: 16px;
