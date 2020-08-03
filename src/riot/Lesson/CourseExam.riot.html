@@ -35,18 +35,16 @@
                     class="btn-primary"
                     onclick="{nextExamCard}"
                     disabled="{Object.keys(state.currentAnswer).length === 0}"
-                    translate
                 >
-                    Next
+                    { TRANSLATIONS.next() }
                 </button>
                 <button
                     if="{state.cardIdx === state.cards.length - 1}"
                     class="btn-primary"
                     onclick="{nextExamCard}"
                     disabled="{Object.keys(state.currentAnswer).length === 0}"
-                    translate
                 >
-                    Submit answers
+                    { TRANSLATIONS.submit() }
                 </button>
             </div>
         </div>
@@ -85,6 +83,11 @@
                 testmultipleanswer: TestMultipleAnswer,
                 lessonframe: LessonFrame,
                 honorcode: HonorCode,
+            },
+
+            TRANSLATIONS: {
+                next: () => gettext('Next'),
+                submit: () => gettext('Submit answers'),
             },
 
             MINIMUM_SCORE: 75,

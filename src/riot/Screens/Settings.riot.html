@@ -1,7 +1,7 @@
 <Settings>
     <div class="settings">
         <div class="content-wrapper">
-            <h3 translate>Your settings</h3>
+            <h3>{ TRANSLATIONS.settings() }</h3>
 
             <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
                 <div
@@ -11,7 +11,7 @@
                     <input type="checkbox" />
                     <div class="slider"></div>
                 </div>
-                <p translate>Would you like to receive app notifications?</p>
+                <p>{ TRANSLATIONS.notifications() }</p>
             </div>
 
             <LanguageSelector></LanguageSelector>
@@ -20,13 +20,12 @@
                 if="{state.canAddToHomeScreen}"
                 class="btn-secondary"
                 onclick="{promptUserToInstallApp}"
-                translate
                 translation-comment="This button adds an icon to the device homescreen"
             >
-                Add to Home Screen
+                { TRANSLATIONS.add() }
             </button>
 
-            <button class="btn-secondary" onclick="{logout}" translate>Log out</button>
+            <button class="btn-secondary" onclick="{logout}">{ TRANSLATIONS.logout() }</button>
 
             <div is="logos" class="logo" />
 
@@ -61,6 +60,13 @@
             components: {
                 languageselector: LanguageSelector,
                 logos: Logos,
+            },
+
+            TRANSLATIONS: {
+                settings: () => gettext('Your settings'),
+                notifications: () => gettext('Would you like to receive app notifications?'),
+                add: () => gettext('Add to Home Screen'),
+                logout: () => gettext('Log out'),
             },
 
             logout() {

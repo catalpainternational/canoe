@@ -1,8 +1,8 @@
 <TestMultipleAnswer class="answer">
     <div class="answers-block">
         <h4>
-            <span translate>Check </span><span class="bold" translate>all</span
-            ><span> answers that apply</span>
+            <span>{ TRANSLATIONS.check() }</span><span class="bold">{ TRANSLATIONS.all() }</span
+            ><span>{ TRANSLATIONS.apply() }</span>
         </h4>
         <ol>
             <li each="{answer in props.card.answers}" onclick="{() => selectAnswer(answer)}">
@@ -25,17 +25,16 @@
             </li>
         </ol>
     </div>
-    <h4 if="{state.visibleAnswers.length > 0}" translate>
-        Find and check all correct answers and uncheck incorrect answers
+    <h4 if="{state.visibleAnswers.length > 0}">
+        { TRANSLATIONS.checkCorrect() }
     </h4>
     <button
         if="{!props.isCourseExam}"
         class="btn-primary"
         onclick="{showResults}"
         disabled="{state.hiddenAnswers.size === 0 && state.visibleAnswers.size === 0}"
-        translate
     >
-        Check answers
+        { TRANSLATIONS.checkAnswers() }
     </button>
 
     <script>
@@ -51,6 +50,14 @@
                 hiddenAnswers: [],
                 visibleAnswers: [],
                 numberTotalCorrectAnswers: 0,
+            },
+
+            TRANSLATIONS: {
+                check: () => gettext('Check'),
+                all: () => gettext('all'),
+                apply: () => gettext('answers that apply'),
+                checkCorrect: () => gettext('Find and check all correct answers and uncheck incorrect answers'),
+                checkAnswers: () => gettext('Check answers'),
             },
 
             onMounted(props, state) {
