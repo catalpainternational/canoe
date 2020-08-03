@@ -8,10 +8,10 @@
                 </div>
                 <div class="section-title">
                     <div class="unit">
-                        <p class="truncate-if-long">{ lessonTitleMessage() }</p>
+                        <p class="truncate-if-long">{ lessonPageTitleMessage() }</p>
                     </div>
                 </div>
-                <h2 id="title">{props.wagtailPage.title}</h2>
+                <h2 id="lessonPageTitle">{props.wagtailPage.title}</h2>
             </div>
 
             <div class="duration">
@@ -56,7 +56,7 @@
             state: {
                 showLongDescription: false,
                 header: null,
-                title: null,
+                lessonPageTitle: null,
             },
 
             components: {
@@ -103,17 +103,17 @@
                 // With the fresh reference, `stickyHeader` always makes the
                 // the right header sticky. Problem solved.
                 this.state.header = document.getElementsByClassName("lesson-header")[0];
-                this.state.title = this.$("#title");
+                this.state.lessonPageTitle = this.$("#lessonPageTitle");
                 this.state.headerOffsetTop = this.state.header.offsetTop;
             },
 
             stickyHeader() {
                 if (window.pageYOffset > this.state.headerOffsetTop) {
                     this.state.header.classList.add("sticky");
-                    this.state.title.classList.add("truncate-if-long");
+                    this.state.lessonPageTitle.classList.add("truncate-if-long");
                 } else {
                     this.state.header.classList.remove("sticky");
-                    this.state.title.classList.remove("truncate-if-long");
+                    this.state.lessonPageTitle.classList.remove("truncate-if-long");
                 }
             },
 
@@ -151,7 +151,7 @@
                 }
             },
 
-            lessonTitleMessage() {
+            lessonPageTitleMessage() {
                 // display the title of the lesson
                 return gettext("Lesson - %1", this.props.wagtailPage.course.title);
             },

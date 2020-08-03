@@ -9,7 +9,7 @@
                     <div>
                         <p>{ TRANSLATIONS.course() }</p>
                     </div>
-                    <h3 id="title">{props.wagtailPage.data.title}</h3>
+                    <h3 id="coursePageTitle">{props.wagtailPage.data.title}</h3>
                     <div>
                         <p class="bottom-border">{ numberOfLessonsCompleteMessage() }</p>
                     </div>
@@ -63,17 +63,17 @@
 
             state: {
                 header: null,
-                title: null,
+                coursePageTitle: null,
                 isCourseComplete: false,
             },
 
             onMounted(props, state) {
                 const header = this.$(".course-header");
-                const title = this.$("#title");
+                const coursePageTitle = this.$("#coursePageTitle");
                 const { wagtailPage } = props;
                 const isCourseComplete = !isCourseInProgress(wagtailPage);
 
-                this.update({ header, title, isCourseComplete });
+                this.update({ header, coursePageTitle, isCourseComplete });
 
                 window.addEventListener("scroll", this.stickyHeader);
             },
@@ -98,10 +98,10 @@
             stickyHeader() {
                 if (window.pageYOffset > this.state.header.offsetTop) {
                     this.state.header.classList.add("sticky");
-                    this.state.title.classList.add("truncate-if-long");
+                    this.state.coursePageTitle.classList.add("truncate-if-long");
                 } else {
                     this.state.header.classList.remove("sticky");
-                    this.state.title.classList.remove("truncate-if-long");
+                    this.state.coursePageTitle.classList.remove("truncate-if-long");
                 }
             },
 
