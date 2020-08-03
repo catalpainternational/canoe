@@ -1,25 +1,25 @@
 <LessonComplete>
     <LessonFrame>
         <div
-            class="{props.isCourseExamFinished && !props.passedExam ? '' : 'confetti background'}"
+            class="confetti background"
         ></div>
         <template if="{state.lessonSlugs.length}">
             <div class="congratulations-container">
                 <div
-                    class="{props.isCourseExamFinished && !props.passedExam ? 'incorrect-flag' : 'report-card overlay'}"
+                    class="report-card overlay"
                 ></div>
-                <template if="{!isCourseComplete() && !props.isCourseExamFinished}">
+                <template if="{!isCourseComplete()}">
                     <div>
-                        <h2 translate>Congratulations!</h2>
+                        <h2>{ TRANSLATIONS.congrats() }</h2>
                         <p>{ lessonCompleteMessage() }</p>
                     </div>
-                    <button class="btn-primary" onclick="{goToCourseOverview}" translate>
-                        Next Lesson
+                    <button class="btn-primary" onclick="{goToCourseOverview}">
+                        { TRANSLATIONS.next() }
                     </button>
                 </template>
-                <template if="{isCourseComplete() && !props.isCourseExamFinished}">
+                <template if="{isCourseComplete()}">
                     <div>
-                        <h2 translate>Good job!</h2>
+                        <h2>{ TRANSLATIONS.good() }</h2>
                         <p>{ lessonCompleteMessage() }</p>
                         <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
                     </div>
@@ -27,37 +27,11 @@
                         if="{ courseHasExam() }"
                         class="btn-primary"
                         onclick="{goToCourseExam}"
-                        translate
                     >
-                        Take Exam
+                        { TRANSLATIONS.exam() }
                     </button>
-                    <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
-                        Back to Course
-                    </button>
-                </template>
-                <template if="{props.isCourseExamFinished && props.passedExam}">
-                    <div>
-                        <h2 translate>Amazing work!</h2>
-                        <h3 translate>You've completed the course</h3>
-                        <p>{ passedExamMessage() }</p>
-                    </div>
-                    <button class="btn-primary" onclick="{goHome}" translate>
-                        Back to Courses
-                    </button>
-                    <button class="btn-secondary" onclick="{goToResources}" translate>
-                        View Resources
-                    </button>
-                </template>
-                <template if="{props.isCourseExamFinished && !props.passedExam}">
-                    <div>
-                        <h2 translate>Not quite!</h2>
-                        <p>{ failedExamMessage() }</p>
-                    </div>
-                    <button class="btn-primary" onclick="{goToCourseExam}" translate>
-                        Retake Exam
-                    </button>
-                    <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
-                        Back to Course
+                    <button class="btn-secondary" onclick="{goToCourseOverview}">
+                        { TRANSLATIONS.course() }
                     </button>
                 </template>
             </div>
@@ -75,6 +49,14 @@
 
             state: {
                 lessonSlugs: [],
+            },
+
+            TRANSLATIONS: {
+                congrats: () => gettext('Congratulations!'),
+                next: () => gettext('Next Lesson'),
+                good: () => gettext('Good job!'),
+                exam: () => gettext('Take Exam'),
+                course: () => gettext('Back to Course'),
             },
 
             onMounted() {
@@ -105,14 +87,6 @@
                 location.hash = "#" + this.props.course.id;
             },
 
-            goHome() {
-                location.hash = "#";
-            },
-
-            goToResources() {
-                location.hash = "#resources";
-            },
-
             goToCourseExam() {
                 location.hash = `#${this.props.course.id}/exam/0`;
             },
@@ -127,23 +101,6 @@
                 return gettext(
                     'Take the exam now to complete the course "%1"',
                     this.props.course.title
-                );
-            },
-
-            passedExamMessage() {
-                // message when user passed the exam
-                return gettext(
-                    "You passed this exam with a score of %1. If you would like to improve your score you can retake this exam.",
-                    this.props.finalScore
-                );
-            },
-
-            failedExamMessage() {
-                // message when user did not pass exam
-                return gettext(
-                    "You did not pass this assessment because you only scored %1 and you need to reach %2 to pass. You can retake this exam now or later.",
-                    this.props.finalScore,
-                    this.props.minimumScore
                 );
             },
         };

@@ -6,27 +6,27 @@
                 <div class="{!state.passedExam ? 'incorrect-flag' : 'report-card overlay'}"></div>
                 <template if="{state.passedExam}">
                     <div>
-                        <h2 translate>Amazing work!</h2>
-                        <h3 translate>You've completed the course</h3>
+                        <h2>{ TRANSLATIONS.success() }</h2>
+                        <h3>{ TRANSLATIONS.completed() }</h3>
                         <p>{ passedExamMessage() }</p>
                     </div>
-                    <button class="btn-primary" onclick="{goHome}" translate>
-                        Back to Courses
+                    <button class="btn-primary" onclick="{goHome}">
+                        { TRANSLATIONS.back() }
                     </button>
-                    <button class="btn-secondary" onclick="{goToResources}" translate>
-                        View Resources
+                    <button class="btn-secondary" onclick="{goToResources}">
+                        { TRANSLATIONS.resources() }
                     </button>
                 </template>
                 <template if="{!state.passedExam}">
                     <div>
-                        <h2 translate>Not quite!</h2>
+                        <h2>{ TRANSLATIONS.notQuite() }</h2>
                         <p>{ failedExamMessage() }</p>
                     </div>
-                    <button class="btn-primary" onclick="{goToCourseExam}" translate>
-                        Retake Exam
+                    <button class="btn-primary" onclick="{goToCourseExam}">
+                        { TRANSLATIONS.retake() }
                     </button>
-                    <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
-                        Back to Course
+                    <button class="btn-secondary" onclick="{goToCourseOverview}">
+                        { TRANSLATIONS.backCourse() }
                     </button>
                 </template>
             </div>
@@ -45,6 +45,16 @@
 
             state: {
                 passedExam: null,
+            },
+
+            TRANSLATIONS: {
+                success: () => gettext("Amazing work!"),
+                completed: () => gettext("You've completed the course"),
+                back: () => gettext("Back to Courses"),
+                resources: () => gettext("View Resources"),
+                notQuite: () => gettext("Not quite!"),
+                retake: () => gettext("Retake Exam"),
+                backCourse: () => gettext("Back to Course"),
             },
 
             onMounted(props, state) {

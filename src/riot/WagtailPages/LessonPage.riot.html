@@ -23,10 +23,16 @@
                 <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">
                     {props.wagtailPage.data.long_description}
                 </p>
-                <a if="{props.wagtailPage.data.long_description && state.showLongDescription}"
-                    onclick="{toggleLessonDescription}" translate>See less</a>
-                <a if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
-                    onclick="{toggleLessonDescription}" translate>See more</a>
+                <a
+                    if="{props.wagtailPage.data.long_description && state.showLongDescription}"
+                    onclick="{toggleLessonDescription}"
+                    >{ TRANSLATIONS.less() }</a
+                >
+                <a
+                    if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
+                    onclick="{toggleLessonDescription}"
+                    >{ TRANSLATIONS.more() }</a
+                >
             </div>
 
             <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
@@ -65,6 +71,8 @@
 
             TRANSLATIONS: {
                 lesson_activities: () => gettext('Lesson Activities'),
+                more: () => gettext('See more'),
+                less: () => gettext('See less'),
             },
 
             OBJECTIVES: "objectives",

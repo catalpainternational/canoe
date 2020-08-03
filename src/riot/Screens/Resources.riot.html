@@ -2,7 +2,7 @@
     <div class="content-wrapper" if="{state.hash == null}">
         <div class="resources-bar">
             <span class="resources-icon title"></span>
-            <h3 translate>Resources</h3>
+            <h3>{ TRANSLATIONS.resources() }</h3>
         </div>
         <SearchBar
             if="{state.articles.length > 0}"
@@ -61,6 +61,7 @@
             },
 
             TRANSLATIONS: {
+                resources: () => gettext("Resources"),
                 loading: () => gettext("Loading . . ."),
                 noArticlesYet: () =>
                     gettext("There are no resource articles yet. Check back soon!"),

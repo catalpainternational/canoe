@@ -9,20 +9,17 @@
             if="{props.isQuestionComplete && !props.isLastQuestion}" 
             class="btn-primary" 
             onclick="{ nextTestCard }" 
-            translate
-        >Next</button>
+        >{ TRANSLATIONS.next() }</button>
         <button 
             if="{props.isQuestionComplete && props.isLastQuestion}" 
             class="btn-primary" 
             onclick="{ completePage }" 
-            translate
-        >Finish</button>
+        >{ TRANSLATIONS.finish() }</button>
         <button 
             if="{!props.isQuestionComplete}" 
             class="btn-primary btn-wrong" 
             onclick="{ () => props.toggleModal(false, {}) }" 
-            translate
-        >Try again</button>
+        >{ TRANSLATIONS.try() }</button>
     </PopupModal>
 
     <script>
@@ -33,6 +30,12 @@
         export default {
             components: {
                 popupmodal: PopupModal,
+            },
+
+            TRANSLATIONS: {
+                next: () => gettext('Next'),
+                finish: () => gettext('Finish'),
+                try: () => gettext('Try again'),
             },
 
             nextTestCard() {
