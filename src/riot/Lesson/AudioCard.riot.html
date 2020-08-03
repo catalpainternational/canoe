@@ -3,19 +3,12 @@
         <div class="speaker"></div>
         <h3 class="media-title">{props.media.title}</h3>
         <p class="media-description">{props.media.description}</p>
-        <audio 
-            controls 
-            crossorigin="anonymous" 
-            onplay="{ (event) => storeAnalytics(event) }"
-        >
-            <source
-                src="{getMediaUrl(props.media.sources[0].src)}"
-                type="{props.media.sources[0].type}"
-            />
-            <span translate>Your browser does not support the audio element.</span>
+        <audio controls crossorigin="anonymous" onplay="{ (event) => storeAnalytics(event) }">
+            <source src="{getMediaUrl(props.media.sources[0].src)}" type="{props.media.sources[0].type}" />
+            <span>{ TRANSLATIONS.browserSupport() }</span>
         </audio>
-        <p if={state.cached} translate>This audio will play offline.</p>
-        <p if={!state.cached} translate>This audio is not available offline.</p>
+        <p if={state.cached}>{ TRANSLATIONS.cached() }</p>
+        <p if={!state.cached}>{ TRANSLATIONS.notCached() }</p>
     </div>
 
     <script>
@@ -30,6 +23,12 @@
         export default {
             state: {
                 cached: false
+            },
+
+            TRANSLATIONS: {
+                browserSupport: () => gettext("Your browser does not support the audio element."),
+                cached: () => gettext("This audio will play offline."),
+                notCached: () => gettext("This audio is not available offline."),
             },
 
             async onMounted(props, state) {

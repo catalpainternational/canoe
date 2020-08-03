@@ -40,17 +40,15 @@
                     class="btn-primary"
                     onclick="{nextContentPage}"
                     if="{state.cardIdx < props.lessonContent.cards.length - 1}"
-                    translate
                 >
-                    Next
+                    { TRANSLATIONS.next() }
                 </button>
                 <button
                     class="btn-primary"
                     onclick="{completeContentModal}"
                     if="{state.cardIdx === props.lessonContent.cards.length - 1}"
-                    translate
                 >
-                    Finish
+                    { TRANSLATIONS.finish() }
                 </button>
             </div>
         </div>
@@ -94,6 +92,11 @@
                 videocard: VideoCard,
                 audiocard: AudioCard,
                 pdfcard: PdfCard,
+            },
+
+            TRANSLATIONS: {
+                next: () => gettext("Next"),
+                finish: () => gettext("Finish"),
             },
 
             onBeforeMount(props, state) {

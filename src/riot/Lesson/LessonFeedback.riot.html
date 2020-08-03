@@ -3,10 +3,10 @@
         <template if="{!state.madeFeedbackDecision}">
             <div class="feedback-icon">
                 <div class="sun"></div>
-                <h2 translate>FEEDBACK</h2>
+                <h2>{ TRANSLATIONS.feedback() }</h2>
             </div>
             <div class="feedback-container">
-                <h3 translate>Are you enjoying this lesson?</h3>
+                <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
                 <div class="feedback-buttons">
                     <button class="feedback" onclick="{clickedThisLessonIsFine}">
                         <span class="neutral-smiley"></span>
@@ -23,24 +23,24 @@
                 
                 </p>
             </div>
-            <button class="btn-primary no-thanks" onclick="{clickedNoThanks}" translate>
-                No thanks
+            <button class="btn-primary no-thanks" onclick="{clickedNoThanks}">
+                { TRANSLATIONS.no() }
             </button>
         </template>
         <template if="{state.madeFeedbackDecision}">
             <div class="feedback-icon">
                 <div class="sun"></div>
-                <h2 translate>FEEDBACK</h2>
+                <h2>{ TRANSLATIONS.feedback() }</h2>
             </div>
             <div class="thank-you-container">
-                <h3 translate>Successfully sent!</h3>
+                <h3>{ TRANSLATIONS.sent() }</h3>
                 <div class="correct-flag"></div>
                 <p>
                     { TRANSLATIONS.feedback_sent() }
                 </p>
             </div>
-            <button class="btn-primary thank-you-container" onclick="{clickedContinue}" translate>
-                Continue
+            <button class="btn-primary thank-you-container" onclick="{clickedContinue}">
+                { TRANSLATIONS.continue() }
             </button>
         </template>
     </LessonFrame>
@@ -51,8 +51,13 @@
 
         export default {
             TRANSLATIONS: {
+                feedback: () => gettext('FEEDBACK'),
+                enjoying_lesson: () => gettext('Are you enjoying this lesson?'),
                 give_feedback: () => gettext("Let us know what you think of this lesson. We value your feedback and treat all feedback as confidential."),
                 feedback_sent: () => gettext("Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"),
+                no: () => gettext('No thanks'),
+                sent: () => gettext('Successfully sent!'),
+                continue: () => gettext('Continue')
             },
             components: {
                 lessonframe: LessonFrame,

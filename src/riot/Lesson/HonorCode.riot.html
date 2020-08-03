@@ -1,12 +1,12 @@
 <HonorCode>
     <div>
-        <h3 translate>Course exam</h3>
+        <h3>{ TRANSLATIONS.exam() }</h3>
         <p class="score-explanation">
             <raw html="{ youMustScoreAtLeastMessage() }"></raw>
         </p>
     </div>
     <div class="code">
-        <h4 translate>Code of conduct</h4>
+        <h4>{ TRANSLATIONS.code() }</h4>
         <p>
             { TRANSLATIONS.promise() }
         </p>
@@ -21,12 +21,11 @@
             class="btn-primary"
             onclick="{goToCourseExam}"
             disabled="{!state.hasAgreed}"
-            translate
         >
-            Start Exam
+            { TRANSLATIONS.startExam() }
         </button>
-        <button class="btn-secondary" onclick="{goToCourseOverview}" translate>
-            Back to Course
+        <button class="btn-secondary" onclick="{goToCourseOverview}">
+            { TRANSLATIONS.backCourse() }
         </button>
     </div>
 
@@ -35,8 +34,12 @@
 
         export default {
             TRANSLATIONS: {
+                exam: () => gettext('Course exam'),
+                code: () => gettext('Code of conduct'),
                 promise: () => gettext('You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?'),
                 agree: () => gettext('Yes, I agree'),
+                startExam: () => gettext('Start Exam'),
+                backCourse: () => gettext('Back to Course')
             },
 
             components: {
