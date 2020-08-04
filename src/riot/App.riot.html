@@ -11,12 +11,16 @@
 
         <DataDownload if="{isUserLoggedIn()}"></DataDownload>
 
+        <LoadingDots
+            if="{Object.keys(state.wagtailPage).length === 0}"
+            extrastyleclasses="light app"
+        ></LoadingDots>
+
         <template if="{isUserLoggedIn() && isSiteDownloaded()}">
             <TopMenu
                 contentType="{state.contentType}"
                 wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
             ></TopMenu>
-            <LoadingDots if="{state.isLoading}" extrastyleclasses="light"></LoadingDots>
             <HomePage
                 if="{state.contentType === 'HomePage'}"
                 wagtailPage="{state.wagtailPage}"
@@ -90,7 +94,6 @@
                 wagtailPage: {},
                 homePageURL: "",
                 appTitle: "",
-                isLoading: false,
             },
 
             components: {
@@ -152,14 +155,12 @@
             },
 
             async route() {
-                this.update({ isLoading: true });
                 const page = await getPage();
                 const pageModel = getWagtailPageModelName(page);
 
                 this.update({
                     wagtailPage: page,
                     contentType: pageModel,
-                    isLoading: false,
                 });
             },
 
