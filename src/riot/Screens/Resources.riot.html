@@ -24,8 +24,7 @@
                 showFooter="{false}"
             ></Card>
         </div>
-        <p if="{state.isLoading}">{ TRANSLATIONS.loading() }</p>
-        <p></p>
+        <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
         <p if="{!state.isLoading && state.articles == 0}">
             { TRANSLATIONS.noArticlesYet() }
         </p>
@@ -35,6 +34,7 @@
         import TagList from "RiotTags/Components/TagList.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
         import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
         import { getResources } from "js/WagtailPagesAPI";
@@ -58,11 +58,11 @@
                 taglist: TagList,
                 card: Card,
                 searchbar: SearchBar,
+                loadingdots: LoadingDots,
             },
 
             TRANSLATIONS: {
                 resources: () => gettext("Resources"),
-                loading: () => gettext("Loading . . ."),
                 noArticlesYet: () =>
                     gettext("There are no resource articles yet. Check back soon!"),
             },

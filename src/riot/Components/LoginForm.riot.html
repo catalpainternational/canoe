@@ -22,18 +22,24 @@
             <span class="warning"></span>
             <p class="error-message">{state.errorExplanation}</p>
         </div>
+        <LoadingDots if="{state.isLoginButtonDisabled}" extrastyleclasses="dark"></LoadingDots>
         <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}">
             { TRANSLATIONS.login() }
         </button>
     </form>
     <script>
         import { alertIfRequestWasMadeOffline } from "js/Errors";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
         export default {
             state: {
                 isShowingPassword: false,
                 isLoginButtonDisabled: false,
                 errorExplanation: "",
+            },
+
+            components: {
+                loadingdots: LoadingDots,
             },
 
             TRANSLATIONS: {
