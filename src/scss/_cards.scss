@@ -103,6 +103,7 @@
     .status.btn-start-lesson {
         border-radius: 10px;
         max-width: fit-content;
+        max-width: -moz-fit-content;
         border: 1px solid $blue-1;
         box-sizing: border-box;
         background-color: rgba(4, 120, 142, 0.07);
