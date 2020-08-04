@@ -110,16 +110,14 @@
 
                     if (this.state.selectedTags.length > 0) {
                         for (var i = 0; i < this.state.selectedTags.length; ++i) {
-                            const encodedTag = encodeURIComponent(
-                                this.state.selectedTags[i].toLowerCase()
-                            );
-                            urlParams.append("filter", encodedTag);
+                            const pendingTag = this.state.selectedTags[i].toLowerCase();
+                            urlParams.append("filter", pendingTag);
                         }
                     }
                     this.replaceUrlQuery(urlParams);
                 } else {
                     this.state.selectedTags.push(clickedTag);
-                    urlParams.append("filter", encodeURIComponent(clickedTag));
+                    urlParams.append("filter", clickedTag);
                     !isFromUrl && this.replaceUrlQuery(urlParams);
                     this.update();
                 }
@@ -128,9 +126,8 @@
 
             submitSearch(searchString) {
                 const urlParams = this.generateUrlParams();
-                const encodedQuery = encodeURIComponent(searchString);
 
-                urlParams.set("qs", encodedQuery);
+                urlParams.set("qs", searchString);
                 this.replaceUrlQuery(urlParams);
                 this.update({ searchString });
             },
