@@ -29,7 +29,7 @@
             <a class="send-message" onclick="{switchToContactUsModal}">{ TRANSLATIONS.send() }</a>.
         </p>
         <button class="btn-primary" onclick="{loginAsGuest}">
-            { TRANSLATIONS.login() }
+            { TRANSLATIONS.guestLogin() }
         </button>
     </PopupModal>
 
@@ -68,7 +68,6 @@
                         `No learning progress will be saved while you are logged in as a guest. If you would like to create an account, please`
                     ),
                 send: () => gettext("send us a message"),
-                login: () => gettext("Login as a guest"),
             },
 
             onBeforeMount(props, state) {

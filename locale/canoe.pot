@@ -238,7 +238,6 @@ msgid "Login"
 msgstr ""
 
 #: src/riot/Screens/Login.riot.html:63
-#: src/riot/Screens/Login.riot.html:71
 msgid "Login as a guest"
 msgstr ""
 
