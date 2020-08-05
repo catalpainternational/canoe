@@ -18,9 +18,9 @@
                 >
             </a>
         </div>
-        <div if="{state.errorExplanation}">
+        <div if="{state.errorExplanation}" class="error-message">
             <span class="warning"></span>
-            <p class="error-message">{state.errorExplanation}</p>
+            <p>{state.errorExplanation}</p>
         </div>
         <LoadingDots if="{state.isLoginButtonDisabled}" extrastyleclasses="dark"></LoadingDots>
         <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}">
@@ -48,6 +48,7 @@
                 password: () => gettext("Password"),
                 showPassword: () => gettext("Show Password"),
                 hidePassword: () => gettext("Hide Password"),
+                invalid: () => gettext("Invalid login credentials"),
             },
 
             getUsernameAndPasswordFromForm() {
@@ -77,7 +78,7 @@
                     if (alertIfRequestWasMadeOffline(error)) {
                     } else if (error.message === "400") {
                         this.update({
-                            errorExplanation: "Invalid login credentials",
+                            errorExplanation: this.TRANSLATIONS.invalid(),
                         });
                     }
                 } finally {

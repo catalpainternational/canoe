@@ -91,6 +91,14 @@ Login > div {
                 cursor: pointer;
             }
         }
+
+        .error-message {
+            margin-top: -15px;
+
+            p {
+                font-size: 1em;
+            }
+        }
     }
 
     .extra-button-space {
