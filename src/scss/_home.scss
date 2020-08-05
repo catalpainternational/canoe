@@ -49,6 +49,10 @@ HomePage .header {
     @media only screen and (max-width: $lg-phone) {
         padding: 0 2em;
     }
+
+    @media only screen and (max-width: $sm-phone) {
+        padding: 0 1.5em;
+    }
 }
 
 HomePage .header:after {
