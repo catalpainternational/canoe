@@ -43,6 +43,7 @@
             doPageTagsMatchSelections,
             doesQueryMatchSearchContent,
         } from "js/SearchAndFiltering";
+        import { isGuestUser } from "js/AuthenticationUtilities";
 
         export default {
             state: {
@@ -132,7 +133,10 @@
             },
 
             isResourceArticleVisible(article) {
+                const { is_visible_to_guests } = article;
                 const { searchString } = this.state;
+
+                const doesUserHavePermission = isGuestUser() === is_visible_to_guests;
                 const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,
                     article.title,
@@ -143,7 +147,7 @@
                 const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
                 const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
 
-                const showArticle = isQueryMatch && isTagMatch;
+                const showArticle = doesUserHavePermission && isQueryMatch && isTagMatch;
                 return showArticle;
             },
 

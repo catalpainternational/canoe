@@ -27,7 +27,7 @@
         <div
             class="course"
             each="{course in state.sortedListOfCourses}"
-            if="{isCourseVisible(course.tags)}"
+            if="{isCourseVisible(course)}"
         >
             <Card
                 title="{course.data.title}"
@@ -160,10 +160,15 @@
                 this.update();
             },
 
-            isCourseVisible(courseTags) {
+            isCourseVisible(course) {
+                const { tags, is_visible_to_guests } = course;
                 const { selectedTags } = this.state;
-                const lowercaseCourseTags = courseTags.map((tag) => tag.toLowerCase());
-                return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
+
+                const lowercaseCourseTags = tags.map((tag) => tag.toLowerCase());
+                return (
+                    isGuestUser() === is_visible_to_guests &&
+                    doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
+                );
             },
 
             showBanner() {
