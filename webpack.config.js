@@ -15,6 +15,7 @@ const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
 const defaultProjectConfiguration = require("./canoe-project-default.js");
+process.traceDeprecation = true;
 
 module.exports = (env) => {
     // read the environment configuration
@@ -192,6 +193,7 @@ module.exports = (env) => {
 
     const productionWebpackConfig = env && env.PRODUCTION ? require("./webpack.prod.js") : {};
 
+    console.log(projectConfiguration.WEBPACK_CONFIG);
     const config = merge.strategy({
         "resolve.modules": "prepend",
     })(
@@ -200,5 +202,6 @@ module.exports = (env) => {
         environmentConfiguration.WEBPACK_CONFIG,
         productionWebpackConfig
     );
+    console.log(config);
     return config;
 };
