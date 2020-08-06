@@ -1,5 +1,5 @@
 const webpack = require("webpack");
-const merge = require("webpack-merge");
+const { mergeWithCustomize, customizeArray } = require('webpack-merge');
 const path = require("path");
 const fs = require("fs");
 
@@ -193,15 +193,15 @@ module.exports = (env) => {
 
     const productionWebpackConfig = env && env.PRODUCTION ? require("./webpack.prod.js") : {};
 
-    console.log(projectConfiguration.WEBPACK_CONFIG);
-    const config = merge.strategy({
-        "resolve.modules": "prepend",
+    const config = mergeWithCustomize({
+        customizeArray: customizeArray({
+            'resolve.modules': 'prepend'
+          })
     })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,
         environmentConfiguration.WEBPACK_CONFIG,
         productionWebpackConfig
     );
-    console.log(config);
     return config;
 };
