@@ -62,10 +62,16 @@ const postNotificationSubscription = async (subscriptionData) => {
 };
 
 const pushManagerSubscribesToNotifications = async (registration) => {
-    const notificationSubscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(APPLICATION_SERVER_KEY),
-    });
+    let notificationSubscription = null;
+    try {
+        notificationSubscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(APPLICATION_SERVER_KEY),
+        });
+    } catch (error) {
+        return false;
+    }
+
     return notificationSubscription;
 };
 
@@ -99,6 +105,9 @@ const formatSubscriptionForServer = (notificationSubscription) => {
 
 const turnOnNotifications = async (swRegistration) => {
     const notificationSubscription = await pushManagerSubscribesToNotifications(swRegistration);
+    if (!notificationSubscription) {
+        return false;
+    }
     const subscriptionPostJSON = formatSubscriptionForServer(notificationSubscription);
     return await postNotificationSubscription(subscriptionPostJSON);
 };
@@ -118,6 +127,9 @@ export const supportsPushManager = async () => {
 export const subscribeToNotifications = async () => {
     const swRegistration = await navigator.serviceWorker.ready;
     const subscription = await turnOnNotifications(swRegistration);
+    if (!subscription) {
+        return false;
+    }
     storeRegistrationId(subscription.registration_id);
 };
 
