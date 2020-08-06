@@ -7,6 +7,11 @@ Canoe is the shared progressive web app for Catalpa's e-learning projects.
 Canoe is designed to be a pure javascript codebase that can be hosted simply by NGINX or even on a CDN.
 It is dependent on a backend server application that lives in the project contianing it to provide authentication, content and action storing APIs.
 
+## Node and Yarn
+
+Node 12.18.3
+Yarn 2
+
 ## Instructions
 
 1. In this directory `yarn` to install dependencies.
@@ -23,7 +28,7 @@ yarn start \
 ```
 Check the project documentation. It is usual for a project to implement build scripts to save you remembering and typing all this.
 
-6. Builds can be produced by using `yarn build` with the same parameters as the start command, by default these will be developmnet builds
+6. Builds can be produced by using `yarn build` with the same parameters as the start command, by default these will be development builds
 
 7. Production builds can be produced by passing `--env.PRODUCTION` to the build and start commands
 
