@@ -8,18 +8,35 @@
                 <h6 if="{state.currentCourse && isCourseInProgress(state.currentCourse)}">
                     { continueLearningMessage() }
                 </h6>
-                <ContinueLearningButton if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
-                    class="profile header-text" background="home-background-image"></ContinueLearningButton>
+                <ContinueLearningButton
+                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
+                    class="profile header-text"
+                    background="home-background-image"
+                ></ContinueLearningButton>
             </div>
             <span class="home-background-image"></span>
         </div>
     </div>
     <div class="content-wrapper">
-        <TagList if="{state.listOfTags.length > 0}" tags="{state.listOfTags}" onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"></TagList>
-        <div class="course" each="{course in state.sortedListOfCourses}" if="{isCourseVisible(course.tags)}">
-            <Card title="{course.data.title}" link="{course.data.id}" description="{courseProgressMessage(course)}"
-                isCompleted="{!isCourseInProgress(course)}" showFooter="{true}" type="course"></Card>
+        <TagList
+            if="{state.listOfTags.length > 0}"
+            tags="{state.listOfTags}"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
+        <div
+            class="course"
+            each="{course in state.sortedListOfCourses}"
+            if="{isCourseVisible(course.tags)}"
+        >
+            <Card
+                title="{course.data.title}"
+                link="{course.data.id}"
+                description="{courseProgressMessage(course)}"
+                isCompleted="{!isCourseInProgress(course)}"
+                showFooter="{true}"
+                type="course"
+            ></Card>
         </div>
     </div>
 

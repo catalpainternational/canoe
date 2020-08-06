@@ -7,10 +7,7 @@
 
         <div class="extra-button-space">
             <button onclick="{toggleLoginHelpModal}">{ TRANSLATIONS.forgot() }</button>
-            <button
-                if="{state.isLoginAsGuestAvailable}"
-                onclick="{toggleLoginAsGuestModal}"
-            >
+            <button if="{state.isLoginAsGuestAvailable}" onclick="{toggleLoginAsGuestModal}">
                 { TRANSLATIONS.guestLogin() }
             </button>
         </div>
@@ -28,11 +25,11 @@
         <div class="cross gray close-btn" onclick="{toggleLoginAsGuestModal}"></div>
         <h2 class="header-no-image">{ TRANSLATIONS.loggingAsGuest() }</h2>
         <p>
-          { TRANSLATIONS.noProgress() }  
+            { TRANSLATIONS.noProgress() }
             <a class="send-message" onclick="{switchToContactUsModal}">{ TRANSLATIONS.send() }</a>.
         </p>
         <button class="btn-primary" onclick="{loginAsGuest}">
-            { TRANSLATIONS.login() }
+            { TRANSLATIONS.guestLogin() }
         </button>
     </PopupModal>
 
@@ -62,14 +59,15 @@
             },
 
             TRANSLATIONS: {
-                forgot: () => gettext('Forgot username or password?'),
-                guestLogin: () => gettext('Login as a guest'),
-                help: () => gettext('Need help?'),
+                forgot: () => gettext("Forgot username or password?"),
+                guestLogin: () => gettext("Login as a guest"),
+                help: () => gettext("Need help?"),
                 loggingAsGuest: () => gettext(`You're logging in as a guest`),
-                noProgress: () => gettext(`No learning progress will be saved while you are logged in as a guest. If you would like
-                    to create an account, please`),
-                send: () => gettext('send us a message'),
-                login: () => gettext('Login as a guest'),
+                noProgress: () =>
+                    gettext(
+                        `No learning progress will be saved while you are logged in as a guest. If you would like to create an account, please`
+                    ),
+                send: () => gettext("send us a message"),
             },
 
             onBeforeMount(props, state) {
