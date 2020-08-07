@@ -62,11 +62,10 @@ const postNotificationSubscription = async (subscriptionData) => {
 };
 
 const pushManagerSubscribesToNotifications = async (registration) => {
-    notificationSubscription = await registration.pushManager.subscribe({
+    const notificationSubscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(APPLICATION_SERVER_KEY),
     });
-
     return notificationSubscription;
 };
 
@@ -128,7 +127,7 @@ export const subscribeToNotifications = async () => {
     const swRegistration = await navigator.serviceWorker.ready;
     const subscription = await turnOnNotifications(swRegistration);
     if (!subscription) {
-        return false;
+        return;
     }
     storeRegistrationId(subscription.registration_id);
 };
