@@ -165,9 +165,9 @@
                 const { selectedTags } = this.state;
 
                 const lowercaseCourseTags = tags.map((tag) => tag.toLowerCase());
+                const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
                 return (
-                    isGuestUser() === is_visible_to_guests &&
-                    doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
+                    doesUserHavePermission && doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
                 );
             },
 

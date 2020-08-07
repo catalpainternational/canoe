@@ -136,7 +136,7 @@
                 const { is_visible_to_guests } = article;
                 const { searchString } = this.state;
 
-                const doesUserHavePermission = isGuestUser() === is_visible_to_guests;
+                const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
                 const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,
                     article.title,
