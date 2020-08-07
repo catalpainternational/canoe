@@ -3,17 +3,16 @@
         import { storeManifest, storeSiteDownloadedIs } from "ReduxImpl/Store";
         import { fetchManifest } from "js/WagtailPagesAPI";
         import { SiteDownloader } from "js/SiteDownloader";
-        import { updateApi, updateIdb } from "Actions/actions_store.js";
-        import { pullCompletionsIntoMemory, clearInMemoryCompletions } from "Actions/completion.js";
-        import {
-            pullExamAnswersIntoMemory,
-            clearInMemoryExamAnswers,
-            pullExamScoresIntoMemory,
-            clearInMemoryExamScores,
-        } from "Actions/exam";
-        import { closeAndDeleteDB } from "Actions/actions_idb";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
+
+        import { pullExamDataIntoMemory, clearInMemoryExamData } from "js/ExamInterface";
+        import {
+            pullCompletionsIntoMemory,
+            clearInMemoryCompletions,
+        } from "js/CompletionInterface";
+        import { updateApi, updateIdb } from "Actions/actions_store.js";
+        import { closeAndDeleteDB } from "Actions/actions_idb";
 
         const EVERY_FIVE_MINUTES = 1000 * 60 * 5;
 
@@ -37,29 +36,21 @@
                 new SiteDownloader().requestTheSitesPagesAndImages();
             },
 
-            async pullExamDataIntoMemory() {
-                await pullExamAnswersIntoMemory();
-                await pullExamScoresIntoMemory();
-            },
-
-            async startCompletionsService() {
-                await updateIdb();
+            async pullIdbDataIntoMemory() {
                 await pullCompletionsIntoMemory();
-                await this.pullExamDataIntoMemory();
+                await pullExamDataIntoMemory();
             },
 
             async prepDataForAppLaunch() {
                 if (!isGuestUser()) {
-                    await this.startCompletionsService();
+                    await updateIdb();
                     this.state.pagesPoller = window.setInterval(
                         this.pollForWebpageChanges,
                         EVERY_FIVE_MINUTES
                     );
-                } else {
-                    // Pulls completions from the database into memory.
-                    await pullCompletionsIntoMemory();
-                    await pullExamAnswersIntoMemory();
                 }
+
+                await this.pullIdbDataIntoMemory();
 
                 this.pollForWebpageChanges();
                 this.state.completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
@@ -73,8 +64,7 @@
                 window.clearInterval(this.state.pagesPoller);
                 storeSiteDownloadedIs(false);
                 clearInMemoryCompletions();
-                clearInMemoryExamAnswers();
-                clearInMemoryExamScores();
+                clearInMemoryExamData();
                 await closeAndDeleteDB();
             },
         };

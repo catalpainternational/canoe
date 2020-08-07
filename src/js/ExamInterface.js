@@ -9,6 +9,10 @@ import {
     saveExamScore as saveScore,
     getExamHighScore as getHighScore,
     hasUserTriedExam as hasTriedExam,
+    pullExamAnswersIntoMemory,
+    pullExamScoresIntoMemory,
+    clearInMemoryExamAnswers,
+    clearInMemoryExamScores,
 } from "Actions/exam";
 
 export const saveExamAnswer = (questionId, answer) => {
@@ -33,4 +37,14 @@ export const getExamHighScore = (courseSlug) => {
 
 export const hasUserTriedExam = (courseSlug) => {
     return hasTriedExam(courseSlug);
+};
+
+export const pullExamDataIntoMemory = async () => {
+    await pullExamAnswersIntoMemory();
+    await pullExamScoresIntoMemory();
+};
+
+export const clearInMemoryExamData = () => {
+    clearInMemoryExamAnswers();
+    clearInMemoryExamScores();
 };
