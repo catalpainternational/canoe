@@ -57,7 +57,7 @@ module.exports = (env) => {
             contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
-            modules: [path.resolve(__dirname, "src"), "node_modules"],
+            modules: [path.resolve(__dirname, "src")],
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
                 js: path.resolve(__dirname, "src/js"),
