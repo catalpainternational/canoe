@@ -24,7 +24,7 @@ const getPreviewPageUrl = (queryString) => {
 
 const routeToTranslation = (translationPageId) => {
     const [, section, cardNumber] = parseURLHash();
-    const translatedPageUrl = `#${translationPageId}`;
+    let translatedPageUrl = `#${translationPageId}`;
     if (section) {
         translatedPageUrl += `/${section}/`;
     }
