@@ -9,6 +9,8 @@ import {
     getFinishedLessonSlugs,
     getLatestCompletionInCourse,
     getLatestInCompletionArray,
+    pullCompletionsIntoMemory as pullCompletions,
+    clearInMemoryCompletions as clearCompletions,
 } from "Actions/completion";
 
 const getCourseAndLessonSlugs = (wagtailCoursePage) => {
@@ -63,6 +65,14 @@ export const countCompleteLessonsInCourses = (wagtailCourses) => {
 
 export const countFinishedLessonsAmongSlugs = (courseSlug, slugsOfLiveLessons) => {
     return getFinishedLessonSlugs(courseSlug, slugsOfLiveLessons).length;
+};
+
+export const clearInMemoryCompletions = () => {
+    clearCompletions();
+};
+
+export const pullCompletionsIntoMemory = async () => {
+    await pullCompletions();
 };
 
 const EXAM_SLUG = "exam";

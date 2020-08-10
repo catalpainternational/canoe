@@ -134,3 +134,7 @@ export const tallyExamScore = (questionIds) => {
     const numberOfQuestions = questionIds.length;
     return (numberCorrect / numberOfQuestions) * 100;
 };
+
+export const hasUserTriedExam = (courseSlug) => {
+    return finalScores.has(courseSlug);
+};
