@@ -5,14 +5,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Language: en\n"
 
-#: src/riot/WagtailPages/HomePage.riot.html:121
-msgid "%1 / %2 lesson complete"
-msgid_plural "%1 / %2 lessons complete"
-msgstr[0] ""
-msgstr[1] ""
-
 #. the number of lessons completed in a course
-#: src/riot/WagtailPages/CoursePage.riot.html:142
+#: src/riot/WagtailPages/CoursePage.riot.html:148
+#: src/riot/WagtailPages/HomePage.riot.html:118
 msgid "%1 lesson complete"
 msgid_plural "%1 lessons complete"
 msgstr[0] ""
@@ -48,7 +43,7 @@ msgstr ""
 msgid "%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
 msgstr ""
 
-#: src/riot/WagtailPages/CoursePage.riot.html:150
+#: src/riot/WagtailPages/CoursePage.riot.html:156
 msgid "%1's Course Exam"
 msgstr ""
 
@@ -303,7 +298,7 @@ msgstr ""
 msgid "Read the question more carefully!"
 msgstr ""
 
-#: src/riot/Screens/Resources.riot.html:64
+#: src/riot/Screens/Resources.riot.html:65
 msgid "Resources"
 msgstr ""
 
@@ -385,7 +380,7 @@ msgstr ""
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
 msgstr ""
 
-#: src/riot/Screens/Resources.riot.html:66
+#: src/riot/Screens/Resources.riot.html:67
 msgid "There are no resource articles yet. Check back soon!"
 msgstr ""
 

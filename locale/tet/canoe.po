@@ -14,11 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#, fuzzy
-msgid "%1 / %2 lesson complete"
-msgid_plural "%1 / %2 lessons complete"
-msgstr[0] "%2 / %1 lisaun kompletu"
-
 #. the number of lessons completed in a course
 msgid "%1 lesson complete"
 msgid_plural "%1 lessons complete"

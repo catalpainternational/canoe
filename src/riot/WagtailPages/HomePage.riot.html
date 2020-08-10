@@ -115,15 +115,15 @@
             },
 
             courseProgressMessage(course) {
-                // displays how many lessons are complete and how many lessons are in the current course
-                const numberOfCompleteLessons = countCompleteLessonsInCourses([course]);
-
                 return ngettext(
-                    "%1 / %2 lesson complete",
-                    "%1 / %2 lessons complete",
-                    numberOfCompleteLessons,
-                    course.data.lessons_count
+                    "%1 lesson complete",
+                    "%1 lessons complete",
+                    this.getCourseProgress(course)
                 );
+            },
+
+            getCourseProgress(course) {
+                return countCompleteLessonsInCourses([course]) + " / " + course.data.lessons_count;
             },
 
             greetingMessage() {
@@ -167,7 +167,8 @@
                 const lowercaseCourseTags = tags.map((tag) => tag.toLowerCase());
                 const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
                 return (
-                    doesUserHavePermission && doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
+                    doesUserHavePermission &&
+                    doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
                 );
             },
 
