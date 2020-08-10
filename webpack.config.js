@@ -15,7 +15,9 @@ const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
 const defaultProjectConfiguration = require("./canoe-project-default.js");
-process.traceDeprecation = true;
+
+// uncomment this to find the source of webpack deprecation warnings
+// process.traceDeprecation = true;
 
 module.exports = (env) => {
     // read the environment configuration
