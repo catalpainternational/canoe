@@ -118,11 +118,11 @@
                 return ngettext(
                     "%1 lesson complete",
                     "%1 lessons complete",
-                    this.getCourseProgress(course)
+                    this.calculateCourseProgress(course)
                 );
             },
 
-            getCourseProgress(course) {
+            calculateCourseProgress(course) {
                 return countCompleteLessonsInCourses([course]) + " / " + course.data.lessons_count;
             },
 

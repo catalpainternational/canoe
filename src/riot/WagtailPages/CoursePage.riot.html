@@ -90,7 +90,7 @@
                 window.removeEventListener("scroll", this.stickyHeader);
             },
 
-            getCourseProgress() {
+            calculateCourseProgress() {
                 const { wagtailPage } = this.props;
                 return (
                     countCompleteLessonsInCourses([wagtailPage]) +
@@ -148,7 +148,7 @@
                 return ngettext(
                     "%1 lesson complete",
                     "%1 lessons complete",
-                    this.getCourseProgress()
+                    this.calculateCourseProgress()
                 );
             },
 
