@@ -171,7 +171,7 @@ msgstr ""
 msgid "Hi %1"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:50
+#: src/riot/Components/LoginForm.riot.html:52
 msgid "Hide Password"
 msgstr ""
 
@@ -183,7 +183,7 @@ msgstr ""
 msgid "In the meantime please use Safari."
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:51
+#: src/riot/Components/LoginForm.riot.html:53
 msgid "Invalid login credentials"
 msgstr ""
 
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:46
+#: src/riot/Components/LoginForm.riot.html:48
 msgid "Login"
 msgstr ""
 
@@ -285,7 +285,7 @@ msgstr ""
 msgid "Overall progress"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:48
+#: src/riot/Components/LoginForm.riot.html:50
 msgid "Password"
 msgstr ""
 
@@ -322,7 +322,7 @@ msgstr ""
 msgid "send us a message"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:49
+#: src/riot/Components/LoginForm.riot.html:51
 msgid "Show Password"
 msgstr ""
 
@@ -409,7 +409,7 @@ msgstr ""
 msgid "Try again"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:47
+#: src/riot/Components/LoginForm.riot.html:49
 msgid "Username"
 msgstr ""
 

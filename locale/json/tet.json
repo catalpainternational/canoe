@@ -30,10 +30,13 @@
     "Course exam": "Ezama ba kursu",
     "FEEDBACK": "Komentáriu",
     "Finish": "Remata",
+    "Forgot username or password?": "Haluha uzuáriu ka seña?",
+    "Good job!": "Serbisu di'ak tebes!",
     "Great": "Di'ak tebes!",
     "Great job!": "Serbisu di'ak tebes!",
     "Great work %1! You have completed %2% of your overall coursework": "Parabéns %1! Ita kompleta ona  %2% husi ita nian lisaun tomak ",
     "Hi %1": "Olá %1",
+    "Hide Password": "Subar Seña",
     "In the meantime please use Safari.": "Iha tempu leet, favór uza Safari",
     "Keep going": "Favór kontinua nafatin",
     "Language": "Lian",
@@ -65,6 +68,7 @@
     "See less": "Haree ouituan",
     "See more": "Haree liután",
     "send us a message": "favor kontaktu ami",
+    "Show Password": "Hatudu Seña",
     "Site download is complete!": "Kompletu ona download sítiu ida ne'e!",
     "Site is downloading.": "Sítiu ne'e grava hela.",
     "Start Activity": "Hahu Atividade",
@@ -84,6 +88,7 @@
     "Would you like to receive app notifications?": "Ita hakarak simu notifikasaun husi aplikasaun ne'e? ",
     "Yes, I agree": "Sim, ha'u konkorda",
     "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later.": "Ita hetan valór %1%. Ida ne'e la to'o atu pasa ezame ne'e. Atu bele pasa ita presiza atu hetan valór %2% ka liu. Ita bele koko foti fila ezame ne'e orsida ka tempu seluk atu bele hetan valór ne'ebé diak liu.",
+    "You just completed the lesson \"%1\"": "Ita foin halo remata lisaun,\" 1 %1 \"",
     "You only have %1 lesson left to finish %2.": [
         "Ita hela deit lisaun %1 atu remata %2."
     ],
@@ -94,6 +99,7 @@
     "You've completed the course": "Ita kompleta ona kursu",
     "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?": "Ita atu komesa ezame ba kursu ne'e. Ita promete atu halo hotu ezame ne'e mesak no la uza ema seluk nian ajuda?",
     "Your browser does not support the audio element.": "Ita-nia navegadór la suporta komponente audiu nian.",
+    "Your browser does not support the video element.": "Ita-nia navegadór la suporta komponente audiu nian.",
     "Your lessons": "Ita-nia lisaun",
     "Your settings": "Ita-nia konfigurasaun"
 }
