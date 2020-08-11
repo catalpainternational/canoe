@@ -59,10 +59,8 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
-        import {
-            getHomePage
-        } from "js/WagtailPagesAPI";
-        import { getCapitalizedUsername } from "js/AuthenticationUtilities";
+        import { getHomePage } from "js/WagtailPagesAPI";
+        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { getAllLessons } from "js/utilities";
         import {
             countCompleteLessonsInCourse,
@@ -83,11 +81,11 @@
             },
 
             TRANSLATIONS: {
-                overall: () => gettext('Overall progress'),
-                byCourse: () => gettext('Progress by course'),
-                learning: () => gettext('Learning statistics'),
-                lessonsCompleted: () => gettext('lessons completed so far'),
-                lessonsLeft: () => gettext('lessons remaining to finish your study')
+                overall: () => gettext("Overall progress"),
+                byCourse: () => gettext("Progress by course"),
+                learning: () => gettext("Learning statistics"),
+                lessonsCompleted: () => gettext("lessons completed so far"),
+                lessonsLeft: () => gettext("lessons remaining to finish your study"),
             },
 
             isCourseInProgress(aCourse) {
@@ -126,7 +124,11 @@
 
             async renderProfilePage() {
                 const homePage = await getHomePage();
-                const courses = homePage.courses;
+                let courses = homePage.courses;
+
+                if (isGuestUser()) {
+                    courses = courses.filter((course) => course.is_visible_to_guests);
+                }
                 const lastWorkedOnCourse = this.getCurrentCourse(courses);
 
                 this.update({

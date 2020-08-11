@@ -1,5 +1,5 @@
 import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls.js";
-import { getAuthenticationToken } from "js/AuthenticationUtilities.js";
+import { getAuthenticationToken, isGuestUser } from "js/AuthenticationUtilities.js";
 import {
     storeWagtailPage,
     getWagtailPageFromStore,
@@ -147,6 +147,9 @@ export const getResources = async () => {
     const resources = [];
     for (const childPageId of resourcesRoot.data.children) {
         const childPage = await _getOrFetchWagtailPageById(childPageId);
+        if (!childPage.is_visible_to_guests && isGuestUser()) {
+            continue;
+        }
         resources.push(childPage);
     }
     return resources;

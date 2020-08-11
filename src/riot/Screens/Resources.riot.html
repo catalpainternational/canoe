@@ -25,7 +25,7 @@
             ></Card>
         </div>
         <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
-        <p if="{!state.isLoading && state.articles == 0}">
+        <p if="{!state.isLoading && state.articles.length === 0}">
             { TRANSLATIONS.noArticlesYet() }
         </p>
     </div>
@@ -43,7 +43,6 @@
             doPageTagsMatchSelections,
             doesQueryMatchSearchContent,
         } from "js/SearchAndFiltering";
-        import { isGuestUser } from "js/AuthenticationUtilities";
 
         export default {
             state: {
@@ -136,7 +135,6 @@
                 const { is_visible_to_guests } = article;
                 const { searchString } = this.state;
 
-                const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
                 const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,
                     article.title,
@@ -147,7 +145,7 @@
                 const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
                 const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
 
-                const showArticle = doesUserHavePermission && isQueryMatch && isTagMatch;
+                const showArticle = isQueryMatch && isTagMatch;
                 return showArticle;
             },
 
