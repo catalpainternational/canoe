@@ -126,6 +126,10 @@ msgstr ""
 msgid "Course exam"
 msgstr ""
 
+#: src/riot/Components/ContactInformation.riot.html:18
+msgid "Don't have WhatsApp?"
+msgstr ""
+
 #: src/riot/Lesson/PdfCard.riot.html:11
 msgid "Download this PDF to your device"
 msgstr ""
@@ -171,7 +175,7 @@ msgstr ""
 msgid "Hi %1"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:52
+#: src/riot/Components/LoginForm.riot.html:50
 msgid "Hide Password"
 msgstr ""
 
@@ -179,11 +183,15 @@ msgstr ""
 msgid "Highest score"
 msgstr ""
 
+#: src/riot/Components/ContactInformation.riot.html:20
+msgid "I need help accessing my account"
+msgstr ""
+
 #: src/riot/Screens/ChangeBrowser.riot.html:19
 msgid "In the meantime please use Safari."
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:53
+#: src/riot/Components/LoginForm.riot.html:51
 msgid "Invalid login credentials"
 msgstr ""
 
@@ -228,7 +236,7 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:48
+#: src/riot/Components/LoginForm.riot.html:46
 msgid "Login"
 msgstr ""
 
@@ -249,6 +257,10 @@ msgstr ""
 
 #: src/riot/Lesson/LessonComplete.riot.html:56
 msgid "Next Lesson"
+msgstr ""
+
+#: src/riot/Components/GuestBanner.riot.html:16
+msgid "No data or progress will be saved"
 msgstr ""
 
 #: src/riot/Screens/Login.riot.html:67
@@ -285,7 +297,7 @@ msgstr ""
 msgid "Overall progress"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:50
+#: src/riot/Components/LoginForm.riot.html:48
 msgid "Password"
 msgstr ""
 
@@ -318,11 +330,23 @@ msgstr ""
 msgid "See more"
 msgstr ""
 
+#: src/riot/Components/ContactInformation.riot.html:19
+msgid "Send SMS"
+msgstr ""
+
 #: src/riot/Screens/Login.riot.html:70
 msgid "send us a message"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:51
+#: src/riot/Components/ContactInformation.riot.html:16
+msgid "Send us a message and we'll help you log in"
+msgstr ""
+
+#: src/riot/Components/ContactInformation.riot.html:17
+msgid "Send WhatsApp"
+msgstr ""
+
+#: src/riot/Components/LoginForm.riot.html:49
 msgid "Show Password"
 msgstr ""
 
@@ -409,7 +433,7 @@ msgstr ""
 msgid "Try again"
 msgstr ""
 
-#: src/riot/Components/LoginForm.riot.html:49
+#: src/riot/Components/LoginForm.riot.html:47
 msgid "Username"
 msgstr ""
 
@@ -453,6 +477,10 @@ msgstr[1] ""
 #. message when user passed the exam
 #: src/riot/Lesson/ExamResults.riot.html:94
 msgid "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam."
+msgstr ""
+
+#: src/riot/Components/GuestBanner.riot.html:15
+msgid "You're logged in as a guest user"
 msgstr ""
 
 #: src/riot/Screens/Login.riot.html:65
