@@ -292,7 +292,10 @@ msgstr ""
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
 msgstr "Obrigado ba ita-nia komentáriu. Ita-nia opiniaun importante mai ami. Ami sei servisu maka'as atu hadia ita-nia esperensia."
 
-msgid "There are no resource articles yet. Check back soon!"
+msgid "There are no courses yet. Check back soon!"
+msgstr ""
+
+msgid "There are no resources yet. Check back soon!"
 msgstr ""
 
 msgid "This audio is not available offline."

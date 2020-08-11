@@ -5,12 +5,12 @@
             <h3>{ TRANSLATIONS.resources() }</h3>
         </div>
         <SearchBar
-            if="{state.articles.length > 0}"
+            if="{state.articles.length > 0 && state.isAnyArticleVisible}"
             searchString="{state.searchString}"
             submitSearch="{submitSearch}"
         ></SearchBar>
         <TagList
-            if="{state.listOfAllTags.length > 0}"
+            if="{state.listOfAllTags.length > 0 && state.isAnyArticleVisible}"
             tags="{state.listOfAllTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
@@ -25,7 +25,7 @@
             ></Card>
         </div>
         <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
-        <p if="{!state.isLoading && state.articles == 0}">
+        <p if="{!state.isLoading && (state.articles == 0 || !state.isAnyArticleVisible)}">
             { TRANSLATIONS.noArticlesYet() }
         </p>
     </div>
@@ -52,6 +52,7 @@
                 articles: [],
                 listOfAllTags: [],
                 isLoading: false,
+                isAnyArticleVisible: false,
             },
 
             components: {
@@ -64,14 +65,20 @@
             TRANSLATIONS: {
                 resources: () => gettext("Resources"),
                 noArticlesYet: () =>
-                    gettext("There are no resource articles yet. Check back soon!"),
+                    gettext("There are no resources yet. Check back soon!"),
             },
 
             async onMounted() {
                 this.toggleLoadingMessage();
                 const articles = await getResources();
                 const listOfAllTags = getTagsFromPages(articles);
-                this.update({ articles, listOfAllTags, selectedTags: [] });
+                const isAnyArticleVisible = this.checkForVisibleArticles(articles);
+                this.update({
+                    articles,
+                    listOfAllTags,
+                    selectedTags: [],
+                    isAnyArticleVisible,
+                });
 
                 const urlParams = this.generateUrlParams();
 
@@ -89,6 +96,14 @@
                     }
                 }
                 this.toggleLoadingMessage();
+            },
+
+            checkForVisibleArticles(articles) {
+                for (const article of articles) {
+                    if (article.is_visible_to_guests) {
+                        return true;
+                    }
+                }
             },
 
             toggleLoadingMessage() {

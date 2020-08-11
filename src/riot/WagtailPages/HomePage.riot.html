@@ -19,7 +19,7 @@
     </div>
     <div class="content-wrapper">
         <TagList
-            if="{state.listOfTags.length > 0}"
+            if="{state.listOfTags.length > 0 && state.isAnyCourseVisible}"
             tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
@@ -38,6 +38,9 @@
                 type="course"
             ></Card>
         </div>
+        <p if="{state.sortedListOfCourses.length > 0 && !state.isAnyCourseVisible}">
+            { TRANSLATIONS.noCourses() }
+        </p>
     </div>
 
     <script>
@@ -63,6 +66,7 @@
                 selectedTags: [],
                 listOfTags: [],
                 sortedListOfCourses: [],
+                isAnyCourseVisible: false,
             },
 
             components: {
@@ -70,6 +74,10 @@
                 continuelearningbutton: ContinueLearningButton,
                 taglist: TagList,
                 guestbanner: GuestBanner,
+            },
+
+            TRANSLATIONS: {
+                noCourses: () => gettext("There are no courses yet. Check back soon!"),
             },
 
             onMounted(props, state) {
@@ -80,11 +88,21 @@
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
                 const sortedListOfCourses = this.sortCourses(unsortedCourses);
+                const isAnyCourseVisible = this.checkForVisibleCourses(unsortedCourses);
                 this.update({
                     currentCourse,
                     listOfTags,
                     sortedListOfCourses,
+                    isAnyCourseVisible,
                 });
+            },
+
+            checkForVisibleCourses(courses) {
+                for (const course of courses) {
+                    if (course.is_visible_to_guests) {
+                        return true;
+                    }
+                }
             },
 
             sortCourses(courses) {
@@ -167,7 +185,8 @@
                 const lowercaseCourseTags = tags.map((tag) => tag.toLowerCase());
                 const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
                 return (
-                    doesUserHavePermission && doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
+                    doesUserHavePermission &&
+                    doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
                 );
             },
 
