@@ -12,7 +12,7 @@
         <DataDownload if="{isUserLoggedIn()}"></DataDownload>
 
         <LoadingDots
-            if="{Object.keys(state.wagtailPage).length === 0}"
+            if="{Object.keys(state.wagtailPage).length === 0 && isUserLoggedIn()}"
             extrastyleclasses="light app"
         ></LoadingDots>
 
