@@ -1,17 +1,17 @@
 import "babel-polyfill";
 
-import { store } from "ReduxImpl/Store";
+import { subscribeToStore, getServiceWorkerState } from "ReduxImpl/Interface";
 import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 
-let storeState = store.getState();
+let currentServiceWorkerState = getServiceWorkerState();
 
-store.subscribe( () => {
-    const newStoreState = store.getState();
-    if(newStoreState.serviceWorker === storeState.serviceWorker) {
+subscribeToStore(() => {
+    const newServiceWorkerState = getServiceWorkerState();
+    if (newServiceWorkerState === currentServiceWorkerState.serviceWorkerState) {
         return;
     }
 
-    switch(newStoreState.serviceWorker) {
+    switch (newServiceWorkerState) {
         case "install-failed":
             // show a retry message
             document.querySelector("#service-worker-loading").hidden = true;
@@ -25,7 +25,7 @@ store.subscribe( () => {
         case "controlling":
             // hide the loading splash
             document.querySelector("#preapp-messages").hidden = true;
-            import(/* webpackChunkName: "app" */ "./app.js")
+            import(/* webpackChunkName: "app" */ "./app.js");
             break;
         case "update-waiting":
             // TODO should we reload? it might interrupt something
@@ -36,7 +36,7 @@ store.subscribe( () => {
             break;
     }
     // store state for next time
-    storeState = store.getState();
+    currentServiceWorkerState = getServiceWorkerState();
 });
 
 initializeServiceWorker();

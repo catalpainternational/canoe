@@ -4,7 +4,9 @@
 // while the component is mounted with the state before and after redux.
 // Dispatches available as arguments.
 
-export const installReduxPlugin = function (component, store) {
+import { store } from "ReduxImpl/Store";
+
+export const installReduxPlugin = function (component) {
     if (typeof component.storeListener !== "function") {
         return;
     }
