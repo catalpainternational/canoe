@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Language: en\n"
 
-#: src/riot/WagtailPages/HomePage.riot.html:139
+#: src/riot/WagtailPages/HomePage.riot.html:146
 msgid "%1 / %2 lesson complete"
 msgid_plural "%1 / %2 lessons complete"
 msgstr[0] ""
@@ -172,7 +172,7 @@ msgid "Great work %1! You have completed %2% of your overall coursework"
 msgstr ""
 
 #. Greet the user with their username
-#: src/riot/WagtailPages/HomePage.riot.html:149
+#: src/riot/WagtailPages/HomePage.riot.html:156
 msgid "Hi %1"
 msgstr ""
 
@@ -385,11 +385,11 @@ msgstr ""
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
 msgstr ""
 
-#: src/riot/WagtailPages/HomePage.riot.html:80
+#: src/riot/WagtailPages/HomePage.riot.html:81
 msgid "There are no courses yet. Check back soon!"
 msgstr ""
 
-#: src/riot/Screens/Resources.riot.html:68
+#: src/riot/Screens/Resources.riot.html:67
 msgid "There are no resources yet. Check back soon!"
 msgstr ""
 
@@ -453,7 +453,7 @@ msgstr ""
 msgid "You just completed the lesson \"%1\""
 msgstr ""
 
-#: src/riot/WagtailPages/HomePage.riot.html:126
+#: src/riot/WagtailPages/HomePage.riot.html:133
 msgid "You only have %1 lesson left to finish %2."
 msgid_plural "You only have %1 lessons left to finish %2."
 msgstr[0] ""
