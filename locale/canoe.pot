@@ -51,16 +51,8 @@ msgstr ""
 msgid "Add to Home Screen"
 msgstr ""
 
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:57
-msgid "all"
-msgstr ""
-
 #: src/riot/Lesson/ExamResults.riot.html:51
 msgid "Amazing work!"
-msgstr ""
-
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:58
-msgid "answers that apply"
 msgstr ""
 
 #: src/riot/Lesson/LessonFeedback.riot.html:55
@@ -81,11 +73,11 @@ msgstr ""
 msgid "Back to lesson overview"
 msgstr ""
 
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:56
-msgid "Check"
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:54
+msgid "Check <strong>all</strong> answers that apply"
 msgstr ""
 
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:60
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:57
 msgid "Check answers"
 msgstr ""
 
@@ -138,7 +130,7 @@ msgstr ""
 msgid "FEEDBACK"
 msgstr ""
 
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:59
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:56
 msgid "Find and check all correct answers and uncheck incorrect answers"
 msgstr ""
 
@@ -404,8 +396,8 @@ msgstr ""
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
 msgstr ""
 
-#: src/riot/Screens/Resources.riot.html:67
-msgid "There are no resource articles yet. Check back soon!"
+#: src/riot/Screens/Resources.riot.html:66
+msgid "There are no resources yet. Check back soon!"
 msgstr ""
 
 #: src/riot/Lesson/AudioCard.riot.html:31
