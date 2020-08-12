@@ -38,7 +38,7 @@
                 type="course"
             ></Card>
         </div>
-        <p if="{state.sortedListOfCourses.length > 0 && !state.isAnyCourseVisible}">
+        <p if="{!state.isLoading && !state.isAnyCourseVisible}">
             { TRANSLATIONS.noCourses() }
         </p>
     </div>
@@ -67,6 +67,7 @@
                 listOfTags: [],
                 sortedListOfCourses: [],
                 isAnyCourseVisible: false,
+                isLoading: false,
             },
 
             components: {
@@ -80,7 +81,8 @@
                 noCourses: () => gettext("There are no courses yet. Check back soon!"),
             },
 
-            onMounted(props, state) {
+            async onMounted(props, state) {
+                this.update({ isLoading: true });
                 const unsortedCourses = props.wagtailPage.courses.filter(
                     (course) => course.lessons.length
                 );
@@ -88,21 +90,12 @@
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
                 const sortedListOfCourses = this.sortCourses(unsortedCourses);
-                const isAnyCourseVisible = this.checkForVisibleCourses(unsortedCourses);
                 this.update({
                     currentCourse,
                     listOfTags,
                     sortedListOfCourses,
-                    isAnyCourseVisible,
+                    isLoading: false,
                 });
-            },
-
-            checkForVisibleCourses(courses) {
-                for (const course of courses) {
-                    if (course.is_visible_to_guests) {
-                        return true;
-                    }
-                }
             },
 
             sortCourses(courses) {
@@ -184,6 +177,11 @@
 
                 const lowercaseCourseTags = tags.map((tag) => tag.toLowerCase());
                 const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
+
+                if (!this.state.isAnyCourseVisible && doesUserHavePermission) {
+                    this.state.isAnyCourseVisible = true;
+                }
+
                 return (
                     doesUserHavePermission &&
                     doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
