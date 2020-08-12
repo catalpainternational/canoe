@@ -71,10 +71,12 @@
                 this.toggleLoadingMessage();
                 const articles = await getResources();
                 const listOfAllTags = getTagsFromPages(articles);
+                const isAnyArticleVisible = this.checkForVisibleArticles(articles);
                 this.update({
                     articles,
                     listOfAllTags,
                     selectedTags: [],
+                    isAnyArticleVisible,
                 });
 
                 const urlParams = this.generateUrlParams();
@@ -97,6 +99,18 @@
 
             toggleLoadingMessage() {
                 this.update({ isLoading: !this.state.isLoading });
+            },
+
+            checkForVisibleArticles(articles) {
+                if (isGuestUser()) {
+                    for (const article of articles) {
+                        return article.is_visible_to_guests
+                    }
+                } else if (articles.length > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             },
 
             generateUrlParams() {
@@ -141,9 +155,6 @@
                 const { searchString } = this.state;
 
                 const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
-                if (!this.state.isAnyArticleVisible && doesUserHavePermission) {
-                    this.state.isAnyArticleVisible = true;
-                }
 
                 const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,

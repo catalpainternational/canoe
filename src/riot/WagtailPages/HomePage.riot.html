@@ -90,12 +90,26 @@
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
                 const sortedListOfCourses = this.sortCourses(unsortedCourses);
+                const isAnyCourseVisible = this.checkForVisibleCourses(unsortedCourses);
                 this.update({
                     currentCourse,
                     listOfTags,
                     sortedListOfCourses,
                     isLoading: false,
+                    isAnyCourseVisible,
                 });
+            },
+
+            checkForVisibleCourses(courses) {
+                if (isGuestUser()) {
+                    for (const course of courses) {
+                        return course.is_visible_to_guests;
+                    }
+                } else if (courses.length > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
             },
 
             sortCourses(courses) {
@@ -177,10 +191,6 @@
 
                 const lowercaseCourseTags = tags.map((tag) => tag.toLowerCase());
                 const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
-
-                if (!this.state.isAnyCourseVisible && doesUserHavePermission) {
-                    this.state.isAnyCourseVisible = true;
-                }
 
                 return (
                     doesUserHavePermission &&
