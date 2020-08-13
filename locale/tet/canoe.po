@@ -142,7 +142,7 @@ msgid "In the meantime please use Safari."
 msgstr "Iha tempu leet, favór uza Safari"
 
 msgid "Invalid login credentials"
-msgstr ""
+msgstr "Informasaun ne’ebé ita hatama la lo’os"
 
 msgid "Keep going"
 msgstr "Favór kontinua nafatin"
