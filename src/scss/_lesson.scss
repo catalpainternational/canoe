@@ -225,7 +225,7 @@ LessonObjective .objective {
 
     .card-number {
         font-size: 12px;
-        margin-bottom: -15px;
+        margin-bottom: -5px;
         flex: 0;
     }
 
@@ -240,7 +240,6 @@ LessonObjective .objective {
             display: inline-block;
             position: relative;
             left: unset;
-            width: 80px;
             height: 50px;
         }
 
@@ -354,8 +353,16 @@ LessonContent .content {
         margin-top: 10%;
     }
 
-    p {
-        font-size: 14px;
+    p,
+    li {
+        font-size: 18px;
+        line-height: 1.3em;
+        margin: 0.3em 0;
+    }
+
+    ul,
+    ol {
+        padding-left: 20px;
     }
 
     p.media-description {
@@ -378,7 +385,6 @@ LessonContent .content {
         display: inline-block;
         position: relative;
         left: unset;
-        width: 80px;
         height: 50px;
     }
 
@@ -394,7 +400,7 @@ LessonContent .content {
 
     .card-number {
         font-size: 12px;
-        margin-bottom: -15px;
+        margin-bottom: -5px;
         flex: 0;
         text-align: center;
     }
@@ -433,12 +439,6 @@ TestPopupModal {
         .answers-block {
             align-self: start;
             flex: 1;
-        }
-
-        .bold {
-            font-weight: 650;
-            margin-left: 4px;
-            margin-right: 4px;
         }
     }
 
@@ -585,7 +585,7 @@ TestPopupModal {
 
         .card-number {
             font-size: 12px;
-            margin-bottom: -15px;
+            margin-bottom: -5px;
             flex: 0;
             text-align: center;
         }
@@ -784,7 +784,7 @@ ExamResults {
 CourseExam {
     .card-number {
         font-size: 12px;
-        margin-bottom: -15px;
+        margin-bottom: -5px;
         flex: 0;
     }
 
@@ -799,12 +799,15 @@ CourseExam {
             display: inline-block;
             position: relative;
             left: unset;
-            width: 80px;
             height: 50px;
         }
 
         .btn-primary {
             min-width: 160px;
         }
+    }
+
+    div.card-container {
+        justify-content: unset;
     }
 }

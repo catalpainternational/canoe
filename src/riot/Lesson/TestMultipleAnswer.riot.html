@@ -1,9 +1,6 @@
 <TestMultipleAnswer class="answer">
     <div class="answers-block">
-        <h4>
-            <span>{ TRANSLATIONS.check() }</span><span class="bold">{ TRANSLATIONS.all() }</span
-            ><span>{ TRANSLATIONS.apply() }</span>
-        </h4>
+        <h4><raw html="{ TRANSLATIONS.checkAllAnswers() }"></raw></h4>
         <ol>
             <li each="{answer in props.card.answers}" onclick="{() => selectAnswer(answer)}">
                 <div>
@@ -40,6 +37,7 @@
     <script>
         import { dispatchTestAnswerEvent } from "js/Events";
         import { doesTheArrayContainTheObject } from "js/utilities";
+        import Raw from "RiotTags/Components/Raw.riot.html";
 
         const doAnswersMatch = (left, right) => {
             return left.text === right.text;
@@ -53,11 +51,14 @@
             },
 
             TRANSLATIONS: {
-                check: () => gettext('Check'),
-                all: () => gettext('all'),
-                apply: () => gettext('answers that apply'),
-                checkCorrect: () => gettext('Find and check all correct answers and uncheck incorrect answers'),
-                checkAnswers: () => gettext('Check answers'),
+                checkAllAnswers: () => gettext("Check <strong>all</strong> answers that apply"),
+                checkCorrect: () =>
+                    gettext("Find and check all correct answers and uncheck incorrect answers"),
+                checkAnswers: () => gettext("Check answers"),
+            },
+
+            components: {
+                raw: Raw,
             },
 
             onMounted(props, state) {

@@ -47,6 +47,10 @@
         @media only screen and (max-width: $sm-phone) {
             padding: 15px;
         }
+
+        @media only screen and (max-width: $xs-phone) {
+            padding: 10px;
+        }
     }
 
     .card-footer {
@@ -57,6 +61,10 @@
         @media only screen and (max-width: $sm-phone) {
             flex-wrap: wrap;
             padding: 0px 15px 15px 15px;
+        }
+
+        @media only screen and (max-width: $xs-phone) {
+            padding: 0px 10px 10px 10px;
         }
     }
 

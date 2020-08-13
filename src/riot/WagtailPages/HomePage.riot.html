@@ -140,15 +140,15 @@
             },
 
             courseProgressMessage(course) {
-                // displays how many lessons are complete and how many lessons are in the current course
-                const numberOfCompleteLessons = countCompleteLessonsInCourses([course]);
-
                 return ngettext(
-                    "%1 / %2 lesson complete",
-                    "%1 / %2 lessons complete",
-                    numberOfCompleteLessons,
-                    course.data.lessons_count
+                    "%1 lesson complete",
+                    "%1 lessons complete",
+                    this.calculateCourseProgress(course)
                 );
+            },
+
+            calculateCourseProgress(course) {
+                return countCompleteLessonsInCourses([course]) + " / " + course.data.lessons_count;
             },
 
             greetingMessage() {
