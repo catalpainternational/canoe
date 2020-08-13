@@ -80,7 +80,7 @@
                 noCourses: () => gettext("There are no courses yet. Check back soon!"),
             },
 
-            async onMounted(props, state) {
+            onMounted(props, state) {
                 this.update({ isLoading: true });
                 const unsortedCourses = props.wagtailPage.courses.filter(
                     (course) => course.lessons.length
