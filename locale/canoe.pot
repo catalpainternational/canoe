@@ -7,7 +7,7 @@ msgstr ""
 
 #. the number of lessons completed in a course
 #: src/riot/WagtailPages/CoursePage.riot.html:148
-#: src/riot/WagtailPages/HomePage.riot.html:118
+#: src/riot/WagtailPages/HomePage.riot.html:143
 msgid "%1 lesson complete"
 msgid_plural "%1 lessons complete"
 msgstr[0] ""
@@ -34,7 +34,7 @@ msgid "%1 of %2"
 msgstr ""
 
 #. displays how many lessons of the total in a course have been completed
-#: src/riot/Screens/Profile.riot.html:144
+#: src/riot/Screens/Profile.riot.html:146
 msgid "%1 out of %2 completed"
 msgstr ""
 
@@ -158,7 +158,7 @@ msgid "Great job!"
 msgstr ""
 
 #. displays percentage of completed lessons in all courses combined
-#: src/riot/Screens/Profile.riot.html:153
+#: src/riot/Screens/Profile.riot.html:155
 msgid "Great work %1! You have completed %2% of your overall coursework"
 msgstr ""
 
@@ -199,7 +199,7 @@ msgstr ""
 msgid "Latest notifications"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:88
+#: src/riot/Screens/Profile.riot.html:86
 msgid "Learning statistics"
 msgstr ""
 
@@ -212,11 +212,11 @@ msgstr ""
 msgid "Lesson Activities"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:89
+#: src/riot/Screens/Profile.riot.html:87
 msgid "lessons completed so far"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:90
+#: src/riot/Screens/Profile.riot.html:88
 msgid "lessons remaining to finish your study"
 msgstr ""
 
@@ -285,7 +285,7 @@ msgstr ""
 msgid "Oops"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:86
+#: src/riot/Screens/Profile.riot.html:84
 msgid "Overall progress"
 msgstr ""
 
@@ -293,7 +293,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:87
+#: src/riot/Screens/Profile.riot.html:85
 msgid "Progress by course"
 msgstr ""
 
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Read the question more carefully!"
 msgstr ""
 
-#: src/riot/Screens/Resources.riot.html:65
+#: src/riot/Screens/Resources.riot.html:64
 msgid "Resources"
 msgstr ""
 
@@ -398,6 +398,10 @@ msgstr ""
 
 #: src/riot/WagtailPages/HomePage.riot.html:81
 msgid "There are no courses yet. Check back soon!"
+msgstr ""
+
+#: src/riot/Screens/Resources.riot.html:65
+msgid "There are no resources yet. Check back soon!"
 msgstr ""
 
 #: src/riot/Lesson/AudioCard.riot.html:31
