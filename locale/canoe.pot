@@ -5,14 +5,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Language: en\n"
 
-#: src/riot/WagtailPages/HomePage.riot.html:121
-msgid "%1 / %2 lesson complete"
-msgid_plural "%1 / %2 lessons complete"
-msgstr[0] ""
-msgstr[1] ""
-
 #. the number of lessons completed in a course
-#: src/riot/WagtailPages/CoursePage.riot.html:142
+#: src/riot/WagtailPages/CoursePage.riot.html:148
+#: src/riot/WagtailPages/HomePage.riot.html:118
 msgid "%1 lesson complete"
 msgid_plural "%1 lessons complete"
 msgstr[0] ""
@@ -48,7 +43,7 @@ msgstr ""
 msgid "%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
 msgstr ""
 
-#: src/riot/WagtailPages/CoursePage.riot.html:150
+#: src/riot/WagtailPages/CoursePage.riot.html:156
 msgid "%1's Course Exam"
 msgstr ""
 
@@ -56,16 +51,8 @@ msgstr ""
 msgid "Add to Home Screen"
 msgstr ""
 
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:57
-msgid "all"
-msgstr ""
-
 #: src/riot/Lesson/ExamResults.riot.html:51
 msgid "Amazing work!"
-msgstr ""
-
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:58
-msgid "answers that apply"
 msgstr ""
 
 #: src/riot/Lesson/LessonFeedback.riot.html:55
@@ -86,11 +73,11 @@ msgstr ""
 msgid "Back to lesson overview"
 msgstr ""
 
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:56
-msgid "Check"
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:54
+msgid "Check <strong>all</strong> answers that apply"
 msgstr ""
 
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:60
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:57
 msgid "Check answers"
 msgstr ""
 
@@ -131,6 +118,10 @@ msgstr ""
 msgid "Course exam"
 msgstr ""
 
+#: src/riot/Components/ContactInformation.riot.html:18
+msgid "Don't have WhatsApp?"
+msgstr ""
+
 #: src/riot/Lesson/PdfCard.riot.html:11
 msgid "Download this PDF to your device"
 msgstr ""
@@ -139,7 +130,7 @@ msgstr ""
 msgid "FEEDBACK"
 msgstr ""
 
-#: src/riot/Lesson/TestMultipleAnswer.riot.html:59
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:56
 msgid "Find and check all correct answers and uncheck incorrect answers"
 msgstr ""
 
@@ -182,6 +173,10 @@ msgstr ""
 
 #: src/riot/WagtailPages/CoursePage.riot.html:64
 msgid "Highest score"
+msgstr ""
+
+#: src/riot/Components/ContactInformation.riot.html:20
+msgid "I need help accessing my account"
 msgstr ""
 
 #: src/riot/Screens/ChangeBrowser.riot.html:19
@@ -256,6 +251,10 @@ msgstr ""
 msgid "Next Lesson"
 msgstr ""
 
+#: src/riot/Components/GuestBanner.riot.html:16
+msgid "No data or progress will be saved"
+msgstr ""
+
 #: src/riot/Screens/Login.riot.html:67
 msgid "No learning progress will be saved while you are logged in as a guest. If you would like to create an account, please"
 msgstr ""
@@ -303,7 +302,7 @@ msgstr ""
 msgid "Read the question more carefully!"
 msgstr ""
 
-#: src/riot/Screens/Resources.riot.html:64
+#: src/riot/Screens/Resources.riot.html:65
 msgid "Resources"
 msgstr ""
 
@@ -323,8 +322,20 @@ msgstr ""
 msgid "See more"
 msgstr ""
 
+#: src/riot/Components/ContactInformation.riot.html:19
+msgid "Send SMS"
+msgstr ""
+
 #: src/riot/Screens/Login.riot.html:70
 msgid "send us a message"
+msgstr ""
+
+#: src/riot/Components/ContactInformation.riot.html:16
+msgid "Send us a message and we'll help you log in"
+msgstr ""
+
+#: src/riot/Components/ContactInformation.riot.html:17
+msgid "Send WhatsApp"
 msgstr ""
 
 #: src/riot/Components/LoginForm.riot.html:49
@@ -386,7 +397,7 @@ msgid "Thanks for your feedback. Your opinion matters to us and we are working h
 msgstr ""
 
 #: src/riot/Screens/Resources.riot.html:66
-msgid "There are no resource articles yet. Check back soon!"
+msgid "There are no resources yet. Check back soon!"
 msgstr ""
 
 #: src/riot/Lesson/AudioCard.riot.html:31
@@ -458,6 +469,10 @@ msgstr[1] ""
 #. message when user passed the exam
 #: src/riot/Lesson/ExamResults.riot.html:94
 msgid "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam."
+msgstr ""
+
+#: src/riot/Components/GuestBanner.riot.html:15
+msgid "You're logged in as a guest user"
 msgstr ""
 
 #: src/riot/Screens/Login.riot.html:65

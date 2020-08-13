@@ -1,14 +1,19 @@
 <GuestBanner>
     <div class="{state.isBannerClosing ? 'close' : ''}">
         <a if="{!state.isBannerClosing}" class="cross" onclick="{closingBanner}"></a>
-        <p>You're logged in as a guest user</p>
-        <p>No data or progress will be saved</p>
+        <p>{ TRANSLATIONS.guest() }</p>
+        <p>{ TRANSLATIONS.data() }</p>
     </div>
 
     <script>
         export default {
             state: {
                 isBannerClosing: false,
+            },
+
+            TRANSLATIONS: {
+                guest: () => gettext("You're logged in as a guest user"),
+                data: () => gettext("No data or progress will be saved"),
             },
 
             closingBanner() {
