@@ -88,26 +88,16 @@
 
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
-                const allVisibleCourses = isGuestUser()
-                    ? this.removeHiddenCoursesFrom(unsortedCourses)
+                const visibleCourses = isGuestUser()
+                    ? unsortedCourses.filter((course) => course.is_visible_to_guests)
                     : unsortedCourses;
-                const sortedListOfCourses = this.sortCourses(allVisibleCourses);
+                const sortedListOfCourses = this.sortCourses(visibleCourses);
                 this.update({
                     currentCourse,
                     listOfTags,
                     sortedListOfCourses,
                     isLoading: false,
                 });
-            },
-
-            removeHiddenCoursesFrom(allCourses) {
-                let coursesVisibleToGuests = [];
-                allCourses.map((course) => {
-                    if (course.is_visible_to_guests) {
-                        coursesVisibleToGuests.push(course);
-                    }
-                });
-                return coursesVisibleToGuests;
             },
 
             sortCourses(courses) {
