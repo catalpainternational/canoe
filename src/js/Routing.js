@@ -24,7 +24,7 @@ const getPreviewPageUrl = (queryString) => {
 
 const routeToTranslation = (translationPageId) => {
     const [, section, cardNumber] = parseURLHash();
-    const translatedPageUrl = `#${translationPageId}`;
+    let translatedPageUrl = `#${translationPageId}`;
     if (section) {
         translatedPageUrl += `/${section}/`;
     }
@@ -106,7 +106,7 @@ export const getSearchQueryFromUrl = () => {
     const currentHash = parseURLHash();
     const queryString = currentHash[0].split("?")[1];
     return queryString;
-}
+};
 
 export function getLessonCardIdx() {
     return parseInt(location.hash.split("/")[2]) - 1;
@@ -116,6 +116,10 @@ export function getNextCardsUrl(lessonId, lessonModule, lessonCardIdx) {
     return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx + 2);
 }
 
-export const getPreviousCardsUrl = (lessonId, lessonModule, lessonCardIdx) => {
-    return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx);
-};
+export function getPreviousCardsUrl(lessonId, lessonModule, lessonCardIdx) {
+    return "#" + lessonId + "/" + lessonModule + "/" + lessonCardIdx;
+}
+
+export function getHashPieces() {
+    return location.hash.split("/");
+}

@@ -1,0 +1,116 @@
+<LoginForm>
+    <form onsubmit="{loginUser}">
+        <h3>{ TRANSLATIONS.login() }</h3>
+        <div class="form-group">
+            <label for="username">{ TRANSLATIONS.username() }</label>
+            <input id="username" type="text" name="username" oninput="{clearError}" />
+        </div>
+        <div class="form-group password">
+            <label for="password">{ TRANSLATIONS.password() }</label>
+            <input id="password" type="password" name="password" oninput="{clearError}" />
+        </div>
+        <div class="icon-box crossout">
+            <a onclick="{showPassword}">
+                <span class="eye"></span>
+                <span class="password-placement"
+                    >{state.isShowingPassword ? TRANSLATIONS.hidePassword() :
+                    TRANSLATIONS.showPassword()}</span
+                >
+            </a>
+        </div>
+        <div if="{state.errorExplanation}" class="error-message">
+            <span class="warning"></span>
+            <p>{state.errorExplanation}</p>
+        </div>
+        <LoadingDots if="{state.isLoginButtonDisabled}" extrastyleclasses="dark"></LoadingDots>
+        <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}">
+            { TRANSLATIONS.login() }
+        </button>
+    </form>
+    <script>
+        import { alertIfRequestWasMadeOffline } from "js/Errors";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+
+        export default {
+            state: {
+                isShowingPassword: false,
+                isLoginButtonDisabled: false,
+                errorExplanation: "",
+            },
+
+            components: {
+                loadingdots: LoadingDots,
+            },
+
+            TRANSLATIONS: {
+                login: () => gettext("Login"),
+                username: () => gettext("Username"),
+                password: () => gettext("Password"),
+                showPassword: () => gettext("Show Password"),
+                hidePassword: () => gettext("Hide Password"),
+                invalid: () => gettext("Invalid login credentials"),
+            },
+
+            getUsernameAndPasswordFromForm() {
+                const usernameInput = this.$("#username");
+                const passwordInput = this.$("#password");
+
+                const usernameAndPassword = {
+                    username: usernameInput.value,
+                    password: passwordInput.value,
+                };
+                return usernameAndPassword;
+            },
+
+            async loginUser(event) {
+                event.preventDefault();
+                const usernameAndPassword = this.getUsernameAndPasswordFromForm();
+                await this.disableFormButtonAndLogin(usernameAndPassword);
+            },
+
+            async disableFormButtonAndLogin(usernameAndPassword) {
+                try {
+                    this.update({
+                        isLoginButtonDisabled: true,
+                    });
+                    await this.props.loginFunction(usernameAndPassword);
+                } catch (error) {
+                    if (alertIfRequestWasMadeOffline(error)) {
+                    } else if (error.message === "400") {
+                        this.update({
+                            errorExplanation: this.TRANSLATIONS.invalid(),
+                        });
+                    }
+                } finally {
+                    this.update({
+                        isLoginButtonDisabled: false,
+                    });
+                }
+            },
+
+            showPassword() {
+                const passwordElement = this.$("#password");
+                const eyeIcon = this.$(".icon-box");
+
+                if (passwordElement.type === "password") {
+                    passwordElement.type = "text";
+                    eyeIcon.classList.remove("crossout");
+                } else {
+                    passwordElement.type = "password";
+                    eyeIcon.classList.add("crossout");
+                }
+                this.update({
+                    isShowingPassword: !this.state.isShowingPassword,
+                });
+            },
+
+            clearError() {
+                if (this.state.errorExplanation) {
+                    this.update({
+                        errorExplanation: null,
+                    });
+                }
+            },
+        };
+    </script>
+</LoginForm>

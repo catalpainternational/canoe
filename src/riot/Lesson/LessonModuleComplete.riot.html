@@ -3,15 +3,17 @@
                 <div class="sun"></div>
 
                 <div class="body">
-                    <h2 translate>Great job!</h2>
+                    <h2>{ TRANSLATIONS.great() }</h2>
                     <h3>{ moduleCompleteMessage() }</h3>
                     <p>{ nextModuleMessage() }</p>
                 </div>
 
                 <div class="bottom-buttons">
-                    <button class="btn-primary" onclick="{goToNextModule}" translate>Keep going</button>
-                    <button class="btn-secondary" onclick="{backToLessonPage}" translate>
-                        Back to lesson overview
+                    <button class="btn-primary" onclick="{goToNextModule}">
+                        { TRANSLATIONS.continue_button() }
+                    </button>
+                    <button class="btn-secondary" onclick="{backToLessonPage}">
+                        { TRANSLATIONS.back_button() }
                     </button>
                 </div>
         </LessonFrame>
@@ -20,6 +22,15 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
         export default {
+            TRANSLATIONS: {
+                objectives: () => gettext('Objectives'), 
+                content: () => gettext('Content'),
+                test: () => gettext('Test'),
+                great: () => gettext('Great job!'),
+                continue_button: () => gettext('Keep going'),
+                back_button: () => gettext('Back to lesson overview'),
+            },
+
             components: {
                 lessonframe: LessonFrame
             },
@@ -36,7 +47,7 @@
                 // message on completing objectives, content or test ( %1 )
                 return gettext(
                     "You've completed the %1",
-                    this.props.module
+                    this.TRANSLATIONS[this.props.module]().toLowerCase()
                 );
             },
 
@@ -44,7 +55,7 @@
                 // message to say what module is next ( %1 is content or test )
                 return gettext(
                     "You're ready to start the %1.",
-                    this.props.nextModule
+                    this.TRANSLATIONS[this.props.nextModule]().toLowerCase()
                 );
             },
         };

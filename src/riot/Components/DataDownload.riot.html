@@ -1,19 +1,24 @@
 <DataDownload>
     <script>
-        import { storeManifest, storeSiteDownloadedIs } from "ReduxImpl/Store";
-        import { fetchManifest } from "js/WagtailPagesAPI";
+        import { storeSiteDownloadedIs } from "ReduxImpl/Store";
         import { SiteDownloader } from "js/SiteDownloader";
-        import { updateApi, updateIdb } from "Actions/actions_store.js";
-        import { initialiseCompletions } from "Actions/completion.js";
-        import { closeAndDeleteDB } from "Actions/actions_idb";
         import { dispatchLoggedInEvent } from "js/Events";
+        import { isGuestUser } from "js/AuthenticationUtilities";
+
+        import { pullExamDataIntoMemory, clearInMemoryExamData } from "js/ExamInterface";
+        import {
+            pullCompletionsIntoMemory,
+            clearInMemoryCompletions,
+        } from "js/CompletionInterface";
+        import { updateApi, updateIdb } from "Actions/actions_store.js";
+        import { closeAndDeleteDB } from "Actions/actions_idb";
 
         const EVERY_FIVE_MINUTES = 1000 * 60 * 5;
 
         export default {
             state: {
                 pagesPoller: null,
-                completionPoller: null
+                completionPoller: null,
             },
 
             onMounted() {
@@ -24,26 +29,24 @@
                 this.clearAppData();
             },
 
-            async pollForWebpageChanges() {
-                const manifest = await fetchManifest();
-                storeManifest(manifest);
-                new SiteDownloader().requestTheSitesPagesAndImages();
-            },
-
-            async startCompletionsService() {
-                await initialiseCompletions();
-                await updateIdb();
+            async pullIdbDataIntoMemory() {
+                await pullCompletionsIntoMemory();
+                await pullExamDataIntoMemory();
             },
 
             async prepDataForAppLaunch() {
-                await this.startCompletionsService();
-                this.pollForWebpageChanges();
+                if (!isGuestUser()) {
+                    await updateIdb();
+                    this.state.pagesPoller = window.setInterval(
+                        this.pollForWebpageChanges,
+                        EVERY_FIVE_MINUTES
+                    );
+                }
 
+                await this.pullIdbDataIntoMemory();
+
+                new SiteDownloader().requestTheSitesPagesAndImages();
                 this.state.completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
-                this.state.pagesPoller = window.setInterval(
-                    this.pollForWebpageChanges,
-                    EVERY_FIVE_MINUTES
-                );
 
                 storeSiteDownloadedIs(true);
                 dispatchLoggedInEvent();
@@ -53,8 +56,10 @@
                 window.clearInterval(this.state.completionPoller);
                 window.clearInterval(this.state.pagesPoller);
                 storeSiteDownloadedIs(false);
+                clearInMemoryCompletions();
+                clearInMemoryExamData();
                 await closeAndDeleteDB();
-            }
+            },
         };
     </script>
 </DataDownload>

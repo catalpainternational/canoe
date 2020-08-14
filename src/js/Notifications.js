@@ -98,7 +98,15 @@ const formatSubscriptionForServer = (notificationSubscription) => {
 };
 
 const turnOnNotifications = async (swRegistration) => {
-    const notificationSubscription = await pushManagerSubscribesToNotifications(swRegistration);
+    let notificationSubscription = null;
+    try {
+        notificationSubscription = await pushManagerSubscribesToNotifications(swRegistration);
+    } catch (error) {
+        if (error instanceof DOMException) {
+            return null;
+        }
+    }
+
     const subscriptionPostJSON = formatSubscriptionForServer(notificationSubscription);
     return await postNotificationSubscription(subscriptionPostJSON);
 };
@@ -118,6 +126,9 @@ export const supportsPushManager = async () => {
 export const subscribeToNotifications = async () => {
     const swRegistration = await navigator.serviceWorker.ready;
     const subscription = await turnOnNotifications(swRegistration);
+    if (!subscription) {
+        return;
+    }
     storeRegistrationId(subscription.registration_id);
 };
 

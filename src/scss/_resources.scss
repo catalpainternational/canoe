@@ -25,16 +25,26 @@ Resources .content-wrapper {
         margin: 0;
         flex: 1;
     }
+
+    taglist {
+        .tag-container::after {
+            right: 10px;
+        }
+
+        .tag-container::before {
+            left: 10px;
+        }
+    }
 }
 
 taglist {
     .tag {
         border-radius: 1.875em;
-        background-color: $gray-6;
-        padding: 0.625em 0.9375em;
-        margin: 0.7em 0.7em 0 0;
+        background-color: $gray-7;
+        padding: 0.5em 0.9em;
+        margin: 0.7em 0.7em 0.7em 0;
         display: inline-block;
-        box-shadow: 0 0.1875em 0.1875em 0 $gray-5;
+        box-shadow: 0 0.15em 0.15em 0 $gray-5;
 
         &.selected {
             background-color: $blue-1;
@@ -47,6 +57,14 @@ taglist {
         &:hover {
             cursor: pointer;
         }
+
+        &:last-child {
+            margin-right: 30px;
+        }
+
+        &:first-child {
+            margin-left: 30px;
+        }
     }
 
     p {
@@ -57,8 +75,35 @@ taglist {
     }
 
     .tag-container {
-        width: 100%;
-        margin-bottom: 1.1em;
+        overflow: auto;
+        white-space: nowrap;
+        margin: 0 -30px 0.5em -30px;
+    }
+
+    .tag-container::after {
+        content: "";
+        width: 30px;
+        height: 45px;
+        position: absolute;
+        right: 0px;
+        background: linear-gradient(90deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
+
+        @media only screen and (min-width: $tablet) {
+            background: none;
+        }
+    }
+
+    .tag-container::before {
+        content: "";
+        width: 30px;
+        height: 45px;
+        position: absolute;
+        left: 0px;
+        background: linear-gradient(270deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
+
+        @media only screen and (min-width: $tablet) {
+            background: none;
+        }
     }
 }
 
@@ -94,7 +139,7 @@ searchbar {
 
     div.form-group {
         border: 0.0625em solid $gray-5;
-        box-shadow: inset 0 0.125em 0.1875em 0 rgba(42,57,66,0.1);
+        box-shadow: inset 0 0.125em 0.1875em 0 rgba(42, 57, 66, 0.1);
         margin-bottom: 0.4em;
         margin-top: 1em;
         border-radius: 0.3125em;
@@ -105,20 +150,8 @@ searchbar {
         background-color: $gray-9;
     }
 
-    input:focus + label:before {
-        content: '';
-    }
-
     label {
         flex: none;
         font-size: 0.8em;
-
-        &:before {
-            content: 'Search';
-        }
-
-        &.hide:before {
-            content: '';
-        }
     }
 }

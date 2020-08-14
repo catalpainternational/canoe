@@ -1,0 +1,32 @@
+<PopupModal>
+    <div id="modal" class="modal">
+        <slot />
+    </div>
+
+    <script>
+        export default {
+            onMounted(props, state) {
+                const { toggleModal } = props;
+                if (!toggleModal) {
+                    return;
+                }
+                window.addEventListener("keydown", this.closeModalOnEscapeKey);
+            },
+
+            onUnmounted(props, state) {
+                const { toggleModal } = props;
+                if (!toggleModal) {
+                    return;
+                }
+                window.removeEventListener("keydown", this.closeModalOnEscapeKey);
+            },
+
+            closeModalOnEscapeKey(event) {
+                if (event.key === "Escape") {
+                    const { toggleModal } = this.props;
+                    toggleModal();
+                }
+            },
+        };
+    </script>
+</PopupModal>

@@ -1,8 +1,8 @@
 <TestSingleAnswer class="answer">
     <ol>
         <li
-            class="{answer === state.selectedAnswer ? 'selected' : ''} {answer === state.selectedAnswer && answer.correct ? '' : 'wrong'}"
             each="{answer in props.card.answers}"
+            class="{doAnswersMatch(answer, state.selectedAnswer) && howToStyleThe(answer)}"
             onclick="{() => selectAnswer(answer)}"
         >
             <div>
@@ -19,7 +19,54 @@
 
         export default {
             state: {
-                selectedAnswer: {}
+                selectedAnswer: {},
+            },
+
+            onMounted(props, state) {
+                this.restoreSavedAnswer();
+            },
+
+            onUpdated(props, state) {
+                if (Object.keys(state.selectedAnswer).length === 0) {
+                    this.restoreSavedAnswer();
+                } else {
+                    this.handleRiotMemoryLeaks();
+                }
+            },
+
+            restoreSavedAnswer() {
+                const { savedAnswer } = this.props;
+                if (!savedAnswer) {
+                    return;
+                }
+
+                this.update({
+                    selectedAnswer: savedAnswer[0],
+                });
+            },
+
+            handleRiotMemoryLeaks() {
+                // This method fixes a riot bug(?) that occurs when two
+                // TestSingleAnswers are back to back. If question one
+                // has a selected answer that matches an answer in question two,
+                // question two will automatically select that answer. We don't
+                // want that, so this method clears the selected answer between
+                // questions.
+                this.state.selectedAnswer = {};
+            },
+
+            doAnswersMatch(left, right) {
+                return left.text === right.text;
+            },
+
+            howToStyleThe(answer) {
+                if (this.props.isCourseExam) {
+                    return "selected-pending";
+                } else if (!answer.correct) {
+                    return "selected-wrong";
+                } else {
+                    return "selected";
+                }
             },
 
             selectAnswer(answer) {
@@ -28,11 +75,22 @@
                     lesson: this.props.lessonName,
                     question: this.props.card.question,
                     answer: answer.text,
-                    isAnswerCorrect: answer.correct
+                    isAnswerCorrect: answer.correct,
                 };
                 dispatchTestAnswerEvent(eventData);
-                this.props.toggleModal(true, answer, answer.correct);
+
+                const { isCourseExam } = this.props;
+                if (isCourseExam) {
+                    const isCorrect = this.gradeAnswer(answer);
+                    this.props.recordAnswer({ isCorrect, answers: [answer] });
+                } else {
+                    this.props.toggleModal(true, answer, answer.correct);
+                }
             },
-        }
+
+            gradeAnswer(answer) {
+                return answer.correct;
+            },
+        };
     </script>
 </TestSingleAnswer>

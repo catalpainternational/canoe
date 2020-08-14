@@ -1,4 +1,5 @@
 <HomePage>
+    <GuestBanner if="{showBanner()}" closeBanner="{closeBanner}"></GuestBanner>
     <div class="wave"></div>
     <div class="header">
         <div class="header-box">
@@ -25,32 +26,16 @@
         ></TagList>
         <div
             class="course"
-            each="{course in props.wagtailPage.courses}"
-            if="{isCourseVisible(course.tags)}"
+            each="{course in state.sortedListOfCourses}"
+            if="{isCourseVisible(course)}"
         >
-            <div class="course-header">
-                <div>
-                    <a href="#{course.data.id}">
-                        <h3>{course.data.title}</h3>
-                    </a>
-                    <div>
-                        <p>{ courseProgressMessage(course) }</p>
-                        <a href="#{course.data.id}">
-                            <p class="text-purple" translate>view all</p>
-                            <span class="arrow background-purple"></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
             <Card
-                if="{state.nextLesson[course.data.id]}"
-                title="{state.nextLesson[course.data.id].title}"
-                description="{state.nextLesson[course.data.id].description}"
-                duration="{state.nextLesson[course.data.id].duration}"
-                link="{state.nextLesson[course.data.id].id}"
-                isCompleted="{isLessonComplete(course, state.nextLesson[course.data.id])}"
-                isComingSoon="{state.nextLesson[course.data.id].coming_soon}"
+                title="{course.data.title}"
+                link="{course.data.id}"
+                description="{courseProgressMessage(course)}"
+                isCompleted="{!isCourseInProgress(course)}"
                 showFooter="{true}"
+                type="course"
             ></Card>
         </div>
     </div>
@@ -59,77 +44,91 @@
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
+        import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
 
-        import { getUsername } from "js/AuthenticationUtilities";
-        import { getAllLessons, getCourseAndLessonSlugs } from "js/utilities";
+        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { isComplete } from "Actions/completion";
         import {
-            countCompleteLessonsInCourse,
+            countCompleteLessonsInCourses,
             getLatestCompletion,
             isCourseInProgress,
-        } from "js/LearningStatistics";
+        } from "js/CompletionInterface";
         import { ON_COMPLETION_CHANGE } from "js/Events";
         import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
+        import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Store";
 
         export default {
             state: {
-                nextLesson: {},
-                courses: [],
                 currentCourse: null,
                 selectedTags: [],
                 listOfTags: [],
+                sortedListOfCourses: [],
             },
 
             components: {
                 card: Card,
                 continuelearningbutton: ContinueLearningButton,
                 taglist: TagList,
+                guestbanner: GuestBanner,
             },
 
-            onBeforeMount(props, state) {
-                const courses = props.wagtailPage.courses;
-                const lastWorkedOnCourse = this.getCurrentCourse(courses);
-                courses.forEach((course) => {
-                    this.getNextLesson(course);
+            onMounted(props, state) {
+                const unsortedCourses = props.wagtailPage.courses.filter(
+                    (course) => course.lessons.length
+                );
+
+                const currentCourse = this.getCurrentCourse(unsortedCourses);
+                const listOfTags = getTagsFromPages(unsortedCourses);
+                const sortedListOfCourses = this.sortCourses(unsortedCourses);
+                this.update({
+                    currentCourse,
+                    listOfTags,
+                    sortedListOfCourses,
+                });
+            },
+
+            sortCourses(courses) {
+                const completedCourses = [];
+                const incompleteCourses = [];
+
+                courses.map((course) => {
+                    if (this.isCourseInProgress(course)) {
+                        incompleteCourses.push(course);
+                    } else {
+                        completedCourses.push(course);
+                    }
                 });
 
-                this.state.courses = courses;
-                this.state.listOfTags = getTagsFromPages(courses);
-                this.state.currentCourse = lastWorkedOnCourse;
+                const sortedCourses = incompleteCourses.concat(completedCourses);
+                return sortedCourses;
             },
 
             continueLearningMessage() {
-                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(
-                    this.state.currentCourse
-                );
+                const { currentCourse } = this.state;
                 return ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
                     this.state.currentCourse.data.lessons_count -
-                        countCompleteLessonsInCourse(courseSlug, lessonSlugs),
+                        countCompleteLessonsInCourses([currentCourse]),
                     this.state.currentCourse.data.title
                 );
             },
 
             courseProgressMessage(course) {
-                // displays how many lessons are complete and how many lessons are in the current course
-                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(course);
-                const numberOfCompleteLessons = countCompleteLessonsInCourse(
-                    courseSlug,
-                    lessonSlugs
-                );
-
                 return ngettext(
-                    "%1 / %2 lesson complete",
-                    "%1 / %2 lessons complete",
-                    numberOfCompleteLessons,
-                    course.data.lessons_count
+                    "%1 lesson complete",
+                    "%1 lessons complete",
+                    this.calculateCourseProgress(course)
                 );
+            },
+
+            calculateCourseProgress(course) {
+                return countCompleteLessonsInCourses([course]) + " / " + course.data.lessons_count;
             },
 
             greetingMessage() {
                 // Greet the user with their username
-                return gettext("Hi %1", getUsername());
+                return gettext("Hi %1", getCapitalizedUsername());
             },
 
             getCurrentCourse(courses) {
@@ -141,25 +140,6 @@
                     (course) => course.data.slug === latestCompletion.courseSlug
                 );
                 return lastWorkedOnCourse;
-            },
-
-            getNextLesson(course) {
-                const lessons = course.lessons;
-                const lastLesson = lessons[lessons.length - 1];
-
-                const isUnfinishedAndIsntComingSoon = (lesson, course) => {
-                    return !isComplete(course.data.slug, lesson.slug) && !lesson.coming_soon;
-                };
-
-                for (const lesson of lessons) {
-                    if (
-                        isUnfinishedAndIsntComingSoon(lesson, course) ||
-                        lesson.id === lastLesson.id
-                    ) {
-                        this.state.nextLesson[course.data.id] = lesson;
-                        break;
-                    }
-                }
             },
 
             isCourseInProgress(aCourse) {
@@ -180,10 +160,26 @@
                 this.update();
             },
 
-            isCourseVisible(courseTags) {
+            isCourseVisible(course) {
+                const { tags, is_visible_to_guests } = course;
                 const { selectedTags } = this.state;
-                const lowercaseCourseTags = courseTags.map(tag => tag.toLowerCase())
-                return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
+
+                const lowercaseCourseTags = tags.map((tag) => tag.toLowerCase());
+                const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
+                return (
+                    doesUserHavePermission &&
+                    doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
+                );
+            },
+
+            showBanner() {
+                return isGuestUser() && isGuestBannerVisible();
+            },
+
+            closeBanner() {
+                toggleGuestBanner(false);
+                this.showBanner();
+                this.update();
             },
         };
     </script>

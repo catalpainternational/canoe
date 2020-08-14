@@ -7,15 +7,15 @@
                         <a class="arrow-gray" onclick="{backToHome}"></a>
                     </div>
                     <div>
-                        <p translate>Course</p>
+                        <p>{ TRANSLATIONS.course() }</p>
                     </div>
-                    <h3>{props.wagtailPage.data.title}</h3>
+                    <h3 id="coursePageTitle">{props.wagtailPage.data.title}</h3>
                     <div>
                         <p class="bottom-border">{ numberOfLessonsCompleteMessage() }</p>
                     </div>
                 </div>
             </div>
-            <h5 class="section-title" translate>Your lessons</h5>
+            <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
             <Card
                 each="{lesson in props.wagtailPage.lessons}"
                 title="{lesson.title}"
@@ -25,25 +25,64 @@
                 isCompleted="{isLessonComplete(lesson)}"
                 isComingSoon="{lesson.coming_soon}"
                 showFooter="{true}"
-            >
-            </Card>
+                type="lesson"
+            ></Card>
+            <template if="{props.examCards.length > 0}">
+                <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
+                <Card
+                    title="{ courseExamTitle() }"
+                    description="{hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${getHighestScore()}%` : ''}"
+                    link="{props.wagtailPage.id}/exam/0"
+                    isCompleted="{isExamComplete(props.wagtailPage.id)}"
+                    isComingSoon="{false}"
+                    showFooter="{true}"
+                    isDisabled="{examDisabled()}"
+                    type="exam"
+                ></Card>
+            </template>
         </div>
     </div>
 
     <script>
-        import { countCompleteLessonsInCourse } from "js/LearningStatistics";
-        import { isComplete } from "Actions/completion";
-        import { getCourseAndLessonSlugs } from "js/utilities";
         import Card from "RiotTags/Components/Card.riot.html";
+        import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
+
+        import { isComplete } from "Actions/completion";
+        import { isGuestUser } from "js/AuthenticationUtilities";
+        import {
+            countCompleteLessonsInCourses,
+            isCourseInProgress,
+            isExamComplete,
+        } from "js/CompletionInterface";
+        import { getExamHighScore, hasUserTriedExam } from "js/ExamInterface";
 
         export default {
+            TRANSLATIONS: {
+                your_lessons: () => gettext("Your lessons"),
+                course: () => gettext("Course"),
+                course_exam: () => gettext("Course exam"),
+                highestScore: () => gettext("Highest score"),
+            },
+
             components: {
                 card: Card,
+                courseexam: CourseExam,
+            },
+
+            state: {
+                header: null,
+                coursePageTitle: null,
+                isCourseComplete: false,
             },
 
             onMounted(props, state) {
-                state.header = document.getElementsByClassName("course-header")[0];
-                state.headerOffsetTop = state.header.offsetTop;
+                const header = this.$(".course-header");
+                const coursePageTitle = this.$("#coursePageTitle");
+                const { wagtailPage } = props;
+                const isCourseComplete = !isCourseInProgress(wagtailPage);
+
+                this.update({ header, coursePageTitle, isCourseComplete });
+
                 window.addEventListener("scroll", this.stickyHeader);
             },
 
@@ -51,10 +90,10 @@
                 window.removeEventListener("scroll", this.stickyHeader);
             },
 
-            getCourseProgress() {
-                const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(this.props.wagtailPage);
+            calculateCourseProgress() {
+                const { wagtailPage } = this.props;
                 return (
-                    countCompleteLessonsInCourse(courseSlug, lessonSlugs) +
+                    countCompleteLessonsInCourses([wagtailPage]) +
                     " / " +
                     this.props.wagtailPage.data.lessons_count
                 );
@@ -65,10 +104,12 @@
             },
 
             stickyHeader() {
-                if (window.pageYOffset > this.state.headerOffsetTop) {
+                if (window.pageYOffset > this.state.header.offsetTop) {
                     this.state.header.classList.add("sticky");
+                    this.state.coursePageTitle.classList.add("truncate-if-long");
                 } else {
                     this.state.header.classList.remove("sticky");
+                    this.state.coursePageTitle.classList.remove("truncate-if-long");
                 }
             },
 
@@ -76,13 +117,44 @@
                 return isComplete(this.props.wagtailPage.data.slug, lesson.slug);
             },
 
+            examDisabled() {
+                // Exams are enabled if you complete all lessons or if you are a
+                // guest user.
+                const { wagtailPage: course } = this.props;
+                const { lessons_count } = course.data;
+                const isExamUnlocked =
+                    countCompleteLessonsInCourses([course]) === lessons_count - 1;
+                return !isExamUnlocked && !isGuestUser();
+            },
+
+            isExamComplete() {
+                const { wagtailPage } = this.props;
+                return isExamComplete(wagtailPage.data.slug);
+            },
+
+            hasUserTriedExam() {
+                const { wagtailPage } = this.props;
+                return hasUserTriedExam(wagtailPage.data.slug);
+            },
+
+            getHighestScore() {
+                const { wagtailPage } = this.props;
+                const highScore = getExamHighScore(wagtailPage.data.slug);
+                return highScore;
+            },
+
             numberOfLessonsCompleteMessage() {
                 // the number of lessons completed in a course
                 return ngettext(
                     "%1 lesson complete",
                     "%1 lessons complete",
-                    this.getCourseProgress()
+                    this.calculateCourseProgress()
                 );
+            },
+
+            courseExamTitle() {
+                let p = gettext("%1's Course Exam", this.props.wagtailPage.title);
+                return p;
             },
         };
     </script>

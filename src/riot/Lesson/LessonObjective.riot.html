@@ -1,7 +1,7 @@
 <LessonObjective>
     <LessonFrame if="{state.cardIdx < props.objective.cards.length}" extraStyleClasses="objective">
         <span class="plant"></span>
-        <h3 translate>Objectives</h3>
+        <h3>{ TRANSLATIONS.title() }</h3>
         <p class="center-objective">{props.objective.cards[state.cardIdx].description}</p>
         <div class="bottom-buttons">
             <div>
@@ -12,17 +12,15 @@
                     class="btn-primary"
                     onclick="{nextObjectiveCard}"
                     if="{state.cardIdx < props.objective.cards.length - 1}"
-                    translate
                 >
-                    Next
+                    { TRANSLATIONS.next() }
                 </button>
                 <button
                     class="btn-primary"
                     onclick="{completeObjectiveModal}"
                     if="{state.cardIdx === props.objective.cards.length - 1}"
-                    translate
                 >
-                    Finish
+                    { TRANSLATIONS.finish() }
                 </button>
             </div>
         </div>
@@ -51,6 +49,12 @@
             components: {
                 lessonmodulecomplete: LessonModuleComplete,
                 lessonframe: LessonFrame,
+            },
+
+            TRANSLATIONS: {
+                next: () => gettext('Next'),
+                title: () => gettext('Objectives'),
+                finish: () => gettext('Finish')
             },
 
             onBeforeMount(props, state) {

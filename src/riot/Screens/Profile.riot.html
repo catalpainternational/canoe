@@ -3,7 +3,7 @@
         <div class="profile-header">
             <div class="header-box">
                 <div class="left-block">
-                    <h3 translate>Overall progress</h3>
+                    <h3>{ TRANSLATIONS.overall() }</h3>
                     <h6>{ percentLessonsCompleteMessage() }</h6>
                     <ContinueLearningButton
                         if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="content-wrapper">
-            <h5 class="section-title" translate>Progress by course</h5>
+            <h5 class="section-title">{ TRANSLATIONS.byCourse() }</h5>
             <ul class="course-progress-list">
                 <li each="{course in state.courses}">
                     <a class="progress card" href="#{course.data.id}">
@@ -36,13 +36,13 @@
                 </li>
             </ul>
 
-            <h5 class="section-title" translate>Learning statistics</h5>
+            <h5 class="section-title">{ TRANSLATIONS.learning() }</h5>
             <div class="stats">
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
                         <span class="checkmark-circle-blue"></span>
                         <h3>{countCompleteLessonsTotal()}</h3>
-                        <h5 translate>lessons completed so far</h5>
+                        <h5>{ TRANSLATIONS.lessonsCompleted() }</h5>
                     </div>
                 </div>
 
@@ -50,7 +50,7 @@
                     <div class="profile-card">
                         <span class="road-sign"></span>
                         <h3>{getNumberOfLessonsLeft()}</h3>
-                        <h5 translate>lessons remaining to finish your study</h5>
+                        <h5>{ TRANSLATIONS.lessonsLeft() }</h5>
                     </div>
                 </div>
             </div>
@@ -59,17 +59,15 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
-        import {
-            getHomePage
-        } from "js/WagtailPagesAPI";
-        import { getUsername } from "js/AuthenticationUtilities";
+        import { getHomePage } from "js/WagtailPagesAPI";
+        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { getAllLessons } from "js/utilities";
         import {
             countCompleteLessonsInCourse,
             countCompleteLessonsInCourses,
             getLatestCompletion,
             isCourseInProgress,
-        } from "js/LearningStatistics";
+        } from "js/CompletionInterface";
 
         export default {
             state: {
@@ -80,6 +78,14 @@
 
             components: {
                 continuelearningbutton: ContinueLearningButton,
+            },
+
+            TRANSLATIONS: {
+                overall: () => gettext("Overall progress"),
+                byCourse: () => gettext("Progress by course"),
+                learning: () => gettext("Learning statistics"),
+                lessonsCompleted: () => gettext("lessons completed so far"),
+                lessonsLeft: () => gettext("lessons remaining to finish your study"),
             },
 
             isCourseInProgress(aCourse) {
@@ -118,7 +124,11 @@
 
             async renderProfilePage() {
                 const homePage = await getHomePage();
-                const courses = homePage.courses;
+                let courses = homePage.courses;
+
+                if (isGuestUser()) {
+                    courses = courses.filter((course) => course.is_visible_to_guests);
+                }
                 const lastWorkedOnCourse = this.getCurrentCourse(courses);
 
                 this.update({
@@ -144,7 +154,7 @@
                 // displays percentage of completed lessons in all courses combined
                 return gettext(
                     "Great work %1! You have completed %2\% of your overall coursework",
-                    getUsername(),
+                    getCapitalizedUsername(),
                     this.getPercentOfLessonsCompleted()
                 );
             },

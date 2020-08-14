@@ -1,64 +1,93 @@
-.modal-background {
-    position: absolute;
-    height: 100vh;
-    z-index: 1;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    top: 0;
-}
-
-.modal-blurred {
-    background-color: rgba(255, 255, 255, 0.8);
-    justify-content: center;
-    flex-direction: column;
-    padding-right: 20px;
-    align-items: center;
-    padding-left: 20px;
-    display: flex;
-    height: 100%;
-}
-
 .modal {
-    box-shadow: 0 0 15px 10px rgba(255, 255, 255, 0.5);
-    border-radius: 30px;
-    border: $border;
+    position: fixed;
+    bottom: 0;
+    background-color: white;
     width: 100%;
-}
-
-.modal-header {
+    text-align: center;
+    height: auto;
+    padding-bottom: 2em;
     border-radius: 30px 30px 0 0;
-    background-color: $white;
-    justify-content: center;
-    border-bottom: $border;
+    box-shadow: 0 0 10px 5px $gray-3;
+    animation-duration: 0.6s;
+    animation-name: slideDown;
     display: flex;
-    padding: 20px;
-
-    h5 {
-        margin: 0;
-    }
-}
-
-.modal-body {
-    border-radius: 0 0 30px 30px;
-    background-color: $white;
     flex-direction: column;
-    padding: 40px 20px;
-    display: flex;
-    
-    h3 {
-        margin-bottom: 20px;
-        text-align: center;
-        margin-top: 0;
+    align-items: center;
+
+    & > div {
+        flex-direction: row;
+        align-items: start;
+        display: flex;
+    }
+
+    h2 {
+        margin: 0;
+        border-bottom: none;
+    }
+
+    button {
+        margin-top: 1em;
     }
 
     p {
-        margin-bottom: 30px;
-        text-align: center;
-        margin-top: 0;
+        margin: 0 0 1em;
+        padding: 0 1.3em;
     }
 
-    .btn-primary {
-        margin-bottom: 15px;
+    .correct-flag,
+    .incorrect-flag {
+        width: 3.125em;
+        height: 3.125em;
+        margin-top: 0.625em;
     }
+
+    .cross.close-btn {
+        align-self: flex-end;
+        margin: 1.5em 1.5em 0.5em;
+    }
+
+    .header-no-image {
+        font-size: 1.5em;
+    }
+
+    .custom-contact-container {
+        button {
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 1.1em;
+        }
+
+        .sm-note {
+            margin-top: 3em;
+            margin-bottom: 0.5em;
+            font-size: 0.9em;
+        }
+
+        .sms-link {
+            font-size: 1.2em;
+            margin-left: 0.4em;
+        }
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0%);
+    }
+}
+
+.modal-background.fade:after {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(black, 0.4);
 }

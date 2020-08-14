@@ -5,6 +5,7 @@
 
 .site-logo {
     @extend %icons-shared;
+    @extend %mask-icons-shared;
     background-image: url("~img/site_logo.svg");
     background-position: center;
     height: 20px;
@@ -17,17 +18,9 @@
 
 .cog {
     @extend %icons-shared;
-    background-image: url("~img/cog.svg");
+    background-image: url("~img/cog_white.svg");
     height: 40px;
     width: 40px;
-
-    &.white {
-        background-image: url("~img/cog_white.svg");
-    }
-
-    &.active {
-        background-image: url("~img/cog_active.svg");
-    }
 }
 
 %bottom-nav-shared {
@@ -39,41 +32,46 @@
 
 .courses-icon {
     @extend %bottom-nav-shared;
-    background-image: url("~img/courses.svg");
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/courses.svg");
+    background-color: $gray-4;
 
     &.active {
-        background-image: url("~img/courses_active.svg");
+        background-color: $blue-1;
     }
 }
 
 .profile-icon {
     @extend %bottom-nav-shared;
-    background-image: url("~img/profile.svg");
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/profile.svg");
+    background-color: $gray-4;
 
     &.active {
-        background-image: url("~img/profile_active.svg");
+        background-color: $blue-1;
     }
 }
 
 .notifications-icon {
     @extend %bottom-nav-shared;
-    background-image: url("~img/notifications.svg");
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/notifications.svg");
+    background-color: $gray-4;
 
     &.active {
-        background-image: url("~img/notifications_active.svg");
+        background-color: $blue-1;
     }
 }
 
 .resources-icon {
     @extend %bottom-nav-shared;
-    background-image: url("../img/clipboard.svg");
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("../img/clipboard.svg");
+    background-color: $gray-4;
 
-    &.active {
-        background-image: url("../img/clipboard_active.svg");
-    }
-
+    &.active,
     &.title {
-        background-image: url("../img/clipboard_active_title.svg");
+        background-color: $blue-1;
     }
 }
 
@@ -98,12 +96,14 @@
 
 .cross {
     @extend %icons-shared;
-    background-image: url("~img/cross.svg");
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/cross.svg");
     height: 10px;
     width: 12px;
+    background: $white;
 
     &.gray {
-        background-image: url("../img/cross_gray.svg");
+        background: $gray-4;
         min-width: 1em;
         height: 1em;
     }
@@ -138,7 +138,7 @@
     background-size: 17px 12px;
     position: absolute;
     height: 30px;
-    width: 20px;
+    width: 30px;
     left: 0;
 
     &:hover {

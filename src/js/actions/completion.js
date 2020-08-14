@@ -1,7 +1,7 @@
 /* Completion module
  * The access point for interface components to set and query completion
  * of content items.
- * All interface methods should be syncronous.
+ * All interface methods should be synchronous.
  * Depends on the action_store module to persist information
  */
 
@@ -12,10 +12,14 @@ import { intersection } from "js/SetMethods";
 const courses = new Map();
 
 // read completion actions from idb to update in memory values
-window.addEventListener(ON_ACTION_CHANGE, initialiseCompletions);
+window.addEventListener(ON_ACTION_CHANGE, pullCompletionsIntoMemory);
+
+export const clearInMemoryCompletions = () => {
+    courses.clear();
+};
 
 // read completions from store and initialise
-export async function initialiseCompletions() {
+export async function pullCompletionsIntoMemory() {
     try {
         const actions = await getCompletions();
         actions.forEach((action) => {
@@ -27,11 +31,11 @@ export async function initialiseCompletions() {
     }
 }
 
-export function setComplete(course, lesson, section) {
+export function setComplete(course, lesson, section, extraDataObject = {}) {
     setCompleteInternal(course, lesson, section, new Date());
 
     // store the action ( via idb and api )
-    storeCompletion({ course, lesson, section });
+    storeCompletion({ course, lesson, section, ...extraDataObject });
 }
 
 function setCompleteInternal(course, lesson, section, date) {
@@ -87,25 +91,26 @@ export function isComplete(course, lesson, section) {
 }
 
 export const isTheCourseComplete = (courseSlug, lessonSlugs) => {
-    const numberOfCompleteLessons = countCompleteLessonsInCourse(courseSlug, lessonSlugs);
+    const numberOfCompleteLessons = getFinishedLessonSlugs(courseSlug, lessonSlugs).length;
     const numberOfLessonsInCourse = lessonSlugs.length;
     return numberOfCompleteLessons === numberOfLessonsInCourse;
 };
 
-export const countCompleteLessonsInCourse = (courseSlug, lessonSlugs) => {
+export const getFinishedLessonSlugs = (courseSlug, liveLessonSlugs) => {
     const courseMap = getCourseMap(courseSlug);
     const lessonsInCourseMap = new Set(courseMap.keys());
-    const liveLessons = new Set(lessonSlugs);
+    const liveLessons = new Set(liveLessonSlugs);
     const liveLessonsInCourseMap = intersection(lessonsInCourseMap, liveLessons);
 
-    let numCompletedLessons = 0;
+    const finishedLessons = [];
     for (const lessonSlug of liveLessonsInCourseMap) {
-        const lessonCompletion = courseMap.get(lessonSlug);
-        if (isLessonComplete(lessonCompletion)) {
-            numCompletedLessons += 1;
+        const lessonMap = courseMap.get(lessonSlug);
+        const isExamComplete = () => isComplete(courseSlug, lessonSlug, lessonSlug);
+        if (isLessonComplete(lessonMap) || isExamComplete()) {
+            finishedLessons.push(lessonSlug);
         }
     }
-    return numCompletedLessons;
+    return finishedLessons;
 };
 
 export const getLatestCompletionInCourse = (courseSlug) => {

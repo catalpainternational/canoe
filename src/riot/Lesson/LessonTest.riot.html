@@ -1,5 +1,5 @@
 <LessonTest>
-    <LessonFrame if="{state.cardIdx < state.cards.length}" id="test" extraStyleClasses="test">
+    <LessonFrame if="{state.cardIdx < state.cards.length}" id="test" extraStyleClasses="test modal-background">
         <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
         <TestSingleAnswer
             if="{state.isSingleAnswer}"
@@ -34,8 +34,7 @@
         if="{state.cardIdx === state.cards.length + 1}"
         course="{props.course}"
         title="{props.title}"
-    >
-    </LessonComplete>
+    ></LessonComplete>
 
     <script>
         import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
@@ -121,9 +120,9 @@
                 });
                 const testElement = this.$(".test");
                 if (showModal) {
-                    testElement.classList.add("showElement");
+                    testElement.classList.add("fade");
                 } else {
-                    testElement.classList.remove("showElement");
+                    testElement.classList.remove("fade");
                 }
             },
 
@@ -171,16 +170,6 @@
                 this.toggleModal(false);
                 window.scroll(0, 0);
                 this.state.selectedAnswer = {};
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
-            },
-
-            completePage() {
-                this.toggleModal(false);
-                setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
                 location.hash = getNextCardsUrl(
                     this.props.lesson.id,
                     this.props.module,

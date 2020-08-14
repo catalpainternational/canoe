@@ -3,16 +3,16 @@
         <div class="notifications-header">
             <div class="header-box">
                 <div class="left-block">
-                    <h3 translate>Latest notifications</h3>
+                    <h3>{ TRANSLATIONS.latest() }</h3>
                 </div>
                 <span class="notifications-image"></span>
             </div>
         </div>
 
         <div class="content-wrapper">
-            <p if="{state.notifications.length === 0}" translate>No notifications.</p>
+            <p if="{state.notifications.length === 0}">{ TRANSLATIONS.none() }</p>
 
-            <h5 if="{state.notifications.length > 0}" class="section-title" translate>Notifications</h5>
+            <h5 if="{state.notifications.length > 0}" class="section-title">{ TRANSLATIONS.notifications() }</h5>
 
             <ol class="notification-list">
                 <li
@@ -33,7 +33,7 @@
                             href="#{state.currentCourse && state.currentCourse.data.id}"
                         >
                             <span class="arrow-blue"></span>
-                            <p translate>Start lesson</p>
+                            <p>{ TRANSLATIONS.start() }</p>
                         </a>
                         <div>
                             <p>{showTimeAgoFromNow(notification.timestamp)}</p>
@@ -56,6 +56,13 @@
             state: {
                 notifications: [],
                 currentCourse: null
+            },
+
+            TRANSLATIONS: {
+                latest: () => gettext('Latest notifications'),
+                none: () => gettext('No notifications.'),
+                notifications: () => gettext('Notifications'),
+                start: () => gettext('Start lesson'),
             },
 
             async refreshNotifications() {

@@ -1,34 +1,5 @@
 <LessonPage>
-    <LessonObjective
-        if="{state.hash === objectivesModule}"
-        objective="{props.wagtailPage.objective}"
-        module="{objectivesModule}"
-        nextModule="{contentModule}"
-        title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage.data}"
-        course="{props.wagtailPage.course}"
-    ></LessonObjective>
-    <LessonContent
-        if="{state.hash === contentModule}"
-        lessonContent="{props.wagtailPage.content}"
-        module="{contentModule}"
-        nextModule="{testModule}"
-        title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage.data}"
-        course="{props.wagtailPage.course}"
-        isLessonPage="{true}"
-    ></LessonContent>
-    <LessonTest
-        if="{state.hash === testModule}"
-        test="{props.wagtailPage.test}"
-        module="{testModule}"
-        title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage.data}"
-        course="{props.wagtailPage.course}"
-    >
-    </LessonTest>
-
-    <div class="replace-this-with-lessonframe background-blue-1" if="{state.hash == null}">
+    <div class="replace-this-with-lessonframe background-blue-1">
         <div class="content-wrapper">
             {grabLessonHeaderReference()}
             <div class="lesson-header">
@@ -37,10 +8,10 @@
                 </div>
                 <div class="section-title">
                     <div class="unit">
-                        <h5>{ lessonTitleMessage() }</h5>
+                        <p class="truncate-if-long">{ lessonPageTitleMessage() }</p>
                     </div>
                 </div>
-                <h2>{props.wagtailPage.title}</h2>
+                <h2 id="lessonPageTitle">{props.wagtailPage.title}</h2>
             </div>
 
             <div class="duration">
@@ -55,25 +26,24 @@
                 <a
                     if="{props.wagtailPage.data.long_description && state.showLongDescription}"
                     onclick="{toggleLessonDescription}"
-                    translate
-                    >See less</a
+                    >{ TRANSLATIONS.less() }</a
                 >
                 <a
                     if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
                     onclick="{toggleLessonDescription}"
-                    translate
-                    >See more</a
+                    >{ TRANSLATIONS.more() }</a
                 >
             </div>
-            <h5 class="section-title" translate>Lesson Activities</h5>
+
+            <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
 
             <Card
                 title="1. {props.wagtailPage.objective.title}"
                 description="{props.wagtailPage.objective.aim}"
                 duration="{props.wagtailPage.objective.duration}"
-                link="{props.wagtailPage.id}/{objectivesModule}/1"
-                isCompleted="{isModuleComplete(objectivesModule)}"
-                type="cards"
+                link="{props.wagtailPage.id}/{OBJECTIVES}/1"
+                isCompleted="{isModuleComplete(OBJECTIVES)}"
+                type="activity"
                 showFooter="{true}"
             >
             </Card>
@@ -82,9 +52,9 @@
                 title="2. {props.wagtailPage.content.title}"
                 description="{props.wagtailPage.content.aim}"
                 duration="{props.wagtailPage.content.duration}"
-                link="{props.wagtailPage.id}/{contentModule}/1"
-                isCompleted="{isModuleComplete(contentModule)}"
-                type="video"
+                link="{props.wagtailPage.id}/{CONTENT}/1"
+                isCompleted="{isModuleComplete(CONTENT)}"
+                type="activity"
                 showFooter="{true}"
             >
             </Card>
@@ -93,49 +63,39 @@
                 title="3. {props.wagtailPage.test.title}"
                 description="{props.wagtailPage.test.aim}"
                 duration="{props.wagtailPage.test.duration}"
-                link="{props.wagtailPage.id}/{testModule}/1"
-                isCompleted="{isModuleComplete(testModule)}"
-                type="quiz"
+                link="{props.wagtailPage.id}/{TEST}/1"
+                isCompleted="{isModuleComplete(TEST)}"
+                type="activity"
                 showFooter="{true}"
             >
             </Card>
         </div>
     </div>
-
     <script>
-        import LessonObjective from "RiotTags/Lesson/LessonObjective.riot.html";
-        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
-        import LessonTest from "RiotTags/Lesson/LessonTest.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
 
         import { isComplete } from "Actions/completion";
 
-        const getHash = () => {
-            return location.hash.split("/");
-        };
-
         export default {
             state: {
-                hash: "",
                 showLongDescription: false,
                 header: null,
+                lessonPageTitle: null,
             },
 
-            objectivesModule: "objectives",
-            contentModule: "content",
-            testModule: "test",
-
             components: {
-                lessonobjective: LessonObjective,
-                lessoncontent: LessonContent,
-                lessontest: LessonTest,
                 card: Card,
             },
 
-            onBeforeMount(props, state) {
-                state.hash = getHash()[1];
-                window.addEventListener("hashchange", this.hashChanged);
+            TRANSLATIONS: {
+                lesson_activities: () => gettext("Lesson Activities"),
+                more: () => gettext("See more"),
+                less: () => gettext("See less"),
             },
+
+            OBJECTIVES: "objectives",
+            CONTENT: "content",
+            TEST: "test",
 
             onMounted(props, state) {
                 window.addEventListener("scroll", this.stickyHeader);
@@ -146,39 +106,8 @@
                 this.disableBlockedLessonModules();
             },
 
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
-            },
-
             onUnmounted() {
                 window.removeEventListener("scroll", this.stickyHeader);
-            },
-
-            lessonTitleMessage() {
-                // display the title of the lesson
-                return gettext("Lesson - %1", this.props.wagtailPage.course.title);
-            },
-
-            hashChanged() {
-                this.update({
-                    hash: getHash()[1],
-                });
-
-                if (this.state.hash) {
-                    window.removeEventListener("scroll", this.stickyHeader);
-                } else {
-                    window.addEventListener("scroll", this.stickyHeader);
-                }
-            },
-
-            durationOfLessonMessage() {
-                // the total duration of the lesson in minutes
-                return gettext(
-                    "%1 mins",
-                    this.props.wagtailPage.objective.duration +
-                        this.props.wagtailPage.content.duration +
-                        this.props.wagtailPage.test.duration
-                );
             },
 
             grabLessonHeaderReference() {
@@ -200,7 +129,18 @@
                 // With the fresh reference, `stickyHeader` always makes the
                 // the right header sticky. Problem solved.
                 this.state.header = document.getElementsByClassName("lesson-header")[0];
+                this.state.lessonPageTitle = this.$("#lessonPageTitle");
                 this.state.headerOffsetTop = this.state.header.offsetTop;
+            },
+
+            stickyHeader() {
+                if (window.pageYOffset > this.state.headerOffsetTop) {
+                    this.state.header.classList.add("sticky");
+                    this.state.lessonPageTitle.classList.add("truncate-if-long");
+                } else {
+                    this.state.header.classList.remove("sticky");
+                    this.state.lessonPageTitle.classList.remove("truncate-if-long");
+                }
             },
 
             backToCoursePage() {
@@ -221,14 +161,6 @@
                 );
             },
 
-            stickyHeader() {
-                if (window.pageYOffset > this.state.headerOffsetTop) {
-                    this.state.header.classList.add("sticky");
-                } else {
-                    this.state.header.classList.remove("sticky");
-                }
-            },
-
             disableBlockedLessonModules() {
                 const ongoingCards = [...document.getElementsByClassName("ongoing")];
 
@@ -243,6 +175,21 @@
                 for (const card of cardsToDisable) {
                     card.classList.add("disabled");
                 }
+            },
+
+            lessonPageTitleMessage() {
+                // display the title of the lesson
+                return gettext("Lesson - %1", this.props.wagtailPage.course.title);
+            },
+
+            durationOfLessonMessage() {
+                // the total duration of the lesson in minutes
+                return gettext(
+                    "%1 mins",
+                    this.props.wagtailPage.objective.duration +
+                        this.props.wagtailPage.content.duration +
+                        this.props.wagtailPage.test.duration
+                );
             },
         };
     </script>

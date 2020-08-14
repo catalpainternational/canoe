@@ -121,6 +121,12 @@ p.feedback-message {
     };
 }
 
+.truncate-if-long {
+    overflow: hidden;
+    white-space: nowrap;        
+    text-overflow: ellipsis;
+}
+
 .notifications-toggle p {
     font-family: "GalanoGrotesqueAlt";
     line-height: 16px;
@@ -199,6 +205,17 @@ ul, ol {
     @media only screen and (max-width: $tablet) {
         font-size: 1.2em;
         line-height: 1.4;
+    };
+}
+
+// lists within lists
+ul ul, ul ol, ol ul, ol ol {
+    line-height: 1.125;
+    margin-left: .625em;
+    font-size: .625em;
+
+    @media only screen and (max-width: $tablet) {
+        font-size: 0.8em;
     };
 }
 

@@ -27,6 +27,10 @@
             if="{props.lessonContent.cards[state.cardIdx].tag === 'list'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
         />
+        <PdfCard
+            if="{props.lessonContent.cards[state.cardIdx].tag === 'pdf'}"
+            card="{props.lessonContent.cards[state.cardIdx]}"
+        />
         <div if="{props.isLessonPage}" class="bottom-buttons">
             <div>
                 <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
@@ -36,17 +40,15 @@
                     class="btn-primary"
                     onclick="{nextContentPage}"
                     if="{state.cardIdx < props.lessonContent.cards.length - 1}"
-                    translate
                 >
-                    Next
+                    { TRANSLATIONS.next() }
                 </button>
                 <button
                     class="btn-primary"
                     onclick="{completeContentModal}"
                     if="{state.cardIdx === props.lessonContent.cards.length - 1}"
-                    translate
                 >
-                    Finish
+                    { TRANSLATIONS.finish() }
                 </button>
             </div>
         </div>
@@ -69,6 +71,7 @@
         import AudioCard from "RiotTags/Lesson/AudioCard.riot.html";
         import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
         import ListCard from "RiotTags/Lesson/ListCard.riot.html";
+        import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
 
         import { getLessonCardIdx, getNextCardsUrl, getPreviousCardsUrl } from "js/Routing";
         import { setComplete } from "Actions/completion";
@@ -88,10 +91,16 @@
                 lessonframe: LessonFrame,
                 videocard: VideoCard,
                 audiocard: AudioCard,
+                pdfcard: PdfCard,
+            },
+
+            TRANSLATIONS: {
+                next: () => gettext("Next"),
+                finish: () => gettext("Finish"),
             },
 
             onBeforeMount(props, state) {
-                state.cardIdx = props.isLessonPage ? getLessonCardIdx() : '0';
+                state.cardIdx = props.isLessonPage ? getLessonCardIdx() : "0";
                 window.addEventListener("hashchange", this.hashChanged);
             },
 

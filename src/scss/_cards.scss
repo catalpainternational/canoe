@@ -17,13 +17,13 @@
 
     .card-body {
         background-color: $white;
-        border-radius: 8px;
+        border-radius: 8px 8px 0 0;
         padding: 20px;
         display: grid;
 
         h4 {
             grid-row: 1;
-            grid-column: 1/6;
+            grid-column: 1 / 7;
         }
 
         h5 {
@@ -39,6 +39,18 @@
             grid-row: 2;
             grid-column: 1 / 7;
         }
+
+        &.no-footer {
+            border-radius: 8px;
+        }
+
+        @media only screen and (max-width: $sm-phone) {
+            padding: 15px;
+        }
+
+        @media only screen and (max-width: $xs-phone) {
+            padding: 10px;
+        }
     }
 
     .card-footer {
@@ -48,6 +60,11 @@
 
         @media only screen and (max-width: $sm-phone) {
             flex-wrap: wrap;
+            padding: 0px 15px 15px 15px;
+        }
+
+        @media only screen and (max-width: $xs-phone) {
+            padding: 0px 10px 10px 10px;
         }
     }
 
@@ -84,22 +101,31 @@
         p {
             font-size: 10px;
             margin-right: 10px;
+
+            @media only screen and (max-width: $sm-phone) {
+                margin-right: 0;
+            }
         }
     }
 
     .status.btn-start-lesson {
         border-radius: 10px;
-        max-width: 110px;
+        max-width: fit-content;
+        max-width: -moz-fit-content;
         border: 1px solid $blue-1;
         box-sizing: border-box;
         background-color: rgba(4, 120, 142, 0.07);
-        padding: 5px;
+        padding: 6px;
 
         p {
             font-size: 10px;
             line-height: 10px;
             font-weight: 600;
         }
+    }
+
+    .status.start-exam {
+        max-width: 100px;
     }
 
     .status.done {
@@ -125,11 +151,11 @@
     }
 
     .card-body:after {
-        content: '';
+        content: "";
         width: 0;
         height: 0;
         border-style: solid;
-        border-width: 0 50px 50px 0;
+        border-width: 0 35px 35px 0;
         right: 0;
         top: 0;
         border-color: transparent $green-2 transparent transparent;
@@ -143,8 +169,8 @@
         height: 10px;
         width: 4px;
         position: absolute;
-        right: 15px;
-        top: 8px;
+        right: 9px;
+        top: 5px;
         z-index: 1;
         border-bottom: 1.25px solid white;
         border-right: 1.25px solid white;

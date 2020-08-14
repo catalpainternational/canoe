@@ -2,14 +2,15 @@
     <div class="content-wrapper" if="{state.hash == null}">
         <div class="resources-bar">
             <span class="resources-icon title"></span>
-            <h3 translate>Resources</h3>
+            <h3>{ TRANSLATIONS.resources() }</h3>
         </div>
-        <SearchBar 
+        <SearchBar
             if="{state.articles.length > 0}"
-            searchString="{state.searchString}" 
+            searchString="{state.searchString}"
             submitSearch="{submitSearch}"
         ></SearchBar>
         <TagList
+            if="{state.listOfAllTags.length > 0}"
             tags="{state.listOfAllTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
@@ -23,15 +24,19 @@
                 showFooter="{false}"
             ></Card>
         </div>
-        <p if="{state.articles == 0}" translate>There are no resource articles yet. Check back soon!</p>
+        <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
+        <p if="{!state.isLoading && state.articles.length === 0}">
+            { TRANSLATIONS.noArticlesYet() }
+        </p>
     </div>
 
     <script>
         import TagList from "RiotTags/Components/TagList.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
-        import { getSearchQueryFromUrl, parseURLHash } from 'js/Routing';
+        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
         import { getResources } from "js/WagtailPagesAPI";
         import {
             getTagsFromPages,
@@ -45,16 +50,23 @@
                 searchString: "",
                 articles: [],
                 listOfAllTags: [],
-                articleContent: {},
+                isLoading: false,
             },
 
             components: {
                 taglist: TagList,
                 card: Card,
                 searchbar: SearchBar,
+                loadingdots: LoadingDots,
+            },
+
+            TRANSLATIONS: {
+                resources: () => gettext("Resources"),
+                noArticlesYet: () => gettext("There are no resources yet. Check back soon!"),
             },
 
             async onMounted() {
+                this.toggleLoadingMessage();
                 const articles = await getResources();
                 const listOfAllTags = getTagsFromPages(articles);
                 this.update({ articles, listOfAllTags, selectedTags: [] });
@@ -68,12 +80,17 @@
 
                 const filter = urlParams.getAll("filter");
                 if (filter.length > 0) {
-                    for (var i=0; i < filter.length; ++i) {
+                    for (var i = 0; i < filter.length; ++i) {
                         if (listOfAllTags.includes(filter[i])) {
                             this.onTagClick(decodeURIComponent(filter[i]), true);
                         }
                     }
                 }
+                this.toggleLoadingMessage();
+            },
+
+            toggleLoadingMessage() {
+                this.update({ isLoading: !this.state.isLoading });
             },
 
             generateUrlParams() {
@@ -83,23 +100,22 @@
 
             onTagClick(clickedTag, isFromUrl) {
                 const urlParams = this.generateUrlParams();
-                
+
                 if (this.state.selectedTags.includes(clickedTag)) {
                     const tagIndex = this.state.selectedTags.indexOf(clickedTag);
                     this.state.selectedTags.splice(tagIndex, 1);
                     urlParams.delete("filter");
-                    
+
                     if (this.state.selectedTags.length > 0) {
-                        for (var i=0; i < this.state.selectedTags.length; ++i ) {
-                            const encodedTag = encodeURIComponent(this.state.selectedTags[i].toLowerCase());
-                            urlParams.append("filter", encodedTag);
+                        for (var i = 0; i < this.state.selectedTags.length; ++i) {
+                            const pendingTag = this.state.selectedTags[i].toLowerCase();
+                            urlParams.append("filter", pendingTag);
                         }
                     }
                     this.replaceUrlQuery(urlParams);
-
                 } else {
                     this.state.selectedTags.push(clickedTag);
-                    urlParams.append("filter", encodeURIComponent(clickedTag));
+                    urlParams.append("filter", clickedTag);
                     !isFromUrl && this.replaceUrlQuery(urlParams);
                     this.update();
                 }
@@ -108,23 +124,24 @@
 
             submitSearch(searchString) {
                 const urlParams = this.generateUrlParams();
-                const encodedQuery = encodeURIComponent(searchString);
-                
-                urlParams.set("qs", encodedQuery);
+
+                urlParams.set("qs", searchString);
                 this.replaceUrlQuery(urlParams);
                 this.update({ searchString });
             },
 
             isResourceArticleVisible(article) {
+                const { is_visible_to_guests } = article;
                 const { searchString } = this.state;
-                const isQueryMatch = searchString.length < 3 ? 'true' : doesQueryMatchSearchContent(
+
+                const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,
                     article.title,
                     article.description
                 );
 
                 const { selectedTags } = this.state;
-                const lowercaseArticleTags = article.tags.map(tag => tag.toLowerCase());
+                const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
                 const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
 
                 const showArticle = isQueryMatch && isTagMatch;
@@ -132,8 +149,8 @@
             },
 
             replaceUrlQuery(urlParams) {
-                window.history.replaceState({}, '', `${location.pathname}#resources?${urlParams}`);
-            }
+                window.history.replaceState({}, "", `${location.pathname}#resources?${urlParams}`);
+            },
         };
     </script>
 </Resources>

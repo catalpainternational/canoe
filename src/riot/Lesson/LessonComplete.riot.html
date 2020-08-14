@@ -1,31 +1,37 @@
 <LessonComplete>
     <LessonFrame>
-        <div class="confetti background"></div>
+        <div
+            class="confetti background"
+        ></div>
         <template if="{state.lessonSlugs.length}">
             <div class="congratulations-container">
-                <div class="report-card overlay"></div>
+                <div
+                    class="report-card overlay"
+                ></div>
                 <template if="{!isCourseComplete()}">
                     <div>
-                        <h2 translate>Congratulations!</h2>
+                        <h2>{ TRANSLATIONS.congrats() }</h2>
                         <p>{ lessonCompleteMessage() }</p>
                     </div>
-                    <button class="btn-primary" onclick="{goToCourseOverview}" translate>
-                        Next Lesson
+                    <button class="btn-primary" onclick="{goToCourseOverview}">
+                        { TRANSLATIONS.next() }
                     </button>
                 </template>
                 <template if="{isCourseComplete()}">
                     <div>
-                        <h2 translate>Amazing work!</h2>
-                        <h3 translate>You've completed the course</h3>
-                        <p translate>
-                            You are eligible to receive a printed certificate for this course.
-                        </p>
+                        <h2>{ TRANSLATIONS.good() }</h2>
+                        <p>{ lessonCompleteMessage() }</p>
+                        <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
                     </div>
-                    <button class="btn-primary" onclick="{goHome}" translate>
-                        Back to Courses
+                    <button
+                        if="{ courseHasExam() }"
+                        class="btn-primary"
+                        onclick="{goToCourseExam}"
+                    >
+                        { TRANSLATIONS.exam() }
                     </button>
-                    <button class="btn-secondary" onclick="{goToResources}" translate>
-                        View Resources
+                    <button class="btn-secondary" onclick="{goToCourseOverview}">
+                        { TRANSLATIONS.course() }
                     </button>
                 </template>
             </div>
@@ -34,7 +40,7 @@
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { getACoursesLessons } from "js/WagtailPagesAPI";
-        import { countCompleteLessonsInCourse } from "js/LearningStatistics";
+        import { countFinishedLessonsAmongSlugs } from "js/CompletionInterface";
 
         export default {
             components: {
@@ -43,6 +49,14 @@
 
             state: {
                 lessonSlugs: [],
+            },
+
+            TRANSLATIONS: {
+                congrats: () => gettext('Congratulations!'),
+                next: () => gettext('Next Lesson'),
+                good: () => gettext('Good job!'),
+                exam: () => gettext('Take Exam'),
+                course: () => gettext('Back to Course'),
             },
 
             onMounted() {
@@ -55,10 +69,17 @@
                 this.update({ lessonSlugs });
             },
 
+            courseHasExam() {
+                const { course } = this.props;
+                return course.has_exam;
+            },
+
             isCourseComplete() {
+                const { course } = this.props;
+                const { lessonSlugs } = this.state;
                 return (
-                    countCompleteLessonsInCourse(this.props.course.slug, this.state.lessonSlugs) ===
-                    this.props.course.lessons_count
+                    countFinishedLessonsAmongSlugs(course.slug, lessonSlugs) ===
+                    course.lessons_count
                 );
             },
 
@@ -66,17 +87,21 @@
                 location.hash = "#" + this.props.course.id;
             },
 
-            goHome() {
-                location.hash = "#";
-            },
-
-            goToResources() {
-                location.hash = "#resources";
+            goToCourseExam() {
+                location.hash = `#${this.props.course.id}/exam/0`;
             },
 
             lessonCompleteMessage() {
                 // message on completion of a lesson %1 is replaced by the lesson title
-                return gettext('You just completed the lesson, "%1"', this.props.title);
+                return gettext('You just completed the lesson "%1"', this.props.title);
+            },
+
+            takeCourseExamMessage() {
+                // message on completion of lesson and prompt to take course exam
+                return gettext(
+                    'Take the exam now to complete the course "%1"',
+                    this.props.course.title
+                );
             },
         };
     </script>
