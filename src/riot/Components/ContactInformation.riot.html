@@ -4,18 +4,21 @@
         <button class="btn-primary" onclick="{sendWhatsAppMessage}">
             { TRANSLATIONS.whatsapp() }
         </button>
-        <p class="sm-note">{ TRANSLATIONS.noWhatsapp() }</p>
-        <button class="btn-secondary" onclick="{sendSmsMessage}">{ TRANSLATIONS.sms() }</button>
+        <p class="sm-note">
+            { TRANSLATIONS.noWhatsapp() }
+            <a class="sms-link" onclick="{sendSmsMessage}">{ TRANSLATIONS.sms() }</a>
+        </p>
     </div>
 
     <script>
-        const phoneNumber = "19788675309";
+        import { getContactNumber } from "js/AuthenticationUtilities";
+        const phoneNumber = getContactNumber();
 
         export default {
             TRANSLATIONS: {
                 sendMessage: () => gettext("Send us a message and we'll help you log in"),
                 whatsapp: () => gettext("Send WhatsApp"),
-                noWhatsapp: () => gettext("Don't have WhatsApp?"),
+                noWhatsapp: () => gettext("No WhatsApp?"),
                 sms: () => gettext("Send SMS"),
                 help: () => gettext("I need help accessing my account"),
             },
