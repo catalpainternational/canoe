@@ -296,6 +296,9 @@ msgstr "Teste"
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
 msgstr "Obrigado ba ita-nia komentáriu. Ita-nia opiniaun importante mai ami. Ami sei servisu maka'as atu hadia ita-nia esperensia."
 
+msgid "There are no courses yet. Check back soon!"
+msgstr "Seidauk iha kursu. Favor cek fila fali iha tempu badak!"
+
 msgid "There are no resources yet. Check back soon!"
 msgstr "Seidauk iha rekursu. Favor cek fila fali pajina ne’e iha tempu badak!"
 
