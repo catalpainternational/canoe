@@ -622,6 +622,12 @@ LessonFeedback {
         flex-flow: row wrap;
         justify-content: space-evenly;
         margin: 2em 0;
+
+        @media only screen and (max-width: $sm-phone) {
+            flex-flow: column wrap;
+            align-items: center;
+            margin: 1em 0;
+        }
     }
 
     .feedback-icon {
@@ -715,7 +721,15 @@ LessonFeedback {
         }
 
         button.feedback {
-            margin: 0.25em 1em;
+            margin: 0.5em;
+
+            &:first-of-type {
+                margin-top: 0;
+            }
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
         }
     }
 }
