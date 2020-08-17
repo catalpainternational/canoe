@@ -35,6 +35,7 @@ module.exports = (env) => {
         return prev;
     }, {});
     processEnvironment["process.env.SITE_NAME"] = JSON.stringify(projectConfiguration.SITE_NAME);
+    processEnvironment["process.env.HELP_PHONE"] = JSON.stringify(projectConfiguration.HELP_PHONE);
 
     const baseConfig = {
         context: __dirname,

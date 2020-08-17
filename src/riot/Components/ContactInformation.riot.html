@@ -9,8 +9,7 @@
     </div>
 
     <script>
-        const phoneNumber = "19788675309";
-
+        const phoneNumber = process.env.HELP_PHONE && `${process.env.HELP_PHONE}`;
         export default {
             TRANSLATIONS: {
                 sendMessage: () => gettext("Send us a message and we'll help you log in"),
