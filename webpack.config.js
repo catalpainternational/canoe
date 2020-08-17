@@ -147,7 +147,6 @@ module.exports = (env) => {
                 description: projectConfiguration.SITE_DESCRIPTION,
                 background_color: projectConfiguration.BACKGROUND_COLOR,
                 theme_color: projectConfiguration.BACKGROUND_COLOR,
-                contact_number: projectConfiguration.CONTACT_NUMBER,
                 start_url: "/",
                 icons: [
                     {
