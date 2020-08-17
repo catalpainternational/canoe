@@ -120,7 +120,3 @@ export const getUserId = () => {
 export const getUserGroups = () => {
     return localStorage.getItem(USER_GROUPS_STORAGE_KEY);
 };
-
-export const getContactNumber = () => {
-    return process.env.CONTACT_NUMBER;
-};
