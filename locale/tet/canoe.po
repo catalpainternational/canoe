@@ -94,9 +94,6 @@ msgstr "Kursu"
 msgid "Course exam"
 msgstr "Ezama ba kursu"
 
-msgid "Don't have WhatsApp?"
-msgstr "Laiha WhatsApp?"
-
 msgid "Download this PDF to your device"
 msgstr "Download PDF ne’e ba ita nian telemovel"
 
@@ -201,6 +198,9 @@ msgstr "La iha notifikasaun. "
 
 msgid "No thanks"
 msgstr "Lae, Obrigado. "
+
+msgid "No WhatsApp?"
+msgstr "Laiha WhatsApp?"
 
 msgid "Not quite!"
 msgstr "Resposta ne'e ladun lo'os ida!"

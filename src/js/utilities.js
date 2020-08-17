@@ -75,3 +75,7 @@ export const debounce = (func, waitInMilliseconds) => {
         timeout = setTimeout(later, waitInMilliseconds);
     };
 };
+
+export const getContactNumber = () => {
+    return process.env.CONTACT_NUMBER;
+};
