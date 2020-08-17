@@ -37,16 +37,16 @@
             async prepDataForAppLaunch() {
                 if (!isGuestUser()) {
                     await updateIdb();
-                    this.state.pagesPoller = window.setInterval(
-                        this.pollForWebpageChanges,
-                        EVERY_FIVE_MINUTES
-                    );
+                    this.state.completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
                 }
 
                 await this.pullIdbDataIntoMemory();
 
                 new SiteDownloader().requestTheSitesPagesAndImages();
-                this.state.completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
+                this.state.pagesPoller = window.setInterval(
+                    this.pollForWebpageChanges,
+                    EVERY_FIVE_MINUTES
+                );
 
                 storeSiteDownloadedIs(true);
                 dispatchLoggedInEvent();

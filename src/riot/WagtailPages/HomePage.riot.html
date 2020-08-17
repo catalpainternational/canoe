@@ -19,7 +19,7 @@
     </div>
     <div class="content-wrapper">
         <TagList
-            if="{state.listOfTags.length > 0}"
+            if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0}"
             tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
@@ -27,7 +27,7 @@
         <div
             class="course"
             each="{course in state.sortedListOfCourses}"
-            if="{isCourseVisible(course)}"
+            if="{doesCourseHaveTag(course)}"
         >
             <Card
                 title="{course.data.title}"
@@ -38,6 +38,9 @@
                 type="course"
             ></Card>
         </div>
+        <p if="{!state.isLoading && state.sortedListOfCourses.length === 0}">
+            { TRANSLATIONS.noCourses() }
+        </p>
     </div>
 
     <script>
@@ -63,6 +66,7 @@
                 selectedTags: [],
                 listOfTags: [],
                 sortedListOfCourses: [],
+                isLoading: false,
             },
 
             components: {
@@ -72,18 +76,27 @@
                 guestbanner: GuestBanner,
             },
 
+            TRANSLATIONS: {
+                noCourses: () => gettext("There are no courses yet. Check back soon!"),
+            },
+
             onMounted(props, state) {
+                this.update({ isLoading: true });
                 const unsortedCourses = props.wagtailPage.courses.filter(
                     (course) => course.lessons.length
                 );
 
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
-                const sortedListOfCourses = this.sortCourses(unsortedCourses);
+                const visibleCourses = isGuestUser()
+                    ? unsortedCourses.filter((course) => course.is_visible_to_guests)
+                    : unsortedCourses;
+                const sortedListOfCourses = this.sortCourses(visibleCourses);
                 this.update({
                     currentCourse,
                     listOfTags,
                     sortedListOfCourses,
+                    isLoading: false,
                 });
             },
 
@@ -160,16 +173,12 @@
                 this.update();
             },
 
-            isCourseVisible(course) {
-                const { tags, is_visible_to_guests } = course;
+            doesCourseHaveTag(course) {
+                const { tags } = course;
                 const { selectedTags } = this.state;
-
                 const lowercaseCourseTags = tags.map((tag) => tag.toLowerCase());
-                const doesUserHavePermission = isGuestUser() ? is_visible_to_guests : true;
-                return (
-                    doesUserHavePermission &&
-                    doPageTagsMatchSelections(lowercaseCourseTags, selectedTags)
-                );
+
+                return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
             },
 
             showBanner() {

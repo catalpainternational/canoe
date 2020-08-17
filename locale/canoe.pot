@@ -7,7 +7,7 @@ msgstr ""
 
 #. the number of lessons completed in a course
 #: src/riot/WagtailPages/CoursePage.riot.html:148
-#: src/riot/WagtailPages/HomePage.riot.html:118
+#: src/riot/WagtailPages/HomePage.riot.html:131
 msgid "%1 lesson complete"
 msgid_plural "%1 lessons complete"
 msgstr[0] ""
@@ -34,7 +34,7 @@ msgid "%1 of %2"
 msgstr ""
 
 #. displays how many lessons of the total in a course have been completed
-#: src/riot/Screens/Profile.riot.html:144
+#: src/riot/Screens/Profile.riot.html:146
 msgid "%1 out of %2 completed"
 msgstr ""
 
@@ -118,10 +118,6 @@ msgstr ""
 msgid "Course exam"
 msgstr ""
 
-#: src/riot/Components/ContactInformation.riot.html:18
-msgid "Don't have WhatsApp?"
-msgstr ""
-
 #: src/riot/Lesson/PdfCard.riot.html:11
 msgid "Download this PDF to your device"
 msgstr ""
@@ -158,12 +154,12 @@ msgid "Great job!"
 msgstr ""
 
 #. displays percentage of completed lessons in all courses combined
-#: src/riot/Screens/Profile.riot.html:153
+#: src/riot/Screens/Profile.riot.html:155
 msgid "Great work %1! You have completed %2% of your overall coursework"
 msgstr ""
 
 #. Greet the user with their username
-#: src/riot/WagtailPages/HomePage.riot.html:131
+#: src/riot/WagtailPages/HomePage.riot.html:144
 msgid "Hi %1"
 msgstr ""
 
@@ -175,7 +171,7 @@ msgstr ""
 msgid "Highest score"
 msgstr ""
 
-#: src/riot/Components/ContactInformation.riot.html:20
+#: src/riot/Components/ContactInformation.riot.html:23
 msgid "I need help accessing my account"
 msgstr ""
 
@@ -199,7 +195,7 @@ msgstr ""
 msgid "Latest notifications"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:88
+#: src/riot/Screens/Profile.riot.html:86
 msgid "Learning statistics"
 msgstr ""
 
@@ -212,11 +208,11 @@ msgstr ""
 msgid "Lesson Activities"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:89
+#: src/riot/Screens/Profile.riot.html:87
 msgid "lessons completed so far"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:90
+#: src/riot/Screens/Profile.riot.html:88
 msgid "lessons remaining to finish your study"
 msgstr ""
 
@@ -267,6 +263,10 @@ msgstr ""
 msgid "No thanks"
 msgstr ""
 
+#: src/riot/Components/ContactInformation.riot.html:21
+msgid "No WhatsApp?"
+msgstr ""
+
 #: src/riot/Lesson/ExamResults.riot.html:55
 msgid "Not quite!"
 msgstr ""
@@ -285,7 +285,7 @@ msgstr ""
 msgid "Oops"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:86
+#: src/riot/Screens/Profile.riot.html:84
 msgid "Overall progress"
 msgstr ""
 
@@ -293,7 +293,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: src/riot/Screens/Profile.riot.html:87
+#: src/riot/Screens/Profile.riot.html:85
 msgid "Progress by course"
 msgstr ""
 
@@ -302,7 +302,7 @@ msgstr ""
 msgid "Read the question more carefully!"
 msgstr ""
 
-#: src/riot/Screens/Resources.riot.html:65
+#: src/riot/Screens/Resources.riot.html:64
 msgid "Resources"
 msgstr ""
 
@@ -322,7 +322,7 @@ msgstr ""
 msgid "See more"
 msgstr ""
 
-#: src/riot/Components/ContactInformation.riot.html:19
+#: src/riot/Components/ContactInformation.riot.html:22
 msgid "Send SMS"
 msgstr ""
 
@@ -330,11 +330,11 @@ msgstr ""
 msgid "send us a message"
 msgstr ""
 
-#: src/riot/Components/ContactInformation.riot.html:16
+#: src/riot/Components/ContactInformation.riot.html:19
 msgid "Send us a message and we'll help you log in"
 msgstr ""
 
-#: src/riot/Components/ContactInformation.riot.html:17
+#: src/riot/Components/ContactInformation.riot.html:20
 msgid "Send WhatsApp"
 msgstr ""
 
@@ -396,7 +396,11 @@ msgstr ""
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
 msgstr ""
 
-#: src/riot/Screens/Resources.riot.html:66
+#: src/riot/WagtailPages/HomePage.riot.html:80
+msgid "There are no courses yet. Check back soon!"
+msgstr ""
+
+#: src/riot/Screens/Resources.riot.html:65
 msgid "There are no resources yet. Check back soon!"
 msgstr ""
 
@@ -460,7 +464,7 @@ msgstr ""
 msgid "You just completed the lesson \"%1\""
 msgstr ""
 
-#: src/riot/WagtailPages/HomePage.riot.html:108
+#: src/riot/WagtailPages/HomePage.riot.html:121
 msgid "You only have %1 lesson left to finish %2."
 msgid_plural "You only have %1 lessons left to finish %2."
 msgstr[0] ""

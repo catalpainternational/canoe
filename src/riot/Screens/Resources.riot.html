@@ -10,7 +10,7 @@
             submitSearch="{submitSearch}"
         ></SearchBar>
         <TagList
-            if="{state.listOfAllTags.length > 0}"
+            if="{state.listOfAllTags.length > 0 && state.articles.length > 0}"
             tags="{state.listOfAllTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
@@ -69,7 +69,11 @@
                 this.toggleLoadingMessage();
                 const articles = await getResources();
                 const listOfAllTags = getTagsFromPages(articles);
-                this.update({ articles, listOfAllTags, selectedTags: [] });
+                this.update({
+                    articles,
+                    listOfAllTags,
+                    selectedTags: [],
+                });
 
                 const urlParams = this.generateUrlParams();
 
@@ -131,8 +135,7 @@
             },
 
             isResourceArticleVisible(article) {
-                const { is_visible_to_guests } = article;
-                const { searchString } = this.state;
+                const { searchString, selectedTags } = this.state;
 
                 const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,
@@ -140,7 +143,6 @@
                     article.description
                 );
 
-                const { selectedTags } = this.state;
                 const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
                 const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
 

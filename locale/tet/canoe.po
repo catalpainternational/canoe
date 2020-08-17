@@ -94,9 +94,6 @@ msgstr "Kursu"
 msgid "Course exam"
 msgstr "Ezama ba kursu"
 
-msgid "Don't have WhatsApp?"
-msgstr "Laiha WhatsApp?"
-
 msgid "Download this PDF to your device"
 msgstr "Download PDF ne’e ba ita nian telemovel"
 
@@ -202,6 +199,9 @@ msgstr "La iha notifikasaun. "
 msgid "No thanks"
 msgstr "Lae, Obrigado. "
 
+msgid "No WhatsApp?"
+msgstr "Laiha WhatsApp?"
+
 msgid "Not quite!"
 msgstr "Resposta ne'e ladun lo'os ida!"
 
@@ -295,6 +295,9 @@ msgstr "Teste"
 
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
 msgstr "Obrigado ba ita-nia komentáriu. Ita-nia opiniaun importante mai ami. Ami sei servisu maka'as atu hadia ita-nia esperensia."
+
+msgid "There are no courses yet. Check back soon!"
+msgstr "Seidauk iha kursu. Favor cek fila fali iha tempu badak!"
 
 msgid "There are no resources yet. Check back soon!"
 msgstr "Seidauk iha rekursu. Favor cek fila fali pajina ne’e iha tempu badak!"
