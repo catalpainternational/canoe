@@ -1,13 +1,9 @@
 <LessonComplete>
     <LessonFrame>
-        <div
-            class="confetti background"
-        ></div>
+        <div class="confetti background"></div>
         <template if="{state.lessonSlugs.length}">
             <div class="congratulations-container">
-                <div
-                    class="report-card overlay"
-                ></div>
+                <div class="report-card overlay"></div>
                 <template if="{!isCourseComplete()}">
                     <div>
                         <h2>{ TRANSLATIONS.congrats() }</h2>
@@ -23,11 +19,7 @@
                         <p>{ lessonCompleteMessage() }</p>
                         <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
                     </div>
-                    <button
-                        if="{ courseHasExam() }"
-                        class="btn-primary"
-                        onclick="{goToCourseExam}"
-                    >
+                    <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
                         { TRANSLATIONS.exam() }
                     </button>
                     <button class="btn-secondary" onclick="{goToCourseOverview}">
@@ -52,11 +44,11 @@
             },
 
             TRANSLATIONS: {
-                congrats: () => gettext('Congratulations!'),
-                next: () => gettext('Next Lesson'),
-                good: () => gettext('Good job!'),
-                exam: () => gettext('Take Exam'),
-                course: () => gettext('Back to Course'),
+                congrats: () => gettext("Congratulations!"),
+                next: () => gettext("Next Lesson"),
+                good: () => gettext("Good job!"),
+                exam: () => gettext("Take Exam"),
+                course: () => gettext("Back to Course"),
             },
 
             onMounted() {
@@ -79,12 +71,12 @@
                 const { lessonSlugs } = this.state;
                 return (
                     countFinishedLessonsAmongSlugs(course.slug, lessonSlugs) ===
-                    course.lessons_count
+                    course.lessons_count - Number(course.has_exam)
                 );
             },
 
             goToCourseOverview() {
-                location.hash = "#" + this.props.course.id;
+                location.hash = `#${this.props.course.id}`;
             },
 
             goToCourseExam() {
