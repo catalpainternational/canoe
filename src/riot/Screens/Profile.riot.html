@@ -12,6 +12,7 @@
                 <span class="report-card"></span>
             </div>
         </div>
+
         <div class="content-wrapper">
             <h5 class="section-title">{ TRANSLATIONS.byCourse() }</h5>
             <ul class="course-progress-list">
@@ -29,7 +30,7 @@
                             <progress
                                 if="{countCompleteLessonsIn(course) > 0}"
                                 value="{countCompleteLessonsIn(course)}"
-                                max="{course.lessons.length}"
+                                max="{course.data.lessons_count}"
                             ></progress>
                         </div>
                     </a>
@@ -49,7 +50,7 @@
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
                         <span class="road-sign"></span>
-                        <h3>{getNumberOfLessonsLeft()}</h3>
+                        <h3>{getNumberOfLessonsLeftOnSite()}</h3>
                         <h5>{ TRANSLATIONS.lessonsLeft() }</h5>
                     </div>
                 </div>
@@ -61,9 +62,7 @@
 
         import { getHomePage } from "js/WagtailPagesAPI";
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { getAllLessons } from "js/utilities";
         import {
-            countCompleteLessonsInCourse,
             countCompleteLessonsInCourses,
             getLatestCompletion,
             isCourseInProgress,
@@ -71,7 +70,6 @@
 
         export default {
             state: {
-                manifest: null,
                 courses: [],
                 currentCourse: null,
             },
@@ -111,13 +109,23 @@
                 return countCompleteLessonsInCourses([course]);
             },
 
-            getNumberOfLessonsLeft() {
-                return getAllLessons(this.state.courses).length - this.countCompleteLessonsTotal();
+            countSitesLessonsAndExams(courses) {
+                return courses.reduce(
+                    (totalLessons, currentCourse) =>
+                        (totalLessons += currentCourse.data.lessons_count),
+                    0
+                );
+            },
+
+            getNumberOfLessonsLeftOnSite() {
+                const { courses } = this.state;
+                return this.countSitesLessonsAndExams(courses) - this.countCompleteLessonsTotal();
             },
 
             getPercentOfLessonsCompleted() {
                 const percentage =
-                    (this.countCompleteLessonsTotal() / getAllLessons(this.state.courses).length) *
+                    (this.countCompleteLessonsTotal() /
+                        this.countSitesLessonsAndExams(this.state.courses)) *
                     100;
                 return Math.round(percentage) || 0;
             },
@@ -146,7 +154,7 @@
                 return gettext(
                     "%1 out of %2 completed",
                     this.countCompleteLessonsIn(course),
-                    course.lessons.length
+                    course.data.lessons_count
                 );
             },
 
