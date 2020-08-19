@@ -31,7 +31,7 @@ function setLocale(locale) {
     i18n.setLocale(locale);
 }
 
-function checkIfLanguageChanged() {
+function updateLocaleIfLanguageChanged() {
     const newLanguageState = getLanguage();
     if (newLanguageState !== previousLanguageState) {
         setLocale(newLanguageState);
