@@ -1,0 +1,17 @@
+Logos {
+    text-align: center;
+    justify-content: space-around;
+    display: flex;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    max-width: 400px;
+
+    .logo-b {
+        background-image: url("~img/logo.svg");
+        width: 60px;
+        height: 50px;
+        display: inline-block;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
