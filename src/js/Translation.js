@@ -43,4 +43,4 @@ const userLanguage = getLanguage();
 setLocale(userLanguage);
 
 let previousLanguageState = userLanguage;
-const unsubscribe = subscribeToStore(checkIfLanguageChanged);
+const unsubscribe = subscribeToStore(updateLocaleIfLanguageChanged);
