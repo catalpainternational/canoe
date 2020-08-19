@@ -220,14 +220,6 @@
     width: 25px;
 }
 
-.profile-background-image {
-    @extend %icons-shared;
-    background-image: url("~img/profile_image.svg");
-    background-position: center;
-    height: 185px;
-    width: 280px;
-}
-
 .home-background-image {
     @extend %icons-shared;
     background-image: url("~img/home_header_figure.svg");
