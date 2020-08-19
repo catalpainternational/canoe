@@ -7,7 +7,7 @@ let currentServiceWorkerState = getServiceWorkerState();
 
 subscribeToStore(() => {
     const newServiceWorkerState = getServiceWorkerState();
-    if (newServiceWorkerState === currentServiceWorkerState.serviceWorkerState) {
+    if (newServiceWorkerState === currentServiceWorkerState) {
         return;
     }
 
