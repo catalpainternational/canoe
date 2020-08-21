@@ -12,14 +12,6 @@ export const alertAppIsOnline = () => {
     dispatchToastEvent("You are online.");
 };
 
-export const getAllLessons = (courses) => {
-    let lessons = [];
-    for (const course of courses) {
-        lessons = lessons.concat(course.lessons);
-    }
-    return lessons;
-};
-
 export const getLastWorkedOnCourse = async () => {
     const homePage = await getHomePage();
     const courses = homePage.courses;
