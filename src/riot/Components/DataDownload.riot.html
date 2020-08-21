@@ -1,7 +1,7 @@
 <DataDownload>
     <script>
         import { storeSiteDownloadedIs } from "ReduxImpl/Store";
-        import { SiteDownloader } from "js/SiteDownloader";
+        import SiteDownloader from "js/SiteDownloader";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
 
@@ -42,14 +42,14 @@
 
                 await this.pullIdbDataIntoMemory();
 
-                new SiteDownloader().requestTheSitesPagesAndImages();
                 this.state.pagesPoller = window.setInterval(
-                    this.pollForWebpageChanges,
+                    () => new SiteDownloader.requestTheSitesPagesAndImages(),
                     EVERY_FIVE_MINUTES
                 );
 
                 storeSiteDownloadedIs(true);
                 dispatchLoggedInEvent();
+                new SiteDownloader().requestTheSitesPagesAndImages();
             },
 
             async clearAppData() {
