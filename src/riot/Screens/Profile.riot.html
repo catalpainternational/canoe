@@ -12,6 +12,7 @@
                 <span class="report-card"></span>
             </div>
         </div>
+
         <div class="content-wrapper">
             <h5 class="section-title">{ TRANSLATIONS.byCourse() }</h5>
             <ul class="course-progress-list">
@@ -27,9 +28,9 @@
                                 { courseLessonsCompletedMessage(course) }
                             </p>
                             <progress
-                                if="{countCompleteLessonsIn(course) > 0}"
-                                value="{countCompleteLessonsIn(course)}"
-                                max="{course.lessons.length}"
+                                if="{countFinishedLessonsAndExamsIn(course) > 0}"
+                                value="{countFinishedLessonsAndExamsIn(course)}"
+                                max="{course.data.lessons_count}"
                             ></progress>
                         </div>
                     </a>
@@ -41,7 +42,7 @@
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
                         <span class="checkmark-circle-blue"></span>
-                        <h3>{countCompleteLessonsTotal()}</h3>
+                        <h3>{countFinishedLessonsAndExams()}</h3>
                         <h5>{ TRANSLATIONS.lessonsCompleted() }</h5>
                     </div>
                 </div>
@@ -61,9 +62,7 @@
 
         import { getHomePage } from "js/WagtailPagesAPI";
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { getAllLessons } from "js/utilities";
         import {
-            countCompleteLessonsInCourse,
             countCompleteLessonsInCourses,
             getLatestCompletion,
             isCourseInProgress,
@@ -71,7 +70,6 @@
 
         export default {
             state: {
-                manifest: null,
                 courses: [],
                 currentCourse: null,
             },
@@ -88,38 +86,8 @@
                 lessonsLeft: () => gettext("lessons remaining to finish your study"),
             },
 
-            isCourseInProgress(aCourse) {
-                return isCourseInProgress(aCourse);
-            },
-
-            getCurrentCourse(courses) {
-                const latestCompletion = getLatestCompletion(courses);
-                if (latestCompletion === null) {
-                    return null;
-                }
-                const lastWorkedOnCourse = courses.find(
-                    (course) => course.data.slug === latestCompletion.courseSlug
-                );
-                return lastWorkedOnCourse;
-            },
-
-            countCompleteLessonsTotal() {
-                return countCompleteLessonsInCourses(this.state.courses);
-            },
-
-            countCompleteLessonsIn(course) {
-                return countCompleteLessonsInCourses([course]);
-            },
-
-            getNumberOfLessonsLeft() {
-                return getAllLessons(this.state.courses).length - this.countCompleteLessonsTotal();
-            },
-
-            getPercentOfLessonsCompleted() {
-                const percentage =
-                    (this.countCompleteLessonsTotal() / getAllLessons(this.state.courses).length) *
-                    100;
-                return Math.round(percentage) || 0;
+            onMounted() {
+                this.renderProfilePage();
             },
 
             async renderProfilePage() {
@@ -137,16 +105,56 @@
                 });
             },
 
-            onMounted() {
-                this.renderProfilePage();
+            isCourseInProgress(aCourse) {
+                return isCourseInProgress(aCourse);
+            },
+
+            getCurrentCourse(courses) {
+                const latestCompletion = getLatestCompletion(courses);
+                if (latestCompletion === null) {
+                    return null;
+                }
+                const lastWorkedOnCourse = courses.find(
+                    (course) => course.data.slug === latestCompletion.courseSlug
+                );
+                return lastWorkedOnCourse;
+            },
+
+            countFinishedLessonsAndExams() {
+                return countCompleteLessonsInCourses(this.state.courses);
+            },
+
+            countFinishedLessonsAndExamsIn(course) {
+                return countCompleteLessonsInCourses([course]);
+            },
+
+            countLessonsAndExams(courses) {
+                return courses.reduce(
+                    (totalLessons, currentCourse) =>
+                        (totalLessons += currentCourse.data.lessons_count),
+                    0
+                );
+            },
+
+            getNumberOfLessonsLeft() {
+                const { courses } = this.state;
+                return this.countLessonsAndExams(courses) - this.countFinishedLessonsAndExams();
+            },
+
+            getPercentOfLessonsCompleted() {
+                const percentage =
+                    (this.countFinishedLessonsAndExams() /
+                        this.countLessonsAndExams(this.state.courses)) *
+                    100;
+                return Math.round(percentage) || 0;
             },
 
             courseLessonsCompletedMessage(course) {
                 // displays how many lessons of the total in a course have been completed
                 return gettext(
                     "%1 out of %2 completed",
-                    this.countCompleteLessonsIn(course),
-                    course.lessons.length
+                    this.countFinishedLessonsAndExamsIn(course),
+                    course.data.lessons_count
                 );
             },
 
