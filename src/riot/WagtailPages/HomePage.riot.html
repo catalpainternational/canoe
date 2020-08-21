@@ -81,7 +81,6 @@
             },
 
             onMounted(props, state) {
-                console.log("HomePage mounts.");
                 const unsortedCourses = props.wagtailPage.courses.filter(
                     (course) => course.lessons.length
                 );
@@ -97,10 +96,6 @@
                     listOfTags,
                     sortedListOfCourses,
                 });
-            },
-
-            onUpdated() {
-                console.log("HomePage updates.");
             },
 
             sortCourses(courses) {

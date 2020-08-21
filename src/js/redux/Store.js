@@ -3,7 +3,7 @@ import { createStore } from "redux";
 import {
     reducers,
     UPDATED_MANIFEST,
-    SITE_DOWNLOADED,
+    COMPLETIONS_ARE_READY,
     ADDED_WAGTAIL_PAGE,
     ADDED_HOME_PAGE,
     ADDED_COURSE_PAGE,
@@ -71,8 +71,8 @@ export const storeManifest = (manifest) => {
     store.dispatch({ type: UPDATED_MANIFEST, manifest });
 };
 
-export const storeSiteDownloadedIs = (trueOrFalse) => {
-    store.dispatch({ type: SITE_DOWNLOADED, siteIsDownloaded: trueOrFalse });
+export const storeCompletionsAreReadyIs = (areReady) => {
+    store.dispatch({ type: COMPLETIONS_ARE_READY, areCompletionsReady: areReady });
 };
 
 export const changeLanguage = (language) => {
@@ -101,8 +101,8 @@ export const getManifestFromStore = () => {
     return store.getState().manifest;
 };
 
-export const isSiteDownloaded = () => {
-    return store.getState().siteIsDownloaded;
+export const areCompletionsReady = () => {
+    return store.getState().areCompletionsReady;
 };
 
 export const isBrowserSupported = () => {

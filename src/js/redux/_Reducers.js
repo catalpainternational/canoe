@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 export const UPDATED_MANIFEST = "UPDATED_MANIFEST";
-export const SITE_DOWNLOADED = "SITE_DOWNLOADED";
+export const COMPLETIONS_ARE_READY = "actions/completionsAreReady";
 export const ADDED_WAGTAIL_PAGE = "ADDED_WAGTAIL_PAGE";
 export const ADDED_HOME_PAGE = "ADDED_HOME_PAGE";
 export const ADDED_COURSE_PAGE = "ADDED_COURSE_PAGE";
@@ -20,10 +20,10 @@ const updateManifest = (state = {}, action) => {
     }
 };
 
-const signalSiteIsDownloaded = (state = false, action) => {
+const signalCompletionsAre = (state = false, action) => {
     switch (action.type) {
-        case SITE_DOWNLOADED:
-            return action.siteIsDownloaded;
+        case COMPLETIONS_ARE_READY:
+            return action.areCompletionsReady;
         default:
             return state;
     }
@@ -167,7 +167,7 @@ const toggleGuestBannerVisibility = (state = false, action) => {
 
 export const reducers = combineReducers({
     manifest: updateManifest,
-    siteIsDownloaded: signalSiteIsDownloaded,
+    areCompletionsReady: signalCompletionsAre,
     pages: addWagtailPage,
     home: addHome,
     courses: addCourse,

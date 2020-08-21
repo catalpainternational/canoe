@@ -16,7 +16,7 @@
             extrastyleclasses="light app"
         ></LoadingDots>
 
-        <template if="{isUserLoggedIn() && isSiteDownloaded()}">
+        <template if="{isUserLoggedIn() && areCompletionsReady()}">
             <DownloadSite></DownloadSite>
 
             <TopMenu
@@ -53,7 +53,7 @@
         import { isUserLoggedIn } from "js/AuthenticationUtilities";
         import { getPage } from "js/Routing";
         import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
-        import { isBrowserSupported, isSiteDownloaded } from "ReduxImpl/Store";
+        import { isBrowserSupported, areCompletionsReady } from "ReduxImpl/Store";
         import { logPageView } from "js/GoogleAnalytics";
 
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
@@ -172,8 +172,8 @@
                 return isBrowserSupported();
             },
 
-            isSiteDownloaded() {
-                return isSiteDownloaded();
+            areCompletionsReady() {
+                return areCompletionsReady();
             },
 
             isUserLoggedIn() {
