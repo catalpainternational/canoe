@@ -50,7 +50,7 @@
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
                         <span class="road-sign"></span>
-                        <h3>{getNumberOfLessonsLeftOnSite()}</h3>
+                        <h3>{getNumberOfLessonsLeft()}</h3>
                         <h5>{ TRANSLATIONS.lessonsLeft() }</h5>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                 );
             },
 
-            getNumberOfLessonsLeftOnSite() {
+            getNumberOfLessonsLeft() {
                 const { courses } = this.state;
                 return this.countLessonsAndExams(courses) - this.countFinishedLessonsAndExams();
             },
