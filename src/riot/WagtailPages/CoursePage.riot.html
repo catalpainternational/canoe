@@ -9,7 +9,7 @@
                     <div>
                         <p>{ TRANSLATIONS.course() }</p>
                     </div>
-                    <h3 id="coursePageTitle">{props.wagtailPage.data.title}</h3>
+                    <h3 id="coursePageTitle">{props.wagtailPage.title}</h3>
                     <div>
                         <p class="bottom-border">{ numberOfLessonsCompleteMessage() }</p>
                     </div>
@@ -79,7 +79,7 @@
                 const header = this.$(".course-header");
                 const coursePageTitle = this.$("#coursePageTitle");
                 const { wagtailPage } = props;
-                const isCourseComplete = !isCourseInProgress(wagtailPage);
+                const isCourseComplete = wagtailPage.isCourseFinished();
 
                 this.update({ header, coursePageTitle, isCourseComplete });
 
@@ -92,11 +92,7 @@
 
             calculateCourseProgress() {
                 const { wagtailPage } = this.props;
-                return (
-                    countCompleteLessonsInCourses([wagtailPage]) +
-                    " / " +
-                    this.props.wagtailPage.data.lessons_count
-                );
+                return wagtailPage.numberOfCompletedLessons + " / " + wagtailPage.numberOfLessons;
             },
 
             backToHome() {
@@ -114,32 +110,31 @@
             },
 
             isLessonComplete(lesson) {
-                return isComplete(this.props.wagtailPage.data.slug, lesson.slug);
+                return isComplete(this.props.wagtailPage.slug, lesson.slug);
             },
 
             examDisabled() {
                 // Exams are enabled if you complete all lessons or if you are a
                 // guest user.
                 const { wagtailPage: course } = this.props;
-                const { lessons_count } = course.data;
                 const isExamUnlocked =
-                    countCompleteLessonsInCourses([course]) === lessons_count - 1;
+                    course.numberOfCompletedLessons === course.numberOfLessons - 1;
                 return !isExamUnlocked && !isGuestUser();
             },
 
             isExamComplete() {
                 const { wagtailPage } = this.props;
-                return isExamComplete(wagtailPage.data.slug);
+                return isExamComplete(wagtailPage.slug);
             },
 
             hasUserTriedExam() {
                 const { wagtailPage } = this.props;
-                return hasUserTriedExam(wagtailPage.data.slug);
+                return hasUserTriedExam(wagtailPage.slug);
             },
 
             getHighestScore() {
                 const { wagtailPage } = this.props;
-                const highScore = getExamHighScore(wagtailPage.data.slug);
+                const highScore = getExamHighScore(wagtailPage.slug);
                 return highScore;
             },
 
