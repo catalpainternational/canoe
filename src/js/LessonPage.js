@@ -1,3 +1,8 @@
+import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
+import { isComplete } from "Actions/completion";
+
+import CoursePage from "./CoursePage";
+
 export default class LessonPage {
     constructor(aWagtailPage) {
         this.lesson = aWagtailPage;
@@ -49,5 +54,14 @@ export default class LessonPage {
 
     isComingSoon() {
         return this.lesson.data.coming_soon;
+    }
+
+    isFinished() {
+        return isComplete(this.course.slug, this.slug);
+    }
+
+    async getFullCourseObject() {
+        const courseJSON = await _getOrFetchWagtailPageById(this.course.id);
+        return new CoursePage(courseJSON);
     }
 }

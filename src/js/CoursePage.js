@@ -1,4 +1,6 @@
 import { countCompleteLessonsInCourses, getLatestCompletionInCourse } from "js/CompletionInterface";
+import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
+import LessonPage from "./LessonPage";
 
 export default class CoursePage {
     constructor(aWagtailCourse) {
@@ -44,5 +46,15 @@ export default class CoursePage {
 
     getLatestCompletion() {
         return getLatestCompletionInCourse(this.slug);
+    }
+
+    async getFullLessonObjects() {
+        const lessonIds = this.lessons.map((lesson) => lesson.id);
+        const lessons = [];
+        for (const lessonId of lessonIds) {
+            const lessonJSON = await _getOrFetchWagtailPageById(lessonId);
+            lessons.push(new LessonPage(lessonJSON));
+        }
+        return lessons;
     }
 }
