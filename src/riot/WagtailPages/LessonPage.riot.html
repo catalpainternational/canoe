@@ -19,17 +19,17 @@
                 <p>{ durationOfLessonMessage() }</p>
             </div>
             <div class="description">
-                <p>{props.wagtailPage.data.description}</p>
-                <p if="{props.wagtailPage.data.long_description && state.showLongDescription}">
-                    {props.wagtailPage.data.long_description}
+                <p>{props.wagtailPage.shortDescription}</p>
+                <p if="{props.wagtailPage.longDescription && state.showLongDescription}">
+                    {props.wagtailPage.longDescription}
                 </p>
                 <a
-                    if="{props.wagtailPage.data.long_description && state.showLongDescription}"
+                    if="{props.wagtailPage.longDescription && state.showLongDescription}"
                     onclick="{toggleLessonDescription}"
                     >{ TRANSLATIONS.less() }</a
                 >
                 <a
-                    if="{props.wagtailPage.data.long_description && !state.showLongDescription}"
+                    if="{props.wagtailPage.longDescription && !state.showLongDescription}"
                     onclick="{toggleLessonDescription}"
                     >{ TRANSLATIONS.more() }</a
                 >
@@ -156,7 +156,7 @@
             isModuleComplete(section) {
                 return isComplete(
                     this.props.wagtailPage.course.slug,
-                    this.props.wagtailPage.data.slug,
+                    this.props.wagtailPage.slug,
                     section
                 );
             },
@@ -164,7 +164,7 @@
             disableBlockedLessonModules() {
                 const ongoingCards = [...document.getElementsByClassName("ongoing")];
 
-                const isComingSoon = this.props.wagtailPage.data.coming_soon;
+                const isComingSoon = this.props.wagtailPage.isComingSoon();
                 let sliceFrom = 1;
 
                 if (isComingSoon) {
@@ -184,12 +184,7 @@
 
             durationOfLessonMessage() {
                 // the total duration of the lesson in minutes
-                return gettext(
-                    "%1 mins",
-                    this.props.wagtailPage.objective.duration +
-                        this.props.wagtailPage.content.duration +
-                        this.props.wagtailPage.test.duration
-                );
+                return gettext("%1 mins", this.props.wagtailPage.getDuration());
             },
         };
     </script>
