@@ -17,13 +17,13 @@
             </div>
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
             <Card
-                each="{lesson in props.wagtailPage.lessons}"
+                each="{lesson in state.lessons}"
                 title="{lesson.title}"
-                description="{lesson.description}"
-                duration="{lesson.duration}"
+                description="{lesson.shortDescription}"
+                duration="{lesson.getDuration()}"
                 link="{lesson.id}"
-                isCompleted="{isLessonComplete(lesson)}"
-                isComingSoon="{lesson.coming_soon}"
+                isCompleted="{lesson.isFinished()}"
+                isComingSoon="{lesson.isComingSoon()}"
                 showFooter="{true}"
                 type="lesson"
             ></Card>
@@ -47,7 +47,6 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
-        import { isComplete } from "Actions/completion";
         import { isGuestUser } from "js/AuthenticationUtilities";
         import {
             countCompleteLessonsInCourses,
@@ -72,16 +71,16 @@
             state: {
                 header: null,
                 coursePageTitle: null,
-                isCourseComplete: false,
+                lessons: [],
             },
 
-            onMounted(props, state) {
+            async onMounted(props, state) {
                 const header = this.$(".course-header");
                 const coursePageTitle = this.$("#coursePageTitle");
-                const { wagtailPage } = props;
-                const isCourseComplete = wagtailPage.isCourseFinished();
+                const { wagtailPage: course } = props;
+                const lessons = await course.getFullLessonObjects();
 
-                this.update({ header, coursePageTitle, isCourseComplete });
+                this.update({ header, lessons, coursePageTitle });
 
                 window.addEventListener("scroll", this.stickyHeader);
             },
@@ -107,10 +106,6 @@
                     this.state.header.classList.remove("sticky");
                     this.state.coursePageTitle.classList.remove("truncate-if-long");
                 }
-            },
-
-            isLessonComplete(lesson) {
-                return isComplete(this.props.wagtailPage.slug, lesson.slug);
             },
 
             examDisabled() {
