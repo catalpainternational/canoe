@@ -31,7 +31,7 @@
             ></CourseOverview>
             <LessonOverview
                 if="{state.contentType === 'LessonPage'}"
-                wagtailPage="{state.wagtailPage}"
+                wagtailPage="{createLessonPage(state.wagtailPage)}"
             ></LessonOverview>
             <Settings if="{state.contentType === 'settings'}"></Settings>
             <Resources
@@ -54,6 +54,7 @@
         import { isBrowserSupported, isSiteDownloading } from "ReduxImpl/Interface";
         import { logPageView } from "js/GoogleAnalytics";
         import CoursePage from "js/CoursePage";
+        import LessonPage from "js/LessonPage";
 
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
@@ -176,6 +177,10 @@
 
             isUserLoggedIn() {
                 return isUserLoggedIn();
+            },
+
+            createLessonPage(aWagtailPage) {
+                return new LessonPage(aWagtailPage);
             },
 
             createCoursePage(aWagtailPage) {
