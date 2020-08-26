@@ -48,11 +48,7 @@
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
         import { isGuestUser } from "js/AuthenticationUtilities";
-        import {
-            countCompleteLessonsInCourses,
-            isCourseInProgress,
-            isExamComplete,
-        } from "js/CompletionInterface";
+        import { isExamComplete } from "js/CompletionInterface";
         import { getExamHighScore, hasUserTriedExam } from "js/ExamInterface";
 
         export default {
@@ -119,7 +115,7 @@
 
             isExamComplete() {
                 const { wagtailPage } = this.props;
-                return isExamComplete(wagtailPage.slug);
+                return wagtailPage.isExamFinished();
             },
 
             hasUserTriedExam() {
