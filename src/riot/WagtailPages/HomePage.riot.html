@@ -50,11 +50,10 @@
         import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
 
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { isComplete } from "Actions/completion";
-        import { countCompleteLessonsInCourses, getLatestCompletion } from "js/CompletionInterface";
         import { ON_COMPLETION_CHANGE } from "js/Events";
         import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
         import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
+        import { getCourseWithLatestCompletion } from "js/utilities";
 
         export default {
             state: {
@@ -81,14 +80,17 @@
 
                 const courses = await props.wagtailPage.getFullCourseObjects();
 
-                const unsortedCourses = courses.filter((course) => course.lessons.length);
+                const unsortedCourses = courses.filter((course) => course.numberOfLessons);
 
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
+
                 const visibleCourses = isGuestUser()
-                    ? unsortedCourses.filter((course) => course.is_visible_to_guests)
+                    ? unsortedCourses.filter((course) => course.isVisibleToGuests())
                     : unsortedCourses;
+
                 const sortedListOfCourses = this.sortCourses(visibleCourses);
+
                 this.update({
                     currentCourse,
                     listOfTags,
@@ -98,17 +100,8 @@
             },
 
             sortCourses(courses) {
-                const completedCourses = [];
-                const incompleteCourses = [];
-
-                courses.map((course) => {
-                    if (this.isCourseInProgress(course)) {
-                        incompleteCourses.push(course);
-                    } else {
-                        completedCourses.push(course);
-                    }
-                });
-
+                const completedCourses = courses.filter((course) => course.isFinished());
+                const incompleteCourses = courses.filter((course) => !course.isFinished());
                 const sortedCourses = incompleteCourses.concat(completedCourses);
                 return sortedCourses;
             },
@@ -141,20 +134,11 @@
             },
 
             getCurrentCourse(courses) {
-                const lastWorkedOnCourse = courses.reduce((mostRecentCourse, aCourse) =>
-                    mostRecentCourse.getLatestCompletion() > aCourse.getLatestCompletion()
-                        ? mostRecentCourse
-                        : aCourse
-                );
-                return lastWorkedOnCourse;
+                return getCourseWithLatestCompletion(courses);
             },
 
             isCourseInProgress(aCourse) {
                 return !aCourse.isFinished();
-            },
-
-            isLessonComplete(course, lesson) {
-                return isComplete(course.data.slug, lesson.slug);
             },
 
             onTagClick(clickedTag) {
