@@ -48,8 +48,6 @@
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
 
         import { isGuestUser } from "js/AuthenticationUtilities";
-        import { isExamComplete } from "js/CompletionInterface";
-        import { getExamHighScore, hasUserTriedExam } from "js/ExamInterface";
 
         export default {
             TRANSLATIONS: {
@@ -120,12 +118,12 @@
 
             hasUserTriedExam() {
                 const { wagtailPage } = this.props;
-                return hasUserTriedExam(wagtailPage.slug);
+                return wagtailPage.hasUserTriedExam();
             },
 
             getHighestScore() {
                 const { wagtailPage } = this.props;
-                const highScore = getExamHighScore(wagtailPage.slug);
+                const highScore = wagtailPage.getExamHighScore();
                 return highScore;
             },
 

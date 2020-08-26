@@ -2,6 +2,15 @@ import { isExamComplete, countCompleteLessonsInCourses } from "js/CompletionInte
 import { getLatestCompletionInCourse } from "Actions/completion";
 import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
 
+import {
+    saveExamAnswer as saveAnswer,
+    loadExamAnswer as loadAnswer,
+    tallyExamScore as tallyScore,
+    saveExamScore as saveScore,
+    getExamHighScore as getHighScore,
+    hasUserTriedExam as hasTriedExam,
+} from "Actions/exam";
+
 import LessonPage from "./LessonPage";
 
 export default class CoursePage {
@@ -51,6 +60,14 @@ export default class CoursePage {
 
     isExamFinished() {
         return isExamComplete(this.slug);
+    }
+
+    hasUserTriedExam() {
+        return hasTriedExam(this.slug);
+    }
+
+    getExamHighScore() {
+        return getHighScore(this.slug);
     }
 
     isCourseFinished() {
