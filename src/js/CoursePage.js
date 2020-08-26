@@ -63,12 +63,16 @@ export default class CoursePage {
         return getHighScore(this.slug);
     }
 
-    isCourseFinished() {
+    isFinished() {
         return this.numberOfFinishedLessons === this.numberOfLessons;
     }
 
     getLatestCompletion() {
         return getLatestCompletionInCourse(this.slug);
+    }
+
+    isVisibleToGuests() {
+        return this.course.is_visible_to_guests;
     }
 
     async getFullLessonObjects() {
