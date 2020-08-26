@@ -122,7 +122,7 @@
                 return ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
-                    currentCourse.numberOfLessons - currentCourse.numberOfCompletedLessons,
+                    currentCourse.numberOfLessons - currentCourse.numberOfFinishedLessons,
                     currentCourse.title
                 );
             },
@@ -136,7 +136,7 @@
             },
 
             calculateCourseProgress(course) {
-                return course.numberOfCompletedLessons + " / " + course.numberOfLessons;
+                return course.numberOfFinishedLessons + " / " + course.numberOfLessons;
             },
 
             greetingMessage() {

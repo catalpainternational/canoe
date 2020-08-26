@@ -32,7 +32,7 @@ export default class CoursePage {
         return this.course.data.lessons_count;
     }
 
-    get numberOfCompletedLessons() {
+    get numberOfFinishedLessons() {
         return countCompleteLessonsInCourses([this.course]);
     }
 
@@ -45,7 +45,7 @@ export default class CoursePage {
     }
 
     isCourseFinished() {
-        return this.numberOfCompletedLessons === this.numberOfLessons;
+        return this.numberOfFinishedLessons === this.numberOfLessons;
     }
 
     getLatestCompletion() {
