@@ -71,3 +71,21 @@ export const debounce = (func, waitInMilliseconds) => {
 export const getContactNumber = () => {
     return process.env.CONTACT_NUMBER;
 };
+
+export const getCourseWithLatestCompletion = (courses) => {
+    const coursesWithCompletions = courses.filter((course) => course.getLatestCompletion());
+
+    let lastWorkedOnCourse = null;
+    for (const course of coursesWithCompletions) {
+        if (
+            lastWorkedOnCourse &&
+            !course.isFinished() &&
+            course.getLatestCompletion().completionDate <
+                lastWorkedOnCourse.getLatestCompletion().completionDate
+        ) {
+            continue;
+        }
+        lastWorkedOnCourse = course;
+    }
+    return lastWorkedOnCourse;
+};

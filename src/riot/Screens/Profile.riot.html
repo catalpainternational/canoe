@@ -60,7 +60,7 @@
 
         import { getHomePage } from "js/WagtailPagesAPI";
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { countCompleteLessonsInCourses } from "js/CompletionInterface";
+        import { getCourseWithLatestCompletion } from "js/utilities";
 
         import HomePage from "js/HomePage";
 
@@ -108,12 +108,7 @@
             },
 
             getCurrentCourse(courses) {
-                const lastWorkedOnCourse = courses.reduce((mostRecentCourse, aCourse) =>
-                    mostRecentCourse.getLatestCompletion() > aCourse.getLatestCompletion()
-                        ? mostRecentCourse
-                        : aCourse
-                );
-                return lastWorkedOnCourse;
+                return getCourseWithLatestCompletion(courses);
             },
 
             countFinishedLessonsAndExams() {
