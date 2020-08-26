@@ -91,7 +91,7 @@
 
             calculateCourseProgress() {
                 const { wagtailPage } = this.props;
-                return wagtailPage.numberOfCompletedLessons + " / " + wagtailPage.numberOfLessons;
+                return wagtailPage.numberOfFinishedLessons + " / " + wagtailPage.numberOfLessons;
             },
 
             backToHome() {
@@ -113,7 +113,7 @@
                 // guest user.
                 const { wagtailPage: course } = this.props;
                 const isExamUnlocked =
-                    course.numberOfCompletedLessons === course.numberOfLessons - 1;
+                    course.numberOfFinishedLessons === course.numberOfLessons - 1;
                 return !isExamUnlocked && !isGuestUser();
             },
 
