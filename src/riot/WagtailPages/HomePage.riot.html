@@ -51,11 +51,7 @@
 
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { isComplete } from "Actions/completion";
-        import {
-            countCompleteLessonsInCourses,
-            getLatestCompletion,
-            isCourseInProgress,
-        } from "js/CompletionInterface";
+        import { countCompleteLessonsInCourses, getLatestCompletion } from "js/CompletionInterface";
         import { ON_COMPLETION_CHANGE } from "js/Events";
         import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
         import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
@@ -154,7 +150,7 @@
             },
 
             isCourseInProgress(aCourse) {
-                return !aCourse.isCourseFinished();
+                return !aCourse.isFinished();
             },
 
             isLessonComplete(course, lesson) {
