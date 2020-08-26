@@ -1,6 +1,7 @@
-import { countCompleteLessonsInCourses } from "js/CompletionInterface";
+import { isExamComplete, countCompleteLessonsInCourses } from "js/CompletionInterface";
 import { getLatestCompletionInCourse } from "Actions/completion";
 import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
+
 import LessonPage from "./LessonPage";
 
 export default class CoursePage {
@@ -40,8 +41,16 @@ export default class CoursePage {
         return this.course.tags;
     }
 
+    get exam() {
+        return this.course.exam;
+    }
+
     hasExam() {
         return this.course.data.has_exam;
+    }
+
+    isExamFinished() {
+        return isExamComplete(this.slug);
     }
 
     isCourseFinished() {
