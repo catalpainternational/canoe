@@ -7,8 +7,6 @@ import {
     loadExamAnswer as loadAnswer,
     tallyExamScore as tallyScore,
     saveExamScore as saveScore,
-    getExamHighScore as getHighScore,
-    hasUserTriedExam as hasTriedExam,
     pullExamAnswersIntoMemory,
     pullExamScoresIntoMemory,
     clearInMemoryExamAnswers,
@@ -29,14 +27,6 @@ export const tallyFinalScore = (examQuestions) => {
 
 export const saveExamScore = (courseSlug, finalScore) => {
     saveScore(courseSlug, finalScore);
-};
-
-export const getExamHighScore = (courseSlug) => {
-    return getHighScore(courseSlug);
-};
-
-export const hasUserTriedExam = (courseSlug) => {
-    return hasTriedExam(courseSlug);
 };
 
 export const pullExamDataIntoMemory = async () => {
