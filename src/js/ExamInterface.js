@@ -13,22 +13,6 @@ import {
     clearInMemoryExamScores,
 } from "Actions/exam";
 
-export const saveExamAnswer = (questionId, answer) => {
-    saveAnswer(questionId, answer);
-};
-
-export const loadExamAnswer = (questionId) => {
-    return loadAnswer(questionId);
-};
-
-export const tallyFinalScore = (examQuestions) => {
-    return tallyScore(examQuestions);
-};
-
-export const saveExamScore = (courseSlug, finalScore) => {
-    saveScore(courseSlug, finalScore);
-};
-
 export const pullExamDataIntoMemory = async () => {
     await pullExamAnswersIntoMemory();
     await pullExamScoresIntoMemory();
@@ -38,3 +22,21 @@ export const clearInMemoryExamData = () => {
     clearInMemoryExamAnswers();
     clearInMemoryExamScores();
 };
+
+export default class ExamGrader {
+    static saveExamAnswer(questionId, answer) {
+        saveAnswer(questionId, answer);
+    }
+
+    static loadExamAnswer(questionId) {
+        return loadAnswer(questionId);
+    }
+
+    static tallyFinalScore(examQuestions) {
+        return tallyScore(examQuestions);
+    }
+
+    static saveExamScore(courseSlug, finalScore) {
+        saveScore(courseSlug, finalScore);
+    }
+}
