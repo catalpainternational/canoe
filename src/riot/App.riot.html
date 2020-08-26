@@ -23,7 +23,7 @@
             ></TopMenu>
             <HomePage
                 if="{state.contentType === 'HomePage'}"
-                wagtailPage="{state.wagtailPage}"
+                wagtailPage="{createHomePage(state.wagtailPage)}"
             ></HomePage>
             <CourseOverview
                 if="{state.contentType === 'CoursePage'}"
@@ -55,6 +55,7 @@
         import { logPageView } from "js/GoogleAnalytics";
         import CoursePage from "js/CoursePage";
         import LessonPage from "js/LessonPage";
+        import HomePageJS from "js/HomePage";
 
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
@@ -179,12 +180,16 @@
                 return isUserLoggedIn();
             },
 
-            createLessonPage(aWagtailPage) {
-                return new LessonPage(aWagtailPage);
+            createHomePage(aWagtailPage) {
+                return new HomePageJS(aWagtailPage);
             },
 
             createCoursePage(aWagtailPage) {
                 return new CoursePage(aWagtailPage);
+            },
+
+            createLessonPage(aWagtailPage) {
+                return new LessonPage(aWagtailPage);
             },
         };
 

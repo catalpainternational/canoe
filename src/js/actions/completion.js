@@ -114,8 +114,12 @@ export const getFinishedLessonSlugs = (courseSlug, liveLessonSlugs) => {
 };
 
 export const getLatestCompletionInCourse = (courseSlug) => {
-    const courseMap = courses.get(courseSlug);
     let latest = null;
+    if (!courses.has(courseSlug)) {
+        return latest;
+    }
+
+    const courseMap = courses.get(courseSlug);
     for (const [lessonSlug, lessonMap] of courseMap.entries()) {
         for (const [sectionSlug, completionDate] of lessonMap.entries()) {
             if (latest === null || latest.completionDate < completionDate) {

@@ -30,8 +30,8 @@
             if="{doesCourseHaveTag(course)}"
         >
             <Card
-                title="{course.data.title}"
-                link="{course.data.id}"
+                title="{course.title}"
+                link="{course.id}"
                 description="{courseProgressMessage(course)}"
                 isCompleted="{!isCourseInProgress(course)}"
                 showFooter="{true}"
@@ -80,11 +80,12 @@
                 noCourses: () => gettext("There are no courses yet. Check back soon!"),
             },
 
-            onMounted(props, state) {
+            async onMounted(props, state) {
                 this.update({ isLoading: true });
-                const unsortedCourses = props.wagtailPage.courses.filter(
-                    (course) => course.lessons.length
-                );
+
+                const courses = await props.wagtailPage.getFullCourseObjects();
+
+                const unsortedCourses = courses.filter((course) => course.lessons.length);
 
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
@@ -121,9 +122,8 @@
                 return ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
-                    this.state.currentCourse.data.lessons_count -
-                        countCompleteLessonsInCourses([currentCourse]),
-                    this.state.currentCourse.data.title
+                    currentCourse.numberOfLessons - currentCourse.numberOfCompletedLessons,
+                    currentCourse.title
                 );
             },
 
@@ -136,7 +136,7 @@
             },
 
             calculateCourseProgress(course) {
-                return countCompleteLessonsInCourses([course]) + " / " + course.data.lessons_count;
+                return course.numberOfCompletedLessons + " / " + course.numberOfLessons;
             },
 
             greetingMessage() {
@@ -145,18 +145,16 @@
             },
 
             getCurrentCourse(courses) {
-                const latestCompletion = getLatestCompletion(courses);
-                if (latestCompletion === null) {
-                    return null;
-                }
-                const lastWorkedOnCourse = courses.find(
-                    (course) => course.data.slug === latestCompletion.courseSlug
+                const lastWorkedOnCourse = courses.reduce((mostRecentCourse, aCourse) =>
+                    mostRecentCourse.getLatestCompletion() > aCourse.getLatestCompletion()
+                        ? mostRecentCourse
+                        : aCourse
                 );
                 return lastWorkedOnCourse;
             },
 
             isCourseInProgress(aCourse) {
-                return isCourseInProgress(aCourse);
+                return !aCourse.isCourseFinished();
             },
 
             isLessonComplete(course, lesson) {
