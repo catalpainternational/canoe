@@ -1,11 +1,11 @@
-import { countCompleteLessonsInCourses, getLatestCompletionInCourse } from "js/CompletionInterface";
+import { countCompleteLessonsInCourses } from "js/CompletionInterface";
+import { getLatestCompletionInCourse } from "Actions/completion";
 import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
 import LessonPage from "./LessonPage";
 
 export default class CoursePage {
     constructor(aWagtailCourse) {
         this.course = aWagtailCourse;
-        console.log(this.course);
     }
 
     get json() {
@@ -34,6 +34,10 @@ export default class CoursePage {
 
     get numberOfCompletedLessons() {
         return countCompleteLessonsInCourses([this.course]);
+    }
+
+    get tags() {
+        return this.course.tags;
     }
 
     hasExam() {
