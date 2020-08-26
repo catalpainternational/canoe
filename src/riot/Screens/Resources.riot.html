@@ -44,6 +44,8 @@
             doesQueryMatchSearchContent,
         } from "js/SearchAndFiltering";
 
+        import ResourceArticle from "js/ResourceArticle";
+
         export default {
             state: {
                 selectedTags: [],
@@ -67,7 +69,9 @@
 
             async onMounted() {
                 this.toggleLoadingMessage();
-                const articles = await getResources();
+                const articles = (await getResources()).map(
+                    (resource) => new ResourceArticle(resource)
+                );
                 const listOfAllTags = getTagsFromPages(articles);
                 this.update({
                     articles,
