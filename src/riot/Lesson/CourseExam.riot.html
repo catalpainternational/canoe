@@ -1,7 +1,7 @@
 <CourseExam>
     <LessonFrame if="{isAtHonorCode(state.cardIdx)}">
         <HonorCode
-            courseId="{props.wagtailPage.data.id}"
+            courseId="{props.wagtailPage.id}"
             minimumScore="{MINIMUM_SCORE}"
         ></HonorCode>
     </LessonFrame>
@@ -52,7 +52,7 @@
     </LessonFrame>
     <ExamResults
         if="{isAtResults(state.cardIdx)}"
-        course="{props.wagtailPage.data}"
+        course="{props.wagtailPage}"
         title="{props.wagtailPage.title}"
         finalScore="{calculateFinalScore()}"
         minimumScore="{MINIMUM_SCORE}"
