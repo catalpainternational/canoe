@@ -1,6 +1,6 @@
 import { createStore } from "redux";
 
-import { reducers, COMPLETIONS_ARE_READY } from "./_Reducers";
+import { reducers } from "./Reducers";
 
 export const LANGUAGE_STORAGE_KEY = "userLanguage";
 
@@ -27,4 +27,3 @@ export const store = createStore(
     initialStoreState,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
-
