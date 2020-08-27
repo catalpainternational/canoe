@@ -142,7 +142,7 @@
                     }
                 });
 
-                if (this.isUserLoggedIn() && this.isSiteDownloading()) {
+                if (this.isUserLoggedIn() && this.areCompletionsReady()) {
                     // If user returns to site and is logged in.
                     this.route();
                 }
