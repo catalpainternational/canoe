@@ -1,20 +1,8 @@
 import { createStore } from "redux";
 
-import {
-    reducers,
-    UPDATED_MANIFEST,
-    COMPLETIONS_ARE_READY,
-    ADDED_WAGTAIL_PAGE,
-    ADDED_HOME_PAGE,
-    ADDED_COURSE_PAGE,
-    ADDED_LESSON_PAGE,
-    UPDATED_BROWSER_SUPPORT,
-    LANGUAGE_CHANGE,
-    SERVICE_WORKER_EVENT,
-    GUEST_BANNER,
-} from "./_Reducers";
+import { reducers, COMPLETIONS_ARE_READY } from "./_Reducers";
 
-const LANGUAGE_STORAGE_KEY = "userLanguage";
+export const LANGUAGE_STORAGE_KEY = "userLanguage";
 
 const getInitialLanguage = () => {
     const storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
@@ -32,7 +20,6 @@ const getInitialLanguage = () => {
 
 const initialStoreState = {
     language: getInitialLanguage(),
-    isGuestBannerVisible: true,
 };
 
 export const store = createStore(
@@ -41,88 +28,3 @@ export const store = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-export const storeWagtailPage = (wagtailPage) => {
-    switch (wagtailPage.meta.type) {
-        case "elearning_content.HomePage":
-            store.dispatch({ type: ADDED_HOME_PAGE, home: wagtailPage });
-            break;
-        case "elearning_content.CoursePage":
-            store.dispatch({ type: ADDED_COURSE_PAGE, course: wagtailPage });
-            break;
-        case "elearning_content.LessonPage":
-            store.dispatch({ type: ADDED_LESSON_PAGE, lesson: wagtailPage });
-            break;
-        case "elearning_content.ResourcesRoot":
-            // Ignore the ResourcesRoot' root.
-            return;
-        case "elearning_content.ResourceArticle":
-            // Ignore ResourceArticle.
-            return;
-        case "wagtailtrans.TranslatableSiteRootPage":
-            // Ignore the i18nized site's root.
-            return;
-        default:
-            throw new Error(`${wagtailPage.meta.type} is an unreckognized page type.`);
-    }
-    store.dispatch({ type: ADDED_WAGTAIL_PAGE, wagtailPage });
-};
-
-export const storeManifest = (manifest) => {
-    store.dispatch({ type: UPDATED_MANIFEST, manifest });
-};
-
-export const storeCompletionsAreReadyIs = (areReady) => {
-    store.dispatch({ type: COMPLETIONS_ARE_READY, areCompletionsReady: areReady });
-};
-
-export const changeLanguage = (language) => {
-    store.dispatch({ type: LANGUAGE_CHANGE, language: language });
-
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-};
-
-export const serviceWorkerEvent = (event_type) => {
-    store.dispatch({ type: SERVICE_WORKER_EVENT, event_type: event_type });
-};
-
-export const getLanguage = () => {
-    return store.getState().language;
-};
-
-export const storeBrowserSupport = (trueOrFalse) => {
-    store.dispatch({ type: UPDATED_BROWSER_SUPPORT, isBrowserSupported: trueOrFalse });
-};
-
-export const getWagtailPageFromStore = (pageId) => {
-    return store.getState().pages[pageId];
-};
-
-export const getManifestFromStore = () => {
-    return store.getState().manifest;
-};
-
-export const areCompletionsReady = () => {
-    return store.getState().areCompletionsReady;
-};
-
-export const isBrowserSupported = () => {
-    return store.getState().isBrowserSupported;
-};
-
-export const getCourse = (courseId) => {
-    const course = store.getState().courses[courseId];
-    return course;
-};
-
-export const getLesson = (lessonId) => {
-    const lesson = store.getState().lessons[lessonId];
-    return lesson;
-};
-
-export const toggleGuestBanner = (trueOrFalse) => {
-    store.dispatch({ type: GUEST_BANNER, isGuestBannerVisible: trueOrFalse });
-};
-
-export const isGuestBannerVisible = () => {
-    return store.getState().isGuestBannerVisible;
-};

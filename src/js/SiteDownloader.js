@@ -3,7 +3,7 @@ import { dispatchToastEvent } from "js/Events";
 import { leftDifference } from "js/SetMethods";
 import { getImagePaths } from "js/RenditionSelector";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { storeWagtailPage } from "ReduxImpl/Store";
+import { storeWagtailPage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL } from "js/urls";
 
 const PAGES_CACHE = "pages-cache";

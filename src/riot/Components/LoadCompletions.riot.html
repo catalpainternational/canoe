@@ -1,9 +1,11 @@
 <LoadCompletions>
     <script>
-        import { storeCompletionsAreReadyIs } from "ReduxImpl/Store";
+        import {
+            signalCompletionsAreReady,
+            signalCompletionsAreNotReady,
+        } from "ReduxImpl/Interface";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
-
         import { pullExamDataIntoMemory, clearInMemoryExamData } from "js/ExamInterface";
         import {
             pullCompletionsIntoMemory,
@@ -35,7 +37,7 @@
 
                 await this.pullIdbDataIntoMemory();
 
-                storeCompletionsAreReadyIs(true);
+                signalCompletionsAreReady();
                 dispatchLoggedInEvent();
             },
 
@@ -46,7 +48,7 @@
 
             async clearAppData() {
                 window.clearInterval(this.state.pagesPoller);
-                storeCompletionsAreReadyIs(false);
+                signalCompletionsAreNotReady();
                 clearInMemoryCompletions();
                 clearInMemoryExamData();
                 await closeAndDeleteDB();
