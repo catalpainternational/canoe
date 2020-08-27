@@ -1,6 +1,7 @@
 import gettext_js from "gettext.js/dist/gettext.esm.js";
 import tetumTranslations from "../../locale/json/tet.json";
-import { store, getLanguage } from "ReduxImpl/Store";
+
+import { getLanguage, subscribeToStore } from "ReduxImpl/Interface";
 
 var i18n = gettext_js();
 
@@ -30,16 +31,16 @@ function setLocale(locale) {
     i18n.setLocale(locale);
 }
 
-function storeDispatch() {
-    const newStoreState = store.getState();
-    if (newStoreState.language !== previousStoreState.language) {
-        setLocale(newStoreState.language);
+function updateLocaleIfLanguageChanged() {
+    const newLanguageState = getLanguage();
+    if (newLanguageState !== previousLanguageState) {
+        setLocale(newLanguageState);
     }
-    previousStoreState = store.getState();
+    previousLanguageState = newLanguageState;
 }
 
 const userLanguage = getLanguage();
 setLocale(userLanguage);
 
-let previousStoreState = store.getState();
-const unsubscribe = store.subscribe(storeDispatch);
+let previousLanguageState = userLanguage;
+const unsubscribe = subscribeToStore(updateLocaleIfLanguageChanged);

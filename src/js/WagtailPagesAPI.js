@@ -9,7 +9,7 @@ import {
     getLesson,
     getLanguage,
     changeLanguage,
-} from "ReduxImpl/Store";
+} from "ReduxImpl/Interface";
 import { APIMissingPageError } from "js/Errors";
 
 async function token_authed_fetch(url) {

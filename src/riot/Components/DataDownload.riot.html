@@ -1,6 +1,5 @@
 <DataDownload>
     <script>
-        import { storeSiteDownloadedIs } from "ReduxImpl/Store";
         import { SiteDownloader } from "js/SiteDownloader";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
@@ -48,14 +47,12 @@
                     EVERY_FIVE_MINUTES
                 );
 
-                storeSiteDownloadedIs(true);
                 dispatchLoggedInEvent();
             },
 
             async clearAppData() {
                 window.clearInterval(this.state.completionPoller);
                 window.clearInterval(this.state.pagesPoller);
-                storeSiteDownloadedIs(false);
                 clearInMemoryCompletions();
                 clearInMemoryExamData();
                 await closeAndDeleteDB();

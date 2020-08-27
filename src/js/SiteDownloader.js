@@ -4,7 +4,7 @@ import {
     getOrFetchManifest,
     getHomePathsInManifest,
 } from "js/WagtailPagesAPI";
-import { storeWagtailPage } from "ReduxImpl/Store";
+import { storeWagtailPage } from "ReduxImpl/Interface";
 import { dispatchToastEvent } from "js/Events";
 import { leftDifference } from "js/SetMethods";
 import { getImagePaths } from "js/RenditionSelector";

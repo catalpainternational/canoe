@@ -3,15 +3,15 @@
  *
  */
 import { Workbox } from "workbox-window";
-import { serviceWorkerEvent } from "ReduxImpl/Store";
-const SW_UPDATE_INTERVAL = 1000 * 10 * 60 * 4;
+import { changeServiceWorkerState } from "ReduxImpl/Interface";
 import { logNotificationReceived } from "js/GoogleAnalytics"
 import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
 
+const SW_UPDATE_INTERVAL = 1000 * 10 * 60 * 4;
 
 export async function initializeServiceWorker() {
     if (!navigator.serviceWorker) {
-        serviceWorkerEvent("notsupported")
+        changeServiceWorkerState("notsupported")
         return;
     }
 
@@ -21,7 +21,7 @@ export async function initializeServiceWorker() {
         // This happens:
         // a fresh first time visit once the sw is in control
         // a refresh when there is an active sw to take control
-        serviceWorkerEvent("controlling")
+        changeServiceWorkerState("controlling")
 
         function checkForNewVersion() {
             console.log("checking for new version");
@@ -36,14 +36,14 @@ export async function initializeServiceWorker() {
 
     wb.addEventListener("externalinstalled", (e) => {
         // workbox detects a new service worker installed ready for activation ( sometimes )
-        serviceWorkerEvent("update-waiting")
+        changeServiceWorkerState("update-waiting")
     });
 
     wb.addEventListener("redundant", (e) => {
         // This happens:
         // when service worker fails to install
         // when a new service worker takes over control ( sometimes )
-        serviceWorkerEvent("redundant")
+        changeServiceWorkerState("redundant")
     });
 
     wb.addEventListener("message", (event) => {
