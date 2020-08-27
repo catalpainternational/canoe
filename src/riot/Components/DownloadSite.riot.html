@@ -10,10 +10,10 @@
             },
 
             onMounted() {
-                this.state.pagesPoller = window.setInterval(
-                    () => new SiteDownloader.requestTheSitesPagesAndImages(),
-                    EVERY_FIVE_MINUTES
-                );
+                this.state.pagesPoller = window.setInterval(() => {
+                    const downloader = new SiteDownloader();
+                    downloader.requestTheSitesPagesAndImages();
+                }, EVERY_FIVE_MINUTES);
 
                 new SiteDownloader().requestTheSitesPagesAndImages();
             },
