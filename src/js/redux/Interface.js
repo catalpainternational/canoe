@@ -56,7 +56,6 @@ export const getLanguage = () => {
 };
 
 export const changeServiceWorkerState = (eventType) => {
-    console.log(eventType);
     store.dispatch(serviceWorkerStateAction(eventType));
 };
 
