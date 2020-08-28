@@ -5,6 +5,7 @@ import { getImagePaths } from "js/RenditionSelector";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { storeWagtailPage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL } from "js/urls";
+import { getRequest } from "js/Fetch";
 
 const PAGES_CACHE = "pages-cache";
 const IMAGES_CACHE = "images-cache";
@@ -34,18 +35,7 @@ const cacheAllUrls = async (cacheName, paths) => {
     const token = getAuthenticationToken();
     const pathArray = Array.from(paths);
 
-    return await cache.addAll(
-        pathArray.map(
-            (path) =>
-                new Request(`${BACKEND_BASE_URL}${path}`, {
-                    mode: "cors",
-                    headers: {
-                        "Content-Type": "text/json",
-                        Authorization: `JWT ${token}`,
-                    },
-                })
-        )
-    );
+    return await cache.addAll(pathArray.map((path) => getRequest(`${BACKEND_BASE_URL}${path}`)));
 };
 
 const addCachedPagesToRedux = async () => {

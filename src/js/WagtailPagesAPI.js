@@ -1,5 +1,5 @@
 import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls.js";
-import { getAuthenticationToken, isGuestUser } from "js/AuthenticationUtilities.js";
+import { isGuestUser } from "js/AuthenticationUtilities.js";
 import {
     storeWagtailPage,
     getWagtailPageFromStore,
@@ -10,30 +10,7 @@ import {
     getLanguage,
     changeLanguage,
 } from "ReduxImpl/Interface";
-import { APIMissingPageError } from "js/Errors";
-
-async function token_authed_fetch(url) {
-    const token = getAuthenticationToken();
-
-    const response = await fetch(url, {
-        mode: "cors",
-        headers: {
-            "Content-Type": "text/json",
-            Authorization: `JWT ${token}`,
-        },
-    });
-
-    if (!response.ok) {
-        throw new APIMissingPageError(`fetch("${url}") responded with a ${response.status}`);
-    }
-
-    const pagesResponseJSON = await response.json();
-
-    if (pagesResponseJSON.items) {
-        return pagesResponseJSON.items;
-    }
-    return pagesResponseJSON;
-}
+import { token_authed_fetch } from "js/Fetch";
 
 export async function fetchManifest() {
     const allPagesMetadata = await token_authed_fetch(WAGTAIL_MANIFEST_URL);
