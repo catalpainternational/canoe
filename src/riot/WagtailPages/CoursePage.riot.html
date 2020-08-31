@@ -16,6 +16,7 @@
                 </div>
             </div>
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
+            <LoadingDots if="{state.lessons.length === 0}" extrastyleclasses="dark"></LoadingDots>
             <Card
                 each="{lesson in state.lessons}"
                 title="{lesson.title}"
@@ -27,7 +28,7 @@
                 showFooter="{true}"
                 type="lesson"
             ></Card>
-            <template if="{props.examCards.length > 0}">
+            <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <Card
                     title="{ courseExamTitle() }"
@@ -46,6 +47,7 @@
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
         import { isGuestUser } from "js/AuthenticationUtilities";
 
@@ -60,6 +62,7 @@
             components: {
                 card: Card,
                 courseexam: CourseExam,
+                loadingdots: LoadingDots,
             },
 
             state: {

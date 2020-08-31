@@ -25,7 +25,10 @@
             selectedTags="{state.selectedTags}"
         ></TagList>
 
-        <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
+        <LoadingDots
+            if="{state.sortedListOfCourses.length === 0}"
+            extrastyleclasses="dark"
+        ></LoadingDots>
 
         <div
             class="course"
@@ -41,9 +44,7 @@
                 type="course"
             ></Card>
         </div>
-        <p if="{!state.isLoading && state.sortedListOfCourses.length === 0}">
-            { TRANSLATIONS.noCourses() }
-        </p>
+        <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
     </div>
 
     <script>
@@ -65,7 +66,6 @@
                 selectedTags: [],
                 listOfTags: [],
                 sortedListOfCourses: [],
-                isLoading: false,
             },
 
             components: {
@@ -81,8 +81,6 @@
             },
 
             async onMounted(props, state) {
-                this.update({ isLoading: true });
-
                 const courses = await props.wagtailPage.getFullCourseObjects();
 
                 const unsortedCourses = courses.filter((course) => course.numberOfLessons);
@@ -100,7 +98,6 @@
                     currentCourse,
                     listOfTags,
                     sortedListOfCourses,
-                    isLoading: false,
                 });
             },
 
