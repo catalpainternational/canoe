@@ -1,11 +1,16 @@
-import { getOrFetchManifest, getHomePathsInManifest } from "js/WagtailPagesAPI";
+import {
+    fetchPage,
+    fetchImage,
+    getOrFetchManifest,
+    getHomePathsInManifest,
+} from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
 import { leftDifference } from "js/SetMethods";
 import { getImagePaths } from "js/RenditionSelector";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { storeWagtailPage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL } from "js/urls";
-import { getRequest } from "js/Fetch";
+import { getImageRequest, getPageRequest } from "./Fetch";
 
 const PAGES_CACHE = "pages-cache";
 const IMAGES_CACHE = "images-cache";
@@ -30,7 +35,7 @@ const getCachedPathsAndDeleteCruft = async (cacheName, manifestsUrls) => {
     return cachedUrls;
 };
 
-const cacheAllUrls = async (cacheName, paths) => {
+const cacheAllUrls = async (cacheName, paths, getRequest = (path) => path) => {
     const cache = await window.caches.open(cacheName);
     const token = getAuthenticationToken();
     const pathArray = Array.from(paths);
@@ -73,8 +78,15 @@ export default class SiteDownloader {
             dispatchToastEvent(gettext("Site is downloading."));
         }
 
-        await cacheAllUrls(PAGES_CACHE, pagesToFetch);
-        await cacheAllUrls(IMAGES_CACHE, imagesToFetch);
+        // await cacheAllUrls(PAGES_CACHE, pagesToFetch, getPageRequest);
+        // await cacheAllUrls(IMAGES_CACHE, imagesToFetch, getImageRequest);
+
+        for (const pagePath of pagesToFetch) {
+            await fetchPage(pagePath);
+        }
+        for (const imagePath of imagesToFetch) {
+            await fetchImage(imagePath);
+        }
         await addCachedPagesToRedux();
 
         if (pagesToFetch.size > 0 || imagesToFetch.size > 0) {

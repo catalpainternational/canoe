@@ -1,7 +1,20 @@
 import { getAuthenticationToken } from "js/AuthenticationUtilities.js";
 import { APIMissingPageError } from "js/Errors";
+import { getPlatform } from "js/PlatformDetection";
 
-export const getRequest = (url) => {
+export const getImageRequest = (url) => {
+    const token = getAuthenticationToken();
+    const { browser } = getPlatform();
+    return new Request(url, {
+        mode: "cors",
+        headers: {
+            "Content-Type": browser.name === "Chrome" ? "image/webp" : "image/jpeg",
+            Authorization: `JWT ${token}`,
+        },
+    });
+};
+
+export const getPageRequest = (url) => {
     const token = getAuthenticationToken();
     return new Request(url, {
         mode: "cors",
@@ -13,7 +26,7 @@ export const getRequest = (url) => {
 };
 
 export async function token_authed_fetch(url) {
-    const response = await fetch(getRequest(url));
+    const response = await fetch(getPageRequest(url));
 
     if (!response.ok) {
         throw new APIMissingPageError(`fetch("${url}") responded with a ${response.status}`);
