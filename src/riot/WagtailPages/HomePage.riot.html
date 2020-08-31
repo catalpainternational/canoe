@@ -24,6 +24,9 @@
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
+
+        <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
+
         <div
             class="course"
             each="{course in state.sortedListOfCourses}"
@@ -48,6 +51,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
         import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { ON_COMPLETION_CHANGE } from "js/Events";
@@ -69,6 +73,7 @@
                 continuelearningbutton: ContinueLearningButton,
                 taglist: TagList,
                 guestbanner: GuestBanner,
+                loadingdots: LoadingDots,
             },
 
             TRANSLATIONS: {
