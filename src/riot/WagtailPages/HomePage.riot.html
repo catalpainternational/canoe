@@ -18,33 +18,36 @@
         </div>
     </div>
     <div class="content-wrapper">
-        <TagList
-            if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0}"
-            tags="{state.listOfTags}"
-            onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"
-        ></TagList>
-
         <LoadingDots
-            if="{state.sortedListOfCourses.length === 0}"
+            if="{state.sortedListOfCourses === null}"
             extrastyleclasses="dark"
         ></LoadingDots>
 
-        <div
-            class="course"
-            each="{course in state.sortedListOfCourses}"
-            if="{doesCourseHaveTag(course)}"
-        >
-            <Card
-                title="{course.title}"
-                link="{course.id}"
-                description="{courseProgressMessage(course)}"
-                isCompleted="{!isCourseInProgress(course)}"
-                showFooter="{true}"
-                type="course"
-            ></Card>
-        </div>
-        <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
+        <template if="{Array.isArray(state.sortedListOfCourses)}">
+            <TagList
+                if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0}"
+                tags="{state.listOfTags}"
+                onTagClick="{onTagClick}"
+                selectedTags="{state.selectedTags}"
+            ></TagList>
+
+            <div
+                class="course"
+                each="{course in state.sortedListOfCourses}"
+                if="{doesCourseHaveTag(course)}"
+            >
+                <Card
+                    title="{course.title}"
+                    link="{course.id}"
+                    description="{courseProgressMessage(course)}"
+                    isCompleted="{!isCourseInProgress(course)}"
+                    showFooter="{true}"
+                    type="course"
+                ></Card>
+            </div>
+
+            <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
+        </template>
     </div>
 
     <script>
@@ -65,7 +68,7 @@
                 currentCourse: null,
                 selectedTags: [],
                 listOfTags: [],
-                sortedListOfCourses: [],
+                sortedListOfCourses: null,
             },
 
             components: {
