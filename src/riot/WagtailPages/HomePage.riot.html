@@ -5,11 +5,11 @@
         <div class="header-box">
             <div class="left-block">
                 <h3>{ greetingMessage() }</h3>
-                <h6 if="{state.currentCourse && isCourseInProgress(state.currentCourse)}">
+                <h6 if="{state.currentCourse && !state.currentCourse.isFinished()}">
                     { continueLearningMessage() }
                 </h6>
                 <ContinueLearningButton
-                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
+                    if="{state.currentCourse && !state.currentCourse.isFinished()}"
                     class="profile header-text"
                     background="home-background-image"
                 ></ContinueLearningButton>
@@ -40,7 +40,7 @@
                     title="{course.title}"
                     link="{course.id}"
                     description="{courseProgressMessage(course)}"
-                    isCompleted="{!isCourseInProgress(course)}"
+                    isCompleted="{course.isFinished()}"
                     showFooter="{true}"
                     type="course"
                 ></Card>
@@ -88,7 +88,7 @@
 
                 const unsortedCourses = courses.filter((course) => course.numberOfLessons);
 
-                const currentCourse = this.getCurrentCourse(unsortedCourses);
+                const currentCourse = getCourseWithLatestCompletion(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
 
                 const visibleCourses = isGuestUser()
@@ -125,25 +125,13 @@
                 return ngettext(
                     "%1 lesson complete",
                     "%1 lessons complete",
-                    this.calculateCourseProgress(course)
+                    course.numberOfFinishedLessons + " / " + course.numberOfLessons
                 );
-            },
-
-            calculateCourseProgress(course) {
-                return course.numberOfFinishedLessons + " / " + course.numberOfLessons;
             },
 
             greetingMessage() {
                 // Greet the user with their username
                 return gettext("Hi %1", getCapitalizedUsername());
-            },
-
-            getCurrentCourse(courses) {
-                return getCourseWithLatestCompletion(courses);
-            },
-
-            isCourseInProgress(aCourse) {
-                return !aCourse.isFinished();
             },
 
             onTagClick(clickedTag) {
