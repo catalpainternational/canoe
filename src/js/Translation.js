@@ -1,9 +1,9 @@
-import gettext_js from "gettext.js/dist/gettext.esm.js";
+import gettext_js from "gettext.js";
 import tetumTranslations from "../../locale/json/tet.json";
 
 import { getLanguage, subscribeToStore } from "ReduxImpl/Interface";
 
-var i18n = gettext_js();
+var i18n = new gettext_js();
 
 // gettext.js seems to behave wrong when passed a nplurals 1 translation set
 // A temporary fix pending further investigation is to
