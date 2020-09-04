@@ -11,6 +11,7 @@ import {
 import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/ServiceWorker";
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
+import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
 
 export const storeWagtailPage = (wagtailPage) => {
     const { type } = wagtailPage.meta;
@@ -55,7 +56,6 @@ export const getLanguage = () => {
 };
 
 export const changeServiceWorkerState = (eventType) => {
-    console.log(eventType);
     store.dispatch(serviceWorkerStateAction(eventType));
 };
 
@@ -83,13 +83,6 @@ export const getManifestFromStore = () => {
     return store.getState().manifest;
 };
 
-export const isSiteDownloading = () => {
-    const { manifest, pages } = store.getState();
-    const doesTheManifestExist = Object.keys(manifest).length > 0;
-    const arePagesDownloading = Object.keys(pages).length > 0;
-    return doesTheManifestExist && arePagesDownloading;
-};
-
 export const isBrowserSupported = () => {
     return store.getState().isBrowserSupported;
 };
@@ -102,6 +95,18 @@ export const getCourse = (courseId) => {
 export const getLesson = (lessonId) => {
     const lesson = store.getState().lessons[lessonId];
     return lesson;
+};
+
+export const signalCompletionsAreReady = () => {
+    store.dispatch(signalCompletionsReadyAction(true));
+};
+
+export const signalCompletionsAreNotReady = () => {
+    store.dispatch(signalCompletionsReadyAction(false));
+};
+
+export const areCompletionsReady = () => {
+    return store.getState().areCompletionsReady;
 };
 
 export const subscribeToStore = (subscriptionFunction) => {

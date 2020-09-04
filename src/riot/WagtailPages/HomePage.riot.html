@@ -38,7 +38,7 @@
                 type="course"
             ></Card>
         </div>
-        <p if="{!state.isLoading && state.sortedListOfCourses.length === 0}">
+        <p if="{state.sortedListOfCourses.length === 0}">
             { TRANSLATIONS.noCourses() }
         </p>
     </div>
@@ -66,7 +66,6 @@
                 selectedTags: [],
                 listOfTags: [],
                 sortedListOfCourses: [],
-                isLoading: false,
             },
 
             components: {
@@ -81,7 +80,6 @@
             },
 
             onMounted(props, state) {
-                this.update({ isLoading: true });
                 const unsortedCourses = props.wagtailPage.courses.filter(
                     (course) => course.lessons.length
                 );
@@ -96,7 +94,6 @@
                     currentCourse,
                     listOfTags,
                     sortedListOfCourses,
-                    isLoading: false,
                 });
             },
 
