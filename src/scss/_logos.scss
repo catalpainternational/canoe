@@ -4,13 +4,13 @@ Logos {
     display: flex;
     margin-top: 50px;
     margin-bottom: 20px;
-    max-width: 400px;
 
     .logo {
         background-image: url("~img/logo.svg");
-        width: 60px;
+        width: 50px;
         height: 50px;
         background-position: center;
         background-repeat: no-repeat;
+        background-size: contain;
     }
 }

@@ -1,9 +1,11 @@
-<DataDownload>
+<LoadCompletions>
     <script>
-        import { SiteDownloader } from "js/SiteDownloader";
+        import {
+            signalCompletionsAreReady,
+            signalCompletionsAreNotReady,
+        } from "ReduxImpl/Interface";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
-
         import { pullExamDataIntoMemory, clearInMemoryExamData } from "js/ExamInterface";
         import {
             pullCompletionsIntoMemory,
@@ -16,7 +18,6 @@
 
         export default {
             state: {
-                pagesPoller: null,
                 completionPoller: null,
             },
 
@@ -28,11 +29,6 @@
                 this.clearAppData();
             },
 
-            async pullIdbDataIntoMemory() {
-                await pullCompletionsIntoMemory();
-                await pullExamDataIntoMemory();
-            },
-
             async prepDataForAppLaunch() {
                 if (!isGuestUser()) {
                     await updateIdb();
@@ -41,22 +37,22 @@
 
                 await this.pullIdbDataIntoMemory();
 
-                new SiteDownloader().requestTheSitesPagesAndImages();
-                this.state.pagesPoller = window.setInterval(
-                    this.pollForWebpageChanges,
-                    EVERY_FIVE_MINUTES
-                );
-
+                signalCompletionsAreReady();
                 dispatchLoggedInEvent();
             },
 
+            async pullIdbDataIntoMemory() {
+                await pullCompletionsIntoMemory();
+                await pullExamDataIntoMemory();
+            },
+
             async clearAppData() {
-                window.clearInterval(this.state.completionPoller);
                 window.clearInterval(this.state.pagesPoller);
+                signalCompletionsAreNotReady();
                 clearInMemoryCompletions();
                 clearInMemoryExamData();
                 await closeAndDeleteDB();
             },
         };
     </script>
-</DataDownload>
+</LoadCompletions>
