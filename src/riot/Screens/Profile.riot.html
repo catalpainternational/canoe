@@ -6,7 +6,8 @@
                     <h3>{ TRANSLATIONS.overall() }</h3>
                     <h6>{ percentLessonsCompleteMessage() }</h6>
                     <ContinueLearningButton
-                        if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
+                        if="{state.currentCourse && !state.currentCourse.isFinished()}"
+                        currentCourse="{state.currentCourse}"
                     ></ContinueLearningButton>
                 </div>
                 <span class="report-card"></span>
@@ -87,28 +88,23 @@
             },
 
             async renderProfilePage() {
+                console.log("hi there.");
                 const homePageJSON = await getHomePage();
                 const homePage = new HomePage(homePageJSON);
 
+                console.log("loading.");
                 let courses = await homePage.getFullCourseObjects();
+                console.log("here");
 
                 if (isGuestUser()) {
                     courses = courses.filter((course) => course.isVisibleToGuests());
                 }
-                const lastWorkedOnCourse = this.getCurrentCourse(courses);
+                const lastWorkedOnCourse = getCourseWithLatestCompletion(courses);
 
                 this.update({
                     courses,
                     currentCourse: lastWorkedOnCourse,
                 });
-            },
-
-            isCourseInProgress(aCourse) {
-                return !aCourse.isFinished();
-            },
-
-            getCurrentCourse(courses) {
-                return getCourseWithLatestCompletion(courses);
             },
 
             countFinishedLessonsAndExams() {
