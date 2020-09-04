@@ -1,7 +1,7 @@
 import { getHomePage } from "js/WagtailPagesAPI";
 import { getLatestCompletion } from "js/CompletionInterface";
 import { dispatchToastEvent } from "js/Events";
-import { getLanguage } from "ReduxImpl/Store";
+import { getLanguage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL } from "js/urls";
 
 export const alertAppIsOffline = () => {
@@ -10,14 +10,6 @@ export const alertAppIsOffline = () => {
 
 export const alertAppIsOnline = () => {
     dispatchToastEvent("You are online.");
-};
-
-export const getAllLessons = (courses) => {
-    let lessons = [];
-    for (const course of courses) {
-        lessons = lessons.concat(course.lessons);
-    }
-    return lessons;
 };
 
 export const getLastWorkedOnCourse = async () => {
@@ -74,4 +66,8 @@ export const debounce = (func, waitInMilliseconds) => {
         clearTimeout(timeout);
         timeout = setTimeout(later, waitInMilliseconds);
     };
+};
+
+export const getContactNumber = () => {
+    return process.env.CONTACT_NUMBER;
 };

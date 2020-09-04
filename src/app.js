@@ -3,14 +3,13 @@ import { installReduxPlugin } from "ReduxImpl/RiotReduxPlugin";
 import { installTranslationPlugin } from "riot/RiotTranslationPlugin";
 
 import App from "RiotTags/App.riot.html";
-import { store } from "ReduxImpl/Store";
 import "./scss/canoe.scss";
 
 riot.install(function (component) {
     // all components will pass through here
     installTranslationPlugin(component);
-    installReduxPlugin(component, store);
+    installReduxPlugin(component);
 });
 
 riot.register("app", App);
-riot.mount("app", { store });
+riot.mount("app");

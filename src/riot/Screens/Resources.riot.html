@@ -10,7 +10,7 @@
             submitSearch="{submitSearch}"
         ></SearchBar>
         <TagList
-            if="{state.listOfAllTags.length > 0}"
+            if="{state.listOfAllTags.length > 0 && state.articles.length > 0}"
             tags="{state.listOfAllTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
@@ -24,9 +24,8 @@
                 showFooter="{false}"
             ></Card>
         </div>
-        <p if="{state.isLoading}">{ TRANSLATIONS.loading() }</p>
-        <p></p>
-        <p if="{!state.isLoading && state.articles == 0}">
+        <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
+        <p if="{!state.isLoading && state.articles.length === 0}">
             { TRANSLATIONS.noArticlesYet() }
         </p>
     </div>
@@ -35,6 +34,7 @@
         import TagList from "RiotTags/Components/TagList.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
         import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
         import { getResources } from "js/WagtailPagesAPI";
@@ -50,7 +50,6 @@
                 searchString: "",
                 articles: [],
                 listOfAllTags: [],
-                articleContent: {},
                 isLoading: false,
             },
 
@@ -58,20 +57,23 @@
                 taglist: TagList,
                 card: Card,
                 searchbar: SearchBar,
+                loadingdots: LoadingDots,
             },
 
             TRANSLATIONS: {
                 resources: () => gettext("Resources"),
-                loading: () => gettext("Loading . . ."),
-                noArticlesYet: () =>
-                    gettext("There are no resource articles yet. Check back soon!"),
+                noArticlesYet: () => gettext("There are no resources yet. Check back soon!"),
             },
 
             async onMounted() {
                 this.toggleLoadingMessage();
                 const articles = await getResources();
                 const listOfAllTags = getTagsFromPages(articles);
-                this.update({ articles, listOfAllTags, selectedTags: [] });
+                this.update({
+                    articles,
+                    listOfAllTags,
+                    selectedTags: [],
+                });
 
                 const urlParams = this.generateUrlParams();
 
@@ -110,16 +112,14 @@
 
                     if (this.state.selectedTags.length > 0) {
                         for (var i = 0; i < this.state.selectedTags.length; ++i) {
-                            const encodedTag = encodeURIComponent(
-                                this.state.selectedTags[i].toLowerCase()
-                            );
-                            urlParams.append("filter", encodedTag);
+                            const pendingTag = this.state.selectedTags[i].toLowerCase();
+                            urlParams.append("filter", pendingTag);
                         }
                     }
                     this.replaceUrlQuery(urlParams);
                 } else {
                     this.state.selectedTags.push(clickedTag);
-                    urlParams.append("filter", encodeURIComponent(clickedTag));
+                    urlParams.append("filter", clickedTag);
                     !isFromUrl && this.replaceUrlQuery(urlParams);
                     this.update();
                 }
@@ -128,22 +128,21 @@
 
             submitSearch(searchString) {
                 const urlParams = this.generateUrlParams();
-                const encodedQuery = encodeURIComponent(searchString);
 
-                urlParams.set("qs", encodedQuery);
+                urlParams.set("qs", searchString);
                 this.replaceUrlQuery(urlParams);
                 this.update({ searchString });
             },
 
             isResourceArticleVisible(article) {
-                const { searchString } = this.state;
+                const { searchString, selectedTags } = this.state;
+
                 const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,
                     article.title,
                     article.description
                 );
 
-                const { selectedTags } = this.state;
                 const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
                 const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
 

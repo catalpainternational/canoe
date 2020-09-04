@@ -31,7 +31,7 @@
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <Card
                     title="{ courseExamTitle() }"
-                    description="{isExamComplete(props.wagtailPage.id) ? `${TRANSLATIONS.highestScore()}: ${getHighestScore()}%`: ''}"
+                    description="{hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${getHighestScore()}%` : ''}"
                     link="{props.wagtailPage.id}/exam/0"
                     isCompleted="{isExamComplete(props.wagtailPage.id)}"
                     isComingSoon="{false}"
@@ -54,7 +54,7 @@
             isCourseInProgress,
             isExamComplete,
         } from "js/CompletionInterface";
-        import { getExamHighScore } from "js/ExamInterface";
+        import { getExamHighScore, hasUserTriedExam } from "js/ExamInterface";
 
         export default {
             TRANSLATIONS: {
@@ -90,7 +90,7 @@
                 window.removeEventListener("scroll", this.stickyHeader);
             },
 
-            getCourseProgress() {
+            calculateCourseProgress() {
                 const { wagtailPage } = this.props;
                 return (
                     countCompleteLessonsInCourses([wagtailPage]) +
@@ -132,9 +132,15 @@
                 return isExamComplete(wagtailPage.data.slug);
             },
 
+            hasUserTriedExam() {
+                const { wagtailPage } = this.props;
+                return hasUserTriedExam(wagtailPage.data.slug);
+            },
+
             getHighestScore() {
                 const { wagtailPage } = this.props;
-                return getExamHighScore(wagtailPage.data.slug);
+                const highScore = getExamHighScore(wagtailPage.data.slug);
+                return highScore;
             },
 
             numberOfLessonsCompleteMessage() {
@@ -142,7 +148,7 @@
                 return ngettext(
                     "%1 lesson complete",
                     "%1 lessons complete",
-                    this.getCourseProgress()
+                    this.calculateCourseProgress()
                 );
             },
 

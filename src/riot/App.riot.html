@@ -9,9 +9,16 @@
 
         <Login if="{!isUserLoggedIn()}"></Login>
 
-        <DataDownload if="{isUserLoggedIn()}"></DataDownload>
+        <LoadCompletions if="{isUserLoggedIn()}"></LoadCompletions>
 
-        <template if="{isUserLoggedIn() && isSiteDownloaded()}">
+        <LoadingDots
+            if="{Object.keys(state.wagtailPage).length === 0 && isUserLoggedIn()}"
+            extrastyleclasses="light app"
+        ></LoadingDots>
+
+        <template if="{isUserLoggedIn() && areCompletionsReady()}">
+            <DownloadSite></DownloadSite>
+
             <TopMenu
                 contentType="{state.contentType}"
                 wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
@@ -46,15 +53,17 @@
         import { isUserLoggedIn } from "js/AuthenticationUtilities";
         import { getPage } from "js/Routing";
         import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
-        import { isBrowserSupported, isSiteDownloaded } from "ReduxImpl/Store";
+        import { isBrowserSupported, areCompletionsReady } from "ReduxImpl/Interface";
         import { logPageView } from "js/GoogleAnalytics";
 
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
-        import DataDownload from "RiotTags/Components/DataDownload.riot.html";
+        import LoadCompletions from "RiotTags/Components/LoadCompletions.riot.html";
+        import DownloadSite from "RiotTags/Components/DownloadSite.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
         import Toast from "RiotTags/Components/Toast.riot.html";
         import OnlineOrOffline from "RiotTags/Components/OnlineOrOffline.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
         import Login from "RiotTags/Screens/Login.riot.html";
         import Resources from "RiotTags/Screens/Resources.riot.html";
@@ -100,12 +109,14 @@
                 resources: Resources,
                 profile: Profile,
                 settings: Settings,
-                datadownload: DataDownload,
+                loadcompletions: LoadCompletions,
+                downloadsite: DownloadSite,
                 pushsubscription: PushSubscription,
                 changebrowser: ChangeBrowser,
                 toast: Toast,
                 onlineoroffline: OnlineOrOffline,
                 resourcearticle: ResourceArticle,
+                loadingdots: LoadingDots,
             },
 
             onMounted() {
@@ -131,7 +142,7 @@
                     }
                 });
 
-                if (this.isUserLoggedIn() && this.props.store.getState().siteIsDownloaded) {
+                if (this.isUserLoggedIn() && this.areCompletionsReady()) {
                     // If user returns to site and is logged in.
                     this.route();
                 }
@@ -161,8 +172,8 @@
                 return isBrowserSupported();
             },
 
-            isSiteDownloaded() {
-                return isSiteDownloaded();
+            areCompletionsReady() {
+                return areCompletionsReady();
             },
 
             isUserLoggedIn() {

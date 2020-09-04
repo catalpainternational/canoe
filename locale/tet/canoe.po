@@ -14,11 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#, fuzzy
-msgid "%1 / %2 lesson complete"
-msgid_plural "%1 / %2 lessons complete"
-msgstr[0] "%2 / %1 lisaun kompletu"
-
 #. the number of lessons completed in a course
 msgid "%1 lesson complete"
 msgid_plural "%1 lessons complete"
@@ -43,7 +38,7 @@ msgstr "%1 husi %2 kompletu ona"
 
 #. warns the user that this site ( name goes in %1 ) will not be able to send you notifications if you turn this off
 msgid "%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
-msgstr ""
+msgstr "%1 uza sistema notifikasaun hodi haruka atualizasuan no notifikasaun kona-ba kursu ne'ebé util. Se ita dezativa notifikasaun ne'e, ita sei lasimu informasaun kursu ida ne'e. Ita serteza hakarak dezativa notifikasaun ne'e?"
 
 msgid "%1's Course Exam"
 msgstr "%1's Ezame ba Kursu"
@@ -51,14 +46,8 @@ msgstr "%1's Ezame ba Kursu"
 msgid "Add to Home Screen"
 msgstr "Aumenta ba pájina prinsipál"
 
-msgid "all"
-msgstr ""
-
 msgid "Amazing work!"
 msgstr "Parabéns! Serbisu diak loos!"
-
-msgid "answers that apply"
-msgstr ""
 
 msgid "Are you enjoying this lesson?"
 msgstr "Ita gosta lisaun ne'e?"
@@ -72,11 +61,11 @@ msgstr "Fila fali ba kursu"
 msgid "Back to lesson overview"
 msgstr "Fila fali ba sumáriu husi lisaun "
 
-msgid "Check"
-msgstr ""
+msgid "Check <strong>all</strong> answers that apply"
+msgstr "Cek resposta <strong>hotu</strong> ne’ebeé lo’os"
 
 msgid "Check answers"
-msgstr ""
+msgstr "Cek resposta"
 
 msgid "Code of conduct"
 msgstr " Kindut"
@@ -106,21 +95,20 @@ msgid "Course exam"
 msgstr "Ezama ba kursu"
 
 msgid "Download this PDF to your device"
-msgstr ""
+msgstr "Download PDF ne’e ba ita nian telemovel"
 
 msgid "FEEDBACK"
 msgstr "Komentáriu"
 
 msgid "Find and check all correct answers and uncheck incorrect answers"
-msgstr ""
+msgstr "Buka no hili resposta hotu ne’ebé lo’os"
 
 msgid "Finish"
 msgstr "Remata"
 
 msgid "Forgot username or password?"
-msgstr ""
+msgstr "Haluha uzuáriu ka seña?"
 
-#, fuzzy
 msgid "Good job!"
 msgstr "Serbisu di'ak tebes!"
 
@@ -132,21 +120,26 @@ msgstr "Serbisu di'ak tebes!"
 
 #. displays percentage of completed lessons in all courses combined
 msgid "Great work %1! You have completed %2% of your overall coursework"
-msgstr "Parabéns %1! Ita kompleta ona  %2% husi ita nian lisaun tomak "
+msgstr "Parabéns %1! Ita kompleta ona  %2% husi ita nian lisaun tomak"
 
 #. Greet the user with their username
 msgid "Hi %1"
 msgstr "Olá %1"
 
-#, fuzzy
 msgid "Hide Password"
-msgstr "Seña "
+msgstr "Subar Seña"
 
 msgid "Highest score"
-msgstr ""
+msgstr "Valór aas liu"
+
+msgid "I need help accessing my account"
+msgstr "Ha’u presiza apoiu atu asesu ha’u nian perfil"
 
 msgid "In the meantime please use Safari."
 msgstr "Iha tempu leet, favór uza Safari"
+
+msgid "Invalid login credentials"
+msgstr "Informasaun ne’ebé ita hatama la lo’os"
 
 msgid "Keep going"
 msgstr "Favór kontinua nafatin"
@@ -176,9 +169,6 @@ msgstr "Lisaun ne'ebé sei presiza atu kompleta hodi remata ita-nia estudu"
 msgid "Let us know what you think of this lesson. We value your feedback and treat all feedback as confidential."
 msgstr "Favor fó hatene ami ita-nia opiniaun kona-ba lisaun ne'e. Ami apresia ita-nia komentáriu no konsidera ida-ne'e konfidensiál"
 
-msgid "Loading . . ."
-msgstr ""
-
 msgid "Log out"
 msgstr "Sai"
 
@@ -186,10 +176,10 @@ msgid "Login"
 msgstr "Tama"
 
 msgid "Login as a guest"
-msgstr ""
+msgstr "Tama nu’udar bainaka deit"
 
 msgid "Need help?"
-msgstr ""
+msgstr "Presiza ajuda?"
 
 msgid "Next"
 msgstr "Tuir mai"
@@ -197,16 +187,20 @@ msgstr "Tuir mai"
 msgid "Next Lesson"
 msgstr "Lisaun tuir mai"
 
-msgid ""
-"No learning progress will be saved while you are logged in as a guest. If you would like\n"
-"                    to create an account, please"
-msgstr ""
+msgid "No data or progress will be saved"
+msgstr "Progresu aprendizajen sira ne'ebé mak ita halo ona iha ne'e sei la sura"
+
+msgid "No learning progress will be saved while you are logged in as a guest. If you would like to create an account, please"
+msgstr "Tamba ita asesu app ne'e nu’udar bainaka, progresu aprendizajen sira ne'ebé mak ita halo ona iha ne'e sei la sura. Hakarak kria perfíl,"
 
 msgid "No notifications."
 msgstr "La iha notifikasaun. "
 
 msgid "No thanks"
 msgstr "Lae, Obrigado. "
+
+msgid "No WhatsApp?"
+msgstr "Laiha WhatsApp?"
 
 msgid "Not quite!"
 msgstr "Resposta ne'e ladun lo'os ida!"
@@ -218,7 +212,7 @@ msgid "Objectives"
 msgstr "Objetivu"
 
 msgid "Oops"
-msgstr ""
+msgstr "Oppss"
 
 msgid "Overall progress"
 msgstr "Progresu tomak"
@@ -239,7 +233,7 @@ msgid "Retake Exam"
 msgstr "Koko Foti Ezame"
 
 msgid "Search"
-msgstr ""
+msgstr "Buka"
 
 msgid "See less"
 msgstr "Haree ouituan"
@@ -247,12 +241,20 @@ msgstr "Haree ouituan"
 msgid "See more"
 msgstr "Haree liután"
 
-msgid "send us a message"
-msgstr ""
+msgid "Send SMS"
+msgstr "Manda SMS"
 
-#, fuzzy
+msgid "send us a message"
+msgstr "favor kontaktu ami"
+
+msgid "Send us a message and we'll help you log in"
+msgstr "Manda mensajen mai no ami sei ajuda ita atu tama"
+
+msgid "Send WhatsApp"
+msgstr "Manda WhatsApp"
+
 msgid "Show Password"
-msgstr "Seña "
+msgstr "Hatudu Seña"
 
 msgid "Site download is complete!"
 msgstr "Kompletu ona download sítiu ida ne'e!"
@@ -282,32 +284,35 @@ msgid "Successfully sent!"
 msgstr "Avaliasaun manda ona ho susesu!"
 
 msgid "Take Exam"
-msgstr ""
+msgstr "Foti Ezame"
 
 #. message on completion of lesson and prompt to take course exam
 msgid "Take the exam now to complete the course \"%1\""
-msgstr ""
+msgstr "Foti ezame agora atu kompleta kursu \"%1\""
 
 msgid "Test"
-msgstr ""
+msgstr "Teste"
 
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"
 msgstr "Obrigado ba ita-nia komentáriu. Ita-nia opiniaun importante mai ami. Ami sei servisu maka'as atu hadia ita-nia esperensia."
 
-msgid "There are no resource articles yet. Check back soon!"
-msgstr ""
+msgid "There are no courses yet. Check back soon!"
+msgstr "Seidauk iha kursu. Favor cek fila fali iha tempu badak!"
+
+msgid "There are no resources yet. Check back soon!"
+msgstr "Seidauk iha rekursu. Favor cek fila fali pajina ne’e iha tempu badak!"
 
 msgid "This audio is not available offline."
-msgstr ""
+msgstr "Audio ne’e la disponivel offline"
 
 msgid "This audio will play offline."
-msgstr ""
+msgstr "Audio ne’e bele rona offline"
 
 msgid "This video is not available offline."
-msgstr ""
+msgstr "Video ne’e la disponivel offline"
 
 msgid "This video will play offline."
-msgstr ""
+msgstr "Video ne’e bele hare offline"
 
 #. message for what percent a user must score to pass the exam
 msgid "To pass this exam you need to score <strong>%1% or higher</strong>"
@@ -339,9 +344,8 @@ msgid "You did not pass this assessment because you only scored %1% and you need
 msgstr "Ita hetan valór %1%. Ida ne'e la to'o atu pasa ezame ne'e. Atu bele pasa ita presiza atu hetan valór %2% ka liu. Ita bele koko foti fila ezame ne'e orsida ka tempu seluk atu bele hetan valór ne'ebé diak liu."
 
 #. message on completion of a lesson %1 is replaced by the lesson title
-#, fuzzy
 msgid "You just completed the lesson \"%1\""
-msgstr "Ita foin halo remata lisaun,\" 1 %1 \""
+msgstr "Ita foin halo remata lisaun \"%1\""
 
 msgid "You only have %1 lesson left to finish %2."
 msgid_plural "You only have %1 lessons left to finish %2."
@@ -351,8 +355,11 @@ msgstr[0] "Ita hela deit lisaun %1 atu remata %2."
 msgid "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam."
 msgstr "Ita pasa ezame ne'e ho valór %1%. Karik hakarak hadiak liu tan ita nian valór, ita bele foti tan ezame ne'e."
 
+msgid "You're logged in as a guest user"
+msgstr "Ita asesu hela app ne'e nu’udar bainaka"
+
 msgid "You're logging in as a guest"
-msgstr ""
+msgstr "Ita asesu hela app ne'e nu’udar bainaka"
 
 #. message to say what module is next ( %1 is content or test )
 msgid "You're ready to start the %1."
@@ -371,7 +378,6 @@ msgstr "Ita atu komesa ezame ba kursu ne'e. Ita promete atu halo hotu ezame ne'e
 msgid "Your browser does not support the audio element."
 msgstr "Ita-nia navegadór la suporta komponente audiu nian."
 
-#, fuzzy
 msgid "Your browser does not support the video element."
 msgstr "Ita-nia navegadór la suporta komponente audiu nian."
 
@@ -380,34 +386,3 @@ msgstr "Ita-nia lisaun"
 
 msgid "Your settings"
 msgstr "Ita-nia konfigurasaun"
-
-#~ msgid "You did not pass this assessment because you only scored %1 and you need to reach %2 to pass. You can retake this exam now or later."
-#~ msgstr "Ita hetan valór %1%. Ida ne'e la to'o atu pasa ezame ne'e. Atu bele pasa ita presiza atu hetan valór %2% ka liu. Ita bele koko foti fila ezame ne'e orsida ka tempu seluk atu bele hetan valór ne'ebé diak liu."
-
-#~ msgid "You passed this exam with a score of %1. If you would like to improve your score you can retake this exam."
-#~ msgstr "Ita pasa ezame ne'e ho valór %1%. Karik hakarak hadiak liu tan ita nian valór, ita bele foti tan ezame ne'e."
-
-#, fuzzy
-#~ msgid "start %1"
-#~ msgstr "hahú lisaun"
-
-#~ msgid "You are eligible to receive a printed certificate for this course."
-#~ msgstr "Ita kualifika atu simu certifikadu ba kursu ida ne'e. "
-
-#~ msgid "Correct answer. Well done!"
-#~ msgstr "Resposta loos. Serbisu diak!"
-
-#~ msgid "Incorrect answer. Try again."
-#~ msgstr "Resposta la loos. Favor koko fila fali. "
-
-#~ msgid "Jobs that use these skills"
-#~ msgstr "Serbisu ne'ebé uza abilidade hirak ne'e"
-
-#~ msgid "view all"
-#~ msgstr "haree hotu"
-
-#~ msgid "Your browser does not support the video tag."
-#~ msgstr "iIta-nia navegadór la suporta komponente vídeo nian. "
-
-#~ msgid "Your courses"
-#~ msgstr "Ita-nia kursu"

@@ -25,16 +25,6 @@ Login > div {
         left: 2px;
     }
 
-    .logo {
-        text-align: center;
-        justify-content: space-around;
-        display: flex;
-        margin-top: 50px;
-        margin-bottom: 20px;
-        width: 80%;
-        max-width: 400px;
-    }
-
     LoginForm {
         max-width: $content-width;
         width: 100%;
@@ -89,6 +79,14 @@ Login > div {
 
             &:hover {
                 cursor: pointer;
+            }
+        }
+
+        .error-message {
+            margin-top: -15px;
+
+            p {
+                font-size: 1em;
             }
         }
     }

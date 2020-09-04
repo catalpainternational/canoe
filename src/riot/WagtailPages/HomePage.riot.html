@@ -8,19 +8,39 @@
                 <h6 if="{state.currentCourse && isCourseInProgress(state.currentCourse)}">
                     { continueLearningMessage() }
                 </h6>
-                <ContinueLearningButton if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
-                    class="profile header-text" background="home-background-image"></ContinueLearningButton>
+                <ContinueLearningButton
+                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
+                    class="profile header-text"
+                    background="home-background-image"
+                ></ContinueLearningButton>
             </div>
             <span class="home-background-image"></span>
         </div>
     </div>
     <div class="content-wrapper">
-        <TagList if="{state.listOfTags.length > 0}" tags="{state.listOfTags}" onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"></TagList>
-        <div class="course" each="{course in state.sortedListOfCourses}" if="{isCourseVisible(course.tags)}">
-            <Card title="{course.data.title}" link="{course.data.id}" description="{courseProgressMessage(course)}"
-                isCompleted="{!isCourseInProgress(course)}" showFooter="{true}" type="course"></Card>
+        <TagList
+            if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0}"
+            tags="{state.listOfTags}"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
+        <div
+            class="course"
+            each="{course in state.sortedListOfCourses}"
+            if="{doesCourseHaveTag(course)}"
+        >
+            <Card
+                title="{course.data.title}"
+                link="{course.data.id}"
+                description="{courseProgressMessage(course)}"
+                isCompleted="{!isCourseInProgress(course)}"
+                showFooter="{true}"
+                type="course"
+            ></Card>
         </div>
+        <p if="{state.sortedListOfCourses.length === 0}">
+            { TRANSLATIONS.noCourses() }
+        </p>
     </div>
 
     <script>
@@ -38,7 +58,7 @@
         } from "js/CompletionInterface";
         import { ON_COMPLETION_CHANGE } from "js/Events";
         import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
-        import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Store";
+        import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
 
         export default {
             state: {
@@ -55,6 +75,10 @@
                 guestbanner: GuestBanner,
             },
 
+            TRANSLATIONS: {
+                noCourses: () => gettext("There are no courses yet. Check back soon!"),
+            },
+
             onMounted(props, state) {
                 const unsortedCourses = props.wagtailPage.courses.filter(
                     (course) => course.lessons.length
@@ -62,7 +86,10 @@
 
                 const currentCourse = this.getCurrentCourse(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
-                const sortedListOfCourses = this.sortCourses(unsortedCourses);
+                const visibleCourses = isGuestUser()
+                    ? unsortedCourses.filter((course) => course.is_visible_to_guests)
+                    : unsortedCourses;
+                const sortedListOfCourses = this.sortCourses(visibleCourses);
                 this.update({
                     currentCourse,
                     listOfTags,
@@ -98,15 +125,15 @@
             },
 
             courseProgressMessage(course) {
-                // displays how many lessons are complete and how many lessons are in the current course
-                const numberOfCompleteLessons = countCompleteLessonsInCourses([course]);
-
                 return ngettext(
-                    "%1 / %2 lesson complete",
-                    "%1 / %2 lessons complete",
-                    numberOfCompleteLessons,
-                    course.data.lessons_count
+                    "%1 lesson complete",
+                    "%1 lessons complete",
+                    this.calculateCourseProgress(course)
                 );
+            },
+
+            calculateCourseProgress(course) {
+                return countCompleteLessonsInCourses([course]) + " / " + course.data.lessons_count;
             },
 
             greetingMessage() {
@@ -143,9 +170,11 @@
                 this.update();
             },
 
-            isCourseVisible(courseTags) {
+            doesCourseHaveTag(course) {
+                const { tags } = course;
                 const { selectedTags } = this.state;
-                const lowercaseCourseTags = courseTags.map((tag) => tag.toLowerCase());
+                const lowercaseCourseTags = tags.map((tag) => tag.toLowerCase());
+
                 return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
             },
 

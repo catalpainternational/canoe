@@ -4,7 +4,7 @@ import {
     getOrFetchManifest,
     getHomePage,
 } from "js/WagtailPagesAPI.js";
-import { getLanguage } from "ReduxImpl/Store";
+import { getLanguage } from "ReduxImpl/Interface";
 import { PageLacksTranslationDataError } from "js/Errors";
 
 const IS_SETTINGS_RESOURCES_OR_PROFILE = /#([A-Za-z]+)/;
@@ -24,7 +24,7 @@ const getPreviewPageUrl = (queryString) => {
 
 const routeToTranslation = (translationPageId) => {
     const [, section, cardNumber] = parseURLHash();
-    const translatedPageUrl = `#${translationPageId}`;
+    let translatedPageUrl = `#${translationPageId}`;
     if (section) {
         translatedPageUrl += `/${section}/`;
     }

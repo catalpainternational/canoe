@@ -12,6 +12,7 @@
                 <span class="report-card"></span>
             </div>
         </div>
+
         <div class="content-wrapper">
             <h5 class="section-title">{ TRANSLATIONS.byCourse() }</h5>
             <ul class="course-progress-list">
@@ -27,9 +28,9 @@
                                 { courseLessonsCompletedMessage(course) }
                             </p>
                             <progress
-                                if="{countCompleteLessonsIn(course) > 0}"
-                                value="{countCompleteLessonsIn(course)}"
-                                max="{course.lessons.length}"
+                                if="{countFinishedLessonsAndExamsIn(course) > 0}"
+                                value="{countFinishedLessonsAndExamsIn(course)}"
+                                max="{course.data.lessons_count}"
                             ></progress>
                         </div>
                     </a>
@@ -41,7 +42,7 @@
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
                         <span class="checkmark-circle-blue"></span>
-                        <h3>{countCompleteLessonsTotal()}</h3>
+                        <h3>{countFinishedLessonsAndExams()}</h3>
                         <h5>{ TRANSLATIONS.lessonsCompleted() }</h5>
                     </div>
                 </div>
@@ -59,13 +60,9 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
+        import { getHomePage } from "js/WagtailPagesAPI";
+        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import {
-            getHomePage
-        } from "js/WagtailPagesAPI";
-        import { getCapitalizedUsername } from "js/AuthenticationUtilities";
-        import { getAllLessons } from "js/utilities";
-        import {
-            countCompleteLessonsInCourse,
             countCompleteLessonsInCourses,
             getLatestCompletion,
             isCourseInProgress,
@@ -73,7 +70,6 @@
 
         export default {
             state: {
-                manifest: null,
                 courses: [],
                 currentCourse: null,
             },
@@ -83,11 +79,30 @@
             },
 
             TRANSLATIONS: {
-                overall: () => gettext('Overall progress'),
-                byCourse: () => gettext('Progress by course'),
-                learning: () => gettext('Learning statistics'),
-                lessonsCompleted: () => gettext('lessons completed so far'),
-                lessonsLeft: () => gettext('lessons remaining to finish your study')
+                overall: () => gettext("Overall progress"),
+                byCourse: () => gettext("Progress by course"),
+                learning: () => gettext("Learning statistics"),
+                lessonsCompleted: () => gettext("lessons completed so far"),
+                lessonsLeft: () => gettext("lessons remaining to finish your study"),
+            },
+
+            onMounted() {
+                this.renderProfilePage();
+            },
+
+            async renderProfilePage() {
+                const homePage = await getHomePage();
+                let courses = homePage.courses;
+
+                if (isGuestUser()) {
+                    courses = courses.filter((course) => course.is_visible_to_guests);
+                }
+                const lastWorkedOnCourse = this.getCurrentCourse(courses);
+
+                this.update({
+                    courses,
+                    currentCourse: lastWorkedOnCourse,
+                });
             },
 
             isCourseInProgress(aCourse) {
@@ -105,46 +120,41 @@
                 return lastWorkedOnCourse;
             },
 
-            countCompleteLessonsTotal() {
+            countFinishedLessonsAndExams() {
                 return countCompleteLessonsInCourses(this.state.courses);
             },
 
-            countCompleteLessonsIn(course) {
+            countFinishedLessonsAndExamsIn(course) {
                 return countCompleteLessonsInCourses([course]);
             },
 
+            countLessonsAndExams(courses) {
+                return courses.reduce(
+                    (totalLessons, currentCourse) =>
+                        (totalLessons += currentCourse.data.lessons_count),
+                    0
+                );
+            },
+
             getNumberOfLessonsLeft() {
-                return getAllLessons(this.state.courses).length - this.countCompleteLessonsTotal();
+                const { courses } = this.state;
+                return this.countLessonsAndExams(courses) - this.countFinishedLessonsAndExams();
             },
 
             getPercentOfLessonsCompleted() {
                 const percentage =
-                    (this.countCompleteLessonsTotal() / getAllLessons(this.state.courses).length) *
+                    (this.countFinishedLessonsAndExams() /
+                        this.countLessonsAndExams(this.state.courses)) *
                     100;
                 return Math.round(percentage) || 0;
-            },
-
-            async renderProfilePage() {
-                const homePage = await getHomePage();
-                const courses = homePage.courses;
-                const lastWorkedOnCourse = this.getCurrentCourse(courses);
-
-                this.update({
-                    courses,
-                    currentCourse: lastWorkedOnCourse,
-                });
-            },
-
-            onMounted() {
-                this.renderProfilePage();
             },
 
             courseLessonsCompletedMessage(course) {
                 // displays how many lessons of the total in a course have been completed
                 return gettext(
                     "%1 out of %2 completed",
-                    this.countCompleteLessonsIn(course),
-                    course.lessons.length
+                    this.countFinishedLessonsAndExamsIn(course),
+                    course.data.lessons_count
                 );
             },
 

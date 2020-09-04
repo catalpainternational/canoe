@@ -1,24 +1,40 @@
 <ContactInformation>
     <div class="custom-contact-container">
-        <p>Send us a message and we'll help you log in</p>
-        <button class="btn-primary" onclick="{sendWhatsAppMessage}">Send WhatsApp</button>
-        <p class="sm-note">Don't have WhatsApp?</p>
-        <button class="btn-secondary" onclick="{sendSmsMessage}">Send SMS</button>
+        <p>{ TRANSLATIONS.sendMessage() }</p>
+        <button class="btn-primary" onclick="{sendWhatsAppMessage}">
+            { TRANSLATIONS.whatsapp() }
+        </button>
+        <p class="sm-note">
+            { TRANSLATIONS.noWhatsapp() }
+            <a class="sms-link" onclick="{sendSmsMessage}">{ TRANSLATIONS.sms() }</a>
+        </p>
     </div>
 
     <script>
-        const phoneNumber = "19788675309";
-        const encodedMessage = encodeURIComponent("I need help accessing my account");
+        import { getContactNumber } from "js/utilities";
+        const phoneNumber = getContactNumber();
 
         export default {
+            TRANSLATIONS: {
+                sendMessage: () => gettext("Send us a message and we'll help you log in"),
+                whatsapp: () => gettext("Send WhatsApp"),
+                noWhatsapp: () => gettext("No WhatsApp?"),
+                sms: () => gettext("Send SMS"),
+                help: () => gettext("I need help accessing my account"),
+            },
+
+            encodedMessage() {
+                return encodeURIComponent(this.TRANSLATIONS.help());
+            },
+
             sendWhatsAppMessage() {
-                const whatsAppHref = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+                const whatsAppHref = `https://wa.me/${phoneNumber}?text=${this.encodedMessage()}`;
                 window.open(whatsAppHref, "_blank");
                 this.props.toggleLoginHelpModal();
             },
 
             sendSmsMessage() {
-                const smsHref = `sms:${phoneNumber}?&body=${encodedMessage}`;
+                const smsHref = `sms:${phoneNumber}?&body=${this.encodedMessage()}`;
                 window.open(smsHref, "_blank");
                 this.props.toggleLoginHelpModal();
             },

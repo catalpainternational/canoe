@@ -27,7 +27,7 @@
 
             <button class="btn-secondary" onclick="{logout}">{ TRANSLATIONS.logout() }</button>
 
-            <div is="logos" class="logo" />
+            <Logos></Logos>
 
             <!-- <CacheDisplay></CacheDisplay> -->
         </div>
@@ -44,10 +44,7 @@
         } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
         // import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
-        import {
-            alertIfRequestWasMadeOffline,
-            alertIfBrowserBlocksNotifications,
-        } from "js/Errors";
+        import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
         import { getPlatform } from "js/PlatformDetection";
 
         export default {
@@ -63,10 +60,10 @@
             },
 
             TRANSLATIONS: {
-                settings: () => gettext('Your settings'),
-                notifications: () => gettext('Would you like to receive app notifications?'),
-                add: () => gettext('Add to Home Screen'),
-                logout: () => gettext('Log out'),
+                settings: () => gettext("Your settings"),
+                notifications: () => gettext("Would you like to receive app notifications?"),
+                add: () => gettext("Add to Home Screen"),
+                logout: () => gettext("Log out"),
             },
 
             logout() {
