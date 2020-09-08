@@ -90,10 +90,7 @@ export default class CoursePage {
 
     getLatestCompletion() {
         const liveLessons = this.lessons.map((lesson) => lesson.slug);
-        const res = getLatestCompletionInCourse(this.slug, liveLessons);
-        // console.log(`=== ${this.slug} ===`);
-        // console.log(res);
-        return res;
+        return getLatestCompletionInCourse(this.slug, liveLessons);
     }
 
     isVisibleToGuests() {

@@ -8,6 +8,8 @@ import {
     getFinishedLessonSlugs,
 } from "Actions/completion";
 
+// We need this method until LessonComplete can access the CoursePage object and
+// call its .numberOfFinishedLessons.
 export const countFinishedLessonsAmongSlugs = (courseSlug, slugsOfLiveLessons) => {
     return getFinishedLessonSlugs(courseSlug, slugsOfLiveLessons).length;
 };

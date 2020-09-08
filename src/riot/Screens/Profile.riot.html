@@ -88,13 +88,10 @@
             },
 
             async renderProfilePage() {
-                console.log("hi there.");
                 const homePageJSON = await getHomePage();
                 const homePage = new HomePage(homePageJSON);
 
-                console.log("loading.");
                 let courses = await homePage.getFullCourseObjects();
-                console.log("here");
 
                 if (isGuestUser()) {
                     courses = courses.filter((course) => course.isVisibleToGuests());
