@@ -1,10 +1,31 @@
-import { isExamComplete, countCompleteLessonsInCourses } from "js/CompletionInterface";
-import { getLatestCompletionInCourse } from "Actions/completion";
+import { getLatestCompletionInCourse, getFinishedLessonSlugs } from "Actions/completion";
 import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
 
 import { getExamHighScore as getHighScore, hasUserTriedExam as hasTriedExam } from "Actions/exam";
 
+import ExamGrader from "js/ExamGrader";
 import LessonPage from "./LessonPage";
+
+const getCourseAndLessonSlugs = (wagtailCoursePage) => {
+    const { slug, has_exam } = wagtailCoursePage.data;
+    const lessons = wagtailCoursePage.lessons;
+
+    const courseSlug = slug;
+    const lessonSlugs = lessons.map((lesson) => lesson.slug);
+    if (has_exam) {
+        lessonSlugs.push("exam");
+    }
+
+    return {
+        courseSlug,
+        lessonSlugs,
+    };
+};
+
+const countCompleteLessons = (wagtailCourse) => {
+    const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(wagtailCourse);
+    return getFinishedLessonSlugs(courseSlug, lessonSlugs).length;
+};
 
 export default class CoursePage {
     constructor(aWagtailCourse) {
@@ -36,7 +57,7 @@ export default class CoursePage {
     }
 
     get numberOfFinishedLessons() {
-        return countCompleteLessonsInCourses([this.course]);
+        return countCompleteLessons(this.course);
     }
 
     get tags() {
@@ -52,7 +73,7 @@ export default class CoursePage {
     }
 
     isExamFinished() {
-        return isExamComplete(this.slug);
+        return ExamGrader.isExamFinished(this.slug);
     }
 
     hasUserTriedExam() {
@@ -68,7 +89,11 @@ export default class CoursePage {
     }
 
     getLatestCompletion() {
-        return getLatestCompletionInCourse(this.slug);
+        const liveLessons = this.lessons.map((lesson) => lesson.slug);
+        const res = getLatestCompletionInCourse(this.slug, liveLessons);
+        // console.log(`=== ${this.slug} ===`);
+        // console.log(res);
+        return res;
     }
 
     isVisibleToGuests() {

@@ -32,9 +32,9 @@
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <Card
                     title="{ courseExamTitle() }"
-                    description="{hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${getHighestScore()}%` : ''}"
+                    description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
                     link="{props.wagtailPage.id}/exam/0"
-                    isCompleted="{isExamComplete(props.wagtailPage.id)}"
+                    isCompleted="{props.wagtailPage.isExamFinished()}"
                     isComingSoon="{false}"
                     showFooter="{true}"
                     isDisabled="{examDisabled()}"
@@ -112,22 +112,6 @@
                 const isExamUnlocked =
                     course.numberOfFinishedLessons === course.numberOfLessons - 1;
                 return !isExamUnlocked && !isGuestUser();
-            },
-
-            isExamComplete() {
-                const { wagtailPage } = this.props;
-                return wagtailPage.isExamFinished();
-            },
-
-            hasUserTriedExam() {
-                const { wagtailPage } = this.props;
-                return wagtailPage.hasUserTriedExam();
-            },
-
-            getHighestScore() {
-                const { wagtailPage } = this.props;
-                const highScore = wagtailPage.getExamHighScore();
-                return highScore;
             },
 
             numberOfLessonsCompleteMessage() {
