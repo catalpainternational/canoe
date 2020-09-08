@@ -1,5 +1,5 @@
 const webpack = require("webpack");
-const merge = require("webpack-merge");
+const { mergeWithCustomize, customizeArray } = require('webpack-merge');
 const path = require("path");
 const fs = require("fs");
 
@@ -11,9 +11,13 @@ const WebpackPwaManifest = require("webpack-pwa-manifest");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
 const defaultProjectConfiguration = require("./canoe-project-default.js");
+
+// uncomment this to find the source of webpack deprecation warnings
+// process.traceDeprecation = true;
 
 module.exports = (env) => {
     // read the environment configuration
@@ -55,13 +59,21 @@ module.exports = (env) => {
             contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
-            modules: [path.resolve(__dirname, "src"), "node_modules"],
+            modules: [path.resolve(__dirname, "src")],
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
                 js: path.resolve(__dirname, "src/js"),
                 ReduxImpl: path.resolve(__dirname, "src/js/redux"),
                 Actions: path.resolve(__dirname, "src/js/actions"),
             },
+            plugins: [
+                PnpWebpackPlugin,
+            ],
+        },
+        resolveLoader: {
+            plugins: [
+                PnpWebpackPlugin.moduleLoader(module),
+            ],
         },
         module: {
             rules: [
@@ -183,8 +195,10 @@ module.exports = (env) => {
 
     const productionWebpackConfig = env && env.PRODUCTION ? require("./webpack.prod.js") : {};
 
-    const config = merge.strategy({
-        "resolve.modules": "prepend",
+    const config = mergeWithCustomize({
+        customizeArray: customizeArray({
+            'resolve.modules': 'prepend'
+          })
     })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,
