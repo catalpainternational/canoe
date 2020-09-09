@@ -22,11 +22,6 @@ const getCourseAndLessonSlugs = (wagtailCoursePage) => {
     };
 };
 
-const countCompleteLessons = (wagtailCourse) => {
-    const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(wagtailCourse);
-    return getFinishedLessonSlugs(courseSlug, lessonSlugs).length;
-};
-
 export default class CoursePage {
     constructor(aWagtailCourse) {
         this.course = aWagtailCourse;
@@ -57,7 +52,8 @@ export default class CoursePage {
     }
 
     get numberOfFinishedLessons() {
-        return countCompleteLessons(this.course);
+        const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(wagtailCourse);
+        return getFinishedLessonSlugs(courseSlug, lessonSlugs).length;
     }
 
     get tags() {
