@@ -22,4 +22,8 @@ export default class ResourceArticle {
     get tags() {
         return this.article.tags;
     }
+
+    isVisibleToGuests() {
+        return this.article.is_visible_to_guests;
+    }
 }
