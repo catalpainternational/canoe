@@ -4,7 +4,7 @@ import CoursePage from "js/CoursePage";
 
 import { countCompleteLessonsInCourses } from "js/CompletionInterface";
 
-jest.mock("countCompleteLessonsInCourses");
+jest.mock("js/CompletionInterface");
 
 describe("Tests CoursePage's properties.", () => {
     test("CoursePage.id matches JSON's id.", () => {
@@ -36,11 +36,12 @@ describe("Tests CoursePage's properties.", () => {
         expect(cp.numberOfLessons).toBe(TestCourseJSON.data.lessons_count);
     });
 
-    test("CoursePage.numberOfFinishedLessons matches finished lesson and exam count.", () => {
+    test.only("CoursePage.numberOfFinishedLessons matches finished lesson and exam count.", () => {
         const cp = new CoursePage(TestCourseJSON);
 
-        expect(cp.numberOfLessons).toBe(cp.lessons.length + Number(cp.hasExam()));
-        expect(cp.numberOfLessons).toBe(TestCourseJSON.data.lessons_count);
+        const MOCK_COMPLETION_VALUE = 200;
+        countCompleteLessonsInCourses.mockReturnValue(MOCK_COMPLETION_VALUE);
+        expect(cp.numberOfFinishedLessons).toBe(MOCK_COMPLETION_VALUE);
     });
 
     test("CoursePage.tags matches JSON's tags.", () => {
