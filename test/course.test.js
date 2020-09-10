@@ -1,5 +1,5 @@
 import CourseWithExamJSON from "./pageData/courseWithExam";
-import ExamlessCourseJSON from "./pageData/courseWithoutExam";
+import courseWithoutExamJSON from "./pageData/courseWithoutExam";
 
 import CoursePage from "js/CoursePage";
 
@@ -9,62 +9,86 @@ import courseWithExam from "./pageData/courseWithExam";
 jest.mock("js/CompletionInterface");
 
 describe("Tests CoursePage's properties.", () => {
-    test("CoursePage.id matches JSON's id.", () => {
-        const cp = new CoursePage(CourseWithExamJSON);
-        expect(cp.id).toBe(CourseWithExamJSON.id);
-    });
+    test.each([courseWithExam, courseWithoutExamJSON])(
+        "CoursePage.id matches JSON's id.",
+        (courseJSON) => {
+            const cp = new CoursePage(courseJSON);
+            expect(cp.id).toBe(courseJSON.id);
+        }
+    );
 
-    test("CoursePage.title matches JSON's title.", () => {
-        const cp = new CoursePage(CourseWithExamJSON);
-        expect(cp.title).toBe(CourseWithExamJSON.title);
-    });
+    test.each([courseWithExam, courseWithoutExamJSON])(
+        "CoursePage.title matches JSON's title.",
+        (courseJSON) => {
+            const cp = new CoursePage(courseJSON);
+            expect(cp.title).toBe(courseJSON.title);
+        }
+    );
 
-    test("CoursePage.slug matches JSON's slug.", () => {
-        const cp = new CoursePage(CourseWithExamJSON);
-        expect(cp.slug).toBe(CourseWithExamJSON.meta.slug);
-    });
+    test.each([courseWithExam, courseWithoutExamJSON])(
+        "CoursePage.slug matches JSON's slug.",
+        (courseJSON) => {
+            const cp = new CoursePage(courseJSON);
+            expect(cp.slug).toBe(courseJSON.meta.slug);
+        }
+    );
 
-    test("CoursePage.lessons matches JSON's lessons.", () => {
-        const cp = new CoursePage(CourseWithExamJSON);
+    test.each([courseWithExam, courseWithoutExamJSON])(
+        "CoursePage.lessons matches JSON's lessons.",
+        (courseJSON) => {
+            const cp = new CoursePage(courseJSON);
 
-        expect(cp.lessons.length).toBe(CourseWithExamJSON.lessons.length);
-        expect(cp.lessons).toEqual(CourseWithExamJSON.lessons);
-    });
+            expect(cp.lessons.length).toBe(courseJSON.lessons.length);
+            expect(cp.lessons).toEqual(courseJSON.lessons);
+        }
+    );
 
-    test("CoursePage.numberOfLessons matches lesson and exam count.", () => {
-        const cp = new CoursePage(CourseWithExamJSON);
+    test.each([courseWithExam, courseWithoutExamJSON])(
+        "CoursePage.numberOfLessons matches lesson and exam count.",
+        (courseJSON) => {
+            const cp = new CoursePage(courseJSON);
 
-        expect(cp.numberOfLessons).toBe(cp.lessons.length + Number(cp.hasExam()));
-        expect(cp.numberOfLessons).toBe(CourseWithExamJSON.data.lessons_count);
-    });
+            expect(cp.numberOfLessons).toBe(cp.lessons.length + Number(cp.hasExam()));
+            expect(cp.numberOfLessons).toBe(courseJSON.data.lessons_count);
+        }
+    );
 
-    test("CoursePage.numberOfFinishedLessons matches finished lesson and exam count.", () => {
-        const cp = new CoursePage(CourseWithExamJSON);
+    test.each([courseWithExam, courseWithoutExamJSON])(
+        "CoursePage.numberOfFinishedLessons matches finished lesson and exam count.",
+        (courseJSON) => {
+            const cp = new CoursePage(courseJSON);
 
-        const MOCK_COMPLETION_VALUE = 200;
-        countCompleteLessonsInCourses.mockReturnValue(MOCK_COMPLETION_VALUE);
-        expect(cp.numberOfFinishedLessons).toBe(MOCK_COMPLETION_VALUE);
-    });
+            const MOCK_COMPLETION_VALUE = 200;
+            countCompleteLessonsInCourses.mockReturnValue(MOCK_COMPLETION_VALUE);
+            expect(cp.numberOfFinishedLessons).toBe(MOCK_COMPLETION_VALUE);
+        }
+    );
 
-    test("CoursePage.tags matches JSON's tags.", () => {
-        const cp = new CoursePage(CourseWithExamJSON);
+    test.each([courseWithExam, courseWithoutExamJSON])(
+        "CoursePage.tags matches JSON's tags.",
+        (courseJSON) => {
+            const cp = new CoursePage(courseJSON);
 
-        expect(cp.tags.length).toBe(CourseWithExamJSON.tags.length);
-        expect(cp.tags).toEqual(CourseWithExamJSON.tags);
-    });
+            expect(cp.tags.length).toBe(courseJSON.tags.length);
+            expect(cp.tags).toEqual(courseJSON.tags);
+        }
+    );
 
-    test("CoursePage.exam matches JSON's exam.", () => {
-        const cp = new CoursePage(CourseWithExamJSON);
+    test.each([courseWithExam, courseWithoutExamJSON])(
+        "CoursePage.exam matches JSON's exam.",
+        (courseJSON) => {
+            const cp = new CoursePage(courseJSON);
 
-        expect(cp.exam.length).toBe(CourseWithExamJSON.exam.length);
-        expect(cp.exam).toEqual(CourseWithExamJSON.exam);
-    });
+            expect(cp.exam.length).toBe(courseJSON.exam.length);
+            expect(cp.exam).toEqual(courseJSON.exam);
+        }
+    );
 });
 
 describe("Tests CoursePage's methods.", () => {
     test.each([
         [courseWithExam, true],
-        [ExamlessCourseJSON, false],
+        [courseWithoutExamJSON, false],
     ])("CoursePage.hasExam() reflects whether course has an exam.", (courseJSON, expected) => {
         const cp = new CoursePage(courseJSON);
         expect(cp.hasExam()).toBe(expected);
