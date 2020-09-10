@@ -1,5 +1,5 @@
 import CourseWithExamJSON from "./pageData/courseWithExam";
-import courseWithoutExamJSON from "./pageData/courseWithoutExam";
+import courseWithoutExam from "./pageData/courseWithoutExam";
 
 import CoursePage from "js/CoursePage";
 
@@ -9,7 +9,7 @@ import courseWithExam from "./pageData/courseWithExam";
 jest.mock("js/CompletionInterface");
 
 describe("Tests CoursePage's properties.", () => {
-    test.each([courseWithExam, courseWithoutExamJSON])(
+    test.each([courseWithExam, courseWithoutExam])(
         "CoursePage.id matches JSON's id.",
         (courseJSON) => {
             const cp = new CoursePage(courseJSON);
@@ -17,7 +17,7 @@ describe("Tests CoursePage's properties.", () => {
         }
     );
 
-    test.each([courseWithExam, courseWithoutExamJSON])(
+    test.each([courseWithExam, courseWithoutExam])(
         "CoursePage.title matches JSON's title.",
         (courseJSON) => {
             const cp = new CoursePage(courseJSON);
@@ -25,7 +25,7 @@ describe("Tests CoursePage's properties.", () => {
         }
     );
 
-    test.each([courseWithExam, courseWithoutExamJSON])(
+    test.each([courseWithExam, courseWithoutExam])(
         "CoursePage.slug matches JSON's slug.",
         (courseJSON) => {
             const cp = new CoursePage(courseJSON);
@@ -33,7 +33,7 @@ describe("Tests CoursePage's properties.", () => {
         }
     );
 
-    test.each([courseWithExam, courseWithoutExamJSON])(
+    test.each([courseWithExam, courseWithoutExam])(
         "CoursePage.lessons matches JSON's lessons.",
         (courseJSON) => {
             const cp = new CoursePage(courseJSON);
@@ -43,7 +43,7 @@ describe("Tests CoursePage's properties.", () => {
         }
     );
 
-    test.each([courseWithExam, courseWithoutExamJSON])(
+    test.each([courseWithExam, courseWithoutExam])(
         "CoursePage.numberOfLessons matches lesson and exam count.",
         (courseJSON) => {
             const cp = new CoursePage(courseJSON);
@@ -53,7 +53,7 @@ describe("Tests CoursePage's properties.", () => {
         }
     );
 
-    test.each([courseWithExam, courseWithoutExamJSON])(
+    test.each([courseWithExam, courseWithoutExam])(
         "CoursePage.numberOfFinishedLessons matches finished lesson and exam count.",
         (courseJSON) => {
             const cp = new CoursePage(courseJSON);
@@ -64,7 +64,7 @@ describe("Tests CoursePage's properties.", () => {
         }
     );
 
-    test.each([courseWithExam, courseWithoutExamJSON])(
+    test.each([courseWithExam, courseWithoutExam])(
         "CoursePage.tags matches JSON's tags.",
         (courseJSON) => {
             const cp = new CoursePage(courseJSON);
@@ -74,7 +74,7 @@ describe("Tests CoursePage's properties.", () => {
         }
     );
 
-    test.each([courseWithExam, courseWithoutExamJSON])(
+    test.each([courseWithExam, courseWithoutExam])(
         "CoursePage.exam matches JSON's exam.",
         (courseJSON) => {
             const cp = new CoursePage(courseJSON);
@@ -88,9 +88,20 @@ describe("Tests CoursePage's properties.", () => {
 describe("Tests CoursePage's methods.", () => {
     test.each([
         [courseWithExam, true],
-        [courseWithoutExamJSON, false],
+        [courseWithoutExam, false],
     ])("CoursePage.hasExam() reflects whether course has an exam.", (courseJSON, expected) => {
         const cp = new CoursePage(courseJSON);
         expect(cp.hasExam()).toBe(expected);
     });
+
+    test.each([
+        [courseWithExam, true],
+        [courseWithoutExam, false],
+    ])(
+        "CoursePage.isExamFinished() reflects whether course exam is finished.",
+        (courseJSON, expected) => {
+            // const cp = new CoursePage(courseJSON);
+            // expect(cp.isExamFinished()).toBe(expected);
+        }
+    );
 });
