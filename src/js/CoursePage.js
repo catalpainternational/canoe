@@ -6,22 +6,6 @@ import { getExamHighScore as getHighScore, hasUserTriedExam as hasTriedExam } fr
 import ExamGrader from "js/ExamGrader";
 import LessonPage from "./LessonPage";
 
-const getCourseAndLessonSlugs = (wagtailCoursePage) => {
-    const { slug, has_exam } = wagtailCoursePage.data;
-    const lessons = wagtailCoursePage.lessons;
-
-    const courseSlug = slug;
-    const lessonSlugs = lessons.map((lesson) => lesson.slug);
-    if (has_exam) {
-        lessonSlugs.push("exam");
-    }
-
-    return {
-        courseSlug,
-        lessonSlugs,
-    };
-};
-
 export default class CoursePage {
     constructor(aWagtailCourse) {
         this.course = aWagtailCourse;
@@ -52,8 +36,11 @@ export default class CoursePage {
     }
 
     get numberOfFinishedLessons() {
-        const { courseSlug, lessonSlugs } = getCourseAndLessonSlugs(wagtailCourse);
-        return getFinishedLessonSlugs(courseSlug, lessonSlugs).length;
+        const lessonSlugs = this.lessons.map((lesson) => lesson.slug);
+        if (this.hasExam()) {
+            lessonSlugs.push("exam");
+        }
+        return getFinishedLessonSlugs(this.slug, lessonSlugs).length;
     }
 
     get tags() {
