@@ -1,12 +1,11 @@
-import CourseWithExamJSON from "./pageData/courseWithExam";
+import courseWithExam from "./pageData/courseWithExam";
 import courseWithoutExam from "./pageData/courseWithoutExam";
 
 import CoursePage from "js/CoursePage";
 
-import { countCompleteLessonsInCourses } from "js/CompletionInterface";
-import courseWithExam from "./pageData/courseWithExam";
+import { getFinishedLessonSlugs } from "Actions/completion";
 
-jest.mock("js/CompletionInterface");
+jest.mock("Actions/completion");
 
 describe("Tests CoursePage's properties.", () => {
     test.each([courseWithExam, courseWithoutExam])(
@@ -58,9 +57,9 @@ describe("Tests CoursePage's properties.", () => {
         (courseJSON) => {
             const cp = new CoursePage(courseJSON);
 
-            const MOCK_COMPLETION_VALUE = 200;
-            countCompleteLessonsInCourses.mockReturnValue(MOCK_COMPLETION_VALUE);
-            expect(cp.numberOfFinishedLessons).toBe(MOCK_COMPLETION_VALUE);
+            const MOCK_LESSON_SLUGS = ["slug-1", "slug-2"];
+            getFinishedLessonSlugs.mockReturnValue(MOCK_LESSON_SLUGS);
+            expect(cp.numberOfFinishedLessons).toBe(MOCK_LESSON_SLUGS.length);
         }
     );
 
