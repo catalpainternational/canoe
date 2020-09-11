@@ -31,8 +31,8 @@ export async function pullCompletionsIntoMemory() {
     }
 }
 
-export function setComplete(course, lesson, section, extraDataObject = {}) {
-    setCompleteInternal(course, lesson, section, new Date());
+export function setComplete(course, lesson, section, extraDataObject = {}, date = new Date()) {
+    setCompleteInternal(course, lesson, section, date);
 
     // store the action ( via idb and api )
     storeCompletion({ course, lesson, section, ...extraDataObject });
