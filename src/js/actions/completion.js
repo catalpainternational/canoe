@@ -49,7 +49,11 @@ const isLaterThanCutoff = (completion) => {
         return false;
     }
     const dateString = `${process.env.DONT_SHOW_COMPLETIONS_AFTER}`;
-    const dontShowActionsFromBeforeThisDate = new Date(dateString);
+
+    let dontShowActionsFromBeforeThisDate = new Date(0);
+    if (dateString !== "undefined") {
+        dontShowActionsFromBeforeThisDate = new Date(dateString);
+    }
     return completion >= dontShowActionsFromBeforeThisDate;
 };
 
