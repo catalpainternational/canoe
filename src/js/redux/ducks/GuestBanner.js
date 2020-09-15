@@ -8,7 +8,7 @@ export const toggleGuestBanner = (trueOrFalse) => ({
 });
 
 // REDUCER
-const isGuestBannerVisible = (state = false, action) => {
+const isGuestBannerVisible = (state = true, action) => {
     switch (action.type) {
         case TOGGLED_GUEST_BANNER:
             return action.isGuestBannerVisible;
