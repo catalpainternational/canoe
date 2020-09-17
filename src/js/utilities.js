@@ -1,5 +1,3 @@
-import { getHomePage } from "js/WagtailPagesAPI";
-import { getLatestCompletion } from "js/CompletionInterface";
 import { dispatchToastEvent } from "js/Events";
 import { getLanguage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL } from "js/urls";
@@ -10,16 +8,6 @@ export const alertAppIsOffline = () => {
 
 export const alertAppIsOnline = () => {
     dispatchToastEvent("You are online.");
-};
-
-export const getLastWorkedOnCourse = async () => {
-    const homePage = await getHomePage();
-    const courses = homePage.courses;
-    const latestCompletion = getLatestCompletion(courses);
-    const lastWorkedOnCourse = courses.find(
-        (course) => course.data.slug === latestCompletion.courseSlug
-    );
-    return lastWorkedOnCourse;
 };
 
 export const isCourseInTheCurrentLanguage = (courseSlug) => {
@@ -70,4 +58,22 @@ export const debounce = (func, waitInMilliseconds) => {
 
 export const getContactNumber = () => {
     return process.env.CONTACT_NUMBER;
+};
+
+export const getCourseWithLatestCompletion = (courses) => {
+    const coursesWithCompletions = courses.filter((course) => course.getLatestCompletion());
+
+    let lastWorkedOnCourse = null;
+    for (const course of coursesWithCompletions) {
+        if (
+            lastWorkedOnCourse &&
+            !course.isFinished() &&
+            course.getLatestCompletion().completionDate <
+                lastWorkedOnCourse.getLatestCompletion().completionDate
+        ) {
+            continue;
+        }
+        lastWorkedOnCourse = course;
+    }
+    return lastWorkedOnCourse;
 };

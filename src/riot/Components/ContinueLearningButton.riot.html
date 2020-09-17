@@ -1,6 +1,6 @@
 <ContinueLearningButton>
     <div>
-        <a href="#{state.currentCourse && state.currentCourse.data.id}">
+        <a href="#{props.currentCourse && props.currentCourse.id}">
             <div class="btn-continue-learning">
                 <p>{ TRANSLATIONS.continueLearning() }</p>
                 <span class="arrow background-gray-2"></span>
@@ -9,27 +9,9 @@
     </div>
 
     <script>
-        import { getLastWorkedOnCourse } from "js/utilities";
-
         export default {
-            state: {
-                currentCourse: null,
-            },
-
             TRANSLATIONS: {
                 continueLearning: () => gettext("Continue learning"),
-            },
-
-            async renderContinueLearningButton() {
-                const lastWorkedOnCourse = await getLastWorkedOnCourse();
-
-                this.update({
-                    currentCourse: lastWorkedOnCourse,
-                });
-            },
-
-            onMounted() {
-                this.renderContinueLearningButton();
             },
         };
     </script>

@@ -59,7 +59,7 @@ export const getOrFetchWagtailPage = async (path) => {
     return wagtailPage;
 };
 
-const _getOrFetchWagtailPageById = async (pageId) => {
+export const _getOrFetchWagtailPageById = async (pageId) => {
     const manifest = await getOrFetchManifest();
     const pagePath = manifest.pages[pageId];
     return getOrFetchWagtailPage(pagePath);

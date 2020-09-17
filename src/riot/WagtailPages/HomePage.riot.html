@@ -5,11 +5,12 @@
         <div class="header-box">
             <div class="left-block">
                 <h3>{ greetingMessage() }</h3>
-                <h6 if="{state.currentCourse && isCourseInProgress(state.currentCourse)}">
+                <h6 if="{state.currentCourse && !state.currentCourse.isFinished()}">
                     { continueLearningMessage() }
                 </h6>
                 <ContinueLearningButton
-                    if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
+                    if="{state.currentCourse && !state.currentCourse.isFinished()}"
+                    currentCourse="{state.currentCourse}"
                     class="profile header-text"
                     background="home-background-image"
                 ></ContinueLearningButton>
@@ -18,29 +19,36 @@
         </div>
     </div>
     <div class="content-wrapper">
-        <TagList
-            if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0}"
-            tags="{state.listOfTags}"
-            onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"
-        ></TagList>
-        <div
-            class="course"
-            each="{course in state.sortedListOfCourses}"
-            if="{doesCourseHaveTag(course)}"
-        >
-            <Card
-                title="{course.data.title}"
-                link="{course.data.id}"
-                description="{courseProgressMessage(course)}"
-                isCompleted="{!isCourseInProgress(course)}"
-                showFooter="{true}"
-                type="course"
-            ></Card>
-        </div>
-        <p if="{state.sortedListOfCourses.length === 0}">
-            { TRANSLATIONS.noCourses() }
-        </p>
+        <LoadingDots
+            if="{state.sortedListOfCourses === null}"
+            extrastyleclasses="dark"
+        ></LoadingDots>
+
+        <template if="{Array.isArray(state.sortedListOfCourses)}">
+            <TagList
+                if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0}"
+                tags="{state.listOfTags}"
+                onTagClick="{onTagClick}"
+                selectedTags="{state.selectedTags}"
+            ></TagList>
+
+            <div
+                class="course"
+                each="{course in state.sortedListOfCourses}"
+                if="{doesCourseHaveTag(course)}"
+            >
+                <Card
+                    title="{course.title}"
+                    link="{course.id}"
+                    description="{courseProgressMessage(course)}"
+                    isCompleted="{course.isFinished()}"
+                    showFooter="{true}"
+                    type="course"
+                ></Card>
+            </div>
+
+            <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
+        </template>
     </div>
 
     <script>
@@ -48,24 +56,20 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
         import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { isComplete } from "Actions/completion";
-        import {
-            countCompleteLessonsInCourses,
-            getLatestCompletion,
-            isCourseInProgress,
-        } from "js/CompletionInterface";
         import { ON_COMPLETION_CHANGE } from "js/Events";
         import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
         import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
+        import { getCourseWithLatestCompletion } from "js/utilities";
 
         export default {
             state: {
                 currentCourse: null,
                 selectedTags: [],
                 listOfTags: [],
-                sortedListOfCourses: [],
+                sortedListOfCourses: null,
             },
 
             components: {
@@ -73,23 +77,27 @@
                 continuelearningbutton: ContinueLearningButton,
                 taglist: TagList,
                 guestbanner: GuestBanner,
+                loadingdots: LoadingDots,
             },
 
             TRANSLATIONS: {
                 noCourses: () => gettext("There are no courses yet. Check back soon!"),
             },
 
-            onMounted(props, state) {
-                const unsortedCourses = props.wagtailPage.courses.filter(
-                    (course) => course.lessons.length
-                );
+            async onMounted(props, state) {
+                const courses = await props.wagtailPage.getFullCourseObjects();
 
-                const currentCourse = this.getCurrentCourse(unsortedCourses);
+                const unsortedCourses = courses.filter((course) => course.numberOfLessons);
+
+                const currentCourse = getCourseWithLatestCompletion(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
+
                 const visibleCourses = isGuestUser()
-                    ? unsortedCourses.filter((course) => course.is_visible_to_guests)
+                    ? unsortedCourses.filter((course) => course.isVisibleToGuests())
                     : unsortedCourses;
+
                 const sortedListOfCourses = this.sortCourses(visibleCourses);
+
                 this.update({
                     currentCourse,
                     listOfTags,
@@ -98,17 +106,8 @@
             },
 
             sortCourses(courses) {
-                const completedCourses = [];
-                const incompleteCourses = [];
-
-                courses.map((course) => {
-                    if (this.isCourseInProgress(course)) {
-                        incompleteCourses.push(course);
-                    } else {
-                        completedCourses.push(course);
-                    }
-                });
-
+                const completedCourses = courses.filter((course) => course.isFinished());
+                const incompleteCourses = courses.filter((course) => !course.isFinished());
                 const sortedCourses = incompleteCourses.concat(completedCourses);
                 return sortedCourses;
             },
@@ -118,9 +117,8 @@
                 return ngettext(
                     "You only have %1 lesson left to finish %2.",
                     "You only have %1 lessons left to finish %2.",
-                    this.state.currentCourse.data.lessons_count -
-                        countCompleteLessonsInCourses([currentCourse]),
-                    this.state.currentCourse.data.title
+                    currentCourse.numberOfLessons - currentCourse.numberOfFinishedLessons,
+                    currentCourse.title
                 );
             },
 
@@ -128,36 +126,13 @@
                 return ngettext(
                     "%1 lesson complete",
                     "%1 lessons complete",
-                    this.calculateCourseProgress(course)
+                    course.numberOfFinishedLessons + " / " + course.numberOfLessons
                 );
-            },
-
-            calculateCourseProgress(course) {
-                return countCompleteLessonsInCourses([course]) + " / " + course.data.lessons_count;
             },
 
             greetingMessage() {
                 // Greet the user with their username
                 return gettext("Hi %1", getCapitalizedUsername());
-            },
-
-            getCurrentCourse(courses) {
-                const latestCompletion = getLatestCompletion(courses);
-                if (latestCompletion === null) {
-                    return null;
-                }
-                const lastWorkedOnCourse = courses.find(
-                    (course) => course.data.slug === latestCompletion.courseSlug
-                );
-                return lastWorkedOnCourse;
-            },
-
-            isCourseInProgress(aCourse) {
-                return isCourseInProgress(aCourse);
-            },
-
-            isLessonComplete(course, lesson) {
-                return isComplete(course.data.slug, lesson.slug);
             },
 
             onTagClick(clickedTag) {

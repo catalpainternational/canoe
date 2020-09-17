@@ -10,9 +10,7 @@
                         <h3>{ TRANSLATIONS.completed() }</h3>
                         <p>{ passedExamMessage() }</p>
                     </div>
-                    <button class="btn-primary" onclick="{goHome}">
-                        { TRANSLATIONS.back() }
-                    </button>
+                    <button class="btn-primary" onclick="{goHome}">{ TRANSLATIONS.back() }</button>
                     <button class="btn-secondary" onclick="{goToResources}">
                         { TRANSLATIONS.resources() }
                     </button>
@@ -36,7 +34,7 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
         import { markExamAsComplete } from "js/CompletionInterface";
-        import { saveExamScore } from "js/ExamInterface";
+        import ExamGrader from "js/ExamGrader";
 
         export default {
             components: {
@@ -63,13 +61,8 @@
 
             calculatePassOrFail() {
                 const { course, finalScore, minimumScore } = this.props;
-                const passedExam = finalScore >= minimumScore;
 
-                saveExamScore(course.slug, finalScore);
-
-                if (passedExam) {
-                    markExamAsComplete(course.slug, finalScore);
-                }
+                ExamGrader.saveExamScore(course.slug, finalScore, minimumScore);
                 this.update({ passedExam });
             },
 
