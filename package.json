@@ -22,6 +22,7 @@
         "@riotjs/webpack-loader": "^4.0.3",
         "babel-loader": "^8.1.0",
         "clean-webpack-plugin": "^3.0.0",
+        "client-oauth2": "^4.3.3",
         "css-loader": "^4.2.0",
         "cssnano": "^4.1.10",
         "file-loader": "^6.0.0",
