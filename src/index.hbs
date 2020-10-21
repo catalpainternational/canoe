@@ -31,12 +31,16 @@
 </head>
 
 <body>
-    <div id="service-worker-loading">
-        {{!-- {{> $index_partials/loading_screen.hbs}} --}}
-        <span class="loading"></span>
-        <img src="loading.png" class="loading" />
-    </div>
     <div id="preapp-messages">
+        <div id="service-worker-loading">
+            {{!-- {{> $index_partials/loading_screen.hbs}} --}}
+            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" id="site-logo" />
+            <img src="{{ loading.png }}" id="loading-img" />
+            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" id="powered-by-logos" />
+            {{!-- <span id="site-logo"></span>
+            <img src="loading.png" id="loading-img" />
+            <span id="powered-by-logos"></span> --}}
+        </div>
         <div id="service-worker-notsupported" hidden>
             <img src="{{ htmlWebpackPlugin.options.favicon_path }}" class="favicon" />
             {{> $index_partials/update_browser.hbs}}
@@ -57,12 +61,8 @@
             margin: 0;
         }
 
-        #preapp-messages div {
-            padding-top: 100px;
-            height: 100%;
-        }
-
-        #preapp-messages {
+        #service-worker-notsupported, 
+        #service-worker-failed {
             height: 100%;
             margin: -8px;
             width: auto;
@@ -79,15 +79,26 @@
             display: block;
         }
 
-        .loading {
+        #service-worker-loading {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #loading-img {
             background-image: url("./loading.png");
             background-repeat: no-repeat;
             background-size: contain;
             width: 100%;
             height: 100%;
-            min-height: 100vh;
             margin: auto;
             padding: 0;
+            flex: 0;
+        }
+
+        #site-logo, 
+        #powered-by-logos {
+            flex: 0;
         }
     </style>
 </body>
