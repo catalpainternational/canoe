@@ -31,12 +31,12 @@
 </head>
 
 <body>
+    <div id="service-worker-loading">
+        {{!-- {{> $index_partials/loading_screen.hbs}} --}}
+        <span class="loading"></span>
+        <img src="loading.png" class="loading" />
+    </div>
     <div id="preapp-messages">
-        <div id="service-worker-loading">
-            {{!-- {{> $index_partials/loading_screen.hbs}} --}}
-            <span class="loading"></span>
-            <img src="loading.png" class="loading" />
-        </div>
         <div id="service-worker-notsupported" hidden>
             <img src="{{ htmlWebpackPlugin.options.favicon_path }}" class="favicon" />
             {{> $index_partials/update_browser.hbs}}
@@ -51,6 +51,10 @@
         html {
             height: 100%;
             background-color: {{ htmlWebpackPlugin.options.background_color }};
+        }
+
+        body {
+            margin: 0;
         }
 
         #preapp-messages div {
@@ -70,12 +74,13 @@
         }
 
         #preapp-messages img.favicon {
-            margin: 10px 10px 10px 10px;
+            margin: 20px auto;
             max-height: 100px;
+            display: block;
         }
 
         .loading {
-            background-image: url("loading.png");
+            background-image: url("./loading.png");
             background-repeat: no-repeat;
             background-size: contain;
             width: 100%;
