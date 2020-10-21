@@ -32,15 +32,17 @@
 
 <body>
     <div id="preapp-messages">
-        <img src="{{ htmlWebpackPlugin.options.favicon_path }}" />
-
         <div id="service-worker-loading">
-            {{> $index_partials/please_wait.hbs}}
+            {{!-- {{> $index_partials/loading_screen.hbs}} --}}
+            <span class="loading"></span>
+            <img src="loading.png" class="loading" />
         </div>
         <div id="service-worker-notsupported" hidden>
+            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" class="favicon" />
             {{> $index_partials/update_browser.hbs}}
         </div>
         <div id="service-worker-failed" onclick="location.reload()" hidden>
+            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" class="favicon" />
             {{> $index_partials/try_again.hbs}}
         </div>
     </div>
@@ -48,14 +50,7 @@
     <style>
         html {
             height: 100%;
-
-            background-color: {
-                    {
-                    htmlWebpackPlugin.options.background_color
-                }
-            }
-
-            ;
+            background-color: {{ htmlWebpackPlugin.options.background_color }};
         }
 
         #preapp-messages div {
@@ -67,23 +62,27 @@
             height: 100%;
             margin: -8px;
             width: auto;
-
-            color: {
-                    {
-                    htmlWebpackPlugin.options.theme_color
-                }
-            }
-
-            ;
             padding: 30px;
             font-family: Verdana;
             font-size: xx-large;
             text-align: center;
+            color: {{ htmlWebpackPlugin.options.theme_color }};           
         }
 
-        #preapp-messages img {
+        #preapp-messages img.favicon {
             margin: 10px 10px 10px 10px;
             max-height: 100px;
+        }
+
+        .loading {
+            background-image: url("loading.png");
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            margin: auto;
+            padding: 0;
         }
     </style>
 </body>
