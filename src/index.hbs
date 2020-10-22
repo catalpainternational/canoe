@@ -33,13 +33,7 @@
 <body>
     <div id="preapp-messages">
         <div id="service-worker-loading">
-            {{!-- {{> $index_partials/loading_screen.hbs}} --}}
-            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" id="site-logo" />
-            <img src="{{ loading.png }}" id="loading-img" />
-            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" id="powered-by-logos" />
-            {{!-- <span id="site-logo"></span>
-            <img src="loading.png" id="loading-img" />
-            <span id="powered-by-logos"></span> --}}
+            {{> $index_partials/loading_screen.hbs}}
         </div>
         <div id="service-worker-notsupported" hidden>
             <img src="{{ htmlWebpackPlugin.options.favicon_path }}" class="favicon" />
@@ -83,22 +77,6 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-        }
-
-        #loading-img {
-            background-image: url("./loading.png");
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 100%;
-            height: 100%;
-            margin: auto;
-            padding: 0;
-            flex: 0;
-        }
-
-        #site-logo, 
-        #powered-by-logos {
-            flex: 0;
         }
     </style>
 </body>
