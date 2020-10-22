@@ -1,7 +1,10 @@
 <Login>
     <div class="modal-background">
-        <span class="site-logo"></span>
-        <span class="login-image"></span>
+        <div class="login-header">
+            <span class="site-logo"></span>
+            <span class="login-image"></span>
+            <h3>{ TRANSLATIONS.login() }</h3>
+        </div>
 
         <LoginForm loginFunction="{login}"></LoginForm>
 
@@ -68,6 +71,7 @@
                         `No learning progress will be saved while you are logged in as a guest. If you would like to create an account, please`
                     ),
                 send: () => gettext("send us a message"),
+                login: () => gettext("Login"),
             },
 
             onBeforeMount(props, state) {

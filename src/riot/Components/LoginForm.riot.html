@@ -1,6 +1,5 @@
 <LoginForm>
     <form onsubmit="{loginUser}">
-        <h3>{ TRANSLATIONS.login() }</h3>
         <div class="form-group">
             <label for="username">{ TRANSLATIONS.username() }</label>
             <input id="username" type="text" name="username" oninput="{clearError}" />
@@ -43,12 +42,12 @@
             },
 
             TRANSLATIONS: {
-                login: () => gettext("Login"),
                 username: () => gettext("Username"),
                 password: () => gettext("Password"),
                 showPassword: () => gettext("Show Password"),
                 hidePassword: () => gettext("Hide Password"),
                 invalid: () => gettext("Invalid login credentials"),
+                login: () => gettext("Login"),
             },
 
             getUsernameAndPasswordFromForm() {

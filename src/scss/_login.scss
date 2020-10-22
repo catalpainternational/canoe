@@ -1,6 +1,6 @@
-Login > div {
+Login .modal-background {
     $content-width: 18.75em;
-    $background-color: $tan;
+    $background-color: $gray-2;
     $button-color: $blue-1;
 
     min-height: 100vh;
@@ -10,13 +10,21 @@ Login > div {
     padding: 20px;
     background-color: $background-color;
 
-    span.site-logo {
-        margin-bottom: 20px;
-    }
+    .login-header {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        background: $gray-8;
+        align-items: center;
 
-    .site-logo,
-    .login-image {
-        flex: none;
+        span.site-logo {
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
     }
 
     .eye {
@@ -36,11 +44,6 @@ Login > div {
 
     form {
         width: 100%;
-
-        h3 {
-            margin-bottom: 20px;
-            margin-top: 20px;
-        }
 
         div.form-group {
             border: 1px solid $gray-5;
