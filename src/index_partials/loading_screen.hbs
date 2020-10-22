@@ -1,12 +1,19 @@
+{{#if true}}
 <div id="site-logo">
-	<img src="{{ htmlWebpackPlugin.options.favicon_path }}" />
+	<img src="../public/canoe-logo.png" />
 </div>
+{{/if}}
+
 <div id="loading-img">
 	<img src="../public/loading.png" />
 </div>
+
+{{#if true}}
 <div id="powered-by-logos">
-	<img src="{{ htmlWebpackPlugin.options.favicon_path }}" />
+	<p>Powered by</p>
+	<img src="../public/catalpa-logo.svg" />
 </div>
+{{/if}}
 
 <style>
 	#service-worker-loading img {
@@ -25,15 +32,44 @@
 		display: flex;
 	}
 
-	#loading-img {
-		flex: 1;
+	#site-logo {
+		margin-bottom: -40px;
+		z-index: 1;
+	}
+
+	#site-logo img {
+		max-width: 60px;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	#loading-img img {
+		max-height: 400px;
+		background-position: center bottom;
+		background-size: cover;
 	}
 
 	#powered-by-logos {
 		background: linear-gradient(134.77deg, #F4F8FA 0%, #D9E2E7 100%);
 		min-height: 160px;
+		flex-direction: column;
+		border-top-left-radius: 60% 10%;
+		border-top-right-radius: 60% 10%;
 	}
 
-	#powered-by-logos img {}
+	#powered-by-logos img {
+		max-width: 30px;
+	}
 
+	#powered-by-logos p {
+		text-align: center;
+		text-transform: uppercase;
+		font-weight: 100;
+		font-family: 'Verdana';
+		font-size: 12px;
+		letter-spacing: 1px;
+		color: #596973;
+		margin-top: 40px;
+		margin-bottom: 0;
+	}
 </style>
