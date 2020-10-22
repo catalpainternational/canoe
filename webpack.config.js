@@ -1,5 +1,5 @@
 const webpack = require("webpack");
-const { mergeWithCustomize, customizeArray } = require('webpack-merge');
+const { mergeWithCustomize, customizeArray } = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
 
@@ -19,7 +19,7 @@ const defaultProjectConfiguration = require("./canoe-project-default.js");
 // uncomment this to find the source of webpack deprecation warnings
 // process.traceDeprecation = true;
 
-module.exports = (env) => {
+module.exports = env => {
     // read the environment configuration
     const environmentConfiguration = Object.assign(
         defaultEnvironmentConfiguration,
@@ -66,18 +66,18 @@ module.exports = (env) => {
                 ReduxImpl: path.resolve(__dirname, "src/js/redux"),
                 Actions: path.resolve(__dirname, "src/js/actions"),
             },
-            plugins: [
-                PnpWebpackPlugin,
-            ],
+            plugins: [PnpWebpackPlugin],
         },
         resolveLoader: {
-            plugins: [
-                PnpWebpackPlugin.moduleLoader(module),
-            ],
+            plugins: [PnpWebpackPlugin.moduleLoader(module)],
         },
         module: {
             rules: [
-                { test: /\.hbs$/, loader: "handlebars-loader" },
+                {
+                    test: /\.hbs$/,
+                    loader: "handlebars-loader",
+                    query: { inlineRequires: '\/public\/' }
+                },
                 {
                     test: /\.riot.html$/,
                     exclude: /node_modules/,
@@ -111,7 +111,12 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.(png|jpg|gif)$/,
-                    use: ["file-loader"],
+                    use: {
+                        loader: "file-loader",
+                        options: {
+                            esModule: false,
+                        },
+                    },
                 },
                 {
                     test: /\.svg$/,
@@ -197,8 +202,8 @@ module.exports = (env) => {
 
     const config = mergeWithCustomize({
         customizeArray: customizeArray({
-            'resolve.modules': 'prepend'
-          })
+            "resolve.modules": "prepend",
+        }),
     })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,

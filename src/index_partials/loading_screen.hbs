@@ -1,14 +1,15 @@
-<img src="{{ htmlWebpackPlugin.options.favicon_path }}" id="site-logo" />
-<img src="./loading.png" id="loading-img" />
-<img src="{{ htmlWebpackPlugin.options.favicon_path }}" id="powered-by-logos" />
-
-{{!-- <span id="site-logo"></span>
-<img src="loading.png" id="loading-img" />
-<span id="powered-by-logos"></span> --}}
+<div id="site-logo">
+	<img src="{{ htmlWebpackPlugin.options.favicon_path }}" />
+</div>
+<div id="loading-img">
+	<img src="../public/loading.png" />
+</div>
+<div id="powered-by-logos">
+	<img src="{{ htmlWebpackPlugin.options.favicon_path }}" />
+</div>
 
 <style>
-	#loading-img {
-		background-image: url("./loading.png");
+	#service-worker-loading img {
 		background-repeat: no-repeat;
 		background-size: contain;
 		width: 100%;
@@ -19,8 +20,20 @@
 	}
 
 	#site-logo,
+	#loading-img,
 	#powered-by-logos {
-		flex: 0;
+		display: flex;
 	}
+
+	#loading-img {
+		flex: 1;
+	}
+
+	#powered-by-logos {
+		background: linear-gradient(134.77deg, #F4F8FA 0%, #D9E2E7 100%);
+		min-height: 160px;
+	}
+
+	#powered-by-logos img {}
 
 </style>
