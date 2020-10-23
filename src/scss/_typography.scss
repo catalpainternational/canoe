@@ -139,18 +139,13 @@ label {
 }
 
 input {
-    font-family: "GalanoGrotesqueAlt";
-    line-height: 16px;
-    font-size: 12px;
+    font-family: "CircularStd-Medium";
+    line-height: 1;
+    font-size: 1.2em;
     color: $gray-1;
     border: none;
     padding: 0;
     background-color: $white;
-
-    @media only screen and (max-width: $tablet) {
-        font-size: 1.2em;
-        line-height: 1;
-    };
 }
 
 ul, ol {

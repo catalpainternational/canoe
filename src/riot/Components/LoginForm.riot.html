@@ -1,12 +1,24 @@
 <LoginForm>
     <form onsubmit="{loginUser}">
-        <div class="form-group">
+        <div id="username-input" class="form-group">
             <label for="username">{ TRANSLATIONS.username() }</label>
-            <input id="username" type="text" name="username" oninput="{clearError}" />
+            <input
+                id="username"
+                type="text"
+                name="username"
+                oninput="{clearError}"
+                onfocus="{() => setInputFocus(event.target.id)}"
+            />
         </div>
-        <div class="form-group password">
+        <div id="password-input" class="form-group password">
             <label for="password">{ TRANSLATIONS.password() }</label>
-            <input id="password" type="password" name="password" oninput="{clearError}" />
+            <input
+                id="password"
+                type="password"
+                name="password"
+                oninput="{clearError}"
+                onfocus="{() => setInputFocus(event.target.id)}"
+            />
             <a id="icon-box" onclick="{showPassword}">
                 <span class="eye crossout"></span>
             </a>
@@ -29,6 +41,7 @@
                 isShowingPassword: false,
                 isLoginButtonDisabled: false,
                 errorExplanation: "",
+                focusField: "username",
             },
 
             components: {
@@ -40,6 +53,10 @@
                 password: () => gettext("Password"),
                 invalid: () => gettext("Invalid login credentials"),
                 login: () => gettext("Login"),
+            },
+
+            onMounted() {
+                this.$("#username").focus();
             },
 
             getUsernameAndPasswordFromForm() {
@@ -101,6 +118,12 @@
                         errorExplanation: null,
                     });
                 }
+            },
+
+            setInputFocus(field) {
+                this.$("#username-input").classList.remove("has-focus");
+                this.$("#password-input").classList.remove("has-focus");
+                this.$(`#${field}-input`).classList.add("has-focus");
             },
         };
     </script>
