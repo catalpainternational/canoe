@@ -1,13 +1,13 @@
 /* Galano Grotesque Alternative */
 @font-face {
-    font-family: 'GalanoGrotesqueAlt';
-    src: url('../fonts/GalanoGrotesqueAlt-Regular.woff2') format('woff2');
+    font-family: "GalanoGrotesqueAlt";
+    src: url("../fonts/GalanoGrotesqueAlt-Regular.woff2") format("woff2");
     font-weight: 400;
 }
 
 @font-face {
-    font-family: 'GalanoGrotesqueAlt';
-    src: url('../fonts/GalanoGrotesqueAlt-Medium.woff2') format('woff2');
+    font-family: "GalanoGrotesqueAlt";
+    src: url("../fonts/GalanoGrotesqueAlt-Medium.woff2") format("woff2");
     font-weight: 500;
 }
 
@@ -19,13 +19,35 @@
 
 /* Tiempos Headline */
 @font-face {
-    font-family: 'TiemposHeadline';
-    src: url('../fonts/TiemposHeadline-Medium.woff2') format('woff2');
+    font-family: "TiemposHeadline";
+    src: url("../fonts/TiemposHeadline-Medium.woff2") format("woff2");
     font-weight: 500;
 }
 
 @font-face {
-    font-family: 'TiemposHeadline';
-    src: url('../fonts/TiemposHeadline-SemiBold.woff2') format('woff2');
+    font-family: "TiemposHeadline";
+    src: url("../fonts/TiemposHeadline-SemiBold.woff2") format("woff2");
     font-weight: 600;
+}
+
+/* Circular Standard */
+
+@font-face {
+    font-family: "CircularStd-Black";
+    src: url("../fonts/CircularStd-Black.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "CircularStd-Bold";
+    src: url("../fonts/CircularStd-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "CircularStd-Book";
+    src: url("../fonts/CircularStd-Book.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "CircularStd-Medium";
+    src: url("../fonts/CircularStd-Medium.ttf") format("truetype");
 }

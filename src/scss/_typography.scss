@@ -1,90 +1,53 @@
 h2 {
-    font-family: "TiemposHeadline";
-    line-height: 28px;
+    font-family: "CircularStd-Bold";
+    line-height: 1.2;
     font-weight: 600;
-    font-size: 22px;
+    font-size: 1.8em;
     color: $gray-1;
-
-    @media only screen and (max-width: $tablet) {
-        font-size: 2em;
-        line-height: 1.2;
-        border-bottom: 1px solid #d5dbdf;
-        padding-bottom: 15px;
-    };
 }
 
 h3 {
-    font-family: "TiemposHeadline";
-    line-height: 20px;
+    font-family: "CircularStd-Bold";
+    line-height: 1.4;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 1.6em;
     color: $gray-1;
-
-    @media only screen and (max-width: $tablet) {
-        font-size: 1.3em;
-        line-height: 1.4;
-    };
-}
-
-homepage h3 {
-    text-transform: none;
-    letter-spacing: 0;
 }
 
 h4 {
-    font-family: "GalanoGrotesqueAlt";
-    line-height: 20px;
+    font-family: "CircularStd-Bold";
+    line-height: 1.4;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 1.2em;
     color: $gray-1;
-
-    @media only screen and (max-width: $tablet) {
-        font-size: 1.2em;
-        line-height: 1.4;
-    };
 }
 
 h5 {
-    font-family: "GalanoGrotesqueAlt";
-    line-height: 20px;
+    font-family: "CircularStd-Medium";
+    line-height: 1.4;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 1.1em;
     color: $gray-3;
-
-    @media only screen and (max-width: $tablet) {
-        font-size: 1.1em;
-        line-height: 1.4;
-    };
 }
 
 h6 {
-    font-family: "GalanoGrotesqueAlt";
-    line-height: 20px;
+    font-family: "CircularStd-Medium";
+    line-height: 1.2;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 0.9em;
     color: $white;
-
-    @media only screen and (max-width: $tablet) {
-        font-size: 0.9em;
-        line-height: 1.2;
-    };
 }
 
 p {
-    font-family: "GalanoGrotesqueAlt";
-    line-height: 24px;
+    font-family: "CircularStd-Medium";
+    line-height: 1.3;
     font-weight: 400;
-    font-size: 13px;
+    font-size: 1.2em;
     color: $gray-3;
-
-    @media only screen and (max-width: $tablet) {
-        font-size: 1.2em;
-        line-height: 1.3;
-    };
 }
 
 p.feedback-message {
-    font-family: "GalanoGrotesqueAlt";
+    font-family: "CircularStd-Medium";
     line-height: 18px;
     font-weight: 600;
     font-size: 12px;
@@ -128,7 +91,6 @@ p.feedback-message {
 }
 
 .notifications-toggle p {
-    font-family: "GalanoGrotesqueAlt";
     line-height: 16px;
     font-weight: 500;
     font-size: 12px;
