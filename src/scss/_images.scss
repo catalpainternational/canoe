@@ -216,8 +216,15 @@
 .eye {
     @extend %icons-shared;
     background-image: url("~img/eye.svg");
-    height: 25px;
-    width: 25px;
+    height: 13px;
+    width: 20px;
+}
+
+.eye.crossout {
+    @extend %icons-shared;
+    background-image: url("~img/eye-crossout.svg");
+    height: 13px;
+    width: 20px;
 }
 
 .home-background-image {

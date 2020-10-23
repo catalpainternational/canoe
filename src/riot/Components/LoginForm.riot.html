@@ -7,14 +7,8 @@
         <div class="form-group password">
             <label for="password">{ TRANSLATIONS.password() }</label>
             <input id="password" type="password" name="password" oninput="{clearError}" />
-        </div>
-        <div class="icon-box crossout">
-            <a onclick="{showPassword}">
-                <span class="eye"></span>
-                <span class="password-placement"
-                    >{state.isShowingPassword ? TRANSLATIONS.hidePassword() :
-                    TRANSLATIONS.showPassword()}</span
-                >
+            <a id="icon-box" onclick="{showPassword}">
+                <span class="eye crossout"></span>
             </a>
         </div>
         <div if="{state.errorExplanation}" class="error-message">
@@ -44,8 +38,6 @@
             TRANSLATIONS: {
                 username: () => gettext("Username"),
                 password: () => gettext("Password"),
-                showPassword: () => gettext("Show Password"),
-                hidePassword: () => gettext("Hide Password"),
                 invalid: () => gettext("Invalid login credentials"),
                 login: () => gettext("Login"),
             },
@@ -89,7 +81,7 @@
 
             showPassword() {
                 const passwordElement = this.$("#password");
-                const eyeIcon = this.$(".icon-box");
+                const eyeIcon = this.$(".eye");
 
                 if (passwordElement.type === "password") {
                     passwordElement.type = "text";

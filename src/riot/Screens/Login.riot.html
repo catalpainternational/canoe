@@ -3,19 +3,19 @@
         <div class="login-header">
             <span class="site-logo"></span>
             <span class="login-image"></span>
-            <h3>{ TRANSLATIONS.login() }</h3>
+            <h4>{ TRANSLATIONS.login() }</h4>
         </div>
 
         <LoginForm loginFunction="{login}"></LoginForm>
 
         <div class="extra-button-space">
-            <button onclick="{toggleLoginHelpModal}">{ TRANSLATIONS.forgot() }</button>
-            <button if="{state.isLoginAsGuestAvailable}" onclick="{toggleLoginAsGuestModal}">
+            <a onclick="{toggleLoginHelpModal}">{ TRANSLATIONS.forgot() }</a>
+            <a if="{state.isLoginAsGuestAvailable}" onclick="{toggleLoginAsGuestModal}">
                 { TRANSLATIONS.guestLogin() }
-            </button>
+            </a>
         </div>
 
-        <Logos></Logos>
+        <!-- <Logos></Logos> -->
     </div>
 
     <PopupModal if="{state.showLoginHelpModal}" toggleModal="{toggleLoginHelpModal}">
@@ -31,16 +31,14 @@
             { TRANSLATIONS.noProgress() }
             <a class="send-message" onclick="{switchToContactUsModal}">{ TRANSLATIONS.send() }</a>.
         </p>
-        <button class="btn-primary" onclick="{loginAsGuest}">
-            { TRANSLATIONS.guestLogin() }
-        </button>
+        <button class="btn-primary" onclick="{loginAsGuest}">{ TRANSLATIONS.guestLogin() }</button>
     </PopupModal>
 
     <script>
         import LoginForm from "RiotTags/Components/LoginForm.riot.html";
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
         import ContactInformation from "RiotTags/Components/ContactInformation.riot.html";
-        import Logos from "riot/Components/Logos.riot.html";
+        // import Logos from "riot/Components/Logos.riot.html";
 
         import { login } from "js/AuthenticationUtilities";
 
@@ -58,7 +56,7 @@
                 popupmodal: PopupModal,
                 contactinformation: ContactInformation,
                 loginform: LoginForm,
-                logos: Logos,
+                // logos: Logos,
             },
 
             TRANSLATIONS: {
