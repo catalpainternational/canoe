@@ -8,7 +8,7 @@
     @extend %mask-icons-shared;
     background-image: url("~img/site_logo.svg");
     background-position: center;
-    height: 20px;
+    height: 30px;
     width: 87px;
 
     &.white {
@@ -208,9 +208,8 @@
     @extend %icons-shared;
     background-image: url("~img/login_image.svg");
     background-position: center;
-    max-width: 250px;
-    height: 190px;
-    width: 100%;
+    width: 125px;
+    height: 125px;
 }
 
 .eye {

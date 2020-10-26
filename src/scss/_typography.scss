@@ -130,14 +130,8 @@ button {
 
 label {
     font-family: $app-typography-regular;
-    line-height: 18px;
-    font-size: 10px;
+    font-size: 1em;
     color: $gray-4;
-
-    @media only screen and (max-width: $tablet) {
-        font-size: 1em;
-        line-height: 1.4;
-    }
 }
 
 input {
