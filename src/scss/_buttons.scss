@@ -1,5 +1,5 @@
 %buttons-shared {
-    border-radius: 25px;
+    border-radius: $app-button-radius;
     min-width: 220px;
 
     &:focus {
@@ -10,7 +10,7 @@
 .btn-primary {
     @extend %buttons-shared;
     box-shadow: 0 10px 8px 0 rgba(42, 57, 66, 0.3);
-    background-color: $blue-1;
+    background-color: $app-accent-color;
     min-height: 50px;
     color: $white;
     border: none;
@@ -28,7 +28,7 @@
     border: none;
     background-color: $white;
     min-height: 48px;
-    color: $blue-1;
+    color: $app-accent-color;
 }
 
 .btn-continue-learning {

@@ -1,5 +1,5 @@
 /* Color pallete */
-$blue-1: #0074FC;
+$blue-1: #0074fc;
 $blue-2: #00b8ad;
 
 $brown: #744d4d;
@@ -47,9 +47,15 @@ $bottom-menu-height-no-footer: 25px;
 $sticky-header-offset: 95px;
 $border: 1px solid $gray-8;
 
-// Breakpoints
+/* Breakpoints */
 $xs-phone: 350px;
 $sm-phone: 374px;
 $lg-phone: 414px;
 $tablet: 600px;
 $tablet-plus: 680px;
+
+/* Customizable elements */
+$app-accent-color: $blue-1;
+$app-button-radius: 25px;
+$app-typography-bold: "CircularStd-Bold";
+$app-typography-regular: "CircularStd-Medium";

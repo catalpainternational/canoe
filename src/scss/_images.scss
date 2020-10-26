@@ -37,7 +37,7 @@
     background-color: $gray-4;
 
     &.active {
-        background-color: $blue-1;
+        background-color: $app-accent-color;
     }
 }
 
@@ -48,7 +48,7 @@
     background-color: $gray-4;
 
     &.active {
-        background-color: $blue-1;
+        background-color: $app-accent-color;
     }
 }
 
@@ -59,7 +59,7 @@
     background-color: $gray-4;
 
     &.active {
-        background-color: $blue-1;
+        background-color: $app-accent-color;
     }
 }
 
@@ -71,7 +71,7 @@
 
     &.active,
     &.title {
-        background-color: $blue-1;
+        background-color: $app-accent-color;
     }
 }
 
@@ -302,7 +302,7 @@
 @mixin feedback-icons {
     height: 50px;
     width: 41px;
-    background-color: $blue-1;
+    background-color: $app-accent-color;
     display: block;
     margin: auto;
     margin-top: 0.5em;

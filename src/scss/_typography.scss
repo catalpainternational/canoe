@@ -1,67 +1,69 @@
 h2 {
-    font-family: "CircularStd-Bold";
+    font-family: $app-typography-bold;
     line-height: 1.2;
     font-size: 1.8em;
     color: $gray-1;
 }
 
 h3 {
-    font-family: "CircularStd-Bold";
+    font-family: $app-typography-bold;
     line-height: 1.4;
     font-size: 1.6em;
     color: $gray-1;
 }
 
 h4 {
-    font-family: "CircularStd-Bold";
+    font-family: $app-typography-bold;
     line-height: 1.4;
     font-size: 1.2em;
     color: $gray-1;
 }
 
 h5 {
-    font-family: "CircularStd-Medium";
+    font-family: $app-typography-regular;
     line-height: 1.4;
     font-size: 1.1em;
     color: $gray-3;
 }
 
 h6 {
-    font-family: "CircularStd-Medium";
+    font-family: $app-typography-regular;
     line-height: 1.2;
     font-size: 0.9em;
     color: $white;
 }
 
 p {
-    font-family: "CircularStd-Medium";
+    font-family: $app-typography-regular;
     line-height: 1.3;
     font-size: 1.2em;
     color: $gray-3;
 }
 
 p.feedback-message {
-    font-family: "CircularStd-Medium";
     line-height: 18px;
     font-size: 12px;
 
     @media only screen and (max-width: $tablet) {
         font-size: 0.9em;
         line-height: 1.5;
-    };
+    }
 }
 
-.card-body p, .notification-body p {
+.card-body p,
+.notification-body p {
     line-height: 18px;
     font-size: 12px;
 
     @media only screen and (max-width: $tablet) {
         font-size: 0.8em;
         line-height: 1.4;
-    };
+    }
 }
 
-.course-header p, .card-footer p, .notification-footer p {
+.course-header p,
+.card-footer p,
+.notification-footer p {
     text-transform: uppercase;
     letter-spacing: -0.1px;
     line-height: 20px;
@@ -70,16 +72,16 @@ p.feedback-message {
     @media only screen and (max-width: $tablet) {
         font-size: 0.7em;
         line-height: 1.1;
-    };
+    }
 
     @media only screen and (max-width: $sm-phone) {
         line-height: 1.25;
-    };
+    }
 }
 
 .truncate-if-long {
     overflow: hidden;
-    white-space: nowrap;        
+    white-space: nowrap;
     text-overflow: ellipsis;
 }
 
@@ -91,7 +93,7 @@ p.feedback-message {
     @media only screen and (max-width: $tablet) {
         font-size: 1.1em;
         line-height: 1.3;
-    };
+    }
 }
 
 h5.section-title {
@@ -111,15 +113,15 @@ h5.section-title {
 }
 
 a {
-    font-family: "CircularStd-Medium";
+    font-family: $app-typography-regular;
     text-decoration: none;
     line-height: 1.1;
     font-size: 1em;
-    color: $blue-1;
+    color: $app-accent-color;
 }
 
 button {
-    font-family: "CircularStd-Medium";
+    font-family: $app-typography-regular;
     letter-spacing: 0.6px;
     line-height: 1.3;
     font-size: 1em;
@@ -127,7 +129,7 @@ button {
 }
 
 label {
-    font-family: "GalanoGrotesqueAlt";
+    font-family: $app-typography-regular;
     line-height: 18px;
     font-size: 10px;
     color: $gray-4;
@@ -135,11 +137,11 @@ label {
     @media only screen and (max-width: $tablet) {
         font-size: 1em;
         line-height: 1.4;
-    };
+    }
 }
 
 input {
-    font-family: "CircularStd-Medium";
+    font-family: $app-typography-regular;
     line-height: 1;
     font-size: 1.2em;
     color: $gray-1;
@@ -148,8 +150,9 @@ input {
     background-color: $white;
 }
 
-ul, ol {
-    font-family: "GalanoGrotesqueAlt";
+ul,
+ol {
+    font-family: $app-typography-regular;
     line-height: 24px;
     padding-left: 0;
     font-size: 13px;
@@ -158,18 +161,21 @@ ul, ol {
     @media only screen and (max-width: $tablet) {
         font-size: 1.2em;
         line-height: 1.4;
-    };
+    }
 }
 
 // lists within lists
-ul ul, ul ol, ol ul, ol ol {
+ul ul,
+ul ol,
+ol ul,
+ol ol {
     line-height: 1.125;
-    margin-left: .625em;
-    font-size: .625em;
+    margin-left: 0.625em;
+    font-size: 0.625em;
 
     @media only screen and (max-width: $tablet) {
         font-size: 0.8em;
-    };
+    }
 }
 
 // Text colors
