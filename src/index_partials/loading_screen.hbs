@@ -1,12 +1,14 @@
 <div id="site-logo">
-	<img src="../public/canoe-logo.png" />
+	<img src="../public/canoe-logo.svg" />
 </div>
-<div id="loading-img">
-	<img src="../public/loading.png" />
+<div id="loading-image">
+	<img src="../public/canoe-loading.svg" />
 </div>
 <div id="powered-by-logos">
 	<p>Powered by</p>
-	<img src="../public/catalpa-logo.svg" />
+	<div>
+		<img src="../public/catalpa-logo.svg" />
+	</div>
 </div>
 
 <style>
@@ -16,36 +18,43 @@
 	}
 
 	#site-logo,
-	#loading-img,
+	#loading-image,
 	#powered-by-logos {
 		display: flex;
 	}
 
-	#site-logo {
-		margin-bottom: -40px;
-		z-index: 1;
-	}
-
 	#site-logo img {
-		max-width: 60px;
 		margin-top: 20px;
 		margin-bottom: 20px;
 	}
 
-	#loading-img img {
-		max-height: 400px;
+	#loading-image img {
+		height: 70vh; 
+		{{!-- resize to 90vh if there are no logos --}}
 	}
 
 	#powered-by-logos {
 		background: linear-gradient(134.77deg, #F4F8FA 0%, #D9E2E7 100%);
-		min-height: 160px;
+		height: 160px;
 		flex-direction: column;
 		border-top-left-radius: 60% 10%;
 		border-top-right-radius: 60% 10%;
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+	}
+
+	#powered-by-logos div {
+		max-width: 400px;
+		display: flex;
+		justify-content: center;
+		align-self: center;
+		width: 100%;
 	}
 
 	#powered-by-logos img {
 		max-width: 30px;
+		margin: 8%;
 	}
 
 	#powered-by-logos p {
