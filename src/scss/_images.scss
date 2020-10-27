@@ -176,9 +176,15 @@
 
 .warning {
     @extend %icons-shared;
-    background-image: url("~img/warning.svg");
-    height: 16px;
+    @extend %bottom-nav-shared;
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/warning.svg");
+    height: 15px;
     width: 15px;
+
+    &.red {
+        background-color: $red-1;
+    }
 }
 
 .success {

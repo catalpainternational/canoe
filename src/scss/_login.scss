@@ -53,18 +53,10 @@ Login .modal-background {
                 margin-bottom: 0;
             }
 
-            input {
-                background-color: $error-background-color;
-            }
-            
             p {
                 color: $red-1;
                 font-size: 0.8em;
-            }
-
-            .warning {
-                display: inline-block;
-                margin-right: 5px;
+                margin-left: 5px;
             }
 
             .error-message {
@@ -161,7 +153,7 @@ Login .modal-background {
     input {
         border: none;
         padding-top: 15px;
-        background-color: $white;
+        background-color: unset;
 
         &:focus {
             outline: none;
