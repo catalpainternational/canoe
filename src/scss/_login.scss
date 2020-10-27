@@ -1,6 +1,7 @@
 Login .modal-background {
     $content-width: 18.75em;
     $background-color: $gray-9;
+    $error-background-color: rgba(237, 30, 79, 0.05);
 
     min-height: 100vh;
     flex-direction: column;
@@ -42,8 +43,22 @@ Login .modal-background {
     form {
         width: 100%;
 
+        &.has-error {
+            p {
+                color: $red-1;
+            }
+
+            div.form-group {
+                border: 2px solid $red-1;
+                background-color: $error-background-color;
+            }
+
+            input {
+                background-color: $error-background-color;
+            }
+        }
+
         div.form-group {
-            border: 1px solid $gray-5;
             flex-direction: column;
             margin-bottom: 15px;
             border-radius: 5px;
@@ -51,7 +66,7 @@ Login .modal-background {
             display: flex;
             background-color: $white;
             box-shadow: inset 0 2px 3px 0 rgba(42, 57, 66, 0.1);
-            border: 1px solid #d9e2e7;
+            border: 1px solid $gray-7;
             position: relative;
             height: 40px;
 
@@ -62,11 +77,14 @@ Login .modal-background {
                 padding-left: 15px;
                 position: absolute;
                 transition: all 0.3s;
-                width: 100%;
             }
 
             &.password {
-                margin-bottom: 10px;
+                margin-bottom: 20px;
+
+                input {
+                    padding-right: 35px;
+                }
             }
 
             &.has-focus {
@@ -84,12 +102,6 @@ Login .modal-background {
                     top: 5%;
                 }
             }
-        }
-
-        p {
-            margin-bottom: 0;
-            margin-left: 5px;
-            margin-top: 0;
         }
 
         button {
@@ -110,27 +122,14 @@ Login .modal-background {
                 cursor: pointer;
             }
         }
-
-        .password {
-            position: relative;
-        }
-
-        .error-message {
-            margin-top: -15px;
-
-            p {
-                font-size: 1em;
-            }
-        }
     }
 
     .extra-button-space {
         display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
 
         max-width: $content-width;
         width: 100%;
+        margin-top: 10%;
 
         a {
             font-size: 0.875em;
@@ -138,8 +137,6 @@ Login .modal-background {
 
             background-color: $background-color;
             border: none;
-
-            margin-top: 1em;
             flex: 1;
         }
     }

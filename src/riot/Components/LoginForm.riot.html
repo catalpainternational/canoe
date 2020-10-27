@@ -1,5 +1,5 @@
 <LoginForm>
-    <form onsubmit="{loginUser}">
+    <form onsubmit="{loginUser}" class="{state.errorExplanation ? 'has-error' : ''}">
         <div id="username-input" class="form-group">
             <label for="username">{ TRANSLATIONS.username() }</label>
             <input
@@ -53,7 +53,7 @@
             TRANSLATIONS: {
                 username: () => gettext("Username"),
                 password: () => gettext("Password"),
-                invalid: () => gettext("Invalid login credentials"),
+                invalid: () => gettext("Your username or password is incorrect"),
                 login: () => gettext("Login"),
             },
 
@@ -87,9 +87,9 @@
                 } catch (error) {
                     if (alertIfRequestWasMadeOffline(error)) {
                     } else if (error.message === "400") {
-                        this.update({
-                            errorExplanation: this.TRANSLATIONS.invalid(),
-                        });
+                        // this.update({
+                        this.state.errorExplanation = this.TRANSLATIONS.invalid();
+                        // });
                     }
                 } finally {
                     this.update({
@@ -129,14 +129,11 @@
 
             removeInputFocus(event) {
                 const fieldElement = `#${event.target.id}-input`;
-                const fieldHasValue = event.target.value != '';
+                const fieldHasValue = event.target.value != "";
 
                 this.$(fieldElement).classList.remove("has-focus");
 
-                if (
-                    fieldHasValue &&
-                    !this.$(fieldElement).classList.contains("is-filled")
-                ) {
+                if (fieldHasValue && !this.$(fieldElement).classList.contains("is-filled")) {
                     this.$(fieldElement).classList.add("is-filled");
                 } else if (!fieldHasValue) {
                     this.$(fieldElement).classList.remove("is-filled");
