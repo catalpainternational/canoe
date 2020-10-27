@@ -44,17 +44,34 @@ Login .modal-background {
         width: 100%;
 
         &.has-error {
-            p {
-                color: $red-1;
-            }
-
             div.form-group {
                 border: 2px solid $red-1;
                 background-color: $error-background-color;
             }
 
+            div.form-group.password {
+                margin-bottom: 0;
+            }
+
             input {
                 background-color: $error-background-color;
+            }
+            
+            p {
+                color: $red-1;
+                font-size: 0.8em;
+            }
+
+            .warning {
+                display: inline-block;
+                margin-right: 5px;
+            }
+
+            .error-message {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 10px 0;
             }
         }
 
