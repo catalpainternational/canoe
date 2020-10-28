@@ -88,9 +88,7 @@
                 } catch (error) {
                     if (alertIfRequestWasMadeOffline(error)) {
                     } else if (error.message === "400") {
-                        // this.update({
-                        this.state.errorExplanation = this.TRANSLATIONS.invalid();
-                        // });
+                        this.update({ errorExplanation: this.TRANSLATIONS.invalid() });
                     }
                 } finally {
                     this.update({
