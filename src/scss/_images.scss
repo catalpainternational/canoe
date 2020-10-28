@@ -232,33 +232,6 @@
     width: 20px;
 }
 
-.home-background-image {
-    @extend %icons-shared;
-    background-image: url("~img/home_header_figure.svg");
-    background-position: center;
-    z-index: 2;
-    height: 142px;
-    width: 84px;
-    display: inline-block;
-}
-
-.wave {
-    @extend %icons-shared;
-    background-image: url("~img/home_header_wave.svg");
-    z-index: -1;
-    position: absolute;
-    background-position-x: 50%;
-    background-position-y: 25%;
-    padding-top: 60px;
-    height: 78%;
-    width: 100%;
-
-    @media only screen and (min-width: $tablet) {
-        background-image: none;
-        height: 120%;
-    }
-}
-
 .confetti {
     @extend %icons-shared;
     background-image: url("~img/confetti.svg");

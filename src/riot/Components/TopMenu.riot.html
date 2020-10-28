@@ -1,5 +1,5 @@
 <TopMenu>
-    <header class="background-{state.color}">
+    <header if="{!state.isAllCourses}" class="background-{state.color}">
         <div class="top-menu-container">
             <a if="{state.showBackArrow}" class="arrow-white" onclick="{backToRelavantPage}"></a>
             <a
@@ -97,8 +97,6 @@
                     this.state.color = "profile-green";
                 } else if (this.state.isNotifications) {
                     this.state.color = "notifications-orange";
-                } else if (this.state.isAllCourses || this.state.isCard) {
-                    this.state.color = "blue-1";
                 } else if (this.state.isSettings) {
                     this.state.color = "settings-tan";
                 } else {
