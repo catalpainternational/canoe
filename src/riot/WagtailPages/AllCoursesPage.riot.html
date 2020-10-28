@@ -1,58 +1,45 @@
 <AllCoursesPage>
-    <GuestBanner if="{showBanner()}" closeBanner="{closeBanner}"></GuestBanner>
-    <div class="wave"></div>
-    <div class="header">
-        <div class="header-box">
-            <div class="left-block">
-                <h3>{ greetingMessage() }</h3>
-                <h6 if="{state.currentCourse && !state.currentCourse.isFinished()}">
-                    { continueLearningMessage() }
-                </h6>
-                <ContinueLearningButton
-                    if="{state.currentCourse && !state.currentCourse.isFinished()}"
-                    currentCourse="{state.currentCourse}"
-                    class="profile header-text"
-                    background="home-background-image"
-                ></ContinueLearningButton>
-            </div>
-            <span class="home-background-image"></span>
+    <div class="background">
+        <GuestBanner if="{showBanner()}" closeBanner="{closeBanner}"></GuestBanner>
+        <div class="header">
+            <h3>All courses</h3>
+            <p>Explore a range of courses to suit your needs, expertise, and interests.</p>
         </div>
-    </div>
-    <div class="content-wrapper">
-        <LoadingDots
-            if="{state.sortedListOfCourses === null}"
-            extrastyleclasses="dark"
-        ></LoadingDots>
+        <div class="content-wrapper">
+            <LoadingDots
+                if="{state.sortedListOfCourses === null}"
+                extrastyleclasses="dark"
+            ></LoadingDots>
 
-        <template if="{Array.isArray(state.sortedListOfCourses)}">
-            <TagList
+            <template if="{Array.isArray(state.sortedListOfCourses)}">
+                <!-- <TagList
                 if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0}"
                 tags="{state.listOfTags}"
                 onTagClick="{onTagClick}"
                 selectedTags="{state.selectedTags}"
-            ></TagList>
+            ></TagList> -->
 
-            <div
-                class="course"
-                each="{course in state.sortedListOfCourses}"
-                if="{doesCourseHaveTag(course)}"
-            >
-                <Card
-                    title="{course.title}"
-                    link="{course.id}"
-                    description="{courseProgressMessage(course)}"
-                    isCompleted="{course.isFinished()}"
-                    showFooter="{true}"
-                    type="course"
-                ></Card>
-            </div>
+                <div
+                    class="course"
+                    each="{course in state.sortedListOfCourses}"
+                    if="{doesCourseHaveTag(course)}"
+                >
+                    <Card
+                        title="{course.title}"
+                        link="{course.id}"
+                        description="{courseProgressMessage(course)}"
+                        isCompleted="{course.isFinished()}"
+                        showFooter="{true}"
+                        type="course"
+                    ></Card>
+                </div>
 
-            <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
-        </template>
+                <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
+            </template>
+        </div>
     </div>
 
     <script>
-        import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
         import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
@@ -74,7 +61,6 @@
 
             components: {
                 card: Card,
-                continuelearningbutton: ContinueLearningButton,
                 taglist: TagList,
                 guestbanner: GuestBanner,
                 loadingdots: LoadingDots,
@@ -112,27 +98,12 @@
                 return sortedCourses;
             },
 
-            continueLearningMessage() {
-                const { currentCourse } = this.state;
-                return ngettext(
-                    "You only have %1 lesson left to finish %2.",
-                    "You only have %1 lessons left to finish %2.",
-                    currentCourse.numberOfLessons - currentCourse.numberOfFinishedLessons,
-                    currentCourse.title
-                );
-            },
-
             courseProgressMessage(course) {
                 return ngettext(
                     "%1 lesson complete",
                     "%1 lessons complete",
                     course.numberOfFinishedLessons + " / " + course.numberOfLessons
                 );
-            },
-
-            greetingMessage() {
-                // Greet the user with their username
-                return gettext("Hi %1", getCapitalizedUsername());
             },
 
             onTagClick(clickedTag) {

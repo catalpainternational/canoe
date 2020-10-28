@@ -1,4 +1,16 @@
 AllCoursesPage {
+    .background {
+        background-color: $app-background-color;
+    }
+
+    .header {
+        background: $app-gradient;
+        height: 160px;
+        border-bottom-left-radius: 80% 10%;
+        border-bottom-right-radius: 80% 10%;
+        padding: 20px;
+    }
+
     .content-wrapper {
         padding-top: 20px;
 
@@ -13,51 +25,6 @@ AllCoursesPage {
             margin-top: 0;
         }
     }
-
-    .header {
-        @include screen-banner-styles;
-        padding: 0 3em;
-
-        h3 {
-            color: white;
-            margin-bottom: 0;
-            margin-top: 0;
-        }
-
-        h6 {
-            margin: 0 10px 20px 0;
-            font-weight: 400;
-        }
-
-        @media only screen and (max-width: $lg-phone) {
-            padding: 0 2em;
-        }
-
-        @media only screen and (max-width: $sm-phone) {
-            padding: 0 1.5em;
-        }
-
-        &:after {
-            background: #1696ac;
-        }
-    }
-
-    taglist .tag {
-        margin-top: 0.7em;
-    }
-}
-
-AllCoursesPage .btn-continue-learning .arrow {
-    top: 125px;
-    left: 175px;
-    display: inline-block;
-}
-
-AllCoursesPage .left-block {
-    display: inline-block;
-    max-width: 200px;
-    overflow: overlay;
-    margin-top: 10px;
 }
 
 AllCoursesPage div.content-wrapper {
