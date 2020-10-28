@@ -63,7 +63,7 @@
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { getCourseWithLatestCompletion } from "js/utilities";
 
-        import HomePage from "js/HomePage";
+        import AllCoursesPage from "js/AllCoursesPage";
 
         export default {
             state: {
@@ -88,10 +88,10 @@
             },
 
             async renderProfilePage() {
-                const homePageJSON = await getHomePage();
-                const homePage = new HomePage(homePageJSON);
+                const allCoursesPageJSON = await getHomePage();
+                const allCoursesPage = new AllCoursesPage(allCoursesPageJSON);
 
-                let courses = await homePage.getFullCourseObjects();
+                let courses = await allCoursesPage.getFullCourseObjects();
 
                 if (isGuestUser()) {
                     courses = courses.filter((course) => course.isVisibleToGuests());
