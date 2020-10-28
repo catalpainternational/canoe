@@ -23,9 +23,11 @@ export default class ExamGrader {
 
     static saveExamScore(courseSlug, finalScore, minimumScore) {
         saveScore(courseSlug, finalScore);
-        if (finalScore >= minimumScore) {
+        const didPassExam = finalScore >= minimumScore;
+        if (minimumScore) {
             setComplete(courseSlug, EXAM_SLUG, EXAM_SLUG, { finalScore });
         }
+        return didPassExam;
     }
 
     static isExamFinished(courseSlug) {
