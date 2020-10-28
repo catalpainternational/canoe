@@ -18,7 +18,7 @@
                 onTagClick="{onTagClick}"
                 selectedTags="{state.selectedTags}"
             ></TagList> -->
-
+                <h5 class="section-title">All Courses</h5>
                 <div
                     class="course"
                     each="{course in state.sortedListOfCourses}"
@@ -27,10 +27,7 @@
                     <Card
                         title="{course.title}"
                         link="{course.id}"
-                        description="{courseProgressMessage(course)}"
                         isCompleted="{course.isFinished()}"
-                        showFooter="{true}"
-                        type="course"
                     ></Card>
                 </div>
 
