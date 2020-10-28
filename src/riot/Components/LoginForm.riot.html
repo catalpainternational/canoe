@@ -29,9 +29,9 @@
             <span class="warning red"></span>
             <p>{state.errorExplanation}</p>
         </div>
-        <LoadingDots if="{state.isLoginButtonDisabled}" extrastyleclasses="dark"></LoadingDots>
         <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}">
-            { TRANSLATIONS.login() }
+            { state.isLoginButtonDisabled ? TRANSLATIONS.checking() : TRANSLATIONS.login() }
+            <LoadingDots if="{state.isLoginButtonDisabled}" extrastyleclasses="light"></LoadingDots>
         </button>
     </form>
     <script>
@@ -55,6 +55,7 @@
                 password: () => gettext("Password"),
                 invalid: () => gettext("Your username or password is incorrect"),
                 login: () => gettext("Login"),
+                checking: () => gettext("Checking"),
             },
 
             onMounted() {
