@@ -62,7 +62,7 @@
             calculatePassOrFail() {
                 const { course, finalScore, minimumScore } = this.props;
 
-                ExamGrader.saveExamScore(course.slug, finalScore, minimumScore);
+                const passedExam = ExamGrader.saveExamScore(course.slug, finalScore, minimumScore);
                 this.update({ passedExam });
             },
 
