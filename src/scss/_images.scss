@@ -8,7 +8,7 @@
     @extend %mask-icons-shared;
     background-image: url("~img/site_logo.svg");
     background-position: center;
-    height: 20px;
+    height: 30px;
     width: 87px;
 
     &.white {
@@ -37,7 +37,7 @@
     background-color: $gray-4;
 
     &.active {
-        background-color: $blue-1;
+        background-color: $app-accent-color;
     }
 }
 
@@ -48,7 +48,7 @@
     background-color: $gray-4;
 
     &.active {
-        background-color: $blue-1;
+        background-color: $app-accent-color;
     }
 }
 
@@ -59,7 +59,7 @@
     background-color: $gray-4;
 
     &.active {
-        background-color: $blue-1;
+        background-color: $app-accent-color;
     }
 }
 
@@ -71,7 +71,7 @@
 
     &.active,
     &.title {
-        background-color: $blue-1;
+        background-color: $app-accent-color;
     }
 }
 
@@ -176,9 +176,15 @@
 
 .warning {
     @extend %icons-shared;
-    background-image: url("~img/warning.svg");
-    height: 16px;
+    @extend %bottom-nav-shared;
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/warning.svg");
+    height: 15px;
     width: 15px;
+
+    &.red {
+        background-color: $red-1;
+    }
 }
 
 .success {
@@ -208,16 +214,22 @@
     @extend %icons-shared;
     background-image: url("~img/login_image.svg");
     background-position: center;
-    max-width: 250px;
-    height: 190px;
-    width: 100%;
+    width: 125px;
+    height: 125px;
 }
 
 .eye {
     @extend %icons-shared;
     background-image: url("~img/eye.svg");
-    height: 25px;
-    width: 25px;
+    height: 13px;
+    width: 20px;
+}
+
+.eye.crossout {
+    @extend %icons-shared;
+    background-image: url("~img/eye-crossout.svg");
+    height: 13px;
+    width: 20px;
 }
 
 .home-background-image {
@@ -295,7 +307,7 @@
 @mixin feedback-icons {
     height: 50px;
     width: 41px;
-    background-color: $blue-1;
+    background-color: $app-accent-color;
     display: block;
     margin: auto;
     margin-top: 0.5em;

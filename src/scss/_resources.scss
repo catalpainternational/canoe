@@ -47,7 +47,7 @@ taglist {
         box-shadow: 0 0.15em 0.15em 0 $gray-5;
 
         &.selected {
-            background-color: $blue-1;
+            background-color: $app-accent-color;
 
             p {
                 color: white;

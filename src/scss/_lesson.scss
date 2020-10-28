@@ -200,7 +200,6 @@ LessonObjective .objective {
         margin-bottom: 15px;
         margin-top: 5px;
         text-align: center;
-        font-family: "GalanoGrotesqueAlt";
         text-transform: uppercase;
         font-size: 14px;
     }
@@ -307,7 +306,7 @@ LessonContent .content {
         }
 
         span {
-            color: $blue-1;
+            color: $app-accent-color;
             margin: -0.1em 0.1em;
             align-self: flex-start;
             font-size: 1.7em;
@@ -338,7 +337,7 @@ LessonContent .content {
 
         span {
             margin-right: 7px;
-            color: $blue-1;
+            color: $app-accent-color;
             font-weight: 600;
         }
     }
@@ -517,7 +516,7 @@ TestPopupModal {
                 }
 
                 .pendingAnswer {
-                    background-color: $blue-1;
+                    background-color: $app-accent-color;
                     border-radius: 15px;
                     width: 15px;
                 }
@@ -564,12 +563,12 @@ TestPopupModal {
 
             li.selected-pending {
                 .radio {
-                    border: 2px solid $blue-1;
+                    border: 2px solid $app-accent-color;
                     height: 21px;
                     width: 21px;
 
                     & > div {
-                        background-color: $blue-1;
+                        background-color: $app-accent-color;
                     }
                 }
             }
@@ -649,7 +648,6 @@ LessonFeedback {
             text-align: center;
             border: none;
             padding: 0;
-            font-family: "GalanoGrotesqueAlt";
         }
     }
 
@@ -680,14 +678,14 @@ LessonFeedback {
         background-color: white;
 
         &:focus {
-            border: 2px solid $blue-1;
+            border: 2px solid $app-accent-color;
             -webkit-box-shadow: inset 0 1px 1px $gray-6, inset 0 2px 2px $gray-6,
                 inset 0 4px 4px $gray-6, inset 0 8px 8px $gray-6;
             outline: 0;
         }
 
         &.border-blue-1 {
-            border-color: 2px solid $blue-1;
+            border-color: 2px solid $app-accent-color;
         }
 
         &:hover {
@@ -696,7 +694,7 @@ LessonFeedback {
     }
 
     button.no-thanks {
-        color: $blue-1;
+        color: $app-accent-color;
         box-shadow: none;
         background: none;
 

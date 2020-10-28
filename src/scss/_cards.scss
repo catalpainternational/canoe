@@ -93,7 +93,7 @@
         flex: 1;
 
         & > p {
-            color: $blue-1;
+            color: $app-accent-color;
         }
     }
 
@@ -112,7 +112,7 @@
         border-radius: 10px;
         max-width: fit-content;
         max-width: -moz-fit-content;
-        border: 1px solid $blue-1;
+        border: 1px solid $app-accent-color;
         box-sizing: border-box;
         background-color: rgba(4, 120, 142, 0.07);
         padding: 6px;
@@ -199,7 +199,7 @@
 
 .notification-card {
     background-color: rgba(4, 120, 142, 0.05);
-    border: 1px solid $blue-1;
+    border: 1px solid $app-accent-color;
     margin-bottom: 15px;
     border-radius: 3px;
     padding: 20px;
