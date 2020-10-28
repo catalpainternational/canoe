@@ -1,13 +1,13 @@
 import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
 import CoursePage from "./CoursePage";
 
-export default class HomePage {
+export default class AllCoursesPage {
     constructor(aWagtailPage) {
-        this.home = aWagtailPage;
+        this.allCourses = aWagtailPage;
     }
 
     get courses() {
-        return this.home.courses;
+        return this.allCourses.courses;
     }
 
     async getFullCourseObjects() {

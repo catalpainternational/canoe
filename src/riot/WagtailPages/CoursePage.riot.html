@@ -4,7 +4,7 @@
             <div class="course-header">
                 <div>
                     <div>
-                        <a class="arrow-gray" onclick="{backToHome}"></a>
+                        <a class="arrow-gray" onclick="{backToAllCourses}"></a>
                     </div>
                     <div>
                         <p>{ TRANSLATIONS.course() }</p>
@@ -91,7 +91,7 @@
                 return wagtailPage.numberOfFinishedLessons + " / " + wagtailPage.numberOfLessons;
             },
 
-            backToHome() {
+            backToAllCourses() {
                 location.hash = "#";
             },
 
