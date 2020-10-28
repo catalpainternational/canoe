@@ -1,10 +1,24 @@
 /* Circular Standard */
 @font-face {
-    font-family: "CircularStd-Bold";
-    src: url("../fonts/CircularStd-Bold.ttf") format("truetype");
+    font-family: "CircularStd";
+    src: url("../fonts/CircularStd-Black.ttf") format("truetype");
+    font-weight: 600;
 }
 
 @font-face {
-    font-family: "CircularStd-Medium";
+    font-family: "CircularStd";
+    src: url("../fonts/CircularStd-Bold.ttf") format("truetype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "CircularStd";
     src: url("../fonts/CircularStd-Medium.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "CircularStd";
+    src: url("../fonts/CircularStd-Book.ttf") format("truetype");
+    font-weight: 300;
 }
