@@ -10,8 +10,8 @@
     .card-image {
         background-image: url("~img/plant.svg");
         
-        // background-size: contain; // see full image
-        background-size: cover;  // full image area
+        background-size: contain; // see full image
+        // background-size: cover;  // full image area
         
         background-position: center;
         background-color: $gray-7;
