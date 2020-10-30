@@ -8,15 +8,27 @@
     height: 180px;
 
     .card-image {
-        background-color: purple;
-        min-height: 100px;
-        width: 100%;
+        background-image: url("~img/plant.svg");
+        
+        background-size: contain; // see full image
+        // background-size: cover;  // full image area
+        
+        background-position: center;
+        background-color: $gray-7;
+        background-repeat: no-repeat;
+        height: 100%;
         border-radius: 8px 8px 0 0;
     }
 
-    h5 {
-        padding: 15px;
-        margin: 0;
+    .card-title {
+        box-sizing: border-box;
+        min-height: 70px;
+        padding: 10px;
+        overflow: hidden;
+        
+        h5 {
+            margin: 0;
+        }
     }
 
     &.disabled {

@@ -1,6 +1,8 @@
 <Card>
     <a class="card {props.isCompleted ? 'done' : ''}" href="#{props.link}">
         <div class="card-image"></div>
-        <h5>{props.title}</h5>
+        <div class="card-title">
+            <h5>{props.title}</h5>
+        </div>
     </a>
 </Card>
