@@ -23,6 +23,14 @@
     width: 40px;
 }
 
+.filter-icon {
+    @extend %icons-shared;
+    background-image: url("~img/levers.svg");
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+}
+
 %bottom-nav-shared {
     @extend %icons-shared;
     background-position-x: center;
