@@ -23,17 +23,12 @@ const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
 };
 
 const getCookie = (name) => {
-    const cookieStrings = document.cookie.split(`; `);
-    const cookieValue = cookieStrings.find((tokenString) => {
+    const found_cookie = document.cookie.split(`; `).find((tokenString) => {
         const [key] = tokenString.split("=");
         return key === name;
     });
 
-    if (!cookieValue) {
-        throw new Error(`Can't find "${name}" in cookie.`);
-    }
-
-    return cookieValue.substring(cookieValue.indexOf('=') + 1)
+    return found_cookie? found_cookie.substring(found_cookie.indexOf('=') + 1): null
 };
 
 const deleteCookie = (name) => {
@@ -94,11 +89,7 @@ export const getAuthenticationToken = () => {
 };
 
 export const isUserLoggedIn = () => {
-    try {
-        return !!getAuthenticationToken();
-    } catch (e) {
-        return false;
-    }
+    return !!getAuthenticationToken();
 };
 
 export const getUsername = () => {
