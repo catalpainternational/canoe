@@ -25,40 +25,15 @@
 
 .lesson.card,
 .module.card {
-    .card-body {
-        h4 {
-            margin-bottom: 5px;
-            margin-top: 0;
-            font-size: 14px;
-            color: $gray-2;
-        }
-
-        p {
-            margin: 0;
-        }
+    h4 {
+        margin-bottom: 5px;
+        margin-top: 0;
+        font-size: 14px;
+        color: $gray-2;
     }
 
-    .card-footer {
-        justify-content: space-between;
-        display: flex;
-    }
-}
-
-.lesson.card.done,
-.module.card.done {
-    .card-body {
-        border-radius: 8px 8px 0 0;
-    }
-
-    .card-footer {
-        div.status p {
-            font-size: 10px;
-            color: $gray-1;
-
-            @media only screen and (max-width: $sm-phone) {
-                line-height: 1.25;
-            }
-        }
+    p {
+        margin: 0;
     }
 }
 
@@ -208,10 +183,6 @@ LessonObjective .objective {
         margin-bottom: 20px;
         margin-top: 0;
         flex: 1;
-    }
-
-    .carousel-card {
-        align-items: center;
     }
 
     .center-objective {

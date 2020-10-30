@@ -1,200 +1,53 @@
 .card {
-    box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.35);
-    flex-direction: column;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #d5dbdf;
     display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid $gray-7;
+    box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+    background-color: $gray-10;
+    height: 180px;
+
+    .card-image {
+        background-image: url("~img/plant.svg");
+        
+        background-size: contain; // see full image
+        // background-size: cover;  // full image area
+        
+        background-position: center;
+        background-color: $gray-7;
+        background-repeat: no-repeat;
+        height: 100%;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .card-title {
+        box-sizing: border-box;
+        min-height: 70px;
+        padding: 10px;
+        overflow: hidden;
+        
+        h5 {
+            margin: 0;
+        }
+    }
 
     &.disabled {
         pointer-events: none;
         opacity: 0.5;
     }
 
-    &.no-shadow {
+    &.done {
         box-shadow: none;
-    }
-
-    .card-body {
-        background-color: $white;
-        border-radius: 8px 8px 0 0;
-        padding: 20px;
-        display: grid;
-
-        h4 {
-            grid-row: 1;
-            grid-column: 1 / 7;
-        }
-
-        h5 {
-            grid-row: 1;
-            grid-column: 6;
-            margin: 0;
-
-            font-size: 0.6em;
-            text-align: right;
-        }
-
-        p {
-            grid-row: 2;
-            grid-column: 1 / 7;
-        }
-
-        &.no-footer {
-            border-radius: 8px;
-        }
-
-        @media only screen and (max-width: $sm-phone) {
-            padding: 15px;
-        }
-
-        @media only screen and (max-width: $xs-phone) {
-            padding: 10px;
-        }
-    }
-
-    .card-footer {
-        border-radius: 0 0 8px 8px;
-        background-color: white;
-        padding: 0px 20px 20px 20px;
-
-        @media only screen and (max-width: $sm-phone) {
-            flex-wrap: wrap;
-            padding: 0px 15px 15px 15px;
-        }
-
-        @media only screen and (max-width: $xs-phone) {
-            padding: 0px 10px 10px 10px;
-        }
-    }
-
-    div.status,
-    div.duration {
-        align-items: center;
-        display: flex;
-        border-bottom: none;
-        border-top: none;
-
-        & > span {
-            margin-right: 5px;
-        }
-
-        & > .checkmark-circle {
-            margin-left: 3px;
-            margin-top: 2px;
-        }
-
-        & > p {
-            margin: 0;
-        }
-    }
-
-    div.status {
-        flex: 1;
-
-        & > p {
-            color: $app-accent-color;
-        }
-    }
-
-    div.duration {
-        p {
-            font-size: 10px;
-            margin-right: 10px;
-
-            @media only screen and (max-width: $sm-phone) {
-                margin-right: 0;
-            }
-        }
-    }
-
-    .status.btn-start-lesson {
-        border-radius: 10px;
-        max-width: fit-content;
-        max-width: -moz-fit-content;
-        border: 1px solid $app-accent-color;
-        box-sizing: border-box;
-        background-color: rgba(4, 120, 142, 0.07);
-        padding: 6px;
-
-        p {
-            font-size: 10px;
-            line-height: 10px;
-            font-weight: 600;
-        }
-    }
-
-    .status.start-exam {
-        max-width: 100px;
-    }
-
-    .status.done {
-        background-color: $gray-7;
-        max-width: 100px;
-        padding: 3px;
-        border-radius: 5px;
-
-        p {
-            line-height: 10px;
-            font-weight: 600;
-        }
+        background-color: lightgreen;
     }
 }
 
-.card.done {
-    box-shadow: none;
-
-    .card-body {
-        border-radius: 8px 8px 0 0;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .card-body:after {
-        content: "";
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0 35px 35px 0;
-        right: 0;
-        top: 0;
-        border-color: transparent $green-2 transparent transparent;
-        position: absolute;
-    }
-
-    .white-check {
-        text-align: center;
-        display: inline-block;
-        transform: rotate(45deg);
-        height: 10px;
-        width: 4px;
-        position: absolute;
-        right: 9px;
-        top: 5px;
-        z-index: 1;
-        border-bottom: 1.25px solid white;
-        border-right: 1.25px solid white;
-    }
-}
-
-.carousel-card {
-    display: flex;
-    flex-direction: column;
-
-    margin: 0 10px #{$bottom-menu-height-no-footer};
-    padding: 30px;
-    border-radius: 30px;
-    box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
-
-    overflow-y: auto;
-    min-height: calc(100vh - (#{$bottom-menu-height-no-footer} * 6));
-    max-width: $tablet;
-
-    background-color: $white;
-
-    @media only screen and (min-width: $tablet-plus) {
-        margin: auto;
-    }
+.card-container {
+    display: grid;
+    grid-gap: 15px 7%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    justify-content: space-between;
 }
 
 .notification-card {
@@ -226,8 +79,4 @@
 .notification-card.old {
     background-color: $white;
     border-color: $gray-7;
-}
-
-Card:last-child {
-    margin-bottom: 0;
 }
