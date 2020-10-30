@@ -10,7 +10,7 @@ export function postAction(action) {
         body: JSON.stringify(action),
     })
         .then((response) => {
-            return true;
+            return response.ok;
         })
         .catch((err) => {
             return false;
