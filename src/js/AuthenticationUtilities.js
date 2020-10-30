@@ -29,7 +29,7 @@ const getCookie = (name) => {
     });
 
     if (!cookieValue) {
-        throw new Error(`Can't find "${cookieValue}" in cookie.`);
+        throw new Error(`Can't find "${name}" in cookie.`);
     }
 
     return cookieValue.split("=")[1];
