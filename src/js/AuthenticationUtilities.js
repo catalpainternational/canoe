@@ -32,7 +32,7 @@ const getCookie = (name) => {
         throw new Error(`Can't find "${name}" in cookie.`);
     }
 
-    return cookieValue.split("=")[1];
+    return cookieValue.substring(cookieValue.indexOf('=') + 1)
 };
 
 const deleteCookie = (name) => {
