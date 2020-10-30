@@ -30,6 +30,10 @@ export function getActions() {
                 action.date = new Date(action.date);
             });
             return actions;
+        })
+        .catch(err => {
+            console.warn(err);
+            return [];
         });
 }
 
