@@ -10,7 +10,6 @@
                 if="{state.sortedListOfCourses === null}"
                 extrastyleclasses="dark"
             ></LoadingDots>
-
             <template if="{Array.isArray(state.sortedListOfCourses)}">
                 <!-- <TagList
                 if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0}"
@@ -18,22 +17,16 @@
                 onTagClick="{onTagClick}"
                 selectedTags="{state.selectedTags}"
             ></TagList> -->
-
-                <div
-                    class="course"
-                    each="{course in state.sortedListOfCourses}"
-                    if="{doesCourseHaveTag(course)}"
-                >
+                <h5 class="section-title">All Courses</h5>
+                <div class="card-container">
                     <Card
+                        each="{course in state.sortedListOfCourses}"
+                        if="{doesCourseHaveTag(course)}"
                         title="{course.title}"
                         link="{course.id}"
-                        description="{courseProgressMessage(course)}"
                         isCompleted="{course.isFinished()}"
-                        showFooter="{true}"
-                        type="course"
                     ></Card>
                 </div>
-
                 <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
             </template>
         </div>

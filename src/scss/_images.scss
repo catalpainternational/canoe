@@ -163,14 +163,10 @@
     width: 13px;
 }
 
-%lesson-card-shared {
+.clock {
     @extend %icons-shared;
     height: 14px;
     width: 12px;
-}
-
-.clock {
-    @extend %lesson-card-shared;
     background-image: url("~img/clock.svg");
 }
 
