@@ -23,7 +23,11 @@ export function getActions() {
         headers: getHeaders(),
     })
         .then((response) => {
-            return response.json();
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(`HTTP error ${response.status} while fetching ${ACTIONS_ENDPOINT_URL}`);
+            }
         })
         .then((actions) => {
             actions.forEach((action) => {
