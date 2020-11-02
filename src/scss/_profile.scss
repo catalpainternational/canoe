@@ -31,10 +31,6 @@
     background-color: $profile-banner-green;
     padding: 0 3em;
 
-    &:after {
-        background: $profile-banner-green;
-    }
-
     @media only screen and (max-width: $lg-phone) {
         padding: 0 2em;
     }
@@ -61,8 +57,6 @@ Profile .left-block {
 }
 
 Profile div.content-wrapper {
-    padding-top: 20px;
-
     @media only screen and (max-width: $tablet) {
         margin-left: 0;
         margin-right: 0;

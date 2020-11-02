@@ -1,19 +1,13 @@
 <TopMenu>
-    <header if="{!state.isAllCourses}" class="background-{state.color}">
+    <header class="background-{props.color}">
         <div class="top-menu-container">
-            <a if="{state.showBackArrow}" class="arrow-white" onclick="{backToRelavantPage}"></a>
+            <slot />
+            <!-- <a if="{state.showBackArrow}" class="arrow-white" onclick="{backToRelavantPage}"></a>
             <a
                 if="{state.isCard || state.isCourseExam}"
                 class="cross close-btn"
                 onclick="{state.isCard ? backToLessonPage : backToCourse}"
-            ></a>
-
-            <a
-                if="{!state.isAllCourses}"
-                class="site-logo {state.isSettings ? '' : 'white'}"
-                href="#"
-            ></a>
-            <a if="{!state.isSettings}" class="cog" href="#settings"></a>
+            ></a> -->
         </div>
     </header>
 
@@ -92,16 +86,6 @@
                     this.state.goToPreviousPage ||
                     this.state.isSectionList ||
                     (this.state.isCourse && !this.state.isCourseExam);
-
-                if (this.state.isProfile) {
-                    this.state.color = "profile-green";
-                } else if (this.state.isNotifications) {
-                    this.state.color = "notifications-orange";
-                } else if (this.state.isSettings) {
-                    this.state.color = "settings-tan";
-                } else {
-                    this.state.color = "";
-                }
             },
         };
     </script>

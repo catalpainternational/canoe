@@ -18,11 +18,6 @@
 
         <template if="{isUserLoggedIn() && areCompletionsReady()}">
             <DownloadSite></DownloadSite>
-
-            <TopMenu
-                contentType="{state.contentType}"
-                wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
-            ></TopMenu>
             <AllCoursesPage
                 if="{state.contentType === 'HomePage'}"
                 wagtailPage="{createAllCoursesPage(state.wagtailPage)}"
@@ -61,7 +56,6 @@
         import LessonPageJS from "js/LessonPage";
         import ResourceArticleJS from "js/ResourceArticle";
 
-        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
         import LoadCompletions from "RiotTags/Components/LoadCompletions.riot.html";
         import DownloadSite from "RiotTags/Components/DownloadSite.riot.html";
@@ -106,7 +100,6 @@
 
             components: {
                 login: Login,
-                topmenu: TopMenu,
                 bottommenu: BottomMenu,
                 allcoursespage: AllCoursesPage,
                 courseoverview: CourseOverview,
