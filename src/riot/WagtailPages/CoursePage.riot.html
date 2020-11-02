@@ -72,6 +72,12 @@
                 const lessons = await course.getFullLessonObjects();
 
                 this.update({ header, lessons, coursePageTitle });
+
+                window.addEventListener("scroll", this.stickyHeader);
+            },
+
+            onUnmounted() {
+                window.removeEventListener("scroll", this.stickyHeader);
             },
 
             calculateCourseProgress() {
@@ -81,6 +87,16 @@
 
             backToAllCourses() {
                 location.hash = "#";
+            },
+
+            stickyHeader() {
+                if (window.pageYOffset > this.state.header.offsetTop) {
+                    this.state.header.classList.add("sticky");
+                    this.state.coursePageTitle.classList.add("truncate-if-long");
+                } else {
+                    this.state.header.classList.remove("sticky");
+                    this.state.coursePageTitle.classList.remove("truncate-if-long");
+                }
             },
 
             examDisabled() {
