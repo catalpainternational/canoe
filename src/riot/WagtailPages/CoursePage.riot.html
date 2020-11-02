@@ -17,17 +17,20 @@
             </div>
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
             <LoadingDots if="{state.lessons.length === 0}" extrastyleclasses="dark"></LoadingDots>
-            <Card
-                each="{lesson in state.lessons}"
-                title="{lesson.title}"
-                description="{lesson.shortDescription}"
-                duration="{lesson.getDuration()}"
-                link="{lesson.id}"
-                isCompleted="{lesson.isFinished()}"
-                isComingSoon="{lesson.isComingSoon()}"
-                showFooter="{true}"
-                type="lesson"
-            ></Card>
+            <div class="card-container">
+                <Card
+                    each="{lesson in state.lessons}"
+                    title="{lesson.title}"
+                    description="{lesson.shortDescription}"
+                    duration="{lesson.getDuration()}"
+                    link="{lesson.id}"
+                    isCompleted="{lesson.isFinished()}"
+                    isComingSoon="{lesson.isComingSoon()}"
+                    showFooter="{true}"
+                    type="lesson"
+                    status="not-started"
+                ></Card>
+            </div>
             <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <Card
@@ -39,6 +42,7 @@
                     showFooter="{true}"
                     isDisabled="{examDisabled()}"
                     type="exam"
+                    status="not-started"
                 ></Card>
             </template>
         </div>

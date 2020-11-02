@@ -25,6 +25,8 @@
                         title="{course.title}"
                         link="{course.id}"
                         isCompleted="{course.isFinished()}"
+                        status="{courseStatus(course)}"
+                        course="{course}"
                     ></Card>
                 </div>
                 <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
@@ -125,6 +127,16 @@
                 toggleGuestBanner(false);
                 this.showBanner();
                 this.update();
+            },
+
+            courseStatus(course) {
+                if (course.numberOfFinishedLessons == 0) {
+                    return "not-started";
+                } else if (course.numberOfFinishedLessons < course.numberOfLessons) {
+                    return "in-progress";
+                } else {
+                    return "complete";
+                }
             },
         };
     </script>

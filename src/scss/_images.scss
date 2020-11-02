@@ -94,6 +94,10 @@
     width: 12px;
 }
 
+%checkmark {
+    -webkit-mask-image: url("~img/checkmark.svg");
+}
+
 .cross {
     @extend %icons-shared;
     @extend %mask-icons-shared;
@@ -161,6 +165,11 @@
     background-image: url("~img/arrow_blue.svg");
     height: 10px;
     width: 13px;
+}
+
+%arrow-right {
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/arrow_right.svg");
 }
 
 .clock {
