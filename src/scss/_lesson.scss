@@ -66,40 +66,6 @@ LessonPage .content-wrapper {
     h2 {
         border-bottom: none;
     }
-
-    .sticky {
-        position: fixed;
-        top: 0;
-        border: 1px solid $gray-6;
-        padding-right: 10px;
-        min-width: calc(100% - 65px);
-        max-width: calc(100% - 65px);
-        background-color: $tan;
-        z-index: 1;
-        left: 0;
-        padding-left: 55px;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-    }
-
-    .sticky.lesson-header {
-        h2 {
-            font-size: 16px;
-            line-height: 15px;
-        }
-
-        p {
-            font-size: 0.8em;
-        }
-
-        .arrow-gray {
-            margin: 10px 0 0 15px;
-            display: block;
-        }
-    }
-
-    .sticky.lesson-header + .duration {
-        margin-top: $sticky-header-offset;
-    }
 }
 
 LessonPage .content-wrapper .duration {
