@@ -75,50 +75,6 @@ Profile div.content-wrapper {
     height: 150px;
 }
 
-.course-progress-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-
-    li {
-        margin-bottom: 15px;
-    }
-}
-
-.progress.card {
-    .profile-card {
-        align-items: center;
-        display: flex;
-        padding: 1.25em 1.25em 0.5em 1.25em;
-        background-color: white;
-        border-radius: 8px 8px 0 0;
-
-        span {
-            margin-left: 15px;
-        }
-
-        h5 {
-            margin: 0;
-            width: 100%;
-        }
-    }
-
-    .card-footer {
-        padding-bottom: 25px;
-
-        p {
-            margin: 0 0 0 8px;
-            color: $gray-1;
-            display: inline-block;
-        }
-
-        .checkmark {
-            display: inline-block;
-        }
-    }
-}
-
 .stats {
     margin-top: 10px;
     display: flex;

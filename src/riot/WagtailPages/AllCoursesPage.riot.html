@@ -22,9 +22,6 @@
                     <Card
                         each="{course in state.sortedListOfCourses}"
                         if="{doesCourseHaveTag(course)}"
-                        title="{course.title}"
-                        link="{course.id}"
-                        isCompleted="{course.isFinished()}"
                         status="{courseStatus(course)}"
                         course="{course}"
                     ></Card>

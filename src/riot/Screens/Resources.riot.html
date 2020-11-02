@@ -15,13 +15,13 @@
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
-        <div each="{article in state.articles}">
+        <div class="card-container">
             <Card
+                each="{article in state.articles}"
                 if="{isResourceArticleVisible(article)}"
                 title="{article.title}"
                 description="{article.description}"
                 link="{article.id}"
-                showFooter="{false}"
                 status="not-started"
             ></Card>
         </div>

@@ -20,15 +20,9 @@
             <div class="card-container">
                 <Card
                     each="{lesson in state.lessons}"
-                    title="{lesson.title}"
-                    description="{lesson.shortDescription}"
-                    duration="{lesson.getDuration()}"
-                    link="{lesson.id}"
-                    isCompleted="{lesson.isFinished()}"
                     isComingSoon="{lesson.isComingSoon()}"
-                    showFooter="{true}"
-                    type="lesson"
-                    status="not-started"
+                    status="{lesson.isFinished() ? 'complete' : 'not-started'}"
+                    course="{lesson}"
                 ></Card>
             </div>
             <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
@@ -37,12 +31,8 @@
                     title="{ courseExamTitle() }"
                     description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
                     link="{props.wagtailPage.id}/exam/0"
-                    isCompleted="{props.wagtailPage.isExamFinished()}"
-                    isComingSoon="{false}"
-                    showFooter="{true}"
                     isDisabled="{examDisabled()}"
-                    type="exam"
-                    status="not-started"
+                    status="{props.wagtailPage.isExamFinished() ? 'complete' : 'not-started'}"
                 ></Card>
             </template>
         </div>
