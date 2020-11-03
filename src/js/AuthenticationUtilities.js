@@ -4,7 +4,6 @@ import { unsubscribeFromNotifications } from "js/Notifications";
 import { fetch_and_denote_unauthenticatedness as fetch } from "./Fetch";
 
 const USERNAME_STORAGE_KEY = "username";
-const ANONYMOUS_USER = "😸";  // U+1f638 Grinning cat face with smiling eyes
 const USER_ID_STORAGE_KEY = "userId";
 const JWT_TOKEN_STORAGE_KEY = "token";
 const USER_GROUPS_STORAGE_KEY = "userGroups";
@@ -88,7 +87,7 @@ export const isUserLoggedIn = () => {
 };
 
 export const getUsername = () => {
-    return localStorage.getItem(USERNAME_STORAGE_KEY) || ANONYMOUS_USER;
+    return localStorage.getItem(USERNAME_STORAGE_KEY) || process.env.GUEST_USERNAME;
 };
 
 export const getCapitalizedUsername = () => {
