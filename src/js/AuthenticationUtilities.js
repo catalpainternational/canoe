@@ -29,10 +29,10 @@ const getCookie = (name) => {
     });
 
     if (!cookieValue) {
-        throw new Error(`Can't find "${cookieValue}" in cookie.`);
+        throw new Error(`Can't find "${name}" in cookie.`);
     }
 
-    return cookieValue.split("=")[1];
+    return cookieValue.substring(cookieValue.indexOf('=') + 1)
 };
 
 const deleteCookie = (name) => {
