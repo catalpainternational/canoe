@@ -1,10 +1,10 @@
 <LessonPage>
-    <div class="replace-this-with-lessonframe background-blue-1">
+    <div class="replace-this-with-lessonframe">
+        <TopMenu>
+            <a class="arrow-white top-icon left" onclick="{backToCoursePage}"></a>
+        </TopMenu>
         <div class="content-wrapper">
             <div class="lesson-header">
-                <div>
-                    <a class="arrow-gray" onclick="{backToCoursePage}"></a>
-                </div>
                 <div class="section-title">
                     <div class="unit">
                         <p class="truncate-if-long">{ lessonPageTitleMessage() }</p>
@@ -61,6 +61,7 @@
     </div>
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { isComplete } from "Actions/completion";
 
@@ -73,6 +74,7 @@
 
             components: {
                 card: Card,
+                topmenu: TopMenu
             },
 
             TRANSLATIONS: {

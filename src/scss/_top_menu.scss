@@ -7,13 +7,14 @@ header {
         max-width: $tablet;
         background-color: inherit;
         margin: auto;
-        background-color: purple;
+        background-color: $gray-5;
     }
 
     h4 {
         margin: 0 auto;
         color: white;
         text-align: center;
+        padding-top: 10px;
     }
 
     span {
