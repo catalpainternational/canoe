@@ -30,7 +30,7 @@ const getCookie = (name) => {
         return key === name;
     });
 
-    return found_cookie? found_cookie.substring(found_cookie.indexOf('=') + 1): null
+    return found_cookie ? found_cookie.substring(found_cookie.indexOf('=') + 1) : null
 };
 
 const deleteCookie = (name) => {
@@ -108,6 +108,6 @@ export const getUserGroups = () => {
     return localStorage.getItem(USER_GROUPS_STORAGE_KEY);
 };
 
-export const setIsAuthed = (somebool) => {
-    return localStorage.setItem(USER_IS_AUTHED_STORAGE_KEY, Boolean(somebool));
+export const setIsAuthed = (someBool) => {
+    return localStorage.setItem(USER_IS_AUTHED_STORAGE_KEY, Boolean(someBool));
 }
