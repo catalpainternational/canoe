@@ -1,4 +1,8 @@
 <Profile>
+    <TopMenu>
+        <h4>Your profile</h4>
+        <a class="search-icon top-icon right" href="#settings"></a>
+    </TopMenu>
     <div class="profile">
         <div class="profile-header">
             <div class="header-box">
@@ -49,6 +53,7 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { getHomePage } from "js/WagtailPagesAPI";
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
@@ -65,6 +70,7 @@
             components: {
                 continuelearningbutton: ContinueLearningButton,
                 card: Card,
+                topmenu: TopMenu
             },
 
             TRANSLATIONS: {

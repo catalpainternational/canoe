@@ -1,11 +1,11 @@
 <CoursePage>
-    <div class="course background-blue-1">
+    <TopMenu>
+        <a class="arrow-white top-icon left" onclick="{backToAllCourses}"></a>
+    </TopMenu>
+    <div class="course">
         <div class="content-wrapper">
             <div class="course-header">
                 <div>
-                    <div>
-                        <a class="arrow-gray" onclick="{backToAllCourses}"></a>
-                    </div>
                     <div>
                         <p>{ TRANSLATIONS.course() }</p>
                     </div>
@@ -42,6 +42,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { isGuestUser } from "js/AuthenticationUtilities";
 
@@ -57,6 +58,7 @@
                 card: Card,
                 courseexam: CourseExam,
                 loadingdots: LoadingDots,
+                topmenu: TopMenu,
             },
 
             state: {
@@ -72,12 +74,6 @@
                 const lessons = await course.getFullLessonObjects();
 
                 this.update({ header, lessons, coursePageTitle });
-
-                window.addEventListener("scroll", this.stickyHeader);
-            },
-
-            onUnmounted() {
-                window.removeEventListener("scroll", this.stickyHeader);
             },
 
             calculateCourseProgress() {
@@ -87,16 +83,6 @@
 
             backToAllCourses() {
                 location.hash = "#";
-            },
-
-            stickyHeader() {
-                if (window.pageYOffset > this.state.header.offsetTop) {
-                    this.state.header.classList.add("sticky");
-                    this.state.coursePageTitle.classList.add("truncate-if-long");
-                } else {
-                    this.state.header.classList.remove("sticky");
-                    this.state.coursePageTitle.classList.remove("truncate-if-long");
-                }
             },
 
             examDisabled() {
