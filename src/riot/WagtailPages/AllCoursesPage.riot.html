@@ -4,19 +4,21 @@
         <div class="header">
             <h3>All courses</h3>
             <p>Explore a range of courses to suit your needs, expertise, and interests.</p>
+            <a class="filter-icon" onclick="{toggleTagList}"></a>
         </div>
+
         <div class="content-wrapper">
             <LoadingDots
                 if="{state.sortedListOfCourses === null}"
                 extrastyleclasses="dark"
             ></LoadingDots>
             <template if="{Array.isArray(state.sortedListOfCourses)}">
-                <!-- <TagList
-                if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0}"
-                tags="{state.listOfTags}"
-                onTagClick="{onTagClick}"
-                selectedTags="{state.selectedTags}"
-            ></TagList> -->
+                <TagList
+                    if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 && state.showTagList}"
+                    tags="{state.listOfTags}"
+                    onTagClick="{onTagClick}"
+                    selectedTags="{state.selectedTags}"
+                ></TagList>
                 <h5 class="section-title">All Courses</h5>
                 <div class="card-container">
                     <Card
@@ -49,6 +51,7 @@
                 selectedTags: [],
                 listOfTags: [],
                 sortedListOfCourses: null,
+                showTagList: false,
             },
 
             components: {
@@ -96,6 +99,10 @@
                     "%1 lessons complete",
                     course.numberOfFinishedLessons + " / " + course.numberOfLessons
                 );
+            },
+
+            toggleTagList() {
+                this.update({ showTagList: !this.state.showTagList });
             },
 
             onTagClick(clickedTag) {
