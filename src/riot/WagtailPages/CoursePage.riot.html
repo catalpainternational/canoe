@@ -20,19 +20,18 @@
             <div class="card-container">
                 <Card
                     each="{lesson in state.lessons}"
-                    isComingSoon="{lesson.isComingSoon()}"
-                    status="{lesson.isFinished() ? 'complete' : 'not-started'}"
-                    course="{lesson}"
+                    status="{lessonStatus(lesson)}"
+                    title="{lesson.title}"
+                    link="{lesson.id}"
                 ></Card>
             </div>
             <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <Card
-                    title="{ courseExamTitle() }"
+                    title="{courseExamTitle()}"
                     description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
                     link="{props.wagtailPage.id}/exam/0"
-                    isDisabled="{examDisabled()}"
-                    status="{props.wagtailPage.isExamFinished() ? 'complete' : 'not-started'}"
+                    status="{examStatus(props.wagtailPage)}"
                 ></Card>
             </template>
         </div>
@@ -85,7 +84,7 @@
                 location.hash = "#";
             },
 
-            examDisabled() {
+            isExamDisabled() {
                 // Exams are enabled if you complete all lessons or if you are a
                 // guest user.
                 const { wagtailPage: course } = this.props;
@@ -106,6 +105,26 @@
             courseExamTitle() {
                 let p = gettext("%1's Course Exam", this.props.wagtailPage.title);
                 return p;
+            },
+
+            lessonStatus(lesson) {
+                if (lesson.isComingSoon()) {
+                    return "coming-soon";
+                } else if (lesson.isFinished()) {
+                    return "complete";
+                } else {
+                    return "not-started";
+                }
+            },
+
+            examStatus(exam) {
+                if (exam.isExamFinished()) {
+                    return "complete";
+                } else if (this.isExamDisabled()) {
+                    return "disabled";
+                } else {
+                    return "not-started";
+                }
             },
         };
     </script>

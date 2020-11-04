@@ -39,21 +39,21 @@
                 <Card
                     title="1. {props.wagtailPage.objective.title}"
                     link="{props.wagtailPage.id}/{OBJECTIVES}/1"
-                    status="{isModuleComplete(OBJECTIVES) ? 'complete' : 'not-started'}"
+                    status="{moduleStatus(OBJECTIVES)}"
                 >
                 </Card>
 
                 <Card
                     title="2. {props.wagtailPage.content.title}"
                     link="{props.wagtailPage.id}/{CONTENT}/1"
-                    status="{isModuleComplete(CONTENT) ? 'complete' : 'not-started'}"
+                    status="{moduleStatus(CONTENT)}"
                 >
                 </Card>
 
                 <Card
                     title="3. {props.wagtailPage.test.title}"
                     link="{props.wagtailPage.id}/{TEST}/1"
-                    status="{isModuleComplete(TEST) ? 'complete' : 'not-started'}"
+                    status="{moduleStatus(TEST)}"
                 >
                 </Card>
             </div>
@@ -74,7 +74,7 @@
 
             components: {
                 card: Card,
-                topmenu: TopMenu
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
@@ -105,14 +105,6 @@
                 });
             },
 
-            isModuleComplete(section) {
-                return isComplete(
-                    this.props.wagtailPage.course.slug,
-                    this.props.wagtailPage.slug,
-                    section
-                );
-            },
-
             disableBlockedLessonModules() {
                 const ongoingCards = [...document.getElementsByClassName("ongoing")];
 
@@ -137,6 +129,18 @@
             durationOfLessonMessage() {
                 // the total duration of the lesson in minutes
                 return gettext("%1 mins", this.props.wagtailPage.getDuration());
+            },
+
+            moduleStatus(module) {
+                if (isComplete(
+                        this.props.wagtailPage.course.slug,
+                        this.props.wagtailPage.slug,
+                        module
+                )) {
+                    return "complete";
+                } else {
+                    return "not-started";
+                }
             },
         };
     </script>

@@ -25,7 +25,10 @@
                         each="{course in state.sortedListOfCourses}"
                         if="{doesCourseHaveTag(course)}"
                         status="{courseStatus(course)}"
-                        course="{course}"
+                        title="{course.title}"
+                        link="{course.id}"
+                        progressValue="{course.numberOfFinishedLessons}"
+                        progressMax="{course.numberOfLessons}"
                     ></Card>
                 </div>
                 <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
@@ -93,14 +96,6 @@
                 return sortedCourses;
             },
 
-            courseProgressMessage(course) {
-                return ngettext(
-                    "%1 lesson complete",
-                    "%1 lessons complete",
-                    course.numberOfFinishedLessons + " / " + course.numberOfLessons
-                );
-            },
-
             toggleTagList() {
                 this.update({ showTagList: !this.state.showTagList });
             },
@@ -134,7 +129,7 @@
             },
 
             courseStatus(course) {
-                if (course.numberOfFinishedLessons == 0) {
+                if (course.numberOfFinishedLessons === 0) {
                     return "not-started";
                 } else if (course.numberOfFinishedLessons < course.numberOfLessons) {
                     return "in-progress";
