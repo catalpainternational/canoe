@@ -1,11 +1,11 @@
 <CoursePage>
-    <div class="course background-blue-1">
+    <TopMenu>
+        <a class="arrow-white top-icon left" onclick="{backToAllCourses}"></a>
+    </TopMenu>
+    <div class="course">
         <div class="content-wrapper">
             <div class="course-header">
                 <div>
-                    <div>
-                        <a class="arrow-gray" onclick="{backToAllCourses}"></a>
-                    </div>
                     <div>
                         <p>{ TRANSLATIONS.course() }</p>
                     </div>
@@ -17,28 +17,21 @@
             </div>
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
             <LoadingDots if="{state.lessons.length === 0}" extrastyleclasses="dark"></LoadingDots>
-            <Card
-                each="{lesson in state.lessons}"
-                title="{lesson.title}"
-                description="{lesson.shortDescription}"
-                duration="{lesson.getDuration()}"
-                link="{lesson.id}"
-                isCompleted="{lesson.isFinished()}"
-                isComingSoon="{lesson.isComingSoon()}"
-                showFooter="{true}"
-                type="lesson"
-            ></Card>
+            <div class="card-container">
+                <Card
+                    each="{lesson in state.lessons}"
+                    status="{lessonStatus(lesson)}"
+                    title="{lesson.title}"
+                    link="{lesson.id}"
+                ></Card>
+            </div>
             <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <Card
-                    title="{ courseExamTitle() }"
+                    title="{courseExamTitle()}"
                     description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
                     link="{props.wagtailPage.id}/exam/0"
-                    isCompleted="{props.wagtailPage.isExamFinished()}"
-                    isComingSoon="{false}"
-                    showFooter="{true}"
-                    isDisabled="{examDisabled()}"
-                    type="exam"
+                    status="{examStatus(props.wagtailPage)}"
                 ></Card>
             </template>
         </div>
@@ -48,6 +41,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { isGuestUser } from "js/AuthenticationUtilities";
 
@@ -63,6 +57,7 @@
                 card: Card,
                 courseexam: CourseExam,
                 loadingdots: LoadingDots,
+                topmenu: TopMenu,
             },
 
             state: {
@@ -78,12 +73,6 @@
                 const lessons = await course.getFullLessonObjects();
 
                 this.update({ header, lessons, coursePageTitle });
-
-                window.addEventListener("scroll", this.stickyHeader);
-            },
-
-            onUnmounted() {
-                window.removeEventListener("scroll", this.stickyHeader);
             },
 
             calculateCourseProgress() {
@@ -95,17 +84,7 @@
                 location.hash = "#";
             },
 
-            stickyHeader() {
-                if (window.pageYOffset > this.state.header.offsetTop) {
-                    this.state.header.classList.add("sticky");
-                    this.state.coursePageTitle.classList.add("truncate-if-long");
-                } else {
-                    this.state.header.classList.remove("sticky");
-                    this.state.coursePageTitle.classList.remove("truncate-if-long");
-                }
-            },
-
-            examDisabled() {
+            isExamDisabled() {
                 // Exams are enabled if you complete all lessons or if you are a
                 // guest user.
                 const { wagtailPage: course } = this.props;
@@ -126,6 +105,26 @@
             courseExamTitle() {
                 let p = gettext("%1's Course Exam", this.props.wagtailPage.title);
                 return p;
+            },
+
+            lessonStatus(lesson) {
+                if (lesson.isComingSoon()) {
+                    return "coming-soon";
+                } else if (lesson.isFinished()) {
+                    return "complete";
+                } else {
+                    return "not-started";
+                }
+            },
+
+            examStatus(exam) {
+                if (exam.isExamFinished()) {
+                    return "complete";
+                } else if (this.isExamDisabled()) {
+                    return "disabled";
+                } else {
+                    return "not-started";
+                }
             },
         };
     </script>

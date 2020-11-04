@@ -49,14 +49,6 @@ LessonPage .unit h5 {
 }
 
 LessonPage .content-wrapper {
-    border-radius: 30px 30px 0 0;
-    background-color: $gray-10;
-    padding-top: 30px;
-
-    .arrow-gray {
-        display: none;
-    }
-
     p {
         margin-top: 5px;
         margin-bottom: 5px;
@@ -65,40 +57,6 @@ LessonPage .content-wrapper {
 
     h2 {
         border-bottom: none;
-    }
-
-    .sticky {
-        position: fixed;
-        top: 0;
-        border: 1px solid $gray-6;
-        padding-right: 10px;
-        min-width: calc(100% - 65px);
-        max-width: calc(100% - 65px);
-        background-color: $tan;
-        z-index: 1;
-        left: 0;
-        padding-left: 55px;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-    }
-
-    .sticky.lesson-header {
-        h2 {
-            font-size: 16px;
-            line-height: 15px;
-        }
-
-        p {
-            font-size: 0.8em;
-        }
-
-        .arrow-gray {
-            margin: 10px 0 0 15px;
-            display: block;
-        }
-    }
-
-    .sticky.lesson-header + .duration {
-        margin-top: $sticky-header-offset;
     }
 }
 
@@ -135,10 +93,8 @@ LessonPage .description {
 }
 
 LessonFrame {
-    $screen-height-minus-top-menu: calc(100vh - #{$top-menu-height});
-
     .frame-background {
-        min-height: $screen-height-minus-top-menu;
+        min-height: 100vh;
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
@@ -221,7 +177,7 @@ LessonObjective .objective {
 }
 
 LessonContent .content {
-    padding-bottom: $bottom-menu-height-no-footer;
+    padding-bottom: 25px;
 
     raw,
     basiccard,

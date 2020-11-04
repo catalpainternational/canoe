@@ -317,3 +317,20 @@
     @extend %stat-icon-shared;
     background-image: url("~img/film.svg");
 }
+
+// Icons for card status
+
+%arrow-right {
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/arrow_right.svg");
+}
+
+%checkmark {
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/checkmark.svg");
+}
+
+%lock {
+    @extend %mask-icons-shared;
+    -webkit-mask-image: url("~img/lock.svg");
+}

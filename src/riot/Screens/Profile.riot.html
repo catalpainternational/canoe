@@ -1,4 +1,8 @@
 <Profile>
+    <TopMenu>
+        <h4>Your profile</h4>
+        <a class="search-icon top-icon right" href="#settings"></a>
+    </TopMenu>
     <div class="profile">
         <div class="profile-header">
             <div class="header-box">
@@ -17,23 +21,16 @@
         <div class="content-wrapper">
             <h5 class="section-title">{ TRANSLATIONS.byCourse() }</h5>
             <ul class="course-progress-list">
-                <li each="{course in state.courses}">
-                    <a class="progress card" href="#{course.id}">
-                        <div class="profile-card">
-                            <h5>{course.title}</h5>
-                            <span class="arrow background-purple"></span>
-                        </div>
-                        <div class="card-footer">
-                            <span class="checkmark"></span>
-                            <p>{ courseLessonsCompletedMessage(course) }</p>
-                            <progress
-                                if="{course.numberOfFinishedLessons > 0}"
-                                value="{course.numberOfFinishedLessons}"
-                                max="{course.numberOfLessons}"
-                            ></progress>
-                        </div>
-                    </a>
-                </li>
+                <div class="card-container">
+                    <Card
+                        each="{course in state.courses}"
+                        title="{course.title}"
+                        link="{course.id}"
+                        status="{courseStatus(course)}"
+                        progressValue="{course.numberOfFinishedLessons}"
+                        progressMax="{course.numberOfLessons}"
+                    ></Card>
+                </div>
             </ul>
 
             <h5 class="section-title">{ TRANSLATIONS.learning() }</h5>
@@ -58,6 +55,8 @@
     </div>
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
+        import Card from "RiotTags/Components/Card.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { getHomePage } from "js/WagtailPagesAPI";
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
@@ -73,6 +72,8 @@
 
             components: {
                 continuelearningbutton: ContinueLearningButton,
+                card: Card,
+                topmenu: TopMenu
             },
 
             TRANSLATIONS: {
@@ -130,15 +131,6 @@
                 return Math.round(percentage) || 0;
             },
 
-            courseLessonsCompletedMessage(course) {
-                // displays how many lessons of the total in a course have been completed
-                return gettext(
-                    "%1 out of %2 completed",
-                    course.numberOfFinishedLessons,
-                    course.numberOfLessons
-                );
-            },
-
             percentLessonsCompleteMessage() {
                 // displays percentage of completed lessons in all courses combined
                 return gettext(
@@ -146,6 +138,16 @@
                     getCapitalizedUsername(),
                     this.getPercentOfLessonsCompleted()
                 );
+            },
+
+            courseStatus(course) {
+                if (course.numberOfFinishedLessons === 0) {
+                    return "not-started";
+                } else if (course.numberOfFinishedLessons < course.numberOfLessons) {
+                    return "in-progress";
+                } else {
+                    return "complete";
+                }
             },
         };
     </script>
