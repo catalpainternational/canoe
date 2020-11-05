@@ -94,7 +94,7 @@ LessonPage .description {
 
 LessonFrame {
     .frame-background {
-        min-height: 100vh;
+        min-height: calc(100vh - #{$top-menu-height});
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
