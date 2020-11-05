@@ -1,6 +1,6 @@
 <Profile>
     <TopMenu>
-        <h4>Your profile</h4>
+        <h4>{ TRANSLATIONS.yourProfile() }</h4>
         <a class="search-icon top-icon right" href="#settings"></a>
     </TopMenu>
     <div class="profile">
@@ -77,6 +77,7 @@
             },
 
             TRANSLATIONS: {
+                yourProfile: () => gettext("Your profile"),
                 overall: () => gettext("Overall progress"),
                 byCourse: () => gettext("Progress by course"),
                 learning: () => gettext("Learning statistics"),
