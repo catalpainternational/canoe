@@ -10,5 +10,6 @@ module.exports = {
         devServer: {
             port: 8080,
         }
-    }
+    },
+    GUEST_USERNAME: "Guest"
 };
