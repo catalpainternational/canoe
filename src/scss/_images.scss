@@ -319,18 +319,14 @@
 }
 
 // Icons for card status
-
-%arrow-right {
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/arrow_right.svg");
+%status-play {    
+    background-image: url("~img/status_play.svg");
 }
 
-%checkmark {
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/checkmark.svg");
+%status-complete {
+    background-image: url("~img/status_complete.svg");
 }
 
-%lock {
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/lock.svg");
+%status-lock {
+    background-image: url("~img/status_lock.svg");
 }
