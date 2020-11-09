@@ -5,6 +5,7 @@ import {
     getHomePathsInManifest,
 } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
+import { getPlatform } from "js/PlatformDetection";
 import { leftDifference } from "js/SetMethods";
 import { getImagePaths } from "js/RenditionSelector";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
@@ -58,6 +59,12 @@ const addCachedPagesToRedux = async () => {
 };
 
 export default class SiteDownloader {
+
+    async precacheVideos () {
+        if (!getPlatform().inAppelflap) return;
+        // TODO: interface with Appelflap/Eekhoorn to store video
+    }
+
     async requestTheSitesPagesAndImages() {
         const manifest = await getOrFetchManifest();
 
@@ -88,6 +95,7 @@ export default class SiteDownloader {
             await fetchImage(imagePath);
         }
         await addCachedPagesToRedux();
+        await this.precacheVideos();
 
         if (pagesToFetch.size > 0 || imagesToFetch.size > 0) {
             dispatchToastEvent(gettext("Site download is complete!"));
