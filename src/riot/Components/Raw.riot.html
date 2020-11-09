@@ -1,23 +1,55 @@
 <raw>
     <script>
         import { component } from "riot";
+        import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
         import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
+        import { getPlatform } from "js/PlatformDetection";
+        import { getOrFetchManifest } from "js/WagtailPagesAPI";
+
 
         const mountImage = component(ImageWrapper);
+        const canoetuberex = RegExp("canoetube://[0-9]+").compile();
+        const inAppelflap = getPlatform().inAppelflap;
         export default {
             setInnerHTML() {
                 this.root.innerHTML = this.props.html;
                 this.$$("embed").forEach(embed => {
-                    mountImage(
-                        embed.insertAdjacentElement(
-                            "afterend",
-                            document.createElement("div")
-                        ),
-                        {
-                            imageId: embed.getAttribute("id"),
-                            alt: embed.getAttribute("alt"),
-                        }
-                    );
+                    switch (embed.getAttribute("embedtype")) {
+                        case "media":
+                            const the_url = embed.getAttribute("url");
+                            if (canoetuberex.test(the_url)) {
+                                getOrFetchManifest()
+                                    .then(mfest => Object.values(mfest.canoetube_manifest[the_url]).sort((el1,el2) => el1.size - el2.size)[0])
+                                    .then(smallestvideo => {
+                                        // TODO: probe/use locally stored Eekhoorn-served copy if we're inAppelflap
+                                        // Potentially, we could do some intelligent format-picking here depending on browser (Safari doesn't do VP8), screen size and connection speed (perusing https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation)
+                                        const video = document.createElement("video");
+                                        video.setAttribute("src", `${BACKEND_BASE_URL}${MEDIA_PATH}/${smallestvideo.mediapath}`);
+                                        video.setAttribute("controls", "");
+                                        video.innerText = "Alas! Video is not supported on your platform.";
+                                        embed.replaceWith(video);
+                                    })
+                                .catch(console.error);
+                            } else {
+                                // TODO: test for other things we may wish to embed, see #283
+                                console.warn(`Unhandled media embed URL: ${the_url}`);
+                            }
+                            break;
+                        case "image":
+                            mountImage(
+                            embed.insertAdjacentElement(
+                                "afterend",
+                                document.createElement("div")
+                            ),
+                                {
+                                    imageId: embed.getAttribute("id"),
+                                    alt: embed.getAttribute("alt"),
+                                }
+                            );
+                            break;
+                        default:
+                            console.warn(`Unhandled embedtype ${embed.getAttribute("embedtype")}`);
+                    }
                 });
             },
 
