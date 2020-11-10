@@ -18,6 +18,7 @@
         background-repeat: no-repeat;
         height: 100%;
         border-radius: 8px 8px 0 0;
+        position: relative;
     }
 
     .card-title {
@@ -56,45 +57,26 @@
 
     &.complete .card-status,
     &.in-progress .card-status,
-    &.disabled .card-status {
+    &.disabled .card-status,
+    &.coming-soon .card-status {
         position: absolute;
-        top: 20%;
-        left: 37%;
+        top: 30%;
+        left: 40%;
         width: 40px;
         height: 40px;
-        border-radius: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .status-icon {
-            @extend %icons-shared;
-            @extend %mask-icons-shared;
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            background-color: $white;
-        }
+        @extend %icons-shared;
     }
 
     &.complete {
         box-shadow: none;
 
         .card-status {
-            background-color: $blue-2;
-
-            .status-icon {
-                @extend %checkmark;
-            }
+            @extend %status-complete;
         }
     }
 
     &.in-progress .card-status {
-        background-color: $app-accent-color;
-
-        .status-icon {
-            @extend %arrow-right;
-        }
+        @extend %status-play;
     }
 
     &.disabled,
@@ -115,11 +97,7 @@
         }
 
         .card-status {
-            background-color: $gray-1;
-
-            .status-icon {
-                @extend %lock;
-            }
+            @extend %status-lock;
         }
     }
 }

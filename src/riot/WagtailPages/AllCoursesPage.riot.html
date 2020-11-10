@@ -2,8 +2,8 @@
     <div class="background">
         <GuestBanner if="{showBanner()}" closeBanner="{closeBanner}"></GuestBanner>
         <div class="header">
-            <h3>All courses</h3>
-            <p>Explore a range of courses to suit your needs, expertise, and interests.</p>
+            <h3>{ TRANSLATIONS.allCourses() }</h3>
+            <p>{ TRANSLATIONS.coursesIntro() }</p>
             <a class="filter-icon" onclick="{toggleTagList}"></a>
         </div>
 
@@ -19,7 +19,7 @@
                     onTagClick="{onTagClick}"
                     selectedTags="{state.selectedTags}"
                 ></TagList>
-                <h5 class="section-title">All Courses</h5>
+                <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
                 <div class="card-container">
                     <Card
                         each="{course in state.sortedListOfCourses}"
@@ -66,6 +66,8 @@
 
             TRANSLATIONS: {
                 noCourses: () => gettext("There are no courses yet. Check back soon!"),
+                allCourses: () => gettext("All courses"),
+                coursesIntro: () => gettext("Explore a range of courses to suit your needs, expertise, and interests.")
             },
 
             async onMounted(props, state) {
