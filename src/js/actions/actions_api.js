@@ -1,5 +1,6 @@
 import { getAuthenticationToken } from "../AuthenticationUtilities.js";
 import { BACKEND_BASE_URL } from "../urls.js";
+import { fetch_and_denote_unauthenticatedness as fetch} from "../Fetch.js";
 
 const ACTIONS_ENDPOINT_URL = `${BACKEND_BASE_URL}/progress/actions`;
 
@@ -10,7 +11,7 @@ export function postAction(action) {
         body: JSON.stringify(action),
     })
         .then((response) => {
-            return true;
+            return response.ok;
         })
         .catch((err) => {
             return false;
@@ -23,7 +24,11 @@ export function getActions() {
         headers: getHeaders(),
     })
         .then((response) => {
-            return response.json();
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(`HTTP error ${response.status} while fetching ${ACTIONS_ENDPOINT_URL}`);
+            }
         })
         .then((actions) => {
             actions.forEach((action) => {
