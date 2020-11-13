@@ -1,6 +1,6 @@
 import { dispatchToastEvent } from "js/Events";
 import { getLanguage } from "ReduxImpl/Interface";
-import { BACKEND_BASE_URL } from "js/urls";
+import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
 
 export const alertAppIsOffline = () => {
     dispatchToastEvent("You are offline.");
@@ -23,7 +23,7 @@ export const isCourseInTheCurrentLanguage = (courseSlug) => {
 };
 
 export const getMediaUrl = (mediaPath) => {
-    return `${BACKEND_BASE_URL}${mediaPath}`;
+    return `${BACKEND_BASE_URL}${MEDIA_PATH}/${mediaPath}`;
 };
 
 export const doesTheArrayContainTheObject = (theArray, theObject, matchingFunction) => {
