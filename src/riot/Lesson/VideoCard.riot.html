@@ -1,7 +1,7 @@
 <VideoCard>
     <div>
         <div class="film"></div>
-        <video
+        <video id="thevideo"
             width="100%"
             crossorigin="anonymous"
             controls="true"
@@ -9,10 +9,6 @@
             onplay="{ (event) => storeAnalytics(event) }"
         >
             <!-- if preload set to none the video will not actually be requested, if set to auto it is requested -->
-            <source
-                src="{getMediaUrl(props.media.sources[0].src)}"
-                type="{props.media.sources[0].type}"
-            />
             <span>{ TRANSLATIONS.browserSupport() }</span>
         </video>
         <h3 class="media-title">{props.media.title}</h3>
@@ -28,6 +24,7 @@
             addToCache,
             deleteItemFromCache
         } from "js/cacheManager/cacheManager.js";
+        import { getOrFetchManifest } from "js/WagtailPagesAPI";
         import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
         export default {
@@ -46,10 +43,13 @@
                 if (!this.state.cached) {
                     this.toggleAvailableOffline();
                 }
+                document.getElementById("thevideo").src = await this.getVideoMediaUrl(props.media.source);
             },
 
-            getMediaUrl(mediaPath) {
-                return getMediaUrl(mediaPath);
+            getVideoMediaUrl(videoID) {
+                return getOrFetchManifest()
+                    // choose smallest video. Much more elaborate strategies are possible, but they need coordination with the backend (through TranscodeDefinition objects) to establish a convention on label use (S/M/L ? 360p/480p/720p ? what about codecs - h264/vp8 ?)
+                    .then(mfest => getMediaUrl(Object.values(mfest.media[videoID]).sort((el1,el2) => el1.size - el2.size)[0].mediapath));
             },
 
             storeAnalytics() {
@@ -58,13 +58,13 @@
             },
 
             async getCacheInfo() {
-                const url = getMediaUrl(this.props.media.sources[0].src);
+                const url = await this.getVideoMediaUrl(this.props.media.source);
                 const cached = await isItemCached(url);
                 this.update({ cached });
             },
 
             async toggleAvailableOffline(e) {
-                const url = getMediaUrl(this.props.media.sources[0].src);
+                const url = await this.getVideoMediaUrl(this.props.media.source);
                 const action = this.state.cached
                     ? deleteItemFromCache(url, "media-cache")
                     : addToCache(url, "media-cache");
