@@ -2,6 +2,8 @@ import { getAuthenticationToken, setIsAuthed } from "js/AuthenticationUtilities.
 import { APIMissingPageError } from "js/Errors";
 import { getPlatform } from "js/PlatformDetection";
 
+
+const WEBP_BROWSERS = ["Chrome", "Firefox"];
 const DEAUTHED_HTTP_STATUSES = [401, 403];
 
 export const fetch_and_denote_unauthenticatedness = (request_or_url, maybe_fetchopts) => {
@@ -12,13 +14,14 @@ export const fetch_and_denote_unauthenticatedness = (request_or_url, maybe_fetch
     });
 }
 
+
 export const getImageRequest = (url) => {
     const token = getAuthenticationToken();
     const { browser } = getPlatform();
     return new Request(url, {
         mode: "cors",
         headers: {
-            "Content-Type": browser.name === "Chrome" ? "image/webp" : "image/jpeg",
+            "Content-Type": browser.name in WEBP_BROWSERS ? "image/webp" : "image/jpeg",
             Authorization: `JWT ${token}`,
         },
     });
