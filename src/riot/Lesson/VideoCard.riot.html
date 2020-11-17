@@ -18,13 +18,12 @@
     </div>
 
     <script>
-        import { getMediaUrl } from "js/utilities";
+        import { resolveMedia } from "js/utilities";
         import {
             isItemCached,
             addToCache,
             deleteItemFromCache
         } from "js/cacheManager/cacheManager.js";
-        import { getOrFetchManifest } from "js/WagtailPagesAPI";
         import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
         export default {
@@ -43,13 +42,7 @@
                 if (!this.state.cached) {
                     this.toggleAvailableOffline();
                 }
-                this.$("video").src = await this.resolveMedia(props.media.id);
-            },
-
-            resolveMedia(mediaID) {
-                return getOrFetchManifest()
-                    // choose smallest video. Much more elaborate strategies are possible, but they need coordination with the backend (through TranscodeDefinition objects) to establish a convention on label use (S/M/L ? 360p/480p/720p ? what about codecs - h264/vp8 ?)
-                    .then(mfest => getMediaUrl(Object.values(mfest.media[mediaID]).sort((el1,el2) => el1.size - el2.size)[0].mediapath));
+                this.$("video").src = await resolveMedia(props.media.id);
             },
 
             storeAnalytics() {
@@ -58,13 +51,13 @@
             },
 
             async getCacheInfo() {
-                const url = await this.resolveMedia(this.props.media.id);
+                const url = await resolveMedia(this.props.media.id);
                 const cached = await isItemCached(url);
                 this.update({ cached });
             },
 
             async toggleAvailableOffline(e) {
-                const url = await this.resolveMedia(this.props.media.id);
+                const url = await resolveMedia(this.props.media.id);
                 const action = this.state.cached
                     ? deleteItemFromCache(url, "media-cache")
                     : addToCache(url, "media-cache");
