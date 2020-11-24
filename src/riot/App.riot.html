@@ -140,7 +140,7 @@
                 };
 
                 window.addEventListener("hashchange", () => {
-                    if (!this.isUserLoggedIn()) {
+                    if (this.isUserLoggedIn()) {
                         this.route();
                         logPageView(window.location.hash);
                     }
@@ -156,8 +156,6 @@
                 const completionCallback = async (state) => {
                     if (state.userLoggedIn) {
                         await loginRoute();
-                    } else {
-                        logoutUpdate();                        
                     }
                 };
 
