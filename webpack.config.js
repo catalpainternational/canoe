@@ -11,7 +11,7 @@ const WebpackPwaManifest = require("webpack-pwa-manifest");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
+const PnpWebpackPlugin = require("pnp-webpack-plugin");
 
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
 const defaultProjectConfiguration = require("./canoe-project-default.js");
@@ -123,7 +123,7 @@ module.exports = (env) => {
                     },
                 },
                 {
-                    test: /\.m?js$/,
+                    test: /\.(js|mjs)$/,
                     exclude: /node_modules/,
                     use: {
                         loader: "babel-loader",
