@@ -4,6 +4,7 @@
 // while the component is mounted with the state before and after redux.
 // Dispatches available as arguments.
 
+import pureSubscribe from "redux-pure-subscribe";
 import { store } from "ReduxImpl/Store";
 
 export const installReduxPlugin = function (component) {
@@ -21,7 +22,8 @@ export const installReduxPlugin = function (component) {
         let previousState = store.getState();
 
         // subscribe to the redux store
-        component.storeUnsubscribe = store.subscribe(function callStoreListener() {
+        // pureSubscribe is used as it performs like a debounce on store activity
+        component.storeUnsubscribe = pureSubscribe(store, function callStoreListener() {
             const state = store.getState();
             component.storeListener(previousState, state);
             // store the previous state

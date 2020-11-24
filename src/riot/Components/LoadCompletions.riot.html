@@ -48,11 +48,18 @@
             },
 
             async clearAppData() {
+                if (!!this.state.clearingAppData) {
+                    return;
+                }
+                this.state.clearingAppData = true;
+                
                 window.clearInterval(this.state.pagesPoller);
                 signalCompletionsAreNotReady();
                 clearInMemoryCompletions();
                 clearInMemoryExamData();
                 await closeAndDeleteDB();
+
+                this.state.clearingAppData = false;
             },
         };
     </script>

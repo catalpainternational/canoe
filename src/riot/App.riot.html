@@ -53,7 +53,7 @@
         import { getPage } from "js/Routing";
         import { ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
         import { isBrowserSupported, isUserLoggedIn, areCompletionsReady, getManifestFromStore } from "ReduxImpl/Interface";
-        import { storeSubscribers } from "js/redux/StoreSubscribers";
+        import { storeSubscribers } from "ReduxImpl/StoreSubscribers";
         import { logPageView } from "js/GoogleAnalytics";
 
         import HomePageJS from "js/HomePage";
@@ -102,6 +102,7 @@
                 wagtailPage: {},
                 homePageURL: "",
                 appTitle: "",
+                storeSubscriptions: {},
             },
 
             components: {
@@ -130,9 +131,7 @@
                     this.update();
                 });
 
-                const loginRoute = async () => {
-                    this.route();
-                };
+                const loginRoute = async () => this.route();
 
                 const logoutUpdate = () => {
                     window.location.hash = "";
@@ -151,29 +150,37 @@
                     loginRoute();
                 }
 
+                // Watch for changes to specific store members
                 // After downloading its materials, the app starts.
                 const completionTargets = ["areCompletionsReady"];
-                const completionCallback = async (state) => {
-                    if (state.userLoggedIn) {
+                const completionCallback = async (storeState) => {
+                    if (storeState.userLoggedIn) {
                         await loginRoute();
                     }
                 };
 
                 const logoutTargets = ["userLoggedIn"];
-                const logoutCallback = async (state) => {
-                    if (!state.userLoggedIn) {
-                        logoutUpdate();                        
+                const logoutCallback = (storeState) => {
+                    if (!storeState.userLoggedIn) {
+                        if (!!this.state.logoutUpdating) {
+                            return;
+                        }
+
+                        this.state.logoutUpdating = true;
+                        logoutUpdate();
+                        this.state.logoutUpdating = false;
                     }
                 };
     
-                storeSubscribers(completionCallback, completionTargets);
-                storeSubscribers(logoutCallback, logoutTargets);
+                this.state.storeSubscriptions["completion"] = storeSubscribers(completionCallback, completionTargets);
+                this.state.storeSubscriptions["logout"] = storeSubscribers(logoutCallback, logoutTargets);
             },
 
             onUpdated() {
                 scrollToFirstUnfinishedContent();
             },
 
+            /** Watch for any change within the entire store */
             storeListener(previousStoreState, storeState) {
                 if (previousStoreState.language != storeState.language) {
                     this.update();

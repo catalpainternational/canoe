@@ -3,7 +3,7 @@ import { dispatchSiteDownloadEvent } from "js/Events";
 import { unsubscribeFromNotifications } from "js/Notifications";
 
 import { fetch_and_denote_unauthenticatedness as fetch } from "./Fetch";
-import { signalUserLoggedIn, signalUserLoggedOut } from "js/redux/Interface";
+import { signalUserLoggedIn, signalUserLoggedOut } from "ReduxImpl/Interface";
 
 const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
@@ -71,10 +71,10 @@ export const login = async (usernameAndPassword) => {
 };
 
 export const logout = async () => {
+    signalUserLoggedOut();
     deleteCookie(JWT_TOKEN_STORAGE_KEY);
     localStorage.clear();
     unsubscribeFromNotifications();
-    signalUserLoggedOut();
 };
 
 export const getAuthenticationToken = () => {

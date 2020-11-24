@@ -2,7 +2,7 @@ import { getAuthenticationToken } from "js/AuthenticationUtilities.js";
 import { APIMissingPageError } from "js/Errors";
 import { getPlatform } from "js/PlatformDetection";
 
-import { signalUserLoggedOut } from "js/redux/Interface";
+import { signalUserLoggedOut } from "ReduxImpl/Interface";
 
 
 const WEBP_BROWSERS = ["Chrome", "Firefox"];
