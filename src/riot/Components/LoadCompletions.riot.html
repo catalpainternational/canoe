@@ -3,6 +3,7 @@
         import {
             signalCompletionsAreReady,
             signalCompletionsAreNotReady,
+            signalUserLoggedIn,
         } from "ReduxImpl/Interface";
         import { dispatchLoggedInEvent } from "js/Events";
         import { isGuestUser } from "js/AuthenticationUtilities";
@@ -38,7 +39,8 @@
                 await this.pullIdbDataIntoMemory();
 
                 signalCompletionsAreReady();
-                dispatchLoggedInEvent();
+                // Normally this will have already occured in AuthenticationUtilities.login
+                signalUserLoggedIn();
             },
 
             async pullIdbDataIntoMemory() {

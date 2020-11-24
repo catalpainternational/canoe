@@ -12,6 +12,7 @@ import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/Se
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
+import { signalUserLoggedIn as signalUserLoggedInAction } from "./ducks/Authentication";
 
 export const storeWagtailPage = (wagtailPage) => {
     const { type } = wagtailPage.meta;
@@ -108,6 +109,24 @@ export const signalCompletionsAreNotReady = () => {
 export const areCompletionsReady = () => {
     return store.getState().areCompletionsReady;
 };
+
+
+// Authentication
+/** Signals to the Redux Store that the User is/has Logged In */
+export const signalUserLoggedIn = () => {
+    store.dispatch(signalUserLoggedInAction(true));
+};
+
+/** Signals to the Redux Store that the User is/has Logged Out */
+export const signalUserLoggedOut = () => {
+    store.dispatch(signalUserLoggedInAction(false));
+};
+
+/** Get's the User's login state from the Redux Store */
+export const isUserLoggedIn = () => {
+    return store.getState().userLoggedIn;
+};
+
 
 export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);

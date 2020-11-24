@@ -1,6 +1,8 @@
-import { getAuthenticationToken, setIsAuthed } from "js/AuthenticationUtilities.js";
+import { getAuthenticationToken } from "js/AuthenticationUtilities.js";
 import { APIMissingPageError } from "js/Errors";
 import { getPlatform } from "js/PlatformDetection";
+
+import { signalUserLoggedOut } from "js/redux/Interface";
 
 
 const WEBP_BROWSERS = ["Chrome", "Firefox"];
@@ -9,7 +11,9 @@ const DEAUTHED_HTTP_STATUSES = [401, 403];
 export const fetch_and_denote_unauthenticatedness = (request_or_url, maybe_fetchopts) => {
     return fetch(request_or_url, maybe_fetchopts)
     .then(resp => {
-        if (DEAUTHED_HTTP_STATUSES.indexOf(resp.status) !== -1) setIsAuthed(false);
+        if (DEAUTHED_HTTP_STATUSES.indexOf(resp.status) !== -1) {
+            signalUserLoggedOut();
+        }
         return resp;
     });
 }

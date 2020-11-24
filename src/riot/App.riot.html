@@ -7,16 +7,16 @@
         <OnlineOrOffline></OnlineOrOffline>
         <Toast></Toast>
 
-        <Login if="{userShouldLogin()}"></Login>
+        <Login if="{!isUserLoggedIn()}"></Login>
 
-        <LoadCompletions if="{!userShouldLogin()}"></LoadCompletions>
+        <LoadCompletions if="{isUserLoggedIn()}"></LoadCompletions>
 
         <LoadingDots
-            if="{Object.keys(state.wagtailPage).length === 0 && !userShouldLogin()}"
+            if="{Object.keys(state.wagtailPage).length === 0 && isUserLoggedIn()}"
             extrastyleclasses="light app"
         ></LoadingDots>
 
-        <template if="{!userShouldLogin() && areCompletionsReady()}">
+        <template if="{isUserLoggedIn() && areCompletionsReady()}">
             <DownloadSite></DownloadSite>
 
             <TopMenu
@@ -50,10 +50,10 @@
     </template>
 
     <script>
-        import { isUserLoggedIn } from "js/AuthenticationUtilities";
         import { getPage } from "js/Routing";
-        import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
-        import { isBrowserSupported, areCompletionsReady, getManifestFromStore } from "ReduxImpl/Interface";
+        import { ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
+        import { isBrowserSupported, isUserLoggedIn, areCompletionsReady, getManifestFromStore } from "ReduxImpl/Interface";
+        import { storeSubscribers } from "js/redux/StoreSubscribers";
         import { logPageView } from "js/GoogleAnalytics";
 
         import HomePageJS from "js/HomePage";
@@ -130,27 +130,46 @@
                     this.update();
                 });
 
-                // After downloading its materials, the app starts.
-                window.addEventListener(ON_LOG_IN, async () => {
+                const loginRoute = async () => {
                     this.route();
-                });
+                };
 
-                window.addEventListener(ON_LOG_OUT, () => {
+                const logoutUpdate = () => {
                     window.location.hash = "";
-                    this.update();
-                });
+                    this.update();                        
+                };
 
                 window.addEventListener("hashchange", () => {
-                    if (!this.userShouldLogin()) {
+                    if (!this.isUserLoggedIn()) {
                         this.route();
                         logPageView(window.location.hash);
                     }
                 });
 
-                if (!this.userShouldLogin() && this.areCompletionsReady()) {
+                if (!this.isUserLoggedIn() && this.areCompletionsReady()) {
                     // If user returns to site and is logged in.
-                    this.route();
+                    loginRoute();
                 }
+
+                // After downloading its materials, the app starts.
+                const completionTargets = ["areCompletionsReady"];
+                const completionCallback = async (state) => {
+                    if (state.userLoggedIn) {
+                        await loginRoute();
+                    } else {
+                        logoutUpdate();                        
+                    }
+                };
+
+                const logoutTargets = ["userLoggedIn"];
+                const logoutCallback = async (state) => {
+                    if (!state.userLoggedIn) {
+                        logoutUpdate();                        
+                    }
+                };
+    
+                storeSubscribers(completionCallback, completionTargets);
+                storeSubscribers(logoutCallback, logoutTargets);
             },
 
             onUpdated() {
@@ -181,11 +200,8 @@
                 return areCompletionsReady();
             },
 
-            userShouldLogin() {
-                return !(
-                    localStorage.getItem("fetch_result_indicates_authed") === "true"
-                    || Object.keys(getManifestFromStore()).length && isUserLoggedIn()
-                );
+            isUserLoggedIn() {
+                return isUserLoggedIn();
             },
 
             createHomePage(aWagtailPage) {
