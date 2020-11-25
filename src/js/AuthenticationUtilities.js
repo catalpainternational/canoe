@@ -16,7 +16,8 @@ const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
     // sets value attributes provided eg {max-age: 3e8} to set expiry to 10 years in the future.
     // and potentially does vastly different things, because it does not escape inputs.
     document.cookie = Object.entries(attributes).reduce(
-        (cookieString, keyValue) => `${cookieString};${keyValue[0]}=${keyValue[1]}`,
+        (cookieString, keyValue) =>
+            `${cookieString};${keyValue[0]}=${keyValue[1]}`,
         keyOnlyAttributes.reduce(
             (cookieString, attribute) => `${cookieString};${attribute}`,
             `${name}=${value}`
@@ -30,7 +31,9 @@ const getCookie = (name) => {
         return key === name;
     });
 
-    return found_cookie ? found_cookie.substring(found_cookie.indexOf('=') + 1) : null
+    return found_cookie
+        ? found_cookie.substring(found_cookie.indexOf("=") + 1)
+        : null;
 };
 
 const deleteCookie = (name) => {
@@ -44,16 +47,17 @@ const fetchAuthToken = async (usernameAndPassword) => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(usernameAndPassword),
-    })
-    .then((response) => {
-        if (!response.ok) throw new Error(`Login failed, HTTP status: ${response.status}`);
+    }).then((response) => {
+        if (!response.ok)
+            throw new Error(`Login failed, HTTP status: ${response.status}`);
         return response.json();
-    })
+    });
 };
 
-
 export const login = async (usernameAndPassword) => {
-    const { token, username, userId, groups } = await fetchAuthToken(usernameAndPassword);
+    const { token, username, userId, groups } = await fetchAuthToken(
+        usernameAndPassword
+    );
 
     // Browsers refuse to set secure cookies from non https locations
     setCookie(
@@ -82,7 +86,9 @@ export const getAuthenticationToken = () => {
 };
 
 export const getUsername = () => {
-    return localStorage.getItem(USERNAME_STORAGE_KEY) || process.env.GUEST_USERNAME;
+    return (
+        localStorage.getItem(USERNAME_STORAGE_KEY) || process.env.GUEST_USERNAME
+    );
 };
 
 export const getCapitalizedUsername = () => {

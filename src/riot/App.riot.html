@@ -52,7 +52,12 @@
     <script>
         import { getPage } from "js/Routing";
         import { ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
-        import { isBrowserSupported, isUserLoggedIn, areCompletionsReady, getManifestFromStore } from "ReduxImpl/Interface";
+        import {
+            isBrowserSupported,
+            isUserLoggedIn,
+            areCompletionsReady,
+            getManifestFromStore,
+        } from "ReduxImpl/Interface";
         import { storeSubscribers } from "ReduxImpl/StoreSubscribers";
         import { logPageView } from "js/GoogleAnalytics";
 
@@ -135,7 +140,7 @@
 
                 const logoutUpdate = () => {
                     window.location.hash = "";
-                    this.update();                        
+                    this.update();
                 };
 
                 window.addEventListener("hashchange", () => {
@@ -171,9 +176,15 @@
                         this.state.logoutUpdating = false;
                     }
                 };
-    
-                this.state.storeSubscriptions["completion"] = storeSubscribers(completionCallback, completionTargets);
-                this.state.storeSubscriptions["logout"] = storeSubscribers(logoutCallback, logoutTargets);
+
+                this.state.storeSubscriptions["completion"] = storeSubscribers(
+                    completionCallback,
+                    completionTargets
+                );
+                this.state.storeSubscriptions["logout"] = storeSubscribers(
+                    logoutCallback,
+                    logoutTargets
+                );
             },
 
             onUpdated() {

@@ -6,7 +6,10 @@
             signalUserLoggedIn,
         } from "ReduxImpl/Interface";
         import { isGuestUser } from "js/AuthenticationUtilities";
-        import { pullExamDataIntoMemory, clearInMemoryExamData } from "js/ExamInterface";
+        import {
+            pullExamDataIntoMemory,
+            clearInMemoryExamData,
+        } from "js/ExamInterface";
         import {
             pullCompletionsIntoMemory,
             clearInMemoryCompletions,
@@ -32,7 +35,10 @@
             async prepDataForAppLaunch() {
                 if (!isGuestUser()) {
                     await updateIdb();
-                    this.state.completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
+                    this.state.completionPoller = window.setInterval(
+                        updateApi,
+                        EVERY_FIVE_MINUTES
+                    );
                 }
 
                 await this.pullIdbDataIntoMemory();
@@ -52,7 +58,7 @@
                     return;
                 }
                 this.state.clearingAppData = true;
-                
+
                 window.clearInterval(this.state.pagesPoller);
                 signalCompletionsAreNotReady();
                 clearInMemoryCompletions();

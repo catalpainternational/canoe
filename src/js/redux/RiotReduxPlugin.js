@@ -23,16 +23,20 @@ export const installReduxPlugin = function (component) {
 
         // subscribe to the redux store
         // pureSubscribe is used as it performs like a debounce on store activity
-        component.storeUnsubscribe = pureSubscribe(store, function callStoreListener() {
-            const state = store.getState();
-            component.storeListener(previousState, state);
-            // store the previous state
-            previousState = store.getState();
-        });
+        component.storeUnsubscribe = pureSubscribe(
+            store,
+            function callStoreListener() {
+                const state = store.getState();
+                component.storeListener(previousState, state);
+                // store the previous state
+                previousState = store.getState();
+            }
+        );
 
         // call the original mount
         originalOnMounted.apply(component, args);
     };
+
     // unsubscribe before unmount
     component.onBeforeUnmount = function reduxOnBeforeUnmount(...args) {
         component.storeUnsubscribe();

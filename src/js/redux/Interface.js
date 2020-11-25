@@ -110,7 +110,6 @@ export const areCompletionsReady = () => {
     return store.getState().areCompletionsReady;
 };
 
-
 // Authentication
 /** Signals to the Redux Store that the User is/has Logged In */
 export const signalUserLoggedIn = () => {
@@ -126,7 +125,6 @@ export const signalUserLoggedOut = () => {
 export const isUserLoggedIn = () => {
     return store.getState().userLoggedIn;
 };
-
 
 export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);
