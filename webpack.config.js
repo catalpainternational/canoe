@@ -49,6 +49,7 @@ module.exports = (env) => {
         },
         entry: {
             canoe: path.resolve(__dirname, "src", "index.js"),
+            render: path.resolve(__dirname, "src", "ts", "Render.ts"),
         },
         output: {
             filename: "[name]-[contenthash].js",
@@ -77,6 +78,10 @@ module.exports = (env) => {
         },
         module: {
             rules: [
+                {
+                    test: /\.tsx?$/,
+                    loader: 'ts-loader'
+                },
                 { test: /\.hbs$/, loader: "handlebars-loader" },
                 {
                     test: /\.riot.html$/,
@@ -198,7 +203,7 @@ module.exports = (env) => {
     const config = mergeWithCustomize({
         customizeArray: customizeArray({
             'resolve.modules': 'prepend'
-          })
+        })
     })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,
