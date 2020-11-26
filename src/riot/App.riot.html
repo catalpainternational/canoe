@@ -54,10 +54,11 @@
         import { ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
         import {
             isBrowserSupported,
-            isUserLoggedIn,
             areCompletionsReady,
             getManifestFromStore,
         } from "ReduxImpl/Interface";
+        import { isUserAuthed } from "js/AuthenticationUtilities";
+
         import { storeSubscribers } from "ReduxImpl/StoreSubscribers";
         import { logPageView } from "js/GoogleAnalytics";
 
@@ -217,7 +218,7 @@
             },
 
             isUserLoggedIn() {
-                return isUserLoggedIn();
+                return isUserAuthed();
             },
 
             createHomePage(aWagtailPage) {

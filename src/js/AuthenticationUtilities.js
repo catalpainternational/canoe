@@ -3,12 +3,13 @@ import { dispatchSiteDownloadEvent } from "js/Events";
 import { unsubscribeFromNotifications } from "js/Notifications";
 
 import { fetch_and_denote_unauthenticatedness as fetch } from "./Fetch";
-import { signalUserLoggedIn, signalUserLoggedOut } from "ReduxImpl/Interface";
+import { isUserLoggedIn, signalUserLoggedIn, signalUserLoggedOut } from "ReduxImpl/Interface";
 
 const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
 const JWT_TOKEN_STORAGE_KEY = "token";
 const USER_GROUPS_STORAGE_KEY = "userGroups";
+const USER_IS_AUTHED_STORAGE_KEY = "fetch_result_indicates_authed";
 
 const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
     // sets name=value cookie
@@ -69,20 +70,37 @@ export const login = async (usernameAndPassword) => {
     localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
     localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
-    signalUserLoggedIn();
+    setIsAuthed(true);
 
     dispatchSiteDownloadEvent();
 };
 
 export const logout = async () => {
-    signalUserLoggedOut();
     deleteCookie(JWT_TOKEN_STORAGE_KEY);
     localStorage.clear();
     unsubscribeFromNotifications();
+    setIsAuthed(false);
 };
 
 export const getAuthenticationToken = () => {
     return getCookie(JWT_TOKEN_STORAGE_KEY);
+};
+
+/** Returns true if the Redux store shows the user is logged in,
+ * otherwise returns the value in localStorage.
+*/
+export const isUserAuthed = () => {
+    if (isUserLoggedIn()) {
+        return true;
+    }
+
+    let auth_status_denoted = localStorage.getItem(USER_IS_AUTHED_STORAGE_KEY);
+    if (auth_status_denoted === null) {
+        setIsAuthed(false);
+        auth_status_denoted = "false";
+    }
+
+    return Boolean(auth_status_denoted);
 };
 
 export const getUsername = () => {
@@ -107,3 +125,13 @@ export const getUserId = () => {
 export const getUserGroups = () => {
     return localStorage.getItem(USER_GROUPS_STORAGE_KEY);
 };
+
+export const setIsAuthed = (someBool) => {
+    if (someBool) {
+        signalUserLoggedIn();
+    } else {
+        signalUserLoggedOut();
+    }
+
+    return localStorage.setItem(USER_IS_AUTHED_STORAGE_KEY, Boolean(someBool));	
+}
