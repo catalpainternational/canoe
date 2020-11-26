@@ -1,4 +1,4 @@
-import { BACKEND_BASE_URL } from "js/urls";
+import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
 import { getOrFetchManifest } from "js/WagtailPagesAPI";
 import { getPlatform } from "js/PlatformDetection";
 import { MissingImageError } from "js/Errors";
@@ -26,7 +26,7 @@ const getRenditionUrl = (renditions) => {
 };
 
 const getRenditionPath = (renditions) => {
-    return `/media/${getRendition(renditions)}`;
+    return `${MEDIA_PATH}/${getRendition(renditions)}`;
 };
 
 const getRendition = (renditions) => {
