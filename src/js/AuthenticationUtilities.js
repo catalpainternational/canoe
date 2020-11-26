@@ -3,11 +3,7 @@ import { dispatchSiteDownloadEvent } from "js/Events";
 import { unsubscribeFromNotifications } from "js/Notifications";
 
 import { fetch_and_denote_unauthenticatedness as fetch } from "./Fetch";
-import {
-    isUserLoggedIn,
-    signalUserLoggedIn,
-    signalUserLoggedOut,
-} from "ReduxImpl/Interface";
+import { isUserLoggedIn, signalUserLoginStatus } from "ReduxImpl/Interface";
 
 const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
@@ -141,10 +137,6 @@ export const setUserAuthStatus = (someBool) => {
 
     let storeUserLoginState = isUserLoggedIn();
     if (storeUserLoginState === null || storeUserLoginState !== someBool) {
-        if (someBool) {
-            signalUserLoggedIn();
-        } else {
-            signalUserLoggedOut();
-        }
+        signalUserLoginStatus(someBool);
     }
 };

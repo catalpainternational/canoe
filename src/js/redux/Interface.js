@@ -111,17 +111,12 @@ export const areCompletionsReady = () => {
 };
 
 // Authentication
-/** Signals to the Redux Store that the User is/has Logged In */
-export const signalUserLoggedIn = () => {
-    store.dispatch(signalUserLoggedInAction(true));
+/** Signals to the Redux Store what the user's current login status is */
+export const signalUserLoginStatus = (trueOrFalse) => {
+    store.dispatch(signalUserLoggedInAction(trueOrFalse));
 };
 
-/** Signals to the Redux Store that the User is/has Logged Out */
-export const signalUserLoggedOut = () => {
-    store.dispatch(signalUserLoggedInAction(false));
-};
-
-/** Get's the User's login state from the Redux Store */
+/** Gets the User's login state from the Redux Store */
 export const isUserLoggedIn = () => {
     return store.getState().userLoggedIn;
 };
