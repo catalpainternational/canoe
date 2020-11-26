@@ -3,9 +3,11 @@
         import {
             signalCompletionsAreReady,
             signalCompletionsAreNotReady,
-            signalUserLoggedIn,
         } from "ReduxImpl/Interface";
-        import { isGuestUser } from "js/AuthenticationUtilities";
+        import {
+            isGuestUser,
+            setUserAuthStatus,
+        } from "js/AuthenticationUtilities";
         import {
             pullExamDataIntoMemory,
             clearInMemoryExamData,
@@ -45,7 +47,7 @@
 
                 signalCompletionsAreReady();
                 // Normally this will have already occured in AuthenticationUtilities.login
-                signalUserLoggedIn();
+                setUserAuthStatus(true);
             },
 
             async pullIdbDataIntoMemory() {

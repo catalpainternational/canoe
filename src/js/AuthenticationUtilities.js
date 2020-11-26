@@ -3,7 +3,11 @@ import { dispatchSiteDownloadEvent } from "js/Events";
 import { unsubscribeFromNotifications } from "js/Notifications";
 
 import { fetch_and_denote_unauthenticatedness as fetch } from "./Fetch";
-import { isUserLoggedIn, signalUserLoggedIn, signalUserLoggedOut } from "ReduxImpl/Interface";
+import {
+    isUserLoggedIn,
+    signalUserLoggedIn,
+    signalUserLoggedOut,
+} from "ReduxImpl/Interface";
 
 const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
@@ -89,7 +93,7 @@ export const getAuthenticationToken = () => {
 /** Returns true if the Redux store shows the user is logged in,
  * otherwise returns the value in localStorage.
  * Ensures that the login status is synchronised between the two.
-*/
+ */
 export const isUserAuthed = () => {
     let storeUserLoginState = isUserLoggedIn();
     if (storeUserLoginState !== null) {
@@ -132,7 +136,7 @@ export const getUserGroups = () => {
     return localStorage.getItem(USER_GROUPS_STORAGE_KEY);
 };
 
-const setUserAuthStatus = (someBool) => {
+export const setUserAuthStatus = (someBool) => {
     localStorage.setItem(USER_IS_AUTHED_STORAGE_KEY, Boolean(someBool));
 
     let storeUserLoginState = isUserLoggedIn();
@@ -143,4 +147,4 @@ const setUserAuthStatus = (someBool) => {
             signalUserLoggedOut();
         }
     }
-}
+};
