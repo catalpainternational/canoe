@@ -86,6 +86,49 @@
             max-height: 100px;
         }
     </style>
+        <script>
+        const MANIFEST_CACHE_NAME = "manifest-cache";
+        const MANIFEST_URL = "{{{ htmlWebpackPlugin.options.api_base_url }}}/manifest";
+        const EMPTY_SLATE_BOOT_KEY = "empty_slate_boot";
+        var webpack_script_sources = [
+            {{# each htmlWebpackPlugin.tags.bodyTags }}
+            new DOMParser().parseFromString(new DOMParser().parseFromString("{{this}}", "text/html").documentElement.innerText, "text/html").scripts[0].src,
+            {{/each}}
+        ];
+        window.onload = (event) => {
+            // First deduce whether we're in blank slate state vs preseeded state, by checking for a cached manifest.
+            // Only then boot the app, so that Riot can synchronously access this fact.
+            caches.keys()
+                .then(cachenames => {
+                    if (cachenames.indexOf(MANIFEST_CACHE_NAME) < 0) {
+                        sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, true);
+                        return true;
+                    }
+                    else {
+                        return caches.open(MANIFEST_CACHE_NAME)
+                        .then(thecache => {
+                            return thecache.match(MANIFEST_URL);
+                        })
+                        .then(manifest => {
+                            let is_empty_slate_boot = (manifest === undefined);
+                            sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, is_empty_slate_boot);
+                            return is_empty_slate_boot;
+                        })
+                    }
+                })
+                .catch(err => console.error)
+                .then(_whevs => {
+                    webpack_script_sources.forEach(src => {
+                        script = document.createElement("script");
+                        script.src = src;
+                        script.type = 'application/javascript';
+                        script.async = false;
+                        script.defer = true;
+                        document.head.appendChild(script);
+                    });
+                });
+        };
+    </script>
 </body>
 
 </html>

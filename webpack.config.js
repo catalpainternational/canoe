@@ -143,10 +143,12 @@ module.exports = (env) => {
             new HtmlWebpackPlugin({
                 title: projectConfiguration.SITE_NAME,
                 template: path.resolve(__dirname, "src/index.hbs"),
+                inject: false,
                 favicon: projectConfiguration.FAVICON_PATH,
                 favicon_path: path.basename(projectConfiguration.FAVICON_PATH),
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
                 ga_tag: environmentConfiguration.GA_TAG,
+                api_base_url: environmentConfiguration.API_BASE_URL,
                 theme_color: projectConfiguration.THEME_COLOR,
                 background_color: projectConfiguration.BACKGROUND_COLOR,
             }),
