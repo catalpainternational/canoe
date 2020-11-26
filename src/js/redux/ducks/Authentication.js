@@ -8,7 +8,7 @@ export const signalUserLoggedIn = (trueOrFalse) => ({
 });
 
 // REDUCER
-const userLoggedIn = (state = false, action) => {
+const userLoggedIn = (state = null, action) => {
     switch (action.type) {
         case USER_LOGGED_IN:
             return action.userLoggedIn;

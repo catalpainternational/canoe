@@ -70,7 +70,7 @@ export const login = async (usernameAndPassword) => {
     localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
     localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
-    setIsAuthed(true);
+    setUserAuthStatus(true);
 
     dispatchSiteDownloadEvent();
 };
@@ -79,7 +79,7 @@ export const logout = async () => {
     deleteCookie(JWT_TOKEN_STORAGE_KEY);
     localStorage.clear();
     unsubscribeFromNotifications();
-    setIsAuthed(false);
+    setUserAuthStatus(false);
 };
 
 export const getAuthenticationToken = () => {
@@ -88,19 +88,25 @@ export const getAuthenticationToken = () => {
 
 /** Returns true if the Redux store shows the user is logged in,
  * otherwise returns the value in localStorage.
+ * Ensures that the login status is synchronised between the two.
 */
 export const isUserAuthed = () => {
-    if (isUserLoggedIn()) {
-        return true;
+    let storeUserLoginState = isUserLoggedIn();
+    if (storeUserLoginState !== null) {
+        setUserAuthStatus(storeUserLoginState);
+        return storeUserLoginState;
     }
 
     let auth_status_denoted = localStorage.getItem(USER_IS_AUTHED_STORAGE_KEY);
     if (auth_status_denoted === null) {
-        setIsAuthed(false);
-        auth_status_denoted = "false";
+        auth_status_denoted = false;
+    } else {
+        auth_status_denoted = Boolean(auth_status_denoted);
     }
 
-    return Boolean(auth_status_denoted);
+    setUserAuthStatus(auth_status_denoted);
+
+    return auth_status_denoted;
 };
 
 export const getUsername = () => {
@@ -126,12 +132,15 @@ export const getUserGroups = () => {
     return localStorage.getItem(USER_GROUPS_STORAGE_KEY);
 };
 
-export const setIsAuthed = (someBool) => {
-    if (someBool) {
-        signalUserLoggedIn();
-    } else {
-        signalUserLoggedOut();
-    }
+const setUserAuthStatus = (someBool) => {
+    localStorage.setItem(USER_IS_AUTHED_STORAGE_KEY, Boolean(someBool));
 
-    return localStorage.setItem(USER_IS_AUTHED_STORAGE_KEY, Boolean(someBool));	
+    let storeUserLoginState = isUserLoggedIn();
+    if (storeUserLoginState === null || storeUserLoginState !== someBool) {
+        if (someBool) {
+            signalUserLoggedIn();
+        } else {
+            signalUserLoggedOut();
+        }
+    }
 }
