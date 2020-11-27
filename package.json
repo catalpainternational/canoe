@@ -7,12 +7,17 @@
     "author": "Catalpa International",
     "license": "MIT",
     "private": true,
+    "types": "dist/types/index.d.ts",
     "scripts": {
-        "build": "webpack",
-        "start": "webpack-dev-server",
+        "build": "yarn build:types && webpack",
+        "start": "yarn build:types:watch && webpack-dev-server",
         "makemessages": "node messages_scan.js && msgmerge --update --no-location --no-wrap locale/tet/canoe.po locale/canoe.pot",
         "compilemessages": "node_modules/gettext.js/bin/po2json locale/tet/canoe.po locale/json/tet.json -p",
-        "translate": "yarn makemessages && yarn compilemessages"
+        "translate": "yarn makemessages && yarn compilemessages",
+        "build:types": "tsc --emitDeclarationOnly",
+        "build:types:watch": "tsc --emitDeclarationOnly --watch",
+        "type-check": "tsc --noEmit",
+        "type-check:watch": "yarn type-check -- --watch"
     },
     "devDependencies": {
         "@babel/core": "^7.8.4",
@@ -21,11 +26,14 @@
         "@babel/preset-typescript": "^7.12.7",
         "@riotjs/compiler": "^4.9.3",
         "@riotjs/webpack-loader": "^4.0.3",
+        "@types/webpack-dev-server": "^3.11.1",
+        "@yarnpkg/pnpify": "^2.3.3",
         "babel-loader": "^8.1.0",
         "clean-webpack-plugin": "^3.0.0",
         "css-loader": "^4.2.0",
         "cssnano": "^4.1.10",
         "file-loader": "^6.0.0",
+        "fork-ts-checker-webpack-plugin": "^6.0.4",
         "gettext-extractor": "^3.5.2",
         "handlebars": "^4.7.6",
         "handlebars-loader": "^1.7.1",
@@ -36,12 +44,14 @@
         "node-sass": "^4.14.1",
         "optimize-css-assets-webpack-plugin": "^5.0.3",
         "pnp-webpack-plugin": "^1.6.4",
+        "redux-devtools-extension": "^2.13.8",
         "riot": "^4.13.4",
         "sass-loader": "^9.0.3",
         "style-loader": "^1.2.1",
         "svg-url-loader": "^6.0.0",
         "terser-webpack-plugin": "^4.0.0",
         "ts-loader": "^8.0.11",
+        "ts-node": "^9.0.0",
         "typescript": "^4.1.2",
         "webpack": "^4.44.1",
         "webpack-cli": "^3.3.12",
@@ -67,7 +77,6 @@
         "workbox-strategies": "^5.1.3"
     },
     "resolutions": {
-        "core-js": "^2",
-        "typescript": "3.9.5"
+        "core-js": "^2"
     }
 }
