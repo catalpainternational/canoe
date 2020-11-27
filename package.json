@@ -17,7 +17,7 @@
         "build:types": "tsc --emitDeclarationOnly",
         "build:types:watch": "tsc --emitDeclarationOnly --watch",
         "type-check": "tsc --noEmit",
-        "type-check:watch": "yarn type-check -- --watch",
+        "type-check:watch": "yarn type-check -- --watch"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9",
@@ -38,7 +38,6 @@
         "clean-webpack-plugin": "^3.0.0",
         "css-loader": "^4.2.0",
         "cssnano": "^4.1.10",
-        "cypress": "^6.0.0",
         "eslint": "^7.14.0",
         "eslint-config-prettier": "^6.15.0",
         "eslint-plugin-prettier": "^3.1.4",
