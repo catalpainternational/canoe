@@ -10,7 +10,7 @@
     "types": "dist/types/index.d.ts",
     "scripts": {
         "build": "yarn build:types && webpack",
-        "start": "yarn build:types:watch && webpack-dev-server",
+        "start": "yarn build:types && webpack-dev-server",
         "makemessages": "node messages_scan.js && msgmerge --update --no-location --no-wrap locale/tet/canoe.po locale/canoe.pot",
         "compilemessages": "node_modules/gettext.js/bin/po2json locale/tet/canoe.po locale/json/tet.json -p",
         "translate": "yarn makemessages && yarn compilemessages",
