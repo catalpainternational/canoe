@@ -5,18 +5,16 @@
 // 4. not care if you are not logged in, if the data is present
 
 import { CanoeStore } from "./Interfaces/Store";
-import { CanoeManifest } from "./Interfaces/Manifest";
 import { CanoeCache } from "./Interfaces/Cache";
 import { CanoeFetch } from "./Interfaces/Fetch";
-import { ResourceGroupDescriptor, ResourceDescriptor } from "./Interfaces/ResourceDescriptor";
+import { ResourceGroupDescriptor } from "./Interfaces/ResourceDescriptor";
 
-
-/**  to be called on every navigation
+/**  To be called on every navigation
  Params:
-  store: in memory data syncronously accessed state store
-  locationHash: the window.location.hash 
-  cacheStorage: the CacheStorage e.g. window.caches
-  fetchImplementation: a fetch implementation like WindowOrWorkerGlobalScope.fetch
+  @store in memory data synchronously accessed state store
+  @locationHash the window.location.hash 
+  @cacheStorage the CacheStorage e.g. window.caches
+  @fetchImplementation a fetch implementation like WindowOrWorkerGlobalScope.fetch
 
  Responsibilities:
   - get the required data for page rendering either from the state, or the cache  
@@ -29,34 +27,45 @@ export async function getDataAndRender(
     store: CanoeStore,
     cache: CanoeCache,
     fetch: CanoeFetch,
-    loadingCallback: (options: object) => void,
-    renderCallback: (data: object) => void,
+    loadingCallback: (options: Record<string, unknown>) => void,
+    renderCallback: (data: Record<string, unknown>) => void
 ): Promise<void> {
-
     // try to get the manifest from memory
-    const manifest: CanoeManifest = await getManifest(manifestUri, store, cache, fetch, loadingCallback);
+    const manifest = await getManifest(
+        manifestUri,
+        store,
+        cache,
+        fetch,
+        loadingCallback
+    );
 
     // we have a manifest so let's find out what data we need
-    const resourceGroup: ResourceGroupDescriptor = manifest.getResourceGroup(locationHash);
+    const resourceGroup = manifest.getResourceGroup(locationHash);
 
     // get the primary resource
-    const primaryResource: object = await getPrimaryResource(resourceGroup, store, cache, fetch, loadingCallback);
+    const primaryResource = await getPrimaryResource(
+        resourceGroup,
+        store,
+        cache,
+        fetch,
+        loadingCallback
+    );
 
     // render with the required resource data
     renderCallback(primaryResource);
 }
 
-/** gets the manifest either from the store, cache, or network
- * updates the store and cache if needed
+/** Gets the manifest either from the store, cache, or network.
+ * Updates the store and cache if needed
  */
 async function getManifest(
     manifestUri: string,
     store: CanoeStore,
     cache: CanoeCache,
     fetch: CanoeFetch,
-    handleLoading: (options: object) => void,
+    handleLoading: (options: Record<string, unknown>) => void
 ) {
-    let manifest: CanoeManifest | undefined = store.getManifest();
+    let manifest = store.getManifest();
 
     // try to get the manifest from cache
     if (manifest === undefined) {
@@ -81,9 +90,9 @@ async function getPrimaryResource(
     store: CanoeStore,
     cache: CanoeCache,
     fetch: CanoeFetch,
-    handleLoading: (options: object) => void,
+    handleLoading: (options: Record<string, unknown>) => void
 ) {
-    let primaryResource: object | undefined = store.getResource(resourceGroup.primary);
+    let primaryResource = store.getResource(resourceGroup.primary);
 
     // try to get the resource from cache
     if (primaryResource === undefined) {

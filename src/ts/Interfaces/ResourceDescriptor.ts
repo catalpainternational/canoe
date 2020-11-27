@@ -6,7 +6,7 @@ interface ResourceDescriptor {
     storeKey: string;
 }
 
-//** Describe a group of resources */
+/** Describe a group of resources */
 interface ResourceGroupDescriptor {
     /** the main resource without which we cannot render the page */
     primary: ResourceDescriptor;
@@ -14,4 +14,4 @@ interface ResourceGroupDescriptor {
     dependents: ResourceDescriptor[];
 }
 
-export { ResourceDescriptor, ResourceGroupDescriptor }
+export { ResourceDescriptor, ResourceGroupDescriptor };
