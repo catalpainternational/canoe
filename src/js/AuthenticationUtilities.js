@@ -7,7 +7,8 @@ const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
 const JWT_TOKEN_STORAGE_KEY = "token";
 const USER_GROUPS_STORAGE_KEY = "userGroups";
-const USER_IS_AUTHED_STORAGE_KEY = "fetch_result_indicates_authed";
+const EMPTY_SLATE_BOOT_KEY = "empty_slate_boot";
+export const USER_IS_AUTHED_STORAGE_KEY = "fetch_result_indicates_authed";
 
 const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
     // sets name=value cookie
@@ -65,7 +66,7 @@ export const login = async (usernameAndPassword) => {
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
     localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
     setIsAuthed(true);
-
+    sessionStorage.removeItem(EMPTY_SLATE_BOOT_KEY);
     dispatchSiteDownloadEvent();
 };
 
