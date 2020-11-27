@@ -12,6 +12,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
 const defaultProjectConfiguration = require("./canoe-project-default.js");
@@ -60,6 +61,7 @@ module.exports = (env) => {
             contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
+            extensions: ['.ts', '.js', '.json', ".riot.html"],
             modules: [path.resolve(__dirname, "src")],
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
@@ -78,10 +80,6 @@ module.exports = (env) => {
         },
         module: {
             rules: [
-                {
-                    test: /\.tsx?$/,
-                    loader: 'ts-loader'
-                },
                 { test: /\.hbs$/, loader: "handlebars-loader" },
                 {
                     test: /\.riot.html$/,
@@ -128,12 +126,15 @@ module.exports = (env) => {
                     },
                 },
                 {
-                    test: /\.m?js$/,
+                    test: /\.(js|mjs|ts)$/,
                     exclude: /node_modules/,
                     use: {
                         loader: "babel-loader",
                         options: {
-                            presets: ["@babel/preset-env"],
+                            presets: [
+                                "@babel/preset-env",
+                                "@babel/preset-typescript",
+                            ],
                             plugins: ["@babel/plugin-transform-runtime"],
                         },
                     },
@@ -195,6 +196,12 @@ module.exports = (env) => {
                 ngettext: ["js/Translation", "ngettext"],
             }),
             new MiniCssExtractPlugin(),
+            new ForkTsCheckerWebpackPlugin({
+                async: false,
+                eslint: {
+                    files: ["./src/**/*.ts"],
+                },
+            }),            
         ],
     };
 
