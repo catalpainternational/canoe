@@ -21,6 +21,7 @@
                 "plugin:@typescript-eslint/recommended"
             ],
             "rules": {
+                "@typescript-eslint/no-explicit-any": 0, // Turn this rule off
                 "@typescript-eslint/member-delimiter-style": 0,
                 "@typescript-eslint/interface-name-prefix": 0,
                 "@typescript-eslint/no-use-before-define": 0
