@@ -4598,6 +4598,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"buf-compare@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "buf-compare@npm:1.0.1"
+  checksum: 027ba8130cf247d41227a74f676df63d9a0c1897f84974aad37724a686d820dd5fda823876972ea8e04168caf4dfdf3b4f83fdccaaf9d66863b3e3e6af1688f2
+  languageName: node
+  linkType: hard
+
 "buffer-equal@npm:0.0.1":
   version: 0.0.1
   resolution: "buffer-equal@npm:0.0.1"
@@ -4932,6 +4939,7 @@ __metadata:
     dayjs: ^1.8.32
     eslint: ^7.14.0
     eslint-config-prettier: ^6.15.0
+    eslint-plugin-ava: ^11.0.0
     eslint-plugin-prettier: ^3.1.4
     file-loader: ^6.0.0
     fork-ts-checker-webpack-plugin: ^6.0.4
@@ -5673,6 +5681,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-assert@npm:^0.2.0":
+  version: 0.2.1
+  resolution: "core-assert@npm:0.2.1"
+  dependencies:
+    buf-compare: ^1.0.0
+    is-error: ^2.2.0
+  checksum: c99accec562ac7df3e7468e06c3dd840efb5e24b16b02dfc58f36ee61e7652155d3c4e900c389f8ec4f5d6340cf8fbfe82e0639200a70839348fa776ea3384e9
+  languageName: node
+  linkType: hard
+
 "core-js-compat@npm:^3.6.2":
   version: 3.6.5
   resolution: "core-js-compat@npm:3.6.5"
@@ -6237,6 +6255,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"deep-strict-equal@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "deep-strict-equal@npm:0.2.0"
+  dependencies:
+    core-assert: ^0.2.0
+  checksum: 935bcc63557589d68c2411aa5016f255048a3583eceddb63391124adf0a59a71504f7bd6bf9c3822a62b54e42ed2b05223384d508c6687937777f1da8a26d4c6
+  languageName: node
+  linkType: hard
+
 "deepmerge@npm:^4.2.2":
   version: 4.2.2
   resolution: "deepmerge@npm:4.2.2"
@@ -6750,6 +6777,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"enhance-visitors@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "enhance-visitors@npm:1.0.0"
+  dependencies:
+    lodash: ^4.13.1
+  checksum: f27b6552e4a673d5fef808b638b24ad1c89cbcb742c5da0b0453ad225e7009c4af31a7c632f5f1415bd63ffd995ac40453bb66ccf42800d6332b79736cff84d2
+  languageName: node
+  linkType: hard
+
 "enhanced-resolve@npm:^4.0.0, enhanced-resolve@npm:^4.1.1, enhanced-resolve@npm:^4.3.0":
   version: 4.3.0
   resolution: "enhanced-resolve@npm:4.3.0"
@@ -6910,6 +6946,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-ava@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "eslint-plugin-ava@npm:11.0.0"
+  dependencies:
+    deep-strict-equal: ^0.2.0
+    enhance-visitors: ^1.0.0
+    eslint-utils: ^2.1.0
+    espree: ^7.2.0
+    espurify: ^2.0.1
+    import-modules: ^2.0.0
+    micro-spelling-correcter: ^1.1.1
+    pkg-dir: ^4.2.0
+    resolve-from: ^5.0.0
+  peerDependencies:
+    eslint: ">=7.7.0"
+  checksum: bc6d28b943503cf6d35b90bd52cb7077116b9ded88a0bba62ab04097ffb5dcf1d999558c928745e8c0c7a14e21726c001875ebbb4260c50fb99d9433dd90e91b
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-prettier@npm:^3.1.4":
   version: 3.1.4
   resolution: "eslint-plugin-prettier@npm:3.1.4"
@@ -7012,7 +7067,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"espree@npm:^7.3.0":
+"espree@npm:^7.2.0, espree@npm:^7.3.0":
   version: 7.3.0
   resolution: "espree@npm:7.3.0"
   dependencies:
@@ -7030,6 +7085,13 @@ __metadata:
     esparse: ./bin/esparse.js
     esvalidate: ./bin/esvalidate.js
   checksum: 5df45a3d9c95c36800d028ba76d8d4e04e199932b58c2939f462f859fd583e7d39b4a12d3f97986cf272a28a5fe5948ee6e49e36ef63f67b5b48d82a635c5081
+  languageName: node
+  linkType: hard
+
+"espurify@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "espurify@npm:2.0.1"
+  checksum: 2a91f6b95d785b5b9ea4279729c9857ceb6f3224ab45266da143c23712591dd66049b248c68094fb403d2c87e36e13844e3d1145fc365675aa1696d82c0b2586
   languageName: node
   linkType: hard
 
@@ -8764,6 +8826,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"import-modules@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "import-modules@npm:2.0.0"
+  checksum: 81b7f5c762d3775ddc75195f0b97aaa1e9a6d219ae4b9a896b2e46daafd0e3911563f75e819d65b6272329f06d221da539f78aa045c967097c8cb8beac64154c
+  languageName: node
+  linkType: hard
+
 "imurmurhash@npm:^0.1.4":
   version: 0.1.4
   resolution: "imurmurhash@npm:0.1.4"
@@ -9104,7 +9173,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"is-error@npm:^2.2.2":
+"is-error@npm:^2.2.0, is-error@npm:^2.2.2":
   version: 2.2.2
   resolution: "is-error@npm:2.2.2"
   checksum: ca195e2491bf5a382f29637f303deda6c05cf9d860d037c99526592605167ee2f12a98a999f3a21eb6b85560a96ca6c1d874b6bf91a273d2e6525e5e820e1d4b
@@ -10008,7 +10077,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.20":
+"lodash@npm:^4.13.1, lodash@npm:^4.17.20":
   version: 4.17.20
   resolution: "lodash@npm:4.17.20"
   checksum: c62101d2500c383b5f174a7e9e6fe8098149ddd6e9ccfa85f36d4789446195f5c4afd3cfba433026bcaf3da271256566b04a2bf2618e5a39f6e67f8c12030cb6
@@ -10353,6 +10422,13 @@ fsevents@~2.1.2:
   version: 1.1.2
   resolution: "methods@npm:1.1.2"
   checksum: 450e4ea0fd4a0f3de8c0593d753c7d6c8f2ee49766f5ef35c68cc2ac41699d5e295b7d6330fc2b7271b8569a07857e3eb0b5df0599a353c5808265b4b5066168
+  languageName: node
+  linkType: hard
+
+"micro-spelling-correcter@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "micro-spelling-correcter@npm:1.1.1"
+  checksum: b871346d144a5cb4c356e9e1bed180f7307e2312133cbc6f775722efaf7e655afb6159fee79fbce10d56e19bd5f674822dcdba662fa2b5c2943ccb0bc073a6ce
   languageName: node
   linkType: hard
 
