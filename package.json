@@ -16,6 +16,7 @@
         "translate": "yarn makemessages && yarn compilemessages",
         "build:types": "tsc --emitDeclarationOnly",
         "build:types:watch": "tsc --emitDeclarationOnly --watch",
+        "pretty-ts": "yarn prettier -w \"./src/**/*.ts\"",
         "type-check": "tsc --noEmit",
         "type-check:watch": "yarn type-check -- --watch"
     },
