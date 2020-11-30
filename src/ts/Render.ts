@@ -10,11 +10,13 @@ import { CanoeFetch } from "./Interfaces/Fetch";
 import { ResourceGroupDescriptor } from "./Interfaces/ResourceDescriptor";
 
 /**  To be called on every navigation
- Params:
-  @store in memory data synchronously accessed state store
+  @manifestUri
   @locationHash the window.location.hash 
-  @cacheStorage the CacheStorage e.g. window.caches
-  @fetchImplementation a fetch implementation like WindowOrWorkerGlobalScope.fetch
+  @store in memory data synchronously accessed state store
+  @cache the CacheStorage e.g. window.caches
+  @fetch a fetch implementation like WindowOrWorkerGlobalScope.fetch
+  @loadingCallback
+  @renderCallback
 
  Responsibilities:
   - get the required data for page rendering either from the state, or the cache  
