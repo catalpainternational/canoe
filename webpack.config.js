@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require("webpack");
-const { mergeWithCustomize, customizeArray } = require('webpack-merge');
+const { mergeWithCustomize, customizeArray } = require("webpack-merge");
 const path = require("path");
-const fs = require("fs");
 
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { InjectManifest } = require("workbox-webpack-plugin");
@@ -24,7 +24,9 @@ module.exports = (env) => {
     // read the environment configuration
     const environmentConfiguration = Object.assign(
         defaultEnvironmentConfiguration,
-        env && env.ENVIRONMENT_CONFIG_PATH ? require(env.ENVIRONMENT_CONFIG_PATH) : {}
+        env && env.ENVIRONMENT_CONFIG_PATH
+            ? require(env.ENVIRONMENT_CONFIG_PATH)
+            : {}
     );
 
     // read the project configuration
@@ -35,11 +37,18 @@ module.exports = (env) => {
 
     // merge environment and project configurations for use in webpack compilation
     // webpack.DefinePlugin will replace process.env.CONFIG_KEY with configured valuea
-    const processEnvironment = Object.keys(environmentConfiguration).reduce((prev, next) => {
-        prev[`process.env.${next}`] = JSON.stringify(environmentConfiguration[next]);
-        return prev;
-    }, {});
-    processEnvironment["process.env.SITE_NAME"] = JSON.stringify(projectConfiguration.SITE_NAME);
+    const processEnvironment = Object.keys(environmentConfiguration).reduce(
+        (prev, next) => {
+            prev[`process.env.${next}`] = JSON.stringify(
+                environmentConfiguration[next]
+            );
+            return prev;
+        },
+        {}
+    );
+    processEnvironment["process.env.SITE_NAME"] = JSON.stringify(
+        projectConfiguration.SITE_NAME
+    );
 
     const baseConfig = {
         context: __dirname,
@@ -61,7 +70,7 @@ module.exports = (env) => {
             contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
-            extensions: [".ts", ".js", ".json", ".riot.html"],
+            extensions: [".ts", ".js", ".cjs", ".mjs", ".json", ".riot.html"],
             modules: [path.resolve(__dirname, "src")],
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
@@ -69,14 +78,10 @@ module.exports = (env) => {
                 ReduxImpl: path.resolve(__dirname, "src/js/redux"),
                 Actions: path.resolve(__dirname, "src/js/actions"),
             },
-            plugins: [
-                PnpWebpackPlugin,
-            ],
+            plugins: [PnpWebpackPlugin],
         },
         resolveLoader: {
-            plugins: [
-                PnpWebpackPlugin.moduleLoader(module),
-            ],
+            plugins: [PnpWebpackPlugin.moduleLoader(module)],
         },
         module: {
             rules: [
@@ -127,7 +132,7 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.(js|mjs|ts)$/,
-                    exclude: /node_modules/,
+                    exclude: [/node_modules/, "/src/**/tests/**/*"],
                     use: {
                         loader: "babel-loader",
                         options: {
@@ -199,20 +204,19 @@ module.exports = (env) => {
             new ForkTsCheckerWebpackPlugin({
                 async: false,
                 eslint: {
-                    files: [
-                        "./src/**/*.ts"
-                    ],
+                    files: ["./src/**/*.ts"],
                 },
-            }),            
+            }),
         ],
     };
 
-    const productionWebpackConfig = env && env.PRODUCTION ? require("./webpack.prod.js") : {};
+    const productionWebpackConfig =
+        env && env.PRODUCTION ? require("./webpack.prod.js") : {};
 
     const config = mergeWithCustomize({
         customizeArray: customizeArray({
-            'resolve.modules': 'prepend'
-        })
+            "resolve.modules": "prepend",
+        }),
     })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,

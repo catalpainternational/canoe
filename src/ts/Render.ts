@@ -80,21 +80,36 @@ async function getPrimaryResource(
     storeCacheFetch: CanoeStoreCacheFetch,
     handleLoading: (options: Record<string, unknown>) => void
 ) {
-    let primaryResource = storeCacheFetch.store.getResource(resourceGroup.primary);
+    let primaryResource = storeCacheFetch.store.getResource(
+        resourceGroup.primary
+    );
 
     // try to get the resource from cache
     if (primaryResource === undefined) {
         handleLoading({ msg: "Requesting resource from cache" });
-        primaryResource = await storeCacheFetch.cache.getResource(resourceGroup.primary);
-        storeCacheFetch.store.updateResource(resourceGroup.primary, primaryResource);
+        primaryResource = await storeCacheFetch.cache.getResource(
+            resourceGroup.primary
+        );
+        storeCacheFetch.store.updateResource(
+            resourceGroup.primary,
+            primaryResource
+        );
     }
     // try to get the resource from network
     if (primaryResource === undefined) {
         // we don't have resource, get it from the internet
         handleLoading({ msg: "Requesting resource from network" });
-        primaryResource = await storeCacheFetch.fetch.getResource(resourceGroup.primary);
-        storeCacheFetch.store.updateResource(resourceGroup.primary, primaryResource);
-        storeCacheFetch.cache.updateResource(resourceGroup.primary, primaryResource);
+        primaryResource = await storeCacheFetch.fetch.getResource(
+            resourceGroup.primary
+        );
+        storeCacheFetch.store.updateResource(
+            resourceGroup.primary,
+            primaryResource
+        );
+        storeCacheFetch.cache.updateResource(
+            resourceGroup.primary,
+            primaryResource
+        );
     }
 
     return primaryResource;

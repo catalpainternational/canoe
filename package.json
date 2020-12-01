@@ -9,23 +9,27 @@
     "private": true,
     "types": "dist/types/index.d.ts",
     "ava": {
-        "extensions": ["js", "mjs", "cjs", "ts"],
+        "babel": true,
+        "extensions": [
+            "mjs",
+            "ts"
+        ],
         "files": [
-            "src/**/tests/**/*"
+            "src/**/tests/**/*.test.*"
         ],
         "require": [
+            "@babel/register",
             "ts-node/register",
             "tsconfig-paths/register"
         ]
     },
     "scripts": {
         "build": "yarn build:types && webpack",
-        "start": "yarn build:types:watch && webpack-dev-server",
+        "start": "yarn build:types && webpack-dev-server",
         "makemessages": "node messages_scan.js && msgmerge --update --no-location --no-wrap locale/tet/canoe.po locale/canoe.pot",
         "compilemessages": "node_modules/gettext.js/bin/po2json locale/tet/canoe.po locale/json/tet.json -p",
         "translate": "yarn makemessages && yarn compilemessages",
         "build:types": "tsc --emitDeclarationOnly",
-        "build:types:watch": "tsc --emitDeclarationOnly --watch",
         "type-check": "tsc --noEmit",
         "type-check:watch": "yarn type-check -- --watch",
         "test": "ava",
@@ -37,6 +41,7 @@
         "@babel/plugin-transform-runtime": "^7.8.3",
         "@babel/preset-env": "^7.12.7",
         "@babel/preset-typescript": "^7.12.7",
+        "@babel/register": "^7.12.1",
         "@riotjs/compiler": "^4.9.3",
         "@riotjs/webpack-loader": "^4.0.3",
         "@types/eslint": "^7",
