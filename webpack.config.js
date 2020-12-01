@@ -61,7 +61,7 @@ module.exports = (env) => {
             contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
-            extensions: ['.ts', '.js', '.json', ".riot.html"],
+            extensions: [".ts", ".js", ".json", ".riot.html"],
             modules: [path.resolve(__dirname, "src")],
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
@@ -199,7 +199,9 @@ module.exports = (env) => {
             new ForkTsCheckerWebpackPlugin({
                 async: false,
                 eslint: {
-                    files: ["./src/**/*.ts"],
+                    files: [
+                        "./src/**/*.ts"
+                    ],
                 },
             }),            
         ],

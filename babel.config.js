@@ -2,7 +2,11 @@ module.exports = {
     "presets": [
         [
             "@babel/preset-env",
-            { "targets": { "node": "current" }, "useBuiltIns": "usage" }
+            {
+                "targets": { "node": "current" },
+                "corejs": "2",
+                "useBuiltIns": "usage"
+            }
         ],
         "@babel/preset-typescript"
     ],

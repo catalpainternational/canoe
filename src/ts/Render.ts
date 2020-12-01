@@ -4,17 +4,13 @@
 // 3. try to fetch data if it has to ( display something while it does )
 // 4. not care if you are not logged in, if the data is present
 
-import { CanoeStore } from "./Interfaces/Store";
-import { CanoeCache } from "./Interfaces/Cache";
-import { CanoeFetch } from "./Interfaces/Fetch";
+import { CanoeStoreCacheFetch } from "./Interfaces/StoreCacheFetch";
 import { ResourceGroupDescriptor } from "./Interfaces/ResourceDescriptor";
 
 /**  To be called on every navigation
   @manifestUri
   @locationHash the window.location.hash 
-  @store in memory data synchronously accessed state store
-  @cache the CacheStorage e.g. window.caches
-  @fetch a fetch implementation like WindowOrWorkerGlobalScope.fetch
+  @storeCacheFetch in memory data synchronously accessed state store + cache + fetch implementation
   @loadingCallback
   @renderCallback
 
@@ -26,18 +22,14 @@ import { ResourceGroupDescriptor } from "./Interfaces/ResourceDescriptor";
 export async function getDataAndRender(
     manifestUri: string,
     locationHash: string,
-    store: CanoeStore,
-    cache: CanoeCache,
-    fetch: CanoeFetch,
+    storeCacheFetch: CanoeStoreCacheFetch,
     loadingCallback: (options: Record<string, unknown>) => void,
     renderCallback: (data: Record<string, unknown>) => void
 ): Promise<void> {
     // try to get the manifest from memory
     const manifest = await getManifest(
         manifestUri,
-        store,
-        cache,
-        fetch,
+        storeCacheFetch,
         loadingCallback
     );
 
@@ -47,9 +39,7 @@ export async function getDataAndRender(
     // get the primary resource
     const primaryResource = await getPrimaryResource(
         resourceGroup,
-        store,
-        cache,
-        fetch,
+        storeCacheFetch,
         loadingCallback
     );
 
@@ -62,26 +52,24 @@ export async function getDataAndRender(
  */
 async function getManifest(
     manifestUri: string,
-    store: CanoeStore,
-    cache: CanoeCache,
-    fetch: CanoeFetch,
+    storeCacheFetch: CanoeStoreCacheFetch,
     handleLoading: (options: Record<string, unknown>) => void
 ) {
-    let manifest = store.getManifest();
+    let manifest = storeCacheFetch.store.getManifest();
 
     // try to get the manifest from cache
     if (manifest === undefined) {
         handleLoading({ msg: "Requesting manifest from cache" });
-        manifest = await cache.getManifest(manifestUri);
-        store.updateManifest(manifest);
+        manifest = await storeCacheFetch.cache.getManifest(manifestUri);
+        storeCacheFetch.store.updateManifest(manifest);
     }
 
     // try to get the manifest from network
     if (manifest === undefined) {
         handleLoading({ msg: "Requesting manifest from network" });
-        manifest = await fetch.getManifest(manifestUri);
-        store.updateManifest(manifest);
-        cache.updateManifest(manifest);
+        manifest = await storeCacheFetch.fetch.getManifest(manifestUri);
+        storeCacheFetch.store.updateManifest(manifest);
+        storeCacheFetch.cache.updateManifest(manifest);
     }
 
     return manifest;
@@ -89,26 +77,24 @@ async function getManifest(
 
 async function getPrimaryResource(
     resourceGroup: ResourceGroupDescriptor,
-    store: CanoeStore,
-    cache: CanoeCache,
-    fetch: CanoeFetch,
+    storeCacheFetch: CanoeStoreCacheFetch,
     handleLoading: (options: Record<string, unknown>) => void
 ) {
-    let primaryResource = store.getResource(resourceGroup.primary);
+    let primaryResource = storeCacheFetch.store.getResource(resourceGroup.primary);
 
     // try to get the resource from cache
     if (primaryResource === undefined) {
         handleLoading({ msg: "Requesting resource from cache" });
-        primaryResource = await cache.getResource(resourceGroup.primary);
-        store.updateResource(resourceGroup.primary, primaryResource);
+        primaryResource = await storeCacheFetch.cache.getResource(resourceGroup.primary);
+        storeCacheFetch.store.updateResource(resourceGroup.primary, primaryResource);
     }
     // try to get the resource from network
     if (primaryResource === undefined) {
         // we don't have resource, get it from the internet
         handleLoading({ msg: "Requesting resource from network" });
-        primaryResource = await fetch.getResource(resourceGroup.primary);
-        store.updateResource(resourceGroup.primary, primaryResource);
-        cache.updateResource(resourceGroup.primary, primaryResource);
+        primaryResource = await storeCacheFetch.fetch.getResource(resourceGroup.primary);
+        storeCacheFetch.store.updateResource(resourceGroup.primary, primaryResource);
+        storeCacheFetch.cache.updateResource(resourceGroup.primary, primaryResource);
     }
 
     return primaryResource;
