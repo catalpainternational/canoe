@@ -30,6 +30,7 @@
         "compilemessages": "node_modules/gettext.js/bin/po2json locale/tet/canoe.po locale/json/tet.json -p",
         "translate": "yarn makemessages && yarn compilemessages",
         "build:types": "tsc --emitDeclarationOnly",
+        "pretty-ts": "yarn prettier -w \"./src/**/*.ts\"",
         "type-check": "tsc --noEmit",
         "type-check:watch": "yarn type-check -- --watch",
         "test": "ava",
