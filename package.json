@@ -8,14 +8,26 @@
     "license": "MIT",
     "private": true,
     "types": "dist/types/index.d.ts",
+    "workspaces": [
+        "babel-plugin/webpack-alias"
+    ],
     "ava": {
-        "babel": true,
+        "babel": {
+            "testOptions": {
+                "plugins": [
+                    "./babel-plugin/webpack-alias"
+                ]
+            }
+        },
         "extensions": [
             "mjs",
             "ts"
         ],
         "files": [
             "src/**/tests/**/*.test.*"
+        ],
+        "nodeArguments": [
+            "--experimental-modules"
         ],
         "require": [
             "@babel/register",

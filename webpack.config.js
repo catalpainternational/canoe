@@ -77,6 +77,7 @@ module.exports = (env) => {
                 js: path.resolve(__dirname, "src/js"),
                 ReduxImpl: path.resolve(__dirname, "src/js/redux"),
                 Actions: path.resolve(__dirname, "src/js/actions"),
+                ts: path.resolve(__dirname, "src/ts"),
             },
             plugins: [PnpWebpackPlugin],
         },

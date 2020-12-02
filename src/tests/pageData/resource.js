@@ -1,4 +1,4 @@
-module.export = {
+export default {
     id: 220,
     meta: {
         type: "elearning_content.ResourceArticle",
