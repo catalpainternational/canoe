@@ -1,8 +1,4 @@
-const {
-    GettextExtractor,
-    JsExtractors,
-    HtmlExtractors,
-} = require("gettext-extractor");
+const { GettextExtractor, JsExtractors, HtmlExtractors } = require("gettext-extractor");
 
 const extractor = new GettextExtractor();
 
@@ -26,7 +22,7 @@ const jsParser = extractor
             comments: jsParserCommentOptions,
         }),
     ])
-    .parseFilesGlob("./src/**/*.@(ts|js|mjs|cjs)");
+    .parseFilesGlob("./src/**/*.@(ts|js|tsx|jsx)");
 
 extractor
     .createHtmlParser([
