@@ -36,7 +36,7 @@ module.exports = (env) => {
     );
 
     // merge environment and project configurations for use in webpack compilation
-    // webpack.DefinePlugin will replace process.env.CONFIG_KEY with configured valuea
+    // webpack.DefinePlugin will replace process.env.CONFIG_KEY with configured values
     const processEnvironment = Object.keys(environmentConfiguration).reduce(
         (prev, next) => {
             prev[`process.env.${next}`] = JSON.stringify(

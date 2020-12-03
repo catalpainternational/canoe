@@ -15,10 +15,7 @@ module.exports = {
             "@babel/plugin-transform-runtime",
             {
                 regenerator: true,
-            },
-        ],
-        "./babel-plugin/webpack-alias"
-        // The local plugin "./babel-plugin/webpack-alias"
-        // is used exclusively for ava's use of babel for the tests
+            }
+        ]
     ],
 };

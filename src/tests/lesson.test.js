@@ -2,7 +2,7 @@ import lessonJSON from "./pageData/lesson";
 
 import LessonPage from "js/LessonPage";
 
-//import { isComplete } from "js/actions/completion";
+//import { isComplete } from "Actions/completion";
 import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
 
 // Because AVA runs tests concurrently it does not group their output like Mocha or Jest
