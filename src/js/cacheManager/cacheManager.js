@@ -1,7 +1,7 @@
 /// CacheManager
 // a set of simple functions to easily wrap and expose cache operations
 
-import { BACKEND_BASE_URL } from "../../js/urls";
+import { BACKEND_BASE_URL } from "js/urls";
 
 // requires ignoreVary:true but I am not sure why!
 const CACHE_OPTIONS = { ignoreVary: true };

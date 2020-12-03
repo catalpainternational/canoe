@@ -12,7 +12,7 @@ import {
 } from "./actions_idb";
 import { postAction, getActions } from "./actions_api";
 import { make_uuid32 } from "./make_uuid32";
-import { ON_ACTION_CHANGE } from "../Events";
+import { ON_ACTION_CHANGE } from "js/Events";
 
 const COMPLETION_ACTION_TYPE = "completion";
 const EXAM_ACTION_TYPE = "exam";
