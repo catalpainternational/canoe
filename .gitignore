@@ -113,4 +113,3 @@ canoe-environment.js
 canoe-project.js
 locale/**/*.~
 .DS_Store
-babel-plugin/webpack-alias/lib/
