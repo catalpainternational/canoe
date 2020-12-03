@@ -62,7 +62,6 @@
         "ava": "^3.13.0",
         "babel-loader": "^8.1.0",
         "babel-plugin-7-webpack-alias": "^0.2.1",
-        "babel-register": "^6.26.0",
         "clean-webpack-plugin": "^3.0.0",
         "css-loader": "^4.2.0",
         "cssnano": "^4.1.10",
