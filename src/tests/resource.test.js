@@ -6,6 +6,8 @@ import ResourceArticle from "../js/ResourceArticle";
 
 // Because AVA runs tests concurrently it does not group their output like Mocha or Jest
 
+// For mocks use sinon
+
 // Test ResourceArticle's properties.
 test("ResourceArticle properties: ResourceArticle's id matches resource JSON's id.", (t) => {
     const ra = new ResourceArticle(resourceArticleJSON);
