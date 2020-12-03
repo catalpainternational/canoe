@@ -13,7 +13,7 @@ import { ResourceGroupDescriptor } from "./Interfaces/ResourceDescriptor";
  Params:
   @store in memory data synchronously accessed state store
   @locationHash the window.location.hash 
-  @cacheStorage the CacheStorage e.g. window.caches	
+  @cacheStorage the CacheStorage e.g. window.caches
   @fetchImplementation a fetch implementation like WindowOrWorkerGlobalScope.fetch
 
  Responsibilities:
@@ -92,36 +92,21 @@ async function getPrimaryResource(
     fetch: CanoeFetch,
     handleLoading: (options: Record<string, unknown>) => void
 ) {
-    let primaryResource = store.getResource(
-        resourceGroup.primary
-    );
+    let primaryResource = store.getResource(resourceGroup.primary);
 
     // try to get the resource from cache
     if (primaryResource === undefined) {
         handleLoading({ msg: "Requesting resource from cache" });
-        primaryResource = await cache.getResource(
-            resourceGroup.primary
-        );
-        store.updateResource(
-            resourceGroup.primary,
-            primaryResource
-        );
+        primaryResource = await cache.getResource(resourceGroup.primary);
+        store.updateResource(resourceGroup.primary, primaryResource);
     }
     // try to get the resource from network
     if (primaryResource === undefined) {
         // we don't have resource, get it from the internet
         handleLoading({ msg: "Requesting resource from network" });
-        primaryResource = await fetch.getResource(
-            resourceGroup.primary
-        );
-        store.updateResource(
-            resourceGroup.primary,
-            primaryResource
-        );
-        cache.updateResource(
-            resourceGroup.primary,
-            primaryResource
-        );
+        primaryResource = await fetch.getResource(resourceGroup.primary);
+        store.updateResource(resourceGroup.primary, primaryResource);
+        cache.updateResource(resourceGroup.primary, primaryResource);
     }
 
     return primaryResource;
