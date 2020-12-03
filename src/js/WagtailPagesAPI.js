@@ -1,5 +1,5 @@
-import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls.js";
-import { isGuestUser } from "js/AuthenticationUtilities.js";
+import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls";
+import { isGuestUser } from "js/AuthenticationUtilities";
 import {
     storeWagtailPage,
     getWagtailPageFromStore,
