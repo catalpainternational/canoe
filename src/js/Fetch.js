@@ -1,4 +1,4 @@
-import { getAuthenticationToken, setIsAuthed } from "js/AuthenticationUtilities";
+import { getAuthenticationToken, setIsAuthed } from "js/AuthenticationUtilities.js";
 import { APIMissingPageError } from "js/Errors";
 import { getPlatform } from "js/PlatformDetection";
 

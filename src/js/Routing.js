@@ -3,7 +3,7 @@ import {
     getOrFetchWagtailPage,
     getOrFetchManifest,
     getHomePage,
-} from "js/WagtailPagesAPI";
+} from "js/WagtailPagesAPI.js";
 import { getLanguage } from "ReduxImpl/Interface";
 import { PageLacksTranslationDataError } from "js/Errors";
 
