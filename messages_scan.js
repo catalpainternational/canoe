@@ -22,7 +22,7 @@ const jsParser = extractor
             comments: jsParserCommentOptions,
         }),
     ])
-    .parseFilesGlob("./src/**/*.@(ts|js|tsx|jsx)");
+    .parseFilesGlob("./src/**/*.@(ts|js|mjs|cjs)");
 
 extractor
     .createHtmlParser([
