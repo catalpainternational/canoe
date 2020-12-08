@@ -80,7 +80,7 @@
         "node-sass": "^4.14.1",
         "optimize-css-assets-webpack-plugin": "^5.0.3",
         "pnp-webpack-plugin": "^1.6.4",
-        "prettier": "^2.2.0",
+        "prettier": "^2.2.1",
         "redux-devtools-extension": "^2.13.8",
         "riot": "^4.13.4",
         "sass-loader": "^9.0.3",
