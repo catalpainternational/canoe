@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require("webpack");
 const { mergeWithCustomize, customizeArray } = require("webpack-merge");
 const path = require("path");
@@ -35,7 +36,7 @@ module.exports = (env) => {
     );
 
     // merge environment and project configurations for use in webpack compilation
-    // webpack.DefinePlugin will replace process.env.CONFIG_KEY with configured valuea
+    // webpack.DefinePlugin will replace process.env.CONFIG_KEY with configured values
     const processEnvironment = Object.keys(environmentConfiguration).reduce(
         (prev, next) => {
             prev[`process.env.${next}`] = JSON.stringify(
@@ -69,14 +70,8 @@ module.exports = (env) => {
             contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
-            extensions: [".ts", ".js", ".json", ".riot.html"],
+            extensions: [".ts", ".js", ".cjs", ".mjs", ".json", ".riot.html"],
             modules: [path.resolve(__dirname, "src")],
-            alias: {
-                RiotTags: path.resolve(__dirname, "src/riot/"),
-                js: path.resolve(__dirname, "src/js"),
-                ReduxImpl: path.resolve(__dirname, "src/js/redux"),
-                Actions: path.resolve(__dirname, "src/js/actions"),
-            },
             plugins: [PnpWebpackPlugin],
         },
         resolveLoader: {
@@ -131,7 +126,7 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.(js|mjs|ts)$/,
-                    exclude: /node_modules/,
+                    exclude: [/node_modules/, "/src/**/tests/**/*"],
                     use: {
                         loader: "babel-loader",
                         options: {

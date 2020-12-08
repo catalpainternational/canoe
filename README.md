@@ -32,6 +32,8 @@ Check the project documentation. It is usual for a project to implement build sc
 
 7. Production builds can be produced by passing `--env.PRODUCTION` to the build and start commands
 
+8. Tests can be run with `yarn test`, add the `--verbose` flag if you want more output.  We're running `ava` for the tests, a LOT more info can be found by visiting their github repo `https://github.com/avajs/ava`, the README includes links to their docs (also in github).
+
 ## Project Integration
 
 Canoe is intended to be easily and quickly configurable to run in a new project. We have mechanisms through configuration files to allow overriding assets to change css and images.

@@ -33,6 +33,7 @@
         }
     ],
     "rules": {
+        "@typescript-eslint/no-explicit-any": 0, // Means disable rule
         "no-console": 1, // Means warning
         "prettier/prettier": 2 // Means error
     },
