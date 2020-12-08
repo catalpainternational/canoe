@@ -4232,17 +4232,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-7-webpack-alias@npm:^0.2.1":
-  version: 0.2.2
-  resolution: "babel-plugin-7-webpack-alias@npm:0.2.2"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.0.0
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: d4eb519caf2a890e5c001a3e5a0d5e54aeff2b65d9de492c7ee0f545966ce2913a0295b84cc0c5cd6146c182740da25d8f776cbc4e39c96300191c5341a0ae2d
-  languageName: node
-  linkType: hard
-
 "babel-plugin-dynamic-import-node@npm:^2.3.3":
   version: 2.3.3
   resolution: "babel-plugin-dynamic-import-node@npm:2.3.3"
@@ -5058,7 +5047,6 @@ __metadata:
     RiotTags: "link:src/riot/"
     ava: ^3.13.0
     babel-loader: ^8.1.0
-    babel-plugin-7-webpack-alias: ^0.2.1
     babel-polyfill: ^6.26.0
     clean-webpack-plugin: ^3.0.0
     css-loader: ^4.2.0
