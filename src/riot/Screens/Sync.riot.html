@@ -10,7 +10,6 @@
         </div>
 
         <div class="content-wrapper">
-            <p>{portNo()}</p>
             <p>{state.appelflapMeta}</p>
             <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
 
@@ -51,7 +50,7 @@
         import dayjs from "dayjs";
         import relativeTime from "dayjs/plugin/relativeTime";
 
-        import { appelflapMeta, getPortNo } from "ts/AppelflapConnect";
+        import { AppelflapConnect } from "ts/AppelflapConnect";
 
         dayjs.extend(relativeTime);
 
@@ -79,13 +78,10 @@
                 this.refreshSyncs();
             },
 
-            portNo() {
-                return getPortNo();
-            },
-
             appelflapStatus() {
                 this.update({appelflapMeta: "Getting"});
-                appelflapMeta().then((response) => {
+                const appelflapConnect = new AppelflapConnect();
+                appelflapConnect.getMeta().then((response) => {
                     this.update({appelflapMeta: JSON.stringify(response)});
                 });
             }
