@@ -10,6 +10,7 @@
         </div>
 
         <div class="content-wrapper">
+            <p>{portNo()}</p>
             <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
 
             <h5 if="{state.syncs.length > 0}" class="section-title">
@@ -45,8 +46,11 @@
 
     <script>
         import { getNotifications } from "js/Notifications";
+
         import dayjs from "dayjs";
         import relativeTime from "dayjs/plugin/relativeTime";
+
+        import { getPortNo } from "ts/AppelflapConnect";
 
         dayjs.extend(relativeTime);
 
@@ -71,6 +75,10 @@
             onMounted() {
                 this.refreshSyncs();
             },
+
+            portNo() {
+                return getPortNo();
+            }
         };
     </script>
 </Sync>
