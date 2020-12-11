@@ -11,6 +11,7 @@
 
         <div class="content-wrapper">
             <p>{portNo()}</p>
+            <p>{this.state.appelflapMeta}</p>
             <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
 
             <h5 if="{state.syncs.length > 0}" class="section-title">
@@ -50,13 +51,14 @@
         import dayjs from "dayjs";
         import relativeTime from "dayjs/plugin/relativeTime";
 
-        import { getPortNo } from "ts/AppelflapConnect";
+        import { appelflapMeta, getPortNo } from "ts/AppelflapConnect";
 
         dayjs.extend(relativeTime);
 
         export default {
             state: {
                 syncs: [],
+                appelflapMeta: "",
             },
 
             TRANSLATIONS: {
@@ -78,6 +80,12 @@
 
             portNo() {
                 return getPortNo();
+            },
+
+            appelflapStatus() {
+                appelflapMeta().then((response) => {
+                    this.state.appelflapMeta = response;
+                });
             }
         };
     </script>

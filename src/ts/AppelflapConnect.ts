@@ -22,3 +22,25 @@ export function getPortNo(): number | undefined {
         10
     );
 }
+
+export const appelflapFetch = async (
+    request_or_url: RequestInfo,
+    maybe_fetchopts: RequestInit | undefined
+): Promise<Response> => {
+    return await fetch(request_or_url, maybe_fetchopts);
+};
+
+export const appelflapMeta = async (): Promise<string> => {
+    const portNo = getPortNo();
+    const statusRequestURI = `http://127.0.0.1:${portNo}/meta/status`;
+
+    const response = await appelflapFetch(statusRequestURI, undefined);
+
+    if (!response.ok) {
+        return "Nope, that's not OK";
+    }
+
+    const pagesResponseJSON = await response.json();
+
+    return pagesResponseJSON;
+};
