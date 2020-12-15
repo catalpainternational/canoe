@@ -1,4 +1,11 @@
 import { THttpMethods } from "ts/Types/CanoeEnums";
+import {
+    TPublication,
+    TPublicationTarget,
+    TSubscription,
+    TSubscriptions,
+    TSubscriptionVersion,
+} from "ts/Types/CacheTypes";
 
 export class AppelflapConnect {
     #localHostURI = "http://127.0.0.1";
@@ -174,38 +181,33 @@ export class AppelflapConnect {
         return this.performCommand(commandPath);
     };
 
-    private publicationPath = (webOrigin: string, cacheName: string) => {
-        const prepWebOrigin = encodeURIComponent(webOrigin);
-        const prepCacheName = encodeURIComponent(cacheName);
+    private publicationPath = (publication: TPublicationTarget) => {
+        const prepWebOrigin = encodeURIComponent(publication.webOrigin);
+        const prepCacheName = encodeURIComponent(publication.cacheName);
         return `${prepWebOrigin}/${prepCacheName}`;
     };
 
     public savePublication = async (
-        webOrigin: string,
-        cacheName: string,
-        version: number
+        publication: TPublication
     ): Promise<any> => {
         const { commandPath, method } = this._commands.savePublication;
         const requestPath = `${commandPath}/${this.publicationPath(
-            webOrigin,
-            cacheName
+            publication
         )}`;
         const commandInit = {
             method: method,
-            headers: { "version-number": version.toString() },
+            headers: { "version-number": publication.version.toString() },
         };
 
         return this.performCommand(requestPath, commandInit, "text");
     };
 
     public deletePublication = async (
-        webOrigin: string,
-        cacheName: string
+        publication: TPublicationTarget
     ): Promise<any> => {
         const { commandPath, method } = this._commands.deletePublication;
         const requestPath = `${commandPath}/${this.publicationPath(
-            webOrigin,
-            cacheName
+            publication
         )}`;
 
         return this.performCommand(requestPath, { method }, "text");
@@ -219,22 +221,31 @@ export class AppelflapConnect {
 
     /** Set up the Version Min and Max headers */
     private setVersionHeaders = (
-        versionMin?: number,
-        versionMax?: number
+        versionRange: TSubscription | TSubscriptionVersion
     ): Record<string, string> | undefined => {
         let min = -1;
         let max = -1;
-        if (versionMin || versionMax) {
-            if (versionMin && versionMax && versionMin > versionMax) {
-                const tempVersion = versionMin;
-                versionMin = versionMax;
-                versionMax = tempVersion;
+        if (versionRange["Version-Min"] || versionRange["Version-Max"]) {
+            if (
+                versionRange["Version-Min"] &&
+                versionRange["Version-Max"] &&
+                versionRange["Version-Min"] > versionRange["Version-Max"]
+            ) {
+                const tempVersion = versionRange["Version-Min"];
+                versionRange["Version-Min"] = versionRange["Version-Max"];
+                versionRange["Version-Max"] = tempVersion;
             }
-            if (versionMin && versionMin > 0) {
-                min = versionMin;
+            if (
+                versionRange["Version-Min"] &&
+                versionRange["Version-Min"] > 0
+            ) {
+                min = versionRange["Version-Min"];
             }
-            if (versionMax && versionMax > 0) {
-                max = versionMax;
+            if (
+                versionRange["Version-Max"] &&
+                versionRange["Version-Max"] > 0
+            ) {
+                max = versionRange["Version-Max"];
             }
         }
         if (min > -1 || max > -1) {
@@ -251,19 +262,13 @@ export class AppelflapConnect {
         return undefined;
     };
 
-    public subscribe = async (
-        webOrigin: string,
-        cacheName: string,
-        versionMin?: number,
-        versionMax?: number
-    ): Promise<any> => {
+    public subscribe = async (subscription: TSubscription): Promise<any> => {
         const { commandPath, method } = this._commands.subscribe;
         const requestPath = `${commandPath}/${this.publicationPath(
-            webOrigin,
-            cacheName
+            subscription
         )}`;
         const commandInit = { method: method } as RequestInit;
-        const headers = this.setVersionHeaders(versionMin, versionMax);
+        const headers = this.setVersionHeaders(subscription);
         if (headers) {
             commandInit.headers = headers;
         }
@@ -272,35 +277,21 @@ export class AppelflapConnect {
     };
 
     public unsubscribe = async (
-        webOrigin: string,
-        cacheName: string
+        publication: TPublicationTarget
     ): Promise<any> => {
         const { commandPath, method } = this._commands.unsubscribe;
         const requestPath = `${commandPath}/${this.publicationPath(
-            webOrigin,
-            cacheName
+            publication
         )}`;
 
         return this.performCommand(requestPath, { method }, "text");
     };
 
     public bulkSubscribe = async (
-        webOrigin: string,
-        cacheName: string,
-        subscriptions: {
-            [name: string]: {
-                [name: string]: {
-                    "Version-Min": number;
-                    "Version-Max": number;
-                };
-            };
-        }
+        subscriptions: TSubscriptions
     ): Promise<any> => {
         const { commandPath, method } = this._commands.bulkSubscribe;
-        const requestPath = `${commandPath}/${this.publicationPath(
-            webOrigin,
-            cacheName
-        )}`;
+        const requestPath = `${commandPath}`;
         const commandInit = {
             method: method,
             headers: {
