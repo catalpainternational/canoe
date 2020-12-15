@@ -1,4 +1,7 @@
-module.exports = {
+/** This babel config is for Javascript only (js|cjs|mjs),
+ * for Typescript see the babel settings in the webpack config */
+
+ module.exports = {
     presets: [
         [
             "@babel/preset-env",
@@ -8,14 +11,13 @@ module.exports = {
                 useBuiltIns: "usage",
             },
         ],
-        "@babel/preset-typescript",
     ],
     plugins: [
         [
             "@babel/plugin-transform-runtime",
             {
                 regenerator: true,
-            }
-        ]
+            },
+        ],
     ],
 };
