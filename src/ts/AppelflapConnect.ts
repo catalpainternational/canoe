@@ -106,6 +106,7 @@ export class AppelflapConnect {
             this.#localHostURI
         }:${this.getPortNo()}/${commandPath}`;
 
+        /** When we finally have authorization via Appelflap, we'll change this */
         const weHazAuthorization = false;
 
         const requestInit =
