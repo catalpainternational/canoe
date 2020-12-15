@@ -1,6 +1,19 @@
-export function buildFakeNavigator(): Navigator {
+function get_portno_encoded(portNo: number): string {
+    const encodeOffset = "a".charCodeAt(0);
+    return String.fromCharCode(
+        ...[...portNo.toString()].map((digit: string) => {
+            return Number(digit) + encodeOffset;
+        })
+    );
+}
+
+export function buildFakeNavigator(portNo?: number): Navigator {
+    const languages = ["en", "tdt"];
+    if (portNo) {
+        languages.push(`ep-${get_portno_encoded(portNo)}`);
+    }
     return {
-        languages: ["ep-abcd"],
+        languages: languages,
         activeVRDisplays: [],
         clipboard: {} as Clipboard,
         credentials: {} as CredentialsContainer,

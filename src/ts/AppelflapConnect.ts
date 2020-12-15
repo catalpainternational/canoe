@@ -84,16 +84,16 @@ export class AppelflapConnect {
             /^ep-[a-j]{4,5}$/.test(word)
         )[0];
 
-        this.#portNo = !portword
-            ? -1
-            : parseInt(
-                  portword
-                      .split("")
-                      .slice(3)
-                      .map((el) => String.fromCharCode(el.charCodeAt(0) - 0x31))
-                      .join(""),
-                  10
-              );
+        if (!portword) {
+            this.#portNo = -1;
+            return this.#portNo;
+        }
+
+        const portNo = [...portword.substr(3)]
+            .map((el) => String.fromCharCode(el.charCodeAt(0) - 0x31))
+            .join("");
+
+        this.#portNo = parseInt(portNo, 10);
 
         return this.#portNo;
     }
