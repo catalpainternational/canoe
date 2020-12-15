@@ -125,16 +125,36 @@ module.exports = (env) => {
                     },
                 },
                 {
-                    test: /\.(js|mjs|ts)$/,
+                    test: /\.(js|cjs|mjs)$/,
+                    exclude: [/node_modules/, "/src/**/tests/**/*"],
+                    use: {
+                        loader: "babel-loader",
+                    },
+                },
+                {
+                    test: /\.(ts)$/,
                     exclude: [/node_modules/, "/src/**/tests/**/*"],
                     use: {
                         loader: "babel-loader",
                         options: {
                             presets: [
-                                "@babel/preset-env",
                                 "@babel/preset-typescript",
+                                "@babel/preset-env",
                             ],
-                            plugins: ["@babel/plugin-transform-runtime"],
+                            plugins: [
+                                [
+                                    "@babel/plugin-transform-runtime",
+                                    {
+                                        regenerator: true,
+                                    },
+                                ],
+                                [
+                                    "@babel/plugin-proposal-class-properties",
+                                    {
+                                        loose: true,
+                                    },
+                                ],
+                            ],
                         },
                     },
                 },

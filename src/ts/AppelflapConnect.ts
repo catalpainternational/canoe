@@ -1,64 +1,66 @@
+import { THttpMethods } from "ts/Types/CanoeEnums";
+
 export class AppelflapConnect {
-    private _localHostURI = "http://127.0.0.1";
+    #localHostURI = "http://127.0.0.1";
 
-    private _portNo = -1;
-    private _metaApi = "meta";
-    private _cacheApi = "api/ingeblikt";
-    private _actionApi = "do";
+    #portNo = -1;
+    #metaApi = "meta";
+    #cacheApi = "api/ingeblikt";
+    #actionApi = "do";
 
-    private _lock = "insertion-lock";
-    private _publications = "publications";
-    private _subscriptions = "subscriptions";
-    private _status = "status";
-    private _reboot = "reboot";
+    #lock = "insertion-lock";
+    #publications = "publications";
+    #subscriptions = "subscriptions";
+    #status = "status";
+    #reboot = "reboot";
 
     private _commands = {
         getMetaStatus: {
-            commandPath: `${this._metaApi}/${this._status}`,
+            commandPath: `${this.#metaApi}/${this.#status}`,
             method: "GET",
         },
         setLock: {
-            commandPath: `${this._cacheApi}/${this._lock}`,
+            commandPath: `${this.#cacheApi}/${this.#lock}`,
             method: "PUT",
         },
         releaseLock: {
-            commandPath: `${this._cacheApi}/${this._lock}`,
+            commandPath: `${this.#cacheApi}/${this.#lock}`,
             method: "DELETE",
         },
         getCacheStatus: {
-            commandPath: `${this._cacheApi}/${this._status}`,
+            commandPath: `${this.#cacheApi}/${this.#status}`,
             method: "GET",
         },
         doReboot: {
-            commandPath: `${this._actionApi}/${this._reboot}`,
+            commandPath: `${this.#actionApi}/${this.#reboot}`,
             method: "POST",
         },
         getPublications: {
-            commandPath: `${this._cacheApi}/${this._publications}`,
+            commandPath: `${this.#cacheApi}/${this.#publications}`,
             method: "GET",
         },
         savePublication: {
-            commandPath: `${this._cacheApi}/${this._publications}`,
+            commandPath: `${this.#cacheApi}/${this.#publications}`,
             method: "PUT",
         },
         deletePublication: {
-            commandPath: `${this._cacheApi}/${this._publications}`,
+            commandPath: `${this.#cacheApi}/${this.#publications}`,
             method: "DELETE",
         },
         getSubscriptions: {
-            commandPath: `${this._cacheApi}/${this._subscriptions}`,
+            commandPath: `${this.#cacheApi}/${this.#subscriptions}`,
             method: "GET",
         },
         subscribe: {
-            commandPath: `${this._cacheApi}/${this._subscriptions}`,
+            commandPath: `${this.#cacheApi}/${this.#subscriptions}`,
             method: "PUT",
         },
         unsubscribe: {
-            commandPath: `${this._cacheApi}/${this._subscriptions}`,
+            commandPath: `${this.#cacheApi}/${this.#subscriptions}`,
             method: "DELETE",
         },
         bulkSubscribe: {
-            commandPath: `${this._cacheApi}/${this._subscriptions}`,
+            commandPath: `${this.#cacheApi}/${this.#subscriptions}`,
             method: "POST",
         },
     } as {
@@ -74,15 +76,15 @@ export class AppelflapConnect {
         // it won't already be occupied. Similarly the charcode shifting is not obfuscation, it's just that Geckoview is picky about what we pass
         // as a language tag.
 
-        if (this._portNo > -1) {
-            return this._portNo;
+        if (this.#portNo > -1) {
+            return this.#portNo;
         }
 
         const portword = navigator.languages.filter((word) =>
             /^ep-[a-j]{4,5}$/.test(word)
         )[0];
 
-        this._portNo = !portword
+        this.#portNo = !portword
             ? -1
             : parseInt(
                   portword
@@ -93,7 +95,7 @@ export class AppelflapConnect {
                   10
               );
 
-        return this._portNo;
+        return this.#portNo;
     }
 
     private appelflapFetch = async (
@@ -101,7 +103,7 @@ export class AppelflapConnect {
         commandInit?: RequestInit
     ): Promise<Response> => {
         const requestInfo = `${
-            this._localHostURI
+            this.#localHostURI
         }:${this.getPortNo()}/${commandPath}`;
 
         const weHazAuthorization = false;
