@@ -9,10 +9,15 @@
             class="resources-icon { props.contentType === 'resources' ? 'active' : ''}"
             href="#resources"
         ></a>
+        <a
+            class="resources-icon { props.contentType === 'sync' ? 'active' : ''}"
+            href="#sync"
+        ></a>
     </footer>
 
     <script>
         import { parseURLHash } from "js/Routing";
+        import { getPlatform } from "js/PlatformDetection";
 
         export default {
             onBeforeMount(props, state) {
@@ -21,6 +26,11 @@
 
             onBeforeUpdate(props, state) {
                 this.updateState();
+            },
+
+            shouldShowSync() {
+                const { browser, inAppelflap, inPWAMode } = getPlatform();
+                return inAppelflap;
             },
 
             updateState() {

@@ -46,6 +46,7 @@
             <Profile if="{state.contentType === 'profile'}"></Profile>
             <BottomMenu contentType="{state.contentType}"></BottomMenu>
             <PushSubscription></PushSubscription>
+            <Sync if="{state.contentType === 'sync'}"></Sync>
         </template>
     </template>
 
@@ -75,6 +76,7 @@
         import Profile from "RiotTags/Screens/Profile.riot.html";
         import Settings from "RiotTags/Screens/Settings.riot.html";
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
+        import Sync from "RiotTags/Screens/Sync";
 
         import HomePage from "RiotTags/WagtailPages/HomePage.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
@@ -114,6 +116,7 @@
                 resources: Resources,
                 profile: Profile,
                 settings: Settings,
+                sync: Sync,
                 loadcompletions: LoadCompletions,
                 downloadsite: DownloadSite,
                 pushsubscription: PushSubscription,

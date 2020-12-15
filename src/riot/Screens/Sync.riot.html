@@ -1,0 +1,90 @@
+<Sync>
+    <div class="sync">
+        <div class="sync-header">
+            <div class="header-box">
+                <div class="left-block">
+                    <h3>{ TRANSLATIONS.latest() }</h3>
+                </div>
+                <span class="syncs-image"></span>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <p>{state.appelflapMeta}</p>
+            <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
+
+            <h5 if="{state.syncs.length > 0}" class="section-title">
+                { TRANSLATIONS.notifications() }
+            </h5>
+
+            <ol class="sync-list">
+                <li
+                    each="{(sync, index) in state.syncs}"
+                    class="sync-card {markOldNotifications(index)}"
+                >
+                    <div class="sync-header">
+                        <h6>{sync.title}</h6>
+                    </div>
+
+                    <div class="sync-body">
+                        <p>{sync.body}</p>
+                    </div>
+
+                    <div class="sync-footer">
+                        <a class="action">
+                            <span class="arrow-blue"></span>
+                            <p>{ TRANSLATIONS.start() }</p>
+                        </a>
+                        <div>
+                            <p>{showTimeAgoFromNow(sync.timestamp)}</p>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        import { getNotifications } from "js/Notifications";
+
+        import dayjs from "dayjs";
+        import relativeTime from "dayjs/plugin/relativeTime";
+
+        import { AppelflapConnect } from "ts/AppelflapConnect";
+
+        dayjs.extend(relativeTime);
+
+        export default {
+            state: {
+                syncs: [],
+                appelflapMeta: "Hello",
+            },
+
+            TRANSLATIONS: {
+                latest: () => gettext("Latest syncs"),
+                none: () => gettext("No syncs."),
+                notifications: () => gettext("Syncs"),
+                start: () => gettext("Start lesson"),
+            },
+
+            async refreshSyncs() {
+                this.update({
+                    notifications: await getSyncs(),
+                });
+            },
+
+            onMounted() {
+                this.appelflapStatus();
+                this.refreshSyncs();
+            },
+
+            appelflapStatus() {
+                this.update({appelflapMeta: "Getting"});
+                const appelflapConnect = new AppelflapConnect();
+                appelflapConnect.getMeta().then((response) => {
+                    this.update({appelflapMeta: JSON.stringify(response)});
+                });
+            }
+        };
+    </script>
+</Sync>
