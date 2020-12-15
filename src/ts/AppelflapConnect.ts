@@ -1,9 +1,11 @@
 export class AppelflapConnect {
     private _localHostURI = "http://127.0.0.1";
+
     private _portNo = -1;
     private _metaApi = "meta";
     private _cacheApi = "api/ingeblikt";
     private _actionApi = "do";
+
     private _lock = "insertion-lock";
     private _publications = "publications";
     private _subscriptions = "subscriptions";
@@ -189,6 +191,7 @@ export class AppelflapConnect {
             method: method,
             headers: { "version-number": version.toString() },
         };
+
         return this.performCommand(requestPath, commandInit, "text");
     };
 
@@ -201,32 +204,67 @@ export class AppelflapConnect {
             webOrigin,
             cacheName
         )}`;
+
         return this.performCommand(requestPath, { method }, "text");
     };
 
     public getSubscriptions = async (): Promise<any> => {
         const { commandPath } = this._commands.getSubscriptions;
+
         return this.performCommand(commandPath);
+    };
+
+    /** Set up the Version Min and Max headers */
+    private setVersionHeaders = (
+        versionMin?: number,
+        versionMax?: number
+    ): Record<string, string> | undefined => {
+        let min = -1;
+        let max = -1;
+        if (versionMin || versionMax) {
+            if (versionMin && versionMax && versionMin > versionMax) {
+                const tempVersion = versionMin;
+                versionMin = versionMax;
+                versionMax = tempVersion;
+            }
+            if (versionMin && versionMin > 0) {
+                min = versionMin;
+            }
+            if (versionMax && versionMax > 0) {
+                max = versionMax;
+            }
+        }
+        if (min > -1 || max > -1) {
+            const headers: Record<string, string> = {};
+            if (min > -1) {
+                headers["Version-Min"] = min.toString();
+            }
+            if (max > -1) {
+                headers["Version-Max"] = max.toString();
+            }
+            return headers;
+        }
+
+        return undefined;
     };
 
     public subscribe = async (
         webOrigin: string,
         cacheName: string,
-        versionMin: number,
-        versionMax: number
+        versionMin?: number,
+        versionMax?: number
     ): Promise<any> => {
         const { commandPath, method } = this._commands.subscribe;
         const requestPath = `${commandPath}/${this.publicationPath(
             webOrigin,
             cacheName
         )}`;
-        const commandInit = {
-            method: method,
-            headers: {
-                "Version-Min": versionMin.toString(),
-                "Version-Max": versionMax.toString(),
-            },
-        };
+        const commandInit = { method: method } as RequestInit;
+        const headers = this.setVersionHeaders(versionMin, versionMax);
+        if (headers) {
+            commandInit.headers = headers;
+        }
+
         return this.performCommand(requestPath, commandInit, "text");
     };
 
@@ -239,6 +277,7 @@ export class AppelflapConnect {
             webOrigin,
             cacheName
         )}`;
+
         return this.performCommand(requestPath, { method }, "text");
     };
 
@@ -266,6 +305,7 @@ export class AppelflapConnect {
             },
             body: JSON.stringify(subscriptions),
         };
+
         return this.performCommand(requestPath, commandInit, "text");
     };
 }
