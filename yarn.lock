@@ -77,7 +77,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.12.9":
+"@babel/core@npm:^7.0.0, @babel/core@npm:^7.12.9":
   version: 7.12.9
   resolution: "@babel/core@npm:7.12.9"
   dependencies:
@@ -2028,7 +2028,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.4":
   version: 7.11.2
   resolution: "@babel/runtime@npm:7.11.2"
   dependencies:
@@ -2934,6 +2934,16 @@ __metadata:
   version: 3.0.3
   resolution: "@types/minimatch@npm:3.0.3"
   checksum: 672ccdac197e8176eed1a9441d0caf8a29a90eb139b1cefdd4c9e71b1c48f5c749f5d101a2d85da15c6259214ebda95072835021407d60330a731a2672964b82
+  languageName: node
+  linkType: hard
+
+"@types/node-fetch@npm:^2":
+  version: 2.5.7
+  resolution: "@types/node-fetch@npm:2.5.7"
+  dependencies:
+    "@types/node": "*"
+    form-data: ^3.0.0
+  checksum: 101f6e8474407f957dfe1750d82aa0bcaa56347d09c8ba8634e6a901d07032533c0a578860691d915ff8fa230355700c41c04ae7e505840b5d6ff8cc3ece7741
   languageName: node
   linkType: hard
 
@@ -5038,6 +5048,7 @@ __metadata:
     "@types/eslint": ^7
     "@types/eslint-config-prettier": ^6
     "@types/eslint-plugin-prettier": ^3
+    "@types/node-fetch": ^2
     "@types/prettier": ^2
     "@types/webpack-dev-server": ^3.11.1
     "@typescript-eslint/eslint-plugin": ^4.8.2
@@ -5057,6 +5068,7 @@ __metadata:
     eslint-config-prettier: ^6.15.0
     eslint-plugin-ava: ^11.0.0
     eslint-plugin-prettier: ^3.1.4
+    fetch-mock: ^9.11.0
     file-loader: ^6.0.0
     fork-ts-checker-webpack-plugin: ^6.0.4
     gettext-extractor: ^3.5.2
@@ -5069,6 +5081,7 @@ __metadata:
     idb: ^5.0.4
     js: "link:src/js"
     mini-css-extract-plugin: ^0.9.0
+    node-fetch: ^2.6.1
     node-sass: ^4.14.1
     optimize-css-assets-webpack-plugin: ^5.0.3
     pnp-webpack-plugin: ^1.6.4
@@ -5555,7 +5568,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"combined-stream@npm:^1.0.6, combined-stream@npm:~1.0.6":
+"combined-stream@npm:^1.0.6, combined-stream@npm:^1.0.8, combined-stream@npm:~1.0.6":
   version: 1.0.8
   resolution: "combined-stream@npm:1.0.8"
   dependencies:
@@ -7625,6 +7638,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fetch-mock@npm:^9.11.0":
+  version: 9.11.0
+  resolution: "fetch-mock@npm:9.11.0"
+  dependencies:
+    "@babel/core": ^7.0.0
+    "@babel/runtime": ^7.0.0
+    core-js: ^3.0.0
+    debug: ^4.1.1
+    glob-to-regexp: ^0.4.0
+    is-subset: ^0.1.1
+    lodash.isequal: ^4.5.0
+    path-to-regexp: ^2.2.1
+    querystring: ^0.2.0
+    whatwg-url: ^6.5.0
+  peerDependencies:
+    node-fetch: "*"
+  peerDependenciesMeta:
+    node-fetch:
+      optional: true
+  checksum: ba019727c6aeabd8c9109723c5747ff71fc96813c8d52312f239e3d0f6e90612e1ad520895c4919503d05adc79876384050d6b2f947ed16701aafcda441abad3
+  languageName: node
+  linkType: hard
+
 "figgy-pudding@npm:^3.5.1":
   version: 3.5.2
   resolution: "figgy-pudding@npm:3.5.2"
@@ -7877,6 +7913,17 @@ __metadata:
     semver: ^7.3.2
     tapable: ^1.0.0
   checksum: fa6a5ea7243695b88f5788054b30f4ae84bf7966902794969ca089d72ea5e00c93f0991de08719c8ae1ec57d47b880735bc5359369344c469c31d544ad670f81
+  languageName: node
+  linkType: hard
+
+"form-data@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "form-data@npm:3.0.0"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: 1af88217b449eda6566a0d95185f2baa403ed2a0e3b11547069f6062be66cbac7c8d7a25f0fc59560702e96526e659b5b9e5a8c6fefe00f06da44338191a9133
   languageName: node
   linkType: hard
 
@@ -8205,6 +8252,13 @@ fsevents@~2.1.2:
   dependencies:
     is-glob: ^4.0.1
   checksum: 2af6e196fba4071fb07ba261366e446ba2b320e6db0a2069cf8e12117c5811abc6721f08546148048882d01120df47e56aa5a965517a6e5ba19bfeb792655119
+  languageName: node
+  linkType: hard
+
+"glob-to-regexp@npm:^0.4.0":
+  version: 0.4.1
+  resolution: "glob-to-regexp@npm:0.4.1"
+  checksum: 6093c15d9f92d010998dd7cc7a5ba4e74eea83878d3f8c2616c6935dab9a79bf31ca7ddc214604b84a87c65b9e51481221e325be68f5fe6db8ed27dc76a5230f
   languageName: node
   linkType: hard
 
@@ -9653,6 +9707,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"is-subset@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "is-subset@npm:0.1.1"
+  checksum: 1ab891ec6de0467bdaa2d8cd8e5d923c7fe617eb8e2d75f33205ff48d21658521d7f86d15637209d57f2ad99aa19241bf62ec31ddb558710d079738bdee3149d
+  languageName: node
+  linkType: hard
+
 "is-svg@npm:^3.0.0":
   version: 3.0.0
   resolution: "is-svg@npm:3.0.0"
@@ -10273,6 +10334,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"lodash.isequal@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.isequal@npm:4.5.0"
+  checksum: 5b47e094641c18a915497343894c66f7da6aebb9aaa2a3fcc5643455aaf29d19df60ebbed664c8374fb959c8b4ce96810ee6becd8a71ac58c6c2ca8d29762947
+  languageName: node
+  linkType: hard
+
 "lodash.islength@npm:^4.0.1":
   version: 4.0.1
   resolution: "lodash.islength@npm:4.0.1"
@@ -10291,6 +10359,13 @@ fsevents@~2.1.2:
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: 4e2bb42a87a148991458d7c384bc197e96f7115e9536fc8e2c86ae9e99ce1c1f693ff15eb85761952535f48d72253aed8e673d9f32dde3e671cd91e3fde220a7
+  languageName: node
+  linkType: hard
+
+"lodash.sortby@npm:^4.7.0":
+  version: 4.7.0
+  resolution: "lodash.sortby@npm:4.7.0"
+  checksum: 43cde11276c66da7b3eda5e9f00dc6edc276d2bcf0a5969ffc62b612cd1c4baf2eff5e84cee11383005722c460a9ca0f521fad4fa1cd2dc1ef013ee4da2dfe63
   languageName: node
   linkType: hard
 
@@ -11116,6 +11191,13 @@ fsevents@~2.1.2:
     lower-case: ^2.0.1
     tslib: ^1.10.0
   checksum: 619e0bd00a3ef0fa6ad9442d32c88adcf47339c5b0d9bdfaaab19380709dad5ba71f865ae584531988ba85a6083e1f0ea0b851bcc49c67aee40a5100104e84b9
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "node-fetch@npm:2.6.1"
+  checksum: cbb171635e538162b977eac5dfe7a1e07a9a02e991924377a6435502291e2f823d306b95aabc455caebf4a118ccf836868462bc70ccc3095af02bb9da61fda37
   languageName: node
   linkType: hard
 
@@ -12088,6 +12170,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"path-to-regexp@npm:^2.2.1":
+  version: 2.4.0
+  resolution: "path-to-regexp@npm:2.4.0"
+  checksum: 643c15bf32ce32ad4c0ea378f88a3400c0ab3f1178d2b77ffd2f2d3700637e9e15cf92eb3e94a1d75d701e52f9cc1f1a179c1f7477abb3b6089786d3f96787b0
+  languageName: node
+  linkType: hard
+
 "path-type@npm:^1.0.0":
   version: 1.1.0
   resolution: "path-type@npm:1.1.0"
@@ -12971,7 +13060,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"querystring@npm:0.2.0":
+"querystring@npm:0.2.0, querystring@npm:^0.2.0":
   version: 0.2.0
   resolution: "querystring@npm:0.2.0"
   checksum: 1e76c51462f0ffb148e0b2fdeb811f61377800298605229d32efcdaaaf0a8fd4314a4b4405e1fbf130a5ca421c0e51f926fab5bb9f8b9b3b8c394f4e2d33d3d1
@@ -15178,6 +15267,15 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"tr46@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "tr46@npm:1.0.1"
+  dependencies:
+    punycode: ^2.1.0
+  checksum: 66e2e4d6799d3c2fcc56ad6084e8ab7b3e744f138babc86100e5e2bfaf011231d00d229cfccfaf338da953b96c3ea9128d182274915c1516c5189ee75b7c0ad9
+  languageName: node
+  linkType: hard
+
 "treeify@npm:^1.1.0":
   version: 1.1.0
   resolution: "treeify@npm:1.1.0"
@@ -15879,6 +15977,13 @@ typescript@^4.1.2:
   languageName: node
   linkType: hard
 
+"webidl-conversions@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "webidl-conversions@npm:4.0.2"
+  checksum: 75c2ada4262cda41410ec898178f4f2a31419a905415a98a0bd1b93441ce4a2b942bae2d0ac6d637b749b9d3b309be5a49dbc3b06aae9d9e65280554268a2c94
+  languageName: node
+  linkType: hard
+
 "webpack-cli@npm:^3.3.12":
   version: 3.3.12
   resolution: "webpack-cli@npm:3.3.12"
@@ -16079,6 +16184,17 @@ typescript@^4.1.2:
   version: 2.0.0
   resolution: "well-known-symbols@npm:2.0.0"
   checksum: be24986ab5a567bd22c467886ca79ffff7a262050be599a62e01449c864bf2849a39c7444203005470919a471d635274cd73c6f5109f75c24536ff404abdabd2
+  languageName: node
+  linkType: hard
+
+"whatwg-url@npm:^6.5.0":
+  version: 6.5.0
+  resolution: "whatwg-url@npm:6.5.0"
+  dependencies:
+    lodash.sortby: ^4.7.0
+    tr46: ^1.0.1
+    webidl-conversions: ^4.0.2
+  checksum: 454a06402d3ccec0057b8b2d00231153a38bb985749268903111166175e599254175461515b351cd3e6c7e1a9674c35adbcf708304cd38e6aae5b81c6ac9e095
   languageName: node
   linkType: hard
 
