@@ -82,3 +82,30 @@ test("Cache: lock", async (t: any) => {
 
     fetchMock.reset();
 });
+
+test("Cache: unlock", async (t: any) => {
+    const testPort = 9090;
+    global["navigator"] = buildFakeNavigator(testPort);
+
+    const afc = new AppelflapConnect();
+    const testUri = `${afc.localHostURI}:${testPort}/${afc.cacheApi}/${afc.insLock}`;
+    const successResponse = new Response("ok", {
+        status: 200,
+        statusText: "Ok",
+    });
+    const authFailureResponse = new Response(undefined, {
+        status: 401,
+        statusText: "Not Authorized",
+    });
+
+    fetchMock.delete(testUri, successResponse);
+    const successResult = await afc.unlock();
+    t.is(successResult, "ok");
+
+    fetchMock.delete(testUri, authFailureResponse);
+    await afc.unlock().catch((reason) => {
+        t.is(reason, "Not Authorized");
+    });
+
+    fetchMock.reset();
+});
