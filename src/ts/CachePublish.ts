@@ -10,8 +10,7 @@ export class CachePublish {
 
     /** Get a list of published items from Appelflap */
     publications = async (): Promise<TPublications> => {
-        const publicationList = await this.#afc.getPublications();
-        return JSON.parse(publicationList) as TPublications;
+        return await this.#afc.getPublications();
     };
 
     /** Instructs Appelflap to 'publish' a single publication */
