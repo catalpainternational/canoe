@@ -114,7 +114,7 @@ export class AppelflapConnect {
         }:${this.getPortNo()}/${commandPath}`;
 
         /** When we finally have authorization via Appelflap, we'll change this */
-        const weHazAuthorization = false;
+        const weHaveAuthorization = false;
 
         const requestInit =
             !weHazAuthorization ||
