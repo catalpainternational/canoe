@@ -9,6 +9,16 @@ export type TPublicationVersion = {
 
 export type TPublication = TPublicationTarget & TPublicationVersion;
 
+export type TPublicationSize = {
+    size: number;
+};
+
+export type TPublications = {
+    [name: string]: {
+        [name: string]: TPublicationVersion & TPublicationSize;
+    };
+};
+
 export type TSubscriptionVersion = {
     "Version-Min"?: number;
     "Version-Max"?: number;

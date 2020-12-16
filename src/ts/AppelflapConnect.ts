@@ -156,12 +156,12 @@ export class AppelflapConnect {
         return this.performCommand(commandPath);
     };
 
-    public setLock = async (): Promise<any> => {
+    public lock = async (): Promise<any> => {
         const { commandPath, method } = this._commands.setLock;
         return this.performCommand(commandPath, { method }, "text");
     };
 
-    public releaseLock = async (): Promise<any> => {
+    public unlock = async (): Promise<any> => {
         const { commandPath, method } = this._commands.releaseLock;
         return this.performCommand(commandPath, { method }, "text");
     };
@@ -187,9 +187,7 @@ export class AppelflapConnect {
         return `${prepWebOrigin}/${prepCacheName}`;
     };
 
-    public savePublication = async (
-        publication: TPublication
-    ): Promise<any> => {
+    public publish = async (publication: TPublication): Promise<any> => {
         const { commandPath, method } = this._commands.savePublication;
         const requestPath = `${commandPath}/${this.publicationPath(
             publication
@@ -202,7 +200,7 @@ export class AppelflapConnect {
         return this.performCommand(requestPath, commandInit, "text");
     };
 
-    public deletePublication = async (
+    public unpublish = async (
         publication: TPublicationTarget
     ): Promise<any> => {
         const { commandPath, method } = this._commands.deletePublication;
