@@ -217,16 +217,15 @@ export class AppelflapConnect {
         return this.performCommand(commandPath) as Promise<TSubscriptions>;
     };
 
-    /** Set up the Version Min and Max header.
+    /** Build the Version Min and Max headers.
      * This method 'assumes responsibility' for the values provided to it.
-     * If both a min and max are provided and they are incorrectly ordered,
-     * then their values will be silently swapped.
      * @param { TSubscription | TSubscriptionVersion } versionRange
      * - A subscription or subscriptionVersion that identifies none, either or both a version min and a version max value
      * @returns { Record<string, string> | undefined }
      * undefined if there were no version min or max values, otherwise a header with the relevant values
+     * @throws { RangeError } If both a min and max are provided and they are incorrectly ordered
      */
-    private setVersionHeaders = (
+    private buildVersionHeaders = (
         versionRange: TSubscription | TSubscriptionVersion
     ): Record<string, string> | undefined => {
         let min = -1;
@@ -237,9 +236,9 @@ export class AppelflapConnect {
                 versionRange["Version-Max"] &&
                 versionRange["Version-Min"] > versionRange["Version-Max"]
             ) {
-                const tempVersion = versionRange["Version-Min"];
-                versionRange["Version-Min"] = versionRange["Version-Max"];
-                versionRange["Version-Max"] = tempVersion;
+                throw new RangeError(
+                    "Version-Min must be less than or equal to Version-Max"
+                );
             }
             if (
                 versionRange["Version-Min"] &&
