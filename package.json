@@ -49,6 +49,7 @@
         "@types/eslint": "^7",
         "@types/eslint-config-prettier": "^6",
         "@types/eslint-plugin-prettier": "^3",
+        "@types/node": "^14.14.14",
         "@types/node-fetch": "^2",
         "@types/prettier": "^2",
         "@types/webpack-dev-server": "^3.11.1",

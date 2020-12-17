@@ -1,6 +1,7 @@
 import { THttpMethods } from "ts/Types/CanoeEnums";
 import {
     TPublication,
+    TPublications,
     TPublicationTarget,
     TSubscription,
     TSubscriptions,
@@ -112,19 +113,17 @@ export class AppelflapConnect {
         const requestInfo = `${this.localHostURI}:${this.portNo}/${commandPath}`;
 
         /** When we finally have authorization via Appelflap, we'll change this */
-        const weHazAuthorization = false;
+        const weHaveAuthorization = false;
 
         const requestInitRequired =
-            weHazAuthorization ||
+            weHaveAuthorization ||
             (commandInit && JSON.stringify(commandInit) !== '{"method":"GET"}');
 
         const requestInit = !requestInitRequired
             ? undefined
-            : commandInit
-            ? commandInit
-            : ({} as RequestInit);
+            : commandInit || ({} as RequestInit);
 
-        if (weHazAuthorization) {
+        if (weHaveAuthorization) {
             // Add the authorization header
         }
 
@@ -161,12 +160,12 @@ export class AppelflapConnect {
         return this.performCommand(commandPath);
     };
 
-    public lock = async (): Promise<any> => {
+    public lock = async (): Promise<string> => {
         const { commandPath, method } = this._commands.setLock;
         return this.performCommand(commandPath, { method }, "text");
     };
 
-    public unlock = async (): Promise<any> => {
+    public unlock = async (): Promise<string> => {
         const { commandPath, method } = this._commands.releaseLock;
         return this.performCommand(commandPath, { method }, "text");
     };
@@ -181,9 +180,9 @@ export class AppelflapConnect {
         return this.performCommand(commandPath, { method }, "text");
     };
 
-    public getPublications = async (): Promise<any> => {
+    public getPublications = async (): Promise<TPublications> => {
         const { commandPath } = this._commands.getPublications;
-        return this.performCommand(commandPath);
+        return this.performCommand(commandPath) as Promise<TPublications>;
     };
 
     private publicationPath = (publication: TPublicationTarget) => {
@@ -192,7 +191,7 @@ export class AppelflapConnect {
         return `${prepWebOrigin}/${prepCacheName}`;
     };
 
-    public publish = async (publication: TPublication): Promise<any> => {
+    public publish = async (publication: TPublication): Promise<string> => {
         const { commandPath, method } = this._commands.savePublication;
         const requestPath = `${commandPath}/${this.publicationPath(
             publication
@@ -207,7 +206,7 @@ export class AppelflapConnect {
 
     public unpublish = async (
         publication: TPublicationTarget
-    ): Promise<any> => {
+    ): Promise<string> => {
         const { commandPath, method } = this._commands.deletePublication;
         const requestPath = `${commandPath}/${this.publicationPath(
             publication
@@ -216,13 +215,21 @@ export class AppelflapConnect {
         return this.performCommand(requestPath, { method }, "text");
     };
 
-    public getSubscriptions = async (): Promise<any> => {
+    public getSubscriptions = async (): Promise<TSubscriptions> => {
         const { commandPath } = this._commands.getSubscriptions;
 
-        return this.performCommand(commandPath);
+        return this.performCommand(commandPath) as Promise<TSubscriptions>;
     };
 
-    /** Set up the Version Min and Max headers */
+    /** Set up the Version Min and Max header.
+     * This method 'assumes responsibility' for the values provided to it.
+     * If both a min and max are provided and they are incorrectly ordered,
+     * then their values will be silently swapped.
+     * @param { TSubscription | TSubscriptionVersion } versionRange
+     * - A subscription or subscriptionVersion that identifies none, either or both a version min and a version max value
+     * @returns { Record<string, string> | undefined }
+     * undefined if there were no version min or max values, otherwise a header with the relevant values
+     */
     private setVersionHeaders = (
         versionRange: TSubscription | TSubscriptionVersion
     ): Record<string, string> | undefined => {
@@ -265,7 +272,7 @@ export class AppelflapConnect {
         return undefined;
     };
 
-    public subscribe = async (subscription: TSubscription): Promise<any> => {
+    public subscribe = async (subscription: TSubscription): Promise<string> => {
         const { commandPath, method } = this._commands.subscribe;
         const requestPath = `${commandPath}/${this.publicationPath(
             subscription
@@ -281,7 +288,7 @@ export class AppelflapConnect {
 
     public unsubscribe = async (
         publication: TPublicationTarget
-    ): Promise<any> => {
+    ): Promise<string> => {
         const { commandPath, method } = this._commands.unsubscribe;
         const requestPath = `${commandPath}/${this.publicationPath(
             publication
@@ -292,7 +299,7 @@ export class AppelflapConnect {
 
     public bulkSubscribe = async (
         subscriptions: TSubscriptions
-    ): Promise<any> => {
+    ): Promise<string> => {
         const { commandPath, method } = this._commands.bulkSubscribe;
         const requestPath = `${commandPath}`;
         const commandInit = {
