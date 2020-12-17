@@ -6,13 +6,16 @@ import { buildFakeNavigator } from "./fakeNavigator";
 
 import { AppelflapConnect } from "../AppelflapConnect";
 
+test.before((t: any) => {
+    t.context["testPort"] = 9090;
+    global["navigator"] = buildFakeNavigator(t.context.testPort);
+    t.context["afc"] = new AppelflapConnect();
+});
+
 test("getPortNo (Appelflap test)", (t: any) => {
-    const testPort = 9090;
-    global["navigator"] = buildFakeNavigator(testPort);
-    const afc = new AppelflapConnect();
     t.is(
-        afc.portNo,
-        testPort,
+        t.context.afc.portNo,
+        t.context.testPort,
         "navigator has encoded portNo - implies Appelflap"
     );
 
@@ -27,11 +30,8 @@ test("getPortNo (Appelflap test)", (t: any) => {
 
 /** meta status is not expected to be used by the Canoe-Appelflap cache API */
 test("getMetaStatus", async (t: any) => {
-    const testPort = 9090;
-    global["navigator"] = buildFakeNavigator(testPort);
-
-    const afc = new AppelflapConnect();
-    const testUri = `${afc.localHostURI}:${testPort}/${afc.metaApi}/${afc.status}`;
+    const afc = t.context.afc as AppelflapConnect;
+    const testUri = `${afc.localHostURI}:${t.context.testPort}/${afc.metaApi}/${afc.status}`;
 
     const state = {
         diskused: 554058,
@@ -57,11 +57,8 @@ test("getMetaStatus", async (t: any) => {
 });
 
 test("Cache: lock", async (t: any) => {
-    const testPort = 9090;
-    global["navigator"] = buildFakeNavigator(testPort);
-
-    const afc = new AppelflapConnect();
-    const testUri = `${afc.localHostURI}:${testPort}/${afc.cacheApi}/${afc.insLock}`;
+    const afc = t.context.afc as AppelflapConnect;
+    const testUri = `${afc.localHostURI}:${t.context.testPort}/${afc.cacheApi}/${afc.insLock}`;
     const successResponse = new Response("ok", {
         status: 200,
         statusText: "Ok",
@@ -84,11 +81,8 @@ test("Cache: lock", async (t: any) => {
 });
 
 test("Cache: unlock", async (t: any) => {
-    const testPort = 9090;
-    global["navigator"] = buildFakeNavigator(testPort);
-
-    const afc = new AppelflapConnect();
-    const testUri = `${afc.localHostURI}:${testPort}/${afc.cacheApi}/${afc.insLock}`;
+    const afc = t.context.afc as AppelflapConnect;
+    const testUri = `${afc.localHostURI}:${t.context.testPort}/${afc.cacheApi}/${afc.insLock}`;
     const successResponse = new Response("ok", {
         status: 200,
         statusText: "Ok",
@@ -111,11 +105,8 @@ test("Cache: unlock", async (t: any) => {
 });
 
 test("Cache: status", async (t: any) => {
-    const testPort = 9090;
-    global["navigator"] = buildFakeNavigator(testPort);
-
-    const afc = new AppelflapConnect();
-    const testUri = `${afc.localHostURI}:${testPort}/${afc.cacheApi}/${afc.status}`;
+    const afc = t.context.afc as AppelflapConnect;
+    const testUri = `${afc.localHostURI}:${t.context.testPort}/${afc.cacheApi}/${afc.status}`;
     const testResponse = {
         "staged-caches": {
             "some-web-origin": { "some-cache-name": { Size: 9000 } },
@@ -138,6 +129,31 @@ test("Cache: status", async (t: any) => {
 
     fetchMock.get(testUri, authFailureResponse);
     await afc.getCacheStatus().catch((reason) => {
+        t.is(reason, "Not Authorized");
+    });
+
+    fetchMock.reset();
+});
+
+test("Cache: canoe reboot", async (t: any) => {
+    const afc = t.context.afc as AppelflapConnect;
+    const testUri = `${afc.localHostURI}:${t.context.testPort}/${afc.actionApi}/${afc.reboot}`;
+
+    const successResponse = new Response("ok", {
+        status: 200,
+        statusText: "Ok",
+    });
+    const authFailureResponse = new Response(undefined, {
+        status: 401,
+        statusText: "Not Authorized",
+    });
+
+    fetchMock.post(testUri, successResponse);
+    const successResult = await afc.doReboot();
+    t.is(successResult, "ok");
+
+    fetchMock.post(testUri, authFailureResponse);
+    await afc.doReboot().catch((reason: any) => {
         t.is(reason, "Not Authorized");
     });
 

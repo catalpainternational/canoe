@@ -14,7 +14,7 @@ export class AppelflapConnect {
     #portNo = -1;
     readonly metaApi = "meta";
     readonly cacheApi = "api/ingeblikt";
-    readonly actionApi = "do";
+    readonly actionApi = "api/do";
 
     readonly insLock = "insertion-lock";
     readonly publications = "publications";
