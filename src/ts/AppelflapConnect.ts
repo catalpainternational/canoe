@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { THttpMethods } from "ts/Types/CanoeEnums";
 import {
     TPublication,
@@ -238,27 +239,23 @@ export class AppelflapConnect {
     ): Record<string, string> | undefined => {
         let min = -1;
         let max = -1;
-        if (versionRange["Version-Min"] || versionRange["Version-Max"]) {
+        const hasMin = typeof versionRange.versionMin === "number";
+        const hasMax = typeof versionRange.versionMax === "number";
+        if (hasMin || hasMax) {
             if (
-                versionRange["Version-Min"] &&
-                versionRange["Version-Max"] &&
-                versionRange["Version-Min"] > versionRange["Version-Max"]
+                hasMin &&
+                hasMax &&
+                versionRange.versionMin! > versionRange.versionMax!
             ) {
                 throw new RangeError(
-                    "Version-Min must be less than or equal to Version-Max"
+                    "versionMin must be less than or equal to versionMax"
                 );
             }
-            if (
-                versionRange["Version-Min"] &&
-                versionRange["Version-Min"] > 0
-            ) {
-                min = versionRange["Version-Min"];
+            if (hasMin && versionRange.versionMin! > 0) {
+                min = versionRange.versionMin!;
             }
-            if (
-                versionRange["Version-Max"] &&
-                versionRange["Version-Max"] > 0
-            ) {
-                max = versionRange["Version-Max"];
+            if (hasMax && versionRange.versionMax! > 0) {
+                max = versionRange.versionMax!;
             }
         }
         if (min > -1 || max > -1) {

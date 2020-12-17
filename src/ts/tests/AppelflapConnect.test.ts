@@ -298,7 +298,7 @@ test("Cache: getSubscriptions", async (t: any) => {
     const testUri = `${afc.localHostURI}:${t.context.testPort}/${afc.cacheApi}/${afc.subscriptions}`;
     const testResponse = {
         "some-web-origin": {
-            "some-cache-name": { "Version-Min": 10, "Version-Max": 9000 },
+            "some-cache-name": { versionMin: 10, versionMax: 9000 },
         },
     };
 
@@ -333,14 +333,14 @@ test("Cache: subscribe", async (t: any) => {
     const subscription: TSubscription = {
         webOrigin: webOrigin,
         cacheName: cacheName,
-        "Version-Min": versionMin,
-        "Version-Max": versionMax,
+        versionMin: versionMin,
+        versionMax: versionMax,
     };
     const badSubscription: TSubscription = {
         webOrigin: webOrigin,
         cacheName: cacheName,
-        "Version-Min": versionMax,
-        "Version-Max": versionMin,
+        versionMin: versionMax,
+        versionMax: versionMin,
     };
 
     // When doing throwsAsync tests, expect 2 assertions returned for each test
@@ -356,7 +356,7 @@ test("Cache: subscribe", async (t: any) => {
     const failureResult = await t.throwsAsync(afc.subscribe(badSubscription));
     t.is(
         failureResult.message,
-        "Version-Min must be less than or equal to Version-Max"
+        "versionMin must be less than or equal to versionMax"
     );
 
     fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
@@ -411,18 +411,18 @@ test("Cache: bulkSubscribe", async (t: any) => {
     const subscriptions: TSubscriptions = {
         "some-web-origin": {
             "some-cache-name": {
-                "Version-Min": 10,
-                "Version-Max": 9000,
+                versionMin: 10,
+                versionMax: 9000,
             },
             "some-other-cache-name": {
-                "Version-Min": 10,
-                "Version-Max": 9000,
+                versionMin: 10,
+                versionMax: 9000,
             },
         },
         "some-other-web-origin": {
             "yet-another-cache-name": {
-                "Version-Min": 10,
-                "Version-Max": 9000,
+                versionMin: 10,
+                versionMax: 9000,
             },
         },
     };
