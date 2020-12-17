@@ -232,7 +232,7 @@ test("Cache: publish", async (t: any) => {
         version: version,
     };
 
-    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // When doing throwsAsync tests, expect 2 assertions returned for each test
     // And do the 'ok' test last to ensure that all tests are awaited
     t.plan(11);
     [
@@ -271,7 +271,7 @@ test("Cache: unpublish", async (t: any) => {
         version: version,
     };
 
-    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // When doing throwsAsync tests, expect 2 assertions returned for each test
     // And do the 'ok' test last to ensure that all tests are awaited
     t.plan(7);
     [authFailureResponse, notFoundResponse, conflictResponse].forEach(
@@ -336,15 +336,28 @@ test("Cache: subscribe", async (t: any) => {
         "Version-Min": versionMin,
         "Version-Max": versionMax,
     };
+    const badSubscription: TSubscription = {
+        webOrigin: webOrigin,
+        cacheName: cacheName,
+        "Version-Min": versionMax,
+        "Version-Max": versionMin,
+    };
 
-    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // When doing throwsAsync tests, expect 2 assertions returned for each test
     // And do the 'ok' test last to ensure that all tests are awaited
-    t.plan(5);
+    t.plan(7);
     [authFailureResponse, conflictResponse].forEach(async (response) => {
         fetchMock.put(testUri, response, { overwriteRoutes: true });
         const failureResult = await t.throwsAsync(afc.subscribe(subscription));
         t.is(failureResult.message, response.statusText);
     });
+
+    fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
+    const failureResult = await t.throwsAsync(afc.subscribe(badSubscription));
+    t.is(
+        failureResult.message,
+        "Version-Min must be less than or equal to Version-Max"
+    );
 
     fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.subscribe(subscription);
@@ -368,7 +381,7 @@ test("Cache: unsubscribe", async (t: any) => {
         cacheName: cacheName,
     };
 
-    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // When doing throwsAsync tests, expect 2 assertions returned for each test
     // And do the 'ok' test last to ensure that all tests are awaited
     t.plan(7);
     [authFailureResponse, notFoundResponse, conflictResponse].forEach(
@@ -414,7 +427,7 @@ test("Cache: bulkSubscribe", async (t: any) => {
         },
     };
 
-    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // When doing throwsAsync tests, expect 2 assertions returned for each test
     // And do the 'ok' test last to ensure that all tests are awaited
     t.plan(5);
     [badRequestResponse, authFailureResponse].forEach(async (response) => {
