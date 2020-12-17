@@ -144,11 +144,11 @@ export class AppelflapConnect {
                 case 404:
                 case 409:
                 case 503:
-                    return Promise.reject(response.statusText);
+                    return Promise.reject(new Error(response.statusText));
             }
 
             // This is a response status that's not known
-            return Promise.reject("Nope, that's not OK");
+            return Promise.reject(new Error("Nope, that's not OK"));
         }
 
         switch (returnType) {

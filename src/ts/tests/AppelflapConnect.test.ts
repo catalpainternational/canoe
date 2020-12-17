@@ -109,16 +109,13 @@ test("Cache: lock", async (t: any) => {
 
     const testUri = `${afc.localHostURI}:${t.context.testPort}/${afc.cacheApi}/${afc.insLock}`;
 
-    t.plan(2);
-
     fetchMock.put(testUri, successResponse);
     const successResult = await afc.lock();
     t.is(successResult, "ok");
 
     fetchMock.put(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.lock().catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
+    const result = await t.throwsAsync(afc.lock());
+    t.is(result.message, authFailureResponse.statusText);
 
     fetchMock.reset();
 });
@@ -130,16 +127,13 @@ test("Cache: unlock", async (t: any) => {
 
     const testUri = `${afc.localHostURI}:${t.context.testPort}/${afc.cacheApi}/${afc.insLock}`;
 
-    t.plan(2);
-
     fetchMock.delete(testUri, successResponse);
     const successResult = await afc.unlock();
     t.is(successResult, "ok");
 
     fetchMock.delete(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.unlock().catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
+    const result = await t.throwsAsync(afc.unlock());
+    t.is(result.message, authFailureResponse.statusText);
 
     fetchMock.reset();
 });
@@ -161,16 +155,13 @@ test("Cache: status", async (t: any) => {
         headers: { "Content-Type": "application/json" },
     });
 
-    t.plan(2);
-
     fetchMock.get(testUri, successResponse);
     const successResult = await afc.getCacheStatus();
     t.deepEqual(successResult, testResponse);
 
     fetchMock.get(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.getCacheStatus().catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
+    const result = await t.throwsAsync(afc.getCacheStatus());
+    t.is(result.message, authFailureResponse.statusText);
 
     fetchMock.reset();
 });
@@ -182,16 +173,13 @@ test("Cache: canoe reboot", async (t: any) => {
 
     const testUri = `${afc.localHostURI}:${t.context.testPort}/${afc.actionApi}/${afc.reboot}`;
 
-    t.plan(2);
-
     fetchMock.post(testUri, successResponse);
     const successResult = await afc.doReboot();
     t.is(successResult, "ok");
 
     fetchMock.post(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.doReboot().catch((reason: any) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
+    const result = await t.throwsAsync(afc.doReboot());
+    t.is(result.message, authFailureResponse.statusText);
 
     fetchMock.reset();
 });
@@ -213,16 +201,13 @@ test("Cache: getPublications", async (t: any) => {
         headers: { "Content-Type": "application/json" },
     });
 
-    t.plan(2);
-
     fetchMock.get(testUri, successResponse);
     const successResult = await afc.getPublications();
     t.deepEqual(successResult, testResponse);
 
     fetchMock.get(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.getPublications().catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
+    const result = await t.throwsAsync(afc.getPublications());
+    t.is(result.message, authFailureResponse.statusText);
 
     fetchMock.reset();
 });
@@ -247,38 +232,24 @@ test("Cache: publish", async (t: any) => {
         version: version,
     };
 
-    t.plan(6);
+    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // And do the 'ok' test last to ensure that all tests are awaited
+    t.plan(11);
+    [
+        badRequestResponse,
+        authFailureResponse,
+        notFoundResponse,
+        conflictResponse,
+        serviceUnavailableResponse,
+    ].forEach(async (response) => {
+        fetchMock.put(testUri, response, { overwriteRoutes: true });
+        const failureResult = await t.throwsAsync(afc.publish(publication));
+        t.is(failureResult.message, response.statusText);
+    });
 
-    fetchMock.put(testUri, successResponse);
+    fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.publish(publication);
     t.is(successResult, "ok");
-
-    fetchMock.put(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.publish(publication).catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
-
-    fetchMock.put(testUri, badRequestResponse, { overwriteRoutes: true });
-    await afc.publish(publication).catch((reason) => {
-        t.is(reason, badRequestResponse.statusText);
-    });
-
-    fetchMock.put(testUri, notFoundResponse, { overwriteRoutes: true });
-    await afc.publish(publication).catch((reason) => {
-        t.is(reason, notFoundResponse.statusText);
-    });
-
-    fetchMock.put(testUri, conflictResponse, { overwriteRoutes: true });
-    await afc.publish(publication).catch((reason) => {
-        t.is(reason, conflictResponse.statusText);
-    });
-
-    fetchMock.put(testUri, serviceUnavailableResponse, {
-        overwriteRoutes: true,
-    });
-    await afc.publish(publication).catch((reason) => {
-        t.is(reason, serviceUnavailableResponse.statusText);
-    });
 
     fetchMock.reset();
 });
@@ -300,26 +271,22 @@ test("Cache: unpublish", async (t: any) => {
         version: version,
     };
 
-    t.plan(4);
+    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // And do the 'ok' test last to ensure that all tests are awaited
+    t.plan(7);
+    [authFailureResponse, notFoundResponse, conflictResponse].forEach(
+        async (response) => {
+            fetchMock.delete(testUri, response, { overwriteRoutes: true });
+            const failureResult = await t.throwsAsync(
+                afc.unpublish(publication)
+            );
+            t.is(failureResult.message, response.statusText);
+        }
+    );
 
-    fetchMock.delete(testUri, successResponse);
+    fetchMock.delete(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.unpublish(publication);
     t.is(successResult, "ok");
-
-    fetchMock.delete(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.unpublish(publication).catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
-
-    fetchMock.delete(testUri, notFoundResponse, { overwriteRoutes: true });
-    await afc.unpublish(publication).catch((reason) => {
-        t.is(reason, notFoundResponse.statusText);
-    });
-
-    fetchMock.delete(testUri, conflictResponse, { overwriteRoutes: true });
-    await afc.unpublish(publication).catch((reason) => {
-        t.is(reason, conflictResponse.statusText);
-    });
 
     fetchMock.reset();
 });
@@ -341,16 +308,13 @@ test("Cache: getSubscriptions", async (t: any) => {
         headers: { "Content-Type": "application/json" },
     });
 
-    t.plan(2);
-
     fetchMock.get(testUri, successResponse);
     const successResult = await afc.getSubscriptions();
     t.deepEqual(successResult, testResponse);
 
     fetchMock.get(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.getSubscriptions().catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
+    const result = await t.throwsAsync(afc.getSubscriptions());
+    t.is(result.message, authFailureResponse.statusText);
 
     fetchMock.reset();
 });
@@ -373,21 +337,18 @@ test("Cache: subscribe", async (t: any) => {
         "Version-Max": versionMax,
     };
 
-    t.plan(3);
+    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // And do the 'ok' test last to ensure that all tests are awaited
+    t.plan(5);
+    [authFailureResponse, conflictResponse].forEach(async (response) => {
+        fetchMock.put(testUri, response, { overwriteRoutes: true });
+        const failureResult = await t.throwsAsync(afc.subscribe(subscription));
+        t.is(failureResult.message, response.statusText);
+    });
 
-    fetchMock.put(testUri, successResponse);
+    fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.subscribe(subscription);
     t.is(successResult, "ok");
-
-    fetchMock.put(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.subscribe(subscription).catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
-
-    fetchMock.put(testUri, conflictResponse, { overwriteRoutes: true });
-    await afc.subscribe(subscription).catch((reason) => {
-        t.is(reason, conflictResponse.statusText);
-    });
 
     fetchMock.reset();
 });
@@ -407,26 +368,22 @@ test("Cache: unsubscribe", async (t: any) => {
         cacheName: cacheName,
     };
 
-    t.plan(4);
+    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // And do the 'ok' test last to ensure that all tests are awaited
+    t.plan(7);
+    [authFailureResponse, notFoundResponse, conflictResponse].forEach(
+        async (response) => {
+            fetchMock.delete(testUri, response, { overwriteRoutes: true });
+            const failureResult = await t.throwsAsync(
+                afc.unsubscribe(subscription)
+            );
+            t.is(failureResult.message, response.statusText);
+        }
+    );
 
-    fetchMock.delete(testUri, successResponse);
+    fetchMock.delete(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.unsubscribe(subscription);
     t.is(successResult, "ok");
-
-    fetchMock.delete(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.unsubscribe(subscription).catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
-
-    fetchMock.delete(testUri, notFoundResponse, { overwriteRoutes: true });
-    await afc.unsubscribe(subscription).catch((reason) => {
-        t.is(reason, notFoundResponse.statusText);
-    });
-
-    fetchMock.delete(testUri, conflictResponse, { overwriteRoutes: true });
-    await afc.unsubscribe(subscription).catch((reason) => {
-        t.is(reason, conflictResponse.statusText);
-    });
 
     fetchMock.reset();
 });
@@ -457,21 +414,20 @@ test("Cache: bulkSubscribe", async (t: any) => {
         },
     };
 
-    t.plan(3);
+    // When doing bulk tests, expect 2 assertions returned for each test in the loop
+    // And do the 'ok' test last to ensure that all tests are awaited
+    t.plan(5);
+    [badRequestResponse, authFailureResponse].forEach(async (response) => {
+        fetchMock.post(testUri, response, { overwriteRoutes: true });
+        const failureResult = await t.throwsAsync(
+            afc.bulkSubscribe(subscriptions)
+        );
+        t.is(failureResult.message, response.statusText);
+    });
 
-    fetchMock.post(testUri, successResponse);
+    fetchMock.post(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.bulkSubscribe(subscriptions);
     t.is(successResult, "ok");
-
-    fetchMock.post(testUri, badRequestResponse, { overwriteRoutes: true });
-    await afc.bulkSubscribe(subscriptions).catch((reason) => {
-        t.is(reason, badRequestResponse.statusText);
-    });
-
-    fetchMock.post(testUri, authFailureResponse, { overwriteRoutes: true });
-    await afc.bulkSubscribe(subscriptions).catch((reason) => {
-        t.is(reason, authFailureResponse.statusText);
-    });
 
     fetchMock.reset();
 });
