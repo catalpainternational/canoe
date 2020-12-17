@@ -9,7 +9,7 @@
             class="resources-icon { props.contentType === 'resources' ? 'active' : ''}"
             href="#resources"
         ></a>
-        <a
+        <a if="{shouldShowSync()}"
             class="resources-icon { props.contentType === 'sync' ? 'active' : ''}"
             href="#sync"
         ></a>
