@@ -273,7 +273,7 @@ export class AppelflapConnect {
             subscription
         )}`;
         const commandInit = { method: method } as RequestInit;
-        const headers = this.setVersionHeaders(subscription);
+        const headers = this.buildVersionHeaders(subscription);
         if (headers) {
             commandInit.headers = headers;
         }
