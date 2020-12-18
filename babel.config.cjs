@@ -1,7 +1,7 @@
 /** This babel config is for Javascript only (js|cjs|mjs),
  * for Typescript see the babel settings in the webpack config */
 
- module.exports = {
+module.exports = {
     presets: [
         [
             "@babel/preset-env",

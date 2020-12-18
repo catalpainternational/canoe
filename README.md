@@ -12,18 +12,18 @@ It is dependent on a backend server application that lives in the project contia
 Key Software for Building and Testing
 
 ### Environment
-- Node 14.15.1
+- Node 14+
 
 ### Dependency Management
-- Yarn 2.1.1
+- Yarn 2+ (berry)
 
 ### Transpiling
-- Typescript 3.8.3
-- Webpack 4.44.1
-- Babel 7.8.4
+- Typescript 4+ (3.8.3 minimum)
+- Webpack 4.44+
+- Babel 7.8+
 
 ### Testing
-- Ava 3.13.0
+- Ava 3.13+
 
 ## Instructions
 
