@@ -117,9 +117,9 @@ export class AppelflapConnect {
         /** When we finally have authorization via Appelflap, we'll change this */
         const weHaveAuthorization = false;
 
-        const requestInitRequired =
-            weHaveAuthorization ||
-            (commandInit && JSON.stringify(commandInit) !== '{"method":"GET"}');
+        // Somewhere, some documentation says it is preferable to set requestInit to undefined
+        // if all the values are defaults (e.g. `method: GET`), but I can't find it currently.
+        const requestInitRequired = weHaveAuthorization || commandInit;
 
         const requestInit = !requestInitRequired
             ? undefined
