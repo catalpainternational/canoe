@@ -7,16 +7,16 @@
         <OnlineOrOffline></OnlineOrOffline>
         <Toast></Toast>
 
-        <Login if="{!isUserLoggedIn()}"></Login>
+        <Login if="{userShouldLogin()}"></Login>
 
-        <LoadCompletions if="{isUserLoggedIn()}"></LoadCompletions>
+        <LoadCompletions if="{!userShouldLogin()}"></LoadCompletions>
 
         <LoadingDots
-            if="{Object.keys(state.wagtailPage).length === 0 && isUserLoggedIn()}"
+            if="{Object.keys(state.wagtailPage).length === 0 && !userShouldLogin()}"
             extrastyleclasses="dark app"
         ></LoadingDots>
 
-        <template if="{isUserLoggedIn() && areCompletionsReady()}">
+        <template if="{!userShouldLogin() && areCompletionsReady()}">
             <DownloadSite></DownloadSite>
             <AllCoursesPage
                 if="{state.contentType === 'HomePage'}"
@@ -45,10 +45,10 @@
     </template>
 
     <script>
-        import { isUserLoggedIn } from "js/AuthenticationUtilities";
+        import { userShouldLogin } from "js/AuthenticationUtilities";
         import { getPage } from "js/Routing";
         import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
-        import { isBrowserSupported, areCompletionsReady } from "ReduxImpl/Interface";
+        import { isBrowserSupported, areCompletionsReady, getManifestFromStore } from "ReduxImpl/Interface";
         import { logPageView } from "js/GoogleAnalytics";
 
         import AllCoursesPageJS from "js/AllCoursesPage";
@@ -134,13 +134,13 @@
                 });
 
                 window.addEventListener("hashchange", () => {
-                    if (this.isUserLoggedIn()) {
+                    if (!this.userShouldLogin()) {
                         this.route();
                         logPageView(window.location.hash);
                     }
                 });
 
-                if (this.isUserLoggedIn() && this.areCompletionsReady()) {
+                if (!this.userShouldLogin() && this.areCompletionsReady()) {
                     // If user returns to site and is logged in.
                     this.route();
                 }
@@ -174,8 +174,8 @@
                 return areCompletionsReady();
             },
 
-            isUserLoggedIn() {
-                return isUserLoggedIn();
+            userShouldLogin() {
+                return userShouldLogin();
             },
 
             createAllCoursesPage(aWagtailPage) {
