@@ -1,24 +1,14 @@
-export function getPlatform(): {
-    browser: {
-        name: any;
-        version: any;
-    };
-    inAppelflap: boolean;
-    inPWAMode: boolean;
-} {
-    const browser = getBrowser();
+import { TBrowser, TPlatform } from "./Types/PlatformTypes";
 
+export function getPlatform(): TPlatform {
     return {
-        browser,
+        browser: getBrowser(),
         inAppelflap: inAppelflap(),
         inPWAMode: inPWAMode(),
     };
 }
 
-export function getBrowser(): {
-    name: any;
-    version: any;
-} {
+export function getBrowser(): TBrowser {
     const ua = navigator.userAgent;
     let tem: any;
     let M: any[] =
