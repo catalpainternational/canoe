@@ -14,8 +14,6 @@ riot.install(function (component) {
     installReduxPlugin(component);
 });
 
-riot.register("app", App);
-
 const inAppelflap = () => {
     const { browser, inAppelflap, inPWAMode } = getPlatform();
     return inAppelflap;
@@ -37,13 +35,13 @@ if (inAppelflap()) {
                 // Should we show a small warning?
             }
 
+            riot.register("app", App);
             riot.mount("app");
         })
         .catch((_) => {
             /* Do nothing */
         });
 } else {
+    riot.register("app", App);
     riot.mount("app");
 }
-
-lockCanoe();
