@@ -65,9 +65,6 @@
         } from "ReduxImpl/Interface";
         import { logPageView } from "js/GoogleAnalytics";
 
-        import { getPlatform } from "js/PlatformDetection";
-        import { AppelflapConnect } from "ts/AppelflapConnect";
-
         import HomePageJS from "js/HomePage";
         import CoursePageJS from "js/CoursePage";
         import LessonPageJS from "js/LessonPage";
@@ -109,23 +106,6 @@
             const unfinishedContentCoords = firstUnfinishedContent.getBoundingClientRect();
             window.scroll(unfinishedContentCoords);
         };
-
-        const inAppelflap = () => {
-            const { browser, inAppelflap, inPWAMode } = getPlatform();
-            return inAppelflap;
-        };
-
-        /** Tell Appelflap that Canoe is 'locked'
-         * and should not be rebooted */
-        const lockCanoe = async () => {
-            const appelflapConnect = new AppelflapConnect();
-            const lockResult = await appelflapConnect.lock();
-            if (lockResult !== "ok") {
-                // The lock didn't succeed, the app is probably still usable.
-                // We don't yet understand what this means for the user and the app.
-                // Should we show a small warning?
-            }
-        }
 
         export default {
             state: {
@@ -177,12 +157,6 @@
                         logPageView(window.location.hash);
                     }
                 });
-
-                if (inAppelflap()) {
-                    lockCanoe()
-                        .then(_ => { /* Do nothing */ })
-                        .catch(_ => { /* Do nothing */ });
-                }
 
                 if (!this.userShouldLogin() && this.areCompletionsReady()) {
                     // If user returns to site and is logged in.
