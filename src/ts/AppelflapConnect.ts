@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { THttpMethods } from "ts/Types/CanoeEnums";
 import {
     TPublication,
@@ -9,66 +10,66 @@ import {
 } from "ts/Types/CacheTypes";
 
 export class AppelflapConnect {
-    #localHostURI = "http://127.0.0.1";
+    readonly localHostURI = "http://127.0.0.1";
 
     #portNo = -1;
-    #metaApi = "meta";
-    #cacheApi = "api/ingeblikt";
-    #actionApi = "do";
+    readonly metaApi = "meta";
+    readonly cacheApi = "api/ingeblikt";
+    readonly actionApi = "api/do";
 
-    #lock = "insertion-lock";
-    #publications = "publications";
-    #subscriptions = "subscriptions";
-    #status = "status";
-    #reboot = "reboot";
+    readonly insLock = "insertion-lock";
+    readonly publications = "publications";
+    readonly subscriptions = "subscriptions";
+    readonly status = "status";
+    readonly reboot = "reboot";
 
     private _commands = {
         getMetaStatus: {
-            commandPath: `${this.#metaApi}/${this.#status}`,
+            commandPath: `${this.metaApi}/${this.status}`,
             method: "GET",
         },
         setLock: {
-            commandPath: `${this.#cacheApi}/${this.#lock}`,
+            commandPath: `${this.cacheApi}/${this.insLock}`,
             method: "PUT",
         },
         releaseLock: {
-            commandPath: `${this.#cacheApi}/${this.#lock}`,
+            commandPath: `${this.cacheApi}/${this.insLock}`,
             method: "DELETE",
         },
         getCacheStatus: {
-            commandPath: `${this.#cacheApi}/${this.#status}`,
+            commandPath: `${this.cacheApi}/${this.status}`,
             method: "GET",
         },
         doReboot: {
-            commandPath: `${this.#actionApi}/${this.#reboot}`,
+            commandPath: `${this.actionApi}/${this.reboot}`,
             method: "POST",
         },
         getPublications: {
-            commandPath: `${this.#cacheApi}/${this.#publications}`,
+            commandPath: `${this.cacheApi}/${this.publications}`,
             method: "GET",
         },
         savePublication: {
-            commandPath: `${this.#cacheApi}/${this.#publications}`,
+            commandPath: `${this.cacheApi}/${this.publications}`,
             method: "PUT",
         },
         deletePublication: {
-            commandPath: `${this.#cacheApi}/${this.#publications}`,
+            commandPath: `${this.cacheApi}/${this.publications}`,
             method: "DELETE",
         },
         getSubscriptions: {
-            commandPath: `${this.#cacheApi}/${this.#subscriptions}`,
+            commandPath: `${this.cacheApi}/${this.subscriptions}`,
             method: "GET",
         },
         subscribe: {
-            commandPath: `${this.#cacheApi}/${this.#subscriptions}`,
+            commandPath: `${this.cacheApi}/${this.subscriptions}`,
             method: "PUT",
         },
         unsubscribe: {
-            commandPath: `${this.#cacheApi}/${this.#subscriptions}`,
+            commandPath: `${this.cacheApi}/${this.subscriptions}`,
             method: "DELETE",
         },
         bulkSubscribe: {
-            commandPath: `${this.#cacheApi}/${this.#subscriptions}`,
+            commandPath: `${this.cacheApi}/${this.subscriptions}`,
             method: "POST",
         },
     } as {
@@ -76,7 +77,7 @@ export class AppelflapConnect {
     };
 
     /** Get the port number that Appelflap is using or return -1 */
-    public getPortNo(): number {
+    get portNo(): number {
         // Appelflap knows the port number (which is randomly picked at launch); and it needs to let the web context know what the port number is.
         // It could be learned via a call to a contentscript (WebExtension), but that won't work in a ServiceWorker. Hence, we stuff it in the language
         // tags, which are available inside a ServiceWorker context.
@@ -110,9 +111,7 @@ export class AppelflapConnect {
         commandPath: string,
         commandInit?: RequestInit
     ): Promise<Response> => {
-        const requestInfo = `${
-            this.#localHostURI
-        }:${this.getPortNo()}/${commandPath}`;
+        const requestInfo = `${this.localHostURI}:${this.portNo}/${commandPath}`;
 
         /** When we finally have authorization via Appelflap, we'll change this */
         const weHaveAuthorization = false;
@@ -140,7 +139,17 @@ export class AppelflapConnect {
         const response = await this.appelflapFetch(commandPath, commandInit);
 
         if (!response.ok) {
-            return "Nope, that's not OK";
+            switch (response.status) {
+                case 400:
+                case 401:
+                case 404:
+                case 409:
+                case 503:
+                    return Promise.reject(new Error(response.statusText));
+            }
+
+            // This is a response status that's not known
+            return Promise.reject(new Error("Nope, that's not OK"));
         }
 
         switch (returnType) {
@@ -230,27 +239,23 @@ export class AppelflapConnect {
     ): Record<string, string> | undefined => {
         let min = -1;
         let max = -1;
-        if (versionRange["Version-Min"] || versionRange["Version-Max"]) {
+        const hasMin = typeof versionRange.versionMin === "number";
+        const hasMax = typeof versionRange.versionMax === "number";
+        if (hasMin || hasMax) {
             if (
-                versionRange["Version-Min"] &&
-                versionRange["Version-Max"] &&
-                versionRange["Version-Min"] > versionRange["Version-Max"]
+                hasMin &&
+                hasMax &&
+                versionRange.versionMin! > versionRange.versionMax!
             ) {
                 throw new RangeError(
-                    "Version-Min must be less than or equal to Version-Max"
+                    "versionMin must be less than or equal to versionMax"
                 );
             }
-            if (
-                versionRange["Version-Min"] &&
-                versionRange["Version-Min"] > 0
-            ) {
-                min = versionRange["Version-Min"];
+            if (hasMin && versionRange.versionMin! > 0) {
+                min = versionRange.versionMin!;
             }
-            if (
-                versionRange["Version-Max"] &&
-                versionRange["Version-Max"] > 0
-            ) {
-                max = versionRange["Version-Max"];
+            if (hasMax && versionRange.versionMax! > 0) {
+                max = versionRange.versionMax!;
             }
         }
         if (min > -1 || max > -1) {

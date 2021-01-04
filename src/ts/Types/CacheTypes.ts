@@ -20,8 +20,8 @@ export type TPublications = {
 };
 
 export type TSubscriptionVersion = {
-    "Version-Min"?: number;
-    "Version-Max"?: number;
+    versionMin?: number;
+    versionMax?: number;
 };
 
 export type TSubscription = TPublicationTarget & TSubscriptionVersion;
