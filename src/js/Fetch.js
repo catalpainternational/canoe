@@ -1,6 +1,6 @@
 import { getAuthenticationToken, setIsAuthed } from "js/AuthenticationUtilities";
 import { APIMissingPageError } from "js/Errors";
-import { getPlatform } from "js/PlatformDetection";
+import { getBrowser } from "ts/PlatformDetection";
 
 
 const WEBP_BROWSERS = ["Chrome", "Firefox"];
@@ -17,7 +17,7 @@ export const fetch_and_denote_unauthenticatedness = (request_or_url, maybe_fetch
 
 export const getImageRequest = (url) => {
     const token = getAuthenticationToken();
-    const { browser } = getPlatform();
+    const browser = getBrowser();
     return new Request(url, {
         mode: "cors",
         headers: {
