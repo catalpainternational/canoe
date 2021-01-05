@@ -1,0 +1,121 @@
+{
+    "version": "0.0.1",
+    "pages": [
+        {
+            "loc_hash": "/site/canoe-home",
+            "storage_container": "/site/canoe-home",
+            "version": 3,
+            "api_url": "/api/v2/pages/4/",
+            "assets": [],
+            "language": "en"
+        },
+        {
+            "loc_hash": "/site/canoe-home/course",
+            "storage_container": "/site/canoe-home/course",
+            "version": 12,
+            "api_url": "/api/v2/pages/10/",
+            "assets": [],
+            "language": "en"
+        },
+        {
+            "loc_hash": "/site/canoe-home/course/lesson-1",
+            "storage_container": "/site/canoe-home/course/lesson-1",
+            "version": 15,
+            "api_url": "/api/v2/pages/12/",
+            "assets": [
+                {
+                    "type": "image",
+                    "renditions": {
+                        "width-800|format-webp": "images/Screenshot_2020-12-10_at_13.45.26.width-800.format-webp.webp",
+                        "width-600|format-jpeg": "images/Screenshot_2020-12-10_at_13.45.26.width-600.format-jpeg.jpg",
+                        "max-165x165": "images/Screenshot_2020-12-10_at_13.45.26.max-165x165.png"
+                    }
+                }
+            ],
+            "language": "en"
+        },
+        {
+            "loc_hash": "/site/canoe-home-tet",
+            "storage_container": "/site/canoe-home-tet",
+            "version": 4,
+            "api_url": "/api/v2/pages/5/",
+            "assets": [],
+            "language": "tet"
+        },
+        {
+            "loc_hash": "/site/canoe-home-tet/course-tet",
+            "storage_container": "/site/canoe-home-tet/course-tet",
+            "version": 18,
+            "api_url": "/api/v2/pages/11/",
+            "assets": [],
+            "language": "tet"
+        },
+        {
+            "loc_hash": "/site/canoe-home-tet/course-tet/lesson-1-tet",
+            "storage_container": "/site/canoe-home-tet/course-tet/lesson-1-tet",
+            "version": 17,
+            "api_url": "/api/v2/pages/13/",
+            "assets": [
+                {
+                    "type": "image",
+                    "renditions": {
+                        "width-800|format-webp": "images/Screenshot_2020-12-10_at_13.45.26.width-800.format-webp.webp",
+                        "width-600|format-jpeg": "images/Screenshot_2020-12-10_at_13.45.26.width-600.format-jpeg.jpg",
+                        "max-165x165": "images/Screenshot_2020-12-10_at_13.45.26.max-165x165.png"
+                    }
+                }
+            ],
+            "language": "tet"
+        },
+        {
+            "loc_hash": "/site/canoe-resources",
+            "storage_container": "/site/canoe-resources",
+            "version": 6,
+            "api_url": "/api/v2/pages/6/",
+            "assets": [],
+            "language": "en"
+        },
+        {
+            "loc_hash": "/site/canoe-resources/example-resource",
+            "storage_container": "/site/canoe-resources/example-resource",
+            "version": 9,
+            "api_url": "/api/v2/pages/8/",
+            "assets": [
+                {
+                    "type": "image",
+                    "renditions": {
+                        "width-800|format-webp": "images/Screenshot_2020-12-13_at_10.02.36.width-800.format-webp.webp",
+                        "width-600|format-jpeg": "images/Screenshot_2020-12-13_at_10.02.36.width-600.format-jpeg.jpg",
+                        "max-165x165": "images/Screenshot_2020-12-13_at_10.02.36.max-165x165.png"
+                    }
+                }
+            ],
+            "language": "en"
+        },
+        {
+            "loc_hash": "/site/canoe-resources-tet",
+            "storage_container": "/site/canoe-resources-tet",
+            "version": 7,
+            "api_url": "/api/v2/pages/7/",
+            "assets": [],
+            "language": "tet"
+        },
+        {
+            "loc_hash": "/site/canoe-resources-tet/example-resource-tet",
+            "storage_container": "/site/canoe-resources-tet/example-resource-tet",
+            "version": 10,
+            "api_url": "/api/v2/pages/9/",
+            "assets": [
+                {
+                    "type": "image",
+                    "renditions": {
+                        "width-800|format-webp": "images/Screenshot_2020-12-13_at_10.02.36.width-800.format-webp.webp",
+                        "width-600|format-jpeg": "images/Screenshot_2020-12-13_at_10.02.36.width-600.format-jpeg.jpg",
+                        "max-165x165": "images/Screenshot_2020-12-13_at_10.02.36.max-165x165.png"
+                    }
+                }
+            ],
+            "language": "tet"
+        }
+    ]
+}
