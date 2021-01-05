@@ -4,12 +4,21 @@ import { IManifest } from "../Interfaces/IManifest";
 import { IPage } from "../Interfaces/IPage";
 
 export class Manifest implements IManifest {
+    get isAvailableOffline(): boolean {
+        return true;
+    }
+
+    get isPublishable(): boolean {
+        return true;
+    }
+
     getHomePageHash(
         languageCode: string,
         loadingCallback: LoadingCallback
     ): string {
         throw new Error("Method not implemented.");
     }
+
     getPageData(
         locationHash: string,
         languageCode: string,
@@ -17,6 +26,7 @@ export class Manifest implements IManifest {
     ): Record<string, unknown> {
         throw new Error("Method not implemented.");
     }
+
     getPageDetail(locationHash: string, languageCode: string): IPage {
         throw new Error("Method not implemented.");
     }
