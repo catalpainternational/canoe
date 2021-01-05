@@ -8,7 +8,7 @@ export interface IManifestItemState {
 
     /** Is this manifest, page or asset item complete (in itself) and ready for distribution?
      * @remarks This is used to tell Appelflap that this individual item can be shared to other devices
-     * @returns true is this item itself is complete and the most recent that is known about amongst all the devices currently connected
+     * @returns true is this item itself is complete - all descendant pages and assets are in the cache
      */
     isPublishable: boolean;
 }
