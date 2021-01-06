@@ -1,23 +1,27 @@
 {
     "version": "0.0.1",
-    "pages": [
-        {
+    "pages": {
+        "4": {
             "loc_hash": "/site/canoe-home",
             "storage_container": "/site/canoe-home",
             "version": 3,
             "api_url": "/api/v2/pages/4/",
             "assets": [],
-            "language": "en"
+            "language": "en",
+            "children": [10],
+            "depth": 3
         },
-        {
+        "10": {
             "loc_hash": "/site/canoe-home/course",
             "storage_container": "/site/canoe-home/course",
             "version": 12,
             "api_url": "/api/v2/pages/10/",
             "assets": [],
-            "language": "en"
+            "language": "en",
+            "children": [12],
+            "depth": 4
         },
-        {
+        "12": {
             "loc_hash": "/site/canoe-home/course/lesson-1",
             "storage_container": "/site/canoe-home/course/lesson-1",
             "version": 15,
@@ -32,25 +36,31 @@
                     }
                 }
             ],
-            "language": "en"
+            "language": "en",
+            "children": [],
+            "depth": 5
         },
-        {
+        "5": {
             "loc_hash": "/site/canoe-home-tet",
             "storage_container": "/site/canoe-home-tet",
             "version": 4,
             "api_url": "/api/v2/pages/5/",
             "assets": [],
-            "language": "tet"
+            "language": "tet",
+            "children": [11],
+            "depth": 3
         },
-        {
+        "11": {
             "loc_hash": "/site/canoe-home-tet/course-tet",
             "storage_container": "/site/canoe-home-tet/course-tet",
             "version": 18,
             "api_url": "/api/v2/pages/11/",
             "assets": [],
-            "language": "tet"
+            "language": "tet",
+            "children": [13],
+            "depth": 4
         },
-        {
+        "13": {
             "loc_hash": "/site/canoe-home-tet/course-tet/lesson-1-tet",
             "storage_container": "/site/canoe-home-tet/course-tet/lesson-1-tet",
             "version": 17,
@@ -65,17 +75,21 @@
                     }
                 }
             ],
-            "language": "tet"
+            "language": "tet",
+            "children": [],
+            "depth": 5
         },
-        {
+        "6": {
             "loc_hash": "/site/canoe-resources",
             "storage_container": "/site/canoe-resources",
             "version": 6,
             "api_url": "/api/v2/pages/6/",
             "assets": [],
-            "language": "en"
+            "language": "en",
+            "children": [8],
+            "depth": 3
         },
-        {
+        "8": {
             "loc_hash": "/site/canoe-resources/example-resource",
             "storage_container": "/site/canoe-resources/example-resource",
             "version": 9,
@@ -90,17 +104,21 @@
                     }
                 }
             ],
-            "language": "en"
+            "language": "en",
+            "children": [],
+            "depth": 4
         },
-        {
+        "7": {
             "loc_hash": "/site/canoe-resources-tet",
             "storage_container": "/site/canoe-resources-tet",
             "version": 7,
             "api_url": "/api/v2/pages/7/",
             "assets": [],
-            "language": "tet"
+            "language": "tet",
+            "children": [9],
+            "depth": 3
         },
-        {
+        "9": {
             "loc_hash": "/site/canoe-resources-tet/example-resource-tet",
             "storage_container": "/site/canoe-resources-tet/example-resource-tet",
             "version": 10,
@@ -115,7 +133,9 @@
                     }
                 }
             ],
-            "language": "tet"
+            "language": "tet",
+            "children": [],
+            "depth": 4
         }
-    ]
+    }
 }

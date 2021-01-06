@@ -2,14 +2,87 @@
 import { LoadingCallback } from "../Callbacks";
 import { IManifest } from "../Interfaces/IManifest";
 import { IPage } from "../Interfaces/IPage";
+import { TPage } from "../Types/ManifestTypes";
+
+import { getManifestFromStore, storeManifest } from "ReduxImpl/Interface";
+import { fetchManifest } from "js/WagtailPagesAPI";
 
 export class Manifest implements IManifest {
+    version: string;
+    pages: Record<string, TPage>;
+
+    /** This is a basic integrity check.  It ensures that:
+     * - All child pages have matching page entries
+     */
+    get isValid(): boolean {
+        const allPageNames = Object.keys(this.pages).sort() as string[];
+        let childPageNames: Set<string> = new Set();
+        allPageNames.forEach((pageName) => {
+            childPageNames = new Set([
+                ...childPageNames,
+                ...this.pages[pageName].children.map((c) => c.toString()),
+            ]);
+        });
+        const matchedPages = new Set([...allPageNames, ...childPageNames]);
+
+        return matchedPages === childPageNames;
+    }
+
     get isAvailableOffline(): boolean {
-        return true;
+        if (this.version === "0.0.0") {
+            return false;
+        }
+
+        return this.isValid;
     }
 
     get isPublishable(): boolean {
+        if (this.version === "0.0.0") {
+            return false;
+        }
+
         return true;
+    }
+
+    constructor() {
+        this.version = "0.0.0";
+        this.pages = {
+            "0": {
+                loc_hash: "/site/manifest-loading",
+                storage_container: "/site/manifest-loading",
+                version: 3,
+                api_url: "/api/v2/pages/0/",
+                assets: [],
+                language: "en",
+                children: [],
+                depth: 0,
+            },
+        };
+
+        if (!this.isPublishable) {
+            this.getOrFetchManifest()
+                .then((mani: any) => {
+                    if (mani?.pages) {
+                        this.version = mani.version;
+                        this.pages = mani.pages;
+                    }
+                })
+                .catch((_) => {
+                    // Swallow the error, this will leave us with the default 'manifest'
+                });
+        }
+    }
+
+    async getOrFetchManifest(): Promise<any> {
+        const manifestInStore = getManifestFromStore();
+
+        if (Object.entries(manifestInStore).length > 0) {
+            return manifestInStore;
+        }
+
+        const manifest = await fetchManifest();
+        storeManifest(manifest);
+        return manifest;
     }
 
     getHomePageHash(

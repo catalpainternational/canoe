@@ -9,7 +9,12 @@ export class CanoeHost {
         return await appelflapConnect.lock();
     };
 
-    StartCanoe = (riotStart: () => void): void => {
+    /** Start Canoe, if there is a host then this will start Canoe `within` that host
+     * @param { function } startUp a void returning function to be executed
+     * after this StartCanoe method has done its thing.
+     * Use `() => {}` when calling this method if you do not want anything to be executed.
+     */
+    StartCanoe = (startUp: () => void): void => {
         if (inAppelflap()) {
             this.LockCanoe()
                 .then((lockResult) => {
@@ -19,13 +24,13 @@ export class CanoeHost {
                         // Should we show a small warning?
                     }
 
-                    riotStart();
+                    startUp();
                 })
                 .catch(() => {
                     /* Do nothing */
                 });
         } else {
-            riotStart();
+            startUp();
         }
     };
 }
