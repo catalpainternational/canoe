@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { LoadingCallback } from "../Callbacks";
-import { IManifest } from "../Interfaces/IManifest";
-import { IPage } from "../Interfaces/IPage";
-import { TPage } from "../Types/ManifestTypes";
+import { LoadingCallback } from "ts/Callbacks";
+import { IManifest } from "ts/Interfaces/IManifest";
+import { IPage } from "ts/Interfaces/IPage";
+import { TPage } from "ts/Types/ManifestTypes";
 
+// See ts/Typings for the type definitions for these imports
 import { getManifestFromStore, storeManifest } from "ReduxImpl/Interface";
 import { fetchManifest } from "js/WagtailPagesAPI";
 
