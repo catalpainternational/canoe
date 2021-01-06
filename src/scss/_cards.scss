@@ -9,15 +9,13 @@
     position: relative;
 
     .card-image {
-        background-image: url("~img/plant.svg");
-        background-size: contain; // see full image
-        // background-size: cover;  // full image area
-
+        background-size: cover;
         background-position: center;
-        background-color: $gray-7;
+        background-color: $gray-9;
         background-repeat: no-repeat;
+        border-bottom: 0.5px solid $gray-8;
         height: 100%;
-        border-radius: 8px 8px 0 0;
+        border-radius: 7px 7px 0 0;
         position: relative;
     }
 
@@ -60,6 +58,7 @@
     &.disabled .card-status,
     &.coming-soon .card-status {
         position: absolute;
+        border-radius: 20px;
         top: 30%;
         left: 40%;
         width: 40px;
@@ -77,6 +76,7 @@
 
     &.in-progress .card-status {
         @extend %status-play;
+        box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
     }
 
     &.disabled,
@@ -92,7 +92,7 @@
             height: 100%;
             top: 0;
             left: 0;
-            background-color: rgba($gray-6, 0.4);
+            background-color: rgba($gray-7, 0.6);
             border-radius: 8px;
         }
 

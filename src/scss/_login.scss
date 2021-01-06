@@ -10,14 +10,11 @@ Login .modal-background {
     background-color: $background-color;
 
     .login-header {
+        @include header-swoop;
         width: 100%;
         display: flex;
-        padding: 20px 0;
         flex-direction: column;
-        background: $app-gradient;
         align-items: center;
-        border-bottom-left-radius: 80% 10%;
-        border-bottom-right-radius: 80% 10%;
         margin-bottom: 35px;
 
         span {

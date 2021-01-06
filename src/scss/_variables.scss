@@ -41,7 +41,7 @@ $settings-background-tan: $tan;
 
 /* Layout */
 $bottom-menu-height: 70px;
-$top-menu-height: 50px;
+$top-menu-height: 60px;
 $border: 1px solid $gray-8;
 
 /* Breakpoints */
@@ -55,5 +55,6 @@ $tablet-plus: 680px;
 $app-accent-color: $blue-1;
 $app-button-radius: 25px;
 $app-typography: "CircularStd";
-$app-gradient: linear-gradient(134.77deg, $gray-9 0%, $gray-7 100%);
+$top-gradient: linear-gradient(135deg, $gray-9 0%, $gray-7 100%);
+$bottom-gradient: linear-gradient(225deg, $gray-7 0%, $gray-9 100%);
 $app-background-color: $gray-9;

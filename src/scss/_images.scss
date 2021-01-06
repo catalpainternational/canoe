@@ -18,7 +18,7 @@
 
 .cog {
     @extend %icons-shared;
-    background-image: url("~img/cog_white.svg");
+    background-image: url("~img/cog.svg");
     height: 40px;
     width: 40px;
 }
@@ -35,7 +35,7 @@
     @extend %icons-shared;
     @extend %mask-icons-shared;
     background-position-x: center;
-    height: 20px;
+    height: 22px;
     width: 20px;
 }
 
@@ -119,7 +119,6 @@
 
     &.gray {
         background: $gray-4;
-        min-width: 1em;
         height: 1em;
     }
 }
@@ -159,11 +158,6 @@
     &:hover {
         cursor: pointer;
     }
-}
-
-.arrow-white {
-    @extend %arrow-shared;
-    background-image: url("~img/arrow_white.svg");
 }
 
 .arrow-gray {
@@ -261,7 +255,9 @@
 // Masking icons so we can dynamically set their color
 %mask-icons-shared {
     -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
     -webkit-mask-size: contain;
+    mask-size: contain;
 }
 
 .arrow {
@@ -319,8 +315,20 @@
 }
 
 // Icons for card status
-%status-play {    
-    background-image: url("~img/status_play.svg");
+%status-play {
+    @extend %mask-icons-shared;
+    background: $blue-1;
+    border: .1px solid $gray-5;
+    display: flex;
+
+    span {
+        -webkit-mask-image: url("~img/chevron_right.svg");
+        background-color: $white;
+        height: 15px;
+        width: 15px;
+        -webkit-mask-size: cover;
+        margin: auto;
+    }
 }
 
 %status-complete {

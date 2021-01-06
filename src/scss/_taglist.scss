@@ -3,7 +3,7 @@ TagList {
         border-radius: 1.875em;
         background-color: $gray-7;
         padding: 0.5em 0.9em;
-        margin: 0 0.7em 0.7em 0;
+        margin: 0 0.7em 1.2em 0;
         display: inline-block;
         box-shadow: 0 0.15em 0.15em 0 $gray-6;
 
@@ -42,8 +42,7 @@ TagList {
     .tag-container {
         overflow: auto;
         white-space: nowrap;
-        margin: 0 -30px 0.5em -30px;
-        padding-top: 10px;
+        margin: 0 -30px;
     }
 
     .tag-container::after {

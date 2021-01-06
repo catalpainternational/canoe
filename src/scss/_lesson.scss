@@ -37,57 +37,71 @@
     }
 }
 
-LessonPage .replace-this-with-lessonframe {
-    margin-top: -#{$top-menu-height};
-    padding-top: $top-menu-height;
-}
-
-LessonPage .unit h5 {
-    width: 100%;
-    margin: 5px 0;
-    font-weight: 400;
-}
-
-LessonPage .content-wrapper {
-    p {
-        margin-top: 5px;
-        margin-bottom: 5px;
-        font-size: 1em;
+LessonPage {
+    .objective .card-image {
+        background-image: url("~img/stock_objective.svg");
     }
 
-    h2 {
-        border-bottom: none;
-    }
-}
-
-LessonPage .content-wrapper .duration {
-    align-items: center;
-    display: flex;
-    border-bottom: 1px solid $gray-6;
-    border-top: 1px solid $gray-6;
-
-    span {
-        margin: 5px;
+    .content .card-image {
+        background-image: url("~img/stock_content.svg");
     }
 
-    p {
-        font-size: 12px;
-        margin: 3px 10px 3px;
-    }
-}
-
-LessonPage .description {
-    p {
-        font-size: 15px;
-        margin-bottom: 5px;
-        margin-top: 10px;
+    .test .card-image {
+        background-image: url("~img/stock_test.svg");
     }
 
-    a {
-        font-size: 12px;
+    .replace-this-with-lessonframe {
+        margin-top: -#{$top-menu-height};
+        padding-top: $top-menu-height;
+    }
 
-        &:hover {
-            cursor: pointer;
+    .unit h5 {
+        width: 100%;
+        margin: 5px 0;
+        font-weight: 400;
+    }
+
+    .content-wrapper {
+        p {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+
+        h2 {
+            border-bottom: none;
+        }
+
+        .duration {
+            align-items: center;
+            display: flex;
+            border-bottom: 1px solid $gray-6;
+            border-top: 1px solid $gray-6;
+
+            span {
+                margin: 5px;
+            }
+
+            p {
+                font-size: 12px;
+                margin: 3px 10px 3px;
+            }
+        }
+    }
+
+    .description {
+        p {
+            font-size: 15px;
+            margin-bottom: 5px;
+            margin-top: 10px;
+        }
+
+        a {
+            font-size: 12px;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 }
