@@ -3,6 +3,7 @@
     border-bottom-left-radius: 80% 10%;
     border-bottom-right-radius: 80% 10%;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 @mixin bottom-swoop {
