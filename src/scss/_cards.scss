@@ -57,13 +57,13 @@
     &.in-progress .card-status,
     &.disabled .card-status,
     &.coming-soon .card-status {
+        @extend %icons-shared;
         position: absolute;
         border-radius: 20px;
         top: 30%;
         left: 40%;
         width: 40px;
         height: 40px;
-        @extend %icons-shared;
     }
 
     &.complete {

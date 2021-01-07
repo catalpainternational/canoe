@@ -37,10 +37,6 @@
             },
 
             onMounted(props, state) {
-                this.renderExam();
-            },
-
-            renderExam() {
                 const { exam } = this.props.wagtailPage;
                 if (!exam) {
                     return;
