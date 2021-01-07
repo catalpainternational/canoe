@@ -23,6 +23,22 @@
                     onTagClick="{onTagClick}"
                     selectedTags="{state.selectedTags}"
                 ></TagList>
+                <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
+                    <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
+                    <Card
+                        status="{courseStatus(state.currentCourse)}"
+                        title="{state.currentCourse.title}"
+                        link="{state.currentCourse.id}"
+                        progressValue="{state.currentCourse.numberOfFinishedLessons}"
+                        progressMax="{state.currentCourse.numberOfLessons}"
+                    ></Card>
+                </template>
+                <h5
+                    if="{state.currentCourse && !state.currentCourse.isFinished()}"
+                    class="section-title"
+                >
+                    { TRANSLATIONS.allCourses() }
+                </h5>
                 <div class="card-container">
                     <Card
                         each="{course in state.sortedListOfCourses}"
@@ -70,6 +86,7 @@
             TRANSLATIONS: {
                 noCourses: () => gettext("There are no courses yet. Check back soon!"),
                 allCourses: () => gettext("All courses"),
+                continueLearning: () => gettext("Continue Learning"),
                 coursesIntro: () =>
                     gettext(
                         "Explore a range of courses to suit your needs, expertise, and interests."
