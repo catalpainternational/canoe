@@ -4,7 +4,7 @@
 module.exports = {
     GA_TAG: false,
     API_BASE_URL: "http://localhost:8000",
-    NEW_MANIFEST_API_BASE_URL: "https://canoe-engineering.temp.build/",
+    NEW_MANIFEST_API_BASE_URL: "https://localhost:8000",
     DONT_SHOW_COMPLETIONS_AFTER: "2020-2-15",
     APPLICATION_SERVER_KEY: "",
     WEBPACK_CONFIG: {

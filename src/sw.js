@@ -13,7 +13,8 @@ import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-import { BACKEND_BASE_URL } from "./js/urls";
+import { BACKEND_BASE_URL, MANIFEST_BACKEND_BASE_URL } from "js/urls";
+import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME } from "ts/Constants";
 
 registerRoute(
     new RegExp(`${BACKEND_BASE_URL}/media/media/.+`),
@@ -40,7 +41,14 @@ registerRoute(
 registerRoute(
     new RegExp(`${BACKEND_BASE_URL}/manifest`),
     new StaleWhileRevalidate({
-        cacheName: "manifest-cache",
+        cacheName: MANIFEST_CACHE_NAME,
+    })
+);
+
+registerRoute(
+    new RegExp(`${MANIFEST_BACKEND_BASE_URL}/manifest/0.0.1`),
+    new StaleWhileRevalidate({
+        cacheName: MANIFESTV2_CACHE_NAME,
     })
 );
 

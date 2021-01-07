@@ -5,8 +5,11 @@ import { IPage } from "ts/Interfaces/IPage";
 import { TPage } from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
-import { getManifestFromStore, storeManifest } from "ReduxImpl/Interface";
+import { storeManifest } from "ReduxImpl/Interface";
 import { fetchManifest } from "js/WagtailPagesAPI";
+
+import { store, LANGUAGE_STORAGE_KEY } from "ReduxImpl/Store";
+import { MANIFEST_URL } from "js/urls";
 
 export class Manifest implements IManifest {
     version: string;
@@ -74,8 +77,20 @@ export class Manifest implements IManifest {
         }
     }
 
+    getManifestFromStore(): any {
+        return store.getState().manifestv2;
+    }
+
+    async fetchManifest(): Promise<any> {
+        const resp = await fetch(MANIFEST_URL);
+        if (resp.ok) {
+            return Promise.resolve(resp.json());
+        }
+        return await Promise.reject("Could not retrieve manifest");
+    }
+
     async getOrFetchManifest(): Promise<any> {
-        const manifestInStore = getManifestFromStore();
+        const manifestInStore = this.getManifestFromStore();
 
         if (Object.entries(manifestInStore).length > 0) {
             return manifestInStore;

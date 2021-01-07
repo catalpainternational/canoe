@@ -4,7 +4,7 @@ import { subscribeToStore, getServiceWorkerState } from "ReduxImpl/Interface";
 import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 
 import { MANIFEST_URL } from "js/urls";
-import { MANIFEST_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
+import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
 let currentServiceWorkerState = getServiceWorkerState();
 
@@ -53,19 +53,30 @@ subscribeToStore(() => {
  * @returns true when a manifest can be found, false otherwise.
  */
 const record_bootstate = async () => {
-    let manifestIsExtant = false
+    let manifestIsExtant = false;
+    let manifestV2IsExtant = false;
     const cacheNames = await caches.keys();
-    if (cacheNames.indexOf(MANIFEST_CACHE_NAME) === -1) {
+    if (cacheNames.indexOf(MANIFEST_CACHE_NAME) === -1 || cacheNames.indexOf(MANIFESTV2_CACHE_NAME) === -1) {
         return manifestIsExtant;
     }
+
     try {
-        manifestIsExtant = (await caches.open(MANIFEST_CACHE_NAME)).match(MANIFEST_URL) !== undefined;
+        manifestIsExtant = (await caches.open(MANIFEST_CACHE_NAME)).match(WAGTAIL_MANIFEST_URL) !== undefined;
     } catch {
         // Do nothing - manifestIsExtant is still false
     }
-    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !manifestIsExtant);
 
-    return manifestIsExtant;
+    try {
+        manifestV2IsExtant = (await caches.open(MANIFESTV2_CACHE_NAME)).match(MANIFEST_URL) !== undefined;
+    } catch {
+        // Do nothing - manifestV2IsExtant is still false
+    }
+
+    // Both must be empty to indicate 'empty'
+    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !(manifestIsExtant || manifestV2IsExtant));
+
+    // Both must be true to indicate we've got everything
+    return manifestIsExtant && manifestV2IsExtant;
 };
 
 initializeServiceWorker();
