@@ -2,6 +2,12 @@ Resources {
     .card-image {
         background-image: url("~img/stock_resource.svg");
     }
+
+    .resources-swoop {
+        @include header-swoop;
+        @include center-with-flex;
+        height: 100px;
+    }
 }
 
 searchbar {

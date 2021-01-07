@@ -1,39 +1,25 @@
 <LessonPage>
-    <div class="replace-this-with-lessonframe">
-        <TopMenu>
-            <a class="arrow-gray top-icon left has-circle" onclick="{backToCoursePage}"></a>
-        </TopMenu>
-        <div class="content-wrapper">
-            <div class="lesson-header">
-                <div class="section-title">
-                    <div class="unit">
-                        <p class="truncate-if-long">{ lessonPageTitleMessage() }</p>
-                    </div>
-                </div>
-                <h2 id="lessonPageTitle">{props.wagtailPage.title}</h2>
-            </div>
-
-            <div class="duration">
-                <span class="clock"></span>
-                <p>{ durationOfLessonMessage() }</p>
-            </div>
-            <div class="description">
-                <p>{props.wagtailPage.shortDescription}</p>
-                <p if="{props.wagtailPage.longDescription && state.showLongDescription}">
-                    {props.wagtailPage.longDescription}
-                </p>
-                <a
-                    if="{props.wagtailPage.longDescription && state.showLongDescription}"
-                    onclick="{toggleLessonDescription}"
-                    >{ TRANSLATIONS.less() }</a
-                >
-                <a
-                    if="{props.wagtailPage.longDescription && !state.showLongDescription}"
-                    onclick="{toggleLessonDescription}"
-                    >{ TRANSLATIONS.more() }</a
-                >
-            </div>
-
+    <TopMenu>
+        <a class="arrow-gray top-icon left has-circle" onclick="{backToCoursePage}"></a>
+        <h4>{ props.wagtailPage.course.title }</h4>
+    </TopMenu>
+    <div class="content-wrapper">
+        <h3 id="lessonPageTitle">{props.wagtailPage.title}</h3>
+        <p>{props.wagtailPage.shortDescription}</p>
+        <p if="{props.wagtailPage.longDescription && state.showLongDescription}">
+            {props.wagtailPage.longDescription}
+        </p>
+        <a
+            if="{props.wagtailPage.longDescription && state.showLongDescription}"
+            onclick="{toggleLessonDescription}"
+            >{ TRANSLATIONS.less() }</a
+        >
+        <a
+            if="{props.wagtailPage.longDescription && !state.showLongDescription}"
+            onclick="{toggleLessonDescription}"
+            >{ TRANSLATIONS.more() }</a
+        >
+        <div class="activity-swoop">
             <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
             <div class="card-container">
                 <Card
@@ -62,6 +48,7 @@
             </div>
         </div>
     </div>
+
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
@@ -124,22 +111,14 @@
                 }
             },
 
-            lessonPageTitleMessage() {
-                // display the title of the lesson
-                return gettext("Lesson - %1", this.props.wagtailPage.course.title);
-            },
-
-            durationOfLessonMessage() {
-                // the total duration of the lesson in minutes
-                return gettext("%1 mins", this.props.wagtailPage.getDuration());
-            },
-
             moduleStatus(module) {
-                if (isComplete(
+                if (
+                    isComplete(
                         this.props.wagtailPage.course.slug,
                         this.props.wagtailPage.slug,
                         module
-                )) {
+                    )
+                ) {
                     return "complete";
                 } else {
                     return "not-started";

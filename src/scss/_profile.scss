@@ -5,8 +5,8 @@ Profile {
 
     .profile-swoop {
         @include header-swoop;
+        @include center-with-flex;
         height: 100px;
-        text-align: center;
     }
 }
 

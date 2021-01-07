@@ -1,6 +1,7 @@
 %buttons-shared {
     border-radius: $app-button-radius;
     min-width: 220px;
+    width: 100%;
 
     &:focus {
         outline: 0;
