@@ -1,30 +1,17 @@
-@mixin screen-banner-styles {
-    height: 180px;
-    padding: 0 1em;
+@mixin header-swoop {
+    background: $top-gradient;
+    border-bottom-left-radius: 80% 10%;
+    border-bottom-right-radius: 80% 10%;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
-    .header-box {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        max-width: $tablet;
-        margin: auto;
-    }
-
-    &:after {
-        content: '';
-        width: 100%;
-        height: 20px;
-        border-radius: 0 0 50% 50%;
-        position: absolute;
-        top: 245px;
-        left: 0;
-    
-        @media only screen and (min-width: $tablet) {
-            display: none;
-        };
-    }
-
-    @media only screen and (min-width: $tablet) {
-        height: 20vh;
-    }
+@mixin bottom-swoop {
+    background: $bottom-gradient;
+    border-top-left-radius: 400% 20%;
+    border-top-right-radius: 400% 20%;
+    padding: 20px 20px 0 20px;
+    margin: 0 -20px;
+    width: 100%;
+    min-height: inherit;
 }

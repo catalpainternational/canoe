@@ -31,13 +31,14 @@
 @import "scss/_logos";
 
 /* General */
-body {
+* {
     margin: 0;
+    padding: 0;
 }
 
 div.content-wrapper {
-    min-height: calc(100vh - #{$bottom-menu-height});
-    padding-bottom: calc(#{$bottom-menu-height} + 25px);
+    min-height: calc(100vh - #{$bottom-menu-height} - #{$top-menu-height});
+    padding-bottom: calc(#{$bottom-menu-height});
     padding-left: 20px;
     padding-right: 20px;
     background-color: $app-background-color;
@@ -45,11 +46,7 @@ div.content-wrapper {
     margin: auto;
 }
 
-.profile,
-.settings {
-    background-color: $tan;
-}
-
+//TODO: delete these
 .background-blue-1 {
     background-color: #04788e;
 }

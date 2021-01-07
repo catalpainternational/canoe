@@ -4,10 +4,12 @@ AllCoursesPage {
     }
 
     .header {
-        background: $app-gradient;
-        height: 160px;
-        border-bottom-left-radius: 80% 10%;
-        border-bottom-right-radius: 80% 10%;
-        padding: 20px;
+        @include header-swoop;
+        height: 200px;
+        margin-bottom: 20px;
+    }
+
+    .card-image {
+        background-image: url("~img/stock_course.svg");
     }
 }

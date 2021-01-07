@@ -10,14 +10,11 @@ Login .modal-background {
     background-color: $background-color;
 
     .login-header {
+        @include header-swoop;
         width: 100%;
         display: flex;
-        padding: 20px 0;
         flex-direction: column;
-        background: $app-gradient;
         align-items: center;
-        border-bottom-left-radius: 80% 10%;
-        border-bottom-right-radius: 80% 10%;
         margin-bottom: 35px;
 
         span {
@@ -126,9 +123,18 @@ Login .modal-background {
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            z-index: 1;
 
             &:hover {
                 cursor: pointer;
+            }
+            
+            p {
+                margin: 0;
+                letter-spacing: 0.4px;
+                font-size: 0.5em;
+                text-transform: uppercase;
             }
         }
     }

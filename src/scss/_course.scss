@@ -1,60 +1,9 @@
-.course {
-    margin-bottom: 40px;
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-}
-
-.course-header {
-    margin-bottom: 10px;
-    display: flex;
-
-    & > span {
-        margin-right: 15px;
-    }
-
-    & > div {
-        flex-direction: column;
-        display: flex;
-        flex: 1;
-
-        h3 {
-            margin: 0;
-            font-size: 30px;
-            line-height: 30px;
-        }
-
-        & > div {
-            display: flex;
-
-            p {
-                margin: 5px 0;
-                flex: 1;
-                font-size: 14px;
-
-                &.bottom-border {
-                    border-bottom: 1px solid;
-                    border-color: $gray-6;
-                    padding-bottom: 5px;
-                }
-            }
-
-            a {
-                align-items: center;
-                display: flex;
-            }
-        }
-    }
-
-    a {
-        text-transform: uppercase;
-        letter-spacing: 0.2px;
-        color: $gray-1;
-
-        span {
-            margin-left: 5px;
-            margin-bottom: 3px;
-        }
-    }
+CoursePage {
+    .lesson-swoop {
+		@include bottom-swoop;
+	}
+	
+	.card-image {
+		background-image: url("~img/stock_lesson.svg");
+	}
 }

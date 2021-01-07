@@ -1,7 +1,7 @@
 <Card>
     <a class="card {props.status}" href="#{props.link}">
         <div class="card-image">
-            <span class="card-status"></span>
+            <span class="card-status"><span></span></span>
         </div>
         <div class="card-title">
             <h5>{props.title}</h5>
@@ -10,11 +10,7 @@
                 value="{props.progressValue}"
                 max="{props.progressMax}"
             ></progress>
-            <progress
-                if="{props.status === 'complete'}"
-                value="1"
-                max="1"
-            ></progress>
+            <progress if="{props.status === 'complete'}" value="1" max="1"></progress>
         </div>
     </a>
 </Card>

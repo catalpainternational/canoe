@@ -27,7 +27,6 @@
 }
 
 .profile-header {
-    @include screen-banner-styles;
     background-color: $profile-banner-green;
     padding: 0 3em;
 
@@ -40,27 +39,33 @@
     }
 }
 
-Profile .background-gray-2 {
-    display: inline-block;
-}
-
-Profile .left-block {
-    display: inline-block;
-    max-width: 200px;
-    overflow: overlay;
-    font-weight: 400;
-
-    h6 {
-        margin-top: 10px;
-        margin-bottom: 10px;
+Profile {
+    .card-image {
+        background-image: url("~img/stock_course.svg");
     }
-}
 
-Profile div.content-wrapper {
-    @media only screen and (max-width: $tablet) {
-        margin-left: 0;
-        margin-right: 0;
-        border-radius: 0;
+    .background-gray-2 {
+        display: inline-block;
+    }
+
+    .left-block {
+        display: inline-block;
+        max-width: 200px;
+        overflow: overlay;
+        font-weight: 400;
+
+        h6 {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    }
+
+    div.content-wrapper {
+        @media only screen and (max-width: $tablet) {
+            margin-left: 0;
+            margin-right: 0;
+            border-radius: 0;
+        }
     }
 }
 
