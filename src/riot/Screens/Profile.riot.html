@@ -9,10 +9,6 @@
                 <div class="left-block">
                     <h3>{ TRANSLATIONS.overall() }</h3>
                     <h6>{ percentLessonsCompleteMessage() }</h6>
-                    <ContinueLearningButton
-                        if="{state.currentCourse && !state.currentCourse.isFinished()}"
-                        currentCourse="{state.currentCourse}"
-                    ></ContinueLearningButton>
                 </div>
                 <span class="report-card"></span>
             </div>
@@ -54,7 +50,6 @@
         </div>
     </div>
     <script>
-        import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
@@ -71,7 +66,6 @@
             },
 
             components: {
-                continuelearningbutton: ContinueLearningButton,
                 card: Card,
                 topmenu: TopMenu
             },

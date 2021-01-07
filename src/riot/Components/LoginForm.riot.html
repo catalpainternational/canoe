@@ -23,6 +23,7 @@
             />
             <a id="icon-box" onclick="{showPassword}">
                 <span class="eye crossout"></span>
+                <p>{ state.isShowingPassword ? TRANSLATIONS.hide() : TRANSLATIONS.show() }</p>
             </a>
         </div>
         <div if="{state.errorExplanation}" class="error-message">
@@ -56,6 +57,8 @@
                 invalid: () => gettext("Your username or password is incorrect"),
                 login: () => gettext("Login"),
                 checking: () => gettext("Checking"),
+                show: () => gettext("show"),
+                hide: () => gettext("hide"),
             },
 
             onMounted() {

@@ -123,9 +123,18 @@ Login .modal-background {
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            z-index: 1;
 
             &:hover {
                 cursor: pointer;
+            }
+            
+            p {
+                margin: 0;
+                letter-spacing: 0.4px;
+                font-size: 0.5em;
+                text-transform: uppercase;
             }
         }
     }
