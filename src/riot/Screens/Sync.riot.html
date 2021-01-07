@@ -51,6 +51,7 @@
         import relativeTime from "dayjs/plugin/relativeTime";
 
         import { AppelflapConnect } from "ts/AppelflapConnect";
+        import { Manifest } from "ts/Implementations/Manifest";
 
         dayjs.extend(relativeTime);
 
@@ -84,6 +85,8 @@
                 appelflapConnect.getMetaStatus().then((response) => {
                     this.update({appelflapMeta: JSON.stringify(response)});
                 });
+                // try to get the manifest
+                const manifest = new Manifest();
             }
         };
     </script>
