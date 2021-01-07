@@ -333,6 +333,7 @@
     background: $blue-1;
     border: .1px solid $gray-5;
     display: flex;
+    box-sizing: border-box;
 
     span {
         -webkit-mask-image: url("~img/chevron_right.svg");
