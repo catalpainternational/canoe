@@ -136,18 +136,20 @@
 
 %stat-icon-shared {
     @extend %icons-shared;
+    @extend %mask-icons-shared;
     height: 25px;
     width: 25px;
+    background: $blue-1;
 }
 
 .checkmark-circle-blue {
     @extend %stat-icon-shared;
-    background-image: url("~img/checkmark_circle_blue.svg");
+    -webkit-mask-image:: url("~img/checkmark_circle_blue.svg");
 }
 
 .road-sign {
     @extend %stat-icon-shared;
-    background-image: url("~img/road_sign.svg");
+    -webkit-mask-image:: url("~img/road_sign.svg");
 }
 
 .plant {
