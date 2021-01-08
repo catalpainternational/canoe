@@ -3,10 +3,8 @@ Profile {
         background-image: url("~img/stock_course.svg");
     }
 
-    .profile-swoop {
-        @include header-swoop;
+    .with-swoop {
         @include center-with-flex;
-        height: 100px;
     }
 }
 

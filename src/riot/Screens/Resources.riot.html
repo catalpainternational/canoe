@@ -1,7 +1,7 @@
 <Resources>
-    <div class="resources-swoop">
+    <TopMenu extrastyleclasses="with-swoop">
         <h4>{ TRANSLATIONS.resources() }</h4>
-    </div>
+    </TopMenu>
     <div class="content-wrapper" if="{state.hash == null}">
         <SearchBar
             if="{state.articles.length > 0}"
@@ -34,6 +34,7 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
         import { getResources } from "js/WagtailPagesAPI";
@@ -59,6 +60,7 @@
                 card: Card,
                 searchbar: SearchBar,
                 loadingdots: LoadingDots,
+                topmenu: TopMenu
             },
 
             TRANSLATIONS: {

@@ -3,12 +3,18 @@ header {
 
     .top-menu-container {
         position: relative;
-        height: $top-menu-height;
         max-width: $tablet;
         background-color: inherit;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    }
+
+    .with-swoop {
+        @include header-swoop;
+        height: 100px;
+    }
+
+    .without-swoop {
+        @include center-with-flex;
+        height: $top-menu-height;
     }
 
     h4 {
