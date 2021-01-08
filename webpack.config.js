@@ -153,7 +153,6 @@ module.exports = env => {
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
                 ga_tag: environmentConfiguration.GA_TAG,
                 theme_color: projectConfiguration.THEME_COLOR,
-                background_color: projectConfiguration.BACKGROUND_COLOR,
             }),
             new HtmlWebpackInlineSVGPlugin({ runPreEmit: true }),
             new WebpackPwaManifest({
@@ -162,8 +161,6 @@ module.exports = env => {
                 name: projectConfiguration.SITE_NAME,
                 short_name: projectConfiguration.SITE_SHORT_NAME,
                 description: projectConfiguration.SITE_DESCRIPTION,
-                background_color: projectConfiguration.BACKGROUND_COLOR,
-                theme_color: projectConfiguration.BACKGROUND_COLOR,
                 start_url: "/",
                 icons: [
                     {

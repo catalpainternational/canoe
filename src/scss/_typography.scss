@@ -3,7 +3,7 @@ h2 {
     font-size: 1.8em;
     color: $gray-1;
     font-weight: 600;
-    margin: 1.2em 0;
+    margin: 0.8em 0;
 }
 
 h3 {
@@ -11,7 +11,7 @@ h3 {
     font-size: 1.5em;
     color: $gray-1;
     font-weight: 500;
-    margin: 0.9em 0;
+    margin: 0.7em 0;
 }
 
 h4 {
@@ -54,12 +54,6 @@ p {
     text-transform: uppercase;
     letter-spacing: -0.1px;
     font-size: 10px;
-}
-
-.truncate-if-long {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 .notifications-toggle p {

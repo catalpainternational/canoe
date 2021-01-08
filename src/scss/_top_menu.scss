@@ -6,11 +6,12 @@ header {
         height: $top-menu-height;
         max-width: $tablet;
         background-color: inherit;
-        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     h4 {
-        margin: 0 auto;
         text-align: center;
     }
 
