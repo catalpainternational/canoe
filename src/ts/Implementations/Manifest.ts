@@ -99,7 +99,7 @@ export class Manifest implements IManifest {
     }
 
     async getOrFetchManifest(): Promise<any> {
-        const manifestInStore = this.getManifestFromStore();
+        const manifestInStore = await this.getManifestFromStore();
 
         if (manifestInStore && Object.entries(manifestInStore).length > 0) {
             return manifestInStore;
