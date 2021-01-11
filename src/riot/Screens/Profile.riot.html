@@ -1,6 +1,9 @@
 <Profile>
     <TopMenu extrastyleclasses="with-swoop">
         <h4>{ TRANSLATIONS.yourProfile() }</h4>
+        <a class="top-icon right" href="#settings">
+            <span class="settings-icon"> </span>
+        </a>
     </TopMenu>
 
     <div class="content-wrapper">
@@ -36,7 +39,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
@@ -58,7 +61,7 @@
             components: {
                 card: Card,
                 loadingdots: LoadingDots,
-                topmenu: TopMenu
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {

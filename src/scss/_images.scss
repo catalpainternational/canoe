@@ -93,7 +93,7 @@
 .settings-icon {
     @extend %bottom-nav-shared;
     -webkit-mask-image: url("../img/cog.svg");
-    background-color: $gray-4;
+    background-color: $blue-1;
 
     &.active,
     &.title {
