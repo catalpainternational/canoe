@@ -3,7 +3,7 @@ import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
 
 import { getExamHighScore as getHighScore, hasUserTriedExam as hasTriedExam } from "Actions/exam";
 
-import ExamGrader from "js/ExamGrader";
+import ExamGrader from "js/Exams/ExamGrader";
 import LessonPage from "js/LessonPage";
 
 class CoursePage {
