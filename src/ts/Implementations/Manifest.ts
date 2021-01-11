@@ -83,7 +83,14 @@ export class Manifest implements IManifest {
     async fetchManifest(): Promise<any> {
         let responseFailure = "";
         try {
-            const resp = await fetch(MANIFEST_URL);
+            const corsNonAuthRequest = new Request(MANIFEST_URL, {
+                mode: "cors",
+                headers: {
+                    "Content-Type": "text/json",
+                },
+            });
+            console.info(JSON.stringify(corsNonAuthRequest));
+            const resp = await fetch(corsNonAuthRequest);
             if (!resp.ok) {
                 responseFailure = "Http error getting manifest";
             } else {
