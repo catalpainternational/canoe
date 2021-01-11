@@ -81,11 +81,21 @@ export class Manifest implements IManifest {
     }
 
     async fetchManifest(): Promise<any> {
-        const resp = await fetch(MANIFEST_URL);
-        if (resp.ok) {
-            return Promise.resolve(resp.json());
+        let responseFailure = "";
+        try {
+            const resp = await fetch(MANIFEST_URL);
+            if (!resp.ok) {
+                responseFailure = "Http error getting manifest";
+            } else {
+                return resp.json();
+            }
+        } catch {
+            responseFailure = "Network error getting manifest";
         }
-        return await Promise.reject("Could not retrieve manifest");
+
+        return Promise.reject(
+            `Could not retrieve manifest. ${responseFailure}`
+        );
     }
 
     async getOrFetchManifest(): Promise<any> {
