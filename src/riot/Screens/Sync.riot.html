@@ -68,15 +68,15 @@
                 start: () => gettext("Start lesson"),
             },
 
-            async refreshSyncs() {
-                this.update({
-                    notifications: await getSyncs(),
-                });
-            },
+            // async refreshSyncs() {
+            //     this.update({
+            //         notifications: await getSyncs(),
+            //     });
+            // },
 
             onMounted() {
                 this.appelflapStatus();
-                this.refreshSyncs();
+                // this.refreshSyncs();
             },
 
             async appelflapStatus() {
