@@ -1,7 +1,7 @@
 import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
-import CoursePage from "./CoursePage";
+import CoursePage from "js/CoursePage";
 
-export default class HomePage {
+class HomePage {
     constructor(aWagtailPage) {
         this.home = aWagtailPage;
     }
@@ -20,3 +20,5 @@ export default class HomePage {
         return courses;
     }
 }
+
+export default HomePage;

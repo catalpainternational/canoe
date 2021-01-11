@@ -1,9 +1,9 @@
 import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
 import { isComplete } from "Actions/completion";
 
-import CoursePage from "./CoursePage";
+import CoursePage from "js/CoursePage";
 
-export default class LessonPage {
+class LessonPage {
     constructor(aWagtailPage) {
         this.lesson = aWagtailPage;
     }
@@ -65,3 +65,5 @@ export default class LessonPage {
         return new CoursePage(courseJSON);
     }
 }
+
+export default LessonPage;

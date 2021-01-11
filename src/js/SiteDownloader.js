@@ -57,7 +57,7 @@ const addCachedPagesToRedux = async () => {
     }
 };
 
-export default class SiteDownloader {
+class SiteDownloader {
     async requestTheSitesPagesAndImages() {
         const manifest = await getOrFetchManifest();
 
@@ -81,6 +81,7 @@ export default class SiteDownloader {
         // await cacheAllUrls(PAGES_CACHE, pagesToFetch, getPageRequest);
         // await cacheAllUrls(IMAGES_CACHE, imagesToFetch, getImageRequest);
 
+        console.log(pagesToFetch);
         for (const pagePath of pagesToFetch) {
             await fetchPage(pagePath);
         }
@@ -94,3 +95,5 @@ export default class SiteDownloader {
         }
     }
 }
+
+export default SiteDownloader;

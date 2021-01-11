@@ -4,9 +4,9 @@ import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
 import { getExamHighScore as getHighScore, hasUserTriedExam as hasTriedExam } from "Actions/exam";
 
 import ExamGrader from "js/ExamGrader";
-import LessonPage from "./LessonPage";
+import LessonPage from "js/LessonPage";
 
-export default class CoursePage {
+class CoursePage {
     constructor(aWagtailCourse) {
         this.course = aWagtailCourse;
     }
@@ -90,3 +90,5 @@ export default class CoursePage {
         return lessons;
     }
 }
+
+export default CoursePage;
