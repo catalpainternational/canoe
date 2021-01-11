@@ -1,4 +1,4 @@
-header {
+TopMenu {
     width: 100%;
 
     .top-menu-container {
@@ -10,11 +10,13 @@ header {
     .with-swoop {
         @include header-swoop;
         height: 100px;
+        margin: auto;
     }
 
     .without-swoop {
         @include center-with-flex;
         height: $top-menu-height;
+        margin: auto;
     }
 
     h4 {

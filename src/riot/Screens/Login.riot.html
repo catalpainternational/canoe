@@ -1,10 +1,10 @@
 <Login>
     <div class="modal-background">
-        <div class="login-header">
+        <TopMenu extrastyleclasses="with-swoop">
             <span class="site-logo"></span>
             <span class="login-image"></span>
             <h4>{ TRANSLATIONS.login() }</h4>
-        </div>
+        </TopMenu>
 
         <LoginForm loginFunction="{login}"></LoginForm>
 
@@ -36,6 +36,7 @@
         import LoginForm from "RiotTags/Components/LoginForm.riot.html";
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
         import ContactInformation from "RiotTags/Components/ContactInformation.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { login } from "js/AuthenticationUtilities";
 
@@ -53,6 +54,7 @@
                 popupmodal: PopupModal,
                 contactinformation: ContactInformation,
                 loginform: LoginForm,
+                topmenu: TopMenu
             },
 
             TRANSLATIONS: {
