@@ -1,4 +1,4 @@
-export default class ResourceArticle {
+class ResourceArticle {
     constructor(aWagtailPage) {
         this.article = aWagtailPage;
     }
@@ -23,3 +23,5 @@ export default class ResourceArticle {
         return this.article.tags;
     }
 }
+
+export default ResourceArticle;
