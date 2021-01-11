@@ -2,11 +2,16 @@ import { inAppelflap } from "ts/PlatformDetection";
 import { AppelflapConnect } from "ts/AppelflapConnect";
 
 export class CanoeHost {
+    #afc?: AppelflapConnect;
+
+    constructor() {
+        this.#afc = inAppelflap() ? new AppelflapConnect() : undefined;
+    }
+
     /** Tell Appelflap that Canoe is 'locked'
      * and should not be rebooted */
     LockCanoe = async (): Promise<string> => {
-        const appelflapConnect = new AppelflapConnect();
-        return await appelflapConnect.lock();
+        return this.#afc ? await this.#afc.lock() : "notOk";
     };
 
     StartCanoe = async (startUp: () => void): Promise<boolean> => {

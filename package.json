@@ -110,6 +110,7 @@
         "js": "link:src/js",
         "pretty-bytes": "^5.3.0",
         "redux": "^4.0.5",
+        "src": "link:src",
         "ts": "link:src/ts",
         "webpack-pwa-manifest": "^4.2.0",
         "workbox-google-analytics": "^5.1.3",

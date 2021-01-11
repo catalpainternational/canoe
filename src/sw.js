@@ -13,7 +13,7 @@ import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-import { WAGTAIL_MANIFEST_URL, MANIFEST_BACKEND_BASE_URL } from "js/urls";
+import { BACKEND_BASE_URL, MANIFEST_BACKEND_BASE_URL } from "js/urls";
 import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME } from "ts/Constants";
 
 registerRoute(
@@ -46,7 +46,7 @@ registerRoute(
 );
 
 registerRoute(
-    new RegExp(WAGTAIL_MANIFEST_URL),
+    new RegExp(`${BACKEND_BASE_URL}/manifest`),
     new StaleWhileRevalidate({
         cacheName: MANIFEST_CACHE_NAME,
     })
@@ -75,6 +75,10 @@ registerRoute(
 registerRoute(new RegExp(`/sockjs-node/info`), new NetworkOnly());
 
 setDefaultHandler(new CacheFirst());
+
+export function registerAppelflap(appelFlapURI) {
+    registerRoute(new RegExp(appelFlapURI, new NetworkOnly()));
+}
 
 const getNotificationTitleMessageAndTag = (eventData) => {
     let title = null;

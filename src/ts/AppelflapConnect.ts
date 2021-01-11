@@ -9,6 +9,8 @@ import {
     TSubscriptionVersion,
 } from "ts/Types/CacheTypes";
 
+import { registerAppelflap } from "src/sw";
+
 export class AppelflapConnect {
     readonly localHostURI = "http://127.0.0.1";
 
@@ -22,6 +24,10 @@ export class AppelflapConnect {
     readonly subscriptions = "subscriptions";
     readonly status = "status";
     readonly reboot = "reboot";
+
+    constructor() {
+        this.initialiseRoutes();
+    }
 
     private _commands = {
         getMetaStatus: {
@@ -158,6 +164,15 @@ export class AppelflapConnect {
             case "text":
                 return await response.text();
         }
+    };
+
+    private initialiseRoutes = (): void => {
+        const routes = [
+            `${this.localHostURI}:${this.portNo}/${this.metaApi}/.*`,
+            `${this.localHostURI}:${this.portNo}/${this.cacheApi}/.*`,
+            `${this.localHostURI}:${this.portNo}/${this.actionApi}/.*`,
+        ];
+        routes.forEach((route) => registerAppelflap(route));
     };
 
     public getMetaStatus = async (): Promise<any> => {
