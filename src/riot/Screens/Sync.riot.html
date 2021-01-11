@@ -79,14 +79,16 @@
                 this.refreshSyncs();
             },
 
-            appelflapStatus() {
+            async appelflapStatus() {
                 this.update({appelflapMeta: "Getting"});
                 const appelflapConnect = new AppelflapConnect();
                 appelflapConnect.getMetaStatus().then((response) => {
                     this.update({appelflapMeta: JSON.stringify(response)});
                 });
+
                 // try to get the manifest
                 const manifest = new Manifest();
+                const foundManifest = await manifest.getOrFetchManifest();
             }
         };
     </script>
