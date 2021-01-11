@@ -6,6 +6,7 @@ import { TPage } from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
 import { storeManifest } from "ReduxImpl/Interface";
+import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
 import { store, LANGUAGE_STORAGE_KEY } from "ReduxImpl/Store";
 import { MANIFEST_URL } from "js/urls";
@@ -83,14 +84,14 @@ export class Manifest implements IManifest {
     async fetchManifest(): Promise<any> {
         let responseFailure = "";
         try {
-            const corsNonAuthRequest = new Request(MANIFEST_URL, {
-                mode: "cors",
+            const init = {
+                method: "GET",
                 headers: {
-                    "Content-Type": "text/json",
+                    "Content-Type": "application/json",
+                    Authorization: `JWT ${getAuthenticationToken()}`,
                 },
-            });
-            console.info(JSON.stringify(corsNonAuthRequest));
-            const resp = await fetch(corsNonAuthRequest);
+            } as RequestInit;
+            const resp = await fetch(MANIFEST_URL, init);
             if (!resp.ok) {
                 responseFailure = "Http error getting manifest";
             } else {
