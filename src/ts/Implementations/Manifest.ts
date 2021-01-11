@@ -6,7 +6,6 @@ import { TPage } from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
 import { storeManifest } from "ReduxImpl/Interface";
-import { fetchManifest } from "js/WagtailPagesAPI";
 
 import { store, LANGUAGE_STORAGE_KEY } from "ReduxImpl/Store";
 import { MANIFEST_URL } from "js/urls";
@@ -96,7 +95,7 @@ export class Manifest implements IManifest {
             return manifestInStore;
         }
 
-        const manifest = await fetchManifest();
+        const manifest = await this.fetchManifest();
         storeManifest(manifest);
         return manifest;
     }
