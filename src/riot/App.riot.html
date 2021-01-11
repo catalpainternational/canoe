@@ -166,7 +166,15 @@
                 }
 
                 const canoeHost = new CanoeHost();
-                canoeHost.StartCanoe(() => {});
+                canoeHost
+                    .StartCanoe(() => {})
+                    .then((_) => {
+                        // Success
+                    })
+                    .catch((_) => {
+                        // Appelflap is apparently around, but we couldn't get the lock on Canoe
+                        // The app is probably still usable, but we may wish to show a message to the user.
+                    });
             },
 
             onUpdated() {

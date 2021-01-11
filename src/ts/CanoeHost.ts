@@ -9,23 +9,23 @@ export class CanoeHost {
         return await appelflapConnect.lock();
     };
 
-    StartCanoe = (riotStart: () => void): void => {
+    StartCanoe = async (riotStart: () => void): Promise<boolean> => {
+        let lockResult = true;
         if (inAppelflap()) {
-            this.LockCanoe()
-                .then((lockResult) => {
-                    if (lockResult !== "ok") {
-                        // The lock didn't succeed, the app is probably still usable.
-                        // We don't yet understand what this means for the user and the app.
-                        // Should we show a small warning?
-                    }
-
-                    riotStart();
-                })
-                .catch(() => {
-                    /* Do nothing */
-                });
-        } else {
-            riotStart();
+            try {
+                lockResult = (await this.LockCanoe()) === "ok";
+            } catch {
+                // We don't know why Appelflap is thought to be around, and yet it failed.
+                lockResult = false;
+            }
         }
+
+        riotStart();
+
+        // If lockResult is false, the app is probably still usable.
+        // However, we do not yet understand what this means for the user and the app.
+        return lockResult
+            ? Promise.resolve(lockResult)
+            : Promise.reject(lockResult);
     };
 }
