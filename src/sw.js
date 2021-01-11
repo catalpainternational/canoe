@@ -13,11 +13,11 @@ import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-import { WAGTAIL_MANIFEST_URL, MANIFEST_URL, MEDIA_PATH } from "js/urls";
+import { WAGTAIL_MANIFEST_URL, MANIFEST_BACKEND_BASE_URL } from "js/urls";
 import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME } from "ts/Constants";
 
 registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}${MEDIA_PATH}${MEDIA_PATH}/.+`),
+    new RegExp(`${BACKEND_BASE_URL}/media/media/.+`),
     new CacheFirst({
         cacheName: "media-cache",
         plugins: [new RangeRequestsPlugin()],
@@ -25,7 +25,7 @@ registerRoute(
 );
 
 registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}${MEDIA_PATH}/images/.+`),
+    new RegExp(`${BACKEND_BASE_URL}/media/images/.+`),
     new CacheFirst({
         cacheName: "images-cache",
     })
@@ -39,7 +39,7 @@ registerRoute(
 );
 
 registerRoute(
-    new RegExp(MANIFEST_URL),
+    new RegExp(`${MANIFEST_BACKEND_BASE_URL}/manifest/0\.0\.1`),
     new StaleWhileRevalidate({
         cacheName: MANIFESTV2_CACHE_NAME,
     })
