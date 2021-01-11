@@ -9,28 +9,23 @@ export class CanoeHost {
         return await appelflapConnect.lock();
     };
 
-    /** Start Canoe, if there is a host then this will start Canoe `within` that host
-     * @param { function } startUp a void returning function to be executed
-     * after this StartCanoe method has done its thing.
-     * Use `() => {}` when calling this method if you do not want anything to be executed.
-     */
-    StartCanoe = (startUp: () => void): void => {
+    StartCanoe = async (startUp: () => void): Promise<boolean> => {
+        let lockResult = true;
         if (inAppelflap()) {
-            this.LockCanoe()
-                .then((lockResult) => {
-                    if (lockResult !== "ok") {
-                        // The lock didn't succeed, the app is probably still usable.
-                        // We don't yet understand what this means for the user and the app.
-                        // Should we show a small warning?
-                    }
-
-                    startUp();
-                })
-                .catch(() => {
-                    /* Do nothing */
-                });
-        } else {
-            startUp();
+            try {
+                lockResult = (await this.LockCanoe()) === "ok";
+            } catch {
+                // We don't know why Appelflap is thought to be around, and yet it failed.
+                lockResult = false;
+            }
         }
+
+        startUp();
+
+        // If lockResult is false, the app is probably still usable.
+        // However, we do not yet understand what this means for the user and the app.
+        return lockResult
+            ? Promise.resolve(lockResult)
+            : Promise.reject(lockResult);
     };
 }
