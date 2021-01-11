@@ -1,5 +1,5 @@
 const webpack = require("webpack");
-const { mergeWithCustomize, customizeArray } = require('webpack-merge');
+const { mergeWithCustomize, customizeArray } = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
 
@@ -63,17 +63,14 @@ module.exports = (env) => {
             alias: {
                 RiotTags: path.resolve(__dirname, "src/riot/"),
                 js: path.resolve(__dirname, "src/js"),
+                "@": path.resolve(__dirname, "src/js"),
                 ReduxImpl: path.resolve(__dirname, "src/js/redux"),
                 Actions: path.resolve(__dirname, "src/js/actions"),
             },
-            plugins: [
-                PnpWebpackPlugin,
-            ],
+            plugins: [PnpWebpackPlugin],
         },
         resolveLoader: {
-            plugins: [
-                PnpWebpackPlugin.moduleLoader(module),
-            ],
+            plugins: [PnpWebpackPlugin.moduleLoader(module)],
         },
         module: {
             rules: [
@@ -197,8 +194,8 @@ module.exports = (env) => {
 
     const config = mergeWithCustomize({
         customizeArray: customizeArray({
-            'resolve.modules': 'prepend'
-          })
+            "resolve.modules": "prepend",
+        }),
     })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,

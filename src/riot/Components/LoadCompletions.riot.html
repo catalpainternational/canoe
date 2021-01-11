@@ -4,13 +4,13 @@
             signalCompletionsAreReady,
             signalCompletionsAreNotReady,
         } from "ReduxImpl/Interface";
-        import { dispatchLoggedInEvent } from "js/Events";
-        import { isGuestUser } from "js/AuthenticationUtilities";
-        import { pullExamDataIntoMemory, clearInMemoryExamData } from "js/Exams/ExamInterface";
+        import { dispatchLoggedInEvent } from "@/Events";
+        import { isGuestUser } from "@/AuthenticationUtilities";
+        import { pullExamDataIntoMemory, clearInMemoryExamData } from "@/Exams/ExamInterface";
         import {
             pullCompletionsIntoMemory,
             clearInMemoryCompletions,
-        } from "js/CompletionInterface";
+        } from "@/CompletionInterface";
         import { updateApi, updateIdb } from "Actions/actions_store.js";
         import { closeAndDeleteDB } from "Actions/actions_idb";
 

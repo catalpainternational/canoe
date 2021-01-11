@@ -1,8 +1,8 @@
 import "babel-polyfill";
 
 import { subscribeToStore, getServiceWorkerState } from "ReduxImpl/Interface";
-import { initializeServiceWorker } from "js/ServiceWorkerManagement";
-import { BACKEND_BASE_URL } from "js/urls.js";
+import { initializeServiceWorker } from "@/ServiceWorkerManagement";
+import { BACKEND_BASE_URL } from "@/urls.js";
 
 let currentServiceWorkerState = getServiceWorkerState();
 

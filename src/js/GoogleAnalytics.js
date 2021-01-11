@@ -1,4 +1,4 @@
-import { getUserGroups, getUserId } from "js/AuthenticationUtilities";
+import { getUserGroups, getUserId } from "@/AuthenticationUtilities";
 
 const isGoogleAnalyticsAvailable = () => {
     return !!process.env.GA_TAG;

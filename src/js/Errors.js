@@ -1,4 +1,4 @@
-import { alertAppIsOffline } from "js/utilities";
+import { alertAppIsOffline } from "@/utilities";
 
 export class APIMissingPageError extends Error {
     constructor(message) {

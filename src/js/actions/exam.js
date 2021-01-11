@@ -1,4 +1,4 @@
-import { ExamIsMissingAnAnswer } from "js/Errors";
+import { ExamIsMissingAnAnswer } from "@/Errors";
 import {
     storeExamAnswerInIDB,
     getExamAnswersFromIdb,

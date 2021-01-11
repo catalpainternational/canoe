@@ -1,5 +1,5 @@
-import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls.js";
-import { isGuestUser } from "js/AuthenticationUtilities.js";
+import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "@/urls.js";
+import { isGuestUser } from "@/AuthenticationUtilities.js";
 import {
     storeWagtailPage,
     getWagtailPageFromStore,
@@ -10,7 +10,7 @@ import {
     getLanguage,
     changeLanguage,
 } from "ReduxImpl/Interface";
-import { token_authed_fetch } from "js/Fetch";
+import { token_authed_fetch } from "@/Fetch";
 
 export async function fetchManifest() {
     const allPagesMetadata = await token_authed_fetch(WAGTAIL_MANIFEST_URL);

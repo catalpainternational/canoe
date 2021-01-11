@@ -1,7 +1,7 @@
-import { dispatchToastEvent } from "js/Events";
+import { dispatchToastEvent } from "@/Events";
 import { getLanguage } from "ReduxImpl/Interface";
-import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
-import { getOrFetchManifest } from "js/WagtailPagesAPI";
+import { BACKEND_BASE_URL, MEDIA_PATH } from "@/urls";
+import { getOrFetchManifest } from "@/WagtailPagesAPI";
 
 export const alertAppIsOffline = () => {
     dispatchToastEvent("You are offline.");

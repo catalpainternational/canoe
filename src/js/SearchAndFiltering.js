@@ -1,4 +1,4 @@
-import { intersection } from "js/SetMethods";
+import { intersection } from "@/SetMethods";
 
 export const getTagsFromPages = (pagesWithTags) => {
     const eachArticlesTags = pagesWithTags.map((page) => page.tags);

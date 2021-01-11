@@ -4,8 +4,8 @@
  */
 import { Workbox } from "workbox-window";
 import { changeServiceWorkerState } from "ReduxImpl/Interface";
-import { logNotificationReceived } from "js/GoogleAnalytics"
-import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
+import { logNotificationReceived } from "@/GoogleAnalytics"
+import { ON_ADD_TO_HOME_SCREEN } from "@/Events";
 
 const SW_UPDATE_INTERVAL = 1000 * 10 * 60 * 4;
 

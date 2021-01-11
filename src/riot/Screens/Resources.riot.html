@@ -36,15 +36,15 @@
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
-        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
-        import { getResources } from "js/WagtailPagesAPI";
+        import { getSearchQueryFromUrl, parseURLHash } from "@/Routing";
+        import { getResources } from "@/WagtailPagesAPI";
         import {
             getTagsFromPages,
             doPageTagsMatchSelections,
             doesQueryMatchSearchContent,
-        } from "js/SearchAndFiltering";
+        } from "@/SearchAndFiltering";
 
-        import ResourceArticle from "js/ResourceArticle";
+        import ResourceArticle from "@/ResourceArticle";
 
         export default {
             state: {

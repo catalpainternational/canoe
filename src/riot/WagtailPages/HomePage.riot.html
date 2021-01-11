@@ -58,11 +58,11 @@
         import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
-        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { ON_COMPLETION_CHANGE } from "js/Events";
-        import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
+        import { getCapitalizedUsername, isGuestUser } from "@/AuthenticationUtilities";
+        import { ON_COMPLETION_CHANGE } from "@/Events";
+        import { getTagsFromPages, doPageTagsMatchSelections } from "@/SearchAndFiltering";
         import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
-        import { getCourseWithLatestCompletion } from "js/utilities";
+        import { getCourseWithLatestCompletion } from "@/utilities";
 
         export default {
             state: {

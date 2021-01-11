@@ -1,7 +1,7 @@
-import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
-import { getOrFetchManifest } from "js/WagtailPagesAPI";
-import { getPlatform } from "js/PlatformDetection";
-import { MissingImageError } from "js/Errors";
+import { BACKEND_BASE_URL, MEDIA_PATH } from "@/urls";
+import { getOrFetchManifest } from "@/WagtailPagesAPI";
+import { getPlatform } from "@/PlatformDetection";
+import { MissingImageError } from "@/Errors";
 
 const WEBP_RENDITION = "width-800|format-webp";
 const JPEG_RENDITION = "width-600|format-jpeg";

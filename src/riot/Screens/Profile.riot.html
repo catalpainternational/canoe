@@ -59,11 +59,11 @@
     <script>
         import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
 
-        import { getHomePage } from "js/WagtailPagesAPI";
-        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { getCourseWithLatestCompletion } from "js/utilities";
+        import { getHomePage } from "@/WagtailPagesAPI";
+        import { getCapitalizedUsername, isGuestUser } from "@/AuthenticationUtilities";
+        import { getCourseWithLatestCompletion } from "@/utilities";
 
-        import HomePage from "js/HomePage";
+        import HomePage from "@/HomePage";
 
         export default {
             state: {

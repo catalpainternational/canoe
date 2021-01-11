@@ -1,7 +1,7 @@
-import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
+import { _getOrFetchWagtailPageById } from "@/WagtailPagesAPI";
 import { isComplete } from "Actions/completion";
 
-import CoursePage from "js/CoursePage";
+import CoursePage from "@/CoursePage";
 
 class LessonPage {
     constructor(aWagtailPage) {

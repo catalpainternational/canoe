@@ -1,5 +1,5 @@
-import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
-import CoursePage from "js/CoursePage";
+import { _getOrFetchWagtailPageById } from "@/WagtailPagesAPI";
+import CoursePage from "@/CoursePage";
 
 class HomePage {
     constructor(aWagtailPage) {

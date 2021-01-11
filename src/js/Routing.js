@@ -3,9 +3,9 @@ import {
     getOrFetchWagtailPage,
     getOrFetchManifest,
     getHomePage,
-} from "js/WagtailPagesAPI.js";
+} from "@/WagtailPagesAPI.js";
 import { getLanguage } from "ReduxImpl/Interface";
-import { PageLacksTranslationDataError } from "js/Errors";
+import { PageLacksTranslationDataError } from "@/Errors";
 
 const IS_SETTINGS_RESOURCES_OR_PROFILE = /#([A-Za-z]+)/;
 const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'

@@ -1,6 +1,6 @@
-import { BACKEND_BASE_URL } from "js/urls";
-import { dispatchLoggedOutEvent, dispatchSiteDownloadEvent } from "js/Events";
-import { unsubscribeFromNotifications } from "js/Notifications";
+import { BACKEND_BASE_URL } from "@/urls";
+import { dispatchLoggedOutEvent, dispatchSiteDownloadEvent } from "@/Events";
+import { unsubscribeFromNotifications } from "@/Notifications";
 import { fetch_and_denote_unauthenticatedness as fetch } from "./Fetch";
 
 const USERNAME_STORAGE_KEY = "username";

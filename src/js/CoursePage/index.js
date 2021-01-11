@@ -1,10 +1,10 @@
 import { getLatestCompletionInCourse, getFinishedLessonSlugs } from "Actions/completion";
-import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
+import { _getOrFetchWagtailPageById } from "@/WagtailPagesAPI";
 
 import { getExamHighScore as getHighScore, hasUserTriedExam as hasTriedExam } from "Actions/exam";
 
-import ExamGrader from "js/Exams/ExamGrader";
-import LessonPage from "js/LessonPage";
+import ExamGrader from "@/Exams/ExamGrader"
+import LessonPage from "@/LessonPage";
 
 class CoursePage {
     constructor(aWagtailCourse) {

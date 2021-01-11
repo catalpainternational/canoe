@@ -1,6 +1,6 @@
-import { getAuthenticationToken, setIsAuthed } from "js/AuthenticationUtilities.js";
-import { APIMissingPageError } from "js/Errors";
-import { getPlatform } from "js/PlatformDetection";
+import { getAuthenticationToken, setIsAuthed } from "@/AuthenticationUtilities.js";
+import { APIMissingPageError } from "@/Errors";
+import { getPlatform } from "@/PlatformDetection";
 
 
 const WEBP_BROWSERS = ["Chrome", "Firefox"];

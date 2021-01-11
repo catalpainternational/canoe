@@ -62,11 +62,11 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import HonorCode from "RiotTags/Lesson/HonorCode.riot.html";
 
-        import { getLessonCardIdx, getPreviousCardsUrl, getNextCardsUrl } from "js/Routing";
-        import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
-        import { URLDoesntExist, ExamIsMissingAnAnswer } from "js/Errors";
+        import { getLessonCardIdx, getPreviousCardsUrl, getNextCardsUrl } from "@/Routing";
+        import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "@/Events";
+        import { URLDoesntExist, ExamIsMissingAnAnswer } from "@/Errors";
 
-        import ExamGrader from "js/Exams/ExamGrader";
+        import ExamGrader from "@/Exams/ExamGrader";
 
         export default {
             state: {

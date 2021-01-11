@@ -3,14 +3,14 @@ import {
     fetchImage,
     getOrFetchManifest,
     getHomePathsInManifest,
-} from "js/WagtailPagesAPI";
-import { dispatchToastEvent } from "js/Events";
-import { leftDifference } from "js/SetMethods";
-import { getImagePaths } from "js/RenditionSelector";
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
+} from "@/WagtailPagesAPI";
+import { dispatchToastEvent } from "@/Events";
+import { leftDifference } from "@/SetMethods";
+import { getImagePaths } from "@/RenditionSelector";
+import { getAuthenticationToken } from "@/AuthenticationUtilities";
 import { storeWagtailPage } from "ReduxImpl/Interface";
-import { BACKEND_BASE_URL } from "js/urls";
-import { getImageRequest, getPageRequest } from "./Fetch";
+import { BACKEND_BASE_URL } from "@/urls";
+import { getImageRequest, getPageRequest } from "@/Fetch";
 
 const PAGES_CACHE = "pages-cache";
 const IMAGES_CACHE = "images-cache";
@@ -81,7 +81,6 @@ class SiteDownloader {
         // await cacheAllUrls(PAGES_CACHE, pagesToFetch, getPageRequest);
         // await cacheAllUrls(IMAGES_CACHE, imagesToFetch, getImageRequest);
 
-        console.log(pagesToFetch);
         for (const pagePath of pagesToFetch) {
             await fetchPage(pagePath);
         }

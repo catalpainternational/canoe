@@ -1,9 +1,9 @@
-import { BACKEND_BASE_URL } from "js/urls";
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { getPlatform } from "js/PlatformDetection";
-import { urlBase64ToUint8Array } from "js/DjangoPushNotifications";
-import { alertIfRequestWasMadeOffline } from "js/Errors";
-import { logUnsubscribedFromNotifications } from "js/GoogleAnalytics";
+import { BACKEND_BASE_URL } from "@/urls";
+import { getAuthenticationToken } from "@/AuthenticationUtilities";
+import { getPlatform } from "@/PlatformDetection";
+import { urlBase64ToUint8Array } from "@/DjangoPushNotifications";
+import { alertIfRequestWasMadeOffline } from "@/Errors";
+import { logUnsubscribedFromNotifications } from "@/GoogleAnalytics";
 
 const APPLICATION_SERVER_KEY = `${process.env.APPLICATION_SERVER_KEY}`;
 const NOTIFICATION_ID_KEY = "notificationRegistrationId";

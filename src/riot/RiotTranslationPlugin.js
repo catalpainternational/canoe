@@ -2,7 +2,7 @@
 // install in your riot.install handler
 // Looks for all elements with a 'translate' attributen replaces content with gettext(content)
 
-import { gettext } from "js/Translation";
+import { gettext } from "@/Translation";
 
 const ORIGINAL_TRANSLATION_ATTRIBUTE = "canoe_translation_original";
 
