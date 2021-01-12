@@ -3,7 +3,7 @@ TagList {
         border-radius: 1.875em;
         background-color: $gray-7;
         padding: 0.5em 0.9em;
-        margin: 0 0.7em 1.2em 0;
+        margin: 0.6em 0.6em 0.6em 0;
         display: inline-block;
         box-shadow: 0 0.15em 0.15em 0 $gray-6;
 
@@ -22,14 +22,6 @@ TagList {
         &:hover {
             cursor: pointer;
         }
-
-        &:last-child {
-            margin-right: 30px;
-        }
-
-        &:first-child {
-            margin-left: 30px;
-        }
     }
 
     p {
@@ -42,32 +34,6 @@ TagList {
     .tag-container {
         overflow: auto;
         white-space: nowrap;
-        margin: 0 -30px;
-    }
-
-    .tag-container::after {
-        content: "";
-        width: 30px;
-        height: 45px;
-        position: absolute;
-        right: 0px;
-        background: linear-gradient(90deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
-
-        @media only screen and (min-width: $tablet) {
-            background: none;
-        }
-    }
-
-    .tag-container::before {
-        content: "";
-        width: 30px;
-        height: 45px;
-        position: absolute;
-        left: 0px;
-        background: linear-gradient(270deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
-
-        @media only screen and (min-width: $tablet) {
-            background: none;
-        }
+        margin: 0;
     }
 }
