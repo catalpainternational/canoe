@@ -76,10 +76,6 @@ registerRoute(new RegExp(`/sockjs-node/info`), new NetworkOnly());
 
 setDefaultHandler(new CacheFirst());
 
-export function registerAppelflap(appelFlapURI) {
-    registerRoute(new RegExp(appelFlapURI, new NetworkOnly()));
-}
-
 const getNotificationTitleMessageAndTag = (eventData) => {
     let title = null;
     let message = null;

@@ -9,7 +9,8 @@ import {
     TSubscriptionVersion,
 } from "ts/Types/CacheTypes";
 
-import { registerAppelflap } from "src/sw";
+import { registerRoute } from "workbox-routing/registerRoute";
+import { NetworkOnly } from "workbox-strategies/NetworkOnly";
 
 export class AppelflapConnect {
     readonly localHostURI = "http://127.0.0.1";
@@ -172,7 +173,10 @@ export class AppelflapConnect {
             `${this.localHostURI}:${this.portNo}/${this.cacheApi}/.*`,
             `${this.localHostURI}:${this.portNo}/${this.actionApi}/.*`,
         ];
-        routes.forEach((route) => registerAppelflap(route));
+        console.info(JSON.stringify(routes));
+        routes.forEach((route) =>
+            registerRoute(new RegExp(route), new NetworkOnly())
+        );
     };
 
     public getMetaStatus = async (): Promise<any> => {
