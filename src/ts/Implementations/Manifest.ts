@@ -8,7 +8,7 @@ import { TPage } from "ts/Types/ManifestTypes";
 import { storeManifest } from "ReduxImpl/Interface";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
-import { store, LANGUAGE_STORAGE_KEY } from "ReduxImpl/Store";
+import { store } from "ReduxImpl/Store";
 import { MANIFEST_URL } from "js/urls";
 
 export class Manifest implements IManifest {
