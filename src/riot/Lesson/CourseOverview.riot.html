@@ -37,10 +37,6 @@
             },
 
             onMounted(props, state) {
-                this.renderExam();
-            },
-
-            renderExam() {
                 const { exam } = this.props.wagtailPage;
                 if (!exam) {
                     return;
@@ -58,12 +54,6 @@
                 this.update({
                     hash: getHashPieces()[1],
                 });
-
-                if (this.state.hash) {
-                    window.removeEventListener("scroll", this.stickyHeader);
-                } else {
-                    window.addEventListener("scroll", this.stickyHeader);
-                }
             },
         };
     </script>

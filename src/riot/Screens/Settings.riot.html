@@ -1,8 +1,9 @@
 <Settings>
     <div class="settings">
-        <div class="content-wrapper">
+        <div class="settings-swoop">
             <h3>{ TRANSLATIONS.settings() }</h3>
-
+        </div>
+        <div class="content-wrapper">
             <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
@@ -28,8 +29,6 @@
             <button class="btn-secondary" onclick="{logout}">{ TRANSLATIONS.logout() }</button>
 
             <Logos></Logos>
-
-            <!-- <CacheDisplay></CacheDisplay> -->
         </div>
     </div>
     <script>
@@ -43,7 +42,6 @@
             isSubscribedToNotifications,
         } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
-        // import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
         import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
         import { getPlatform } from "js/PlatformDetection";
 

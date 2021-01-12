@@ -1,109 +1,12 @@
-Resources .content-wrapper {
-    border-radius: 1.875em 1.875em 0 0;
-    background-color: $gray-10;
-    padding-top: 1.875em;
-
-    .resources-icon {
-        width: 1.875em;
-        height: 1.875em;
-        margin-right: 0.75em;
-        margin-bottom: 0;
+Resources {
+    .card-image {
+        background-image: url("~img/stock_resource.svg");
     }
 
-    .resources-bar {
-        height: 2em;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .section-title {
-        margin: 0.3125em 0;
-    }
-
-    h3 {
-        display: inline-block;
-        margin: 0;
-        flex: 1;
-    }
-
-    taglist {
-        .tag-container::after {
-            right: 10px;
-        }
-
-        .tag-container::before {
-            left: 10px;
-        }
-    }
-}
-
-taglist {
-    .tag {
-        border-radius: 1.875em;
-        background-color: $gray-7;
-        padding: 0.5em 0.9em;
-        margin: 0 0.7em 0.7em 0;
-        display: inline-block;
-        box-shadow: 0 0.15em 0.15em 0 $gray-5;
-
-        &.selected {
-            background-color: $blue-1;
-
-            p {
-                color: white;
-            }
-        }
-
-        &:hover {
-            cursor: pointer;
-        }
-
-        &:last-child {
-            margin-right: 30px;
-        }
-
-        &:first-child {
-            margin-left: 30px;
-        }
-    }
-
-    p {
-        font-size: 0.875em;
-        line-height: 0.625em;
-        font-weight: 200;
-        margin: 0;
-    }
-
-    .tag-container {
-        overflow: auto;
-        white-space: nowrap;
-        margin: 0 -30px 0.5em -30px;
-    }
-
-    .tag-container::after {
-        content: "";
-        width: 30px;
-        height: 45px;
-        position: absolute;
-        right: 0px;
-        background: linear-gradient(90deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
-
-        @media only screen and (min-width: $tablet) {
-            background: none;
-        }
-    }
-
-    .tag-container::before {
-        content: "";
-        width: 30px;
-        height: 45px;
-        position: absolute;
-        left: 0px;
-        background: linear-gradient(270deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
-
-        @media only screen and (min-width: $tablet) {
-            background: none;
-        }
+    .resources-swoop {
+        @include header-swoop;
+        @include center-with-flex;
+        height: 100px;
     }
 }
 

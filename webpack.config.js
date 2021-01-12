@@ -1,5 +1,5 @@
 const webpack = require("webpack");
-const { mergeWithCustomize, customizeArray } = require('webpack-merge');
+const { mergeWithCustomize, customizeArray } = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
 
@@ -19,7 +19,7 @@ const defaultProjectConfiguration = require("./canoe-project-default.js");
 // uncomment this to find the source of webpack deprecation warnings
 // process.traceDeprecation = true;
 
-module.exports = (env) => {
+module.exports = env => {
     // read the environment configuration
     const environmentConfiguration = Object.assign(
         defaultEnvironmentConfiguration,
@@ -66,18 +66,18 @@ module.exports = (env) => {
                 ReduxImpl: path.resolve(__dirname, "src/js/redux"),
                 Actions: path.resolve(__dirname, "src/js/actions"),
             },
-            plugins: [
-                PnpWebpackPlugin,
-            ],
+            plugins: [PnpWebpackPlugin],
         },
         resolveLoader: {
-            plugins: [
-                PnpWebpackPlugin.moduleLoader(module),
-            ],
+            plugins: [PnpWebpackPlugin.moduleLoader(module)],
         },
         module: {
             rules: [
-                { test: /\.hbs$/, loader: "handlebars-loader" },
+                {
+                    test: /\.hbs$/,
+                    loader: "handlebars-loader",
+                    query: { inlineRequires: '\/public\/' }
+                },
                 {
                     test: /\.riot.html$/,
                     exclude: /node_modules/,
@@ -111,7 +111,12 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.(png|jpg|gif)$/,
-                    use: ["file-loader"],
+                    use: {
+                        loader: "file-loader",
+                        options: {
+                            esModule: false,
+                        },
+                    },
                 },
                 {
                     test: /\.svg$/,
@@ -148,7 +153,6 @@ module.exports = (env) => {
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
                 ga_tag: environmentConfiguration.GA_TAG,
                 theme_color: projectConfiguration.THEME_COLOR,
-                background_color: projectConfiguration.BACKGROUND_COLOR,
             }),
             new HtmlWebpackInlineSVGPlugin({ runPreEmit: true }),
             new WebpackPwaManifest({
@@ -157,8 +161,6 @@ module.exports = (env) => {
                 name: projectConfiguration.SITE_NAME,
                 short_name: projectConfiguration.SITE_SHORT_NAME,
                 description: projectConfiguration.SITE_DESCRIPTION,
-                background_color: projectConfiguration.BACKGROUND_COLOR,
-                theme_color: projectConfiguration.BACKGROUND_COLOR,
                 start_url: "/",
                 icons: [
                     {
@@ -197,8 +199,8 @@ module.exports = (env) => {
 
     const config = mergeWithCustomize({
         customizeArray: customizeArray({
-            'resolve.modules': 'prepend'
-          })
+            "resolve.modules": "prepend",
+        }),
     })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,

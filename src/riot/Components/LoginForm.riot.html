@@ -1,30 +1,38 @@
 <LoginForm>
-    <form onsubmit="{loginUser}">
-        <h3>{ TRANSLATIONS.login() }</h3>
-        <div class="form-group">
+    <form onsubmit="{loginUser}" class="{state.errorExplanation ? 'has-error' : ''}">
+        <div id="username-input" class="form-group">
             <label for="username">{ TRANSLATIONS.username() }</label>
-            <input id="username" type="text" name="username" oninput="{clearError}" />
+            <input
+                id="username"
+                type="text"
+                name="username"
+                oninput="{clearError}"
+                onfocus="{setInputFocus}"
+                onblur="{removeInputFocus}"
+            />
         </div>
-        <div class="form-group password">
+        <div id="password-input" class="form-group password">
             <label for="password">{ TRANSLATIONS.password() }</label>
-            <input id="password" type="password" name="password" oninput="{clearError}" />
-        </div>
-        <div class="icon-box crossout">
-            <a onclick="{showPassword}">
-                <span class="eye"></span>
-                <span class="password-placement"
-                    >{state.isShowingPassword ? TRANSLATIONS.hidePassword() :
-                    TRANSLATIONS.showPassword()}</span
-                >
+            <input
+                id="password"
+                type="password"
+                name="password"
+                oninput="{clearError}"
+                onfocus="{setInputFocus}"
+                onblur="{removeInputFocus}"
+            />
+            <a id="icon-box" onclick="{showPassword}">
+                <span class="eye crossout"></span>
+                <p>{ state.isShowingPassword ? TRANSLATIONS.hide() : TRANSLATIONS.show() }</p>
             </a>
         </div>
         <div if="{state.errorExplanation}" class="error-message">
-            <span class="warning"></span>
+            <span class="warning red"></span>
             <p>{state.errorExplanation}</p>
         </div>
-        <LoadingDots if="{state.isLoginButtonDisabled}" extrastyleclasses="dark"></LoadingDots>
         <button class="btn-primary" type="submit" disabled="{state.isLoginButtonDisabled}">
-            { TRANSLATIONS.login() }
+            { state.isLoginButtonDisabled ? TRANSLATIONS.checking() : TRANSLATIONS.login() }
+            <LoadingDots if="{state.isLoginButtonDisabled}" extrastyleclasses="light"></LoadingDots>
         </button>
     </form>
     <script>
@@ -36,6 +44,7 @@
                 isShowingPassword: false,
                 isLoginButtonDisabled: false,
                 errorExplanation: "",
+                focusField: "username",
             },
 
             components: {
@@ -43,12 +52,17 @@
             },
 
             TRANSLATIONS: {
-                login: () => gettext("Login"),
                 username: () => gettext("Username"),
                 password: () => gettext("Password"),
-                showPassword: () => gettext("Show Password"),
-                hidePassword: () => gettext("Hide Password"),
-                invalid: () => gettext("Invalid login credentials"),
+                invalid: () => gettext("Your username or password is incorrect"),
+                login: () => gettext("Login"),
+                checking: () => gettext("Checking"),
+                show: () => gettext("show"),
+                hide: () => gettext("hide"),
+            },
+
+            onMounted() {
+                this.$("#username").focus();
             },
 
             getUsernameAndPasswordFromForm() {
@@ -77,9 +91,7 @@
                 } catch (error) {
                     if (alertIfRequestWasMadeOffline(error)) {
                     } else if (error.message === "400") {
-                        this.update({
-                            errorExplanation: this.TRANSLATIONS.invalid(),
-                        });
+                        this.update({ errorExplanation: this.TRANSLATIONS.invalid() });
                     }
                 } finally {
                     this.update({
@@ -90,7 +102,7 @@
 
             showPassword() {
                 const passwordElement = this.$("#password");
-                const eyeIcon = this.$(".icon-box");
+                const eyeIcon = this.$(".eye");
 
                 if (passwordElement.type === "password") {
                     passwordElement.type = "text";
@@ -109,6 +121,24 @@
                     this.update({
                         errorExplanation: null,
                     });
+                }
+            },
+
+            setInputFocus(event) {
+                const fieldElement = `#${event.target.id}-input`;
+                this.$(fieldElement).classList.add("has-focus");
+            },
+
+            removeInputFocus(event) {
+                const fieldElement = `#${event.target.id}-input`;
+                const fieldHasValue = event.target.value != "";
+
+                this.$(fieldElement).classList.remove("has-focus");
+
+                if (fieldHasValue && !this.$(fieldElement).classList.contains("is-filled")) {
+                    this.$(fieldElement).classList.add("is-filled");
+                } else if (!fieldHasValue) {
+                    this.$(fieldElement).classList.remove("is-filled");
                 }
             },
         };

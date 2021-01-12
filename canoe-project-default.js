@@ -15,6 +15,5 @@ module.exports = {
     SITE_NAME: "Canoe",
     SITE_SHORT_NAME: "Canoe",
     SITE_DESCRIPTION: "An online education platform",
-    BACKGROUND_COLOR: "#ffffff",
     FAVICON_PATH: "./src/favicon.ico"
 };

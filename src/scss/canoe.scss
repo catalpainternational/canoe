@@ -21,39 +21,32 @@
 @import "lesson";
 @import "cards";
 @import "login";
-@import "home";
+@import "all-courses";
 @import "toast";
 @import "resources";
 @import "honorcode";
 @import "banner";
 @import "loading";
+@import "taglist";
 @import "scss/_logos";
 
 /* General */
-body {
+* {
     margin: 0;
-    background-color: $blue-1;
+    padding: 0;
 }
 
 div.content-wrapper {
-    min-height: calc(100vh - #{$top-menu-height} - 30px - 40px - #{$bottom-menu-height});
-    padding-bottom: calc(#{$bottom-menu-height} + 140px);
-    padding-right: 30px;
-    padding-left: 30px;
-    background-color: $tan;
+    min-height: calc(100vh - #{$bottom-menu-height} - #{$top-menu-height});
+    padding-bottom: calc(#{$bottom-menu-height} + 20px);
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: $app-background-color;
     max-width: $tablet;
     margin: auto;
-
-    @media only screen and (max-width: $tablet-plus) {
-        margin: auto 10px;
-    }
 }
 
-.profile,
-.settings {
-    background-color: $tan;
-}
-
+//TODO: delete these
 .background-blue-1 {
     background-color: #04788e;
 }

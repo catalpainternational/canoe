@@ -1,6 +1,6 @@
 /* Color pallete */
-$blue-1: #04788e;
-$blue-2: #00b8ad;
+$blue-1: #0074fc;
+$blue-2: #00d2a8;
 
 $brown: #744d4d;
 
@@ -30,7 +30,7 @@ $pink-2: #c300ab;
 
 $purple: #6f6cac;
 
-$red-1: #de3011;
+$red-1: #ed1e4f;
 $red-2: #ff694d;
 
 $white: #ffffff;
@@ -40,16 +40,21 @@ $profile-banner-green: #129a62;
 $settings-background-tan: $tan;
 
 /* Layout */
-$bottom-menu-height: 65px;
-$top-menu-height: 65px;
-$top-menu-height-no-footer: 55px;
-$bottom-menu-height-no-footer: 25px;
-$sticky-header-offset: 95px;
+$bottom-menu-height: 70px;
+$top-menu-height: 60px;
 $border: 1px solid $gray-8;
 
-// Breakpoints
+/* Breakpoints */
 $xs-phone: 350px;
 $sm-phone: 374px;
 $lg-phone: 414px;
 $tablet: 600px;
 $tablet-plus: 680px;
+
+/* Customizable elements */
+$app-accent-color: $blue-1;
+$app-button-radius: 25px;
+$app-typography: "CircularStd";
+$top-gradient: linear-gradient(135deg, $gray-9 0%, $gray-7 100%);
+$bottom-gradient: linear-gradient(225deg, $gray-7 0%, $gray-9 100%);
+$app-background-color: $gray-9;

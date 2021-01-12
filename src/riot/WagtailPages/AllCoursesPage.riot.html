@@ -1,0 +1,167 @@
+<AllCoursesPage>
+    <div class="background">
+        <GuestBanner if="{showBanner()}" closeBanner="{closeBanner}"></GuestBanner>
+        <div class="header">
+            <h3>{ TRANSLATIONS.allCourses() }</h3>
+            <p>{ TRANSLATIONS.coursesIntro() }</p>
+            <a
+                if="{Array.isArray(state.sortedListOfCourses) && state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 }"
+                class="filter-icon"
+                onclick="{toggleTagList}"
+            ></a>
+        </div>
+
+        <div class="content-wrapper">
+            <LoadingDots
+                if="{state.sortedListOfCourses === null}"
+                extrastyleclasses="dark"
+            ></LoadingDots>
+            <template if="{Array.isArray(state.sortedListOfCourses)}">
+                <TagList
+                    if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 && state.showTagList}"
+                    tags="{state.listOfTags}"
+                    onTagClick="{onTagClick}"
+                    selectedTags="{state.selectedTags}"
+                ></TagList>
+                <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
+                    <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
+                    <Card
+                        status="{courseStatus(state.currentCourse)}"
+                        title="{state.currentCourse.title}"
+                        link="{state.currentCourse.id}"
+                        progressValue="{state.currentCourse.numberOfFinishedLessons}"
+                        progressMax="{state.currentCourse.numberOfLessons}"
+                    ></Card>
+                </template>
+                <h5
+                    if="{state.currentCourse && !state.currentCourse.isFinished()}"
+                    class="section-title"
+                >
+                    { TRANSLATIONS.allCourses() }
+                </h5>
+                <div class="card-container">
+                    <Card
+                        each="{course in state.sortedListOfCourses}"
+                        if="{doesCourseHaveTag(course)}"
+                        status="{courseStatus(course)}"
+                        title="{course.title}"
+                        link="{course.id}"
+                        progressValue="{course.numberOfFinishedLessons}"
+                        progressMax="{course.numberOfLessons}"
+                    ></Card>
+                </div>
+                <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
+            </template>
+        </div>
+    </div>
+
+    <script>
+        import Card from "RiotTags/Components/Card.riot.html";
+        import TagList from "RiotTags/Components/TagList.riot.html";
+        import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+
+        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
+        import { ON_COMPLETION_CHANGE } from "js/Events";
+        import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
+        import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
+        import { getCourseWithLatestCompletion } from "js/utilities";
+
+        export default {
+            state: {
+                currentCourse: null,
+                selectedTags: [],
+                listOfTags: [],
+                sortedListOfCourses: null,
+                showTagList: false,
+            },
+
+            components: {
+                card: Card,
+                taglist: TagList,
+                guestbanner: GuestBanner,
+                loadingdots: LoadingDots,
+            },
+
+            TRANSLATIONS: {
+                noCourses: () => gettext("There are no courses yet. Check back soon!"),
+                allCourses: () => gettext("All courses"),
+                continueLearning: () => gettext("Continue Learning"),
+                coursesIntro: () =>
+                    gettext(
+                        "Explore a range of courses to suit your needs, expertise, and interests."
+                    ),
+            },
+
+            async onMounted(props, state) {
+                const courses = await props.wagtailPage.getFullCourseObjects();
+
+                const unsortedCourses = courses.filter(course => course.numberOfLessons);
+
+                const currentCourse = getCourseWithLatestCompletion(unsortedCourses);
+                const listOfTags = getTagsFromPages(unsortedCourses);
+
+                const visibleCourses = isGuestUser()
+                    ? unsortedCourses.filter(course => course.isVisibleToGuests())
+                    : unsortedCourses;
+
+                const sortedListOfCourses = this.sortCourses(visibleCourses);
+
+                this.update({
+                    currentCourse,
+                    listOfTags,
+                    sortedListOfCourses,
+                });
+            },
+
+            sortCourses(courses) {
+                const completedCourses = courses.filter(course => course.isFinished());
+                const incompleteCourses = courses.filter(course => !course.isFinished());
+                const sortedCourses = incompleteCourses.concat(completedCourses);
+                return sortedCourses;
+            },
+
+            toggleTagList() {
+                this.update({ showTagList: !this.state.showTagList });
+            },
+
+            onTagClick(clickedTag) {
+                if (this.state.selectedTags.includes(clickedTag)) {
+                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
+                    this.state.selectedTags.splice(tagIndex, 1);
+                } else {
+                    this.state.selectedTags.push(clickedTag);
+                }
+                this.update();
+            },
+
+            doesCourseHaveTag(course) {
+                const { tags } = course;
+                const { selectedTags } = this.state;
+                const lowercaseCourseTags = tags.map(tag => tag.toLowerCase());
+
+                return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
+            },
+
+            showBanner() {
+                return isGuestUser() && isGuestBannerVisible();
+            },
+
+            closeBanner() {
+                toggleGuestBanner(false);
+                this.showBanner();
+                this.update();
+            },
+
+            courseStatus(course) {
+                if (course.numberOfFinishedLessons === 0) {
+                    return "not-started";
+                } else if (course.numberOfFinishedLessons < course.numberOfLessons) {
+                    return "in-progress";
+                } else {
+                    return "complete";
+                }
+            },
+        };
+    </script>
+</AllCoursesPage>

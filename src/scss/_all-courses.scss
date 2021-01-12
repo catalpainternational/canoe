@@ -1,0 +1,15 @@
+AllCoursesPage {
+    .background {
+        background-color: $app-background-color;
+    }
+
+    .header {
+        @include header-swoop;
+        height: 200px;
+        margin-bottom: 20px;
+    }
+
+    .card-image {
+        background-image: url("~img/stock_course.svg");
+    }
+}

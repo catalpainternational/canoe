@@ -1,9 +1,24 @@
 <LessonFrame>
-    <div class="frame-background background-blue-1">
+    <TopMenu>
+        <a class="top-icon right" href="#">
+            <span class="cross gray"></span>
+        </a>
+    </TopMenu>
+    <div class="frame-background">
         <div class="card-frame">
             <div class="card-container {props.extrastyleclasses}">
                 <slot />
             </div>
         </div>
     </div>
+
+    <script>
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+
+        export default {
+            components: {
+                topmenu: TopMenu,
+            },
+        };
+    </script>
 </LessonFrame>

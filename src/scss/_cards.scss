@@ -1,205 +1,119 @@
 .card {
-    box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.35);
-    flex-direction: column;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #d5dbdf;
     display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid $gray-7;
+    box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+    background-color: $gray-10;
+    height: 180px;
+    position: relative;
 
-    &.disabled {
-        pointer-events: none;
-        opacity: 0.5;
+    .card-image {
+        background-size: cover;
+        background-position: center;
+        background-color: $gray-9;
+        background-repeat: no-repeat;
+        border-bottom: 0.5px solid $gray-8;
+        height: 100%;
+        border-radius: 7px 7px 0 0;
+        position: relative;
     }
 
-    &.no-shadow {
-        box-shadow: none;
-    }
-
-    .card-body {
-        background-color: $white;
-        border-radius: 8px 8px 0 0;
-        padding: 20px;
-        display: grid;
-
-        h4 {
-            grid-row: 1;
-            grid-column: 1 / 7;
-        }
+    .card-title {
+        box-sizing: border-box;
+        min-height: 70px;
+        padding: 10px;
+        overflow: hidden;
 
         h5 {
-            grid-row: 1;
-            grid-column: 6;
             margin: 0;
-
-            font-size: 0.6em;
-            text-align: right;
         }
 
-        p {
-            grid-row: 2;
-            grid-column: 1 / 7;
+        progress {
+            width: 100%;
+            height: 5px;
+            -webkit-appearance: none;
+            border: none;
+            border-radius: 5px;
         }
 
-        &.no-footer {
+        progress::-webkit-progress-bar {
+            background-color: $gray-7;
+            border-radius: 5px;
+        }
+
+        progress::-webkit-progress-value {
+            background-color: $blue-2;
+            border-radius: 5px;
+        }
+
+        progress::-moz-progress-bar {
+            background-color: $blue-2;
+            border-radius: 5px;
+        }
+    }
+
+    &.complete .card-status,
+    &.in-progress .card-status,
+    &.disabled .card-status,
+    &.coming-soon .card-status {
+        @extend %icons-shared;
+        position: absolute;
+        border-radius: 20px;
+        top: 30%;
+        left: 40%;
+        width: 40px;
+        height: 40px;
+    }
+
+    &.complete {
+        box-shadow: none;
+
+        .card-status {
+            @extend %status-complete;
+        }
+    }
+
+    &.in-progress .card-status {
+        @extend %status-play;
+        box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
+    }
+
+    &.disabled,
+    &.coming-soon {
+        pointer-events: none;
+        box-shadow: none;
+        filter: grayscale(100%);
+
+        &:after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba($gray-7, 0.6);
             border-radius: 8px;
         }
 
-        @media only screen and (max-width: $sm-phone) {
-            padding: 15px;
-        }
-
-        @media only screen and (max-width: $xs-phone) {
-            padding: 10px;
-        }
-    }
-
-    .card-footer {
-        border-radius: 0 0 8px 8px;
-        background-color: white;
-        padding: 0px 20px 20px 20px;
-
-        @media only screen and (max-width: $sm-phone) {
-            flex-wrap: wrap;
-            padding: 0px 15px 15px 15px;
-        }
-
-        @media only screen and (max-width: $xs-phone) {
-            padding: 0px 10px 10px 10px;
-        }
-    }
-
-    div.status,
-    div.duration {
-        align-items: center;
-        display: flex;
-        border-bottom: none;
-        border-top: none;
-
-        & > span {
-            margin-right: 5px;
-        }
-
-        & > .checkmark-circle {
-            margin-left: 3px;
-            margin-top: 2px;
-        }
-
-        & > p {
-            margin: 0;
-        }
-    }
-
-    div.status {
-        flex: 1;
-
-        & > p {
-            color: $blue-1;
-        }
-    }
-
-    div.duration {
-        p {
-            font-size: 10px;
-            margin-right: 10px;
-
-            @media only screen and (max-width: $sm-phone) {
-                margin-right: 0;
-            }
-        }
-    }
-
-    .status.btn-start-lesson {
-        border-radius: 10px;
-        max-width: fit-content;
-        max-width: -moz-fit-content;
-        border: 1px solid $blue-1;
-        box-sizing: border-box;
-        background-color: rgba(4, 120, 142, 0.07);
-        padding: 6px;
-
-        p {
-            font-size: 10px;
-            line-height: 10px;
-            font-weight: 600;
-        }
-    }
-
-    .status.start-exam {
-        max-width: 100px;
-    }
-
-    .status.done {
-        background-color: $gray-7;
-        max-width: 100px;
-        padding: 3px;
-        border-radius: 5px;
-
-        p {
-            line-height: 10px;
-            font-weight: 600;
+        .card-status {
+            @extend %status-lock;
         }
     }
 }
 
-.card.done {
-    box-shadow: none;
-
-    .card-body {
-        border-radius: 8px 8px 0 0;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .card-body:after {
-        content: "";
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0 35px 35px 0;
-        right: 0;
-        top: 0;
-        border-color: transparent $green-2 transparent transparent;
-        position: absolute;
-    }
-
-    .white-check {
-        text-align: center;
-        display: inline-block;
-        transform: rotate(45deg);
-        height: 10px;
-        width: 4px;
-        position: absolute;
-        right: 9px;
-        top: 5px;
-        z-index: 1;
-        border-bottom: 1.25px solid white;
-        border-right: 1.25px solid white;
-    }
+.card-container {
+    display: grid;
+    grid-gap: 15px 7%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    justify-content: space-between;
 }
 
-.carousel-card {
-    display: flex;
-    flex-direction: column;
-
-    margin: 0 10px #{$bottom-menu-height-no-footer};
-    padding: 30px;
-    border-radius: 30px;
-    box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
-
-    overflow-y: auto;
-    min-height: calc(100vh - (#{$bottom-menu-height-no-footer} * 6));
-    max-width: $tablet;
-
-    background-color: $white;
-
-    @media only screen and (min-width: $tablet-plus) {
-        margin: auto;
-    }
-}
-
+// Legacy needs this (?)
 .notification-card {
     background-color: rgba(4, 120, 142, 0.05);
-    border: 1px solid $blue-1;
+    border: 1px solid $app-accent-color;
     margin-bottom: 15px;
     border-radius: 3px;
     padding: 20px;
@@ -226,8 +140,4 @@
 .notification-card.old {
     background-color: $white;
     border-color: $gray-7;
-}
-
-Card:last-child {
-    margin-bottom: 0;
 }

@@ -1,9 +1,8 @@
 <Resources>
+    <div class="resources-swoop">
+        <h4>{ TRANSLATIONS.resources() }</h4>
+    </div>
     <div class="content-wrapper" if="{state.hash == null}">
-        <div class="resources-bar">
-            <span class="resources-icon title"></span>
-            <h3>{ TRANSLATIONS.resources() }</h3>
-        </div>
         <SearchBar
             if="{state.articles.length > 0}"
             searchString="{state.searchString}"
@@ -15,13 +14,13 @@
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
-        <div each="{article in state.articles}">
+        <div class="card-container">
             <Card
+                each="{article in state.articles}"
                 if="{isResourceArticleVisible(article)}"
                 title="{article.title}"
-                description="{article.description}"
                 link="{article.id}"
-                showFooter="{false}"
+                status="not-started"
             ></Card>
         </div>
         <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>

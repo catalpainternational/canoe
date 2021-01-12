@@ -117,11 +117,6 @@
             },
 
             onHashChange() {
-                this.renderAnExamScreen();
-                window.scroll(0, 0);
-            },
-
-            renderAnExamScreen() {
                 const cardIdx = getLessonCardIdx();
                 this.update({
                     cardIdx,
@@ -143,6 +138,8 @@
                     card,
                     currentAnswer,
                 });
+                
+                window.scroll(0, 0);
             },
 
             isAtHonorCode(cardIdx) {
@@ -186,7 +183,7 @@
 
             calculateFinalScore() {
                 const { cards } = this.props;
-                const listOfExamQuestions = cards.map((card) => card.id);
+                const listOfExamQuestions = cards.map(card => card.id);
                 try {
                     return Math.round(ExamGrader.tallyFinalScore(listOfExamQuestions));
                 } catch (err) {

@@ -1,14 +1,26 @@
 <BottomMenu>
     <footer if="{state.showBottomMenu}">
-        <a class="courses-icon { props.contentType === 'HomePage' ? 'active' : ''}" href="#"></a>
-        <a
-            class="profile-icon { props.contentType === 'profile' ? 'active' : ''}"
-            href="#profile"
-        ></a>
-        <a
-            class="resources-icon { props.contentType === 'resources' ? 'active' : ''}"
-            href="#resources"
-        ></a>
+        <div class="bottom-menu">
+            <!-- <a href="#">
+                <span class="home-icon { props.contentType === 'HomePage' ? 'active' : ''}"></span>
+            </a> -->
+            <a href="#">
+                <span class="all-courses-icon { props.contentType === 'HomePage' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#profile">
+                <span class="profile-icon { props.contentType === 'profile' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#resources">
+                <span class="resources-icon { props.contentType === 'resources' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#settings">
+                <span class="settings-icon { props.contentType === 'settings' ? 'active' : ''}">
+                </span>
+            </a>
+        </div>
     </footer>
 
     <script>

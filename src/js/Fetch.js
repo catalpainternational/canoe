@@ -14,7 +14,6 @@ export const fetch_and_denote_unauthenticatedness = (request_or_url, maybe_fetch
     });
 }
 
-
 export const getImageRequest = (url) => {
     const token = getAuthenticationToken();
     const { browser } = getPlatform();
