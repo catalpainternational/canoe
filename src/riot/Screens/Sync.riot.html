@@ -11,6 +11,7 @@
 
         <div class="content-wrapper">
             <p>{state.appelflapMeta}</p>
+            <p>{state.manifest}</p>
             <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
 
             <h5 if="{state.syncs.length > 0}" class="section-title">
@@ -59,6 +60,7 @@
             state: {
                 syncs: [],
                 appelflapMeta: "Hello",
+                manifest: {},
             },
 
             TRANSLATIONS: {
@@ -90,6 +92,7 @@
                 const manifest = new Manifest();
                 try {
                     const foundManifest = await manifest.getOrFetchManifest();
+                    this.update({ manifest: JSON.stringify(foundManifest) });
                 } catch {
                     this.update({
                         notifications: () => {
