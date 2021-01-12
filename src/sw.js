@@ -14,6 +14,7 @@ import { precacheAndRoute } from "workbox-precaching";
 precacheAndRoute(self.__WB_MANIFEST);
 
 import { BACKEND_BASE_URL } from "./js/urls";
+import { AppelflapConnect } from "ts/AppelflapConnect";
 
 registerRoute(
     new RegExp(`${BACKEND_BASE_URL}/media/media/.+`),
@@ -61,6 +62,10 @@ registerRoute(
     new NetworkOnly(),
     "POST"
 );
+
+// Set up routes to Appelflap, if Canoe is not hosted by Appelflap this does nothing
+const appelflapConnect = new AppelflapConnect();
+appelflapConnect.initialiseRoutes();
 
 // webpack-dev-server communicates over this endpoint. Without this clause, the
 // service worker caches these requests and breaks webpack-dev-server.

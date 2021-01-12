@@ -13,7 +13,7 @@ import { registerRoute } from "workbox-routing/registerRoute";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly";
 
 export class AppelflapConnect {
-    readonly localHostURI = "http://127.0.0.1";
+    readonly localHostURI = "http://localhost";
 
     #portNo = -1;
     readonly metaApi = "meta";
@@ -25,10 +25,6 @@ export class AppelflapConnect {
     readonly subscriptions = "subscriptions";
     readonly status = "status";
     readonly reboot = "reboot";
-
-    constructor() {
-        this.initialiseRoutes();
-    }
 
     private _commands = {
         getMetaStatus: {
@@ -167,13 +163,17 @@ export class AppelflapConnect {
         }
     };
 
-    private initialiseRoutes = (): void => {
+    /** This method should only be called once when routes are being registered with workbox */
+    public initialiseRoutes = (): void => {
         const portNo = this.portNo;
-        Object.keys(this._commands).forEach((commandName) => {
-            const command = this._commands[commandName];
-            const route = `${this.localHostURI}:${portNo}/${command.commandPath}`;
-            registerRoute(route, new NetworkOnly(), command.method);
-        });
+
+        if (portNo > -1) {
+            Object.keys(this._commands).forEach((commandName) => {
+                const command = this._commands[commandName];
+                const route = `${this.localHostURI}:${portNo}/${command.commandPath}`;
+                registerRoute(route, new NetworkOnly(), command.method);
+            });
+        }
     };
 
     public getMetaStatus = async (): Promise<any> => {
