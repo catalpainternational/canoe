@@ -250,9 +250,9 @@
 .arrow {
     @extend %mask-icons-shared;
     -webkit-mask-image: url("~img/arrow.svg");
-    height: 20px;
-    width: 15px;
-    background-color: $gray-1;
+    height: 14px;
+    width: 19px;
+    background-color: $blue-1;
 }
 
 .incorrect-flag {

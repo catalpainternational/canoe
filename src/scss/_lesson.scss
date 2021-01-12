@@ -111,8 +111,7 @@ LessonObjective .objective {
         .arrow {
             display: inline-block;
             position: relative;
-            left: unset;
-            height: 50px;
+            margin: 20px;
         }
 
         .btn-primary {
@@ -256,8 +255,7 @@ LessonContent .content {
     .arrow {
         display: inline-block;
         position: relative;
-        left: unset;
-        height: 50px;
+        margin: 20px;
     }
 
     .speaker,
@@ -683,8 +681,7 @@ CourseExam {
         .arrow {
             display: inline-block;
             position: relative;
-            left: unset;
-            height: 50px;
+            margin: 20px;
         }
 
         .btn-primary {
