@@ -21,6 +21,8 @@ TopMenu {
 
     h4 {
         text-align: center;
+        color: $gray-3;
+        font-weight: 200;
     }
 
     span {
@@ -33,11 +35,11 @@ TopMenu {
         background-position: center;
 
         &.right {
-            right: 10px;
+            right: 15px;
         }
 
         &.left {
-            left: 10px;
+            left: 15px;
         }
 
         &.has-circle {
@@ -46,6 +48,12 @@ TopMenu {
             border-radius: 20px;
             background-color: white;
             box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
+
+            .arrow {
+                position: absolute;
+                top: 13px;
+                left: 11px;
+            }
         }
     }
 }

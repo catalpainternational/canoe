@@ -1,5 +1,5 @@
 <LessonComplete>
-    <LessonFrame>
+    <LessonFrame linkTo="{props.course.id}">
         <div class="confetti background"></div>
         <template if="{state.lessonSlugs.length}">
             <div class="congratulations-container">
@@ -57,7 +57,7 @@
 
             async loadLessonsForIsCourseComplete() {
                 const lessons = await getACoursesLessons(this.props.course.id);
-                const lessonSlugs = lessons.map((lesson) => lesson.slug);
+                const lessonSlugs = lessons.map(lesson => lesson.slug);
                 this.update({ lessonSlugs });
             },
 
@@ -76,7 +76,7 @@
             },
 
             goToCourseOverview() {
-                location.hash = "#" + this.props.course.id;
+                location.hash = `#${this.props.course.id}`;
             },
 
             goToCourseExam() {
