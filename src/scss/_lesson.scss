@@ -65,10 +65,6 @@ LessonFrame {
         background-color: $white;
         border-radius: 30px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
-
-        @media only screen and (min-width: $tablet-plus) {
-            margin: 0 auto 1.5em;
-        }
     }
 }
 
@@ -316,10 +312,6 @@ TestPopupModal {
         h3 {
             align-self: start;
             margin-bottom: 0.3em;
-        }
-
-        @media only screen and (max-width: $sm-phone) {
-            margin-bottom: 1rem;
         }
 
         button {
@@ -623,12 +615,6 @@ ExamResults {
 
         .btn-secondary {
             margin-top: 1em;
-        }
-
-        @media only screen and (max-width: $sm-phone) {
-            h2 {
-                font-size: 1.9em;
-            }
         }
     }
 

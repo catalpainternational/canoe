@@ -32,10 +32,6 @@ GuestBanner {
         text-align: center;
         margin-top: 0.25em;
         margin-bottom: 0.25em;
-
-        @media only screen and (min-width: $tablet) {
-            line-height: 1.4;
-        }
     }
 
     .cross {
