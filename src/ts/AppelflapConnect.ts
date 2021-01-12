@@ -178,32 +178,34 @@ export class AppelflapConnect {
 
     public getMetaStatus = async (): Promise<any> => {
         const { commandPath } = this._commands.getMetaStatus;
-        return this.performCommand(commandPath);
+        return await this.performCommand(commandPath);
     };
 
     public lock = async (): Promise<string> => {
         const { commandPath, method } = this._commands.setLock;
-        return this.performCommand(commandPath, { method }, "text");
+        return await this.performCommand(commandPath, { method }, "text");
     };
 
     public unlock = async (): Promise<string> => {
         const { commandPath, method } = this._commands.releaseLock;
-        return this.performCommand(commandPath, { method }, "text");
+        return await this.performCommand(commandPath, { method }, "text");
     };
 
     public getCacheStatus = async (): Promise<any> => {
         const { commandPath } = this._commands.getCacheStatus;
-        return this.performCommand(commandPath);
+        return await this.performCommand(commandPath);
     };
 
     public doReboot = async (): Promise<any> => {
         const { commandPath, method } = this._commands.doReboot;
-        return this.performCommand(commandPath, { method }, "text");
+        return await this.performCommand(commandPath, { method }, "text");
     };
 
     public getPublications = async (): Promise<TPublications> => {
         const { commandPath } = this._commands.getPublications;
-        return this.performCommand(commandPath) as Promise<TPublications>;
+        return (await this.performCommand(
+            commandPath
+        )) as Promise<TPublications>;
     };
 
     private publicationPath = (publication: TPublicationTarget) => {
@@ -222,7 +224,7 @@ export class AppelflapConnect {
             headers: { "version-number": publication.version.toString() },
         };
 
-        return this.performCommand(requestPath, commandInit, "text");
+        return await this.performCommand(requestPath, commandInit, "text");
     };
 
     public unpublish = async (
@@ -233,13 +235,15 @@ export class AppelflapConnect {
             publication
         )}`;
 
-        return this.performCommand(requestPath, { method }, "text");
+        return await this.performCommand(requestPath, { method }, "text");
     };
 
     public getSubscriptions = async (): Promise<TSubscriptions> => {
         const { commandPath } = this._commands.getSubscriptions;
 
-        return this.performCommand(commandPath) as Promise<TSubscriptions>;
+        return (await this.performCommand(
+            commandPath
+        )) as Promise<TSubscriptions>;
     };
 
     /** Build the Version Min and Max headers.
@@ -299,7 +303,7 @@ export class AppelflapConnect {
             commandInit.headers = headers;
         }
 
-        return this.performCommand(requestPath, commandInit, "text");
+        return await this.performCommand(requestPath, commandInit, "text");
     };
 
     public unsubscribe = async (
@@ -310,7 +314,7 @@ export class AppelflapConnect {
             publication
         )}`;
 
-        return this.performCommand(requestPath, { method }, "text");
+        return await this.performCommand(requestPath, { method }, "text");
     };
 
     public bulkSubscribe = async (
@@ -326,6 +330,6 @@ export class AppelflapConnect {
             body: JSON.stringify(subscriptions),
         };
 
-        return this.performCommand(requestPath, commandInit, "text");
+        return await this.performCommand(requestPath, commandInit, "text");
     };
 }
