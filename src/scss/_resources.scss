@@ -6,6 +6,10 @@ Resources {
     .with-swoop {
         @include center-with-flex;
     }
+
+    .tag-container {
+        margin: 0;
+    }
 }
 
 searchbar {

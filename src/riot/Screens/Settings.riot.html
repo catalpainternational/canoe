@@ -1,7 +1,7 @@
 <Settings>
     <div class="settings">
         <TopMenu extrastyleclasses="with-swoop">
-            <h3>{ TRANSLATIONS.settings() }</h3>
+            <h4>{ TRANSLATIONS.settings() }</h4>
         </TopMenu>
         <div class="content-wrapper">
             <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
@@ -56,12 +56,12 @@
             components: {
                 languageselector: LanguageSelector,
                 logos: Logos,
-                topmenu: TopMenu
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
                 settings: () => gettext("Your settings"),
-                notifications: () => gettext("Would you like to receive app notifications?"),
+                notifications: () => gettext("Do you want to receive app notifications?"),
                 add: () => gettext("Add to Home Screen"),
                 logout: () => gettext("Log out"),
             },

@@ -49,16 +49,10 @@ p {
     font-size: 12px;
 }
 
-.course-header p,
 .notification-footer p {
     text-transform: uppercase;
     letter-spacing: -0.1px;
     font-size: 10px;
-}
-
-.notifications-toggle p {
-    font-size: 12px;
-    color: $gray-1;
 }
 
 h5.section-title {
@@ -117,29 +111,3 @@ ol ol {
     margin-left: 0.625em;
     font-size: 0.625em;
 }
-
-// Text colors
-.text-blue-1 { color: #04788E; }
-.text-blue-2 { color: #00B8AD; }
-.text-brown { color: #744D4D; }
-.text-gray-1 { color: #2A3942; }
-.text-gray-2 { color: #3F525E; }
-.text-gray-3 { color: #596973; }
-.text-gray-4 { color: #82939E; }
-.text-gray-5 { color: #A0AFB8; }
-.text-gray-6 { color: #C9D6DE; }
-.text-gray-7 { color: #C9D6DE; }
-.text-gray-8 { color: #E8EEF1; }
-.text-gray-9 { color: #F4F8FA; }
-.text-gray-10 { color: #FAFDFF; }
-.text-green-1 { color: #007B56; }
-.text-green-2 { color: #10B584; }
-.text-green-3 { color: #F4FFFC; }
-.text-orange-1 { color: #F66400; }
-.text-orange-2 { color: #F67C36; }
-.text-pink-1 { color: #8A0079; }
-.text-pink-2 { color: #C300AB; }
-.text-purple { color: #6F6CAC; }
-.text-red-1 { color: #DE3011; }
-.text-red-2 { color: #FF694D; }
-.text-white { color: #FFFFFF; }

@@ -55,18 +55,16 @@
             },
 
             state: {
-                header: null,
                 coursePageTitle: null,
                 lessons: [],
             },
 
             async onMounted(props, state) {
-                const header = this.$(".course-header");
                 const coursePageTitle = this.$("#coursePageTitle");
                 const { wagtailPage: course } = props;
                 const lessons = await course.getFullLessonObjects();
 
-                this.update({ header, lessons, coursePageTitle });
+                this.update({ lessons, coursePageTitle });
             },
 
             backToAllCourses() {
