@@ -90,7 +90,7 @@
                     await this.props.loginFunction(usernameAndPassword);
                 } catch (error) {
                     if (alertIfRequestWasMadeOffline(error)) {
-                    } else if (error.message === "400") {
+                    } else if (error.message.includes("HTTP status: 400")) {
                         this.update({ errorExplanation: this.TRANSLATIONS.invalid() });
                     }
                 } finally {
