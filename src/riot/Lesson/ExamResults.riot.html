@@ -1,6 +1,6 @@
 <ExamResults>
     <template if="{state.passedExam !== null}">
-        <LessonFrame>
+        <LessonFrame linkTo="{props.course.id}">
             <div class="{!state.passedExam ? '' : 'confetti background'}"></div>
             <div class="congratulations-container">
                 <div class="{!state.passedExam ? 'incorrect-flag' : 'report-card overlay'}"></div>
@@ -10,7 +10,9 @@
                         <h3>{ TRANSLATIONS.completed() }</h3>
                         <p>{ passedExamMessage() }</p>
                     </div>
-                    <button class="btn-primary" onclick="{goToAllCourses}">{ TRANSLATIONS.back() }</button>
+                    <button class="btn-primary" onclick="{goToAllCourses}">
+                        { TRANSLATIONS.back() }
+                    </button>
                     <button class="btn-secondary" onclick="{goToResources}">
                         { TRANSLATIONS.resources() }
                     </button>
@@ -67,7 +69,7 @@
             },
 
             goToCourseOverview() {
-                location.hash = "#" + this.props.course.id;
+                location.hash = `#${this.props.course.id}`;
             },
 
             goToAllCourses() {

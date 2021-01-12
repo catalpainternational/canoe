@@ -1,5 +1,9 @@
 <LessonObjective>
-    <LessonFrame if="{state.cardIdx < props.objective.cards.length}" extraStyleClasses="objective">
+    <LessonFrame
+        if="{state.cardIdx < props.objective.cards.length}"
+        extraStyleClasses="objective"
+        linkTo="{props.lesson.id}"
+    >
         <span class="plant"></span>
         <h3>{ TRANSLATIONS.title() }</h3>
         <p class="center-objective">{props.objective.cards[state.cardIdx].description}</p>
@@ -52,9 +56,9 @@
             },
 
             TRANSLATIONS: {
-                next: () => gettext('Next'),
-                title: () => gettext('Objectives'),
-                finish: () => gettext('Finish')
+                next: () => gettext("Next"),
+                title: () => gettext("Objectives"),
+                finish: () => gettext("Finish"),
             },
 
             onBeforeMount(props, state) {

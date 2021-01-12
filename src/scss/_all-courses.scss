@@ -3,10 +3,8 @@ AllCoursesPage {
         background-color: $app-background-color;
     }
 
-    .header {
-        @include header-swoop;
+    .with-swoop {
         height: 200px;
-        margin-bottom: 20px;
     }
 
     .card-image {
