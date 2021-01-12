@@ -9,6 +9,9 @@ import {
     TSubscriptionVersion,
 } from "ts/Types/CacheTypes";
 
+import { registerRoute } from "workbox-routing/registerRoute";
+import { NetworkOnly } from "workbox-strategies/NetworkOnly";
+
 export class AppelflapConnect {
     readonly localHostURI = "http://127.0.0.1";
 
@@ -22,6 +25,10 @@ export class AppelflapConnect {
     readonly subscriptions = "subscriptions";
     readonly status = "status";
     readonly reboot = "reboot";
+
+    constructor() {
+        this.initialiseRoutes();
+    }
 
     private _commands = {
         getMetaStatus: {
@@ -158,6 +165,15 @@ export class AppelflapConnect {
             case "text":
                 return await response.text();
         }
+    };
+
+    private initialiseRoutes = (): void => {
+        const portNo = this.portNo;
+        Object.keys(this._commands).forEach((commandName) => {
+            const command = this._commands[commandName];
+            const route = `${this.localHostURI}:${portNo}/${command.commandPath}`;
+            registerRoute(new RegExp(route), new NetworkOnly(), command.method);
+        });
     };
 
     public getMetaStatus = async (): Promise<any> => {
