@@ -168,15 +168,12 @@ export class AppelflapConnect {
     };
 
     private initialiseRoutes = (): void => {
-        const routes = [
-            `${this.localHostURI}:${this.portNo}/${this.metaApi}/.*`,
-            `${this.localHostURI}:${this.portNo}/${this.cacheApi}/.*`,
-            `${this.localHostURI}:${this.portNo}/${this.actionApi}/.*`,
-        ];
-        console.info(JSON.stringify(routes));
-        routes.forEach((route) =>
-            registerRoute(new RegExp(route), new NetworkOnly())
-        );
+        const portNo = this.portNo;
+        Object.keys(this._commands).forEach((commandName) => {
+            const command = this._commands[commandName];
+            const route = `${this.localHostURI}:${portNo}/${command.commandPath}`;
+            registerRoute(new RegExp(route), new NetworkOnly(), command.method);
+        });
     };
 
     public getMetaStatus = async (): Promise<any> => {
