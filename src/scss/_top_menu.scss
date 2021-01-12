@@ -31,7 +31,7 @@ TopMenu {
 
     a.top-icon {
         position: absolute;
-        top: 20px;
+        top: 15px;
         background-position: center;
 
         &.right {
@@ -48,10 +48,12 @@ TopMenu {
             border-radius: 20px;
             background-color: white;
             box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
-        }
 
-        &.arrow-gray {
-            top: 10px;
+            .arrow {
+                position: absolute;
+                top: 13px;
+                left: 11px;
+            }
         }
     }
 }

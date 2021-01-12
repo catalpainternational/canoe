@@ -108,11 +108,10 @@ LessonObjective .objective {
         width: 100%;
         margin-bottom: 15px;
 
-        .arrow-gray {
+        .arrow {
             display: inline-block;
             position: relative;
-            left: unset;
-            height: 50px;
+            margin: 20px;
         }
 
         .btn-primary {
@@ -253,11 +252,10 @@ LessonContent .content {
         margin-bottom: 15px;
     }
 
-    .arrow-gray {
+    .arrow {
         display: inline-block;
         position: relative;
-        left: unset;
-        height: 50px;
+        margin: 20px;
     }
 
     .speaker,
@@ -680,11 +678,10 @@ CourseExam {
         width: 100%;
         margin-bottom: 15px;
 
-        .arrow-gray {
+        .arrow {
             display: inline-block;
             position: relative;
-            left: unset;
-            height: 50px;
+            margin: 20px;
         }
 
         .btn-primary {

@@ -159,32 +159,6 @@
     width: 45px;
 }
 
-%arrow-shared {
-    @extend %icons-shared;
-    background-position: center;
-    background-size: 17px 12px;
-    position: absolute;
-    height: 30px;
-    width: 30px;
-    left: 0;
-
-    &:hover {
-        cursor: pointer;
-    }
-}
-
-.arrow-gray {
-    @extend %arrow-shared;
-    background-image: url("~img/arrow_gray.svg");
-}
-
-.arrow-blue {
-    @extend %icons-shared;
-    background-image: url("~img/arrow_blue.svg");
-    height: 10px;
-    width: 13px;
-}
-
 .clock {
     @extend %icons-shared;
     height: 14px;
@@ -276,8 +250,9 @@
 .arrow {
     @extend %mask-icons-shared;
     -webkit-mask-image: url("~img/arrow.svg");
-    height: 10px;
-    width: 13px;
+    height: 14px;
+    width: 19px;
+    background-color: $blue-1;
 }
 
 .incorrect-flag {
