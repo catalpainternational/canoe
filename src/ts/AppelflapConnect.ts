@@ -172,7 +172,7 @@ export class AppelflapConnect {
         Object.keys(this._commands).forEach((commandName) => {
             const command = this._commands[commandName];
             const route = `${this.localHostURI}:${portNo}/${command.commandPath}`;
-            registerRoute(new RegExp(route), new NetworkOnly(), command.method);
+            registerRoute(route, new NetworkOnly(), command.method);
         });
     };
 
