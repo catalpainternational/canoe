@@ -144,12 +144,12 @@
 
 .checkmark-circle-blue {
     @extend %stat-icon-shared;
-    -webkit-mask-image:: url("~img/checkmark_circle_blue.svg");
+    -webkit-mask-image: url("~img/checkmark_circle_blue.svg");
 }
 
 .road-sign {
     @extend %stat-icon-shared;
-    -webkit-mask-image:: url("~img/road_sign.svg");
+    -webkit-mask-image: url("~img/road_sign.svg");
 }
 
 .plant {

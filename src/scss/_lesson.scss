@@ -42,6 +42,10 @@ LessonFrame {
         align-items: stretch;
     }
 
+    .without-swoop {
+        height: 50px;
+    }
+
     .card-container {
         position: relative;
         display: flex;

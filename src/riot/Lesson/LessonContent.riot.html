@@ -2,6 +2,7 @@
     <LessonFrame
         if="{!props.isLessonPage || state.cardIdx < props.lessonContent.cards.length}"
         extraStyleClasses="content"
+        linkTo="{props.lesson.id}"
     >
         <Raw
             if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"

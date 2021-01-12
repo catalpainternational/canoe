@@ -1,13 +1,11 @@
 <LessonModuleComplete>
-        <LessonFrame>
+        <LessonFrame linkTo="{props.lessonId}">
                 <div class="sun"></div>
-
                 <div class="body">
                     <h2>{ TRANSLATIONS.great() }</h2>
                     <h3>{ moduleCompleteMessage() }</h3>
                     <p>{ nextModuleMessage() }</p>
                 </div>
-
                 <div class="bottom-buttons">
                     <button class="btn-primary" onclick="{goToNextModule}">
                         { TRANSLATIONS.continue_button() }
@@ -36,11 +34,11 @@
             },
 
             goToNextModule() {
-                location.hash = "#" + this.props.lessonId + "/" + this.props.nextModule + "/1";
+                location.hash = `#${this.props.lessonId}/${this.props.nextModule}/1`;
             },
 
             backToLessonPage() {
-                location.hash = "#" + this.props.lessonId;
+                location.hash = `#${this.props.lessonId}`;
             },
 
             moduleCompleteMessage() {
