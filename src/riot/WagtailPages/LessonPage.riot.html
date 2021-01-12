@@ -1,18 +1,34 @@
 <LessonPage>
-    <div class="replace-this-with-lessonframe background-blue-1">
-        <div class="content-wrapper">
-            {grabLessonHeaderReference()}
-            <div class="lesson-header">
-                <div>
-                    <a class="arrow-gray" onclick="{backToCoursePage}"></a>
-                </div>
-                <div class="section-title">
-                    <div class="unit">
-                        <p class="truncate-if-long">{ lessonPageTitleMessage() }</p>
-                    </div>
-                </div>
-                <h2 id="lessonPageTitle">{props.wagtailPage.title}</h2>
-            </div>
+    <TopMenu extrastyleclasses="without-swoop">
+        <a class="arrow top-icon left has-circle" onclick="{backToCoursePage}"></a>
+        <h4>{ props.wagtailPage.course.title }</h4>
+    </TopMenu>
+    <div class="content-wrapper">
+        <h3 id="lessonPageTitle">{props.wagtailPage.title}</h3>
+        <p>{props.wagtailPage.shortDescription}</p>
+        <p if="{props.wagtailPage.longDescription && state.showLongDescription}">
+            {props.wagtailPage.longDescription}
+        </p>
+        <a
+            if="{props.wagtailPage.longDescription && state.showLongDescription}"
+            onclick="{toggleLessonDescription}"
+            >{ TRANSLATIONS.less() }</a
+        >
+        <a
+            if="{props.wagtailPage.longDescription && !state.showLongDescription}"
+            onclick="{toggleLessonDescription}"
+            >{ TRANSLATIONS.more() }</a
+        >
+        <div class="activity-swoop">
+            <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
+            <div class="card-container">
+                <Card
+                    title="1. {props.wagtailPage.objective.title}"
+                    link="{props.wagtailPage.id}/{OBJECTIVES}/1"
+                    status="{moduleStatus(OBJECTIVES)}"
+                    class="objective"
+                >
+                </Card>
 
             <div class="duration">
                 <span class="clock"></span>
