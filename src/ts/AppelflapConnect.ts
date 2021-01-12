@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { THttpMethods } from "ts/Types/CanoeEnums";
 import {
     TPublication,
     TPublications,
@@ -9,112 +8,18 @@ import {
     TSubscriptionVersion,
 } from "ts/Types/CacheTypes";
 
-import { registerRoute } from "workbox-routing/registerRoute";
-import { NetworkOnly } from "workbox-strategies/NetworkOnly";
+import {
+    AF_LOCALHOSTURI,
+    APPELFLAPCOMMANDS,
+    AppelflapPortNo,
+} from "js/RoutingAppelflap";
 
 export class AppelflapConnect {
-    readonly localHostURI = "http://localhost";
-
-    #portNo = -1;
-    readonly metaApi = "meta";
-    readonly cacheApi = "api/ingeblikt";
-    readonly actionApi = "api/do";
-
-    readonly insLock = "insertion-lock";
-    readonly publications = "publications";
-    readonly subscriptions = "subscriptions";
-    readonly status = "status";
-    readonly reboot = "reboot";
-
-    private _commands = {
-        getMetaStatus: {
-            commandPath: `${this.metaApi}/${this.status}`,
-            method: "GET",
-        },
-        setLock: {
-            commandPath: `${this.cacheApi}/${this.insLock}`,
-            method: "PUT",
-        },
-        releaseLock: {
-            commandPath: `${this.cacheApi}/${this.insLock}`,
-            method: "DELETE",
-        },
-        getCacheStatus: {
-            commandPath: `${this.cacheApi}/${this.status}`,
-            method: "GET",
-        },
-        doReboot: {
-            commandPath: `${this.actionApi}/${this.reboot}`,
-            method: "POST",
-        },
-        getPublications: {
-            commandPath: `${this.cacheApi}/${this.publications}`,
-            method: "GET",
-        },
-        savePublication: {
-            commandPath: `${this.cacheApi}/${this.publications}`,
-            method: "PUT",
-        },
-        deletePublication: {
-            commandPath: `${this.cacheApi}/${this.publications}`,
-            method: "DELETE",
-        },
-        getSubscriptions: {
-            commandPath: `${this.cacheApi}/${this.subscriptions}`,
-            method: "GET",
-        },
-        subscribe: {
-            commandPath: `${this.cacheApi}/${this.subscriptions}`,
-            method: "PUT",
-        },
-        unsubscribe: {
-            commandPath: `${this.cacheApi}/${this.subscriptions}`,
-            method: "DELETE",
-        },
-        bulkSubscribe: {
-            commandPath: `${this.cacheApi}/${this.subscriptions}`,
-            method: "POST",
-        },
-    } as {
-        [name: string]: { commandPath: string; method: THttpMethods };
-    };
-
-    /** Get the port number that Appelflap is using or return -1 */
-    get portNo(): number {
-        // Appelflap knows the port number (which is randomly picked at launch); and it needs to let the web context know what the port number is.
-        // It could be learned via a call to a contentscript (WebExtension), but that won't work in a ServiceWorker. Hence, we stuff it in the language
-        // tags, which are available inside a ServiceWorker context.
-        // This is not a security measure or anything — it's just that we can't use a statically defined port, because we simply don't know whether
-        // it won't already be occupied. Similarly the charcode shifting is not obfuscation, it's just that Geckoview is picky about what we pass
-        // as a language tag.
-
-        if (this.#portNo > -1) {
-            return this.#portNo;
-        }
-
-        const portword = navigator.languages.filter((word) =>
-            /^ep-[a-j]{4,5}$/.test(word)
-        )[0];
-
-        if (!portword) {
-            this.#portNo = -1;
-            return this.#portNo;
-        }
-
-        const portNo = [...portword.substr(3)]
-            .map((el) => String.fromCharCode(el.charCodeAt(0) - 0x31))
-            .join("");
-
-        this.#portNo = parseInt(portNo, 10);
-
-        return this.#portNo;
-    }
-
     private appelflapFetch = async (
         commandPath: string,
         commandInit?: RequestInit
     ): Promise<Response> => {
-        const requestInfo = `${this.localHostURI}:${this.portNo}/${commandPath}`;
+        const requestInfo = `${AF_LOCALHOSTURI}:${AppelflapPortNo()}/${commandPath}`;
 
         /** When we finally have authorization via Appelflap, we'll change this */
         const weHaveAuthorization = false;
@@ -163,46 +68,33 @@ export class AppelflapConnect {
         }
     };
 
-    /** This method should only be called once when routes are being registered with workbox */
-    public initialiseRoutes = (): void => {
-        const portNo = this.portNo;
-
-        if (portNo > -1) {
-            Object.keys(this._commands).forEach((commandName) => {
-                const command = this._commands[commandName];
-                const route = `${this.localHostURI}:${portNo}/${command.commandPath}`;
-                registerRoute(route, new NetworkOnly(), command.method);
-            });
-        }
-    };
-
     public getMetaStatus = async (): Promise<any> => {
-        const { commandPath } = this._commands.getMetaStatus;
+        const { commandPath } = APPELFLAPCOMMANDS.getMetaStatus;
         return await this.performCommand(commandPath);
     };
 
     public lock = async (): Promise<string> => {
-        const { commandPath, method } = this._commands.setLock;
+        const { commandPath, method } = APPELFLAPCOMMANDS.setLock;
         return await this.performCommand(commandPath, { method }, "text");
     };
 
     public unlock = async (): Promise<string> => {
-        const { commandPath, method } = this._commands.releaseLock;
+        const { commandPath, method } = APPELFLAPCOMMANDS.releaseLock;
         return await this.performCommand(commandPath, { method }, "text");
     };
 
     public getCacheStatus = async (): Promise<any> => {
-        const { commandPath } = this._commands.getCacheStatus;
+        const { commandPath } = APPELFLAPCOMMANDS.getCacheStatus;
         return await this.performCommand(commandPath);
     };
 
     public doReboot = async (): Promise<any> => {
-        const { commandPath, method } = this._commands.doReboot;
+        const { commandPath, method } = APPELFLAPCOMMANDS.doReboot;
         return await this.performCommand(commandPath, { method }, "text");
     };
 
     public getPublications = async (): Promise<TPublications> => {
-        const { commandPath } = this._commands.getPublications;
+        const { commandPath } = APPELFLAPCOMMANDS.getPublications;
         return (await this.performCommand(
             commandPath
         )) as Promise<TPublications>;
@@ -215,7 +107,7 @@ export class AppelflapConnect {
     };
 
     public publish = async (publication: TPublication): Promise<string> => {
-        const { commandPath, method } = this._commands.savePublication;
+        const { commandPath, method } = APPELFLAPCOMMANDS.savePublication;
         const requestPath = `${commandPath}/${this.publicationPath(
             publication
         )}`;
@@ -230,7 +122,7 @@ export class AppelflapConnect {
     public unpublish = async (
         publication: TPublicationTarget
     ): Promise<string> => {
-        const { commandPath, method } = this._commands.deletePublication;
+        const { commandPath, method } = APPELFLAPCOMMANDS.deletePublication;
         const requestPath = `${commandPath}/${this.publicationPath(
             publication
         )}`;
@@ -239,7 +131,7 @@ export class AppelflapConnect {
     };
 
     public getSubscriptions = async (): Promise<TSubscriptions> => {
-        const { commandPath } = this._commands.getSubscriptions;
+        const { commandPath } = APPELFLAPCOMMANDS.getSubscriptions;
 
         return (await this.performCommand(
             commandPath
@@ -293,7 +185,7 @@ export class AppelflapConnect {
     };
 
     public subscribe = async (subscription: TSubscription): Promise<string> => {
-        const { commandPath, method } = this._commands.subscribe;
+        const { commandPath, method } = APPELFLAPCOMMANDS.subscribe;
         const requestPath = `${commandPath}/${this.publicationPath(
             subscription
         )}`;
@@ -309,7 +201,7 @@ export class AppelflapConnect {
     public unsubscribe = async (
         publication: TPublicationTarget
     ): Promise<string> => {
-        const { commandPath, method } = this._commands.unsubscribe;
+        const { commandPath, method } = APPELFLAPCOMMANDS.unsubscribe;
         const requestPath = `${commandPath}/${this.publicationPath(
             publication
         )}`;
@@ -320,7 +212,7 @@ export class AppelflapConnect {
     public bulkSubscribe = async (
         subscriptions: TSubscriptions
     ): Promise<string> => {
-        const { commandPath, method } = this._commands.bulkSubscribe;
+        const { commandPath, method } = APPELFLAPCOMMANDS.bulkSubscribe;
         const requestPath = `${commandPath}`;
         const commandInit = {
             method: method,
