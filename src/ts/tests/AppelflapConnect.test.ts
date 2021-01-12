@@ -1,3 +1,4 @@
+
 import test from "ava";
 import fetchMock from "fetch-mock";
 import { Response } from "node-fetch";
@@ -11,18 +12,12 @@ import {
     TSubscription,
     TSubscriptions,
 } from "ts/Types/CacheTypes";
-import {
-    AF_LOCALHOSTURI,
-    AF_META_API,
-    AF_CACHE_API,
-    AF_ACTION_API,
-    AF_INS_LOCK,
-    AF_PUBLICATIONS,
-    AF_SUBSCRIPTIONS,
-    AF_STATUS,
-    AF_REBOOT,
-    AppelflapPortNo,
-} from "js/RoutingAppelflap";
+/* eslint-disable prettier/prettier */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: For when the unit tests cannot find the declaration file
+import { AF_LOCALHOSTURI, AF_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT, AppelflapPortNo } from "js/RoutingAppelflap";
+// The above import statement MUST all appear on the one line for the @ts-ignore to work
+/* eslint-enable prettier/prettier */
 
 test.before((t: any) => {
     t.context["testPort"] = 9090;
