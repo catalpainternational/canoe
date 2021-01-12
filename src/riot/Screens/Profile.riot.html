@@ -1,7 +1,10 @@
 <Profile>
-    <div class="profile-swoop">
+    <TopMenu extrastyleclasses="with-swoop">
         <h4>{ TRANSLATIONS.yourProfile() }</h4>
-    </div>
+        <a class="top-icon right" href="#settings">
+            <span class="settings-icon"> </span>
+        </a>
+    </TopMenu>
 
     <div class="content-wrapper">
         <h5 class="section-title">{ TRANSLATIONS.courseProgress() }</h5>
@@ -36,10 +39,11 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { getHomePage } from "js/WagtailPagesAPI";
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
@@ -57,6 +61,7 @@
             components: {
                 card: Card,
                 loadingdots: LoadingDots,
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {

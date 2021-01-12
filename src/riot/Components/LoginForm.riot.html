@@ -21,7 +21,7 @@
                 onfocus="{setInputFocus}"
                 onblur="{removeInputFocus}"
             />
-            <a id="icon-box" onclick="{showPassword}">
+            <a id="icon-box" onclick="{showPassword}" tabindex="0">
                 <span class="eye crossout"></span>
                 <p>{ state.isShowingPassword ? TRANSLATIONS.hide() : TRANSLATIONS.show() }</p>
             </a>

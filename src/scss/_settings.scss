@@ -1,8 +1,6 @@
 Settings {
-    .settings-swoop {
-        @include header-swoop;
+    .with-swoop {
         @include center-with-flex;
-        height: 100px;
     }
 
     button {

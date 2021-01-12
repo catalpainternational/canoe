@@ -93,7 +93,7 @@
 .settings-icon {
     @extend %bottom-nav-shared;
     -webkit-mask-image: url("../img/cog.svg");
-    background-color: $gray-4;
+    background-color: $blue-1;
 
     &.active,
     &.title {
@@ -144,12 +144,12 @@
 
 .checkmark-circle-blue {
     @extend %stat-icon-shared;
-    -webkit-mask-image:: url("~img/checkmark_circle_blue.svg");
+    -webkit-mask-image: url("~img/checkmark_circle_blue.svg");
 }
 
 .road-sign {
     @extend %stat-icon-shared;
-    -webkit-mask-image:: url("~img/road_sign.svg");
+    -webkit-mask-image: url("~img/road_sign.svg");
 }
 
 .plant {
@@ -157,32 +157,6 @@
     background-image: url("~img/plant.svg");
     height: 50px;
     width: 45px;
-}
-
-%arrow-shared {
-    @extend %icons-shared;
-    background-position: center;
-    background-size: 17px 12px;
-    position: absolute;
-    height: 30px;
-    width: 30px;
-    left: 0;
-
-    &:hover {
-        cursor: pointer;
-    }
-}
-
-.arrow-gray {
-    @extend %arrow-shared;
-    background-image: url("~img/arrow_gray.svg");
-}
-
-.arrow-blue {
-    @extend %icons-shared;
-    background-image: url("~img/arrow_blue.svg");
-    height: 10px;
-    width: 13px;
 }
 
 .clock {
@@ -276,8 +250,9 @@
 .arrow {
     @extend %mask-icons-shared;
     -webkit-mask-image: url("~img/arrow.svg");
-    height: 10px;
-    width: 13px;
+    height: 14px;
+    width: 19px;
+    background-color: $blue-1;
 }
 
 .incorrect-flag {

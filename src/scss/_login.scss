@@ -1,21 +1,19 @@
 Login .modal-background {
     $content-width: 18.75em;
-    $background-color: $app-background-color;
-    $error-background-color: rgba(237, 30, 79, 0.05);
 
     min-height: 100vh;
     flex-direction: column;
     align-items: center;
     display: flex;
-    background-color: $background-color;
+    background-color: $app-background-color;
 
-    .login-header {
-        @include header-swoop;
+    .with-swoop {
         width: 100%;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        margin-bottom: 35px;
+        flex-direction: column;
+        height: 300px;
+        margin-bottom: 20px;
 
         span {
             margin-bottom: 20px;
@@ -43,7 +41,7 @@ Login .modal-background {
         &.has-error {
             div.form-group {
                 border: 2px solid $red-1;
-                background-color: $error-background-color;
+                background-color: rgba(237, 30, 79, 0.05);
             }
 
             div.form-group.password {
@@ -140,13 +138,13 @@ Login .modal-background {
 
         max-width: $content-width;
         width: 100%;
-        margin-top: 10%;
+        margin-top: 20px;
 
         a {
             font-size: 0.875em;
             text-align: center;
 
-            background-color: $background-color;
+            background-color: $app-background-color;
             border: none;
             flex: 1;
         }

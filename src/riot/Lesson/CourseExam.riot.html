@@ -1,11 +1,12 @@
 <CourseExam>
-    <LessonFrame if="{isAtHonorCode(state.cardIdx)}">
+    <LessonFrame if="{isAtHonorCode(state.cardIdx)}" linkTo="{props.wagtailPage.id}">
         <HonorCode courseId="{props.wagtailPage.id}" minimumScore="{MINIMUM_SCORE}"></HonorCode>
     </LessonFrame>
     <LessonFrame
         if="{state.cardIdx >= 0 && state.cardIdx < state.cards.length && state.card}"
         id="test"
         extraStyleClasses="test"
+        linkTo="{props.wagtailPage.id}"
     >
         <h3>{state.cardIdx + 1}. {state.card.question}</h3>
         <TestSingleAnswer
@@ -24,7 +25,7 @@
         ></TestMultipleAnswer>
         <div class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{previousExamCard}"></a>
+                <a if="{state.cardIdx > 0}" class="arrow" onclick="{previousExamCard}"></a>
             </div>
             <div>
                 <button
@@ -138,7 +139,7 @@
                     card,
                     currentAnswer,
                 });
-                
+
                 window.scroll(0, 0);
             },
 

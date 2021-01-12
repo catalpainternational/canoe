@@ -1,7 +1,7 @@
 <AllCoursesPage>
     <div class="background">
         <GuestBanner if="{showBanner()}" closeBanner="{closeBanner}"></GuestBanner>
-        <div class="header">
+        <TopMenu extrastyleclasses="with-swoop">
             <h3>{ TRANSLATIONS.allCourses() }</h3>
             <p>{ TRANSLATIONS.coursesIntro() }</p>
             <a
@@ -9,7 +9,7 @@
                 class="filter-icon"
                 onclick="{toggleTagList}"
             ></a>
-        </div>
+        </TopMenu>
 
         <div class="content-wrapper">
             <LoadingDots
@@ -60,6 +60,7 @@
         import TagList from "RiotTags/Components/TagList.riot.html";
         import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { ON_COMPLETION_CHANGE } from "js/Events";
@@ -81,6 +82,7 @@
                 taglist: TagList,
                 guestbanner: GuestBanner,
                 loadingdots: LoadingDots,
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {

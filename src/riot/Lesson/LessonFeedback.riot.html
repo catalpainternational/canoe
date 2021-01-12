@@ -1,5 +1,5 @@
 <LessonFeedback>
-    <LessonFrame>
+    <LessonFrame linkTo="{backToLesson()}">
         <template if="{!state.madeFeedbackDecision}">
             <div class="feedback-icon">
                 <div class="sun"></div>
@@ -18,10 +18,7 @@
                         <span class="thrilled-smiley"></span>
                     </button>
                 </div>
-                <p>
-                    { TRANSLATIONS.give_feedback() }
-                
-                </p>
+                <p>{ TRANSLATIONS.give_feedback() }</p>
             </div>
             <button class="btn-primary no-thanks" onclick="{clickedNoThanks}">
                 { TRANSLATIONS.no() }
@@ -35,9 +32,7 @@
             <div class="thank-you-container">
                 <h3>{ TRANSLATIONS.sent() }</h3>
                 <div class="correct-flag"></div>
-                <p>
-                    { TRANSLATIONS.feedback_sent() }
-                </p>
+                <p>{ TRANSLATIONS.feedback_sent() }</p>
             </div>
             <button class="btn-primary thank-you-container" onclick="{clickedContinue}">
                 { TRANSLATIONS.continue() }
@@ -51,13 +46,19 @@
 
         export default {
             TRANSLATIONS: {
-                feedback: () => gettext('FEEDBACK'),
-                enjoying_lesson: () => gettext('Are you enjoying this lesson?'),
-                give_feedback: () => gettext("Let us know what you think of this lesson. We value your feedback and treat all feedback as confidential."),
-                feedback_sent: () => gettext("Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"),
-                no: () => gettext('No thanks'),
-                sent: () => gettext('Successfully sent!'),
-                continue: () => gettext('Continue')
+                feedback: () => gettext("FEEDBACK"),
+                enjoying_lesson: () => gettext("Are you enjoying this lesson?"),
+                give_feedback: () =>
+                    gettext(
+                        "We value your feedback and all feedback is confidential."
+                    ),
+                feedback_sent: () =>
+                    gettext(
+                        "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
+                    ),
+                no: () => gettext("No thanks"),
+                sent: () => gettext("Successfully sent!"),
+                continue: () => gettext("Continue"),
             },
             components: {
                 lessonframe: LessonFrame,
@@ -100,6 +101,11 @@
                 const [lessonNumber, section, cardNumber] = parseURLHash();
                 const nextCardNumber = new Number(cardNumber) + 1;
                 window.location.hash = `#${lessonNumber}/${section}/${nextCardNumber}`;
+            },
+
+            backToLesson() {
+                const [lessonNumber] = parseURLHash();
+                return lessonNumber;
             },
 
             sendFeedback(feedbackString) {

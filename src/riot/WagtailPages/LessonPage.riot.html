@@ -1,6 +1,8 @@
 <LessonPage>
-    <TopMenu>
-        <a class="arrow-gray top-icon left has-circle" onclick="{backToCoursePage}"></a>
+    <TopMenu extrastyleclasses="without-swoop">
+        <a class="top-icon left has-circle" onclick="{backToCoursePage}">
+            <span class="arrow"></span>
+        </a>
         <h4>{ props.wagtailPage.course.title }</h4>
     </TopMenu>
     <div class="content-wrapper">
