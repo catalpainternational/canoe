@@ -53,9 +53,19 @@
     <script>
         import { userShouldLogin } from "js/AuthenticationUtilities";
         import { getPage } from "js/Routing";
-        import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
-        import { isBrowserSupported, areCompletionsReady, getManifestFromStore } from "ReduxImpl/Interface";
+        import {
+            ON_LOG_IN,
+            ON_LOG_OUT,
+            ON_REQUEST_SITE_DOWNLOAD,
+        } from "js/Events";
+        import {
+            isBrowserSupported,
+            areCompletionsReady,
+            getManifestFromStore,
+        } from "ReduxImpl/Interface";
         import { logPageView } from "js/GoogleAnalytics";
+
+        import { CanoeHost } from "ts/CanoeHost";
 
         import HomePageJS from "js/HomePage";
         import CoursePageJS from "js/CoursePage";
@@ -154,6 +164,17 @@
                     // If user returns to site and is logged in.
                     this.route();
                 }
+
+                const canoeHost = new CanoeHost();
+                canoeHost
+                    .StartCanoe(() => {})
+                    .then((_) => {
+                        // Success
+                    })
+                    .catch((_) => {
+                        // Appelflap is apparently around, but we couldn't get the lock on Canoe
+                        // The app is probably still usable, but we may wish to show a message to the user.
+                    });
             },
 
             onUpdated() {

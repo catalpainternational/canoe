@@ -17,7 +17,7 @@
 
     <script>
         import { parseURLHash } from "js/Routing";
-        import { getPlatform } from "js/PlatformDetection";
+        import { inAppelflap } from "ts/PlatformDetection";
 
         export default {
             onBeforeMount(props, state) {
@@ -29,8 +29,7 @@
             },
 
             shouldShowSync() {
-                const { browser, inAppelflap, inPWAMode } = getPlatform();
-                return inAppelflap;
+                return inAppelflap();
             },
 
             updateState() {

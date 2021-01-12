@@ -81,7 +81,7 @@
             appelflapStatus() {
                 this.update({appelflapMeta: "Getting"});
                 const appelflapConnect = new AppelflapConnect();
-                appelflapConnect.getMeta().then((response) => {
+                appelflapConnect.getMetaStatus().then((response) => {
                     this.update({appelflapMeta: JSON.stringify(response)});
                 });
             }
