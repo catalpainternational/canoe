@@ -266,30 +266,32 @@
 }
 
 @mixin feedback-icons {
-    height: 50px;
-    width: 41px;
+    height: 30px;
+    width: 30px;
     background-color: $app-accent-color;
     display: block;
     margin: auto;
-    margin-top: 0.5em;
 }
 
 .neutral-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("~img/neutral.png");
+    background: $red-1;
 }
 
 .smiling-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("~img/smile.png");
+    background: $orange-3;
 }
 
 .thrilled-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("~img/thrilled.png");
+    background: $blue-2;
 }
 
 .speaker {
