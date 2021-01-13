@@ -14,7 +14,7 @@ import { precacheAndRoute } from "workbox-precaching";
 precacheAndRoute(self.__WB_MANIFEST);
 
 import { BACKEND_BASE_URL } from "./js/urls";
-import { AppelflapPortNo, APPELFLAPCOMMANDS, AF_LOCALHOSTURI } from "./js/RoutingAppelflap";
+import { initialiseAppelflapRoutes } from "./js/RoutingAppelflap";
 
 registerRoute(
     new RegExp(`${BACKEND_BASE_URL}/media/media/.+`),
@@ -64,20 +64,7 @@ registerRoute(
 );
 
 // Set up routes to Appelflap, if Canoe is not hosted by Appelflap this does nothing
-const initialiseAppelflapRoutes = () => {
-    const portNo = AppelflapPortNo();
-
-    if (portNo > -1) {
-        Object.keys(APPELFLAPCOMMANDS).forEach((commandName) => {
-            const command = APPELFLAPCOMMANDS[commandName];
-            // Port number range is 2^10 to 2^16-1 inclusive - 1024 to 65535
-            const portRange = "(102[4-9]|10[3-9]\d|1[1-9]\d{2}|[2-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])";
-            const route = `${AF_LOCALHOSTURI}:${portRange}/${command.commandPath}`.replaceAll("/", "\\/");
-            registerRoute(RegExp(route), new NetworkOnly(), command.method);
-        });
-    }
-};
-initialiseAppelflapRoutes();
+initialiseAppelflapRoutes(registerRoute, NetworkOnly);
 
 // webpack-dev-server communicates over this endpoint. Without this clause, the
 // service worker caches these requests and breaks webpack-dev-server.

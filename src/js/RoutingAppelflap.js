@@ -82,3 +82,20 @@ export function AppelflapPortNo() {
 
     return parseInt(portNo, 10);
 }
+
+/** Register the routes used to communicate with Appelflap so the service worker handles them as NetworkOnly
+ * @remarks registerRoute and NetworkOnly have to be passed in from sw.js or else the unit tests will not run
+*/
+export function initialiseAppelflapRoutes(registerRoute, NetworkOnly) {
+    const portNo = AppelflapPortNo();
+
+    if (portNo > -1) {
+        Object.keys(APPELFLAPCOMMANDS).forEach((commandName) => {
+            const command = APPELFLAPCOMMANDS[commandName];
+            // Port number range is 2^10 to 2^16-1 inclusive - 1024 to 65535
+            const portRange = "(102[4-9]|10[3-9]\\d|1[1-9]\\d{2}|[2-9]\\d{3}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])";
+            const route = `${AF_LOCALHOSTURI}:${portRange}/${command.commandPath}`.replaceAll("/", "\\/");
+            registerRoute(RegExp(route), new NetworkOnly(), command.method);
+        });
+    }
+};
