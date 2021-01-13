@@ -1,4 +1,3 @@
-
 import test from "ava";
 import fetchMock from "fetch-mock";
 import { Response } from "node-fetch";
