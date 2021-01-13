@@ -4,11 +4,11 @@ import { IManifest } from "ts/Interfaces/IManifest";
 import { IPage } from "ts/Interfaces/IPage";
 import { TPage } from "ts/Types/ManifestTypes";
 
-// See ts/Typings for the type definitions for these imports
-import { storeManifest } from "ReduxImpl/Interface";
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
+import { storeManifestV2 } from "ts/Redux/Interface";
 
+// See ts/Typings for the type definitions for these imports
 import { store } from "ReduxImpl/Store";
+import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { MANIFEST_URL } from "js/urls";
 
 export class Manifest implements IManifest {
@@ -114,7 +114,8 @@ export class Manifest implements IManifest {
         }
 
         const manifest = await this.fetchManifest();
-        storeManifest(manifest);
+        storeManifestV2(manifest);
+
         return manifest;
     }
 
