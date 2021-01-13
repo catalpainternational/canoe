@@ -1,12 +1,11 @@
 <LessonComplete>
     <LessonFrame linkTo="{props.course.id}">
-        <div class="confetti background"></div>
+        <span class="confetti"></span>
         <template if="{state.lessonSlugs.length}">
             <div class="congratulations-container">
-                <div class="report-card overlay"></div>
                 <template if="{!isCourseComplete()}">
                     <div>
-                        <h2>{ TRANSLATIONS.congrats() }</h2>
+                        <h3>{ TRANSLATIONS.congrats() }</h3>
                         <p>{ lessonCompleteMessage() }</p>
                     </div>
                     <button class="btn-primary" onclick="{goToCourseOverview}">
@@ -15,7 +14,7 @@
                 </template>
                 <template if="{isCourseComplete()}">
                     <div>
-                        <h2>{ TRANSLATIONS.good() }</h2>
+                        <h3>{ TRANSLATIONS.good() }</h3>
                         <p>{ lessonCompleteMessage() }</p>
                         <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
                     </div>

@@ -185,14 +185,6 @@
     width: 15px;
 }
 
-.report-card {
-    @extend %icons-shared;
-    background-image: url("~img/report_card.svg");
-    background-position: center;
-    height: 200px;
-    max-width: 200px;
-}
-
 .notifications-image {
     @extend %icons-shared;
     background-image: url("~img/notifications_header.svg");
@@ -226,9 +218,8 @@
 .confetti {
     @extend %icons-shared;
     background-image: url("~img/confetti.svg");
-    height: 45%;
-    width: 60%;
-    max-width: 300px;
+    height: 150px;
+    width: 170px;
 }
 
 .sun {
@@ -250,7 +241,7 @@
     @extend %mask-icons-shared;
     -webkit-mask-image: url("~img/arrow.svg");
     height: 14px;
-    width: 19px;
+    width: 20px;
     background-color: $blue;
 }
 
