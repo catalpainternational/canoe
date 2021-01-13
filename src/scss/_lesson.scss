@@ -411,19 +411,19 @@ TestPopupModal {
             li.selected {
                 .radio {
                     & > div {
-                        background-color: $green-1;
+                        background-color: $green;
                     }
                 }
             }
 
             li.selected-wrong {
                 .radio {
-                    border: 2px solid $red-2;
+                    border: 2px solid $orange;
                     height: 21px;
                     width: 21px;
 
                     & > div {
-                        background-color: $red-2;
+                        background-color: $orange;
                     }
                 }
             }

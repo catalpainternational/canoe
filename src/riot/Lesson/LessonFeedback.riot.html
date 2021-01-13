@@ -8,13 +8,13 @@
             <div class="feedback-container">
                 <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
                 <div class="feedback-buttons">
-                    <button class="feedback" onclick="{clickedThisLessonIsFine}">
+                    <button class="feedback" onclick="{() => clickedThisLessonIs('fine')}">
                         <span class="neutral-smiley"></span>
                     </button>
-                    <button class="feedback" onclick="{clickedThisLessonIsGood}">
+                    <button class="feedback" onclick="{() => clickedThisLessonIs('good')}">
                         <span class="smiling-smiley"></span>
                     </button>
-                    <button class="feedback" onclick="{clickedThisLessonIsGreat}">
+                    <button class="feedback" onclick="{() => clickedThisLessonIs('great')}">
                         <span class="thrilled-smiley"></span>
                     </button>
                 </div>
@@ -66,22 +66,8 @@
                 madeFeedbackDecision: false,
             },
 
-            clickedThisLessonIsFine() {
-                this.sendFeedback("bad");
-                this.update({
-                    madeFeedbackDecision: true,
-                });
-            },
-
-            clickedThisLessonIsGood() {
-                this.sendFeedback("fine");
-                this.update({
-                    madeFeedbackDecision: true,
-                });
-            },
-
-            clickedThisLessonIsGreat() {
-                this.sendFeedback("great");
+            clickedThisLessonIs(rating) {
+                this.sendFeedback(rating);
                 this.update({
                     madeFeedbackDecision: true,
                 });

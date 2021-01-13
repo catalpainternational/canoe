@@ -93,7 +93,7 @@
 .settings-icon {
     @extend %bottom-nav-shared;
     -webkit-mask-image: url("../img/cog.svg");
-    background-color: $blue-1;
+    background-color: $blue;
 
     &.active,
     &.title {
@@ -138,7 +138,7 @@
     @extend %mask-icons-shared;
     height: 25px;
     width: 25px;
-    background: $blue-1;
+    background: $blue;
 }
 
 .checkmark-circle-blue {
@@ -174,7 +174,7 @@
     width: 15px;
 
     &.red {
-        background-color: $red-1;
+        background-color: $red;
     }
 }
 
@@ -251,7 +251,7 @@
     -webkit-mask-image: url("~img/arrow.svg");
     height: 14px;
     width: 19px;
-    background-color: $blue-1;
+    background-color: $blue;
 }
 
 .incorrect-flag {
@@ -276,21 +276,21 @@
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("~img/neutral.png");
-    background: $red-1;
+    background: $red;
 }
 
 .smiling-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("~img/smile.png");
-    background: $orange-3;
+    background: $yellow;
 }
 
 .thrilled-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("~img/thrilled.png");
-    background: $blue-2;
+    background: $teal;
 }
 
 .speaker {
@@ -306,7 +306,7 @@
 // Icons for card status
 %status-play {
     @extend %mask-icons-shared;
-    background: $blue-1;
+    background: $blue;
     border: .1px solid $gray-5;
     display: flex;
     box-sizing: border-box;
