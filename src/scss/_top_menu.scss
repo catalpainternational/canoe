@@ -10,7 +10,7 @@ TopMenu {
     .with-swoop {
         @include header-swoop;
         height: 100px;
-        margin: auto;
+        margin: auto auto 10px auto;
     }
 
     .without-swoop {
@@ -54,6 +54,19 @@ TopMenu {
                 top: 13px;
                 left: 11px;
             }
+        }
+    }
+
+    a.extra-clickable-space {
+        top: 0;
+        padding: 15px;
+
+        &.right {
+            right: 0;
+        }
+
+        &.left {
+            left: 0;
         }
     }
 }

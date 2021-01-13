@@ -124,13 +124,12 @@
     @extend %icons-shared;
     @extend %mask-icons-shared;
     -webkit-mask-image: url("~img/cross.svg");
-    height: 10px;
-    width: 12px;
+    height: 13px;
+    width: 13px;
     background: $white;
 
     &.gray {
         background: $gray-4;
-        height: 1em;
     }
 }
 

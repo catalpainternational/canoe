@@ -540,9 +540,10 @@ LessonFeedback {
         height: 5.687em;
         width: 5.687em;
         border-radius: 50%;
-        border: 2px solid $gray-6;
-        margin: 0 10px;
+        border: none;
+        box-shadow: 0 5px 10px 0 rgba(42,57,66,0.2);
         background-color: white;
+        margin: 0 10px;
 
         &:focus {
             border: 2px solid $app-accent-color;
