@@ -63,28 +63,22 @@ export const APPELFLAPCOMMANDS = {
     },
 };
 
-export let AppelflapPort = -1;
-
-/** Get the port number that Appelflap is using or return -1 */
+/** Get the port number that Appelflap is using
+ * @remarks See: https://github.com/catalpainternational/appelflap/blob/7a4072f8b914748563333238bb1a49ea527480bd/docs/API/determining-endpoint.md for more info
+ * @returns The port number that Appelflap is using, or -1 which means no Appelflap
+*/
 export function AppelflapPortNo() {
-    if (AppelflapPort > -1) {
-        return AppelflapPort;
-    }
-
     const portword = navigator.languages.filter((word) =>
         /^ep-[a-j]{4,5}$/.test(word)
     )[0];
 
     if (!portword) {
-        AppelflapPort = -1;
-        return AppelflapPort;
+        return -1;
     }
 
     const portNo = [...portword.substr(3)]
         .map((el) => String.fromCharCode(el.charCodeAt(0) - 0x31))
         .join("");
 
-    AppelflapPort = parseInt(portNo, 10);
-
-    return AppelflapPort;
+    return parseInt(portNo, 10);
 }
