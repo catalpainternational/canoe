@@ -16,13 +16,6 @@
     }
 }
 
-.cog {
-    @extend %icons-shared;
-    background-image: url("~img/cog.svg");
-    height: 40px;
-    width: 40px;
-}
-
 .filter-icon {
     @extend %icons-shared;
     background-image: url("~img/levers.svg");
@@ -94,11 +87,6 @@
     @extend %bottom-nav-shared;
     -webkit-mask-image: url("../img/cog.svg");
     background-color: $blue;
-
-    &.active,
-    &.title {
-        background-color: $app-accent-color;
-    }
 }
 
 .search-icon {
@@ -218,8 +206,8 @@
 .confetti {
     @extend %icons-shared;
     background-image: url("~img/confetti.svg");
-    height: 150px;
-    width: 170px;
+    height: 160px;
+    width: 100%;
 }
 
 .sun {

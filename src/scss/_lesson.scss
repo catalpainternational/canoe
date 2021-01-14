@@ -40,6 +40,7 @@ LessonFrame {
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
+        background-color: $gray-8;
     }
 
     .without-swoop {
@@ -47,7 +48,6 @@ LessonFrame {
 
         progress {
             width: 60vw;
-            margin-left: 10px;
         }
     }
 
@@ -61,7 +61,7 @@ LessonFrame {
     }
 
     .card-frame {
-        margin: 0 10px 1.5em;
+        margin: 0 5px 1.5em;
         padding: 30px;
         width: 100%;
         max-width: $tablet;
@@ -70,7 +70,7 @@ LessonFrame {
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
         box-sizing: border-box;
 
-        @media only screen and (min-width: 620px) {
+        @media only screen and (min-width: 610px) {
             margin: 0 auto 1.5em;
         }
     }
@@ -522,14 +522,18 @@ ExamResults {
     .congratulations-container {
         display: flex;
         flex-flow: column nowrap;
-        justify-content: start;
+        justify-content: space-evenly;
         align-items: center;
         text-align: center;
+        height: 100%;
 
+        h2,
         h3 {
             margin-top: 0;
+            margin-bottom: 0.4em;
         }
 
+        .btn-primary,
         .btn-secondary {
             margin-top: 1em;
         }
@@ -556,13 +560,12 @@ CourseExam {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
+    align-items: center;
     width: 100%;
-    margin-bottom: 15px;
 
     .arrow {
         display: inline-block;
         position: relative;
-        margin: 15px;
     }
 
     .btn-primary {

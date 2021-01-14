@@ -36,7 +36,9 @@
         />
         <div if="{props.isLessonPage}" class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="arrow" onclick="{goBack}"></a>
+                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
+                    <span class="arrow"></span>
+                </a>
             </div>
             <div>
                 <button
