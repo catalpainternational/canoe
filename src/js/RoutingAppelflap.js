@@ -2,8 +2,9 @@
 export const AF_LOCALHOSTURI = "http://127.0.0.1";
 
 export const AF_META_API = "meta";
-export const AF_CACHE_API = "appelflap/ingeblikt";
-export const AF_ACTION_API = "appelflap/do";
+export const AF_API_PREFIX = "appelflap";
+export const AF_CACHE_API = `${AF_API_PREFIX}/ingeblikt`;
+export const AF_ACTION_API = `${AF_API_PREFIX}/do`;
 
 export const AF_INS_LOCK = "insertion-lock";
 export const AF_PUBLICATIONS = "publications";
@@ -83,6 +84,35 @@ export function AppelflapPortNo() {
     return parseInt(portNo, 10);
 }
 
+/** Registers each Appelflap API route individudally, will not result in false positives */
+function initialiseSpecificRoutes(registerRoute, NetworkOnly) {
+    const localHostURI = AF_LOCALHOSTURI.replaceAll(".","\.");
+    // Port number range is 2^10 to 2^16-1 inclusive - 1024 to 65535
+    const portRange = "(102[4-9]|10[3-9]\\d|1[1-9]\\d{2}|[2-9]\\d{3}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])";
+
+    // Sort the commandPaths by longest first, probably not required, but ...
+    Object.keys(APPELFLAPCOMMANDS).sort((a, b) => {
+        return b.commandPath.length - a.commandPath.length;
+    }).forEach((commandName) => {
+        const command = APPELFLAPCOMMANDS[commandName];
+        const route = `${localHostURI}:${portRange}/${command.commandPath}`.replaceAll("/", "\\/");
+        registerRoute(RegExp(route), new NetworkOnly(), command.method);
+    });
+}
+
+/** Does a generic registration for Appelflap API routes, this may result in false positives */
+function genericRoutes(registerRoute, NetworkOnly) {
+    const localHostURI = AF_LOCALHOSTURI.replaceAll(".","\.");
+    // Port number range is '0000' to '99999' inclusive
+    const portRange = "[0-9]{4,5}";
+    const appelflapAPIs = [AF_META_API, AF_API_PREFIX];
+
+    Object.keys(appelflapAPIs).forEach((api) => {
+        const route = `${localHostURI}:${portRange}/${api}/.*`.replaceAll("/", "\\/");
+        registerRoute(RegExp(route), new NetworkOnly());
+    });
+}
+
 /** Register the routes used to communicate with Appelflap so the service worker handles them as NetworkOnly
  * @remarks registerRoute and NetworkOnly have to be passed in from sw.js or else the unit tests will not run
 */
@@ -90,14 +120,6 @@ export function initialiseAppelflapRoutes(registerRoute, NetworkOnly) {
     const portNo = AppelflapPortNo();
 
     if (portNo > -1) {
-        // Port number range is 2^10 to 2^16-1 inclusive - 1024 to 65535
-        const portRange = "(102[4-9]|10[3-9]\\d|1[1-9]\\d{2}|[2-9]\\d{3}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])";
-        const localHostURI = AF_LOCALHOSTURI.replaceAll(".","\.");
-
-        Object.keys(APPELFLAPCOMMANDS).forEach((commandName) => {
-            const command = APPELFLAPCOMMANDS[commandName];
-            const route = `${localHostURI}:${portRange}/${command.commandPath}`.replaceAll("/", "\\/");
-            registerRoute(RegExp(route), new NetworkOnly(), command.method);
-        });
+        genericRoutes(registerRoute, NetworkOnly);
     }
 };
