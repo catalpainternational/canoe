@@ -19,10 +19,6 @@ TopMenu {
         margin: auto;
     }
 
-    .gray {
-        background-color: $gray-8;
-    }
-
     .has-circle {
         height: 40px;
         width: 40px;
@@ -62,15 +58,11 @@ TopMenu {
     }
 
     a.extra-clickable-space {
-        top: 0;
+        top: 7px;
         padding: 15px;
 
         &.right {
-            right: 0;
-        }
-
-        &.left {
-            left: 0;
+            right: 7px;
         }
     }
 }

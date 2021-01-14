@@ -34,21 +34,16 @@ LessonPage {
     }
 }
 
-LessonFrame {
+LessonFrame {    
     .frame-background {
         min-height: calc(100vh - #{$top-menu-height});
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
-        background-color: $gray-8;
     }
 
-    .without-swoop {
-        height: 50px;
-
-        progress {
-            width: 60vw;
-        }
+    progress {
+        width: 65vw;
     }
 
     .card-container {
@@ -271,6 +266,7 @@ TestSingleAnswer {
     ol {
         align-self: start;
         flex: 1;
+        width: 100%;
 
         li {
             flex-direction: column;
@@ -577,4 +573,5 @@ CourseExam {
 .card-number {
     position: absolute;
     left: 15px;
+    color: $gray-4;
 }
