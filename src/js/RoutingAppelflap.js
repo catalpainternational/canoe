@@ -92,7 +92,6 @@ export function AppelflapPortNo() {
 
 /** Registers each Appelflap API route individudally, will not result in false positives */
 function initialiseSpecificRoutes(registerRoute, NetworkOnly) {
-    const localHostURI = AF_LOCALHOSTURI.replaceAll(".","\.");
     // Port number range is 2^10 to 2^16-1 inclusive - 1024 to 65535
     const portRange = "(102[4-9]|10[3-9]\\d|1[1-9]\\d{2}|[2-9]\\d{3}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])";
 
@@ -108,16 +107,10 @@ function initialiseSpecificRoutes(registerRoute, NetworkOnly) {
 
 /** Does a generic registration for Appelflap API routes, this may result in false positives */
 function genericRoutes(registerRoute, NetworkOnly) {
-    const localHostURI = AF_LOCALHOSTURI.replaceAll(".","\.");
     // Port number range is '0000' to '99999' inclusive
     const portRange = "[0-9]{4,5}";
-    const appelflapAPIs = [AF_META_API, AF_API_PREFIX];
-
-    appelflapAPIs.forEach((api) => {
-        const route = `${localHostURI}:${portRange}/${api}/.*`.replaceAll("/", "\\/");
-        console.info(route);
-        registerRoute(RegExp(route), new NetworkOnly());
-    });
+    const route = `${localHostURI}:${portRange}/${AF_API_PREFIX}/.*`.replaceAll("/", "\\/");
+    registerRoute(RegExp(route), new NetworkOnly());
 }
 
 /** Register the routes used to communicate with Appelflap so the service worker handles them as NetworkOnly
