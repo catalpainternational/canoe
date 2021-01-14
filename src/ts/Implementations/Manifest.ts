@@ -98,7 +98,7 @@ export class Manifest implements IManifest {
                 return resp.json();
             }
         } catch {
-            responseFailure = "Network error getting manifest";
+            responseFailure = "Error getting manifest";
         }
 
         return Promise.reject(
@@ -106,17 +106,27 @@ export class Manifest implements IManifest {
         );
     }
 
-    async getOrFetchManifest(): Promise<any> {
-        const manifestInStore = await this.getManifestFromStore();
+    private simpleManifestTest(manifest: any) {
+        return manifest && Object.entries(manifest).length > 0;
+    }
 
-        if (manifestInStore && Object.entries(manifestInStore).length > 0) {
+    async getOrFetchManifest(): Promise<any> {
+        let manifestInStore = await this.getManifestFromStore();
+
+        if (this.simpleManifestTest(manifestInStore)) {
             return manifestInStore;
         }
+        try {
+            manifestInStore = await this.fetchManifest();
+            storeManifestV2(manifestInStore);
+        } catch {
+            // Did not successfully fetch manifest
+            return Promise.reject(
+                "Could not fetch the manifest and no manifest in the store"
+            );
+        }
 
-        const manifest = await this.fetchManifest();
-        storeManifestV2(manifest);
-
-        return manifest;
+        return manifestInStore;
     }
 
     getHomePageHash(
