@@ -14,15 +14,15 @@
 
 LessonPage {
     .objective-stock-image .card-image {
-        background-image: url("~img/stock_objective.svg");
+        @extend %stock-objective;
     }
 
     .content-stock-image .card-image {
-        background-image: url("~img/stock_content.svg");
+        @extend %stock-content;
     }
 
     .test-stock-image .card-image {
-        background-image: url("~img/stock_test.svg");
+        @extend %stock-test;
     }
 
     .activity-swoop {
@@ -326,7 +326,7 @@ TestSingleAnswer {
 
             .pendingAnswer {
                 background-color: $app-accent-color;
-                border-radius: 15px;
+                border-radius: 50%;
                 width: 15px;
             }
 

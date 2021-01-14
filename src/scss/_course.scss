@@ -4,6 +4,6 @@ CoursePage {
 	}
 	
 	.card-image {
-		background-image: url("~img/stock_lesson.svg");
+		@extend %stock-lesson;
 	}
 }
