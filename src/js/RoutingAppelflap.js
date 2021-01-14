@@ -1,5 +1,9 @@
-/** If Appelflap is running, it is always on localhost */
-export const AF_LOCALHOSTURI = "http://127.0.0.1";
+/** If Appelflap is running, it is always on localhost
+ * @remarks this MUST be 'localhost' not '127.0.0.1',
+ * because geckoview translates '127.0.0.1' to 'localhost' in the background
+ * which results in the route registration failing
+ */
+export const AF_LOCALHOSTURI = "http:/localhost";
 
 export const AF_API_PREFIX = "appelflap";
 
@@ -109,8 +113,9 @@ function genericRoutes(registerRoute, NetworkOnly) {
     const portRange = "[0-9]{4,5}";
     const appelflapAPIs = [AF_META_API, AF_API_PREFIX];
 
-    Object.keys(appelflapAPIs).forEach((api) => {
+    appelflapAPIs.forEach((api) => {
         const route = `${localHostURI}:${portRange}/${api}/.*`.replaceAll("/", "\\/");
+        console.info(route);
         registerRoute(RegExp(route), new NetworkOnly());
     });
 }
