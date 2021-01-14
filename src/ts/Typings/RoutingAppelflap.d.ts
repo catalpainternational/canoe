@@ -6,6 +6,9 @@ declare module "js/RoutingAppelflap" {
 
     export const AF_LOCALHOSTURI: string;
 
+    export const AF_API_PREFIX: string;
+
+    export const AF_EIKEL_API: string;
     export const AF_META_API: string;
     export const AF_CACHE_API: string;
     export const AF_ACTION_API: string;
