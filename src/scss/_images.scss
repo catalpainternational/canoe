@@ -254,21 +254,21 @@
 .neutral-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("~img/neutral.png");
+    -webkit-mask-image: url("~img/neutral.svg");
     background: $red;
 }
 
 .smiling-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("~img/smile.png");
+    -webkit-mask-image: url("~img/smile.svg");
     background: $yellow;
 }
 
 .thrilled-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
-    -webkit-mask-image: url("~img/thrilled.png");
+    -webkit-mask-image: url("~img/thrilled.svg");
     background: $teal;
 }
 
