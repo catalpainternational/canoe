@@ -7,6 +7,8 @@
         id="test"
         extraStyleClasses="test"
         linkTo="{props.wagtailPage.id}"
+        progressValue="{state.cardIdx + 1}"
+        progressMax="{state.cards.length}"
     >
         <h3>{state.cardIdx + 1}. {state.card.question}</h3>
         <TestSingleAnswer
@@ -25,7 +27,9 @@
         ></TestMultipleAnswer>
         <div class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="arrow" onclick="{previousExamCard}"></a>
+                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{previousExamCard}">
+                    <span class="arrow"></span>
+                </a>
             </div>
             <div>
                 <button
@@ -46,7 +50,6 @@
                 </button>
             </div>
         </div>
-        <p class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
     <ExamResults
         if="{isAtResults(state.cardIdx)}"
@@ -193,11 +196,6 @@
                     }
                     throw err;
                 }
-            },
-
-            cardNumberMessage() {
-                // display the number of the current card out of the total number of cards
-                return gettext("%1 of %2", this.state.cardIdx + 1, this.state.cards.length);
             },
         };
     </script>

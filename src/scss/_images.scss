@@ -16,13 +16,6 @@
     }
 }
 
-.cog {
-    @extend %icons-shared;
-    background-image: url("~img/cog.svg");
-    height: 40px;
-    width: 40px;
-}
-
 .filter-icon {
     @extend %icons-shared;
     background-image: url("~img/levers.svg");
@@ -93,12 +86,7 @@
 .settings-icon {
     @extend %bottom-nav-shared;
     -webkit-mask-image: url("../img/cog.svg");
-    background-color: $blue-1;
-
-    &.active,
-    &.title {
-        background-color: $app-accent-color;
-    }
+    background-color: $blue;
 }
 
 .search-icon {
@@ -124,13 +112,12 @@
     @extend %icons-shared;
     @extend %mask-icons-shared;
     -webkit-mask-image: url("~img/cross.svg");
-    height: 10px;
-    width: 12px;
+    height: 13px;
+    width: 13px;
     background: $white;
 
     &.gray {
         background: $gray-4;
-        height: 1em;
     }
 }
 
@@ -139,7 +126,7 @@
     @extend %mask-icons-shared;
     height: 25px;
     width: 25px;
-    background: $blue-1;
+    background: $blue;
 }
 
 .checkmark-circle-blue {
@@ -175,7 +162,7 @@
     width: 15px;
 
     &.red {
-        background-color: $red-1;
+        background-color: $red;
     }
 }
 
@@ -184,14 +171,6 @@
     background-image: url("~img/success.svg");
     height: 18px;
     width: 15px;
-}
-
-.report-card {
-    @extend %icons-shared;
-    background-image: url("~img/report_card.svg");
-    background-position: center;
-    height: 200px;
-    max-width: 200px;
 }
 
 .notifications-image {
@@ -227,9 +206,8 @@
 .confetti {
     @extend %icons-shared;
     background-image: url("~img/confetti.svg");
-    height: 45%;
-    width: 60%;
-    max-width: 300px;
+    height: 160px;
+    width: 100%;
 }
 
 .sun {
@@ -251,8 +229,8 @@
     @extend %mask-icons-shared;
     -webkit-mask-image: url("~img/arrow.svg");
     height: 14px;
-    width: 19px;
-    background-color: $blue-1;
+    width: 20px;
+    background-color: $blue;
 }
 
 .incorrect-flag {
@@ -266,30 +244,32 @@
 }
 
 @mixin feedback-icons {
-    height: 50px;
-    width: 41px;
+    height: 30px;
+    width: 30px;
     background-color: $app-accent-color;
     display: block;
     margin: auto;
-    margin-top: 0.5em;
 }
 
 .neutral-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("~img/neutral.png");
+    background: $red;
 }
 
 .smiling-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("~img/smile.png");
+    background: $yellow;
 }
 
 .thrilled-smiley {
     @extend %mask-icons-shared;
     @include feedback-icons;
     -webkit-mask-image: url("~img/thrilled.png");
+    background: $teal;
 }
 
 .speaker {
@@ -305,7 +285,7 @@
 // Icons for card status
 %status-play {
     @extend %mask-icons-shared;
-    background: $blue-1;
+    background: $blue;
     border: .1px solid $gray-5;
     display: flex;
     box-sizing: border-box;

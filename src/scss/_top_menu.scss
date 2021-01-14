@@ -10,13 +10,27 @@ TopMenu {
     .with-swoop {
         @include header-swoop;
         height: 100px;
-        margin: auto;
+        margin: auto auto 10px auto;
     }
 
     .without-swoop {
         @include center-with-flex;
         height: $top-menu-height;
         margin: auto;
+    }
+
+    .has-circle {
+        height: 40px;
+        width: 40px;
+        border-radius: 20px;
+        display: inline-block;
+        box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
+
+        .arrow {
+            position: absolute;
+            top: 13px;
+            left: 11px;
+        }
     }
 
     h4 {
@@ -41,19 +55,14 @@ TopMenu {
         &.left {
             left: 15px;
         }
+    }
 
-        &.has-circle {
-            height: 40px;
-            width: 40px;
-            border-radius: 20px;
-            background-color: white;
-            box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
+    a.extra-clickable-space {
+        top: 7px;
+        padding: 15px;
 
-            .arrow {
-                position: absolute;
-                top: 13px;
-                left: 11px;
-            }
+        &.right {
+            right: 7px;
         }
     }
 }

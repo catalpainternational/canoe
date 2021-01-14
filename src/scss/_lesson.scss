@@ -13,15 +13,15 @@
 }
 
 LessonPage {
-    .objective .card-image {
+    .objective-stock-image .card-image {
         background-image: url("~img/stock_objective.svg");
     }
 
-    .content .card-image {
+    .content-stock-image .card-image {
         background-image: url("~img/stock_content.svg");
     }
 
-    .test .card-image {
+    .test-stock-image .card-image {
         background-image: url("~img/stock_test.svg");
     }
 
@@ -34,7 +34,7 @@ LessonPage {
     }
 }
 
-LessonFrame {
+LessonFrame {    
     .frame-background {
         min-height: calc(100vh - #{$top-menu-height});
         display: flex;
@@ -42,8 +42,8 @@ LessonFrame {
         align-items: stretch;
     }
 
-    .without-swoop {
-        height: 50px;
+    progress {
+        width: 65vw;
     }
 
     .card-container {
@@ -52,27 +52,27 @@ LessonFrame {
         flex-direction: column;
         justify-content: space-evenly;
         align-items: center;
-
         height: 100%;
     }
 
     .card-frame {
-        margin: 0 10px 1.5em;
+        margin: 0 5px 1.5em;
         padding: 30px;
-
         width: 100%;
         max-width: $tablet;
         background-color: $white;
         border-radius: 30px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
+        box-sizing: border-box;
+
+        @media only screen and (min-width: 610px) {
+            margin: 0 auto 1.5em;
+        }
     }
 }
 
 LessonObjective .objective {
     h3 {
-        margin-bottom: 15px;
-        margin-top: 5px;
-        text-align: center;
         text-transform: uppercase;
         font-size: 14px;
     }
@@ -90,35 +90,16 @@ LessonObjective .objective {
         font-weight: 500;
         text-align: center;
     }
-
-    .card-number {
-        font-size: 12px;
-        margin-bottom: -5px;
-        flex: 0;
-    }
-
-    .bottom-buttons {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        width: 100%;
-        margin-bottom: 15px;
-
-        .arrow {
-            display: inline-block;
-            position: relative;
-            margin: 20px;
-        }
-
-        .btn-primary {
-            min-width: 90px;
-            font-size: 12px;
-        }
-    }
 }
 
 LessonContent .content {
     padding-bottom: 25px;
+
+    div.content-wrapper {
+        flex-direction: column;
+        padding-top: 30px;
+        display: flex;
+    }
 
     raw,
     basiccard,
@@ -240,216 +221,169 @@ LessonContent .content {
         color: red;
     }
 
-    .bottom-buttons {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        width: 100%;
-        margin-bottom: 15px;
-    }
-
-    .arrow {
-        display: inline-block;
-        position: relative;
-        margin: 20px;
-    }
-
     .speaker,
     .film {
         margin: 0 auto;
     }
-
-    .btn-primary {
-        min-width: 90px;
-        font-size: 12px;
-    }
-
-    .card-number {
-        font-size: 12px;
-        margin-bottom: -5px;
-        flex: 0;
-        text-align: center;
-    }
 }
 
-LessonContent div.content-wrapper {
-    flex-direction: column;
-    padding-top: 30px;
-    display: flex;
-}
-
-LessonTest,
-CourseExam,
-TestSingleAnswer,
 TestMultipleAnswer,
-TestPopupModal {
-    .answer {
-        width: 100%;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
+TestSingleAnswer {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
-        h4 {
-            align-self: start;
-            margin: 0 0 1.5em 0;
-            font-weight: 100;
-            font-size: 1em;
-            color: $gray-3;
-        }
-
-        button {
-            width: 90px;
-            align-self: center;
-        }
-
-        .answers-block {
-            align-self: start;
-            flex: 1;
-        }
+    h4 {
+        align-self: start;
+        margin: 0 0 1.5em 0;
+        font-weight: 100;
+        font-size: 1em;
+        color: $gray-3;
     }
 
-    .test {
-        h3 {
-            align-self: start;
-            margin-bottom: 0.3em;
-        }
+    button {
+        width: 90px;
+        align-self: center;
+    }
 
-        button {
-            flex: end;
-        }
+    .answers-block {
+        align-self: start;
+        flex: 1;
+    }
+}
 
-        ol {
-            align-self: start;
-            flex: 1;
+.test {
+    h3 {
+        align-self: start;
+        margin-bottom: 0.3em;
+    }
 
-            li {
-                flex-direction: column;
-                margin-bottom: 15px;
+    button {
+        flex: end;
+    }
+
+    ol {
+        align-self: start;
+        flex: 1;
+        width: 100%;
+
+        li {
+            flex-direction: column;
+            margin-bottom: 15px;
+            display: flex;
+
+            & > div {
+                align-items: center;
                 display: flex;
 
-                & > div {
-                    align-items: center;
-                    display: flex;
-
-                    p {
-                        flex-shrink: 1;
-                        margin: 0;
-                    }
+                p {
+                    flex-shrink: 1;
+                    margin: 0;
                 }
+            }
 
-                & > div:nth-child(2) {
-                    padding-left: 35px;
+            & > div:nth-child(2) {
+                padding-left: 35px;
 
-                    p {
-                        margin-left: 5px;
-                    }
-                }
-
-                .radio {
-                    background-color: $white;
-                    border-radius: 50%;
-                    margin-right: 10px;
-                    position: relative;
-                    border: $border;
-                    flex-shrink: 0;
-                    height: 23px;
-                    width: 23px;
-
-                    & > div {
-                        border-radius: 50%;
-                        position: absolute;
-                        margin: auto;
-                        height: 11px;
-                        width: 11px;
-                        bottom: 0;
-                        right: 0;
-                        left: 0;
-                        top: 0;
-                    }
-                }
-
-                .pendingAnswer,
-                .success,
-                .warning {
-                    height: 15px;
-                    width: 18px;
-                    display: inline-block;
-                    position: absolute;
+                p {
                     margin-left: 5px;
                 }
+            }
 
-                .pendingAnswer {
+            .radio {
+                background-color: $white;
+                border-radius: 50%;
+                margin-right: 10px;
+                position: relative;
+                border: $border;
+                flex-shrink: 0;
+                height: 23px;
+                width: 23px;
+
+                & > div {
+                    border-radius: 50%;
+                    position: absolute;
+                    margin: auto;
+                    height: 11px;
+                    width: 11px;
+                    bottom: 0;
+                    right: 0;
+                    left: 0;
+                    top: 0;
+                }
+            }
+
+            .pendingAnswer,
+            .success,
+            .warning {
+                height: 15px;
+                width: 18px;
+                display: inline-block;
+                position: absolute;
+                margin-left: 5px;
+            }
+
+            .pendingAnswer {
+                background-color: $app-accent-color;
+                border-radius: 15px;
+                width: 15px;
+            }
+
+            .warning {
+                margin-left: 4px;
+            }
+
+            .checkbox {
+                content: "";
+                box-sizing: border-box;
+                height: 25px;
+                width: 25px;
+                border: 1px solid $gray-5;
+                border-radius: 3px;
+                margin-right: 15px;
+                flex: none;
+            }
+        }
+
+        li:hover {
+            cursor: pointer;
+        }
+
+        li.selected {
+            .radio {
+                & > div {
+                    background-color: $green;
+                }
+            }
+        }
+
+        li.selected-wrong {
+            .radio {
+                border: 2px solid $orange;
+                height: 21px;
+                width: 21px;
+
+                & > div {
+                    background-color: $orange;
+                }
+            }
+        }
+
+        li.selected-pending {
+            .radio {
+                border: 2px solid $app-accent-color;
+                height: 21px;
+                width: 21px;
+
+                & > div {
                     background-color: $app-accent-color;
-                    border-radius: 15px;
-                    width: 15px;
                 }
-
-                .warning {
-                    margin-left: 4px;
-                }
-
-                .checkbox {
-                    content: "";
-                    box-sizing: border-box;
-                    height: 25px;
-                    width: 25px;
-                    border: 1px solid $gray-5;
-                    border-radius: 3px;
-                    margin-right: 15px;
-                    flex: none;
-                }
-            }
-
-            li:hover {
-                cursor: pointer;
-            }
-
-            li.selected {
-                .radio {
-                    & > div {
-                        background-color: $green-1;
-                    }
-                }
-            }
-
-            li.selected-wrong {
-                .radio {
-                    border: 2px solid $red-2;
-                    height: 21px;
-                    width: 21px;
-
-                    & > div {
-                        background-color: $red-2;
-                    }
-                }
-            }
-
-            li.selected-pending {
-                .radio {
-                    border: 2px solid $app-accent-color;
-                    height: 21px;
-                    width: 21px;
-
-                    & > div {
-                        background-color: $app-accent-color;
-                    }
-                }
-            }
-
-            li:last-child {
-                margin-bottom: 0;
             }
         }
 
-        .btn-primary {
-            font-size: 12px;
-        }
-
-        .card-number {
-            font-size: 12px;
-            margin-bottom: -5px;
-            flex: 0;
-            text-align: center;
+        li:last-child {
+            margin-bottom: 0;
         }
     }
 }
@@ -460,20 +394,14 @@ LessonModuleComplete {
 
         h2 {
             font-size: 1.562em;
-            border-bottom: none;
         }
 
         h3 {
             font-size: 1.125em;
         }
-
-        p {
-            font-size: 1em;
-        }
     }
 
     button {
-        width: 100%;
         margin-bottom: 1em;
     }
 }
@@ -489,6 +417,49 @@ LessonFeedback {
             flex-flow: column wrap;
             align-items: center;
             margin: 1em 0;
+        }
+
+        button {
+            height: 5.687em;
+            width: 5.687em;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+            background-color: white;
+            margin: 0 10px;
+
+            &:focus {
+                border: 2px solid $app-accent-color;
+                -webkit-box-shadow: inset 0 1px 1px $gray-6, inset 0 2px 2px $gray-6,
+                    inset 0 4px 4px $gray-6, inset 0 8px 8px $gray-6;
+                outline: 0;
+            }
+
+            &.border-blue-1 {
+                border-color: 2px solid $app-accent-color;
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            @media only screen and (max-width: calc(#{$lg-phone} + 27px)) {
+                height: 5em;
+                width: 5em;
+                margin: 0;
+            }
+
+            @media screen and (max-width: $sm-phone) {
+                margin: 0.5em;
+
+                &:first-of-type {
+                    margin-top: 0;
+                }
+
+                &:last-of-type {
+                    margin-bottom: 0;
+                }
+            }
         }
     }
 
@@ -532,150 +503,75 @@ LessonFeedback {
         }
     }
 
-    button.feedback {
-        height: 5.687em;
-        width: 5.687em;
-        border-radius: 50%;
-        border: 2px solid $gray-6;
-        margin: 0 10px;
-        background-color: white;
-
-        &:focus {
-            border: 2px solid $app-accent-color;
-            -webkit-box-shadow: inset 0 1px 1px $gray-6, inset 0 2px 2px $gray-6,
-                inset 0 4px 4px $gray-6, inset 0 8px 8px $gray-6;
-            outline: 0;
-        }
-
-        &.border-blue-1 {
-            border-color: 2px solid $app-accent-color;
-        }
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    button.no-thanks {
-        color: $app-accent-color;
-        box-shadow: none;
-        background: none;
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
     // Pedro needs smaller buttons at 441px. Better to target an industry
     // breakpoint and add the extra pixels.
-    @media only screen and (max-width: calc(#{$lg-phone} + 27px)) {
-        button.feedback {
-            height: 5em;
-            width: 5em;
-            margin: 0;
-        }
-    }
 
     @media screen and (max-width: $sm-phone) {
         h3 {
             padding-bottom: 0;
-        }
-
-        button.feedback {
-            margin: 0.5em;
-
-            &:first-of-type {
-                margin-top: 0;
-            }
-
-            &:last-of-type {
-                margin-bottom: 0;
-            }
         }
     }
 }
 
 LessonComplete,
 ExamResults {
-    h2 {
-        border-bottom: none;
-    }
-
     .congratulations-container {
         display: flex;
         flex-flow: column nowrap;
-        justify-content: start;
+        justify-content: space-evenly;
         align-items: center;
         text-align: center;
+        height: 100%;
 
-        button {
-            width: 100%;
-            margin-bottom: 10px;
+        h2,
+        h3 {
+            margin-top: 0;
+            margin-bottom: 0.4em;
         }
 
+        .btn-primary,
         .btn-secondary {
             margin-top: 1em;
         }
     }
 
-    .background {
-        position: absolute;
-        top: -1em;
-        left: -1em;
+    .confetti {
+        align-self: end;
     }
 
     .incorrect-flag {
         height: 150px;
         width: 150px;
     }
-
-    .congratulations {
-        flex-direction: column;
-        text-align: center;
-        display: flex;
-
-        span.confetti {
-            margin: auto;
-        }
-
-        h3 {
-            margin-bottom: 20px;
-            margin-top: 20px;
-        }
-
-        p {
-            margin-bottom: 40px;
-            margin-top: 0;
-        }
-    }
 }
 
 CourseExam {
-    .card-number {
-        font-size: 12px;
-        margin-bottom: -5px;
-        flex: 0;
-    }
-
-    .bottom-buttons {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        width: 100%;
-        margin-bottom: 15px;
-
-        .arrow {
-            display: inline-block;
-            position: relative;
-            margin: 20px;
-        }
-
-        .btn-primary {
-            min-width: 160px;
-        }
-    }
-
     div.card-container {
         justify-content: unset;
     }
+}
+
+// Shared lesson styles
+.bottom-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+
+    .arrow {
+        display: inline-block;
+        position: relative;
+    }
+
+    .btn-primary {
+        min-width: 120px;
+        font-size: 12px;
+    }
+}
+
+.card-number {
+    position: absolute;
+    left: 15px;
+    color: $gray-4;
 }

@@ -1,6 +1,10 @@
 <LessonFrame>
     <TopMenu extrastyleclasses="without-swoop">
-        <a class="top-icon right" href="#{props.linkTo}">
+        <template if="{props.progressValue}">
+            <p class="card-number">{ props.progressValue } / { props.progressMax }</p>
+            <progress value="{props.progressValue}" max="{props.progressMax}"></progress>
+        </template>
+        <a class="top-icon right extra-clickable-space" href="#{props.linkTo}">
             <span class="cross gray"></span>
         </a>
     </TopMenu>

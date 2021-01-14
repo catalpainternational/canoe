@@ -8,21 +8,19 @@
             <div class="feedback-container">
                 <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
                 <div class="feedback-buttons">
-                    <button class="feedback" onclick="{clickedThisLessonIsFine}">
+                    <button onclick="{() => clickedThisLessonIs('fine')}">
                         <span class="neutral-smiley"></span>
                     </button>
-                    <button class="feedback" onclick="{clickedThisLessonIsGood}">
+                    <button onclick="{() => clickedThisLessonIs('good')}">
                         <span class="smiling-smiley"></span>
                     </button>
-                    <button class="feedback" onclick="{clickedThisLessonIsGreat}">
+                    <button onclick="{() => clickedThisLessonIs('great')}">
                         <span class="thrilled-smiley"></span>
                     </button>
                 </div>
                 <p>{ TRANSLATIONS.give_feedback() }</p>
             </div>
-            <button class="btn-primary no-thanks" onclick="{clickedNoThanks}">
-                { TRANSLATIONS.no() }
-            </button>
+            <button class="btn-secondary" onclick="{clickedNoThanks}">{ TRANSLATIONS.no() }</button>
         </template>
         <template if="{state.madeFeedbackDecision}">
             <div class="feedback-icon">
@@ -49,9 +47,7 @@
                 feedback: () => gettext("FEEDBACK"),
                 enjoying_lesson: () => gettext("Are you enjoying this lesson?"),
                 give_feedback: () =>
-                    gettext(
-                        "We value your feedback and all feedback is confidential."
-                    ),
+                    gettext("We value your feedback and all feedback is confidential."),
                 feedback_sent: () =>
                     gettext(
                         "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
@@ -68,25 +64,15 @@
                 madeFeedbackDecision: false,
             },
 
-            clickedThisLessonIsFine() {
-                this.sendFeedback("bad");
-                this.update({
-                    madeFeedbackDecision: true,
-                });
-            },
-
-            clickedThisLessonIsGood() {
-                this.sendFeedback("fine");
-                this.update({
-                    madeFeedbackDecision: true,
-                });
-            },
-
-            clickedThisLessonIsGreat() {
-                this.sendFeedback("great");
-                this.update({
-                    madeFeedbackDecision: true,
-                });
+            clickedThisLessonIs(rating) {
+                if (["fine", "good", "great"].includes(rating)) {
+                    this.sendFeedback(rating);
+                    this.update({
+                        madeFeedbackDecision: true,
+                    });
+                } else {
+                    throw Error('You must give a rating of "fine", "good", or "great"');
+                }
             },
 
             clickedNoThanks() {
