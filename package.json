@@ -99,8 +99,6 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.8.4",
-        "@types/workbox-routing": "^4.3.0",
-        "@types/workbox-strategies": "^4.3.0",
         "Actions": "link:src/js/actions",
         "ReduxImpl": "link:src/js/redux",
         "RiotTags": "link:src/riot/",

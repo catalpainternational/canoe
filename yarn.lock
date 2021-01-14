@@ -3127,30 +3127,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/workbox-core@npm:*":
-  version: 4.3.0
-  resolution: "@types/workbox-core@npm:4.3.0"
-  checksum: 78b2e3791c5d593cbb474fb8c64257972324bbae523022093310f08de05e53380008960e40c822a81e7a266b34964f6196c76b68c06ffb3a6ccf81933b416d06
-  languageName: node
-  linkType: hard
-
-"@types/workbox-routing@npm:*, @types/workbox-routing@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "@types/workbox-routing@npm:4.3.0"
-  checksum: ad108e1b2849eb708323b5396df8897980ab354a88bf47ced9f58d8380d552738acfa6474f96a1792547f282d2623bbe14ab8bceceb2c44b9425f891c30933df
-  languageName: node
-  linkType: hard
-
-"@types/workbox-strategies@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "@types/workbox-strategies@npm:4.3.0"
-  dependencies:
-    "@types/workbox-core": "*"
-    "@types/workbox-routing": "*"
-  checksum: 0c65a8aa8423d305ca13f1c401f7f5098797389920e2b73f977bc71c3ccecf8cf5f92ca2813a09e055d8d8fb05becddbe582f2bf27d6d40f322a6139459520aa
-  languageName: node
-  linkType: hard
-
 "@typescript-eslint/eslint-plugin@npm:^4.8.2":
   version: 4.8.2
   resolution: "@typescript-eslint/eslint-plugin@npm:4.8.2"
@@ -5076,8 +5052,6 @@ __metadata:
     "@types/node-fetch": ^2.5.7
     "@types/prettier": ^2
     "@types/webpack-dev-server": ^3.11.1
-    "@types/workbox-routing": ^4.3.0
-    "@types/workbox-strategies": ^4.3.0
     "@typescript-eslint/eslint-plugin": ^4.8.2
     "@typescript-eslint/parser": ^4.8.2
     "@yarnpkg/pnpify": ^2.3.3
