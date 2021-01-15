@@ -34,7 +34,7 @@ LessonPage {
     }
 }
 
-LessonFrame {    
+LessonFrame {
     .frame-background {
         min-height: calc(100vh - #{$top-menu-height});
         display: flex;
@@ -43,7 +43,8 @@ LessonFrame {
     }
 
     progress {
-        width: 65vw;
+        width: 70vw;
+        max-width: 470px;
     }
 
     .card-content {
@@ -178,7 +179,7 @@ LessonContent .content {
 
     listcard {
         width: 100%;
-        
+
         span {
             margin-right: 7px;
             color: $app-accent-color;
@@ -267,6 +268,14 @@ TestSingleAnswer {
             margin-bottom: 15px;
             display: flex;
 
+            &:hover {
+                cursor: pointer;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
             & > div {
                 align-items: center;
                 display: flex;
@@ -283,6 +292,42 @@ TestSingleAnswer {
 
                 p {
                     margin-left: 5px;
+                }
+            }
+
+            &.selected .radio {
+                & > div {
+                    background-color: $green;
+                }
+            }
+
+            &.selected-wrong .radio {
+                border: 2px solid $orange;
+                height: 21px;
+                width: 21px;
+
+                & > div {
+                    background-color: $orange;
+                }
+            }
+
+            &.selected-pending .radio {
+                border: 2px solid $app-accent-color;
+                height: 21px;
+                width: 21px;
+
+                & > div {
+                    background-color: $app-accent-color;
+                }
+            }
+
+            &.selected-pending .radio {
+                border: 2px solid $app-accent-color;
+                height: 21px;
+                width: 21px;
+
+                & > div {
+                    background-color: $app-accent-color;
                 }
             }
 
@@ -339,46 +384,6 @@ TestSingleAnswer {
                 margin-right: 15px;
                 flex: none;
             }
-        }
-
-        li:hover {
-            cursor: pointer;
-        }
-
-        li.selected {
-            .radio {
-                & > div {
-                    background-color: $green;
-                }
-            }
-        }
-
-        li.selected-wrong {
-            .radio {
-                border: 2px solid $orange;
-                height: 21px;
-                width: 21px;
-
-                & > div {
-                    background-color: $orange;
-                }
-            }
-        }
-
-        li.selected-pending {
-            .radio {
-                border: 2px solid $app-accent-color;
-                height: 21px;
-                width: 21px;
-
-                & > div {
-                    background-color: $app-accent-color;
-                }
-            }
-        }
-
-        li:last-child {
-            margin-bottom: 0;
         }
     }
 }
