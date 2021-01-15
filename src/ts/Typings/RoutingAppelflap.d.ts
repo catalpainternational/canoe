@@ -25,4 +25,6 @@ declare module "js/RoutingAppelflap" {
 
     /** Get the port number that Appelflap is using or return -1 */
     export function AppelflapPortNo(): number;
+
+    export function buildAppelflapRoutes(): string[][];
 }
