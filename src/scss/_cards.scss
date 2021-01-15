@@ -9,10 +9,11 @@
     position: relative;
 
     .card-image {
-        background-size: cover;
-        background-position: center;
+        mask-size: cover;
+        -webkit-mask-size: cover;
+        mask-position: center;
+        -webkit-mask-position: center;
         background-color: $gray-9;
-        background-repeat: no-repeat;
         border-bottom: 0.5px solid $gray-8;
         height: 100%;
         border-radius: 7px 7px 0 0;
@@ -34,7 +35,6 @@
     &.in-progress .card-status,
     &.disabled .card-status,
     &.coming-soon .card-status {
-        @extend %icons-shared;
         position: absolute;
         border-radius: 20px;
         top: 30%;
