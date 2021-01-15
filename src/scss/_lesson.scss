@@ -46,12 +46,12 @@ LessonFrame {
         width: 65vw;
     }
 
-    .card-container {
+    .card-content {
         position: relative;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
         align-items: center;
+        justify-content: space-evenly;
         height: 100%;
     }
 
@@ -167,7 +167,6 @@ LessonContent .content {
 
         & p {
             padding-top: 2em;
-            font-size: 1em;
             margin-left: 1em;
 
             &.long {
@@ -179,11 +178,7 @@ LessonContent .content {
 
     listcard {
         width: 100%;
-
-        p {
-            font-size: 1em;
-        }
-
+        
         span {
             margin-right: 7px;
             color: $app-accent-color;
@@ -256,7 +251,6 @@ TestSingleAnswer {
 .test {
     h3 {
         align-self: start;
-        margin-bottom: 0.3em;
     }
 
     button {
@@ -278,6 +272,7 @@ TestSingleAnswer {
                 display: flex;
 
                 p {
+                    font-size: 1.2em;
                     flex-shrink: 1;
                     margin: 0;
                 }
@@ -525,25 +520,19 @@ ExamResults {
             margin-bottom: 0.4em;
         }
 
+        h3 {
+            font-size: 1.2em;
+        }
+
         .btn-primary,
         .btn-secondary {
             margin-top: 1em;
         }
     }
 
-    .confetti {
-        align-self: end;
-    }
-
     .incorrect-flag {
         height: 150px;
         width: 150px;
-    }
-}
-
-CourseExam {
-    div.card-container {
-        justify-content: unset;
     }
 }
 

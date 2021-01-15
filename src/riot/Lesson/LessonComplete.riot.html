@@ -5,7 +5,7 @@
             <div class="congratulations-container">
                 <template if="{!isCourseComplete()}">
                     <div>
-                        <h3>{ TRANSLATIONS.congrats() }</h3>
+                        <h2>{ TRANSLATIONS.congrats() }</h2>
                         <p>{ lessonCompleteMessage() }</p>
                     </div>
                     <button class="btn-primary" onclick="{goToCourseOverview}">
@@ -14,7 +14,7 @@
                 </template>
                 <template if="{isCourseComplete()}">
                     <div>
-                        <h3>{ TRANSLATIONS.good() }</h3>
+                        <h2>{ TRANSLATIONS.good() }</h2>
                         <p>{ lessonCompleteMessage() }</p>
                         <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
                     </div>

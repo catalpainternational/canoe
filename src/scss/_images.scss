@@ -1,30 +1,38 @@
 // Masking icons so we can dynamically set their color
-@mixin mask-icons-shared($image) {
-    mask-image: url($image);
+@mixin mask-icons-shared($image, $contain-or-cover, $color) {
     -webkit-mask-image: url($image);
+    mask-image: url($image);
     
-    mask-repeat: no-repeat;
     -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
     
-    mask-size: contain;
-    -webkit-mask-size: contain;
-
+    -webkit-mask-size: $contain-or-cover;
+    mask-size: $contain-or-cover;
+    
+    background-color: $color;
     display: inline-block;
+
+    // add mask-position center?
+}
+
+@mixin unmaskable-icons-shared($image, $contain-or-cover) {
+    background-image: url($image);
+    background-repeat: no-repeat;
+    background-size: $contain-or-cover;
+    background-position: center;
+    // display: inline-block;
 }
 
 .site-logo {
-    @include mask-icons-shared("~img/site_logo.svg");
-    mask-position: center;
-    -webkit-mask-position: center;
+    @include unmaskable-icons-shared("~img/site_logo.svg", contain);
     height: 30px;
     width: 87px;
 }
 
 .filter-icon {
-    @include mask-icons-shared("~img/levers.svg");
+    @include mask-icons-shared("~img/levers.svg", contain, $blue);
     height: 20px;
     width: 20px;
-    display: inline-block;
 }
 
 %bottom-nav-shared {
@@ -36,8 +44,7 @@
 
 .all-courses-icon {
     @extend %bottom-nav-shared;
-    @include mask-icons-shared("~img/all_courses.svg");
-    background-color: $gray-4;
+    @include mask-icons-shared("~img/all_courses.svg", contain, $gray-4);
 
     &.active {
         background-color: $app-accent-color;
@@ -46,8 +53,7 @@
 
 .profile-icon {
     @extend %bottom-nav-shared;
-    @include mask-icons-shared("~img/profile.svg");
-    background-color: $gray-4;
+    @include mask-icons-shared("~img/profile.svg", contain, $gray-4);
 
     &.active {
         background-color: $app-accent-color;
@@ -56,8 +62,7 @@
 
 .resources-icon {
     @extend %bottom-nav-shared;
-    @include mask-icons-shared("~img/clipboard.svg");
-    background-color: $gray-4;
+    @include mask-icons-shared("~img/clipboard.svg", contain, $gray-4);
 
     &.active,
     &.title {
@@ -66,16 +71,15 @@
 }
 
 .settings-icon {
-    @include mask-icons-shared("~img/cog.svg");
+    @include mask-icons-shared("~img/cog.svg", contain, $blue);
     -webkit-mask-position-x: center;
     mask-position: center;
     height: 22px;
     width: 22px;
-    background-color: $blue;
 }
 
 .search-icon {
-    @include mask-icons-shared("~img/magnifier.svg");
+    @include mask-icons-shared("~img/magnifier.svg", contain, $gray-3);
     -webkit-mask-position-x: center;
     mask-position: center;
     width: 1em;
@@ -83,13 +87,13 @@
 }
 
 .checkmark {
-    @include mask-icons-shared("~img/checkmark.svg");
+    @include mask-icons-shared("~img/checkmark.svg", contain, $blue);
     height: 16px;
     width: 20px;
 }
 
 .cross {
-    @include mask-icons-shared("~img/cross.svg");
+    @include mask-icons-shared("~img/cross.svg", contain, $gray-3);
     height: 13px;
     width: 13px;
     background: $white;
@@ -107,36 +111,35 @@
 
 .checkmark-circle {
     @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/checkmark_circle.svg");
+    @include mask-icons-shared("~img/checkmark_circle.svg", contain, $blue);
 }
 
 .road-sign {
     @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/road_sign.svg");
+    @include mask-icons-shared("~img/road_sign.svg", contain, $blue);
 }
 
 .plant {
-    @include mask-icons-shared("~img/plant.svg");
+    @include unmaskable-icons-shared("~img/plant.svg", contain);
     height: 50px;
     width: 45px;
 }
 
 .warning {
     @extend %bottom-nav-shared;
-    @include mask-icons-shared("~img/warning.svg");
+    @include mask-icons-shared("~img/warning.svg", contain, $red);
     height: 15px;
     width: 15px;
-    background-color: $red;
 }
 
 .success {
-    @include mask-icons-shared("~img/success.svg");
+    @include mask-icons-shared("~img/success.svg", contain, $green);
     height: 18px;
     width: 15px;
 }
 
 .notifications-image {
-    @include mask-icons-shared("~img/notifications_header.svg");
+    @include mask-icons-shared("~img/notifications_header.svg", contain, $gray-3);
     -webkit-mask-position: center;
     mask-position: center;
     height: 145px;
@@ -144,97 +147,95 @@
 }
 
 .login-image {
-    @include mask-icons-shared("~img/login_image.svg");
-    -webkit-mask-position: center;
-    mask-position: center;
+    @include unmaskable-icons-shared("~img/login_image.svg", contain);
     width: 125px;
     height: 125px;
 }
 
 .eye {
-    @include mask-icons-shared("~img/eye.svg");
+    @include mask-icons-shared("~img/eye.svg", contain, $gray-3);
     height: 13px;
     width: 20px;
 }
 
 .eye.crossout {
-    @include mask-icons-shared("~img/eye-crossout.svg");
+    @include mask-icons-shared("~img/eye-crossout.svg", contain, $gray-3);
     height: 13px;
     width: 20px;
 }
 
 .confetti {
-    @include mask-icons-shared("~img/confetti.svg");
-    height: 160px;
+    @include unmaskable-icons-shared("~img/confetti.svg", contain);
+    background-position: left;
+    height: 100%;
+    min-height: 100px;
     width: 100%;
 }
 
 .sun {
-    @include mask-icons-shared("~img/sun.svg");
+    @include mask-icons-shared("~img/sun.svg", contain, $yellow);
     height: 100px;
     width: 100px;
 }
 
 .arrow {
-    @include mask-icons-shared("~img/arrow.svg");
+    @include mask-icons-shared("~img/arrow.svg", contain, $blue);
     height: 14px;
     width: 20px;
-    background-color: $blue;
 }
 
 .incorrect-flag {
-    @include mask-icons-shared("~img/incorrect_flag.svg");
+    @include unmaskable-icons-shared("~img/incorrect_flag.svg", contain);
 }
 
 .correct-flag {
-    @include mask-icons-shared("~img/correct_flag.svg");
+    @include unmaskable-icons-shared("~img/correct_flag.svg", contain);
 }
 
 %feedback-icons {
     height: 30px;
     width: 30px;
-    background-color: $app-accent-color;
     display: block;
     margin: auto;
 }
 
 .neutral-smiley {
-    @include mask-icons-shared("~img/neutral.svg");
+    @include mask-icons-shared("~img/neutral.svg", contain, $app-accent-color);
     @extend %feedback-icons;
     background: $red;
 }
 
 .smiling-smiley {
-    @include mask-icons-shared("~img/smile.svg");
+    @include mask-icons-shared("~img/smile.svg", contain, $app-accent-color);
     @extend %feedback-icons;
     background: $yellow;
 }
 
 .thrilled-smiley {
-    @include mask-icons-shared("~img/thrilled.svg");
+    @include mask-icons-shared("~img/thrilled.svg", contain, $app-accent-color);
     @extend %feedback-icons;
     background: $teal;
 }
 
 .speaker {
     @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/speaker.svg");
+    @include mask-icons-shared("~img/speaker.svg", contain, $gray-3);
 }
 
 .film {
     @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/film.svg");
+    @include mask-icons-shared("~img/film.svg", contain, $gray-3);
 }
 
 // Icons for card status
 %status-play {
-    background: $blue;
+    background-color: $blue;
     border: 0.1px solid $gray-5;
     display: flex;
     box-sizing: border-box;
 
     span {
-        @include mask-icons-shared("~img/chevron_right.svg");
+        @include mask-icons-shared("~img/chevron_right.svg", contain, $gray-3);
         background-color: $white;
         height: 15px;
         width: 15px;
@@ -245,36 +246,34 @@
 }
 
 %status-complete {
-    @include mask-icons-shared("~img/status_complete.svg");
+    @include unmaskable-icons-shared("~img/status_complete.svg", contain);
 }
 
 %status-lock {
-    @include mask-icons-shared("~img/status_lock.svg");
+    @include unmaskable-icons-shared("~img/status_lock.svg", contain);
 }
 
 // Stock card images
-
-
 %stock-course {
-    @include mask-icons-shared("~img/stock_course.svg");
+    @include unmaskable-icons-shared("~img/stock_course.svg", cover);
 }
 
 %stock-lesson {
-    @include mask-icons-shared("~img/stock_lesson.svg");
+    @include unmaskable-icons-shared("~img/stock_lesson.svg", cover);
 }
 
 %stock-resource {
-    @include mask-icons-shared("~img/stock_resource.svg");
+    @include unmaskable-icons-shared("~img/stock_resource.svg", cover);
 }
 
 %stock-objective {
-    @include mask-icons-shared("~img/stock_objective.svg");
+    @include unmaskable-icons-shared("~img/stock_objective.svg", cover);
 }
 
 %stock-content {
-    @include mask-icons-shared("~img/stock_content.svg");
+    @include unmaskable-icons-shared("~img/stock_content.svg", cover);
 }
 
 %stock-test {
-    @include mask-icons-shared("~img/stock_test.svg");
+    @include unmaskable-icons-shared("~img/stock_test.svg", cover);
 }
