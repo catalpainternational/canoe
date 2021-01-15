@@ -8,13 +8,13 @@ TopMenu {
     }
 
     .with-swoop {
-        @include header-swoop;
+        @extend %header-swoop;
         height: 100px;
         margin: auto auto 10px auto;
     }
 
     .without-swoop {
-        @include center-with-flex;
+        @extend %center-with-flex;
         height: $top-menu-height;
         margin: auto;
     }
@@ -46,7 +46,8 @@ TopMenu {
     a.top-icon {
         position: absolute;
         top: 15px;
-        background-position: center;
+        -webkit-mask-position: center;
+        mask-position: center;
 
         &.right {
             right: 15px;

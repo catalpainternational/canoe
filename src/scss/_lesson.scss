@@ -26,7 +26,7 @@ LessonPage {
     }
 
     .activity-swoop {
-        @include bottom-swoop;
+        @extend %bottom-swoop;
 
         a:hover {
             cursor: pointer;
@@ -485,16 +485,12 @@ LessonFeedback {
         }
     }
 
-    @mixin feedback-containers {
+    .feedback-container {
         text-align: center;
     }
 
-    .feedback-container {
-        @include feedback-containers;
-    }
-
     .thank-you-container {
-        @include feedback-containers;
+        text-align: center;
 
         .correct-flag {
             height: 6em;

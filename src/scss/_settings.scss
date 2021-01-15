@@ -1,6 +1,6 @@
 Settings {
     .with-swoop {
-        @include center-with-flex;
+        @extend %center-with-flex;
     }
 
     button {

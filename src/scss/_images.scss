@@ -1,50 +1,42 @@
-%icons-shared {
-    background-repeat: no-repeat;
-    background-size: contain;
+// Masking icons so we can dynamically set their color
+@mixin mask-icons-shared($image) {
+    mask-image: url($image);
+    -webkit-mask-image: url($image);
+    
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    
+    mask-size: contain;
+    -webkit-mask-size: contain;
+
+    display: inline-block;
 }
 
 .site-logo {
-    @extend %icons-shared;
-    @extend %mask-icons-shared;
-    background-image: url("~img/site_logo.svg");
-    background-position: center;
+    @include mask-icons-shared("~img/site_logo.svg");
+    mask-position: center;
+    -webkit-mask-position: center;
     height: 30px;
     width: 87px;
-
-    &.white {
-        background-image: url("~img/site_logo_white.svg");
-    }
 }
 
 .filter-icon {
-    @extend %icons-shared;
-    background-image: url("~img/levers.svg");
+    @include mask-icons-shared("~img/levers.svg");
     height: 20px;
     width: 20px;
     display: inline-block;
 }
 
 %bottom-nav-shared {
-    @extend %icons-shared;
-    @extend %mask-icons-shared;
-    background-position-x: center;
+    -webkit-mask-position-x: center;
+    mask-position: center;
     height: 22px;
     width: 22px;
 }
 
-.home-icon {
-    @extend %bottom-nav-shared;
-    -webkit-mask-image: url("~img/home.svg");
-    background-color: $gray-4;
-
-    &.active {
-        background-color: $app-accent-color;
-    }
-}
-
 .all-courses-icon {
     @extend %bottom-nav-shared;
-    -webkit-mask-image: url("~img/all_courses.svg");
+    @include mask-icons-shared("~img/all_courses.svg");
     background-color: $gray-4;
 
     &.active {
@@ -54,17 +46,7 @@
 
 .profile-icon {
     @extend %bottom-nav-shared;
-    -webkit-mask-image: url("~img/profile.svg");
-    background-color: $gray-4;
-
-    &.active {
-        background-color: $app-accent-color;
-    }
-}
-
-.notifications-icon {
-    @extend %bottom-nav-shared;
-    -webkit-mask-image: url("~img/notifications.svg");
+    @include mask-icons-shared("~img/profile.svg");
     background-color: $gray-4;
 
     &.active {
@@ -74,7 +56,7 @@
 
 .resources-icon {
     @extend %bottom-nav-shared;
-    -webkit-mask-image: url("../img/clipboard.svg");
+    @include mask-icons-shared("~img/clipboard.svg");
     background-color: $gray-4;
 
     &.active,
@@ -84,34 +66,30 @@
 }
 
 .settings-icon {
-    @extend %bottom-nav-shared;
-    -webkit-mask-image: url("../img/cog.svg");
+    @include mask-icons-shared("~img/cog.svg");
+    -webkit-mask-position-x: center;
+    mask-position: center;
+    height: 22px;
+    width: 22px;
     background-color: $blue;
 }
 
 .search-icon {
-    @extend %bottom-nav-shared;
-    background-image: url("../img/magnifier.svg");
-}
-
-.checkmark-circle {
-    @extend %icons-shared;
-    background-image: url("~img/checkmark_circle.svg");
-    height: 14px;
-    width: 12px;
+    @include mask-icons-shared("~img/magnifier.svg");
+    -webkit-mask-position-x: center;
+    mask-position: center;
+    width: 1em;
+    height: 1em;
 }
 
 .checkmark {
-    @extend %icons-shared;
-    background-image: url("~img/checkmark.svg");
-    height: 10px;
-    width: 12px;
+    @include mask-icons-shared("~img/checkmark.svg");
+    height: 16px;
+    width: 20px;
 }
 
 .cross {
-    @extend %icons-shared;
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/cross.svg");
+    @include mask-icons-shared("~img/cross.svg");
     height: 13px;
     width: 13px;
     background: $white;
@@ -122,128 +100,97 @@
 }
 
 %stat-icon-shared {
-    @extend %icons-shared;
-    @extend %mask-icons-shared;
     height: 25px;
     width: 25px;
     background: $blue;
 }
 
-.checkmark-circle-blue {
+.checkmark-circle {
     @extend %stat-icon-shared;
-    -webkit-mask-image: url("~img/checkmark_circle_blue.svg");
+    @include mask-icons-shared("~img/checkmark_circle.svg");
 }
 
 .road-sign {
     @extend %stat-icon-shared;
-    -webkit-mask-image: url("~img/road_sign.svg");
+    @include mask-icons-shared("~img/road_sign.svg");
 }
 
 .plant {
-    @extend %icons-shared;
-    background-image: url("~img/plant.svg");
+    @include mask-icons-shared("~img/plant.svg");
     height: 50px;
     width: 45px;
 }
 
-.clock {
-    @extend %icons-shared;
-    height: 14px;
-    width: 12px;
-    background-image: url("~img/clock.svg");
-}
-
 .warning {
-    @extend %icons-shared;
     @extend %bottom-nav-shared;
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/warning.svg");
+    @include mask-icons-shared("~img/warning.svg");
     height: 15px;
     width: 15px;
-
-    &.red {
-        background-color: $red;
-    }
+    background-color: $red;
 }
 
 .success {
-    @extend %icons-shared;
-    background-image: url("~img/success.svg");
+    @include mask-icons-shared("~img/success.svg");
     height: 18px;
     width: 15px;
 }
 
 .notifications-image {
-    @extend %icons-shared;
-    background-image: url("~img/notifications_header.svg");
-    background-position: center;
+    @include mask-icons-shared("~img/notifications_header.svg");
+    -webkit-mask-position: center;
+    mask-position: center;
     height: 145px;
     width: 118px;
 }
 
 .login-image {
-    @extend %icons-shared;
-    background-image: url("~img/login_image.svg");
-    background-position: center;
+    @include mask-icons-shared("~img/login_image.svg");
+    -webkit-mask-position: center;
+    mask-position: center;
     width: 125px;
     height: 125px;
 }
 
 .eye {
-    @extend %icons-shared;
-    background-image: url("~img/eye.svg");
+    @include mask-icons-shared("~img/eye.svg");
     height: 13px;
     width: 20px;
 }
 
 .eye.crossout {
-    @extend %icons-shared;
-    background-image: url("~img/eye-crossout.svg");
+    @include mask-icons-shared("~img/eye-crossout.svg");
     height: 13px;
     width: 20px;
 }
 
 .confetti {
-    @extend %icons-shared;
-    background-image: url("~img/confetti.svg");
+    @include mask-icons-shared("~img/confetti.svg");
     height: 160px;
     width: 100%;
 }
 
 .sun {
-    @extend %icons-shared;
-    background-image: url("~img/sun.svg");
+    @include mask-icons-shared("~img/sun.svg");
     height: 100px;
     width: 100px;
 }
 
-// Masking icons so we can dynamically set their color
-%mask-icons-shared {
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
-    mask-size: contain;
-}
-
 .arrow {
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/arrow.svg");
+    @include mask-icons-shared("~img/arrow.svg");
     height: 14px;
     width: 20px;
     background-color: $blue;
 }
 
 .incorrect-flag {
-    @extend %icons-shared;
-    background-image: url("~img/incorrect_flag.svg");
+    @include mask-icons-shared("~img/incorrect_flag.svg");
 }
 
 .correct-flag {
-    @extend %icons-shared;
-    background-image: url("~img/correct_flag.svg");
+    @include mask-icons-shared("~img/correct_flag.svg");
 }
 
-@mixin feedback-icons {
+%feedback-icons {
     height: 30px;
     width: 30px;
     background-color: $app-accent-color;
@@ -252,58 +199,82 @@
 }
 
 .neutral-smiley {
-    @extend %mask-icons-shared;
-    @include feedback-icons;
-    -webkit-mask-image: url("~img/neutral.svg");
+    @include mask-icons-shared("~img/neutral.svg");
+    @extend %feedback-icons;
     background: $red;
 }
 
 .smiling-smiley {
-    @extend %mask-icons-shared;
-    @include feedback-icons;
-    -webkit-mask-image: url("~img/smile.svg");
+    @include mask-icons-shared("~img/smile.svg");
+    @extend %feedback-icons;
     background: $yellow;
 }
 
 .thrilled-smiley {
-    @extend %mask-icons-shared;
-    @include feedback-icons;
-    -webkit-mask-image: url("~img/thrilled.svg");
+    @include mask-icons-shared("~img/thrilled.svg");
+    @extend %feedback-icons;
     background: $teal;
 }
 
 .speaker {
     @extend %stat-icon-shared;
-    background-image: url("~img/speaker.svg");
+    @include mask-icons-shared("~img/speaker.svg");
 }
 
 .film {
     @extend %stat-icon-shared;
-    background-image: url("~img/film.svg");
+    @include mask-icons-shared("~img/film.svg");
 }
 
 // Icons for card status
 %status-play {
-    @extend %mask-icons-shared;
     background: $blue;
-    border: .1px solid $gray-5;
+    border: 0.1px solid $gray-5;
     display: flex;
     box-sizing: border-box;
 
     span {
-        -webkit-mask-image: url("~img/chevron_right.svg");
+        @include mask-icons-shared("~img/chevron_right.svg");
         background-color: $white;
         height: 15px;
         width: 15px;
         -webkit-mask-size: cover;
+        mask-size: cover;
         margin: auto;
     }
 }
 
 %status-complete {
-    background-image: url("~img/status_complete.svg");
+    @include mask-icons-shared("~img/status_complete.svg");
 }
 
 %status-lock {
-    background-image: url("~img/status_lock.svg");
+    @include mask-icons-shared("~img/status_lock.svg");
+}
+
+// Stock card images
+
+
+%stock-course {
+    @include mask-icons-shared("~img/stock_course.svg");
+}
+
+%stock-lesson {
+    @include mask-icons-shared("~img/stock_lesson.svg");
+}
+
+%stock-resource {
+    @include mask-icons-shared("~img/stock_resource.svg");
+}
+
+%stock-objective {
+    @include mask-icons-shared("~img/stock_objective.svg");
+}
+
+%stock-content {
+    @include mask-icons-shared("~img/stock_content.svg");
+}
+
+%stock-test {
+    @include mask-icons-shared("~img/stock_test.svg");
 }

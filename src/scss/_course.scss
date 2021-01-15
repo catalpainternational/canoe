@@ -1,6 +1,6 @@
 CoursePage {
     .lesson-swoop {
-		@include bottom-swoop;
+		@extend %bottom-swoop;
 	}
 	
 	.card-image {
