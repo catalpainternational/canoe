@@ -13,10 +13,11 @@ import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-import { BACKEND_BASE_URL } from "./js/urls";
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { buildAppelflapRoutes } from "js/RoutingAppelflap";
 
 registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/media/media/.+`),
+    new RegExp(ROUTES_FOR_REGISTRATION.media),
     new CacheFirst({
         cacheName: "media-cache",
         plugins: [new RangeRequestsPlugin()],
@@ -24,47 +25,45 @@ registerRoute(
 );
 
 registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/media/images/.+`),
+    new RegExp(ROUTES_FOR_REGISTRATION.images),
     new CacheFirst({
         cacheName: "images-cache",
     })
 );
 
 registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/api/v2/pages/.*`),
+    new RegExp(ROUTES_FOR_REGISTRATION.pagesv2),
     new CacheFirst({
         cacheName: "pages-cache",
     })
 );
 
 registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/manifest`),
+    new RegExp(ROUTES_FOR_REGISTRATION.manifest),
     new StaleWhileRevalidate({
         cacheName: "manifest-cache",
     })
 );
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/token-auth/`), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly(), "POST");
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/token-auth/`), new NetworkOnly(), "POST");
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagePreviewv2), new NetworkOnly());
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/api/v2/page_preview`), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly(), "POST");
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/progress/actions`), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly(), "POST");
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/progress/actions`), new NetworkOnly(), "POST");
-
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/notifications/subscribe*`), new NetworkOnly());
-
-registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/notifications/subscribe*`),
-    new NetworkOnly(),
-    "POST"
-);
+// Set up routes to Appelflap, if Canoe is not hosted by Appelflap this does nothing
+buildAppelflapRoutes().forEach((routeDef) => {
+    registerRoute(new RegExp(routeDef[0]), new NetworkOnly(), routeDef[1]);
+});
 
 // webpack-dev-server communicates over this endpoint. Without this clause, the
 // service worker caches these requests and breaks webpack-dev-server.
-registerRoute(new RegExp(`/sockjs-node/info`), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.socketInfo), new NetworkOnly());
 
 setDefaultHandler(new CacheFirst());
 
