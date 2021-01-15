@@ -3,7 +3,7 @@
  * because geckoview translates '127.0.0.1' to 'localhost' in the background
  * which results in the route registration failing
  */
-export const AF_LOCALHOSTURI = "http:/localhost";
+export const AF_LOCALHOSTURI = "http://localhost";
 
 export const AF_API_PREFIX = "appelflap";
 
@@ -75,51 +75,48 @@ export const APPELFLAPCOMMANDS = {
  * @returns The port number that Appelflap is using, or -1 which means no Appelflap
 */
 export function AppelflapPortNo() {
-    const portword = navigator.languages.filter((word) =>
+    const portwords = navigator.languages.filter((word) =>
         /^ep-[a-j]{4,5}$/.test(word)
-    )[0];
+    );
 
-    if (!portword) {
+    if (portwords.length !== 1) {
         return -1;
     }
 
-    const portNo = [...portword.substr(3)]
+    const portNo = [...portwords[0].substr(3)]
         .map((el) => String.fromCharCode(el.charCodeAt(0) - 0x31))
         .join("");
 
     return parseInt(portNo, 10);
 }
 
-/** Registers each Appelflap API route individudally, will not result in false positives */
-function initialiseSpecificRoutes(registerRoute, NetworkOnly) {
+/** Builds each Appelflap API route individually. These will not result in false positives */
+function initialiseSpecificRoutes() {
     // Port number range is 2^10 to 2^16-1 inclusive - 1024 to 65535
     const portRange = "(102[4-9]|10[3-9]\\d|1[1-9]\\d{2}|[2-9]\\d{3}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])";
 
     // Sort the commandPaths by longest first, probably not required, but ...
-    Object.keys(APPELFLAPCOMMANDS).sort((a, b) => {
+    return Object.keys(APPELFLAPCOMMANDS).sort((a, b) => {
         return b.commandPath.length - a.commandPath.length;
-    }).forEach((commandName) => {
+    }).map((commandName) => {
         const command = APPELFLAPCOMMANDS[commandName];
-        const route = `${localHostURI}:${portRange}/${command.commandPath}`.replaceAll("/", "\\/");
-        registerRoute(RegExp(route), new NetworkOnly(), command.method);
+        return [`${AF_LOCALHOSTURI}:${portRange}/${command.commandPath}`, command.method];
     });
 }
 
-/** Does a generic registration for Appelflap API routes, this may result in false positives */
-function genericRoutes(registerRoute, NetworkOnly) {
+/** Builds a generic Appelflap API routes, this may result in false positives */
+function genericRoutes() {
     // Port number range is '0000' to '99999' inclusive
     const portRange = "[0-9]{4,5}";
-    const route = `${localHostURI}:${portRange}/${AF_API_PREFIX}/.*`.replaceAll("/", "\\/");
-    registerRoute(RegExp(route), new NetworkOnly());
+    return [[`${AF_LOCALHOSTURI}:${portRange}/${AF_API_PREFIX}/.*`, "GET"]];
 }
 
-/** Register the routes used to communicate with Appelflap so the service worker handles them as NetworkOnly
- * @remarks registerRoute and NetworkOnly have to be passed in from sw.js or else the unit tests will not run
+/** Build the routes used to communicate with Appelflap so the service worker can register them as NetworkOnly
 */
-export function initialiseAppelflapRoutes(registerRoute, NetworkOnly) {
+export function buildAppelflapRoutes() {
     const portNo = AppelflapPortNo();
 
     if (portNo > -1) {
-        genericRoutes(registerRoute, NetworkOnly);
+        return genericRoutes();
     }
 };
