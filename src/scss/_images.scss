@@ -11,8 +11,6 @@
     
     background-color: $color;
     display: inline-block;
-
-    // add mask-position center?
 }
 
 @mixin unmaskable-icons-shared($image, $contain-or-cover) {
@@ -20,7 +18,6 @@
     background-repeat: no-repeat;
     background-size: $contain-or-cover;
     background-position: center;
-    // display: inline-block;
 }
 
 .site-logo {
