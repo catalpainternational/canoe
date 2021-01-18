@@ -16,14 +16,35 @@ import { AF_LOCALHOSTURI, APPELFLAPCOMMANDS, AppelflapPortNo } from "js/RoutingA
 /* eslint-enable prettier/prettier */
 
 export class AppelflapConnect {
+    /** Get the Authorisation Header details that Appelflap requires
+     * @remarks See: https://github.com/catalpainternational/appelflap/blob/7a4072f8b914748563333238bb1a49ea527480bd/docs/API/determining-endpoint.md for more info
+     * @returns The auth header as `Basic btoaEncodedStuff` or 'None' if the credentials are not available
+     */
+    get authHeader(): string {
+        const credentialsExtract = (prefix: string) => {
+            const rex = RegExp(`^${prefix}-[a-z]{5}$`);
+            const match = navigator.languages.filter((word) =>
+                rex.test(word)
+            )[0];
+
+            return match ? match.substring(4) : match;
+        };
+
+        const creds = ["ecu", "ecp"].map(credentialsExtract);
+        return !creds.every(Boolean)
+            ? "None"
+            : `Basic ${btoa(creds.join(":"))}`;
+    }
+
     private appelflapFetch = async (
         commandPath: string,
         commandInit?: RequestInit
     ): Promise<Response> => {
         const requestInfo = `${AF_LOCALHOSTURI}:${AppelflapPortNo()}/${commandPath}`;
 
-        /** When we finally have authorization via Appelflap, we'll change this */
-        const weHaveAuthorization = false;
+        const authorization = this.authHeader;
+        const weHaveAuthorization =
+            ["Not Set", "None"].indexOf(authorization) === -1;
 
         // Somewhere, some documentation says it is preferable to set requestInit to undefined
         // if all the values are defaults (e.g. `method: GET`), but I can't find it currently.
@@ -35,6 +56,9 @@ export class AppelflapConnect {
 
         if (weHaveAuthorization) {
             // Add the authorization header
+            requestInit!.headers = (requestInit!.headers ||
+                new Headers()) as Headers;
+            requestInit!.headers!.append("Authorization", authorization);
         }
 
         return await fetch(requestInfo, requestInit);
