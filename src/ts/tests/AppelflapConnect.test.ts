@@ -2,6 +2,8 @@ import test from "ava";
 import fetchMock from "fetch-mock";
 import { Response } from "node-fetch";
 
+global.atob = require("atob");
+
 import { buildFakeNavigator } from "./fakeNavigator";
 
 import { AppelflapConnect } from "ts/AppelflapConnect";
@@ -12,6 +14,7 @@ import {
     TSubscription,
     TSubscriptions,
 } from "ts/Types/CacheTypes";
+
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
@@ -458,7 +461,8 @@ test("Cache: Get Package Certificate", async (t: any) => {
     const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_CERTCHAIN}`;
 
     const unsignedTestResult: TCertificate = {
-        cert: "Some PEM cert",
+        cert:
+            "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJsakNDQVgrZ0F3SUJBZ0lCQVRBTkJna3Foa2lHOXcwQkFRc0ZBREFQTVEwd0N3WURWUVFERXdSeWNrdFlNQjRYRFRjd01ERXcKTVRBd01EQXdNRm9YRFRRNE1ERXdNVEF3TURBd01Gb3dEekVOTUFzR0ExVUVBeE1FY25KTFdEQ0NBU0l3RFFZSktvWklodmNOQVFFQgpCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMQk1TQXNaWHk2c05uUzBoenVDb1ZTd05USDVVVEN4bk54WFZ3RkFxREZOVVFrL0dBdDZidDM3CmZMYi9TWUcwTnB5NlJHa295dDlELzhtUy9FNG5GUnV0RXU4ekhJam9mR2JqTXp3clZUNDVlUU5aNmtVSU80MGJXU3Y3UXFsZG53STIKdXU5d0lPNGF1OTdzUEhtSXZXaWRpMm1lcmFoRzFsemQ4VEI1cnRRc0JoN2JKdnJYYTNONUpDN1BLK0Y0aEplclUxWERPWFpNVFFtdAorL2dKMzhxMGFaTVl0Z2xOVTZRVjVwUkh1Y1RKTW45Q09iNTBIQ3BJbDlmdDZIazM4M3MyNWJGVmVGWlQwQVRHenlLOVhvZ0t1Z2hjClRLQzNjNXJlUlljZk9yQlRScTFsRE1yclBzQURyWjZMWUtDcmkvTG5hZ2hyeEIrNmlCK1FuRTBDMTBFQ0F3RUFBVEFOQmdrcWhraUcKOXcwQkFRc0ZBQU1DQUFBPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t",
         isCertSigned: false,
     };
     const unsignedCertResponse = new Response(unsignedTestResult.cert, {
@@ -485,11 +489,13 @@ test("Cache: Get Package Certificate", async (t: any) => {
 
     fetchMock.get(testUri, unsignedCertResponse);
     const unsignedSuccessResult = await afc.getCertificate();
-    t.deepEqual(unsignedSuccessResult, unsignedTestResult);
+    t.is(unsignedSuccessResult.isCertSigned, unsignedTestResult.isCertSigned);
+    t.is(unsignedSuccessResult.cert, atob(unsignedTestResult.cert));
 
     fetchMock.get(testUri, signedCertResponse);
     const signedSuccessResult = await afc.getCertificate();
-    t.deepEqual(signedSuccessResult, signedTestResult);
+    t.is(signedSuccessResult.isCertSigned, signedTestResult.isCertSigned);
+    t.is(signedSuccessResult.cert, atob(signedTestResult.cert));
 
     fetchMock.reset();
 });

@@ -2731,6 +2731,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/atob@npm:^2":
+  version: 2.1.2
+  resolution: "@types/atob@npm:2.1.2"
+  checksum: df8e9efd3c4f842a5183b9a11877adb96d78b1d1559280afa87bc2c77c04ef1abd0004ab1947de0265292ab032497c679b6c1b954efce5eb6b455fb2404ab348
+  languageName: node
+  linkType: hard
+
 "@types/body-parser@npm:*":
   version: 1.19.0
   resolution: "@types/body-parser@npm:1.19.0"
@@ -5045,6 +5052,7 @@ __metadata:
     "@babel/runtime": ^7.8.4
     "@riotjs/compiler": ^4.9.3
     "@riotjs/webpack-loader": ^4.0.3
+    "@types/atob": ^2
     "@types/eslint": ^7
     "@types/eslint-config-prettier": ^6
     "@types/eslint-plugin-prettier": ^3
@@ -5058,6 +5066,7 @@ __metadata:
     Actions: "link:src/js/actions"
     ReduxImpl: "link:src/js/redux"
     RiotTags: "link:src/riot/"
+    atob: ^2.1.2
     ava: ^3.13.0
     babel-loader: ^8.1.0
     babel-polyfill: ^6.26.0
