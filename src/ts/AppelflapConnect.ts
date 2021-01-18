@@ -17,13 +17,11 @@ import { AF_CERT_HEADER_LENGTH, AF_LOCALHOSTURI, APPELFLAPCOMMANDS, AppelflapPor
 /* eslint-enable prettier/prettier */
 
 export class AppelflapConnect {
-    #authHeader = "Not set";
-
+    /** Get the Authorisation Header details that Appelflap requires
+     * @remarks See: https://github.com/catalpainternational/appelflap/blob/7a4072f8b914748563333238bb1a49ea527480bd/docs/API/determining-endpoint.md for more info
+     * @returns The auth header as `Basic btoaEncodedStuff` or 'None' if the credentials are not available
+     */
     get authHeader(): string {
-        if (this.#authHeader !== "Not set") {
-            return this.#authHeader;
-        }
-
         const credentialsExtract = (prefix: string) => {
             const rex = RegExp(`^${prefix}-[a-z]{5}$`);
             const match = navigator.languages.filter((word) =>
@@ -34,11 +32,9 @@ export class AppelflapConnect {
         };
 
         const creds = ["ecu", "ecp"].map(credentialsExtract);
-        this.#authHeader = !creds.every(Boolean)
+        return !creds.every(Boolean)
             ? "None"
             : `Basic ${btoa(creds.join(":"))}`;
-
-        return this.#authHeader;
     }
 
     private appelflapFetch = async (
