@@ -6,6 +6,7 @@ import { buildFakeNavigator } from "./fakeNavigator";
 
 import { AppelflapConnect } from "ts/AppelflapConnect";
 import {
+    TCertificate,
     TPublication,
     TPublicationTarget,
     TSubscription,
@@ -14,7 +15,7 @@ import {
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_LOCALHOSTURI, AF_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT, AppelflapPortNo } from "js/RoutingAppelflap";
+import { AF_LOCALHOSTURI, AF_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT, AppelflapPortNo, AF_CERTCHAIN, AF_CERT_HEADER_LENGTH } from "js/RoutingAppelflap";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -446,6 +447,102 @@ test("Cache: bulkSubscribe", async (t: any) => {
 
     fetchMock.post(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.bulkSubscribe(subscriptions);
+    t.is(successResult, "ok");
+
+    fetchMock.reset();
+});
+
+test("Cache: Get Package Certificate", async (t: any) => {
+    const afc = t.context.afc as AppelflapConnect;
+
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_CERTCHAIN}`;
+
+    const unsignedTestResult: TCertificate = {
+        cert: "Some PEM cert",
+        isCertSigned: false,
+    };
+    const unsignedCertResponse = new Response(unsignedTestResult.cert, {
+        status: 200,
+        statusText: "Ok",
+    });
+    unsignedCertResponse.headers.append(
+        AF_CERT_HEADER_LENGTH,
+        unsignedTestResult.isCertSigned ? "3" : "1"
+    );
+
+    const signedTestResult: TCertificate = {
+        cert: "Some Signed PEM cert",
+        isCertSigned: true,
+    };
+    const signedCertResponse = new Response(signedTestResult.cert, {
+        status: 200,
+        statusText: "Ok",
+    });
+    signedCertResponse.headers.append(
+        AF_CERT_HEADER_LENGTH,
+        signedTestResult.isCertSigned ? "3" : "1"
+    );
+
+    fetchMock.get(testUri, unsignedCertResponse);
+    const unsignedSuccessResult = await afc.getCertificate();
+    t.deepEqual(unsignedSuccessResult, unsignedTestResult);
+
+    fetchMock.get(testUri, signedCertResponse);
+    const signedSuccessResult = await afc.getCertificate();
+    t.deepEqual(signedSuccessResult, signedTestResult);
+
+    fetchMock.reset();
+});
+
+test("Cache: Save Package Certificate", async (t: any) => {
+    const afc = t.context.afc as AppelflapConnect;
+    const successResponse = t.context.successResponse as Response;
+    const badRequestResponse = t.context.badRequestResponse as Response;
+    const authFailureResponse = t.context.authFailureResponse as Response;
+
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_CERTCHAIN}`;
+
+    const signedTestCertificate: TCertificate = {
+        cert: "Some Signed PEM cert",
+        isCertSigned: true,
+    };
+
+    // When doing throwsAsync tests, expect 2 assertions returned for each test
+    // And do the 'ok' test last to ensure that all tests are awaited
+    t.plan(5);
+    [badRequestResponse, authFailureResponse].forEach(async (response) => {
+        fetchMock.put(testUri, response, { overwriteRoutes: true });
+        const failureResult = await t.throwsAsync(
+            afc.saveCertificate(signedTestCertificate)
+        );
+        t.is(failureResult.message, response.statusText);
+    });
+
+    fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
+    const successResult = await afc.saveCertificate(signedTestCertificate);
+    t.is(successResult, "ok");
+
+    fetchMock.reset();
+});
+
+test("Cache: Delete Package Certificate", async (t: any) => {
+    const afc = t.context.afc as AppelflapConnect;
+    const successResponse = t.context.successResponse as Response;
+    const authFailureResponse = t.context.authFailureResponse as Response;
+
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_CERTCHAIN}`;
+
+    // When doing throwsAsync tests, expect 2 assertions returned for each test
+    // And do the 'ok' test last to ensure that all tests are awaited
+    t.plan(3);
+    [authFailureResponse].forEach(async (response) => {
+        fetchMock.delete(testUri, response, { overwriteRoutes: true });
+        const failureResult = await t.throwsAsync(afc.deleteCertificate());
+        t.is(failureResult.message, response.statusText);
+    });
+
+    fetchMock.delete(testUri, successResponse, { overwriteRoutes: true });
+    const successResult = await afc.deleteCertificate();
     t.is(successResult, "ok");
 
     fetchMock.reset();
