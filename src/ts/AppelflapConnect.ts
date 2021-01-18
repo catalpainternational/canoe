@@ -16,14 +16,39 @@ import { AF_LOCALHOSTURI, APPELFLAPCOMMANDS, AppelflapPortNo } from "js/RoutingA
 /* eslint-enable prettier/prettier */
 
 export class AppelflapConnect {
+    #authHeader = "Not set";
+
+    get authHeader(): string {
+        if (this.#authHeader !== "Not set") {
+            return this.#authHeader;
+        }
+
+        const credentialsExtract = (prefix: string) => {
+            const rex = RegExp(`^${prefix}-[a-z]{5}$`);
+            const match = navigator.languages.filter((word) =>
+                rex.test(word)
+            )[0];
+
+            return match ? match.substring(4) : match;
+        };
+
+        const creds = ["ecu", "ecp"].map(credentialsExtract);
+        this.#authHeader = !creds.every(Boolean)
+            ? "None"
+            : `Basic: ${btoa(creds.join(":"))}`;
+
+        return this.#authHeader;
+    }
+
     private appelflapFetch = async (
         commandPath: string,
         commandInit?: RequestInit
     ): Promise<Response> => {
         const requestInfo = `${AF_LOCALHOSTURI}:${AppelflapPortNo()}/${commandPath}`;
 
-        /** When we finally have authorization via Appelflap, we'll change this */
-        const weHaveAuthorization = false;
+        const authorization = this.authHeader;
+        const weHaveAuthorization =
+            ["Not Set", "None"].indexOf(authorization) === -1;
 
         // Somewhere, some documentation says it is preferable to set requestInit to undefined
         // if all the values are defaults (e.g. `method: GET`), but I can't find it currently.
@@ -35,6 +60,9 @@ export class AppelflapConnect {
 
         if (weHaveAuthorization) {
             // Add the authorization header
+            requestInit!.headers = (requestInit!.headers ||
+                new Headers()) as Headers;
+            requestInit!.headers!.append("Authorization", authorization);
         }
 
         return await fetch(requestInfo, requestInit);
