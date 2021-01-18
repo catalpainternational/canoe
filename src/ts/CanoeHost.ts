@@ -1,8 +1,10 @@
 import { inAppelflap } from "ts/PlatformDetection";
 import { AppelflapConnect } from "ts/AppelflapConnect";
+import { TCertificate } from "./Types/CacheTypes";
 
 export class CanoeHost {
     #afc?: AppelflapConnect;
+    #packageCert?: TCertificate;
 
     constructor() {
         this.#afc = inAppelflap() ? new AppelflapConnect() : undefined;
@@ -14,6 +16,16 @@ export class CanoeHost {
         return this.#afc ? await this.#afc.lock() : "notOk";
     };
 
+    private GetPackageCertificateFromAppelflap = async (): Promise<
+        TCertificate | undefined
+    > => {
+        return this.#afc ? await this.#afc.getCertificate() : undefined;
+    };
+
+    get packageCertificate(): TCertificate | undefined {
+        return this.#packageCert;
+    }
+
     StartCanoe = async (startUp: () => void): Promise<boolean> => {
         let lockResult = true;
         if (inAppelflap()) {
@@ -23,6 +35,14 @@ export class CanoeHost {
                 // We don't know why Appelflap is thought to be around, and yet it failed.
                 lockResult = false;
             }
+
+            // if (lockResult) {
+            try {
+                this.#packageCert = await this.GetPackageCertificateFromAppelflap();
+            } catch {
+                // No signed cert
+            }
+            // }
         }
 
         startUp();
