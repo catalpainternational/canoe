@@ -36,7 +36,7 @@ export class AppelflapConnect {
         const creds = ["ecu", "ecp"].map(credentialsExtract);
         this.#authHeader = !creds.every(Boolean)
             ? "None"
-            : `Basic: ${btoa(creds.join(":"))}`;
+            : `Basic ${btoa(creds.join(":"))}`;
 
         return this.#authHeader;
     }
@@ -99,11 +99,14 @@ export class AppelflapConnect {
                 // A `application/x-pem-file` is actually a sub-type of `text`
                 // But we need to include a little extra info from the repsonse header.
                 // So we'll actually return it as an object (i.e. json)
-                // eslint-disable-next-line no-case-declarations
+                /* eslint-disable no-case-declarations */
                 const isCertSigned =
                     response.headers.get(AF_CERT_HEADER_LENGTH) === "3";
+                const encodedCert = await response.text();
+                /* eslint-enable no-case-declarations */
+
                 return {
-                    cert: await response.text(),
+                    cert: atob(encodedCert),
                     isCertSigned: isCertSigned,
                 };
         }
