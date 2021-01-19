@@ -26,6 +26,7 @@ export class CertChain {
     async initialise(): Promise<boolean> {
         try {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
+            console.info(this.#packageCert.cert);
             if (!this.#packageCert?.isCertSigned) {
                 const lastError = await this.PostPackageCertificateForSigning();
                 if (!lastError && this.#packageCert) {

@@ -66,6 +66,7 @@
         import { logPageView } from "js/GoogleAnalytics";
 
         import { CanoeHost } from "ts/CanoeHost";
+        import { CertChain } from "ts/CertChain";
 
         import HomePageJS from "js/HomePage";
         import CoursePageJS from "js/CoursePage";
@@ -114,6 +115,8 @@
                 wagtailPage: {},
                 homePageURL: "",
                 appTitle: "",
+                canoeHost: undefined,
+                certChain: undefined,
             },
 
             components: {
@@ -138,6 +141,32 @@
             },
 
             onMounted() {
+                this.setUpEventListeners();
+
+                state.canoeHost = new CanoeHost();
+                state.canoeHost
+                    .StartCanoe(() => {})
+                    .then((_) => {
+                        // Success
+                    })
+                    .catch((_) => {
+                        // Appelflap is apparently around, but we couldn't get the lock on Canoe
+                        // The app is probably still usable, but we may wish to show a message to the user.
+                    })
+                    .finally((_) => {
+                        // Regardless of what happens with Appelflap, we continue starting up Canoe
+                        if (!this.userShouldLogin() && this.areCompletionsReady()) {
+                            // If user returns to site and is logged in.
+                            this.route();
+                        }
+                    });
+            },
+
+            onUpdated() {
+                scrollToFirstUnfinishedContent();
+            },
+
+            setUpEventListeners() {
                 // After authenticating, the app downloads its materials.
                 window.addEventListener(ON_REQUEST_SITE_DOWNLOAD, () => {
                     this.update();
@@ -159,26 +188,6 @@
                         logPageView(window.location.hash);
                     }
                 });
-
-                if (!this.userShouldLogin() && this.areCompletionsReady()) {
-                    // If user returns to site and is logged in.
-                    this.route();
-                }
-
-                const canoeHost = new CanoeHost();
-                canoeHost
-                    .StartCanoe(() => {})
-                    .then((_) => {
-                        // Success
-                    })
-                    .catch((_) => {
-                        // Appelflap is apparently around, but we couldn't get the lock on Canoe
-                        // The app is probably still usable, but we may wish to show a message to the user.
-                    });
-            },
-
-            onUpdated() {
-                scrollToFirstUnfinishedContent();
             },
 
             storeListener(previousStoreState, storeState) {
@@ -190,6 +199,19 @@
             async route() {
                 const page = await getPage();
                 const pageModel = getWagtailPageModelName(page);
+
+                const afc = this.state.canoeHost.appelflapConnect;
+                if (afc && !this.userShouldLogin() && this.areCompletionsReady() && !this.state.certChain) {
+                    try {
+                        this.state.certChain = new CertChain(afc);
+                        const hasCert = await this.state.certChain.initialise();
+                        const packageCert = this.state.certChain.packageCertificate;
+                        console.log(JSON.stringify(packageCert));
+                    } catch {
+                        // No signed cert
+                    }
+
+                }
 
                 this.update({
                     wagtailPage: page,

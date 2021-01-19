@@ -1,12 +1,15 @@
 import { inAppelflap } from "ts/PlatformDetection";
 import { AppelflapConnect } from "ts/AppelflapConnect";
-import { CertChain } from "./CertChain";
 
 export class CanoeHost {
     #afc?: AppelflapConnect;
 
     constructor() {
         this.#afc = inAppelflap() ? new AppelflapConnect() : undefined;
+    }
+
+    get appelflapConnect(): AppelflapConnect | undefined {
+        return this.#afc;
     }
 
     /** Tell Appelflap that Canoe is 'locked'
@@ -23,17 +26,6 @@ export class CanoeHost {
             } catch {
                 // We don't know why Appelflap is thought to be around, and yet it failed.
                 lockResult = false;
-            }
-
-            if (this.#afc) {
-                try {
-                    const certChain = new CertChain(this.#afc);
-                    const hasCert = await certChain.initialise();
-                    const packageCert = certChain.packageCertificate;
-                    console.log(JSON.stringify(packageCert));
-                } catch {
-                    // No signed cert
-                }
             }
         }
 
