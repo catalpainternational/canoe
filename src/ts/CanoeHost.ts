@@ -28,7 +28,7 @@ export class CanoeHost {
             if (this.#afc) {
                 try {
                     const certChain = new CertChain(this.#afc);
-                    await certChain.initialise();
+                    const hasCert = await certChain.initialise();
                     const packageCert = certChain.packageCertificate;
                     console.log(JSON.stringify(packageCert));
                     console.log(btoa(packageCert?.cert || ""));

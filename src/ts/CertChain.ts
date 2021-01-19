@@ -1,3 +1,5 @@
+import jseu from "js-encoding-utils";
+
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { AppelflapConnect } from "ts/AppelflapConnect";
@@ -48,6 +50,9 @@ export class CertChain {
             return;
         }
 
+        const cert = btoa(this.#packageCert?.cert || "");
+        const derCert = jseu.formatter.pemToBin(cert);
+
         try {
             const init = {
                 method: "POST",
@@ -55,7 +60,7 @@ export class CertChain {
                     "content-type": "application/octet-stream",
                     Authorization: `JWT ${getAuthenticationToken()}`,
                 },
-                body: this.#packageCert?.cert,
+                body: derCert,
             } as RequestInit;
             const resp = await fetch(
                 ROUTES_FOR_REGISTRATION.appelflapPKIsign,
