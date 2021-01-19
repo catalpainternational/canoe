@@ -52,7 +52,7 @@ export class CertChain {
             const init = {
                 method: "POST",
                 headers: {
-                    "content-type": "application/x-pem-file",
+                    "content-type": "application/octet-stream",
                     Authorization: `JWT ${getAuthenticationToken()}`,
                 },
                 body: this.#packageCert?.cert,
