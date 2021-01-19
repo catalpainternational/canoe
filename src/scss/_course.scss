@@ -1,9 +1,9 @@
 CoursePage {
     .lesson-swoop {
-		@include bottom-swoop;
+		@extend %bottom-swoop;
 	}
 	
 	.card-image {
-		background-image: url("~img/stock_lesson.svg");
+		@extend %stock-lesson;
 	}
 }

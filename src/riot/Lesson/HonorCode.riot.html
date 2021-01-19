@@ -7,9 +7,7 @@
     </div>
     <div class="code">
         <h4>{ TRANSLATIONS.code() }</h4>
-        <p>
-            { TRANSLATIONS.promise() }
-        </p>
+        <p>{ TRANSLATIONS.promise() }</p>
         <div class="i-agree-container" onclick="{agreeToCode}">
             <span class="checkbox"></span>
             <span if="{state.hasAgreed}" class="checkmark"></span>
@@ -17,11 +15,7 @@
         </div>
     </div>
     <div>
-        <button
-            class="btn-primary"
-            onclick="{goToCourseExam}"
-            disabled="{!state.hasAgreed}"
-        >
+        <button class="btn-primary" onclick="{goToCourseExam}" disabled="{!state.hasAgreed}">
             { TRANSLATIONS.startExam() }
         </button>
         <button class="btn-secondary" onclick="{goToCourseOverview}">
@@ -34,12 +28,15 @@
 
         export default {
             TRANSLATIONS: {
-                exam: () => gettext('Course exam'),
-                code: () => gettext('Code of conduct'),
-                promise: () => gettext('You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?'),
-                agree: () => gettext('Yes, I agree'),
-                startExam: () => gettext('Start Exam'),
-                backCourse: () => gettext('Back to Course')
+                exam: () => gettext("Course exam"),
+                code: () => gettext("Code of conduct"),
+                promise: () =>
+                    gettext(
+                        "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?"
+                    ),
+                agree: () => gettext("Yes, I agree"),
+                startExam: () => gettext("Start Exam"),
+                backCourse: () => gettext("Back to Course"),
             },
 
             components: {
@@ -65,7 +62,10 @@
             youMustScoreAtLeastMessage() {
                 const { minimumScore } = this.props;
                 // message for what percent a user must score to pass the exam
-                return gettext("To pass this exam you need to score <strong>%1% or higher</strong>", minimumScore);
+                return gettext(
+                    "To pass this exam you need to score <strong>%1% or higher</strong>",
+                    minimumScore
+                );
             },
         };
     </script>

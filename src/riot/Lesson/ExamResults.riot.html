@@ -15,7 +15,8 @@
                     </button>
                 </template>
                 <template if="{!state.passedExam}">
-                    <div class="incorrect-flag">
+                    <div>
+                        <span class="incorrect-flag"></span>
                         <h2>{ TRANSLATIONS.notQuite() }</h2>
                         <p>{ failedExamMessage() }</p>
                     </div>

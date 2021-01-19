@@ -1,10 +1,10 @@
 Resources {
     .card-image {
-        background-image: url("~img/stock_resource.svg");
+        @extend %stock-resource;
     }
 
     .with-swoop {
-        @include center-with-flex;
+        @extend %center-with-flex;
     }
 
     .tag-container {
@@ -34,8 +34,6 @@ searchbar {
     }
 
     .search-icon {
-        width: 1em;
-        height: 1em;
         position: relative;
         flex: none;
         margin-right: 0.5em;

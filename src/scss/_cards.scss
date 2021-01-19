@@ -9,14 +9,14 @@
     position: relative;
 
     .card-image {
-        background-size: cover;
-        background-position: center;
         background-color: $gray-9;
-        background-repeat: no-repeat;
         border-bottom: 0.5px solid $gray-8;
         height: 100%;
         border-radius: 7px 7px 0 0;
         position: relative;
+        justify-content: center;
+        align-items: center;
+        display: flex;
     }
 
     .card-title {
@@ -34,11 +34,7 @@
     &.in-progress .card-status,
     &.disabled .card-status,
     &.coming-soon .card-status {
-        @extend %icons-shared;
-        position: absolute;
-        border-radius: 20px;
-        top: 30%;
-        left: 40%;
+        border-radius: 100%;
         width: 40px;
         height: 40px;
     }

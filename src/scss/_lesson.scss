@@ -14,19 +14,19 @@
 
 LessonPage {
     .objective-stock-image .card-image {
-        background-image: url("~img/stock_objective.svg");
+        @extend %stock-objective;
     }
 
     .content-stock-image .card-image {
-        background-image: url("~img/stock_content.svg");
+        @extend %stock-content;
     }
 
     .test-stock-image .card-image {
-        background-image: url("~img/stock_test.svg");
+        @extend %stock-test;
     }
 
     .activity-swoop {
-        @include bottom-swoop;
+        @extend %bottom-swoop;
 
         a:hover {
             cursor: pointer;
@@ -34,7 +34,7 @@ LessonPage {
     }
 }
 
-LessonFrame {    
+LessonFrame {
     .frame-background {
         min-height: calc(100vh - #{$top-menu-height});
         display: flex;
@@ -43,15 +43,16 @@ LessonFrame {
     }
 
     progress {
-        width: 65vw;
+        width: 70vw;
+        max-width: 470px;
     }
 
-    .card-container {
+    .card-content {
         position: relative;
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
         align-items: center;
+        justify-content: space-evenly;
         height: 100%;
     }
 
@@ -167,7 +168,6 @@ LessonContent .content {
 
         & p {
             padding-top: 2em;
-            font-size: 1em;
             margin-left: 1em;
 
             &.long {
@@ -179,10 +179,6 @@ LessonContent .content {
 
     listcard {
         width: 100%;
-
-        p {
-            font-size: 1em;
-        }
 
         span {
             margin-right: 7px;
@@ -256,7 +252,6 @@ TestSingleAnswer {
 .test {
     h3 {
         align-self: start;
-        margin-bottom: 0.3em;
     }
 
     button {
@@ -273,11 +268,20 @@ TestSingleAnswer {
             margin-bottom: 15px;
             display: flex;
 
+            &:hover {
+                cursor: pointer;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
             & > div {
                 align-items: center;
                 display: flex;
 
                 p {
+                    font-size: 1.2em;
                     flex-shrink: 1;
                     margin: 0;
                 }
@@ -288,6 +292,42 @@ TestSingleAnswer {
 
                 p {
                     margin-left: 5px;
+                }
+            }
+
+            &.selected .radio {
+                & > div {
+                    background-color: $green;
+                }
+            }
+
+            &.selected-wrong .radio {
+                border: 2px solid $orange;
+                height: 21px;
+                width: 21px;
+
+                & > div {
+                    background-color: $orange;
+                }
+            }
+
+            &.selected-pending .radio {
+                border: 2px solid $app-accent-color;
+                height: 21px;
+                width: 21px;
+
+                & > div {
+                    background-color: $app-accent-color;
+                }
+            }
+
+            &.selected-pending .radio {
+                border: 2px solid $app-accent-color;
+                height: 21px;
+                width: 21px;
+
+                & > div {
+                    background-color: $app-accent-color;
                 }
             }
 
@@ -326,7 +366,7 @@ TestSingleAnswer {
 
             .pendingAnswer {
                 background-color: $app-accent-color;
-                border-radius: 15px;
+                border-radius: 50%;
                 width: 15px;
             }
 
@@ -344,46 +384,6 @@ TestSingleAnswer {
                 margin-right: 15px;
                 flex: none;
             }
-        }
-
-        li:hover {
-            cursor: pointer;
-        }
-
-        li.selected {
-            .radio {
-                & > div {
-                    background-color: $green;
-                }
-            }
-        }
-
-        li.selected-wrong {
-            .radio {
-                border: 2px solid $orange;
-                height: 21px;
-                width: 21px;
-
-                & > div {
-                    background-color: $orange;
-                }
-            }
-        }
-
-        li.selected-pending {
-            .radio {
-                border: 2px solid $app-accent-color;
-                height: 21px;
-                width: 21px;
-
-                & > div {
-                    background-color: $app-accent-color;
-                }
-            }
-        }
-
-        li:last-child {
-            margin-bottom: 0;
         }
     }
 }
@@ -485,16 +485,12 @@ LessonFeedback {
         }
     }
 
-    @mixin feedback-containers {
+    .feedback-container {
         text-align: center;
     }
 
-    .feedback-container {
-        @include feedback-containers;
-    }
-
     .thank-you-container {
-        @include feedback-containers;
+        text-align: center;
 
         .correct-flag {
             height: 6em;
@@ -529,25 +525,19 @@ ExamResults {
             margin-bottom: 0.4em;
         }
 
+        h3 {
+            font-size: 1.2em;
+        }
+
         .btn-primary,
         .btn-secondary {
             margin-top: 1em;
         }
     }
 
-    .confetti {
-        align-self: end;
-    }
-
     .incorrect-flag {
         height: 150px;
         width: 150px;
-    }
-}
-
-CourseExam {
-    div.card-container {
-        justify-content: unset;
     }
 }
 

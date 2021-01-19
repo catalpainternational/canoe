@@ -1,10 +1,10 @@
 Profile {
     .card-image {
-        background-image: url("~img/stock_course.svg");
+        @extend %stock-course;
     }
 
     .with-swoop {
-        @include center-with-flex;
+        @extend %center-with-flex;
     }
 }
 

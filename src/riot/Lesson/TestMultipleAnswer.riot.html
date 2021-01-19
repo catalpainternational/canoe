@@ -138,8 +138,6 @@
 
                 const numberIncorrectAnswersChosen = answers.filter(a => !a.correct).length;
                 const numberCorrectAnswersChosen = answers.filter(a => a.correct).length;
-                const numberCorrectAnswersMissing =
-                    this.state.numberTotalCorrectAnswers - numberCorrectAnswersChosen;
 
                 const isQuestionComplete =
                     numberCorrectAnswersChosen === this.state.numberTotalCorrectAnswers &&

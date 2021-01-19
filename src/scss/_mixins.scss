@@ -1,4 +1,4 @@
-@mixin header-swoop {
+%header-swoop {
     background: $top-gradient;
     border-bottom-left-radius: 80% 10%;
     border-bottom-right-radius: 80% 10%;
@@ -6,13 +6,13 @@
     box-sizing: border-box;
 }
 
-@mixin center-with-flex {
+%center-with-flex {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-@mixin bottom-swoop {
+%bottom-swoop {
     background: $bottom-gradient;
     border-top-left-radius: 400% 20%;
     border-top-right-radius: 400% 20%;
