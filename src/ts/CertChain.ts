@@ -1,16 +1,24 @@
+import { getAuthenticationToken } from "js/AuthenticationUtilities";
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { AppelflapConnect } from "ts/AppelflapConnect";
 import { TCertificate } from "./Types/CacheTypes";
 
 export class CertChain {
     #afc?: AppelflapConnect;
     #packageCert?: TCertificate;
+    #lastError: string;
 
     constructor(afc: AppelflapConnect) {
         this.#afc = afc;
+        this.#lastError = "";
     }
 
     get packageCertificate(): TCertificate | undefined {
         return this.#packageCert;
+    }
+
+    get lastError(): string {
+        return this.#lastError;
     }
 
     async initialise(): Promise<boolean> {
@@ -32,55 +40,42 @@ export class CertChain {
         return this.#afc ? await this.#afc.getCertificate() : undefined;
     };
 
-    private PostPackageCertificateForSigning = async (): Promise<
-        TCertificate | undefined
-    > => {
-        let responseFailure = "";
-        try {
-            const init = {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `JWT ${getAuthenticationToken()}`,
-                },
-            } as RequestInit;
-            const resp = await fetch(MANIFEST_URL, init);
-            if (!resp.ok) {
-                responseFailure = "Http error getting manifest";
-            } else {
-                return resp.json();
-            }
-        } catch {
-            responseFailure = "Error getting manifest";
+    private PostPackageCertificateForSigning = async (): Promise<void> => {
+        if (!this.#packageCert || this.#packageCert.isCertSigned) {
+            this.#lastError = this.#packageCert
+                ? "No action taken: package publishing certificate already signed"
+                : "No action taken: no unsigned package publishing certificate available (no Appelflap)";
+            return;
         }
 
-        return undefined;
+        try {
+            const init = {
+                method: "POST",
+                headers: {
+                    "content-type": "application/x-pem-file",
+                    Authorization: `JWT ${getAuthenticationToken()}`,
+                },
+                body: this.#packageCert?.cert,
+            } as RequestInit;
+            const resp = await fetch(
+                ROUTES_FOR_REGISTRATION.appelflapPKIsign,
+                init
+            );
+            if (!resp.ok) {
+                this.#lastError =
+                    "Http error getting package publishing certificate signed";
+            } else {
+                this.#packageCert = {
+                    cert: await resp.text(),
+                    isCertSigned: true,
+                };
+                this.#lastError = "";
+            }
+        } catch {
+            this.#lastError =
+                "Error getting package publishing certificate signed";
+        }
+
+        return;
     };
-
-
-    async fetchManifest(): Promise<any> {
-        return buildFakeManifest();
-        // let responseFailure = "";
-        // try {
-        //     const init = {
-        //         method: "GET",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             Authorization: `JWT ${getAuthenticationToken()}`,
-        //         },
-        //     } as RequestInit;
-        //     const resp = await fetch(MANIFEST_URL, init);
-        //     if (!resp.ok) {
-        //         responseFailure = "Http error getting manifest";
-        //     } else {
-        //         return resp.json();
-        //     }
-        // } catch {
-        //     responseFailure = "Error getting manifest";
-        // }
-
-        // return Promise.reject(
-        //     `Could not retrieve manifest. ${responseFailure}`
-        // );
-    }
 }
