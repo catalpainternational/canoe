@@ -10,7 +10,6 @@ import { storeManifestV2 } from "ts/Redux/Interface";
 import { store } from "ReduxImpl/Store";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { MANIFEST_URL } from "js/urls";
-import { buildFakeManifest } from "../tests/fakeManifest";
 
 export class Manifest implements IManifest {
     version: string;
@@ -83,29 +82,28 @@ export class Manifest implements IManifest {
     }
 
     async fetchManifest(): Promise<any> {
-        return buildFakeManifest();
-        // let responseFailure = "";
-        // try {
-        //     const init = {
-        //         method: "GET",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             Authorization: `JWT ${getAuthenticationToken()}`,
-        //         },
-        //     } as RequestInit;
-        //     const resp = await fetch(MANIFEST_URL, init);
-        //     if (!resp.ok) {
-        //         responseFailure = "Http error getting manifest";
-        //     } else {
-        //         return resp.json();
-        //     }
-        // } catch {
-        //     responseFailure = "Error getting manifest";
-        // }
+        let responseFailure = "";
+        try {
+            const init = {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `JWT ${getAuthenticationToken()}`,
+                },
+            } as RequestInit;
+            const resp = await fetch(MANIFEST_URL, init);
+            if (!resp.ok) {
+                responseFailure = "Http error getting manifest";
+            } else {
+                return resp.json();
+            }
+        } catch {
+            responseFailure = "Error getting manifest";
+        }
 
-        // return Promise.reject(
-        //     `Could not retrieve manifest. ${responseFailure}`
-        // );
+        return Promise.reject(
+            `Could not retrieve manifest. ${responseFailure}`
+        );
     }
 
     private simpleManifestTest(manifest: any) {
