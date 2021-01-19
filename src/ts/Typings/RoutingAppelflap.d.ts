@@ -19,7 +19,7 @@ declare module "js/RoutingAppelflap" {
     export const AF_STATUS: string;
     export const AF_REBOOT: string;
     export const AF_CERTCHAIN: string;
-    export const AF_CERT_HEADER_LENGTH: string;
+    export const AF_CERTCHAIN_LENGTH_HEADER: string;
 
     export const APPELFLAPCOMMANDS: {
         [name: string]: { commandPath: string; method: THttpMethods };

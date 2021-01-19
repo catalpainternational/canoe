@@ -19,7 +19,7 @@ export const AF_STATUS = "status";
 export const AF_REBOOT = "reboot";
 export const AF_CERTCHAIN = "certchain";
 
-export const AF_CERT_HEADER_LENGTH = "X-Appelflap-Chain-Length";
+export const AF_CERTCHAIN_LENGTH_HEADER = "X-Appelflap-Chain-Length";
 
 /** These are all of the commands provided by Appelflap across its API surface */
 export const APPELFLAPCOMMANDS = {
