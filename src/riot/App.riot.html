@@ -143,8 +143,8 @@
             onMounted() {
                 this.setUpEventListeners();
 
-                state.canoeHost = new CanoeHost();
-                state.canoeHost
+                this.state.canoeHost = new CanoeHost();
+                this.state.canoeHost
                     .StartCanoe(() => {})
                     .then((_) => {
                         // Success

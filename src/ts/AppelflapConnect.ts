@@ -57,9 +57,9 @@ export class AppelflapConnect {
 
         if (weHaveAuthorization) {
             // Add the authorization header
-            requestInit!.headers = (requestInit!.headers ||
-                new Headers()) as Headers;
-            requestInit!.headers!.append("Authorization", authorization);
+            const newHeaders: any = requestInit!.headers || {};
+            newHeaders["Authorization"] = authorization;
+            requestInit!.headers = newHeaders;
         }
 
         return await fetch(requestInfo, requestInit);
@@ -96,15 +96,16 @@ export class AppelflapConnect {
                 // But we need to include a little extra info from the repsonse header.
                 // So we'll actually return it as an object (i.e. json)
                 /* eslint-disable no-case-declarations */
+                const encodedCertificate = await response.text();
                 const isCertSigned =
                     response.headers.get(AF_CERTCHAIN_LENGTH_HEADER) === "3";
-                const encodedCertificate = await response.text();
-                /* eslint-enable no-case-declarations */
-
-                return {
+                const cert = {
                     cert: encodedCertificate,
                     isCertSigned: isCertSigned,
-                };
+                } as TCertificate;
+                /* eslint-enable no-case-declarations */
+
+                return cert;
         }
     };
 
