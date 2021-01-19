@@ -98,11 +98,11 @@ export class AppelflapConnect {
                 /* eslint-disable no-case-declarations */
                 const isCertSigned =
                     response.headers.get(AF_CERTCHAIN_LENGTH_HEADER) === "3";
-                const certificate = atob(await response.text());
+                const encodedCertificate = await response.text();
                 /* eslint-enable no-case-declarations */
 
                 return {
-                    cert: certificate,
+                    cert: encodedCertificate,
                     isCertSigned: isCertSigned,
                 };
         }
