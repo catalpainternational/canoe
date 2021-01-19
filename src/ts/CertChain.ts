@@ -27,7 +27,11 @@ export class CertChain {
         try {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
             if (!this.#packageCert?.isCertSigned) {
-                this.PostPackageCertificateForSigning();
+                const lastError = await this.PostPackageCertificateForSigning();
+                if (!lastError && this.#packageCert) {
+                    const result = await this.PostPackageCertificateToAppelflap();
+                    console.info(result);
+                }
             }
         } catch {
             // No signed cert
@@ -42,16 +46,15 @@ export class CertChain {
         return this.#afc ? await this.#afc.getCertificate() : undefined;
     };
 
-    private PostPackageCertificateForSigning = async (): Promise<void> => {
+    private PostPackageCertificateForSigning = async (): Promise<string> => {
         if (!this.#packageCert || this.#packageCert.isCertSigned) {
             this.#lastError = this.#packageCert
                 ? "No action taken: package publishing certificate already signed"
                 : "No action taken: no unsigned package publishing certificate available (no Appelflap)";
-            return;
+            return this.#lastError;
         }
 
-        const cert = btoa(this.#packageCert?.cert || "");
-        const derCert = jseu.formatter.pemToBin(cert);
+        const derCert = jseu.formatter.pemToBin(this.#packageCert?.cert);
 
         try {
             const init = {
@@ -72,7 +75,7 @@ export class CertChain {
             } else {
                 this.#packageCert = {
                     cert: await resp.text(),
-                    isCertSigned: true,
+                    isCertSigned: false,
                 };
                 this.#lastError = "";
             }
@@ -81,6 +84,12 @@ export class CertChain {
                 "Error getting package publishing certificate signed";
         }
 
-        return;
+        return this.#lastError;
+    };
+
+    private PostPackageCertificateToAppelflap = async (): Promise<string> => {
+        return this.#afc && this.#packageCert
+            ? await this.#afc.saveCertificate(this.#packageCert)
+            : "";
     };
 }

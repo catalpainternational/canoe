@@ -31,7 +31,6 @@ export class CanoeHost {
                     const hasCert = await certChain.initialise();
                     const packageCert = certChain.packageCertificate;
                     console.log(JSON.stringify(packageCert));
-                    console.log(btoa(packageCert?.cert || ""));
                 } catch {
                     // No signed cert
                 }
