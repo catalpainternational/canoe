@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
+    TCertificate,
     TPublication,
     TPublications,
     TPublicationTarget,
@@ -11,7 +12,7 @@ import {
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_LOCALHOSTURI, APPELFLAPCOMMANDS, AppelflapPortNo } from "js/RoutingAppelflap";
+import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS, AppelflapPortNo } from "js/RoutingAppelflap";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -67,7 +68,7 @@ export class AppelflapConnect {
     private performCommand = async (
         commandPath: string,
         commandInit?: RequestInit,
-        returnType: "json" | "text" = "json"
+        returnType: "json" | "text" | "pem" = "json"
     ): Promise<any> => {
         const response = await this.appelflapFetch(commandPath, commandInit);
 
@@ -90,6 +91,20 @@ export class AppelflapConnect {
                 return await response.json();
             case "text":
                 return await response.text();
+            case "pem":
+                // A `application/x-pem-file` is actually a sub-type of `text`
+                // But we need to include a little extra info from the repsonse header.
+                // So we'll actually return it as an object (i.e. json)
+                /* eslint-disable no-case-declarations */
+                const isCertSigned =
+                    response.headers.get(AF_CERTCHAIN_LENGTH_HEADER) === "3";
+                const certificate = atob(await response.text());
+                /* eslint-enable no-case-declarations */
+
+                return {
+                    cert: certificate,
+                    isCertSigned: isCertSigned,
+                };
         }
     };
 
@@ -248,5 +263,34 @@ export class AppelflapConnect {
         };
 
         return await this.performCommand(requestPath, commandInit, "text");
+    };
+
+    public getCertificate = async (): Promise<TCertificate> => {
+        const { commandPath } = APPELFLAPCOMMANDS.getCertificate;
+
+        return (await this.performCommand(
+            commandPath,
+            undefined,
+            "pem"
+        )) as Promise<TCertificate>;
+    };
+
+    public saveCertificate = async (
+        certificate: TCertificate
+    ): Promise<string> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.saveCertificate;
+        const commandInit = {
+            method: method,
+            headers: { "content-type": "application/x-pem-file" },
+            body: certificate.cert,
+        };
+
+        return await this.performCommand(commandPath, commandInit, "text");
+    };
+
+    public deleteCertificate = async (): Promise<string> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.deleteCertificate;
+
+        return await this.performCommand(commandPath, { method }, "text");
     };
 }
