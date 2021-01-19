@@ -490,12 +490,12 @@ test("Cache: Get Package Certificate", async (t: any) => {
     fetchMock.get(testUri, unsignedCertResponse);
     const unsignedSuccessResult = await afc.getCertificate();
     t.is(unsignedSuccessResult.isCertSigned, unsignedTestResult.isCertSigned);
-    t.is(unsignedSuccessResult.cert, atob(unsignedTestResult.cert));
+    t.is(unsignedSuccessResult.cert, unsignedTestResult.cert);
 
     fetchMock.get(testUri, signedCertResponse);
     const signedSuccessResult = await afc.getCertificate();
     t.is(signedSuccessResult.isCertSigned, signedTestResult.isCertSigned);
-    t.is(signedSuccessResult.cert, atob(signedTestResult.cert));
+    t.is(signedSuccessResult.cert, signedTestResult.cert);
 
     fetchMock.reset();
 });

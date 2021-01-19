@@ -206,9 +206,9 @@
                         this.state.certChain = new CertChain(afc);
                         const hasCert = await this.state.certChain.initialise();
                         const packageCert = this.state.certChain.packageCertificate;
-                        console.log(JSON.stringify(packageCert));
-                    } catch {
-                        // No signed cert
+                    } catch (e) {
+                        // No signed cert - change this to a proper message, if that is appropriate
+                        console.info(e);
                     }
 
                 }

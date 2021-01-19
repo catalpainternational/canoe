@@ -280,10 +280,11 @@ export class AppelflapConnect {
         certificate: TCertificate
     ): Promise<string> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.saveCertificate;
+        const cert = certificate.cert;
         const commandInit = {
             method: method,
             headers: { "content-type": "application/x-pem-file" },
-            body: certificate.cert,
+            body: cert,
         };
 
         return await this.performCommand(commandPath, commandInit, "text");

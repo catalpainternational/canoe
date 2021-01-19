@@ -26,17 +26,15 @@ export class CertChain {
     async initialise(): Promise<boolean> {
         try {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
-            console.info(`Cert in Appelflap: ${this.#packageCert?.cert || ""}`);
             if (!this.#packageCert?.isCertSigned) {
                 const lastError = await this.PostPackageCertificateForSigning();
                 if (!lastError && this.#packageCert) {
                     const result = await this.PostPackageCertificateToAppelflap();
-                    console.info(result);
                 }
             }
         } catch (e) {
             // No signed cert
-            console.error(e);
+            this.#lastError = e;
             this.#packageCert = undefined;
         }
         return !!this.#packageCert;
@@ -75,8 +73,10 @@ export class CertChain {
                 this.#lastError =
                     "Http error getting package publishing certificate signed";
             } else {
+                const signedCert = btoa(await resp.text());
+
                 this.#packageCert = {
-                    cert: await resp.text(),
+                    cert: signedCert,
                     isCertSigned: false,
                 };
                 this.#lastError = "";
