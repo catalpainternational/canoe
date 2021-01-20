@@ -65,7 +65,7 @@
         } from "ReduxImpl/Interface";
         import { logPageView } from "js/GoogleAnalytics";
 
-        import "ts/StartUp";
+        import { InitialiseCertChain } from "ts/StartUp";
 
         import HomePageJS from "js/HomePage";
         import CoursePageJS from "js/CoursePage";
@@ -141,7 +141,7 @@
                 this.setUpEventListeners();
 
                 // Check that the Appelflap wrapper has started, by looking for its global object
-                if (canoeHost) {
+                if (window.canoeHost) {
                     // Regardless of what happens with Appelflap, we continue starting up Canoe
                     if (
                         !this.userShouldLogin() &&
@@ -194,7 +194,7 @@
                 if (
                     !this.userShouldLogin() &&
                     this.areCompletionsReady() &&
-                    !certChain
+                    !window.certChain
                 ) {
                     InitialiseCertChain();
                 }
