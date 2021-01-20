@@ -40,7 +40,7 @@ registerRoute(
 );
 
 registerRoute(
-    new RegExp(ROUTES_FOR_REGISTRATION.manifestv2),
+    new RegExp(`${ROUTES_FOR_REGISTRATION.manifest}/0\.0\.1`),
     new StaleWhileRevalidate({
         cacheName: MANIFESTV2_CACHE_NAME,
     })
