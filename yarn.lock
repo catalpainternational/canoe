@@ -5101,6 +5101,7 @@ __metadata:
     redux-devtools-extension: ^2.13.8
     riot: ^4.13.4
     sass-loader: ^9.0.3
+    src: "link:src"
     style-loader: ^1.2.1
     svg-url-loader: ^6.0.0
     terser-webpack-plugin: ^4.0.0
@@ -14474,6 +14475,12 @@ fsevents@~2.1.2:
   checksum: 51df1bce9e577287f56822d79ac5bd94f6c634fccf193895f2a1d2db2e975b6aa7bc97afae9cf11d49b7c37fe4afc188ff5c4878be91f2c86eabd11c5df8b62c
   languageName: node
   linkType: hard
+
+"src@link:src::locator=canoe%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "src@link:src::locator=canoe%40workspace%3A."
+  languageName: node
+  linkType: soft
 
 "sshpk@npm:^1.7.0":
   version: 1.16.1

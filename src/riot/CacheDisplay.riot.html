@@ -41,7 +41,9 @@
     </table>
 
     <script>
-        import { getCachesInfo, storageQuota } from "../js/cacheManager/cacheManager";
+        import { getCachesInfo, storageQuota } from "js/cacheManager/cacheManager";
+        import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME } from "ts/Constants";
+
         import prettyBytes from "pretty-bytes";
 
         export default {
@@ -62,7 +64,10 @@
                 cachesInfo.forEach(q => {
                     switch (q.name) {
                         case 'workbox-precache-v2-http://localhost:8080/':
-                        case 'manifest-cache':
+                        case MANIFEST_CACHE_NAME:
+                            cacheSummary['App'] += q.size;
+                            break;
+                        case MANIFESTV2_CACHE_NAME:
                             cacheSummary['App'] += q.size;
                             break;
                         case 'pages-cache':

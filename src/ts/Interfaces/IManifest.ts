@@ -1,8 +1,12 @@
 import { IManifestItemState } from "./IManifestItemState";
 import { IPage } from "./IPage";
 import { LoadingCallback } from "../Callbacks";
+import { TPage } from "../Types/ManifestTypes";
 
 export interface IManifest extends IManifestItemState {
+    version: string;
+    pages: Record<number, TPage>;
+
     /** Gets the home page location for a given language, throws error if not found
      * used when the app wants to direct the user to the home page (e.g. page not found go home?) */
     getHomePageHash(
