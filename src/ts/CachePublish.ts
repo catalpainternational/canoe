@@ -6,7 +6,11 @@ import {
 } from "./Types/CacheTypes";
 
 export class CachePublish {
-    #afc = new AppelflapConnect();
+    #afc: AppelflapConnect;
+
+    constructor(afc: AppelflapConnect) {
+        this.#afc = afc;
+    }
 
     /** Get a list of published items from Appelflap */
     publications = async (): Promise<TPublications> => {

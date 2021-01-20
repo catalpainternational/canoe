@@ -7,7 +7,11 @@ import {
 
 export class CacheSubscribe {
     #subscriptions: TSubscriptions = {};
-    #afc = new AppelflapConnect();
+    #afc: AppelflapConnect;
+
+    constructor(afc: AppelflapConnect) {
+        this.#afc = afc;
+    }
 
     get subscriptions(): TSubscriptions {
         return this.#subscriptions;

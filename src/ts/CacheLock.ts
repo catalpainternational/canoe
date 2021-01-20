@@ -1,7 +1,11 @@
 import { AppelflapConnect } from "./AppelflapConnect";
 
 export class CacheLock {
-    #afc = new AppelflapConnect();
+    #afc: AppelflapConnect;
+
+    constructor(afc: AppelflapConnect) {
+        this.#afc = afc;
+    }
 
     /** Get the status of the cache */
     status = async (): Promise<any> => {

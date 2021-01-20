@@ -2,7 +2,9 @@ import "babel-polyfill";
 
 import { subscribeToStore, getServiceWorkerState } from "ReduxImpl/Interface";
 import { initializeServiceWorker } from "js/ServiceWorkerManagement";
-import { BACKEND_BASE_URL } from "js/urls.js";
+
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
 let currentServiceWorkerState = getServiceWorkerState();
 
@@ -42,26 +44,39 @@ subscribeToStore(() => {
     currentServiceWorkerState = getServiceWorkerState();
 });
 
+/** Sets a sessionStorage item signifying whether we are booting into a:
+ * - preseeded state (either through Appelflap cache injection, or autonomous buildup), or
+ * - blank slate.
+ * 
+ * We use the presence of the manifest as an indication for this.
+ * @remarks Can be used as a fence by awaiting its promise.
+ * @returns true when a manifest can be found, false otherwise.
+ */
+const record_bootstate = async () => {
+    let manifestIsExtant = false;
+    let manifestV2IsExtant = false;
+    const cacheNames = await caches.keys();
+    if (cacheNames.indexOf(MANIFEST_CACHE_NAME) === -1 || cacheNames.indexOf(MANIFESTV2_CACHE_NAME) === -1) {
+        return manifestIsExtant;
+    }
 
-const record_bootstate = () => {
-    // Sets a sessionStorage item signifying whether we are booting into a preseeded state
-    // (either through Appelflap cache injection, or autonomous buildup), or into a
-    // blank slate. We use the presence of the manifest as an indication for this.
-    // Can be used as a fence by awaiting its promise.
-    // Returns true when a manifest can be found, false otherwise.
-    const MANIFEST_CACHE_NAME = "manifest-cache";
-    const MANIFEST_URL = `${BACKEND_BASE_URL}/manifest`;
-    const EMPTY_SLATE_BOOT_KEY = "empty_slate_boot";
+    try {
+        manifestIsExtant = (await caches.open(MANIFEST_CACHE_NAME)).match(ROUTES_FOR_REGISTRATION.manifest) !== undefined;
+    } catch {
+        // Do nothing - manifestIsExtant is still false
+    }
 
-    return caches.keys()
-        .then(cachenames => cachenames.indexOf(MANIFEST_CACHE_NAME) > -1
-            && caches.open(MANIFEST_CACHE_NAME)
-                .then(thecache => thecache.match(MANIFEST_URL) !== undefined)
-        )
-        .then(manifest_is_extant => {
-            sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !manifest_is_extant);
-            return manifest_is_extant;
-        });
+    try {
+        manifestV2IsExtant = (await caches.open(MANIFESTV2_CACHE_NAME)).match(`${ROUTES_FOR_REGISTRATION.manifest}/0.0.1`) !== undefined;
+    } catch {
+        // Do nothing - manifestV2IsExtant is still false
+    }
+
+    // Both must be empty to indicate 'empty'
+    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !(manifestIsExtant || manifestV2IsExtant));
+
+    // Both must be true to indicate we've got everything
+    return manifestIsExtant && manifestV2IsExtant;
 };
 
 initializeServiceWorker();

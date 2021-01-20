@@ -11,6 +11,7 @@
 
         <div class="content-wrapper">
             <p>{state.appelflapMeta}</p>
+            <p>{state.manifest}</p>
             <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
 
             <h5 if="{state.syncs.length > 0}" class="section-title">
@@ -51,6 +52,7 @@
         import relativeTime from "dayjs/plugin/relativeTime";
 
         import { AppelflapConnect } from "ts/AppelflapConnect";
+        import { Manifest } from "ts/Implementations/Manifest";
 
         dayjs.extend(relativeTime);
 
@@ -58,6 +60,7 @@
             state: {
                 syncs: [],
                 appelflapMeta: "Hello",
+                manifest: {},
             },
 
             TRANSLATIONS: {
@@ -67,24 +70,37 @@
                 start: () => gettext("Start lesson"),
             },
 
-            async refreshSyncs() {
-                this.update({
-                    notifications: await getSyncs(),
-                });
-            },
+            // async refreshSyncs() {
+            //     this.update({
+            //         notifications: await getSyncs(),
+            //     });
+            // },
 
             onMounted() {
                 this.appelflapStatus();
-                this.refreshSyncs();
+                // this.refreshSyncs();
             },
 
-            appelflapStatus() {
-                this.update({appelflapMeta: "Getting"});
+            async appelflapStatus() {
+                this.update({ appelflapMeta: "Getting" });
                 const appelflapConnect = new AppelflapConnect();
                 appelflapConnect.getMetaStatus().then((response) => {
-                    this.update({appelflapMeta: JSON.stringify(response)});
+                    this.update({ appelflapMeta: JSON.stringify(response) });
                 });
-            }
+
+                // try to get the manifest
+                const manifest = new Manifest();
+                try {
+                    const foundManifest = await manifest.getOrFetchManifest();
+                    this.update({ manifest: JSON.stringify(foundManifest) });
+                } catch {
+                    this.update({
+                        notifications: () => {
+                            return "Could not retrieve manifest";
+                        },
+                    });
+                }
+            },
         };
     </script>
 </Sync>
