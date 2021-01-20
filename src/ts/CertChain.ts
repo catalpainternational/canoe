@@ -1,5 +1,3 @@
-import jseu from "js-encoding-utils";
-
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { AppelflapConnect } from "ts/AppelflapConnect";
@@ -28,6 +26,7 @@ export class CertChain {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
             if (!this.#packageCert?.isCertSigned) {
                 const lastError = await this.PostPackageCertificateForSigning();
+                console.error(`lastError: ${lastError}`);
                 if (!lastError && this.#packageCert) {
                     const result = await this.PostPackageCertificateToAppelflap();
                 }
@@ -54,16 +53,14 @@ export class CertChain {
             return this.#lastError;
         }
 
-        const derCert = jseu.formatter.pemToBin(this.#packageCert?.cert);
-
         try {
             const init = {
                 method: "POST",
                 headers: {
-                    "content-type": "application/octet-stream",
+                    "content-type": "application/x-pem-file",
                     Authorization: `JWT ${getAuthenticationToken()}`,
                 },
-                body: derCert,
+                body: this.#packageCert?.cert,
             } as RequestInit;
             const resp = await fetch(
                 ROUTES_FOR_REGISTRATION.appelflapPKIsign,
@@ -73,17 +70,16 @@ export class CertChain {
                 this.#lastError =
                     "Http error getting package publishing certificate signed";
             } else {
-                const signedCert = btoa(await resp.text());
+                const rawCert = await resp.text();
 
                 this.#packageCert = {
-                    cert: signedCert,
+                    cert: rawCert,
                     isCertSigned: false,
                 };
                 this.#lastError = "";
             }
-        } catch {
-            this.#lastError =
-                "Error getting package publishing certificate signed";
+        } catch (e) {
+            this.#lastError = `Error getting package publishing certificate signed\n${e}`;
         }
 
         return this.#lastError;

@@ -5090,7 +5090,6 @@ __metadata:
     html-webpack-plugin: ^4.3.0
     idb: ^5.0.4
     js: "link:src/js"
-    js-encoding-utils: ^0.6.2
     mini-css-extract-plugin: ^0.9.0
     node-fetch: ^2.6.1
     node-sass: ^4.14.1
@@ -9874,13 +9873,6 @@ fsevents@~2.1.2:
   version: 2.6.4
   resolution: "js-base64@npm:2.6.4"
   checksum: f3fadb18c2feade451a42677d29ddac4e5d40f6561fce38454c0dbf8b5b937d47e65ca54ae109325db90baaab7443780ae071b7d8577273918e8407b01b83f88
-  languageName: node
-  linkType: hard
-
-"js-encoding-utils@npm:^0.6.2":
-  version: 0.6.2
-  resolution: "js-encoding-utils@npm:0.6.2"
-  checksum: f730f743ca4aa89a2d43413f1dc9d8842f304d4ea915a0b4558a89c00b82c499d8c20a5104c855153a8797c47a51e0d10b04faa1d3eb7354483ebc5be38b9976
   languageName: node
   linkType: hard
 
