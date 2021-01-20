@@ -65,8 +65,7 @@
         } from "ReduxImpl/Interface";
         import { logPageView } from "js/GoogleAnalytics";
 
-        import { CanoeHost } from "ts/CanoeHost";
-        import { CertChain } from "ts/CertChain";
+        import "ts/StartUp";
 
         import HomePageJS from "js/HomePage";
         import CoursePageJS from "js/CoursePage";
@@ -115,8 +114,6 @@
                 wagtailPage: {},
                 homePageURL: "",
                 appTitle: "",
-                canoeHost: undefined,
-                certChain: undefined,
             },
 
             components: {
@@ -143,23 +140,17 @@
             onMounted() {
                 this.setUpEventListeners();
 
-                this.state.canoeHost = new CanoeHost();
-                this.state.canoeHost
-                    .StartCanoe(() => {})
-                    .then((_) => {
-                        // Success
-                    })
-                    .catch((_) => {
-                        // Appelflap is apparently around, but we couldn't get the lock on Canoe
-                        // The app is probably still usable, but we may wish to show a message to the user.
-                    })
-                    .finally((_) => {
-                        // Regardless of what happens with Appelflap, we continue starting up Canoe
-                        if (!this.userShouldLogin() && this.areCompletionsReady()) {
-                            // If user returns to site and is logged in.
-                            this.route();
-                        }
-                    });
+                // Check that the Appelflap wrapper has started, by looking for its global object
+                if (canoeHost) {
+                    // Regardless of what happens with Appelflap, we continue starting up Canoe
+                    if (
+                        !this.userShouldLogin() &&
+                        this.areCompletionsReady()
+                    ) {
+                        // If user returns to site and is logged in.
+                        this.route();
+                    }
+                }
             },
 
             onUpdated() {
@@ -200,17 +191,12 @@
                 const page = await getPage();
                 const pageModel = getWagtailPageModelName(page);
 
-                const afc = this.state.canoeHost.appelflapConnect;
-                if (afc && !this.userShouldLogin() && this.areCompletionsReady() && !this.state.certChain) {
-                    try {
-                        this.state.certChain = new CertChain(afc);
-                        const hasCert = await this.state.certChain.initialise();
-                        const packageCert = this.state.certChain.packageCertificate;
-                    } catch (e) {
-                        // No signed cert - change this to a proper message, if that is appropriate
-                        console.info(e);
-                    }
-
+                if (
+                    !this.userShouldLogin() &&
+                    this.areCompletionsReady() &&
+                    !certChain
+                ) {
+                    InitialiseCertChain();
                 }
 
                 this.update({

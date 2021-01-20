@@ -3,10 +3,14 @@ import "babel-polyfill";
 import { subscribeToStore, getServiceWorkerState } from "ReduxImpl/Interface";
 import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 
+import "ts/StartUp";
+
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
 let currentServiceWorkerState = getServiceWorkerState();
+// Create and Start up the global canoeHost object
+InitialiseCanoeHost();
 
 subscribeToStore(() => {
     const newServiceWorkerState = getServiceWorkerState();
