@@ -9,7 +9,7 @@ import { storeManifestV2 } from "ts/Redux/Interface";
 // See ts/Typings for the type definitions for these imports
 import { store } from "ReduxImpl/Store";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { MANIFEST_URL } from "js/urls";
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
 
 export class Manifest implements IManifest {
     version: string;
@@ -91,7 +91,10 @@ export class Manifest implements IManifest {
                     Authorization: `JWT ${getAuthenticationToken()}`,
                 },
             } as RequestInit;
-            const resp = await fetch(MANIFEST_URL, init);
+            const resp = await fetch(
+                `${ROUTES_FOR_REGISTRATION.manifest}/0.0.1`,
+                init
+            );
             if (!resp.ok) {
                 responseFailure = "Http error getting manifest";
             } else {

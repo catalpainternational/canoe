@@ -1,6 +1,4 @@
-export const BACKEND_BASE_URL = `${process.env.API_BASE_URL}`;
-export const MANIFEST_URL = `${BACKEND_BASE_URL}/manifest/0.0.1`;
-export const WAGTAIL_MANIFEST_URL = `${BACKEND_BASE_URL}/manifest`;
+export const BACKEND_BASE_URL = process.env.API_BASE_URL;
 export const MEDIA_PATH = "/media";
 
 export const ROUTES_FOR_REGISTRATION = {

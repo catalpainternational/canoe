@@ -1,4 +1,4 @@
-import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls";
+import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
 import { isGuestUser } from "js/AuthenticationUtilities";
 import {
     storeWagtailPage,
@@ -13,7 +13,7 @@ import {
 import { token_authed_fetch } from "js/Fetch";
 
 export async function fetchManifest() {
-    const allPagesMetadata = await token_authed_fetch(WAGTAIL_MANIFEST_URL);
+    const allPagesMetadata = await token_authed_fetch(ROUTES_FOR_REGISTRATION.manifest);
     return allPagesMetadata;
 }
 

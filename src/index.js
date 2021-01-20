@@ -3,7 +3,7 @@ import "babel-polyfill";
 import { subscribeToStore, getServiceWorkerState } from "ReduxImpl/Interface";
 import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 
-import { MANIFEST_URL } from "js/urls";
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
 let currentServiceWorkerState = getServiceWorkerState();
@@ -61,13 +61,13 @@ const record_bootstate = async () => {
     }
 
     try {
-        manifestIsExtant = (await caches.open(MANIFEST_CACHE_NAME)).match(WAGTAIL_MANIFEST_URL) !== undefined;
+        manifestIsExtant = (await caches.open(MANIFEST_CACHE_NAME)).match(ROUTES_FOR_REGISTRATION.manifest) !== undefined;
     } catch {
         // Do nothing - manifestIsExtant is still false
     }
 
     try {
-        manifestV2IsExtant = (await caches.open(MANIFESTV2_CACHE_NAME)).match(MANIFEST_URL) !== undefined;
+        manifestV2IsExtant = (await caches.open(MANIFESTV2_CACHE_NAME)).match(`${ROUTES_FOR_REGISTRATION.manifest}/0.0.1`) !== undefined;
     } catch {
         // Do nothing - manifestV2IsExtant is still false
     }
