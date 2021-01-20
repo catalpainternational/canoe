@@ -14,5 +14,4 @@ export const ROUTES_FOR_REGISTRATION = {
     subscribe: `${BACKEND_BASE_URL}/notifications/subscribe.*`,
     socketInfo: "/sockjs-node/info",
     appelflapPKIsign: `${APPELFLAP_PKI}/sign-cert`,
-    appelflapPKIdeploy: `${APPELFLAP_PKI}/deployment-cert`,
 }
