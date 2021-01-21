@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { CanoeHost } from "./CanoeHost";
-import { CertChain } from "./CertChain";
-
-/** Global canoeHost */
-declare global {
-    let canoeHost: CanoeHost;
-    let certChain: CertChain;
-}
+import { CanoeHost } from "ts/CanoeHost";
+import { CertChain } from "ts/CertChain";
 
 /** Initialise the CanoeHost (a wrapper around Appelflap)
  * @param { function } startup - an optional void returning function that is performed after the attempt to start Appelflap.
@@ -15,8 +9,9 @@ export const InitialiseCanoeHost = async (
     startup: () => void = () => {}
 ): Promise<string> => {
     try {
-        canoeHost = new CanoeHost();
-        await canoeHost.StartCanoe(startup);
+        const gt = globalThis as Record<string, any>;
+        gt.canoeHost = new CanoeHost();
+        await gt.canoeHost.StartCanoe(startup);
         return await Promise.resolve("");
     } catch (e) {
         return await Promise.resolve(
@@ -31,17 +26,18 @@ export const InitialiseCanoeHost = async (
  * - The user has the correct permissions to publish
  */
 export const InitialiseCertChain = async (): Promise<void> => {
-    if (!canoeHost) {
+    const gt = globalThis as Record<string, any>;
+    if (!gt.canoeHost) {
         return;
     }
 
-    const afc = canoeHost.appelflapConnect;
+    const afc = gt.canoeHost.appelflapConnect;
 
-    if (afc && !certChain) {
+    if (afc && !gt.certChain) {
         try {
-            certChain = new CertChain(afc);
-            const hasCert = await certChain.initialise();
-            const packageCert = certChain.packageCertificate;
+            gt.certChain = new CertChain(afc);
+            const hasCert = await gt.certChain.initialise();
+            const packageCert = gt.certChain.packageCertificate;
         } catch (e) {
             // No signed cert - change this to a proper message, if that is appropriate
             console.info(e);
