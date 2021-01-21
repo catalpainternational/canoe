@@ -69,6 +69,8 @@ buildAppelflapRoutes().forEach((routeDef) => {
     registerRoute(new RegExp(routeDef[0]), new NetworkOnly(), routeDef[1]);
 });
 
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.appelflapPKIsign), new NetworkOnly(), "POST");
+
 // webpack-dev-server communicates over this endpoint. Without this clause, the
 // service worker caches these requests and breaks webpack-dev-server.
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.socketInfo), new NetworkOnly());
