@@ -6,7 +6,7 @@ import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 import { InitialiseCanoeHost } from "ts/StartUp";
 
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
+import { MANIFESTV0_CACHE_NAME, MANIFESTV1_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
 let currentServiceWorkerState = getServiceWorkerState();
 
@@ -61,30 +61,30 @@ subscribeToStore(() => {
  * @returns true when a manifest can be found, false otherwise.
  */
 const record_bootstate = async () => {
-    let manifestIsExtant = false;
-    let manifestV2IsExtant = false;
+    let manifestV0IsExtant = false;
+    let manifestV1IsExtant = false;
     const cacheNames = await caches.keys();
-    if (cacheNames.indexOf(MANIFEST_CACHE_NAME) === -1 || cacheNames.indexOf(MANIFESTV2_CACHE_NAME) === -1) {
-        return manifestIsExtant;
+    if (cacheNames.indexOf(MANIFESTV0_CACHE_NAME) === -1 || cacheNames.indexOf(MANIFESTV1_CACHE_NAME) === -1) {
+        return manifestV0IsExtant;
     }
 
     try {
-        manifestIsExtant = (await caches.open(MANIFEST_CACHE_NAME)).match(ROUTES_FOR_REGISTRATION.manifest) !== undefined;
+        manifestV0IsExtant = (await caches.open(MANIFESTV0_CACHE_NAME)).match(ROUTES_FOR_REGISTRATION.manifest) !== undefined;
     } catch {
-        // Do nothing - manifestIsExtant is still false
+        // Do nothing - manifestV0IsExtant is still false
     }
 
     try {
-        manifestV2IsExtant = (await caches.open(MANIFESTV2_CACHE_NAME)).match(`${ROUTES_FOR_REGISTRATION.manifest}/0.0.1`) !== undefined;
+        manifestV1IsExtant = (await caches.open(MANIFESTV1_CACHE_NAME)).match(`${ROUTES_FOR_REGISTRATION.manifest}/v1`) !== undefined;
     } catch {
-        // Do nothing - manifestV2IsExtant is still false
+        // Do nothing - manifestV1IsExtant is still false
     }
 
     // Both must be empty to indicate 'empty'
-    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !(manifestIsExtant || manifestV2IsExtant));
+    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !(manifestV0IsExtant || manifestV1IsExtant));
 
     // Both must be true to indicate we've got everything
-    return manifestIsExtant && manifestV2IsExtant;
+    return manifestV0IsExtant && manifestV1IsExtant;
 };
 
 initializeServiceWorker();
