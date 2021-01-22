@@ -8,6 +8,10 @@ export class CanoeHost {
         this.#afc = inAppelflap() ? new AppelflapConnect() : undefined;
     }
 
+    get appelflapConnect(): AppelflapConnect | undefined {
+        return this.#afc;
+    }
+
     /** Tell Appelflap that Canoe is 'locked'
      * and should not be rebooted */
     LockCanoe = async (): Promise<string> => {

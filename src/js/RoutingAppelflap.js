@@ -17,6 +17,9 @@ export const AF_PUBLICATIONS = "publications";
 export const AF_SUBSCRIPTIONS = "subscriptions";
 export const AF_STATUS = "status";
 export const AF_REBOOT = "reboot";
+export const AF_CERTCHAIN = "certchain";
+
+export const AF_CERTCHAIN_LENGTH_HEADER = "X-Appelflap-Chain-Length";
 
 /** These are all of the commands provided by Appelflap across its API surface */
 export const APPELFLAPCOMMANDS = {
@@ -67,6 +70,18 @@ export const APPELFLAPCOMMANDS = {
     bulkSubscribe: {
         commandPath: `${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`,
         method: "POST",
+    },
+    getCertificate: {
+        commandPath: `${AF_CACHE_API}/${AF_CERTCHAIN}`,
+        method: "GET",
+    },
+    saveCertificate: {
+        commandPath: `${AF_CACHE_API}/${AF_CERTCHAIN}`,
+        method: "PUT",
+    },
+    deleteCertificate: {
+        commandPath: `${AF_CACHE_API}/${AF_CERTCHAIN}`,
+        method: "DELETE",
     },
 };
 

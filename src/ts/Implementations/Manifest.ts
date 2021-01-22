@@ -2,13 +2,12 @@
 import { TManifest } from "ts/Types/ManifestTypes";
 import { TPage } from "ts/Types/ManifestTypes";
 
-import { storeManifestV2 } from "ts/Redux/Interface";
+import { storeManifestV1 } from "ts/Redux/Interface";
 
 // See ts/Typings for the type definitions for these imports
 import { store } from "ReduxImpl/Store";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { MANIFEST_URL } from "js/urls";
-import { buildFakeManifest } from "../tests/fakeManifest";
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
 
 export class Manifest implements TManifest {
     version: string;
@@ -80,7 +79,7 @@ export class Manifest implements TManifest {
     }
 
     getManifestFromStore(): any {
-        return store.getState().manifestv2;
+        return store.getState().manifestV1;
     }
 
     async fetchManifest(): Promise<any> {
@@ -93,7 +92,10 @@ export class Manifest implements TManifest {
                     Authorization: `JWT ${getAuthenticationToken()}`,
                 },
             } as RequestInit;
-            const resp = await fetch(MANIFEST_URL, init);
+            const resp = await fetch(
+                `${ROUTES_FOR_REGISTRATION.manifest}/v1`,
+                init
+            );
             if (!resp.ok) {
                 responseFailure = "Http error getting manifest";
             } else {
@@ -120,7 +122,7 @@ export class Manifest implements TManifest {
         }
         try {
             manifestInStore = await this.fetchManifest();
-            storeManifestV2(manifestInStore);
+            storeManifestV1(manifestInStore);
         } catch {
             // Did not successfully fetch manifest
             return Promise.reject(
@@ -129,5 +131,111 @@ export class Manifest implements TManifest {
         }
 
         return manifestInStore;
+    }
+
+    async getLanguageCodes(): Promise<string[]> {
+        const manifest = await this.getOrFetchManifest();
+        const languageCodes = new Set(
+            Object.values(manifest.pages).map((page: any) => {
+                return page.languageCode as string;
+            })
+        );
+
+        return [...languageCodes];
+    }
+
+    async getImages(): Promise<any[]> {
+        const manifest = await this.getOrFetchManifest();
+        const images = new Set(
+            Object.values(manifest.pages)
+                .filter((page: any) => {
+                    return (
+                        page.assets &&
+                        page.assets.filter((asset: any) => {
+                            return asset.type && asset.type === "image";
+                        })
+                    );
+                })
+                .map((page: any) => {
+                    return page.assets.map((asset: any) => asset.renditions);
+                })
+        );
+
+        return [...images];
+    }
+
+    async getRootPage(rootName = "home", languageCode = "en"): Promise<any> {
+        const manifest = await this.getOrFetchManifest();
+        const matchingPages = Object.values(manifest.pages).filter(
+            (page: any) => {
+                // Check there is a location hash and languages
+                // - this is a sanity check only
+                if (!page || !page.loc_hash || !page.language) {
+                    return false;
+                }
+
+                // Check the location hash is for the nominal 'root' of what we're interested in
+                const hashParts = (page.loc_hash as string)
+                    .split("/")
+                    .filter((part) => !!part);
+                if (
+                    hashParts.length > 2 ||
+                    hashParts[hashParts.length - 1].indexOf(rootName) !== 0
+                ) {
+                    return false;
+                }
+
+                // Check the language matches
+                if (languageCode === "tet" || languageCode === "tdt") {
+                    // Check for both 'tet' and 'tdt' together
+                    // We should be using 'tdt', but for historical reasons we usually use 'tet'
+                    // so we're treating them the same
+                    return page.language === "tet" || page.language === "tdt";
+                }
+                return (page.language as string).indexOf(languageCode) === 0;
+            }
+        );
+
+        return matchingPages.length === 1
+            ? (matchingPages[0] as any)
+            : undefined;
+    }
+
+    async getPageId(locationHash: string): Promise<string> {
+        const manifest = await this.getOrFetchManifest();
+        const matchingPages = Object.entries(manifest.pages).filter(
+            (pageElement: [string, unknown]) => {
+                const page = pageElement[1] as any;
+                // Check there is a location hash
+                // - this is a sanity check only
+                if (!page || !page.loc_hash) {
+                    return false;
+                }
+
+                return (page.loc_hash as string).indexOf(locationHash) === 0;
+            }
+        );
+
+        return matchingPages.length === 1 ? matchingPages[0][0] : "";
+    }
+
+    async getHomePageHash(
+        languageCode: string,
+        loadingCallback: LoadingCallback
+    ): Promise<string> {
+        const homePage = await this.getRootPage("home", languageCode);
+        return homePage ? homePage.loc_hash : "";
+    }
+
+    getPageData(
+        locationHash: string,
+        languageCode: string,
+        loadingCallback: LoadingCallback
+    ): Record<string, unknown> {
+        throw new Error("Method not implemented.");
+    }
+
+    getPageDetail(locationHash: string, languageCode: string): IPage {
+        throw new Error("Method not implemented.");
     }
 }

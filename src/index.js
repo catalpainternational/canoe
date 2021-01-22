@@ -3,10 +3,18 @@ import "babel-polyfill";
 import { subscribeToStore, getServiceWorkerState } from "ReduxImpl/Interface";
 import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 
-import { MANIFEST_URL } from "js/urls";
-import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
+import { InitialiseCanoeHost } from "ts/StartUp";
+
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { MANIFESTV1_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
 let currentServiceWorkerState = getServiceWorkerState();
+
+// Create the global canoeHost and certChain objects
+var canoeHost = null;
+var certChain = null;
+// Initialise the canoeHost object
+InitialiseCanoeHost();
 
 subscribeToStore(() => {
     const newServiceWorkerState = getServiceWorkerState();
@@ -53,30 +61,23 @@ subscribeToStore(() => {
  * @returns true when a manifest can be found, false otherwise.
  */
 const record_bootstate = async () => {
-    let manifestIsExtant = false;
-    let manifestV2IsExtant = false;
+    let manifestV1IsExtant = false;
     const cacheNames = await caches.keys();
-    if (cacheNames.indexOf(MANIFEST_CACHE_NAME) === -1 || cacheNames.indexOf(MANIFESTV2_CACHE_NAME) === -1) {
-        return manifestIsExtant;
+    if (cacheNames.indexOf(MANIFESTV1_CACHE_NAME) === -1) {
+        return manifestV1IsExtant;
     }
 
     try {
-        manifestIsExtant = (await caches.open(MANIFEST_CACHE_NAME)).match(WAGTAIL_MANIFEST_URL) !== undefined;
+        manifestV1IsExtant = (await caches.open(MANIFESTV1_CACHE_NAME)).match(ROUTES_FOR_REGISTRATION.manifest) !== undefined;
     } catch {
-        // Do nothing - manifestIsExtant is still false
+        // Do nothing - manifestV1IsExtant is still false
     }
 
-    try {
-        manifestV2IsExtant = (await caches.open(MANIFESTV2_CACHE_NAME)).match(MANIFEST_URL) !== undefined;
-    } catch {
-        // Do nothing - manifestV2IsExtant is still false
-    }
+    // indicate 'empty'
+    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !manifestV1IsExtant);
 
-    // Both must be empty to indicate 'empty'
-    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !(manifestIsExtant || manifestV2IsExtant));
-
-    // Both must be true to indicate we've got everything
-    return manifestIsExtant && manifestV2IsExtant;
+    // indicate we've got everything
+    return manifestV1IsExtant;
 };
 
 initializeServiceWorker();

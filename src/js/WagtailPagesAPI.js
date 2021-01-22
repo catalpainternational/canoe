@@ -1,20 +1,26 @@
-import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls";
+import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
 import { isGuestUser } from "js/AuthenticationUtilities";
 import {
     storeWagtailPage,
     getWagtailPageFromStore,
-    getManifestFromStore,
-    storeManifest,
     getCourse,
     getLesson,
     getLanguage,
     changeLanguage,
 } from "ReduxImpl/Interface";
 import { token_authed_fetch } from "js/Fetch";
+import { Manifest } from "ts/Implementations/Manifest";
 
 export async function fetchManifest() {
-    const allPagesMetadata = await token_authed_fetch(WAGTAIL_MANIFEST_URL);
-    return allPagesMetadata;
+    // try to get the manifest
+    const manifest = new Manifest();
+    try {
+        return await manifest.getOrFetchManifest();
+    } catch {
+        // Do nothing - fall through to the promise reject below
+    }
+
+    return Promise.reject();
 }
 
 export async function fetchPage(path) {
@@ -33,17 +39,6 @@ export const fetchImage = async (url) => {
     });
 };
 
-export const getOrFetchManifest = async () => {
-    const manifestInStore = getManifestFromStore();
-    if (Object.entries(manifestInStore).length > 0) {
-        return manifestInStore;
-    }
-
-    const manifest = await fetchManifest();
-    storeManifest(manifest);
-    return manifest;
-};
-
 export const getOrFetchWagtailPage = async (path) => {
     const pathPieces = path.split("/");
     const secondToLastPiece = pathPieces[pathPieces.length - 2];
@@ -60,19 +55,10 @@ export const getOrFetchWagtailPage = async (path) => {
 };
 
 export const _getOrFetchWagtailPageById = async (pageId) => {
-    const manifest = await getOrFetchManifest();
+    // This should be in a try catch block in case there's no manifest returned
+    const manifest = await fetchManifest();
     const pagePath = manifest.pages[pageId];
     return getOrFetchWagtailPage(pagePath);
-};
-
-export const getHomePathsInManifest = (manifest) => {
-    const { home: homes } = manifest;
-    const homePaths = [];
-    for (const languageCode in homes) {
-        const homePagePath = homes[languageCode];
-        homePaths.push(homePagePath);
-    }
-    return homePaths;
 };
 
 const _getNextAvailablePageImpl = async (pagePathByLangCode, pageTypeString) => {
@@ -96,20 +82,15 @@ const _getNextAvailableResourcesRoot = async (resourcesRootInfo) => {
 };
 
 export const getHomePage = async () => {
-    const manifest = await getOrFetchManifest();
-    const { home: homes } = manifest;
     const currentLanguage = getLanguage();
-    const homePagePath = homes[currentLanguage];
-
-    if (homePagePath) {
-        return await getOrFetchWagtailPage(homePagePath);
-    } else {
-        return await _getNextAvailableHomePage(homes);
-    }
+    // This should be in a try catch block in case there's no manifest returned
+    const manifest = new Manifest();
+    return await manifest.getRootPage("home", currentLanguage);
 };
 
 export const getResources = async () => {
-    const manifest = await getOrFetchManifest();
+    // This should be in a try catch block in case there's no manifest returned
+    const manifest = await fetchManifest();
     const { resourcesRoot: resourcesRootInfo } = manifest;
     const currentLanguage = getLanguage();
     const resourcesRootPath = resourcesRootInfo[currentLanguage];

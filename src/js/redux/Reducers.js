@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 import siteReducer from "./ducks/Site";
-import siteV2Reducer from "ts/Redux/Ducks/SiteV2";
+import siteV1Reducer from "../../ts/Redux/Ducks/SiteV1";
 import languageReducer from "./ducks/i18n";
 import serviceWorkerReducer from "./ducks/ServiceWorker";
 import guestBannerReducer from "./ducks/GuestBanner";
@@ -10,7 +10,7 @@ import areCompletionsReady from "./ducks/Actions";
 
 export const reducers = combineReducers({
     ...siteReducer,
-    ...siteV2Reducer,
+    ...siteV1Reducer,
     ...languageReducer,
     ...serviceWorkerReducer,
     ...guestBannerReducer,

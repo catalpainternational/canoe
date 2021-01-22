@@ -31,3 +31,9 @@ export type TSubscriptions = {
         [name: string]: TSubscriptionVersion;
     };
 };
+
+export type TCertificate = {
+    /** The body of the pem certificate file, as a text string */
+    cert: string;
+    isCertSigned: boolean;
+};

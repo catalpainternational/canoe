@@ -61,11 +61,10 @@
         import {
             isBrowserSupported,
             areCompletionsReady,
-            getManifestFromStore,
         } from "ReduxImpl/Interface";
         import { logPageView } from "js/GoogleAnalytics";
 
-        import { CanoeHost } from "ts/CanoeHost";
+        import { InitialiseCertChain } from "ts/StartUp";
 
         import HomePageJS from "js/HomePage";
         import CoursePageJS from "js/CoursePage";
@@ -138,6 +137,23 @@
             },
 
             onMounted() {
+                this.setUpEventListeners();
+
+                // Check that the Appelflap wrapper has started, by looking for its global object
+                if (window.canoeHost) {
+                    // Regardless of what happens with Appelflap, we continue starting up Canoe
+                    if (!this.userShouldLogin() && this.areCompletionsReady()) {
+                        // If user returns to site and is logged in.
+                        this.route();
+                    }
+                }
+            },
+
+            onUpdated() {
+                scrollToFirstUnfinishedContent();
+            },
+
+            setUpEventListeners() {
                 // After authenticating, the app downloads its materials.
                 window.addEventListener(ON_REQUEST_SITE_DOWNLOAD, () => {
                     this.update();
@@ -159,26 +175,6 @@
                         logPageView(window.location.hash);
                     }
                 });
-
-                if (!this.userShouldLogin() && this.areCompletionsReady()) {
-                    // If user returns to site and is logged in.
-                    this.route();
-                }
-
-                const canoeHost = new CanoeHost();
-                canoeHost
-                    .StartCanoe(() => {})
-                    .then((_) => {
-                        // Success
-                    })
-                    .catch((_) => {
-                        // Appelflap is apparently around, but we couldn't get the lock on Canoe
-                        // The app is probably still usable, but we may wish to show a message to the user.
-                    });
-            },
-
-            onUpdated() {
-                scrollToFirstUnfinishedContent();
             },
 
             storeListener(previousStoreState, storeState) {
@@ -188,12 +184,23 @@
             },
 
             async route() {
+                if (this.userShouldLogin()) {
+                    // Safety valve - we can get here even if the user hasn't actually logged in
+                    window.location.hash = "";
+                    this.update();
+                    return;
+                }
+
                 const page = await getPage();
-                const pageModel = getWagtailPageModelName(page);
+                // const pageModel = getWagtailPageModelName(page);
+
+                if (this.areCompletionsReady() && !window.certChain) {
+                    InitialiseCertChain();
+                }
 
                 this.update({
                     wagtailPage: page,
-                    contentType: pageModel,
+                    contentType: undefined,
                 });
             },
 
@@ -225,10 +232,5 @@
                 return new ResourceArticleJS(aWagtailPage);
             },
         };
-
-        function getWagtailPageModelName(wagtailPage) {
-            const type = wagtailPage.meta.type;
-            return type.substring(type.lastIndexOf(".") + 1);
-        }
     </script>
 </App>

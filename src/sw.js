@@ -13,7 +13,7 @@ import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-import { MANIFEST_CACHE_NAME, MANIFESTV2_CACHE_NAME } from "ts/Constants";
+import { MANIFESTV1_CACHE_NAME } from "ts/Constants";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { buildAppelflapRoutes } from "js/RoutingAppelflap";
 
@@ -40,16 +40,9 @@ registerRoute(
 );
 
 registerRoute(
-    new RegExp(ROUTES_FOR_REGISTRATION.manifestv2),
-    new StaleWhileRevalidate({
-        cacheName: MANIFESTV2_CACHE_NAME,
-    })
-);
-
-registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.manifest),
     new StaleWhileRevalidate({
-        cacheName: MANIFEST_CACHE_NAME,
+        cacheName: MANIFESTV1_CACHE_NAME,
     })
 );
 
@@ -68,6 +61,8 @@ registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly(), 
 buildAppelflapRoutes().forEach((routeDef) => {
     registerRoute(new RegExp(routeDef[0]), new NetworkOnly(), routeDef[1]);
 });
+
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.appelflapPKIsign), new NetworkOnly(), "POST");
 
 // webpack-dev-server communicates over this endpoint. Without this clause, the
 // service worker caches these requests and breaks webpack-dev-server.

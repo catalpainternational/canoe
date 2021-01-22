@@ -1,7 +1,7 @@
 import { dispatchToastEvent } from "js/Events";
 import { getLanguage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
-import { getOrFetchManifest } from "js/WagtailPagesAPI";
+import { fetchManifest } from "js/WagtailPagesAPI";
 
 export const alertAppIsOffline = () => {
     dispatchToastEvent("You are offline.");
@@ -28,7 +28,8 @@ export const getMediaUrl = (mediaPath) => {
 };
 
 export const resolveMedia = (mediaID) => {
-    return getOrFetchManifest()
+    // This should be in a try catch block in case there's no manifest returned
+    return fetchManifest()
         // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
         // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
         // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
