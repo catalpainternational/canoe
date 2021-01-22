@@ -78,7 +78,7 @@ export class Manifest implements IManifest {
     }
 
     getManifestFromStore(): any {
-        return store.getState().manifestv2;
+        return store.getState().manifestV1;
     }
 
     async fetchManifest(): Promise<any> {
