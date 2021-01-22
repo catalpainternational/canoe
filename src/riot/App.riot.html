@@ -142,10 +142,7 @@
                 // Check that the Appelflap wrapper has started, by looking for its global object
                 if (window.canoeHost) {
                     // Regardless of what happens with Appelflap, we continue starting up Canoe
-                    if (
-                        !this.userShouldLogin() &&
-                        this.areCompletionsReady()
-                    ) {
+                    if (!this.userShouldLogin() && this.areCompletionsReady()) {
                         // If user returns to site and is logged in.
                         this.route();
                     }
@@ -187,14 +184,17 @@
             },
 
             async route() {
+                if (this.userShouldLogin()) {
+                    // Safety valve - we can get here even if the user hasn't actually logged in
+                    window.location.hash = "";
+                    this.update();
+                    return;
+                }
+
                 const page = await getPage();
                 const pageModel = getWagtailPageModelName(page);
 
-                if (
-                    !this.userShouldLogin() &&
-                    this.areCompletionsReady() &&
-                    !window.certChain
-                ) {
+                if (this.areCompletionsReady() && !window.certChain) {
                     InitialiseCertChain();
                 }
 

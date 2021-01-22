@@ -88,10 +88,11 @@ export const isUserLoggedIn = () => {
 };
 
 export const userShouldLogin = () => {
+    const no_token = getAuthenticationToken() === null;
     const is_deauthed = localStorage.getItem(USER_IS_AUTHED_STORAGE_KEY) === "false";
     const is_firstboot = sessionStorage.getItem(EMPTY_SLATE_BOOT_KEY) === "true";
     const is_user_logged_in = isUserLoggedIn();
-    return is_deauthed || is_firstboot || !is_user_logged_in;
+    return no_token || is_deauthed || is_firstboot || !is_user_logged_in;
 };
 
 export const getUsername = () => {
