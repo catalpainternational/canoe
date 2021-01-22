@@ -130,8 +130,5 @@ function genericRoutes() {
 */
 export function buildAppelflapRoutes() {
     const portNo = AppelflapPortNo();
-
-    if (portNo > -1) {
-        return genericRoutes();
-    }
+    return portNo > -1 ? genericRoutes() : [];
 };
