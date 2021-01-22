@@ -61,16 +61,6 @@ export const _getOrFetchWagtailPageById = async (pageId) => {
     return getOrFetchWagtailPage(pagePath);
 };
 
-export const getHomePathsInManifest = (manifest) => {
-    const { home: homes } = manifest;
-    const homePaths = [];
-    for (const languageCode in homes) {
-        const homePagePath = homes[languageCode];
-        homePaths.push(homePagePath);
-    }
-    return homePaths;
-};
-
 const _getNextAvailablePageImpl = async (pagePathByLangCode, pageTypeString) => {
     const languageCodes = Object.keys(pagePathByLangCode);
     if (languageCodes.length === 0) {

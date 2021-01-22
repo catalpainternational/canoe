@@ -12,7 +12,7 @@ export interface IManifest extends IManifestItemState {
     getHomePageHash(
         languageCode: string,
         loadingCallback: LoadingCallback
-    ): string;
+    ): Promise<string>;
 
     /** Gets the primary json related to a resource group from a given location hash and language code,
      * throws error if not found
