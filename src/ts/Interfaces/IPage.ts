@@ -1,8 +1,8 @@
 import { IAsset } from "./IAsset";
-import { IManifestItemState } from "./IManifestItemState";
+import { TManifestItemState } from "ts/Types/ManifestTypes";
 
 /** Describe a page of resources */
-export interface IPage extends IManifestItemState {
+export interface IPage extends TManifestItemState {
     /** Location hash of the page */
     loc_hash: string;
     /** Name of the storage container this should be stored in */

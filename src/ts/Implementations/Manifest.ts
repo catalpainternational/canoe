@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TManifest } from "ts/Types/ManifestTypes";
-import { TPage } from "ts/Types/ManifestTypes";
+import { TManifest, TPage } from "ts/Types/ManifestTypes";
 
 import { storeManifestV1 } from "ts/Redux/Interface";
 
@@ -219,23 +218,19 @@ export class Manifest implements TManifest {
         return matchingPages.length === 1 ? matchingPages[0][0] : "";
     }
 
-    async getHomePageHash(
-        languageCode: string,
-        loadingCallback: LoadingCallback
-    ): Promise<string> {
+    async getHomePageHash(languageCode: string): Promise<string> {
         const homePage = await this.getRootPage("home", languageCode);
         return homePage ? homePage.loc_hash : "";
     }
 
     getPageData(
         locationHash: string,
-        languageCode: string,
-        loadingCallback: LoadingCallback
+        languageCode: string
     ): Record<string, unknown> {
         throw new Error("Method not implemented.");
     }
 
-    getPageDetail(locationHash: string, languageCode: string): IPage {
+    getPageDetail(locationHash: string, languageCode: string): TPage {
         throw new Error("Method not implemented.");
     }
 }
