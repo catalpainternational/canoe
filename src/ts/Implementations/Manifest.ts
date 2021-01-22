@@ -143,6 +143,26 @@ export class Manifest implements IManifest {
         return [...languageCodes];
     }
 
+    async getImages(): Promise<any[]> {
+        const manifest = await this.getOrFetchManifest();
+        const images = new Set(
+            Object.values(manifest.pages)
+                .filter((page: any) => {
+                    return (
+                        page.assets &&
+                        page.assets.filter((asset: any) => {
+                            return asset.type && asset.type === "image";
+                        })
+                    );
+                })
+                .map((page: any) => {
+                    return page.assets.map((asset: any) => asset.renditions);
+                })
+        );
+
+        return [...images];
+    }
+
     async getRootPage(rootName = "home", languageCode = "en"): Promise<any> {
         const manifest = await this.getOrFetchManifest();
         const matchingPages = Object.values(manifest.pages).filter(

@@ -82,17 +82,10 @@ const _getNextAvailableResourcesRoot = async (resourcesRootInfo) => {
 };
 
 export const getHomePage = async () => {
-    // This should be in a try catch block in case there's no manifest returned
-    const manifest = await fetchManifest();
-    const { home: homes } = manifest;
     const currentLanguage = getLanguage();
-    const homePagePath = homes[currentLanguage];
-
-    if (homePagePath) {
-        return await getOrFetchWagtailPage(homePagePath);
-    } else {
-        return await _getNextAvailableHomePage(homes);
-    }
+    // This should be in a try catch block in case there's no manifest returned
+    const manifest = new Manifest();
+    return await manifest.getRootPage("home", currentLanguage);
 };
 
 export const getResources = async () => {

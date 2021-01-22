@@ -70,7 +70,7 @@ export default class SiteDownloader {
         })
 
         const manifestsPagePaths = new Set([...homePagePaths, ...Object.values(manifest.pages)]);
-        const manifestsImagesPaths = new Set(getImagePaths(manifest.images));
+        const manifestsImagesPaths = getImagePaths(await manifest.getImages());
 
         const cachedPagePaths = await getCachedPathsAndDeleteCruft(PAGES_CACHE, manifestsPagePaths);
         const cachedImagePaths = await getCachedPathsAndDeleteCruft(
