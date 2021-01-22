@@ -7,6 +7,7 @@ import serviceWorkerReducer from "./ducks/ServiceWorker";
 import guestBannerReducer from "./ducks/GuestBanner";
 import browserSupportReducer from "./ducks/BrowserSupport";
 import areCompletionsReady from "./ducks/Actions";
+import online from "./ducks/online";
 
 export const reducers = combineReducers({
     ...siteReducer,
@@ -16,4 +17,5 @@ export const reducers = combineReducers({
     ...guestBannerReducer,
     ...browserSupportReducer,
     ...areCompletionsReady,
+    ...online,
 });
