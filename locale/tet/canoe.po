@@ -150,6 +150,10 @@ msgstr "Lian"
 msgid "Latest notifications"
 msgstr "Notifikasaun ikus liu"
 
+#, fuzzy
+msgid "Latest syncs"
+msgstr "Notifikasaun ikus liu"
+
 msgid "Learning statistics"
 msgstr "Estatístika aprendizajen "
 
@@ -195,6 +199,9 @@ msgstr "Tamba ita asesu app ne'e nu’udar bainaka, progresu aprendizajen sira n
 
 msgid "No notifications."
 msgstr "La iha notifikasaun. "
+
+msgid "No syncs."
+msgstr ""
 
 msgid "No thanks"
 msgstr "Lae, Obrigado. "
@@ -283,6 +290,9 @@ msgstr "Submete"
 msgid "Successfully sent!"
 msgstr "Avaliasaun manda ona ho susesu!"
 
+msgid "Syncs"
+msgstr ""
+
 msgid "Take Exam"
 msgstr "Foti Ezame"
 
@@ -338,6 +348,12 @@ msgstr "Ita hakarak simu notifikasaun husi aplikasaun ne'e? "
 
 msgid "Yes, I agree"
 msgstr "Sim, ha'u konkorda"
+
+msgid "You are offline!"
+msgstr ""
+
+msgid "You are online!"
+msgstr ""
 
 #. message when user did not pass exam
 msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later."
