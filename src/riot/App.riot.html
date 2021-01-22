@@ -16,8 +16,6 @@
         ></LoadingDots>
 
         <template if="{!userShouldLogin() && areCompletionsReady()}">
-            <DownloadSite></DownloadSite>
-
             <TopMenu
                 contentType="{state.contentType}"
                 wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
@@ -74,7 +72,6 @@
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
         import LoadCompletions from "RiotTags/Components/LoadCompletions.riot.html";
-        import DownloadSite from "RiotTags/Components/DownloadSite.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
         import Toast from "RiotTags/Components/Toast.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
@@ -126,7 +123,6 @@
                 settings: Settings,
                 sync: Sync,
                 loadcompletions: LoadCompletions,
-                downloadsite: DownloadSite,
                 pushsubscription: PushSubscription,
                 changebrowser: ChangeBrowser,
                 toast: Toast,
