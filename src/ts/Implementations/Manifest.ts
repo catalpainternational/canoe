@@ -4,7 +4,7 @@ import { IManifest } from "ts/Interfaces/IManifest";
 import { IPage } from "ts/Interfaces/IPage";
 import { TPage } from "ts/Types/ManifestTypes";
 
-import { storeManifestV2 } from "ts/Redux/Interface";
+import { storeManifestV1 } from "ts/Redux/Interface";
 
 // See ts/Typings for the type definitions for these imports
 import { store } from "ReduxImpl/Store";
@@ -121,7 +121,7 @@ export class Manifest implements IManifest {
         }
         try {
             manifestInStore = await this.fetchManifest();
-            storeManifestV2(manifestInStore);
+            storeManifestV1(manifestInStore);
         } catch {
             // Did not successfully fetch manifest
             return Promise.reject(

@@ -1,7 +1,7 @@
 import {
     fetchPage,
     getOrFetchWagtailPage,
-    getOrFetchManifest,
+    fetchManifest,
     getHomePage,
 } from "js/WagtailPagesAPI";
 import { getLanguage } from "ReduxImpl/Interface";
@@ -35,7 +35,8 @@ const routeToTranslation = (translationPageId) => {
 };
 
 export const getWagtailPageOrRouteToTranslation = async (pageId) => {
-    const manifest = await getOrFetchManifest();
+    // This should be in a try catch block in case there's no manifest returned
+    const manifest = await fetchManifest();
     const pageUrl = manifest.pages[pageId];
     const page = await getOrFetchWagtailPage(pageUrl);
 

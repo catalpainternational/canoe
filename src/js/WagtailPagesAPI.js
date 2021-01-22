@@ -3,18 +3,24 @@ import { isGuestUser } from "js/AuthenticationUtilities";
 import {
     storeWagtailPage,
     getWagtailPageFromStore,
-    getManifestFromStore,
-    storeManifest,
     getCourse,
     getLesson,
     getLanguage,
     changeLanguage,
 } from "ReduxImpl/Interface";
 import { token_authed_fetch } from "js/Fetch";
+import { Manifest } from "ts/Implementations/Manifest";
 
 export async function fetchManifest() {
-    const allPagesMetadata = await token_authed_fetch(ROUTES_FOR_REGISTRATION.manifest);
-    return allPagesMetadata;
+    // try to get the manifest
+    const manifest = new Manifest();
+    try {
+        return await manifest.getOrFetchManifest();
+    } catch {
+        // Do nothing - fall through to the promise reject below
+    }
+
+    return Promise.reject();
 }
 
 export async function fetchPage(path) {
@@ -33,17 +39,6 @@ export const fetchImage = async (url) => {
     });
 };
 
-export const getOrFetchManifest = async () => {
-    const manifestInStore = getManifestFromStore();
-    if (Object.entries(manifestInStore).length > 0) {
-        return manifestInStore;
-    }
-
-    const manifest = await fetchManifest();
-    storeManifest(manifest);
-    return manifest;
-};
-
 export const getOrFetchWagtailPage = async (path) => {
     const pathPieces = path.split("/");
     const secondToLastPiece = pathPieces[pathPieces.length - 2];
@@ -60,7 +55,8 @@ export const getOrFetchWagtailPage = async (path) => {
 };
 
 export const _getOrFetchWagtailPageById = async (pageId) => {
-    const manifest = await getOrFetchManifest();
+    // This should be in a try catch block in case there's no manifest returned
+    const manifest = await fetchManifest();
     const pagePath = manifest.pages[pageId];
     return getOrFetchWagtailPage(pagePath);
 };
@@ -96,7 +92,8 @@ const _getNextAvailableResourcesRoot = async (resourcesRootInfo) => {
 };
 
 export const getHomePage = async () => {
-    const manifest = await getOrFetchManifest();
+    // This should be in a try catch block in case there's no manifest returned
+    const manifest = await fetchManifest();
     const { home: homes } = manifest;
     const currentLanguage = getLanguage();
     const homePagePath = homes[currentLanguage];
@@ -109,7 +106,8 @@ export const getHomePage = async () => {
 };
 
 export const getResources = async () => {
-    const manifest = await getOrFetchManifest();
+    // This should be in a try catch block in case there's no manifest returned
+    const manifest = await fetchManifest();
     const { resourcesRoot: resourcesRootInfo } = manifest;
     const currentLanguage = getLanguage();
     const resourcesRootPath = resourcesRootInfo[currentLanguage];

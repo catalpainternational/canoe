@@ -1,7 +1,7 @@
 import {
     fetchPage,
     fetchImage,
-    getOrFetchManifest,
+    fetchManifest,
     getHomePathsInManifest,
 } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
@@ -59,7 +59,8 @@ const addCachedPagesToRedux = async () => {
 
 export default class SiteDownloader {
     async requestTheSitesPagesAndImages() {
-        const manifest = await getOrFetchManifest();
+        // This should be in a try catch block in case there's no manifest returned
+        const manifest = await fetchManifest();
 
         const homePagePaths = getHomePathsInManifest(manifest);
         const manifestsPagePaths = new Set([...homePagePaths, ...Object.values(manifest.pages)]);
