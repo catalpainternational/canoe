@@ -12,7 +12,7 @@ import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/Se
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
-import { changeOnlineAction } from "./ducks/online";
+import { changeOnlineAction } from "./ducks/Online";
 
 export const storeWagtailPage = (wagtailPage) => {
     const { type } = wagtailPage.meta;
