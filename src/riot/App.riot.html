@@ -53,7 +53,6 @@
         import {
             ON_LOG_IN,
             ON_LOG_OUT,
-            ON_REQUEST_SITE_DOWNLOAD,
         } from "js/Events";
         import {
             isBrowserSupported,
@@ -151,12 +150,6 @@
             },
 
             setUpEventListeners() {
-                // After authenticating, the app downloads its materials.
-                window.addEventListener(ON_REQUEST_SITE_DOWNLOAD, () => {
-                    this.update();
-                });
-
-                // After downloading its materials, the app starts.
                 window.addEventListener(ON_LOG_IN, async () => {
                     this.route();
                 });
