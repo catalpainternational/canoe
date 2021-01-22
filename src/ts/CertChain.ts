@@ -26,9 +26,11 @@ export class CertChain {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
             if (!this.#packageCert?.isCertSigned) {
                 const lastError = await this.PostPackageCertificateForSigning();
-                console.error(`lastError: ${lastError}`);
                 if (!lastError && this.#packageCert) {
                     const result = await this.PostPackageCertificateToAppelflap();
+                    if (!result) {
+                        this.#packageCert = await this.GetPackageCertificateFromAppelflap();
+                    }
                 }
             }
         } catch (e) {
