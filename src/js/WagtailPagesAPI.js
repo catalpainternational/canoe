@@ -16,7 +16,7 @@ export async function fetchManifest() {
     // try to get the manifest
     const manifest = new Manifest();
     try {
-        return await manifest.getOrFetchManifest();
+        return await manifest.getOrFetch();
     } catch {
         // Do nothing - fall through to the promise reject below
     }
@@ -59,7 +59,7 @@ export const _getOrFetchWagtailPageById = async (pageId) => {
     // This should be in a try catch block in case there's no manifest returned
     const manifest = await fetchManifest();
     const page = new Page(manifest.pages[pageId]);
-    return await page.getOrFetchPage();
+    return await page.getOrFetch();
 };
 
 const _getNextAvailablePageImpl = async (pagePathByLangCode, pageTypeString) => {
@@ -90,7 +90,7 @@ export const getHomePage = async () => {
     const page = new Page(rootHomePage);
     if (rootHomePage.api_url) {
         const page = new Page(rootHomePage);
-        return await page.getOrFetchPage();
+        return await page.getOrFetch();
     }
 
     return page;
@@ -104,7 +104,7 @@ export const getResourcesPage = async () => {
     const page = new Page(rootResourcesPage);
     if (rootResourcesPage.api_url) {
         const page = new Page(rootResourcesPage);
-        return await page.getOrFetchPage();
+        return await page.getOrFetch();
     }
 
     return page;

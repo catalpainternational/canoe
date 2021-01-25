@@ -45,7 +45,7 @@ export class Page implements TPage {
         return true;
     }
 
-    static get emptyPage(): TPage {
+    static get emptyItem(): TPage {
         return {
             loc_hash: "",
             storage_container: "",
@@ -63,13 +63,13 @@ export class Page implements TPage {
 
     constructor(opts?: Partial<Page>) {
         if (!opts) {
-            opts = Page.emptyPage;
+            opts = Page.emptyItem;
         }
 
         this.clone(opts);
 
         if (!this.isPublishable) {
-            this.getOrFetchPage()
+            this.getOrFetch()
                 .then((page: any) => {
                     if (page) {
                         this.clone(page);
@@ -111,11 +111,11 @@ export class Page implements TPage {
         }
     }
 
-    getPageFromStore(): any {
+    getFromStore(): any {
         return store.getState().pageV2;
     }
 
-    async fetchPage(): Promise<any> {
+    async fetchItem(): Promise<any> {
         let responseFailure = "";
         try {
             const init = {
@@ -145,14 +145,14 @@ export class Page implements TPage {
         return page && Object.entries(page).length > 0;
     }
 
-    async getOrFetchPage(): Promise<any> {
-        let pageInStore = await this.getPageFromStore();
+    async getOrFetch(): Promise<any> {
+        let pageInStore = await this.getFromStore();
 
         if (this.simplePageTest(pageInStore)) {
             return pageInStore;
         }
         try {
-            pageInStore = await this.fetchPage();
+            pageInStore = await this.fetchItem();
             storePageV2(pageInStore);
         } catch {
             // Did not successfully fetch page
@@ -165,7 +165,7 @@ export class Page implements TPage {
     }
 
     async getImages(): Promise<any[]> {
-        const page = await this.getOrFetchPage();
+        const page = await this.getOrFetch();
         const images = new Set(
             page.assets.map((asset: any) => asset.renditions)
         );

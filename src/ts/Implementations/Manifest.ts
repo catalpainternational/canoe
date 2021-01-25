@@ -46,10 +46,10 @@ export class Manifest implements TManifest {
         return true;
     }
 
-    static get emptyManifest(): TManifest {
+    static get emptyItem(): TManifest {
         return {
             version: "0.0.0",
-            pages: { "0": Page.emptyPage },
+            pages: { "0": Page.emptyItem },
             isValid: false,
             isAvailableOffline: false,
             isPublishable: false,
@@ -58,13 +58,13 @@ export class Manifest implements TManifest {
 
     constructor(opts?: Partial<Manifest>) {
         if (!opts) {
-            opts = Manifest.emptyManifest;
+            opts = Manifest.emptyItem;
         }
 
         this.clone(opts);
 
         if (!this.isPublishable) {
-            this.getOrFetchManifest()
+            this.getOrFetch()
                 .then((mani: any) => {
                     if (mani?.pages) {
                         this.version = mani.version;
@@ -88,11 +88,11 @@ export class Manifest implements TManifest {
         }
     }
 
-    getManifestFromStore(): any {
+    getFromStore(): any {
         return store.getState().manifestV1;
     }
 
-    async fetchManifest(): Promise<any> {
+    async fetchItem(): Promise<any> {
         let responseFailure = "";
         try {
             const init = {
@@ -120,18 +120,18 @@ export class Manifest implements TManifest {
         );
     }
 
-    private simpleManifestTest(manifest: any) {
+    private simpleTest(manifest: any) {
         return manifest && Object.entries(manifest).length > 0;
     }
 
-    async getOrFetchManifest(): Promise<any> {
-        let manifestInStore = await this.getManifestFromStore();
+    async getOrFetch(): Promise<any> {
+        let manifestInStore = await this.getFromStore();
 
-        if (this.simpleManifestTest(manifestInStore)) {
+        if (this.simpleTest(manifestInStore)) {
             return manifestInStore;
         }
         try {
-            manifestInStore = await this.fetchManifest();
+            manifestInStore = await this.fetchItem();
             storeManifestV1(manifestInStore);
         } catch {
             // Did not successfully fetch manifest
@@ -144,7 +144,7 @@ export class Manifest implements TManifest {
     }
 
     async getLanguageCodes(): Promise<string[]> {
-        const manifest = await this.getOrFetchManifest();
+        const manifest = await this.getOrFetch();
         const languageCodes = new Set(
             (Object.values(manifest.pages) as TPage[]).map((page: TPage) => {
                 return page.language;
@@ -155,7 +155,7 @@ export class Manifest implements TManifest {
     }
 
     async getImages(): Promise<any[]> {
-        const manifest = await this.getOrFetchManifest();
+        const manifest = await this.getOrFetch();
         const images = new Set(
             Object.values(manifest.pages)
                 .filter((page: any) => {
@@ -178,7 +178,7 @@ export class Manifest implements TManifest {
         rootName = "home",
         languageCode = "en"
     ): Promise<{ pageId: string; page: TPage }> {
-        const manifest = await this.getOrFetchManifest();
+        const manifest = await this.getOrFetch();
         const matchingPages = (Object.entries(manifest.pages) as [
             string,
             TPage
@@ -213,25 +213,7 @@ export class Manifest implements TManifest {
 
         return matchingPages.length === 1
             ? { pageId: matchingPages[0][0], page: matchingPages[0][1] }
-            : { pageId: "", page: Page.emptyPage };
-    }
-
-    async getPageId(locationHash: string): Promise<string> {
-        const manifest = await this.getOrFetchManifest();
-        const matchingPages = Object.entries(manifest.pages).filter(
-            (pageElement: [string, unknown]) => {
-                const page = pageElement[1] as any;
-                // Check there is a location hash
-                // - this is a sanity check only
-                if (!page || !page.loc_hash) {
-                    return false;
-                }
-
-                return (page.loc_hash as string).indexOf(locationHash) === 0;
-            }
-        );
-
-        return matchingPages.length === 1 ? matchingPages[0][0] : "";
+            : { pageId: "", page: Page.emptyItem };
     }
 
     getPageData(
