@@ -1,4 +1,4 @@
-import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
+import { BACKEND_BASE_URL } from "js/urls";
 import { isGuestUser } from "js/AuthenticationUtilities";
 import {
     storeWagtailPage,
@@ -10,6 +10,7 @@ import {
 } from "ReduxImpl/Interface";
 import { token_authed_fetch } from "js/Fetch";
 import { Manifest } from "ts/Implementations/Manifest";
+import { Page } from "ts/Implementations/Page";
 
 export async function fetchManifest() {
     // try to get the manifest
@@ -57,8 +58,8 @@ export const getOrFetchWagtailPage = async (path) => {
 export const _getOrFetchWagtailPageById = async (pageId) => {
     // This should be in a try catch block in case there's no manifest returned
     const manifest = await fetchManifest();
-    const pagePath = manifest.pages[pageId];
-    return getOrFetchWagtailPage(pagePath);
+    const page = new Page(manifest.pages[pageId]);
+    return await page.getOrFetchPage();
 };
 
 const _getNextAvailablePageImpl = async (pagePathByLangCode, pageTypeString) => {
@@ -86,7 +87,13 @@ export const getHomePage = async () => {
     // This should be in a try catch block in case there's no manifest returned
     const manifest = new Manifest();
     const {page: rootHomePage} = await manifest.getRootPageDefinition("home", currentLanguage);
-    return rootHomePage;
+    const page = new Page(rootHomePage);
+    if (rootHomePage.api_url) {
+        const page = new Page(rootHomePage);
+        return await page.getOrFetchPage();
+    }
+
+    return page;
 };
 
 export const getResourcesPage = async () => {
@@ -94,7 +101,13 @@ export const getResourcesPage = async () => {
     // This should be in a try catch block in case there's no manifest returned
     const manifest = new Manifest();
     const {page: rootResourcesPage} = await manifest.getRootPageDefinition("resources", currentLanguage);
-    return rootResourcesPage;
+    const page = new Page(rootResourcesPage);
+    if (rootResourcesPage.api_url) {
+        const page = new Page(rootResourcesPage);
+        return await page.getOrFetchPage();
+    }
+
+    return page;
 };
 
 export const getResources = async () => {

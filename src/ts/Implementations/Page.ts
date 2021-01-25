@@ -6,7 +6,7 @@ import { storePageV2 } from "ts/Redux/Interface";
 // See ts/Typings for the type definitions for these imports
 import { store } from "ReduxImpl/Store";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { BACKEND_BASE_URL } from "js/urls";
 
 export class Page implements TPage {
     loc_hash!: string;
@@ -126,7 +126,7 @@ export class Page implements TPage {
                 },
             } as RequestInit;
             const resp = await fetch(
-                `${ROUTES_FOR_REGISTRATION.pagesv2}`,
+                `${BACKEND_BASE_URL}${this.api_url}`,
                 init
             );
             if (!resp.ok) {
