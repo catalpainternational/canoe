@@ -5,12 +5,12 @@ import {
     addPageV2 as addPageV2Action,
 } from "ts/Redux/Ducks/SiteV1";
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const storeManifestV1 = (manifestV1: any): void => {
+import { TManifest, TPage } from "../Types/ManifestTypes";
+
+export const storeManifestV1 = (manifestV1: TManifest): void => {
     store.dispatch(addManifestV1Action(manifestV1));
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const storePageV2 = (pageV2: any): void => {
+export const storePageV2 = (pageV2: TPage): void => {
     store.dispatch(addPageV2Action(pageV2));
 };

@@ -88,11 +88,11 @@ export class Manifest implements TManifest {
         }
     }
 
-    getFromStore(): any {
-        return store.getState().manifestV1;
+    getFromStore(): TManifest {
+        return store.getState().manifestV1 as TManifest;
     }
 
-    async fetchItem(): Promise<any> {
+    async fetchItem(): Promise<TManifest> {
         let responseFailure = "";
         try {
             const init = {
@@ -121,11 +121,11 @@ export class Manifest implements TManifest {
     }
 
     private simpleTest(manifest: any) {
-        return manifest && Object.entries(manifest).length > 0;
+        return manifest && (manifest as TManifest);
     }
 
-    async getOrFetch(): Promise<any> {
-        let manifestInStore = await this.getFromStore();
+    async getOrFetch(): Promise<TManifest> {
+        let manifestInStore = this.getFromStore();
 
         if (this.simpleTest(manifestInStore)) {
             return manifestInStore;

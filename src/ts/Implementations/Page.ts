@@ -111,11 +111,11 @@ export class Page implements TPage {
         }
     }
 
-    getFromStore(): any {
-        return store.getState().pageV2;
+    getFromStore(): TPage {
+        return store.getState().pageV2 as TPage;
     }
 
-    async fetchItem(): Promise<any> {
+    async fetchItem(): Promise<TPage> {
         let responseFailure = "";
         try {
             const init = {
@@ -142,11 +142,11 @@ export class Page implements TPage {
     }
 
     private simplePageTest(page: any) {
-        return page && Object.entries(page).length > 0;
+        return page && (page as TPage);
     }
 
     async getOrFetch(): Promise<any> {
-        let pageInStore = await this.getFromStore();
+        let pageInStore = this.getFromStore();
 
         if (this.simplePageTest(pageInStore)) {
             return pageInStore;
