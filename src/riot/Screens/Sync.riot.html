@@ -90,17 +90,21 @@
 
                 // try to get the manifest
                 const manifest = new Manifest();
-                try {
-                    const foundManifest = await manifest.getOrFetchManifest();
-                    this.update({ manifest: JSON.stringify(foundManifest) });
-                } catch {
-                    this.update({
-                        notifications: () => {
-                            return "Could not retrieve manifest";
-                        },
-                    });
+                if( !manifest.isValid) {
+                    try {
+                        await manifest.initialiseByRequest();
+                    } catch {
+                        this.update({
+                            notifications: () => {
+                                return "Could not retrieve manifest";
+                            },
+                        });
+                    }
                 }
-            },
-        };
+                if (manifest.isValid) {
+                    this.update({ manifest: JSON.stringify(manifest.data) });
+                }
+            }
+        }
     </script>
 </Sync>
