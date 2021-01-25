@@ -4,9 +4,8 @@
 // 3. try to fetch data if it has to ( display something while it does )
 // 4. not care if you are not logged in, if the data is present
 
-import { TManifest } from "ts/Types/ManifestTypes";
 import { resolveManifest } from "./Container";
-import { LoadingCallback, RenderCallback } from "./Callbacks";
+import { RenderCallback } from "./Callbacks";
 import { Manifest } from "./Implementations/Manifest";
 
 /**  To be called on every navigation
