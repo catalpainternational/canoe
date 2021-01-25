@@ -1,15 +1,6 @@
-import { dispatchToastEvent } from "js/Events";
 import { getLanguage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
 import { fetchManifest } from "js/WagtailPagesAPI";
-
-export const alertAppIsOffline = () => {
-    dispatchToastEvent("You are offline.");
-};
-
-export const alertAppIsOnline = () => {
-    dispatchToastEvent("You are online.");
-};
 
 export const isCourseInTheCurrentLanguage = (courseSlug) => {
     const currentLanguage = getLanguage();
