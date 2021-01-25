@@ -88,12 +88,20 @@ export const getHomePage = async () => {
     return await manifest.getRootPage("home", currentLanguage);
 };
 
+export const getResourcesPage = async () => {
+    const currentLanguage = getLanguage();
+    // This should be in a try catch block in case there's no manifest returned
+    const manifest = new Manifest();
+    return await manifest.getRootPage("resources", currentLanguage);
+};
+
 export const getResources = async () => {
     // This should be in a try catch block in case there's no manifest returned
-    const manifest = await fetchManifest();
-    const { resourcesRoot: resourcesRootInfo } = manifest;
-    const currentLanguage = getLanguage();
-    const resourcesRootPath = resourcesRootInfo[currentLanguage];
+    const resourcesRootInfo = await getResourcesPage();
+    const resRootHash = resourcesRootInfo ? resourcesRootInfo.loc_hash : "";
+    const resourcesRootPath = (resRootHash)
+        ? resRootHash.substring(resRootHash.lastIndexOf("/"))
+        : ""; 
 
     let resourcesRoot = null;
     if (resourcesRootPath) {
