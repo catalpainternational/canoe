@@ -12,7 +12,7 @@ import { getImagePaths } from "js/RenditionSelector";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { storeWagtailPage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL } from "js/urls";
-import { Manifest } from "../ts/Implementations/Manifest";
+import { Manifest } from "ts/Implementations/Manifest";
 
 const PAGES_CACHE = "pages-cache";
 const IMAGES_CACHE = "images-cache";

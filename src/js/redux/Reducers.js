@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 import siteReducer from "./ducks/Site";
-import siteV1Reducer from "../../ts/Redux/Ducks/SiteV1";
+import siteV1Reducer from "ts/Redux/Ducks/SiteV1";
 import languageReducer from "./ducks/i18n";
 import serviceWorkerReducer from "./ducks/ServiceWorker";
 import guestBannerReducer from "./ducks/GuestBanner";
