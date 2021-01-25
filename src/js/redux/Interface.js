@@ -2,7 +2,6 @@ import { store, LANGUAGE_STORAGE_KEY } from "./Store";
 
 import { changeLanguage as changeLanguageAction } from "./ducks/i18n";
 import {
-    addManifest as addManifestAction,
     addPage as addPageAction,
     addHome as addHomeAction,
     addCourse as addCourseAction,

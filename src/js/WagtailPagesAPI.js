@@ -85,14 +85,16 @@ export const getHomePage = async () => {
     const currentLanguage = getLanguage();
     // This should be in a try catch block in case there's no manifest returned
     const manifest = new Manifest();
-    return await manifest.getRootPage("home", currentLanguage);
+    const {page: rootHomePage} = await manifest.getRootPageDefinition("home", currentLanguage);
+    return rootHomePage;
 };
 
 export const getResourcesPage = async () => {
     const currentLanguage = getLanguage();
     // This should be in a try catch block in case there's no manifest returned
     const manifest = new Manifest();
-    return await manifest.getRootPage("resources", currentLanguage);
+    const {page: rootResourcesPage} = await manifest.getRootPageDefinition("resources", currentLanguage);
+    return rootResourcesPage;
 };
 
 export const getResources = async () => {

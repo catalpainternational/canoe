@@ -7,10 +7,11 @@ import { storeManifestV1 } from "ts/Redux/Interface";
 import { store } from "ReduxImpl/Store";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { Page } from "ts/Implementations/Page";
 
 export class Manifest implements TManifest {
-    version: string;
-    pages: Record<string, TPage>;
+    version!: string;
+    pages!: Record<string, TPage>;
 
     /** This is a basic integrity check.  It ensures that:
      * - All child pages have matching page entries
@@ -45,23 +46,22 @@ export class Manifest implements TManifest {
         return true;
     }
 
-    constructor() {
-        this.version = "0.0.0";
-        this.pages = {
-            "0": {
-                loc_hash: "/site/manifest-loading",
-                storage_container: "/site/manifest-loading",
-                version: 3,
-                api_url: "/api/v2/pages/0/",
-                assets: [],
-                language: "en",
-                children: [],
-                depth: 0,
-                isValid: true,
-                isAvailableOffline: false,
-                isPublishable: false,
-            },
+    static get emptyManifest(): TManifest {
+        return {
+            version: "0.0.0",
+            pages: { "0": Page.emptyPage },
+            isValid: false,
+            isAvailableOffline: false,
+            isPublishable: false,
         };
+    }
+
+    constructor(opts?: Partial<Manifest>) {
+        if (!opts) {
+            opts = Manifest.emptyManifest;
+        }
+
+        this.clone(opts);
 
         if (!this.isPublishable) {
             this.getOrFetchManifest()
@@ -74,6 +74,17 @@ export class Manifest implements TManifest {
                 .catch((_) => {
                     // Swallow the error, this will leave us with the default 'manifest'
                 });
+        }
+    }
+
+    /** Clone a supplied (partial) manifest into this */
+    clone(opts?: Partial<Manifest>): void {
+        if (opts?.version != null) {
+            this.version = opts.version;
+        }
+        if (opts?.pages != null) {
+            // Warning - this is a shallow copy only, it needs changing
+            this.pages = opts.pages;
         }
     }
 
@@ -135,8 +146,8 @@ export class Manifest implements TManifest {
     async getLanguageCodes(): Promise<string[]> {
         const manifest = await this.getOrFetchManifest();
         const languageCodes = new Set(
-            Object.values(manifest.pages).map((page: any) => {
-                return page.languageCode as string;
+            (Object.values(manifest.pages) as TPage[]).map((page: TPage) => {
+                return page.language;
             })
         );
 
@@ -163,41 +174,46 @@ export class Manifest implements TManifest {
         return [...images];
     }
 
-    async getRootPage(rootName = "home", languageCode = "en"): Promise<any> {
+    async getRootPageDefinition(
+        rootName = "home",
+        languageCode = "en"
+    ): Promise<{ pageId: string; page: TPage }> {
         const manifest = await this.getOrFetchManifest();
-        const matchingPages = Object.values(manifest.pages).filter(
-            (page: any) => {
-                // Check there is a location hash and languages
-                // - this is a sanity check only
-                if (!page || !page.loc_hash || !page.language) {
-                    return false;
-                }
-
-                // Check the location hash is for the nominal 'root' of what we're interested in
-                const hashParts = (page.loc_hash as string)
-                    .split("/")
-                    .filter((part) => !!part);
-                if (
-                    hashParts.length > 2 ||
-                    hashParts[hashParts.length - 1].indexOf(rootName) !== 0
-                ) {
-                    return false;
-                }
-
-                // Check the language matches
-                if (languageCode === "tet" || languageCode === "tdt") {
-                    // Check for both 'tet' and 'tdt' together
-                    // We should be using 'tdt', but for historical reasons we usually use 'tet'
-                    // so we're treating them the same
-                    return page.language === "tet" || page.language === "tdt";
-                }
-                return (page.language as string).indexOf(languageCode) === 0;
+        const matchingPages = (Object.entries(manifest.pages) as [
+            string,
+            TPage
+        ][]).filter((page: [string, TPage]) => {
+            // Check there is a location hash and languages
+            // - this is a sanity check only
+            const pageDef = page[1];
+            if (!page || !pageDef.loc_hash || !pageDef.language) {
+                return false;
             }
-        );
+
+            // Check the location hash is for the nominal 'root' of what we're interested in
+            const hashParts = (pageDef.loc_hash as string)
+                .split("/")
+                .filter((part) => !!part);
+            if (
+                hashParts.length > 2 ||
+                hashParts[hashParts.length - 1].indexOf(rootName) !== 0
+            ) {
+                return false;
+            }
+
+            // Check the language matches
+            if (languageCode === "tet" || languageCode === "tdt") {
+                // Check for both 'tet' and 'tdt' together
+                // We should be using 'tdt', but for historical reasons we usually use 'tet'
+                // so we're treating them the same
+                return pageDef.language === "tet" || pageDef.language === "tdt";
+            }
+            return (pageDef.language as string).indexOf(languageCode) === 0;
+        });
 
         return matchingPages.length === 1
-            ? (matchingPages[0] as any)
-            : undefined;
+            ? { pageId: matchingPages[0][0], page: matchingPages[0][1] }
+            : { pageId: "", page: Page.emptyPage };
     }
 
     async getPageId(locationHash: string): Promise<string> {
@@ -216,11 +232,6 @@ export class Manifest implements TManifest {
         );
 
         return matchingPages.length === 1 ? matchingPages[0][0] : "";
-    }
-
-    async getHomePageHash(languageCode: string): Promise<string> {
-        const homePage = await this.getRootPage("home", languageCode);
-        return homePage ? homePage.loc_hash : "";
     }
 
     getPageData(

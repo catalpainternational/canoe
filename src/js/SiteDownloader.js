@@ -67,7 +67,7 @@ export default class SiteDownloader {
         const languages = await manifest.getLanguageCodes();
         const homePagePaths = [];
         languages.forEach(async (language) => {
-            const languageHome = await manifest.getRootPage("home", language);
+            const {page: languageHome} = await manifest.getRootPageDefinition("home", language);
             if (languageHome) {
                 homePagePaths.push(languageHome.loc_hash);
             }
