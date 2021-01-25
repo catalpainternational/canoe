@@ -13,6 +13,7 @@ import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanne
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
 import { changeOnlineAction } from "./ducks/Online";
+import { changeAuthenticated } from "./ducks/Identity";
 
 export const storeWagtailPage = (wagtailPage) => {
     const { type } = wagtailPage.meta;
@@ -120,6 +121,18 @@ export const setOnline = () => {
 
 export const setOffline = () => {
     store.dispatch(changeOnlineAction(false));
+}
+
+export const isAuthenticated = () => {
+    return store.getState().identity.isAuthenticated;
+};
+
+export const setAuthenticated = () => {
+    store.dispatch(changeAuthenticated(true));
+}
+
+export const setUnauthenticated = () => {
+    store.dispatch(changeAuthenticated(false));
 }
 
 export const subscribeToStore = (subscriptionFunction) => {
