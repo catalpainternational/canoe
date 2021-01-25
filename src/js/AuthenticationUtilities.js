@@ -1,5 +1,5 @@
 import { BACKEND_BASE_URL } from "js/urls";
-import { dispatchLoggedOutEvent, dispatchSiteDownloadEvent } from "js/Events";
+import { dispatchLoggedOutEvent, dispatchLoggedInEvent } from "js/Events";
 import { unsubscribeFromNotifications } from "js/Notifications";
 import { fetch_and_denote_unauthenticatedness as fetch } from "./Fetch";
 
@@ -67,7 +67,7 @@ export const login = async (usernameAndPassword) => {
     localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
     setIsAuthed(true);
     sessionStorage.removeItem(EMPTY_SLATE_BOOT_KEY);
-    dispatchSiteDownloadEvent();
+    dispatchLoggedInEvent();
 };
 
 export const logout = async () => {

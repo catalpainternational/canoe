@@ -1,4 +1,4 @@
-import { alertAppIsOffline } from "js/utilities";
+import { setOffline } from "ReduxImpl/Interface";
 
 export class APIMissingPageError extends Error {
     constructor(message) {
@@ -43,7 +43,7 @@ export const alertIfRequestWasMadeOffline = (error) => {
     if (!isAppOffline(error)) {
         return false;
     }
-    alertAppIsOffline();
+    setOffline();
     return true;
 };
 
