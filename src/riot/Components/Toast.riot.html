@@ -1,13 +1,16 @@
 <Toast>
     <p id="snackbar">{state.toastMessage}</p>
     <script>
-        import { ON_TOAST_REQUESTED } from "js/Events";
-
         const TOAST_TIMEOUT_MS = 2500;
 
         export default {
             state: {
                 toastMessage: ""
+            },
+
+            TRANSLATIONS: {
+                offline: () => gettext("You are offline!"),
+                online: () => gettext("You are online!"),
             },
 
             showToast() {
@@ -18,13 +21,14 @@
                 }, TOAST_TIMEOUT_MS);
             },
 
-            onMounted() {
-                window.addEventListener(ON_TOAST_REQUESTED, toastEvent => {
-                    const toastMessage = toastEvent.detail;
-                    this.update({ toastMessage });
+            storeListener(previousStoreState, storeState) {
+                if (previousStoreState.online !== storeState.online) {
+                    this.update({ 
+                        toastMessage: storeState.online ? this.TRANSLATIONS.online() : this.TRANSLATIONS.offline(),
+                    });
                     this.showToast();
-                });
-            }
+                }
+            },
         };
     </script>
 </Toast>

@@ -1,3 +1,7 @@
+ // this component is deprecated in the offlining feature branch
+ // it will be replaced / reimplemented by a more targetted downloader
+ // leaving in place for now for easy reference
+
 import {
     fetchPage,
     fetchImage,

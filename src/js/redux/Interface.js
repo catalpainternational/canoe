@@ -12,6 +12,7 @@ import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/Se
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
+import { changeOnlineAction } from "./ducks/Online";
 
 export const storeWagtailPage = (wagtailPage) => {
     const { type } = wagtailPage.meta;
@@ -100,6 +101,18 @@ export const signalCompletionsAreNotReady = () => {
 export const areCompletionsReady = () => {
     return store.getState().areCompletionsReady;
 };
+
+export const isOnline = () => {
+    return store.getState().online;
+};
+
+export const setOnline = () => {
+    store.dispatch(changeOnlineAction(true));
+}
+
+export const setOffline = () => {
+    store.dispatch(changeOnlineAction(false));
+}
 
 export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);
