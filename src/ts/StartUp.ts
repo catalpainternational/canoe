@@ -36,8 +36,16 @@ export const InitialiseCertChain = async (): Promise<void> => {
     if (afc && !gt.certChain) {
         try {
             gt.certChain = new CertChain(afc);
-            const hasCert = await gt.certChain.initialise();
-            const packageCert = gt.certChain.packageCertificate;
+            const hasCert = await (gt.certChain as CertChain).initialise();
+            if (!hasCert) {
+                throw new Error(
+                    "Publishing certificate chain could not be initialised. \
+                    The certificate endpoint may not be working, \
+                    Canoe is not running within Appelflap (the mobile host), \
+                    the user is not logged in \
+                    or the user may not have the correct permissions."
+                );
+            }
         } catch (e) {
             // No signed cert - change this to a proper message, if that is appropriate
             console.info(e);
