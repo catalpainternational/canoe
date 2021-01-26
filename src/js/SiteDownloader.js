@@ -5,8 +5,8 @@
 import {
     fetchPage,
     fetchImage,
-    getOrFetchManifest,	
-    getHomePathsInManifest,    
+    getOrFetchManifest,
+    getHomePathsInManifest,
 } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
 import { leftDifference } from "js/SetMethods";

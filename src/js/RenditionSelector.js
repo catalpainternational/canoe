@@ -7,7 +7,6 @@ const WEBP_RENDITION = "width-800|format-webp";
 const JPEG_RENDITION = "width-600|format-jpeg";
 
 export const getImageUrl = async (imageId) => {
-    // This should be in a try catch block in case there's no manifest returned
     const manifest = await getOrFetchManifest();
     const images = manifest.images;
     const image = images[imageId];

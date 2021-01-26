@@ -42,9 +42,9 @@ export const storeWagtailPage = (wagtailPage) => {
     store.dispatch(addPageAction(wagtailPage));
 };
 
-export const storeManifest = (manifest) => {	
-    store.dispatch(addManifestAction(manifest));	
-};	
+export const storeManifest = (manifest) => {
+    store.dispatch(addManifestAction(manifest));
+};
 
 export const changeLanguage = (language) => {
     store.dispatch(changeLanguageAction(language));
@@ -80,8 +80,8 @@ export const getWagtailPageFromStore = (pageId) => {
     return store.getState().pages[pageId];
 };
 
-export const getManifestFromStore = () => {	
-    return store.getState().manifest;	
+export const getManifestFromStore = () => {
+    return store.getState().manifest;
 };
 
 export const isBrowserSupported = () => {

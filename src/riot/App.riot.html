@@ -217,10 +217,7 @@
         };
 
         function getWagtailPageModelName(wagtailPage) {
-            if (!!wagtailPage.meta) {
-                const type = wagtailPage.meta.type;
-                return type.substring(type.lastIndexOf(".") + 1);
-            }
+            // Uses new manifest format
             const type = wagtailPage.loc_hash;
             return type.substring(type.lastIndexOf("/") + 1);
         }
