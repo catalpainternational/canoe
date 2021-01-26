@@ -13,7 +13,10 @@ import { getAuthenticationToken } from "js/AuthenticationUtilities";
 export class Page implements TWagtailPage {
     data!: TWagtailPageData;
 
-    constructor() {
+    constructor(apiUrl?: string) {
+        if (apiUrl) {
+            this.data.api_url = apiUrl;
+        }
         this.initialiseFromStore();
     }
 
@@ -50,8 +53,8 @@ export class Page implements TWagtailPage {
     }
 
     /** From old wagtail page definition */
-    get meta(): string {
-        return this.data?.language || "";
+    get meta(): Record<string, any> {
+        return this.data?.meta || "";
     }
 
     get pageId(): string {
@@ -109,7 +112,7 @@ export class Page implements TWagtailPage {
         }
     }
 
-    async initialiseByRequest(): Promise<void> {
+    async initialiseByRequest(): Promise<boolean> {
         const resp = await fetch(this.api_url, {
             method: "GET",
             headers: {
@@ -117,8 +120,12 @@ export class Page implements TWagtailPage {
                 Authorization: `JWT ${getAuthenticationToken()}`,
             },
         });
-        this.data = await resp.json();
+        // Merge the existing page definition into this structure
+        const wagtailPage = await resp.json();
+        this.data = { ...this.data, ...wagtailPage };
         storeWagtailPage(this.data);
+
+        return true;
     }
 
     async getImages(): Promise<any[]> {
@@ -127,16 +134,5 @@ export class Page implements TWagtailPage {
         );
 
         return [...images];
-    }
-
-    getPageData(
-        locationHash: string,
-        languageCode: string
-    ): Record<string, unknown> {
-        throw new Error("Method not implemented.");
-    }
-
-    getPageDetail(locationHash: string, languageCode: string): TPage {
-        throw new Error("Method not implemented.");
     }
 }

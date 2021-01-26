@@ -20,7 +20,6 @@ function buildFakeManifestEntry(
         language: language,
         children: children,
         depth: depth,
-        meta: "",
         isValid: true,
         isAvailableOffline: true,
         isPublishable: true,

@@ -19,10 +19,7 @@ export type TPageData = {
 export type TPage = TPageData & TManifestItemState;
 
 export type TWagtailPageData = {
-    meta: Record<string, any>;
-    body: string;
-    courses: Array<any>;
-    data: Record<string, any>;
+    [x: string]: any;
 } & TPageData;
 
 export type TWagtailPage = TWagtailPageData & TManifestItemState;

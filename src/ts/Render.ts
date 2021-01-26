@@ -4,9 +4,10 @@
 // 3. try to fetch data if it has to ( display something while it does )
 // 4. not care if you are not logged in, if the data is present
 
-import { resolveManifest } from "./Container";
-import { RenderCallback } from "./Callbacks";
-import { Manifest } from "./Implementations/Manifest";
+import { resolveManifest } from "ts/Container";
+import { RenderCallback } from "ts/Callbacks";
+import { Manifest } from "ts/Implementations/Manifest";
+import { TWagtailPageData } from "ts/Types/ManifestTypes";
 
 /**  To be called on every navigation
  Params:
@@ -29,7 +30,7 @@ export async function getDataAndRender(
     const manifest: Manifest = resolveManifest();
 
     // we have a manifest so let's find out what data we need
-    const pageData: Record<string, unknown> = manifest.getPageData(
+    const pageData: TWagtailPageData = await manifest.getPageData(
         locationHash,
         languageCode
     );

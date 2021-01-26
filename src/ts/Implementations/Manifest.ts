@@ -5,6 +5,7 @@ import {
     TManifestData,
     TPage,
     TWagtailPage,
+    TWagtailPageData,
 } from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
@@ -113,14 +114,62 @@ export class Manifest implements TManifest {
         return [...images];
     }
 
-    getPageData(
+    getPageManifestData(
         locationHash: string,
         languageCode: string
-    ): Record<string, unknown> {
-        throw new Error("Method not implemented.");
+    ): TWagtailPageData | undefined {
+        const matchingPages = Object.values(this.data.pages).filter((page) => {
+            // Check there is a location hash and languages
+            // - this is a sanity check only
+            if (!page || !page.loc_hash || !page.language) {
+                return false;
+            }
+
+            // We could get false matches here, needs more work
+            if (page.loc_hash.indexOf(locationHash) === -1) {
+                return false;
+            }
+
+            // Check the language matches
+            if (languageCode === "tet" || languageCode === "tdt") {
+                // Check for both 'tet' and 'tdt' together
+                // We should be using 'tdt', but for historical reasons we usually use 'tet'
+                // so we're treating them the same
+                return page.language === "tet" || page.language === "tdt";
+            }
+            return page.language.indexOf(languageCode) === 0;
+        });
+
+        return matchingPages.length === 1 ? matchingPages[0] : undefined;
     }
 
-    getPageDetail(locationHash: string, languageCode: string): TPage {
-        throw new Error("Method not implemented.");
+    async getPageById(pageId: string): Promise<TWagtailPage> {
+        return await this.getPageByUrl(`/${pageId}/`);
+    }
+
+    async getPageByUrl(url: string): Promise<TWagtailPage> {
+        const manifestPage = new Page(url);
+        const pageFilled = await manifestPage.initialiseByRequest();
+        if (pageFilled) {
+            return manifestPage;
+        }
+
+        return Promise.reject(false);
+    }
+
+    async getPageData(
+        locationHash: string,
+        languageCode: string
+    ): Promise<TWagtailPage> {
+        const pageManifestData = this.getPageManifestData(
+            locationHash,
+            languageCode
+        );
+
+        if (pageManifestData) {
+            return await this.getPageByUrl(pageManifestData.api_url);
+        }
+
+        return Promise.reject(false);
     }
 }
