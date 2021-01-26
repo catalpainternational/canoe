@@ -1,27 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { LoadingCallback } from "ts/Callbacks";
-import { IManifest } from "ts/Interfaces/IManifest";
-import { IPage } from "ts/Interfaces/IPage";
-import { TPage } from "ts/Types/ManifestTypes";
+import {
+    TAssetEntry,
+    TManifest,
+    TManifestData,
+    TPage,
+    TWagtailPage,
+    TWagtailPageData,
+} from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
 import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { Page } from "ts/Implementations/Page";
 
-export class Manifest implements IManifest {
-    data!: Record<string, any>;
-
-    get version(): string {
-        return this.data && this.data.version ? this.data.version : undefined;
-    }
-
-    get pages(): Record<string, TPage> {
-        return this.data && this.data.pages ? this.data.pages : undefined;
-    }
+export class Manifest implements TManifest {
+    data!: TManifestData;
 
     constructor() {
         this.initialiseFromStore();
+    }
+
+    get version(): string {
+        return this.data?.version || "";
+    }
+
+    get pages(): Record<string, TWagtailPage> {
+        return this.data?.pages || { "0": Page.emptyItem };
     }
 
     /** This is a basic integrity check.  It ensures that:
@@ -50,6 +55,16 @@ export class Manifest implements IManifest {
 
     get isPublishable(): boolean {
         return false;
+    }
+
+    static get emptyItem(): TManifest {
+        return {
+            version: "0.0.0",
+            pages: { "0": Page.emptyItem },
+            isValid: false,
+            isAvailableOffline: false,
+            isPublishable: false,
+        };
     }
 
     initialiseFromStore(): void {
@@ -81,48 +96,80 @@ export class Manifest implements IManifest {
     async getImages(): Promise<any[]> {
         const images = new Set(
             Object.values(this.data.pages)
-                .filter((page: any) => {
+                .filter((page: TPage) => {
                     return (
                         page.assets &&
-                        page.assets.filter((asset: any) => {
+                        page.assets.filter((asset: TAssetEntry) => {
                             return asset.type && asset.type === "image";
                         })
                     );
                 })
-                .map((page: any) => {
-                    return page.assets.map((asset: any) => asset.renditions);
+                .map((page: TPage) => {
+                    return page.assets.map(
+                        (asset: TAssetEntry) => asset.renditions
+                    );
                 })
         );
 
         return [...images];
     }
 
-    async getPageId(locationHash: string): Promise<string> {
-        const matchingPages = Object.entries(this.data.pages).filter(
-            (pageElement: [string, unknown]) => {
-                const page = pageElement[1] as any;
-                // Check there is a location hash
-                // - this is a sanity check only
-                if (!page || !page.loc_hash) {
-                    return false;
-                }
-
-                return (page.loc_hash as string).indexOf(locationHash) === 0;
+    getPageManifestData(
+        locationHash: string,
+        languageCode: string
+    ): TWagtailPageData | undefined {
+        const matchingPages = Object.values(this.data.pages).filter((page) => {
+            // Check there is a location hash and languages
+            // - this is a sanity check only
+            if (!page || !page.loc_hash || !page.language) {
+                return false;
             }
+
+            // We could get false matches here, needs more work
+            if (page.loc_hash.indexOf(locationHash) === -1) {
+                return false;
+            }
+
+            // Check the language matches
+            if (languageCode === "tet" || languageCode === "tdt") {
+                // Check for both 'tet' and 'tdt' together
+                // We should be using 'tdt', but for historical reasons we usually use 'tet'
+                // so we're treating them the same
+                return page.language === "tet" || page.language === "tdt";
+            }
+            return page.language.indexOf(languageCode) === 0;
+        });
+
+        return matchingPages.length === 1 ? matchingPages[0] : undefined;
+    }
+
+    async getPageById(pageId: string): Promise<TWagtailPage> {
+        return await this.getPageByUrl(`/${pageId}/`);
+    }
+
+    async getPageByUrl(url: string): Promise<TWagtailPage> {
+        const manifestPage = new Page(url);
+        const pageFilled = await manifestPage.initialiseByRequest();
+        if (pageFilled) {
+            return manifestPage;
+        }
+
+        return Promise.reject(false);
+    }
+
+    async getPageData(
+        locationHash: string,
+        languageCode: string
+    ): Promise<TWagtailPage> {
+        const pageManifestData = this.getPageManifestData(
+            locationHash,
+            languageCode
         );
 
-        return matchingPages.length === 1 ? matchingPages[0][0] : "";
-    }
+        if (pageManifestData) {
+            return await this.getPageByUrl(pageManifestData.api_url);
+        }
 
-    getPageData(
-        locationHash: string,
-        languageCode: string,
-        loadingCallback: LoadingCallback
-    ): Record<string, unknown> {
-        throw new Error("Method not implemented.");
-    }
-
-    getPageDetail(locationHash: string, languageCode: string): IPage {
-        throw new Error("Method not implemented.");
+        return Promise.reject(false);
     }
 }
