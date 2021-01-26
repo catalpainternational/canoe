@@ -47,12 +47,12 @@
 
     <script>
         import { getNotifications } from "js/Notifications";
-        import { fetchManifest } from "js/WagtailPagesAPI";
 
         import dayjs from "dayjs";
         import relativeTime from "dayjs/plugin/relativeTime";
 
         import { AppelflapConnect } from "ts/AppelflapConnect";
+        import { Manifest } from "ts/Implementations/Manifest";
 
         dayjs.extend(relativeTime);
 
@@ -60,7 +60,7 @@
             state: {
                 syncs: [],
                 appelflapMeta: "Hello",
-                manifest: {},
+                manifest: "",
             },
 
             TRANSLATIONS: {
@@ -89,17 +89,23 @@
                 });
 
                 // try to get the manifest
-                try {
-                    const manifest = await fetchManifest();
-                    this.update({ manifest: JSON.stringify(manifest) });
-                } catch {
-                    this.update({
-                        notifications: () => {
-                            return "Could not retrieve manifest";
-                        },
-                    });
+                const manifest = new Manifest();
+                if( !manifest.isValid) {
+                    try {
+                        await manifest.initialiseByRequest();
+                    } catch {
+                        this.update({
+                            notifications: () => {
+                                return "Could not retrieve manifest";
+                            },
+                        });
+                    }
                 }
-            },
-        };
+                if (manifest.data) {
+                    const data = JSON.stringify(manifest.data);
+                    this.update({ manifest: data });
+                }
+            }
+        }
     </script>
 </Sync>

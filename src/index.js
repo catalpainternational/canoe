@@ -6,7 +6,7 @@ import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 import { InitialiseCanoeHost } from "ts/StartUp";
 
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import { MANIFESTV1_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
+import { MANIFEST_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
 let currentServiceWorkerState = getServiceWorkerState();
 
@@ -61,23 +61,23 @@ subscribeToStore(() => {
  * @returns true when a manifest can be found, false otherwise.
  */
 const record_bootstate = async () => {
-    let manifestV1IsExtant = false;
+    let manifestIsExtant = false;
     const cacheNames = await caches.keys();
-    if (cacheNames.indexOf(MANIFESTV1_CACHE_NAME) === -1) {
-        return manifestV1IsExtant;
+    if (cacheNames.indexOf(MANIFEST_CACHE_NAME) === -1) {
+        return manifestIsExtant;
     }
 
     try {
-        manifestV1IsExtant = (await caches.open(MANIFESTV1_CACHE_NAME)).match(ROUTES_FOR_REGISTRATION.manifest) !== undefined;
+        manifestIsExtant = (await caches.open(MANIFEST_CACHE_NAME)).match(ROUTES_FOR_REGISTRATION.manifest) !== undefined;
     } catch {
-        // Do nothing - manifestV1IsExtant is still false
+        // Do nothing - manifestIsExtant is still false
     }
 
     // indicate 'empty'
-    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !manifestV1IsExtant);
+    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !manifestIsExtant);
 
     // indicate we've got everything
-    return manifestV1IsExtant;
+    return manifestIsExtant;
 };
 
 initializeServiceWorker();

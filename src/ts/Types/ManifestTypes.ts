@@ -1,9 +1,11 @@
-export type TManifest = {
+export type TManifestData = {
     version: string;
-    pages: Record<string, TPage>;
-} & TManifestItemState;
+    pages: Record<string, TWagtailPage>;
+};
 
-export type TPage = {
+export type TManifest = TManifestData & TManifestItemState;
+
+export type TPageData = {
     loc_hash: string;
     storage_container: string;
     version: number;
@@ -12,12 +14,25 @@ export type TPage = {
     language: string;
     children: Array<number>;
     depth: number;
-} & TManifestItemState;
+};
 
-export type TAssetEntry = {
+export type TPage = TPageData & TManifestItemState;
+
+export type TWagtailPageData = {
+    meta: Record<string, any>;
+    body: string;
+    courses: Array<any>;
+    data: Record<string, any>;
+} & TPageData;
+
+export type TWagtailPage = TWagtailPageData & TManifestItemState;
+
+export type TAssetEntryData = {
     type: string;
     renditions: Record<string, string>;
-} & TManifestItemState;
+};
+
+export type TAssetEntry = TAssetEntryData & TManifestItemState;
 
 /** Describe the state of a manifest, page or asset item */
 export type TManifestItemState = {

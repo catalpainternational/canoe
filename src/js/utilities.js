@@ -1,6 +1,6 @@
 import { getLanguage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
-import { fetchManifest } from "js/WagtailPagesAPI";
+import { getOrFetchManifest } from "js/WagtailPagesAPI";
 
 export const isCourseInTheCurrentLanguage = (courseSlug) => {
     const currentLanguage = getLanguage();
@@ -19,8 +19,7 @@ export const getMediaUrl = (mediaPath) => {
 };
 
 export const resolveMedia = (mediaID) => {
-    // This should be in a try catch block in case there's no manifest returned
-    return fetchManifest()
+    return getOrFetchManifest()
         // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
         // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
         // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).

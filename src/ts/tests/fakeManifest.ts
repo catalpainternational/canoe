@@ -1,5 +1,5 @@
-import { Manifest } from "../Implementations/Manifest";
-import { TAssetEntry, TManifest, TPage } from "../Types/ManifestTypes";
+import { Manifest } from "ts/Implementations/Manifest";
+import { TManifest, TAssetEntry, TWagtailPage } from "ts/Types/ManifestTypes";
 
 function buildFakeManifestEntry(
     page_no: number,
@@ -9,7 +9,7 @@ function buildFakeManifestEntry(
     assets: Array<TAssetEntry> = [],
     children: Array<number> = [],
     depth: number
-): TPage {
+): TWagtailPage {
     const storage_container = loc_hash;
     return {
         loc_hash: `/site/canoe-${loc_hash}`,
@@ -20,6 +20,7 @@ function buildFakeManifestEntry(
         language: language,
         children: children,
         depth: depth,
+        meta: "",
         isValid: true,
         isAvailableOffline: true,
         isPublishable: true,
@@ -52,8 +53,8 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
 
 export function buildFakeManifest(): TManifest {
     const fakeMani = new Manifest();
-    fakeMani.version = "0.0.1";
-    fakeMani.pages["4"] = buildFakeManifestEntry(
+    fakeMani.data.version = "0.0.1";
+    fakeMani.data.pages["4"] = buildFakeManifestEntry(
         4,
         "home",
         3,
@@ -62,7 +63,7 @@ export function buildFakeManifest(): TManifest {
         [10],
         3
     );
-    fakeMani.pages["10"] = buildFakeManifestEntry(
+    fakeMani.data.pages["10"] = buildFakeManifestEntry(
         4,
         "home/course",
         21,
@@ -71,7 +72,7 @@ export function buildFakeManifest(): TManifest {
         [12],
         4
     );
-    fakeMani.pages["12"] = buildFakeManifestEntry(
+    fakeMani.data.pages["12"] = buildFakeManifestEntry(
         12,
         "home/course/lesson-1",
         21,
@@ -85,7 +86,7 @@ export function buildFakeManifest(): TManifest {
         [],
         5
     );
-    fakeMani.pages["5"] = buildFakeManifestEntry(
+    fakeMani.data.pages["5"] = buildFakeManifestEntry(
         5,
         "home-tet",
         4,
@@ -94,7 +95,7 @@ export function buildFakeManifest(): TManifest {
         [11],
         3
     );
-    fakeMani.pages["5"] = buildFakeManifestEntry(
+    fakeMani.data.pages["5"] = buildFakeManifestEntry(
         11,
         "home-tet/course-tet",
         18,
@@ -103,7 +104,7 @@ export function buildFakeManifest(): TManifest {
         [13],
         4
     );
-    fakeMani.pages["13"] = buildFakeManifestEntry(
+    fakeMani.data.pages["13"] = buildFakeManifestEntry(
         13,
         "home-tet/course-tet/lesson-1-tet",
         17,
@@ -117,7 +118,7 @@ export function buildFakeManifest(): TManifest {
         [],
         5
     );
-    fakeMani.pages["6"] = buildFakeManifestEntry(
+    fakeMani.data.pages["6"] = buildFakeManifestEntry(
         6,
         "resources",
         6,
@@ -126,7 +127,7 @@ export function buildFakeManifest(): TManifest {
         [8],
         3
     );
-    fakeMani.pages["8"] = buildFakeManifestEntry(
+    fakeMani.data.pages["8"] = buildFakeManifestEntry(
         8,
         "resources/example-resource",
         9,
@@ -140,7 +141,7 @@ export function buildFakeManifest(): TManifest {
         [],
         4
     );
-    fakeMani.pages["7"] = buildFakeManifestEntry(
+    fakeMani.data.pages["7"] = buildFakeManifestEntry(
         7,
         "resources-tet",
         7,
@@ -149,7 +150,7 @@ export function buildFakeManifest(): TManifest {
         [9],
         3
     );
-    fakeMani.pages["9"] = buildFakeManifestEntry(
+    fakeMani.data.pages["9"] = buildFakeManifestEntry(
         9,
         "resources-tet/example-resource-tet",
         10,
