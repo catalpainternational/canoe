@@ -1,14 +1,11 @@
 import { BACKEND_BASE_URL } from "js/urls";
-import { dispatchLoggedOutEvent, dispatchLoggedInEvent } from "js/Events";
 import { unsubscribeFromNotifications } from "js/Notifications";
-import { fetch_and_denote_unauthenticatedness as fetch } from "./Fetch";
+import { setAuthenticated, setUnauthenticated, setUser, getUser } from "ReduxImpl/Interface";
 
 const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
 const JWT_TOKEN_STORAGE_KEY = "token";
 const USER_GROUPS_STORAGE_KEY = "userGroups";
-const EMPTY_SLATE_BOOT_KEY = "empty_slate_boot";
-const USER_IS_AUTHED_STORAGE_KEY = "fetch_result_indicates_authed";
 
 const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
     // sets name=value cookie
@@ -65,37 +62,34 @@ export const login = async (usernameAndPassword) => {
     localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
     localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
-    setIsAuthed(true);
-    sessionStorage.removeItem(EMPTY_SLATE_BOOT_KEY);
-    dispatchLoggedInEvent();
+    setAuthenticated({username, userId, groups});
 };
 
 export const logout = async () => {
     deleteCookie(JWT_TOKEN_STORAGE_KEY);
     localStorage.clear();
     unsubscribeFromNotifications();
-    setIsAuthed(false);
-    dispatchLoggedOutEvent();
+    setUnauthenticated();
 };
+
+export const updateUserFromLocalStorage = () => {
+    const token = getAuthenticationToken();
+    if(token) {
+        setAuthenticated({
+            username: localStorage.getItem(USERNAME_STORAGE_KEY),
+            userId: localStorage.getItem(USER_ID_STORAGE_KEY),
+            groups: localStorage.getItem(USER_GROUPS_STORAGE_KEY),
+        });
+    }
+}
 
 export const getAuthenticationToken = () => {
     return getCookie(JWT_TOKEN_STORAGE_KEY);
 };
 
-export const isUserLoggedIn = () => {
-    const auth_status_denoted = localStorage.getItem(USER_IS_AUTHED_STORAGE_KEY);
-    return (auth_status_denoted === null || auth_status_denoted === "true");
-};
-
-export const userShouldLogin = () => {
-    const is_deauthed = localStorage.getItem(USER_IS_AUTHED_STORAGE_KEY) === "false";
-    const is_firstboot = sessionStorage.getItem(EMPTY_SLATE_BOOT_KEY) === "true";
-    const is_user_logged_in = isUserLoggedIn();
-    return is_deauthed || is_firstboot || !is_user_logged_in;
-};
-
 export const getUsername = () => {
-    return localStorage.getItem(USERNAME_STORAGE_KEY) || process.env.GUEST_USERNAME;
+    const user = getUser();
+    return user ? user.username : "Guest";
 };
 
 export const getCapitalizedUsername = () => {
@@ -108,13 +102,9 @@ export const isGuestUser = () => {
 };
 
 export const getUserId = () => {
-    return localStorage.getItem(USER_ID_STORAGE_KEY);
+    return getUser().userId;
 };
 
 export const getUserGroups = () => {
-    return localStorage.getItem(USER_GROUPS_STORAGE_KEY);
+    return getUser().groups;
 };
-
-export const setIsAuthed = (someBool) => {
-    return localStorage.setItem(USER_IS_AUTHED_STORAGE_KEY, Boolean(someBool));
-}

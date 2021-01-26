@@ -4,12 +4,41 @@ import {
     getOrFetchManifest,
     getHomePage,
 } from "js/WagtailPagesAPI";
-import { getLanguage } from "ReduxImpl/Interface";
+import { getLanguage, setRoute } from "ReduxImpl/Interface";
 import { PageLacksTranslationDataError } from "js/Errors";
+import { logPageView } from "js/GoogleAnalytics";
+import { getManifestFromStore } from "./redux/Interface";
+import { Manifest } from "ts/Implementations/Manifest";
 
-const IS_SETTINGS_RESOURCES_OR_PROFILE = /#([A-Za-z]+)/;
+const IS_CANOE_PAGE = /#([A-Za-z]+)/;
 const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
 const IS_PAGE_PREVIEW = /^\?(.+)/;
+
+export function initialiseRouting() {
+    window.addEventListener("hashchange", () => {
+        route(window.location.hash);
+    });
+    route(window.location.hash);
+}
+
+function route(hash) {
+    logPageView(hash);
+    const appPageMatch = hash.match(IS_CANOE_PAGE);
+    if(appPageMatch) {
+        setRoute(appPageMatch[1]);
+        return;
+    }
+    const manifest = new Manifest();
+    if (!manifest.isValid) {
+        setRoute("manifestRequired");
+    }
+    else {
+        manifest.getPageType(hash);
+        setRoute("");
+    }
+            //const type = wagtailPage.meta.type;
+            //return type.substring(type.lastIndexOf(".") + 1);
+}
 
 const getPreviewPageUrl = (queryString) => {
     const params = {};
