@@ -14,7 +14,7 @@ import { token_authed_fetch } from "js/Fetch";
 
 export async function fetchManifest() {
     const allPagesMetadata = await token_authed_fetch(ROUTES_FOR_REGISTRATION.manifest);
-    return Promise.reject();
+    return allPagesMetadata;
 }
 
 export async function fetchPage(path) {
@@ -95,11 +95,55 @@ const _getNextAvailableResourcesRoot = async (resourcesRootInfo) => {
     return _getNextAvailablePageImpl(resourcesRootInfo, "ResourcesRoot");
 };
 
+
+const getRootPage = (manifest, rootName = "home", languageCode = "en") => {
+    const matchingPages = Object.values(manifest.pages).filter(
+        (page) => {
+            // Check there is a location hash and languages
+            // - this is a sanity check only
+            if (!page || !page.loc_hash || !page.language) {
+                return false;
+            }
+
+            // Check the location hash is for the nominal 'root' of what we're interested in
+            const hashParts = page.loc_hash.split("/").filter((part) => !!part);
+            if (
+                hashParts.length > 2 ||
+                hashParts[hashParts.length - 1].indexOf(rootName) === -1
+            ) {
+                return false;
+            }
+
+            // Check the language matches
+            if (languageCode === "tet" || languageCode === "tdt") {
+                // Check for both 'tet' and 'tdt' together
+                // We should be using 'tdt', but for historical reasons we usually use 'tet'
+                // so we're treating them the same
+                return page.language === "tet" || page.language === "tdt";
+            }
+            return page.language.indexOf(languageCode) === 0;
+        }
+    );
+
+    return matchingPages.length === 1
+        ? matchingPages[0]
+        : undefined;
+}
+
 export const getHomePage = async () => {
-    const manifest = await getOrFetchManifest();	
-    const { home: homes } = manifest;
     const currentLanguage = getLanguage();
-    const homePagePath = homes[currentLanguage];
+    const manifest = await getOrFetchManifest();
+
+    let homePagePath = "";
+    if (manifest.home) {
+        // Old manifest format
+        const { home: homes } = manifest;
+        homePagePath = homes[currentLanguage];    
+    } else {
+        // New manifest format
+        const homePage = getRootPage(manifest, "home", currentLanguage);
+        homePagePath = homePage.api_url;
+    }
 
     if (homePagePath) {
         return await getOrFetchWagtailPage(homePagePath);
