@@ -1,28 +1,34 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { LoadingCallback } from "ts/Callbacks";
-import { IManifest } from "ts/Interfaces/IManifest";
-import { IPage } from "ts/Interfaces/IPage";
-import { TPage } from "ts/Types/ManifestTypes";
-
-import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
+import {
+    TAssetEntry,
+    TManifest,
+    TManifestData,
+    TPage,
+    TWagtailPage,
+    TWagtailPageData,
+} from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
-import { store } from "ReduxImpl/Store";
+import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { Page } from "ts/Implementations/Page";
 
-export class Manifest implements IManifest {
-    data!: Record<string, any>;
-    get version(): string {
-        return this.data && this.data.version ? this.data.version : undefined;
-    }
-    get pages(): Record<string, TPage> {
-        return this.data && this.data.pages ? this.data.pages : undefined;
-    }
+export class Manifest implements TManifest {
+    data!: TManifestData;
 
     constructor() {
         this.initialiseFromStore();
     }
+
+    get version(): string {
+        return this.data?.version || "";
+    }
+
+    get pages(): Record<string, TWagtailPage> {
+        return this.data?.pages || { "0": Page.emptyItem };
+    }
+
     /** This is a basic integrity check.  It ensures that:
      * - All child pages have matching page entries
      */
@@ -51,7 +57,17 @@ export class Manifest implements IManifest {
         return false;
     }
 
-    initialiseFromStore(): any {
+    static get emptyItem(): TManifest {
+        return {
+            version: "0.0.0",
+            pages: { "0": Page.emptyItem },
+            isValid: false,
+            isAvailableOffline: false,
+            isPublishable: false,
+        };
+    }
+
+    initialiseFromStore(): void {
         this.data = getManifestFromStore();
     }
 
@@ -67,78 +83,93 @@ export class Manifest implements IManifest {
         storeManifest(this.data);
     }
 
-    getHomePageHash(
-        languageCode: string,
-        loadingCallback: LoadingCallback
-    ): string {
-        throw new Error("Method not implemented.");
+    async getLanguageCodes(): Promise<string[]> {
+        const languageCodes = new Set(
+            Object.values(this.data.pages).map((page: any) => {
+                return page.languageCode as string;
+            })
+        );
+
+        return [...languageCodes];
     }
 
-    getPageData(
+    async getImages(): Promise<any[]> {
+        const images = new Set(
+            Object.values(this.data.pages)
+                .filter((page: TPage) => {
+                    return (
+                        page.assets &&
+                        page.assets.filter((asset: TAssetEntry) => {
+                            return asset.type && asset.type === "image";
+                        })
+                    );
+                })
+                .map((page: TPage) => {
+                    return page.assets.map(
+                        (asset: TAssetEntry) => asset.renditions
+                    );
+                })
+        );
+
+        return [...images];
+    }
+
+    getPageManifestData(
         locationHash: string,
-        languageCode: string,
-        loadingCallback: LoadingCallback
-    ): Record<string, unknown> {
-        throw new Error("Method not implemented.");
+        languageCode: string
+    ): TWagtailPageData | undefined {
+        const matchingPages = Object.values(this.data.pages).filter((page) => {
+            // Check there is a location hash and languages
+            // - this is a sanity check only
+            if (!page || !page.loc_hash || !page.language) {
+                return false;
+            }
+
+            // We could get false matches here, needs more work
+            if (page.loc_hash.indexOf(locationHash) === -1) {
+                return false;
+            }
+
+            // Check the language matches
+            if (languageCode === "tet" || languageCode === "tdt") {
+                // Check for both 'tet' and 'tdt' together
+                // We should be using 'tdt', but for historical reasons we usually use 'tet'
+                // so we're treating them the same
+                return page.language === "tet" || page.language === "tdt";
+            }
+            return page.language.indexOf(languageCode) === 0;
+        });
+
+        return matchingPages.length === 1 ? matchingPages[0] : undefined;
     }
 
-    getPageDetail(locationHash: string, languageCode: string): IPage {
-        throw new Error("Method not implemented.");
+    async getPageById(pageId: string): Promise<TWagtailPage> {
+        return await this.getPageByUrl(`/${pageId}/`);
+    }
+
+    async getPageByUrl(url: string): Promise<TWagtailPage> {
+        const manifestPage = new Page(url);
+        const pageFilled = await manifestPage.initialiseByRequest();
+        if (pageFilled) {
+            return manifestPage;
+        }
+
+        return Promise.reject(false);
+    }
+
+    async getPageData(
+        locationHash: string,
+        languageCode: string
+    ): Promise<TWagtailPage> {
+        const pageManifestData = this.getPageManifestData(
+            locationHash,
+            languageCode
+        );
+
+        if (pageManifestData) {
+            return await this.getPageByUrl(pageManifestData.api_url);
+        }
+
+        return Promise.reject(false);
     }
 }
-
-/** Gets the manifest either from the store, cache, or network.
-async function getManifest(
-    manifestUri: string,
-    store: CanoeStore,
-    cache: CanoeCache,
-    fetch: CanoeFetch,
-    handleLoading: (options: Record<string, unknown>) => void
-) {
-    let manifest = store.getManifest();
-
-    // try to get the manifest from cache
-    if (manifest === undefined) {
-        handleLoading({ msg: "Requesting manifest from cache" });
-        manifest = await cache.getManifest(manifestUri);
-        store.updateManifest(manifest);
-    }
-
-    // try to get the manifest from network
-    if (manifest === undefined) {
-        handleLoading({ msg: "Requesting manifest from network" });
-        manifest = await fetch.getManifest(manifestUri);
-        store.updateManifest(manifest);
-        cache.updateManifest(manifest);
-    }
-
-    return manifest;
-}
-
-async function getPrimaryResource(
-    resourceGroup: ResourceGroupDescriptor,
-    store: CanoeStore,
-    cache: CanoeCache,
-    fetch: CanoeFetch,
-    handleLoading: (options: Record<string, unknown>) => void
-) {
-    let primaryResource = store.getResource(resourceGroup.primary);
-
-    // try to get the resource from cache
-    if (primaryResource === undefined) {
-        handleLoading({ msg: "Requesting resource from cache" });
-        primaryResource = await cache.getResource(resourceGroup.primary);
-        store.updateResource(resourceGroup.primary, primaryResource);
-    }
-    // try to get the resource from network
-    if (primaryResource === undefined) {
-        // we don't have resource, get it from the internet
-        handleLoading({ msg: "Requesting resource from network" });
-        primaryResource = await fetch.getResource(resourceGroup.primary);
-        store.updateResource(resourceGroup.primary, primaryResource);
-        cache.updateResource(resourceGroup.primary, primaryResource);
-    }
-
-    return primaryResource;
-}
-*/
