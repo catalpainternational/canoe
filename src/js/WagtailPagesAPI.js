@@ -19,7 +19,7 @@ export async function fetchManifest() {
 
 export async function fetchPage(path) {
     const pageMetadata = await token_authed_fetch(`${BACKEND_BASE_URL}${path}`);
-    return allPagesMetadata;
+    return pageMetadata;
 }
 
 export const fetchImage = async (url) => {
@@ -96,6 +96,16 @@ const _getNextAvailableResourcesRoot = async (resourcesRootInfo) => {
 };
 
 
+const getLanguageCodes = (manifest) => {
+    const languageCodes = new Set(
+        Object.values(manifest.pages).map((page) => {
+            return page.languageCode;
+        })
+    );
+
+    return [...languageCodes];
+}
+
 const getRootPage = (manifest, rootName = "home", languageCode = "en") => {
     const matchingPages = Object.values(manifest.pages).filter(
         (page) => {
@@ -128,34 +138,43 @@ const getRootPage = (manifest, rootName = "home", languageCode = "en") => {
     return matchingPages.length === 1
         ? matchingPages[0]
         : undefined;
-}
+};
 
 export const getHomePage = async () => {
+    // Uses new manifest format
     const currentLanguage = getLanguage();
     const manifest = await getOrFetchManifest();
 
-    let homePagePath = "";
-    if (manifest.home) {
-        // Old manifest format
-        const { home: homes } = manifest;
-        homePagePath = homes[currentLanguage];    
-    } else {
-        // New manifest format
-        const homePage = getRootPage(manifest, "home", currentLanguage);
-        homePagePath = homePage.api_url;
-    }
+    const getHomePageUrl = async (languageCode) => {
+        const homePage = getRootPage(manifest, "home", languageCode);
+        return homePage.api_url || "";
+    };
 
+    const homePage = getRootPage(manifest, "home", currentLanguage);
+    let homePagePath = getHomePageUrl(currentLanguage);
     if (homePagePath) {
         return await getOrFetchWagtailPage(homePagePath);
-    } else {
-        return await _getNextAvailableHomePage(homes);
     }
+
+    const manifestLanguages = getLanguageCodes(manifest);
+    manifestLanguages.forEach((languageCode) => {
+        homePagePath = getHomePageUrl(languageCode);
+        if (homePagePath) {
+            return;
+        }
+    });
+    if (homePagePath) {
+        return await getOrFetchWagtailPage(homePagePath);
+    }
+    // No page to return
 };
 
 export const getResources = async () => {
-    const manifest = await getOrFetchManifest();
-    const { resourcesRoot: resourcesRootInfo } = manifest;
     const currentLanguage = getLanguage();
+    const manifest = await getOrFetchManifest();
+
+    let 
+    const { resourcesRoot: resourcesRootInfo } = manifest;
     const resourcesRootPath = resourcesRootInfo[currentLanguage];
 
     let resourcesRoot = null;

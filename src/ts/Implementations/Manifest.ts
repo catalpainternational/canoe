@@ -97,42 +97,6 @@ export class Manifest implements IManifest {
         return [...images];
     }
 
-    async getRootPage(rootName = "home", languageCode = "en"): Promise<any> {
-        const matchingPages = Object.values(this.data.pages).filter(
-            (page: any) => {
-                // Check there is a location hash and languages
-                // - this is a sanity check only
-                if (!page || !page.loc_hash || !page.language) {
-                    return false;
-                }
-
-                // Check the location hash is for the nominal 'root' of what we're interested in
-                const hashParts = (page.loc_hash as string)
-                    .split("/")
-                    .filter((part) => !!part);
-                if (
-                    hashParts.length > 2 ||
-                    hashParts[hashParts.length - 1].indexOf(rootName) !== 0
-                ) {
-                    return false;
-                }
-
-                // Check the language matches
-                if (languageCode === "tet" || languageCode === "tdt") {
-                    // Check for both 'tet' and 'tdt' together
-                    // We should be using 'tdt', but for historical reasons we usually use 'tet'
-                    // so we're treating them the same
-                    return page.language === "tet" || page.language === "tdt";
-                }
-                return (page.language as string).indexOf(languageCode) === 0;
-            }
-        );
-
-        return matchingPages.length === 1
-            ? (matchingPages[0] as any)
-            : undefined;
-    }
-
     async getPageId(locationHash: string): Promise<string> {
         const matchingPages = Object.entries(this.data.pages).filter(
             (pageElement: [string, unknown]) => {
@@ -148,14 +112,6 @@ export class Manifest implements IManifest {
         );
 
         return matchingPages.length === 1 ? matchingPages[0][0] : "";
-    }
-
-    async getHomePageHash(
-        languageCode: string,
-        loadingCallback: LoadingCallback
-    ): Promise<string> {
-        const homePage = await this.getRootPage("home", languageCode);
-        return homePage ? homePage.loc_hash : "";
     }
 
     getPageData(
