@@ -12,6 +12,7 @@
         <div class="content-wrapper">
             <p>{state.appelflapMeta}</p>
             <p>{state.manifest}</p>
+            <p>{state.page}</p>
             <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
 
             <h5 if="{state.syncs.length > 0}" class="section-title">
@@ -60,7 +61,8 @@
             state: {
                 syncs: [],
                 appelflapMeta: "Hello",
-                manifest: {},
+                manifest: "",
+                page: "",
             },
 
             TRANSLATIONS: {
@@ -70,15 +72,8 @@
                 start: () => gettext("Start lesson"),
             },
 
-            // async refreshSyncs() {
-            //     this.update({
-            //         notifications: await getSyncs(),
-            //     });
-            // },
-
             onMounted() {
                 this.appelflapStatus();
-                // this.refreshSyncs();
             },
 
             async appelflapStatus() {
@@ -93,6 +88,7 @@
                 if( !manifest.isValid) {
                     try {
                         await manifest.initialiseByRequest();
+
                     } catch {
                         this.update({
                             notifications: () => {
@@ -101,8 +97,13 @@
                         });
                     }
                 }
-                if (manifest.isValid) {
-                    this.update({ manifest: JSON.stringify(manifest.data) });
+                if (manifest.data) {
+                    const data = JSON.stringify(manifest.data);
+                    this.update({ manifest: "Got a manifest" });
+
+                    // try getting a page
+                    const aPage = await manifest.getPageData("/site/home", "en");
+                    this.update({ page: JSON.stringify(page.data) });
                 }
             }
         }

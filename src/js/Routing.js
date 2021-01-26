@@ -36,8 +36,9 @@ const routeToTranslation = (translationPageId) => {
 
 export const getWagtailPageOrRouteToTranslation = async (pageId) => {
     const manifest = await getOrFetchManifest();
-    const pageUrl = manifest.pages[pageId];
-    const page = await getOrFetchWagtailPage(pageUrl);
+    const manifestPage = manifest.pages[pageId];
+    const pagePath = manifestPage ? manifestPage.api_url : "";
+    const page = await getOrFetchWagtailPage(pagePath);
 
     const currentLanguage = getLanguage();
     const translationInfo = page.data.translations;

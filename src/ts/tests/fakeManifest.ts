@@ -1,15 +1,16 @@
-import { TAssetEntry, TPage } from "../Types/ManifestTypes";
+import { Manifest } from "ts/Implementations/Manifest";
+import { TManifest, TAssetEntry, TWagtailPage } from "ts/Types/ManifestTypes";
 
 function buildFakeManifestEntry(
     page_no: number,
     loc_hash: string,
-    storage_container: string,
     version: number,
     language: string,
     assets: Array<TAssetEntry> = [],
     children: Array<number> = [],
     depth: number
-): TPage {
+): TWagtailPage {
+    const storage_container = loc_hash;
     return {
         loc_hash: `/site/canoe-${loc_hash}`,
         storage_container: `/site/canoe-${storage_container}`,
@@ -19,6 +20,9 @@ function buildFakeManifestEntry(
         language: language,
         children: children,
         depth: depth,
+        isValid: true,
+        isAvailableOffline: true,
+        isPublishable: true,
     };
 }
 
@@ -37,136 +41,128 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
         renditions[key] = value;
     });
 
-    return { type: type, renditions: renditions };
+    return {
+        type: type,
+        renditions: renditions,
+        isValid: true,
+        isAvailableOffline: true,
+        isPublishable: true,
+    };
 }
 
-export function buildFakeManifest(): {
-    version: string;
-    pages: Record<string, TPage>;
-} {
-    return {
-        version: "0.0.1",
-        pages: {
-            "4": buildFakeManifestEntry(
-                4,
-                "home",
-                "home",
-                3,
-                "en",
-                [],
-                [10],
-                3
+export function buildFakeManifest(): TManifest {
+    const fakeMani = new Manifest();
+    fakeMani.data.version = "0.0.1";
+    fakeMani.data.pages["4"] = buildFakeManifestEntry(
+        4,
+        "home",
+        3,
+        "en",
+        [],
+        [10],
+        3
+    );
+    fakeMani.data.pages["10"] = buildFakeManifestEntry(
+        4,
+        "home/course",
+        21,
+        "en",
+        [],
+        [12],
+        4
+    );
+    fakeMani.data.pages["12"] = buildFakeManifestEntry(
+        12,
+        "home/course/lesson-1",
+        21,
+        "en",
+        [
+            buildFakeAssetEntry(
+                "image",
+                "images/Screenshot_2020-12-10_at_13.45.26"
             ),
-            "10": buildFakeManifestEntry(
-                10,
-                "home/course",
-                "home/course",
-                21,
-                "en",
-                [],
-                [12],
-                4
+        ],
+        [],
+        5
+    );
+    fakeMani.data.pages["5"] = buildFakeManifestEntry(
+        5,
+        "home-tet",
+        4,
+        "tet",
+        [],
+        [11],
+        3
+    );
+    fakeMani.data.pages["5"] = buildFakeManifestEntry(
+        11,
+        "home-tet/course-tet",
+        18,
+        "tet",
+        [],
+        [13],
+        4
+    );
+    fakeMani.data.pages["13"] = buildFakeManifestEntry(
+        13,
+        "home-tet/course-tet/lesson-1-tet",
+        17,
+        "en",
+        [
+            buildFakeAssetEntry(
+                "image",
+                "images/Screenshot_2020-12-10_at_13.45.26"
             ),
-            "12": buildFakeManifestEntry(
-                12,
-                "home/course/lesson-1",
-                "home/course/lesson-1",
-                21,
-                "en",
-                [
-                    buildFakeAssetEntry(
-                        "image",
-                        "images/Screenshot_2020-12-10_at_13.45.26"
-                    ),
-                ],
-                [],
-                5
+        ],
+        [],
+        5
+    );
+    fakeMani.data.pages["6"] = buildFakeManifestEntry(
+        6,
+        "resources",
+        6,
+        "en",
+        [],
+        [8],
+        3
+    );
+    fakeMani.data.pages["8"] = buildFakeManifestEntry(
+        8,
+        "resources/example-resource",
+        9,
+        "en",
+        [
+            buildFakeAssetEntry(
+                "image",
+                "images/Screenshot_2020-12-13_at_10.02.36"
             ),
-            "5": buildFakeManifestEntry(
-                5,
-                "home-tet",
-                "home-tet",
-                4,
-                "tet",
-                [],
-                [11],
-                3
+        ],
+        [],
+        4
+    );
+    fakeMani.data.pages["7"] = buildFakeManifestEntry(
+        7,
+        "resources-tet",
+        7,
+        "tet",
+        [],
+        [9],
+        3
+    );
+    fakeMani.data.pages["9"] = buildFakeManifestEntry(
+        9,
+        "resources-tet/example-resource-tet",
+        10,
+        "tet",
+        [
+            buildFakeAssetEntry(
+                "image",
+                "images/Screenshot_2020-12-13_at_10.02.36"
             ),
-            "11": buildFakeManifestEntry(
-                11,
-                "home-tet/course-tet",
-                "home-tet/course-tet",
-                18,
-                "tet",
-                [],
-                [13],
-                4
-            ),
-            "13": buildFakeManifestEntry(
-                13,
-                "home-tet/course-tet/lesson-1-tet",
-                "home-tet/course-tet/lesson-1-tet",
-                17,
-                "en",
-                [
-                    buildFakeAssetEntry(
-                        "image",
-                        "images/Screenshot_2020-12-10_at_13.45.26"
-                    ),
-                ],
-                [],
-                5
-            ),
-            "6": buildFakeManifestEntry(
-                6,
-                "resources",
-                "resources",
-                6,
-                "en",
-                [],
-                [8],
-                3
-            ),
-            "8": buildFakeManifestEntry(
-                8,
-                "resources/example-resource",
-                "resources/example-resource",
-                9,
-                "en",
-                [
-                    buildFakeAssetEntry(
-                        "image",
-                        "images/Screenshot_2020-12-13_at_10.02.36"
-                    ),
-                ],
-                [],
-                4
-            ),
-            "7": buildFakeManifestEntry(
-                7,
-                "resources-tet",
-                "resources-tet",
-                7,
-                "tet",
-                [],
-                [9],
-                3
-            ),
-            "9": buildFakeManifestEntry(
-                9,
-                "resources-tet/example-resource-tet",
-                "resources-tet/example-resource-tet",
-                10,
-                "tet",
-                [
-                    buildFakeAssetEntry(
-                        "image",
-                        "images/Screenshot_2020-12-13_at_10.02.36"
-                    ),
-                ],
-                [],
-                4
-            ),
-        },
-    };
+        ],
+        [],
+        4
+    );
+
+    return fakeMani;
 }

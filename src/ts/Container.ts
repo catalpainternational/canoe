@@ -1,7 +1,6 @@
-import { IManifest } from "./Interfaces/IManifest";
-import { Manifest } from "./Implementations/Manifest";
+import { Manifest } from "ts/Implementations/Manifest";
 
-function resolveManifest(): IManifest {
+function resolveManifest(): Manifest {
     return new Manifest();
 }
 
