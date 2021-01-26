@@ -19,7 +19,6 @@ export const getMediaUrl = (mediaPath) => {
 };
 
 export const resolveMedia = (mediaID) => {
-    // This should be in a try catch block in case there's no manifest returned
     return getOrFetchManifest()
         // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
         // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate

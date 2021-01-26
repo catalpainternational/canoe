@@ -60,8 +60,10 @@ export const getOrFetchWagtailPage = async (path) => {
 };
 
 export const _getOrFetchWagtailPageById = async (pageId) => {
+    // Uses new manifest format
     const manifest = await getOrFetchManifest();
-    const pagePath = manifest.pages[pageId];
+    const page = manifest.pages[pageId];
+    const pagePath = page ? page.api_url : "";
     return getOrFetchWagtailPage(pagePath);
 };
 
@@ -136,7 +138,7 @@ export const getHomePage = async () => {
     const currentLanguage = getLanguage();
     const manifest = await getOrFetchManifest();
 
-    const getHomePageUrl = async (languageCode) => {
+    const getHomePageUrl = (languageCode) => {
         const homePage = getRootPage(manifest, "home", languageCode);
         return homePage.api_url || "";
     };
@@ -164,7 +166,7 @@ export const getResources = async () => {
     const currentLanguage = getLanguage();
     const manifest = await getOrFetchManifest();
     
-    const getResourcePageUrl = async (languageCode) => {
+    const getResourcePageUrl = (languageCode) => {
         const resourcePage = getRootPage(manifest, "resources", languageCode);
         return resourcePage.api_url || "";
     };
