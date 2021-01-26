@@ -4,7 +4,7 @@ import { IManifest } from "ts/Interfaces/IManifest";
 import { IPage } from "ts/Interfaces/IPage";
 import { TPage } from "ts/Types/ManifestTypes";
 
-import { storeManifestV2 } from "ts/Redux/Interface";
+import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 
 // See ts/Typings for the type definitions for these imports
 import { store } from "ReduxImpl/Store";
@@ -12,13 +12,24 @@ import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 
 export class Manifest implements IManifest {
-    version: string;
-    pages: Record<string, TPage>;
+    data!: Record<string, any>;
+    get version(): string {
+        return this.data && this.data.version ? this.data.version : undefined;
+    }
+    get pages(): Record<string, TPage> {
+        return this.data && this.data.pages ? this.data.pages : undefined;
+    }
 
+    constructor() {
+        this.initialiseFromStore();
+    }
     /** This is a basic integrity check.  It ensures that:
      * - All child pages have matching page entries
      */
     get isValid(): boolean {
+        if (this.pages === undefined) {
+            return false;
+        }
         const allPageNames = Object.keys(this.pages).sort() as string[];
         let childPageNames: Set<string> = new Set();
         allPageNames.forEach((pageName) => {
@@ -33,103 +44,27 @@ export class Manifest implements IManifest {
     }
 
     get isAvailableOffline(): boolean {
-        if (this.version === "0.0.0") {
-            return false;
-        }
-
-        return this.isValid;
+        return false;
     }
 
     get isPublishable(): boolean {
-        if (this.version === "0.0.0") {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
-    constructor() {
-        this.version = "0.0.0";
-        this.pages = {
-            "0": {
-                loc_hash: "/site/manifest-loading",
-                storage_container: "/site/manifest-loading",
-                version: 3,
-                api_url: "/api/v2/pages/0/",
-                assets: [],
-                language: "en",
-                children: [],
-                depth: 0,
+    initialiseFromStore(): any {
+        this.data = getManifestFromStore();
+    }
+
+    async initialiseByRequest(): Promise<void> {
+        const resp = await fetch(`${ROUTES_FOR_REGISTRATION.manifest}/v1`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `JWT ${getAuthenticationToken()}`,
             },
-        };
-
-        if (!this.isPublishable) {
-            this.getOrFetchManifest()
-                .then((mani: any) => {
-                    if (mani?.pages) {
-                        this.version = mani.version;
-                        this.pages = mani.pages;
-                    }
-                })
-                .catch((_) => {
-                    // Swallow the error, this will leave us with the default 'manifest'
-                });
-        }
-    }
-
-    getManifestFromStore(): any {
-        return store.getState().manifestv2;
-    }
-
-    async fetchManifest(): Promise<any> {
-        let responseFailure = "";
-        try {
-            const init = {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `JWT ${getAuthenticationToken()}`,
-                },
-            } as RequestInit;
-            const resp = await fetch(
-                `${ROUTES_FOR_REGISTRATION.manifest}/0.0.1`,
-                init
-            );
-            if (!resp.ok) {
-                responseFailure = "Http error getting manifest";
-            } else {
-                return resp.json();
-            }
-        } catch {
-            responseFailure = "Error getting manifest";
-        }
-
-        return Promise.reject(
-            `Could not retrieve manifest. ${responseFailure}`
-        );
-    }
-
-    private simpleManifestTest(manifest: any) {
-        return manifest && Object.entries(manifest).length > 0;
-    }
-
-    async getOrFetchManifest(): Promise<any> {
-        let manifestInStore = await this.getManifestFromStore();
-
-        if (this.simpleManifestTest(manifestInStore)) {
-            return manifestInStore;
-        }
-        try {
-            manifestInStore = await this.fetchManifest();
-            storeManifestV2(manifestInStore);
-        } catch {
-            // Did not successfully fetch manifest
-            return Promise.reject(
-                "Could not fetch the manifest and no manifest in the store"
-            );
-        }
-
-        return manifestInStore;
+        });
+        this.data = await resp.json();
+        storeManifest(this.data);
     }
 
     getHomePageHash(
