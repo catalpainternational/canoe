@@ -35,9 +35,9 @@ export const fetchImage = async (url) => {
 
 export const getOrFetchManifest = async () => {
     const manifestInStore = getManifestFromStore();
-    if (Object.entries(manifestInStore).length > 0) {	
+    if (Object.entries(manifestInStore).length > 0) {
         return manifestInStore;
-    }	
+    }
 
     const manifest = await fetchManifest();
     storeManifest(manifest);
