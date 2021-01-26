@@ -5,6 +5,8 @@
 import {
     fetchPage,
     fetchImage,
+    getOrFetchManifest,	
+    getHomePathsInManifest,    
 } from "js/WagtailPagesAPI";
 import { dispatchToastEvent } from "js/Events";
 import { leftDifference } from "js/SetMethods";
@@ -12,7 +14,7 @@ import { getImagePaths } from "js/RenditionSelector";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { storeWagtailPage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL } from "js/urls";
-import { Manifest } from "ts/Implementations/Manifest";
+import { getImageRequest, getPageRequest } from "./Fetch";
 
 const PAGES_CACHE = "pages-cache";
 const IMAGES_CACHE = "images-cache";
@@ -61,20 +63,11 @@ const addCachedPagesToRedux = async () => {
 
 export default class SiteDownloader {
     async requestTheSitesPagesAndImages() {
-        // This should be in a try catch block in case there's no manifest returned
-        const manifest = new Manifest();
+        const manifest = await getOrFetchManifest();
 
-        const languages = await manifest.getLanguageCodes();
-        const homePagePaths = [];
-        languages.forEach(async (language) => {
-            const languageHome = await manifest.getRootPage("home", language);
-            if (languageHome) {
-                homePagePaths.push(languageHome.loc_hash);
-            }
-        })
-
+        const homePagePaths = getHomePathsInManifest(manifest);
         const manifestsPagePaths = new Set([...homePagePaths, ...Object.values(manifest.pages)]);
-        const manifestsImagesPaths = getImagePaths(await manifest.getImages());
+        const manifestsImagesPaths = new Set(getImagePaths(manifest.images));
 
         const cachedPagePaths = await getCachedPathsAndDeleteCruft(PAGES_CACHE, manifestsPagePaths);
         const cachedImagePaths = await getCachedPathsAndDeleteCruft(

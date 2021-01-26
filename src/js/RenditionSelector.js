@@ -1,5 +1,5 @@
 import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
-import { fetchManifest } from "js/WagtailPagesAPI";
+import { getOrFetchManifest } from "js/WagtailPagesAPI";
 import { getBrowser } from "ts/PlatformDetection";
 import { MissingImageError } from "js/Errors";
 
@@ -8,7 +8,7 @@ const JPEG_RENDITION = "width-600|format-jpeg";
 
 export const getImageUrl = async (imageId) => {
     // This should be in a try catch block in case there's no manifest returned
-    const manifest = await fetchManifest();
+    const manifest = await getOrFetchManifest();
     const images = manifest.images;
     const image = images[imageId];
 
