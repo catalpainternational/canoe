@@ -89,17 +89,22 @@
                 });
 
                 // try to get the manifest
-                try {
-                    const manifest = await fetchManifest();
-                    this.update({ manifest: JSON.stringify(manifest) });
-                } catch {
-                    this.update({
-                        notifications: () => {
-                            return "Could not retrieve manifest";
-                        },
-                    });
+                const manifest = new Manifest();
+                if( !manifest.isValid) {
+                    try {
+                        await manifest.initialiseByRequest();
+                    } catch {
+                        this.update({
+                            notifications: () => {
+                                return "Could not retrieve manifest";
+                            },
+                        });
+                    }
                 }
-            },
-        };
+                if (manifest.isValid) {
+                    this.update({ manifest: JSON.stringify(manifest.data) });
+                }
+            }
+        }
     </script>
 </Sync>
