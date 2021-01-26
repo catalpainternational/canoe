@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
 
 import siteReducer from "./ducks/Site";
-import siteV2Reducer from "ts/Redux/Ducks/SiteV2";
 import languageReducer from "./ducks/i18n";
 import serviceWorkerReducer from "./ducks/ServiceWorker";
 import guestBannerReducer from "./ducks/GuestBanner";
@@ -9,10 +8,10 @@ import browserSupportReducer from "./ducks/BrowserSupport";
 import areCompletionsReady from "./ducks/Actions";
 import online from "./ducks/Online";
 import identity from "./ducks/Identity";
+import route from "./ducks/Route";
 
 export const reducers = combineReducers({
     ...siteReducer,
-    ...siteV2Reducer,
     ...languageReducer,
     ...serviceWorkerReducer,
     ...guestBannerReducer,
@@ -20,4 +19,5 @@ export const reducers = combineReducers({
     ...areCompletionsReady,
     ...online,
     ...identity,
+    ...route,
 });

@@ -13,7 +13,8 @@ import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanne
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
 import { changeOnlineAction } from "./ducks/Online";
-import { changeAuthenticated } from "./ducks/Identity";
+import { setAuthenticatedState, setUserDetailsState} from "./ducks/Identity";
+import { setCanoePage } from "./ducks/Route";
 
 export const storeWagtailPage = (wagtailPage) => {
     const { type } = wagtailPage.meta;
@@ -86,7 +87,8 @@ export const getManifestFromStore = () => {
 };
 
 export const isBrowserSupported = () => {
-    return store.getState().isBrowserSupported;
+    const b =  store.getState().isBrowserSupported;
+    return b;
 };
 
 export const getCourse = (courseId) => {
@@ -127,13 +129,29 @@ export const isAuthenticated = () => {
     return store.getState().identity.isAuthenticated;
 };
 
-export const setAuthenticated = () => {
-    store.dispatch(changeAuthenticated(true));
+export const getUser = () => {
+    return store.getState().identity.user;
+};
+
+export const setAuthenticated = (user) => {
+    store.dispatch(setAuthenticatedState(user));
 }
 
 export const setUnauthenticated = () => {
-    store.dispatch(changeAuthenticated(false));
+    store.dispatch(setUnAuthenticatedState());
 }
+
+export const setUser = (user) => {
+    store.dispatch(setUserDetailsState(user));
+}
+
+export const setRoute = (route) => {
+    store.dispatch(setCanoePage(route));
+}
+
+export const getRoute = () => {
+    return store.getState().route;
+};
 
 export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);
