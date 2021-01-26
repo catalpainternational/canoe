@@ -13,7 +13,7 @@ import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-import { MANIFESTV1_CACHE_NAME } from "ts/Constants";
+import { MANIFEST_CACHE_NAME } from "ts/Constants";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { buildAppelflapRoutes } from "js/RoutingAppelflap";
 
@@ -42,7 +42,7 @@ registerRoute(
 registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.manifest),
     new StaleWhileRevalidate({
-        cacheName: MANIFESTV1_CACHE_NAME,
+        cacheName: MANIFEST_CACHE_NAME,
     })
 );
 

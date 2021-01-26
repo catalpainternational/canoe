@@ -4,10 +4,8 @@ import { IManifest } from "ts/Interfaces/IManifest";
 import { IPage } from "ts/Interfaces/IPage";
 import { TPage } from "ts/Types/ManifestTypes";
 
-import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
-
 // See ts/Typings for the type definitions for these imports
-import { store } from "ReduxImpl/Store";
+import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 
@@ -54,7 +52,7 @@ export class Manifest implements IManifest {
         return false;
     }
 
-    initialiseFromStore(): any {
+    initialiseFromStore(): void {
         this.data = getManifestFromStore();
     }
 
