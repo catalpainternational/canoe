@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
     TAssetEntry,
+    TPage,
     TWagtailPage,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
@@ -13,12 +14,18 @@ import { BACKEND_BASE_URL } from "js/urls";
 export class Page implements TWagtailPage {
     data!: TWagtailPageData;
 
-    constructor(apiUrl?: string) {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    constructor(opts?: any) {
         if (!this.data) {
             this.data = Page.emptyItem;
         }
-        if (apiUrl) {
-            this.data.api_url = apiUrl;
+        if (typeof opts === "undefined") {
+            return;
+        }
+        if (typeof opts === "string") {
+            this.data.api_url = opts;
+        } else if (opts instanceof Page) {
+            this.clone(opts);
         }
         this.initialiseFromStore();
     }
@@ -56,11 +63,15 @@ export class Page implements TWagtailPage {
     }
 
     /** From old wagtail page definition */
-    get meta(): Record<string, any> {
-        return this.data?.meta || "";
+    get meta(): Record<string, any> | undefined {
+        return this.data?.meta;
     }
 
     get pageId(): string {
+        if (this.data.id) {
+            return this.data.id.toString();
+        }
+
         const url = this.api_url.split("/").filter((token) => token);
         return url.length ? url[url.length - 1] : "";
     }
@@ -106,6 +117,10 @@ export class Page implements TWagtailPage {
             isAvailableOffline: false,
             isPublishable: false,
         };
+    }
+
+    clone(data: TPage): void {
+        this.data = JSON.parse(JSON.stringify(data));
     }
 
     initialiseFromStore(): void {
