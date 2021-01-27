@@ -15,30 +15,43 @@ const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
 const IS_PAGE_PREVIEW = /^\?(.+)/;
 
 export function initialiseRouting() {
-    window.addEventListener("hashchange", () => {
+    window.addEventListener("hashchange", async () => {
         route(window.location.hash);
     });
     route(window.location.hash);
 }
 
-function route(hash) {
+async function route(hash) {
     logPageView(hash);
+
+    // If we are a simple canoe page all should be good
     const appPageMatch = hash.match(IS_CANOE_PAGE);
     if(appPageMatch) {
         setRoute(appPageMatch[1]);
         return;
     }
+
+    // otherwise we need a manifest to understand what to render
+    try {
+        const manifest = await getValidManifest();
+        const page = hash.length ? manifest.getPageManifestData(hash) : manifest.getLanguageHome(getLanguage());
+        setRoute(page);
+    } catch {
+        setRoute("error");
+    }
+}
+
+async function getValidManifest() {
     const manifest = new Manifest();
     if (!manifest.isValid) {
-        setRoute("manifestRequired");
+        await manifest.initialiseByRequest();
+        return manifest;
+    } else {
+        return Promise.resolve(manifest);
     }
-    else {
-        manifest.getPageType(hash);
-        setRoute("");
-    }
-            //const type = wagtailPage.meta.type;
-            //return type.substring(type.lastIndexOf(".") + 1);
 }
+
+//  below here deprecated
 
 const getPreviewPageUrl = (queryString) => {
     const params = {};

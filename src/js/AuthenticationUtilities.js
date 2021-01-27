@@ -1,6 +1,6 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { unsubscribeFromNotifications } from "js/Notifications";
-import { setAuthenticated, setUnauthenticated, setUser, getUser } from "ReduxImpl/Interface";
+import { setAuthenticated, setUnauthenticated, getUser } from "ReduxImpl/Interface";
 
 const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
@@ -72,7 +72,7 @@ export const logout = async () => {
     setUnauthenticated();
 };
 
-export const updateUserFromLocalStorage = () => {
+export const initialiseIdentity = () => {
     const token = getAuthenticationToken();
     if(token) {
         setAuthenticated({

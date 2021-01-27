@@ -7,13 +7,14 @@ import {
     addHome as addHomeAction,
     addCourse as addCourseAction,
     addLesson as addLessonAction,
+    fetchingManifestAction
 } from "./ducks/Site";
 import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/ServiceWorker";
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
 import { changeOnlineAction } from "./ducks/Online";
-import { setAuthenticatedState, setUserDetailsState} from "./ducks/Identity";
+import { setAuthenticatedState } from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
 
 export const storeWagtailPage = (wagtailPage) => {
@@ -87,8 +88,7 @@ export const getManifestFromStore = () => {
 };
 
 export const isBrowserSupported = () => {
-    const b =  store.getState().isBrowserSupported;
-    return b;
+    return store.getState().isBrowserSupported;
 };
 
 export const getCourse = (courseId) => {
@@ -141,16 +141,16 @@ export const setUnauthenticated = () => {
     store.dispatch(setUnAuthenticatedState());
 }
 
-export const setUser = (user) => {
-    store.dispatch(setUserDetailsState(user));
-}
-
 export const setRoute = (route) => {
     store.dispatch(setCanoePage(route));
 }
 
 export const getRoute = () => {
     return store.getState().route;
+};
+
+export const setFetchingManifest = (fetching) => {
+    store.dispatch(fetchingManifestAction(fetching));
 };
 
 export const subscribeToStore = (subscriptionFunction) => {

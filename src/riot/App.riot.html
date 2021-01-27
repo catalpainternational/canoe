@@ -19,24 +19,21 @@
         <Profile if="{state.route.page === 'profile'}"></Profile>
 
         <HomePage
-            if="{state.contentType === 'HomePage'}"
-            wagtailPage="{createHomePage(state.wagtailPage)}"
+            if="{state.route.page && state.route.page.type === 'homepage'}"
         ></HomePage>
         <CourseOverview
-            if="{state.contentType === 'CoursePage'}"
-            wagtailPage="{createCoursePage(state.wagtailPage)}"
+            if="{state.route.page && state.route.page.type === 'coursepage'}"
         ></CourseOverview>
         <LessonOverview
-            if="{state.contentType === 'LessonPage'}"
-            wagtailPage="{createLessonPage(state.wagtailPage)}"
+            if="{state.route.page && state.route.page.type === 'lessonpage'}"
         ></LessonOverview>
         <Resources
-            if="{state.contentType === 'resources' || state.contentType === 'ResourcesRoot'}"
+            if="{state.route.page && state.route.page.type === 'resourcesroot'}"
         ></Resources>
         <ResourceArticle
-            if="{state.contentType === 'ResourceArticle'}"
-            wagtailPage="{createResourceArticle(state.wagtailPage)}"
+            if="{state.route.page && state.route.page.type === 'resourcearticle'}"
         ></ResourceArticle>
+        
         <BottomMenu contentType="{state.contentType}"></BottomMenu>
         <PushSubscription></PushSubscription>
         <Sync if="{state.contentType === 'sync'}"></Sync>
@@ -87,8 +84,9 @@
                 },
 
                 storeListener(previousStoreState, storeState) {
-                    if (previousStoreState.language != storeState.language
-                        || previousStoreState.route.page != storeState.route.page
+                    if (previousStoreState.language !== storeState.language
+                        || previousStoreState.route.page !== storeState.route.page
+                        || previousStoreState.fetchStatus.fetchingManifest !== storeState.fetchStatus.fetchingManifest
                     ) {
                         this.update({
                             route: getRoute()

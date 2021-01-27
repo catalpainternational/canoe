@@ -16,7 +16,7 @@ const EVERY_FIVE_MINUTES = 1000 * 60 * 5;
 let completionPoller = null;
 let currentAuthenticatedState = false;
 
-export function initializeCompletions() {
+export function initialiseCompletions() {
     currentAuthenticatedState = isAuthenticated();
     if (currentAuthenticatedState) {
         prepDataForAppLaunch();
