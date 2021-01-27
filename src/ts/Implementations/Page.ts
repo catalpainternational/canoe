@@ -5,29 +5,34 @@ import {
     TWagtailPage,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
+import { CacheHandler } from "ts/CacheHandler";
 
 // See ts/Typings for the type definitions for these imports
-import { storeWagtailPage, getWagtailPageFromStore } from "ReduxImpl/Interface";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { BACKEND_BASE_URL } from "js/urls";
 
 export class Page implements TWagtailPage {
     data!: TWagtailPageData;
+    #status!: string;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
+        this.#status = "unset";
         if (!this.data) {
             this.data = Page.emptyItem;
+            this.#status = "empty";
         }
         if (typeof opts === "undefined") {
             return;
         }
         if (typeof opts === "string") {
             this.data.api_url = opts;
+            this.#status = "prepped:url";
         } else if (opts instanceof Page) {
             this.clone(opts);
+            this.#status = "prepped:manifest";
         }
-        this.initialiseFromStore();
+        this.initialiseFromCache();
     }
 
     get loc_hash(): string {
@@ -103,6 +108,10 @@ export class Page implements TWagtailPage {
         return true;
     }
 
+    get status(): string {
+        return this.#status;
+    }
+
     static get emptyItem(): TWagtailPage {
         return {
             loc_hash: "",
@@ -123,20 +132,36 @@ export class Page implements TWagtailPage {
         this.data = JSON.parse(JSON.stringify(data));
     }
 
-    initialiseFromStore(): void {
-        if (this.pageId) {
-            const pageData = getWagtailPageFromStore(this.pageId);
-            if (pageData?.api_url) {
-                // New format
-                this.data = pageData;
+    async initialiseFromResponse(resp: Response): Promise<void> {
+        const pageData = await resp.json();
+        // Merge the existing page definition into this structure
+        if (pageData?.api_url) {
+            // New format
+            this.data = pageData;
+        } else {
+            // Merge old and new
+            this.data = { ...this.data, ...pageData };
+        }
+    }
+
+    async initialiseFromCache(): Promise<void> {
+        if (this.api_url) {
+            this.#status = "loading:cache";
+            const cacheHandler = new CacheHandler();
+            const resp = await cacheHandler.match(this.api_url);
+            if (resp) {
+                await this.initialiseFromResponse(resp);
+                this.#status = "ready:cache";
             } else {
-                // Merge old and new
-                this.data = { ...this.data, ...pageData };
+                this.#status = "prepped:no cache";
             }
+        } else {
+            this.#status = "prepped:no url";
         }
     }
 
     async initialiseByRequest(): Promise<boolean> {
+        this.#status = "loading:fetch";
         const resp = await fetch(`${BACKEND_BASE_URL}${this.api_url}`, {
             method: "GET",
             headers: {
@@ -144,10 +169,13 @@ export class Page implements TWagtailPage {
                 Authorization: `JWT ${getAuthenticationToken()}`,
             },
         });
-        // Merge the existing page definition into this structure
-        const wagtailPage = await resp.json();
-        this.data = { ...this.data, ...wagtailPage };
-        storeWagtailPage(this.data);
+
+        if (resp.ok) {
+            await this.initialiseFromResponse(resp);
+            this.#status = "ready:fetch";
+        } else {
+            this.#status = "prepped:no fetch";
+        }
 
         return true;
     }
