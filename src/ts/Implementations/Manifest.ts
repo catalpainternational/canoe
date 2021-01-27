@@ -72,7 +72,7 @@ export class Manifest implements TManifest {
     }
 
     async initialiseByRequest(): Promise<void> {
-        const resp = await fetch(`${ROUTES_FOR_REGISTRATION.manifest}/v1`, {
+        const resp = await fetch(`${ROUTES_FOR_REGISTRATION.manifest}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -125,18 +125,18 @@ export class Manifest implements TManifest {
                 return false;
             }
 
-            // We could get false matches here, needs more work
-            if (page.loc_hash.indexOf(locationHash) === -1) {
+            // Exact match or match with languageCode at the end
+            if (
+                page.loc_hash !== locationHash &&
+                page.loc_hash !== `${locationHash}-${languageCode}`
+            ) {
                 return false;
             }
 
             // Check the language matches
-            if (languageCode === "tet" || languageCode === "tdt") {
-                // Check for both 'tet' and 'tdt' together
-                // We should be using 'tdt', but for historical reasons we usually use 'tet'
-                // so we're treating them the same
-                return page.language === "tet" || page.language === "tdt";
-            }
+            // Note: We should be using 'tdt' for Tetun Dili,
+            // but for historical reasons we usually use 'tet'
+            // This test doesn't allow for that
             return page.language.indexOf(languageCode) === 0;
         });
 

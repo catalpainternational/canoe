@@ -103,7 +103,7 @@
 
                     // try getting a page
                     const aPage = await manifest.getPageData("/site/home", "en");
-                    this.update({ page: JSON.stringify(page.data) });
+                    this.update({ page: JSON.stringify(aPage.data) });
                 }
             }
         }

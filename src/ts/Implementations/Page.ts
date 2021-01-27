@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
     TAssetEntry,
-    TPage,
     TWagtailPage,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
@@ -9,11 +8,15 @@ import {
 // See ts/Typings for the type definitions for these imports
 import { storeWagtailPage, getWagtailPageFromStore } from "ReduxImpl/Interface";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
+import { BACKEND_BASE_URL } from "js/urls";
 
 export class Page implements TWagtailPage {
     data!: TWagtailPageData;
 
     constructor(apiUrl?: string) {
+        if (!this.data) {
+            this.data = Page.emptyItem;
+        }
         if (apiUrl) {
             this.data.api_url = apiUrl;
         }
@@ -99,7 +102,6 @@ export class Page implements TWagtailPage {
             language: "",
             children: [],
             depth: 0,
-            meta: "",
             isValid: false,
             isAvailableOffline: false,
             isPublishable: false,
@@ -108,12 +110,19 @@ export class Page implements TWagtailPage {
 
     initialiseFromStore(): void {
         if (this.pageId) {
-            this.data = getWagtailPageFromStore(this.pageId);
+            const pageData = getWagtailPageFromStore(this.pageId);
+            if (pageData?.api_url) {
+                // New format
+                this.data = pageData;
+            } else {
+                // Merge old and new
+                this.data = { ...this.data, ...pageData };
+            }
         }
     }
 
     async initialiseByRequest(): Promise<boolean> {
-        const resp = await fetch(this.api_url, {
+        const resp = await fetch(`${BACKEND_BASE_URL}${this.api_url}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
