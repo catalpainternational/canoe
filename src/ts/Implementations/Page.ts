@@ -14,6 +14,7 @@ import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { BACKEND_BASE_URL } from "js/urls";
 
 export class Page implements TWagtailPage {
+    #cache!: Cache;
     data!: TWagtailPageData;
     #status!: string;
 
@@ -151,13 +152,15 @@ export class Page implements TWagtailPage {
     }
 
     async initialiseFromCache(): Promise<void> {
+        this.#cache = await caches.open(PAGES_CACHE_NAME);
+
         if (this.api_url) {
             this.#status = "loading:cache";
-            const cacheHandler = new CacheHandler();
-            const resp = await cacheHandler.match(
-                PAGES_CACHE_NAME,
-                this.fullUrl
-            );
+            const resp = await this.#cache.match(this.fullUrl, {
+                ignoreSearch: true,
+                ignoreMethod: true,
+                ignoreVary: true,
+            });
             if (resp) {
                 await this.initialiseFromResponse(resp);
                 this.#status = "ready:cache";
