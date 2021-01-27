@@ -157,6 +157,16 @@ export class Manifest implements TManifest {
         return Promise.reject(false);
     }
 
+    async getPage(data: TWagtailPageData): Promise<TWagtailPage> {
+        const manifestPage = new Page(data);
+        const pageFilled = await manifestPage.initialiseByRequest();
+        if (pageFilled) {
+            return manifestPage;
+        }
+
+        return Promise.reject(false);
+    }
+
     async getPageData(
         locationHash: string,
         languageCode: string
@@ -167,7 +177,7 @@ export class Manifest implements TManifest {
         );
 
         if (pageManifestData) {
-            return await this.getPageByUrl(pageManifestData.api_url);
+            return await this.getPage(pageManifestData);
         }
 
         return Promise.reject(false);

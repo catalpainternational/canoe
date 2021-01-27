@@ -19,6 +19,10 @@ export type TPageData = {
 export type TPage = TPageData & TManifestItemState;
 
 export type TWagtailPageData = {
+    id?: number;
+    meta?: Record<string, any>;
+    title?: string;
+    data?: Record<string, any>;
     [x: string]: any;
 } & TPageData;
 
