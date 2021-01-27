@@ -42,7 +42,7 @@
 
     <script>
         import { getCachesInfo, storageQuota } from "js/cacheManager/cacheManager";
-        import { MANIFEST_CACHE_NAME } from "ts/Constants";
+        import { MANIFEST_CACHE_NAME, PAGES_CACHE_NAME } from "ts/Constants";
 
         import prettyBytes from "pretty-bytes";
 
@@ -67,7 +67,7 @@
                         case MANIFEST_CACHE_NAME:
                             cacheSummary['App'] += q.size;
                             break;
-                        case 'pages-cache':
+                        case PAGES_CACHE_NAME:
                             cacheSummary['Pages'] += q.size;
                             break;
                         case 'images-cache':

@@ -2,10 +2,12 @@
 import {
     TAssetEntry,
     TPage,
+    TPageData,
     TWagtailPage,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
 import { CacheHandler } from "ts/CacheHandler";
+import { PAGES_CACHE_NAME } from "ts/Constants";
 
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
@@ -28,7 +30,7 @@ export class Page implements TWagtailPage {
         if (typeof opts === "string") {
             this.data.api_url = opts;
             this.#status = "prepped:url";
-        } else if (opts instanceof Page) {
+        } else if (opts as TPageData) {
             this.clone(opts);
             this.#status = "prepped:manifest";
         }
@@ -79,6 +81,10 @@ export class Page implements TWagtailPage {
 
         const url = this.api_url.split("/").filter((token) => token);
         return url.length ? url[url.length - 1] : "";
+    }
+
+    get fullUrl(): string {
+        return `${BACKEND_BASE_URL}${this.api_url}`;
     }
 
     /** This will do a basic integrity check.
@@ -148,7 +154,10 @@ export class Page implements TWagtailPage {
         if (this.api_url) {
             this.#status = "loading:cache";
             const cacheHandler = new CacheHandler();
-            const resp = await cacheHandler.match(this.api_url);
+            const resp = await cacheHandler.match(
+                PAGES_CACHE_NAME,
+                this.fullUrl
+            );
             if (resp) {
                 await this.initialiseFromResponse(resp);
                 this.#status = "ready:cache";
@@ -162,7 +171,7 @@ export class Page implements TWagtailPage {
 
     async initialiseByRequest(): Promise<boolean> {
         this.#status = "loading:fetch";
-        const resp = await fetch(`${BACKEND_BASE_URL}${this.api_url}`, {
+        const resp = await fetch(this.fullUrl, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
