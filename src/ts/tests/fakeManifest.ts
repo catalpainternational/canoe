@@ -20,6 +20,8 @@ function buildFakeManifestEntry(
         language: language,
         children: children,
         depth: depth,
+        type: "homepage",
+        title: "Noooooooooo",
         isValid: true,
         isAvailableOffline: true,
         isPublishable: true,

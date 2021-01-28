@@ -71,6 +71,14 @@ export class Page implements TWagtailPage {
         return this.data?.depth || 0;
     }
 
+    get type(): string {
+        return this.data?.type || "";
+    }
+
+    get title(): string {
+        return this.data?.title || "";
+    }
+
     /** From old wagtail page definition */
     get meta(): Record<string, any> | undefined {
         return this.data?.meta;
@@ -163,6 +171,8 @@ export class Page implements TWagtailPage {
             language: "",
             children: [],
             depth: 0,
+            type: "",
+            title: "",
             isValid: false,
             isAvailableOffline: false,
             isPublishable: false,

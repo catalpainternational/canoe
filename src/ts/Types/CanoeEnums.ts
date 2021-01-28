@@ -28,3 +28,5 @@ export type TPageStatus =
     | "loading:fetch"
     | "ready:cache"
     | "ready:fetch";
+
+export type TPageType = "homepage";

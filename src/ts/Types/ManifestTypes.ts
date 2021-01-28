@@ -1,3 +1,5 @@
+import { TPageType } from "./CanoeEnums";
+
 export type TManifestData = {
     version: string;
     pages: Record<string, TWagtailPage>;
@@ -14,6 +16,10 @@ export type TPageData = {
     language: string;
     children: Array<number>;
     depth: number;
+    type: TPageType | string;
+    title: string;
+    // Other fields
+    [x: string]: any;
 };
 
 export type TPage = TPageData & TManifestItemState;
@@ -21,9 +27,7 @@ export type TPage = TPageData & TManifestItemState;
 export type TWagtailPageData = {
     id?: number;
     meta?: Record<string, any>;
-    title?: string;
     data?: Record<string, any>;
-    [x: string]: any;
 } & TPageData;
 
 export type TWagtailPage = TWagtailPageData & TManifestItemState;
