@@ -13,3 +13,18 @@ export type TSubscribe = "subscribe" | "unsubscribe";
 
 /** Accepted Http methods (complete list) */
 export type THttpMethods = "GET" | "PUT" | "POST" | "DELETE";
+
+/** The current state of a given page */
+export type TPageStatus =
+    /** never been set, or deliberately unset */
+    | "unset"
+    | "empty"
+    | "prepped:url"
+    | "prepped:manifest"
+    | "prepped:no cache"
+    | "prepped:no url"
+    | "prepped:no fetch"
+    | "loading:cache"
+    | "loading:fetch"
+    | "ready:cache"
+    | "ready:fetch";

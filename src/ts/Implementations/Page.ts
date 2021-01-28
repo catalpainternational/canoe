@@ -8,6 +8,7 @@ import {
 } from "ts/Types/ManifestTypes";
 import { CacheHandler } from "ts/CacheHandler";
 import { PAGES_CACHE_NAME } from "ts/Constants";
+import { TPageStatus } from "ts/Types/CanoeEnums";
 
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
@@ -16,7 +17,7 @@ import { BACKEND_BASE_URL } from "js/urls";
 export class Page implements TWagtailPage {
     #cache!: Cache;
     data!: TWagtailPageData;
-    #status!: string;
+    #status!: TPageStatus;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
@@ -89,10 +90,33 @@ export class Page implements TWagtailPage {
     }
 
     /** This will do a basic integrity check.
-     * But for now it just checks that page details have actually been loaded, same as isPublishable
+     * version is not 0, api_url has a value, etc.
      */
     get isValid(): boolean {
-        if (this.version === 0) {
+        if (this.version === 0 || !this.api_url) {
+            return false;
+        }
+
+        // Has the wagtail version of this page been loaded
+        if (
+            !this.meta ||
+            !this.data.data ||
+            !this.data.id ||
+            !this.data.title
+        ) {
+            return false;
+        }
+
+        // Is the page's status acceptable
+        if (
+            [
+                "unset",
+                "empty",
+                "prepped:no cache",
+                "prepped:no url",
+                "prepped:no fetch",
+            ].includes(this.#status)
+        ) {
             return false;
         }
 
@@ -100,15 +124,25 @@ export class Page implements TWagtailPage {
     }
 
     get isAvailableOffline(): boolean {
-        if (this.version === 0) {
+        if (!this.isValid) {
             return false;
         }
 
-        return this.isValid;
+        // Is the page's status acceptable
+        if (!this.#status.startsWith("ready")) {
+            return false;
+        }
+
+        return true;
     }
 
     get isPublishable(): boolean {
-        if (this.version === 0) {
+        if (!this.isValid) {
+            return false;
+        }
+
+        // Is the page's status acceptable
+        if (!this.#status.startsWith("ready")) {
             return false;
         }
 
