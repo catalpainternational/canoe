@@ -17,6 +17,7 @@
         <Login if="{state.route.page === 'login'}"></Login>
         <Settings if="{state.route.page === 'settings'}"></Settings>
         <Profile if="{state.route.page === 'profile'}"></Profile>
+        <Sync if="{state.route.page === 'sync'}"></Sync>
 
         <HomePage
             if="{state.route.page && state.route.page.type === 'homepage'}"
@@ -36,7 +37,6 @@
         
         <BottomMenu contentType="{state.contentType}"></BottomMenu>
         <PushSubscription></PushSubscription>
-        <Sync if="{state.contentType === 'sync'}"></Sync>
     </template>
 
     <script>
