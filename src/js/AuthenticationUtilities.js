@@ -2,6 +2,8 @@ import { BACKEND_BASE_URL } from "js/urls";
 import { unsubscribeFromNotifications } from "js/Notifications";
 import { setAuthenticated, setUnauthenticated, getUser } from "ReduxImpl/Interface";
 
+import { initialiseCertChain } from "ts/StartUp";
+
 const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
 const JWT_TOKEN_STORAGE_KEY = "token";
@@ -48,7 +50,6 @@ const fetchAuthToken = async (usernameAndPassword) => {
     })
 };
 
-
 export const login = async (usernameAndPassword) => {
     const { token, username, userId, groups } = await fetchAuthToken(usernameAndPassword);
 
@@ -63,6 +64,8 @@ export const login = async (usernameAndPassword) => {
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
     localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
     setAuthenticated({username, userId, groups});
+
+    initialiseCertChain(window);
 };
 
 export const logout = async () => {
@@ -70,16 +73,19 @@ export const logout = async () => {
     localStorage.clear();
     unsubscribeFromNotifications();
     setUnauthenticated();
+
+    // Add something here to revoke the certChain
 };
 
 export const initialiseIdentity = () => {
     const token = getAuthenticationToken();
-    if(token) {
+    if (token) {
         setAuthenticated({
             username: localStorage.getItem(USERNAME_STORAGE_KEY),
             userId: localStorage.getItem(USER_ID_STORAGE_KEY),
             groups: localStorage.getItem(USER_GROUPS_STORAGE_KEY),
         });
+        InitialiseCertChain();
     }
 }
 
