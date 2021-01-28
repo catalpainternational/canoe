@@ -154,6 +154,10 @@ export class Page implements TWagtailPage {
             return false;
         }
 
+        if (this.assets.length > 0) {
+            // do nothing for now
+        }
+
         return true;
     }
 

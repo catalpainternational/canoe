@@ -7,6 +7,8 @@ import {
     TWagtailPage,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
+import { TPageType } from "ts/Types/CanoeEnums";
+import { Page } from "ts/Implementations/Page";
 
 // See ts/Typings for the type definitions for these imports
 import {
@@ -16,7 +18,6 @@ import {
 } from "ReduxImpl/Interface";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import { Page } from "ts/Implementations/Page";
 
 export class Manifest implements TManifest {
     data!: TManifestData;
@@ -123,16 +124,41 @@ export class Manifest implements TManifest {
         return [...images];
     }
 
-    getPageManifestData(locationHash: string): TWagtailPageData | undefined {
-        return Object.values(this.data.pages).find((page) => {
-            return page.loc_hash === locationHash;
-        });
+    getPageManifestDataByLocationHash(
+        locationHash: string
+    ): TWagtailPageData | undefined {
+        return Object.values(this.data.pages).find(
+            (page) => page.loc_hash === locationHash
+        );
+    }
+
+    getPageManifestDataByPageType(
+        pageType: TPageType | string,
+        languageCode = "en"
+    ): TWagtailPageData | undefined {
+        return Object.values(this.data.pages).find(
+            (page) => page.type === pageType && page.language === languageCode
+        );
     }
 
     getLanguageHome(languageCode: string): TWagtailPageData | undefined {
-        return Object.values(this.data.pages).find((page) => {
-            return page.type === "homepage" && page.language === languageCode;
-        });
+        return this.getPageManifestDataByPageType("homepage", languageCode);
+    }
+
+    async getPageByType(
+        pageType: TPageType | string,
+        languageCode = "en"
+    ): Promise<TWagtailPage> {
+        const pageManifestData = this.getPageManifestDataByPageType(
+            pageType,
+            languageCode
+        );
+
+        if (pageManifestData) {
+            return await this.getPage(pageManifestData);
+        }
+
+        return Promise.reject(false);
     }
 
     async getPageById(pageId: string): Promise<TWagtailPage> {
@@ -159,11 +185,10 @@ export class Manifest implements TManifest {
         return Promise.reject(false);
     }
 
-    async getPageData(
-        locationHash: string,
-        languageCode: string
-    ): Promise<TWagtailPage> {
-        const pageManifestData = this.getPageManifestData(locationHash);
+    async getPageData(locationHash: string): Promise<TWagtailPage> {
+        const pageManifestData = this.getPageManifestDataByLocationHash(
+            locationHash
+        );
 
         if (pageManifestData) {
             return await this.getPage(pageManifestData);

@@ -29,4 +29,26 @@ export type TPageStatus =
     | "ready:cache"
     | "ready:fetch";
 
-export type TPageType = "homepage";
+export type TPageType =
+    | "homepage"
+    | "resourcesroot"
+    | "resourcearticle"
+    | "coursepage"
+    | "lessonpage";
+
+/** The current state of a given asset */
+export type TAssetStatus =
+    /** never been set, or deliberately unset */
+    | "unset"
+    | "empty"
+    | "prepped:type"
+    | "prepped:manifest"
+    | "prepped:no cache"
+    | "prepped:no type"
+    | "prepped:no fetch"
+    | "loading:cache"
+    | "loading:fetch"
+    | "ready:cache"
+    | "ready:fetch";
+
+export type TAssetType = "image" | "media";
