@@ -4,7 +4,6 @@ import { getBrowser } from "ts/PlatformDetection";
 
 
 const WEBP_BROWSERS = ["Chrome", "Firefox"];
-
 export const getImageRequest = (url) => {
     const token = getAuthenticationToken();
     const browser = getBrowser();

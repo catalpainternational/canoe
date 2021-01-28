@@ -6,7 +6,7 @@
 
         <LoadingDots
             if="{state.loading}"
-            extrastyleclasses="light app"
+            extrastyleclasses="dark app"
         ></LoadingDots>
 
         <TopMenu
@@ -19,9 +19,14 @@
         <Profile if="{state.route.page === 'profile'}"></Profile>
         <Sync if="{state.route.page === 'sync'}"></Sync>
 
+        <AllCoursesPage
+            if="{state.route.page && state.route.page.type === 'homepage'}"
+        ></AllCoursesPage>
+        <!--
         <HomePage
             if="{state.route.page && state.route.page.type === 'homepage'}"
         ></HomePage>
+         -->
         <CourseOverview
             if="{state.route.page && state.route.page.type === 'coursepage'}"
         ></CourseOverview>
@@ -45,7 +50,7 @@
             getRoute
         } from "ReduxImpl/Interface";
 
-        import HomePageJS from "js/HomePage";
+        import AllCoursesPageJS from "js/AllCoursesPage";
         import CoursePageJS from "js/CoursePage";
         import LessonPageJS from "js/LessonPage";
         import ResourceArticleJS from "js/ResourceArticle";
@@ -63,7 +68,7 @@
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
         import Sync from "RiotTags/Screens/Sync";
 
-        import HomePage from "RiotTags/WagtailPages/HomePage.riot.html";
+        import AllCoursesPage from "RiotTags/WagtailPages/AllCoursesPage.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
@@ -99,7 +104,7 @@
             login: Login,
             topmenu: TopMenu,
             bottommenu: BottomMenu,
-            homepage: HomePage,
+            allcoursespage: AllCoursesPage,
             courseoverview: CourseOverview,
             lessonoverview: LessonOverview,
             resources: Resources,
@@ -129,6 +134,7 @@
             window.scroll(unfinishedContentCoords);
         };
 
-        export default App
+        export default App;
+
     </script>
 </App>

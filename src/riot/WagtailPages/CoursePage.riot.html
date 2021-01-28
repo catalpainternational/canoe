@@ -1,44 +1,32 @@
 <CoursePage>
-    <div class="course background-blue-1">
-        <div class="content-wrapper">
-            <div class="course-header">
-                <div>
-                    <div>
-                        <a class="arrow-gray" onclick="{backToHome}"></a>
-                    </div>
-                    <div>
-                        <p>{ TRANSLATIONS.course() }</p>
-                    </div>
-                    <h3 id="coursePageTitle">{props.wagtailPage.title}</h3>
-                    <div>
-                        <p class="bottom-border">{ numberOfLessonsCompleteMessage() }</p>
-                    </div>
-                </div>
-            </div>
+    <TopMenu extrastyleclasses="without-swoop">
+        <a class="top-icon left has-circle" onclick="{backToAllCourses}">
+            <span class="arrow"></span>
+        </a>
+    </TopMenu>
+
+    <div class="content-wrapper">
+        <div>
+            <h3 id="coursePageTitle">{props.wagtailPage.title}</h3>
+        </div>
+        <div class="lesson-swoop">
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
             <LoadingDots if="{state.lessons.length === 0}" extrastyleclasses="dark"></LoadingDots>
-            <Card
-                each="{lesson in state.lessons}"
-                title="{lesson.title}"
-                description="{lesson.shortDescription}"
-                duration="{lesson.getDuration()}"
-                link="{lesson.id}"
-                isCompleted="{lesson.isFinished()}"
-                isComingSoon="{lesson.isComingSoon()}"
-                showFooter="{true}"
-                type="lesson"
-            ></Card>
+            <div class="card-container">
+                <Card
+                    each="{lesson in state.lessons}"
+                    status="{lessonStatus(lesson)}"
+                    title="{lesson.title}"
+                    link="{lesson.id}"
+                ></Card>
+            </div>
             <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <Card
-                    title="{ courseExamTitle() }"
+                    title="{courseExamTitle()}"
                     description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
                     link="{props.wagtailPage.id}/exam/0"
-                    isCompleted="{props.wagtailPage.isExamFinished()}"
-                    isComingSoon="{false}"
-                    showFooter="{true}"
-                    isDisabled="{examDisabled()}"
-                    type="exam"
+                    status="{examStatus(props.wagtailPage)}"
                 ></Card>
             </template>
         </div>
@@ -48,13 +36,13 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { isGuestUser } from "js/AuthenticationUtilities";
 
         export default {
             TRANSLATIONS: {
                 your_lessons: () => gettext("Your lessons"),
-                course: () => gettext("Course"),
                 course_exam: () => gettext("Course exam"),
                 highestScore: () => gettext("Highest score"),
             },
@@ -63,49 +51,27 @@
                 card: Card,
                 courseexam: CourseExam,
                 loadingdots: LoadingDots,
+                topmenu: TopMenu,
             },
 
             state: {
-                header: null,
                 coursePageTitle: null,
                 lessons: [],
             },
 
             async onMounted(props, state) {
-                const header = this.$(".course-header");
                 const coursePageTitle = this.$("#coursePageTitle");
                 const { wagtailPage: course } = props;
                 const lessons = await course.getFullLessonObjects();
 
-                this.update({ header, lessons, coursePageTitle });
-
-                window.addEventListener("scroll", this.stickyHeader);
+                this.update({ lessons, coursePageTitle });
             },
 
-            onUnmounted() {
-                window.removeEventListener("scroll", this.stickyHeader);
-            },
-
-            calculateCourseProgress() {
-                const { wagtailPage } = this.props;
-                return wagtailPage.numberOfFinishedLessons + " / " + wagtailPage.numberOfLessons;
-            },
-
-            backToHome() {
+            backToAllCourses() {
                 location.hash = "#";
             },
 
-            stickyHeader() {
-                if (window.pageYOffset > this.state.header.offsetTop) {
-                    this.state.header.classList.add("sticky");
-                    this.state.coursePageTitle.classList.add("truncate-if-long");
-                } else {
-                    this.state.header.classList.remove("sticky");
-                    this.state.coursePageTitle.classList.remove("truncate-if-long");
-                }
-            },
-
-            examDisabled() {
+            isExamDisabled() {
                 // Exams are enabled if you complete all lessons or if you are a
                 // guest user.
                 const { wagtailPage: course } = this.props;
@@ -114,18 +80,29 @@
                 return !isExamUnlocked && !isGuestUser();
             },
 
-            numberOfLessonsCompleteMessage() {
-                // the number of lessons completed in a course
-                return ngettext(
-                    "%1 lesson complete",
-                    "%1 lessons complete",
-                    this.calculateCourseProgress()
-                );
-            },
-
             courseExamTitle() {
                 let p = gettext("%1's Course Exam", this.props.wagtailPage.title);
                 return p;
+            },
+
+            lessonStatus(lesson) {
+                if (lesson.isComingSoon()) {
+                    return "coming-soon";
+                } else if (lesson.isFinished()) {
+                    return "complete";
+                } else {
+                    return "not-started";
+                }
+            },
+
+            examStatus(exam) {
+                if (exam.isExamFinished()) {
+                    return "complete";
+                } else if (this.isExamDisabled()) {
+                    return "disabled";
+                } else {
+                    return "not-started";
+                }
             },
         };
     </script>

@@ -1,0 +1,13 @@
+AllCoursesPage {
+    .background {
+        background-color: $app-background-color;
+    }
+
+    .with-swoop {
+        height: 200px;
+    }
+
+    .card-image {
+        @extend %stock-course;
+    }
+}

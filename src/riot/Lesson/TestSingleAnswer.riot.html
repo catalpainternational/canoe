@@ -1,4 +1,4 @@
-<TestSingleAnswer class="answer">
+<TestSingleAnswer>
     <ol>
         <li
             each="{answer in props.card.answers}"
@@ -27,10 +27,9 @@
             },
 
             onUpdated(props, state) {
-                if (Object.keys(state.selectedAnswer).length === 0) {
+                const isThereASelectedAnswer = (answer) => Object.keys(answer).length > 0;
+                if (!isThereASelectedAnswer(state.selectedAnswer)) {
                     this.restoreSavedAnswer();
-                } else {
-                    this.handleRiotMemoryLeaks();
                 }
             },
 
@@ -43,16 +42,6 @@
                 this.update({
                     selectedAnswer: savedAnswer[0],
                 });
-            },
-
-            handleRiotMemoryLeaks() {
-                // This method fixes a riot bug(?) that occurs when two
-                // TestSingleAnswers are back to back. If question one
-                // has a selected answer that matches an answer in question two,
-                // question two will automatically select that answer. We don't
-                // want that, so this method clears the selected answer between
-                // questions.
-                this.state.selectedAnswer = {};
             },
 
             doAnswersMatch(left, right) {
@@ -86,6 +75,10 @@
                 } else {
                     this.props.toggleModal(true, answer, answer.correct);
                 }
+
+                // To avoid update bugs, you must reset the answer between
+                // answer selections.
+                this.state.selectedAnswer = {};
             },
 
             gradeAnswer(answer) {

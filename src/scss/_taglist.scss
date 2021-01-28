@@ -1,0 +1,39 @@
+TagList {
+    .tag {
+        border-radius: 1.875em;
+        background-color: $gray-7;
+        padding: 0.5em 0.9em;
+        margin: 0.6em 0.6em 0.6em 0;
+        display: inline-block;
+        box-shadow: 0 0.15em 0.15em 0 $gray-6;
+
+        p {
+            color: $gray-3;
+        }
+
+        &.selected {
+			background-color: $app-accent-color;
+			
+			p {
+				color: $white;
+			}
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    p {
+        font-size: 0.875em;
+        line-height: 0.625em;
+        font-weight: 200;
+        margin: 0;
+    }
+
+    .tag-container {
+        overflow: auto;
+        white-space: nowrap;
+        margin: 0 0 10px 0;
+    }
+}
