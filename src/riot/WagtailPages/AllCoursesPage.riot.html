@@ -1,6 +1,6 @@
 <AllCoursesPage>
     <div class="background">
-        <GuestBanner if="{showBanner()}" closeBanner="{closeBanner}"></GuestBanner>
+        <GuestBanner></GuestBanner>
         <TopMenu extrastyleclasses="with-swoop">
             <h3>{ TRANSLATIONS.allCourses() }</h3>
             <p>{ TRANSLATIONS.coursesIntro() }</p>
@@ -65,7 +65,6 @@
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { ON_COMPLETION_CHANGE } from "js/Events";
         import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
-        import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
         import { getCourseWithLatestCompletion } from "js/utilities";
 
         export default {
@@ -103,10 +102,6 @@
                 const currentCourse = getCourseWithLatestCompletion(unsortedCourses);
                 const listOfTags = getTagsFromPages(unsortedCourses);
 
-                const visibleCourses = isGuestUser()
-                    ? unsortedCourses.filter(course => course.isVisibleToGuests())
-                    : unsortedCourses;
-
                 const sortedListOfCourses = this.sortCourses(visibleCourses);
 
                 this.update({
@@ -143,16 +138,6 @@
                 const lowercaseCourseTags = tags.map(tag => tag.toLowerCase());
 
                 return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
-            },
-
-            showBanner() {
-                return isGuestUser() && isGuestBannerVisible();
-            },
-
-            closeBanner() {
-                toggleGuestBanner(false);
-                this.showBanner();
-                this.update();
             },
 
             courseStatus(course) {
