@@ -1,8 +1,9 @@
 <Settings>
     <div class="settings">
+        <TopMenu extrastyleclasses="with-swoop">
+            <h4>{ TRANSLATIONS.settings() }</h4>
+        </TopMenu>
         <div class="content-wrapper">
-            <h3>{ TRANSLATIONS.settings() }</h3>
-
             <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
@@ -28,13 +29,12 @@
             <button class="btn-secondary" onclick="{logout}">{ TRANSLATIONS.logout() }</button>
 
             <Logos></Logos>
-
-            <!-- <CacheDisplay></CacheDisplay> -->
         </div>
     </div>
     <script>
         import LanguageSelector from "riot/Components/LanguageSelector.riot.html";
         import Logos from "riot/Components/Logos.riot.html";
+        import TopMenu from "riot/Components/TopMenu.riot.html";
         import { logout } from "js/AuthenticationUtilities";
         import {
             supportsPushManager,
@@ -43,7 +43,6 @@
             isSubscribedToNotifications,
         } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
-        // import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
         import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
         import { getPlatform } from "ts/PlatformDetection";
 
@@ -57,11 +56,12 @@
             components: {
                 languageselector: LanguageSelector,
                 logos: Logos,
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
                 settings: () => gettext("Your settings"),
-                notifications: () => gettext("Would you like to receive app notifications?"),
+                notifications: () => gettext("Do you want to receive app notifications?"),
                 add: () => gettext("Add to Home Screen"),
                 logout: () => gettext("Log out"),
             },

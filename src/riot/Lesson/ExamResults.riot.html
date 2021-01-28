@@ -1,22 +1,22 @@
 <ExamResults>
     <template if="{state.passedExam !== null}">
-        <LessonFrame>
-            <div class="{!state.passedExam ? '' : 'confetti background'}"></div>
+        <LessonFrame linkTo="{props.course.id}">
             <div class="congratulations-container">
-                <div class="{!state.passedExam ? 'incorrect-flag' : 'report-card overlay'}"></div>
                 <template if="{state.passedExam}">
-                    <div>
-                        <h2>{ TRANSLATIONS.success() }</h2>
-                        <h3>{ TRANSLATIONS.completed() }</h3>
-                        <p>{ passedExamMessage() }</p>
-                    </div>
-                    <button class="btn-primary" onclick="{goHome}">{ TRANSLATIONS.back() }</button>
+                    <span class="confetti"></span>
+                    <h2>{ TRANSLATIONS.success() }</h2>
+                    <h3>{ TRANSLATIONS.completed() }</h3>
+                    <p>{ passedExamMessage() }</p>
+                    <button class="btn-primary" onclick="{goToAllCourses}">
+                        { TRANSLATIONS.back() }
+                    </button>
                     <button class="btn-secondary" onclick="{goToResources}">
                         { TRANSLATIONS.resources() }
                     </button>
                 </template>
                 <template if="{!state.passedExam}">
                     <div>
+                        <span class="incorrect-flag"></span>
                         <h2>{ TRANSLATIONS.notQuite() }</h2>
                         <p>{ failedExamMessage() }</p>
                     </div>
@@ -67,10 +67,10 @@
             },
 
             goToCourseOverview() {
-                location.hash = "#" + this.props.course.id;
+                location.hash = `#${this.props.course.id}`;
             },
 
-            goHome() {
+            goToAllCourses() {
                 location.hash = "#";
             },
 
@@ -85,7 +85,7 @@
             passedExamMessage() {
                 // message when user passed the exam
                 return gettext(
-                    "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam.",
+                    "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam.",
                     this.props.finalScore
                 );
             },

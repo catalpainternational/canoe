@@ -20,7 +20,7 @@ const defaultProjectConfiguration = require("./canoe-project-default.js");
 // uncomment this to find the source of webpack deprecation warnings
 // process.traceDeprecation = true;
 
-module.exports = (env) => {
+module.exports = env => {
     // read the environment configuration
     const environmentConfiguration = Object.assign(
         defaultEnvironmentConfiguration,
@@ -59,7 +59,6 @@ module.exports = (env) => {
         },
         entry: {
             canoe: path.resolve(__dirname, "src", "index.js"),
-            render: path.resolve(__dirname, "src", "ts", "Render.ts"),
         },
         output: {
             filename: "[name]-[contenthash].js",
@@ -72,14 +71,20 @@ module.exports = (env) => {
         resolve: {
             extensions: [".ts", ".js", ".cjs", ".mjs", ".json", ".riot.html"],
             modules: [path.resolve(__dirname, "src")],
-            plugins: [PnpWebpackPlugin],
+            plugins: [
+                PnpWebpackPlugin,
+            ],
         },
         resolveLoader: {
             plugins: [PnpWebpackPlugin.moduleLoader(module)],
         },
         module: {
             rules: [
-                { test: /\.hbs$/, loader: "handlebars-loader" },
+                {
+                    test: /\.hbs$/,
+                    loader: "handlebars-loader",
+                    query: { inlineRequires: '\/public\/' }
+                },
                 {
                     test: /\.riot.html$/,
                     exclude: /node_modules/,
@@ -113,7 +118,12 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.(png|jpg|gif)$/,
-                    use: ["file-loader"],
+                    use: {
+                        loader: "file-loader",
+                        options: {
+                            esModule: false,
+                        },
+                    },
                 },
                 {
                     test: /\.svg$/,
@@ -173,7 +183,6 @@ module.exports = (env) => {
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
                 ga_tag: environmentConfiguration.GA_TAG,
                 theme_color: projectConfiguration.THEME_COLOR,
-                background_color: projectConfiguration.BACKGROUND_COLOR,
             }),
             new HtmlWebpackInlineSVGPlugin({ runPreEmit: true }),
             new WebpackPwaManifest({
@@ -182,8 +191,6 @@ module.exports = (env) => {
                 name: projectConfiguration.SITE_NAME,
                 short_name: projectConfiguration.SITE_SHORT_NAME,
                 description: projectConfiguration.SITE_DESCRIPTION,
-                background_color: projectConfiguration.BACKGROUND_COLOR,
-                theme_color: projectConfiguration.BACKGROUND_COLOR,
                 start_url: "/",
                 icons: [
                     {

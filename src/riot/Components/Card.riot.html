@@ -1,57 +1,16 @@
 <Card>
-    <a class="{howToStyle()} lesson card" href="#{props.link}">
-        <div class="card-body {!props.showFooter ? 'no-footer' : ''}">
-            <h4 class="truncate-if-long">{props.title}</h4>
-            <div if="{props.isCompleted}" class="white-check"></div>
-            <h5 if="{props.isComingSoon}">{ TRANSLATIONS.comingSoon() }</h5>
-            <div if="{props.isComingSoon}" class="break-card-footer"></div>
-            <p if="{props.type !== 'course'}">{props.description}</p>
+    <a class="card {props.status}" href="#{props.link}">
+        <div class="card-image">
+            <span class="card-status"><span></span></span>
         </div>
-        <div if="{props.showFooter}" class="card-footer">
-            <div if="{props.isCompleted}" class="status done">
-                <span class="checkmark-circle"></span>
-                <p>{ TRANSLATIONS.completed() }</p>
-            </div>
-            <div if="{!props.isCompleted}" class="status btn-start-lesson">
-                <span class="arrow-blue"></span>
-                <p>{ TRANSLATIONS.startMessages[props.type]() }</p>
-            </div>
-            <div if="{props.duration}" class="duration">
-                <span class="clock"></span>
-                <p>{ durationMessage() }</p>
-            </div>
-            <div if="{props.type === 'course'}" class="duration">
-                <p>{props.description}</p>
-            </div>
+        <div class="card-title">
+            <h5>{props.title}</h5>
+            <progress
+                if="{props.status === 'in-progress'}"
+                value="{props.progressValue}"
+                max="{props.progressMax}"
+            ></progress>
+            <progress if="{props.status === 'complete'}" value="1" max="1"></progress>
         </div>
     </a>
-    <script>
-        export default {
-            TRANSLATIONS: {
-                comingSoon: () => gettext("Coming Soon!"),
-                completed: () => gettext("completed"),
-                startMessages: {
-                    activity: () => gettext("Start Activity"),
-                    lesson: () => gettext("Start Lesson"),
-                    course: () => gettext("Start Course"),
-                    exam: () => gettext("Start Exam"),
-                },
-            },
-
-            howToStyle() {
-                if (this.props.isCompleted) {
-                    return "done";
-                } else if (this.props.isDisabled) {
-                    return "disabled";
-                } else {
-                    return "ongoing";
-                }
-            },
-
-            durationMessage() {
-                // the number of minutes it will take to complete the objective, content, test, or lesson
-                return ngettext("%1 min", "%1 mins", this.props.duration, this.props.duration);
-            },
-        };
-    </script>
 </Card>

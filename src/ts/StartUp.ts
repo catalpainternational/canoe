@@ -25,9 +25,9 @@ export const InitialiseCanoeHost = async (
  * - The user is logged in
  * - The user has the correct permissions to publish
  */
-export const InitialiseCertChain = async (): Promise<void> => {
+export const initialiseCertChain = async (): Promise<void> => {
     const gt = globalThis as Record<string, any>;
-    if (!gt.canoeHost) {
+    if (!gt.canoeHost || gt.certChain) {
         return;
     }
 

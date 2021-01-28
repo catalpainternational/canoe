@@ -7,12 +7,15 @@ import {
     addHome as addHomeAction,
     addCourse as addCourseAction,
     addLesson as addLessonAction,
+    fetchingManifestAction
 } from "./ducks/Site";
 import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/ServiceWorker";
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
 import { changeOnlineAction } from "./ducks/Online";
+import { setAuthenticatedState } from "./ducks/Identity";
+import { setCanoePage } from "./ducks/Route";
 
 export const storeWagtailPage = (wagtailPage) => {
     const { type } = wagtailPage.meta;
@@ -121,6 +124,34 @@ export const setOnline = () => {
 export const setOffline = () => {
     store.dispatch(changeOnlineAction(false));
 }
+
+export const isAuthenticated = () => {
+    return store.getState().identity.isAuthenticated;
+};
+
+export const getUser = () => {
+    return store.getState().identity.user;
+};
+
+export const setAuthenticated = (user) => {
+    store.dispatch(setAuthenticatedState(user));
+}
+
+export const setUnauthenticated = () => {
+    store.dispatch(setUnAuthenticatedState());
+}
+
+export const setRoute = (route) => {
+    store.dispatch(setCanoePage(route));
+}
+
+export const getRoute = () => {
+    return store.getState().route;
+};
+
+export const setFetchingManifest = (fetching) => {
+    store.dispatch(fetchingManifestAction(fetching));
+};
 
 export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);

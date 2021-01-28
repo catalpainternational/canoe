@@ -1,72 +1,62 @@
 <App>
-    <template if="{!isBrowserSupported()}">
-        <ChangeBrowser></ChangeBrowser>
-    </template>
+    <ChangeBrowser></ChangeBrowser>
 
-    <template if="{isBrowserSupported()}">
+    <template if="{state.browserSupported}">
         <Toast></Toast>
 
-        <Login if="{userShouldLogin()}"></Login>
-
-        <LoadCompletions if="{!userShouldLogin()}"></LoadCompletions>
-
         <LoadingDots
-            if="{Object.keys(state.wagtailPage).length === 0 && !userShouldLogin()}"
-            extrastyleclasses="light app"
+            if="{state.loading}"
+            extrastyleclasses="dark app"
         ></LoadingDots>
 
-        <template if="{!userShouldLogin() && areCompletionsReady()}">
-            <TopMenu
-                contentType="{state.contentType}"
-                wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
-            ></TopMenu>
-            <HomePage
-                if="{state.contentType === 'HomePage'}"
-                wagtailPage="{createHomePage(state.wagtailPage)}"
-            ></HomePage>
-            <CourseOverview
-                if="{state.contentType === 'CoursePage'}"
-                wagtailPage="{createCoursePage(state.wagtailPage)}"
-            ></CourseOverview>
-            <LessonOverview
-                if="{state.contentType === 'LessonPage'}"
-                wagtailPage="{createLessonPage(state.wagtailPage)}"
-            ></LessonOverview>
-            <Settings if="{state.contentType === 'settings'}"></Settings>
-            <Resources
-                if="{state.contentType === 'resources' || state.contentType === 'ResourcesRoot'}"
-            ></Resources>
-            <ResourceArticle
-                if="{state.contentType === 'ResourceArticle'}"
-                wagtailPage="{createResourceArticle(state.wagtailPage)}"
-            ></ResourceArticle>
-            <Profile if="{state.contentType === 'profile'}"></Profile>
-            <BottomMenu contentType="{state.contentType}"></BottomMenu>
-            <PushSubscription></PushSubscription>
-            <Sync if="{state.contentType === 'sync'}"></Sync>
-        </template>
+        <TopMenu
+            contentType="{state.contentType || state.route.page}"
+            wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
+        ></TopMenu>
+
+        <Login if="{state.route.page === 'login'}"></Login>
+        <Settings if="{state.route.page === 'settings'}"></Settings>
+        <Profile if="{state.route.page === 'profile'}"></Profile>
+        <Sync if="{state.route.page === 'sync'}"></Sync>
+
+        <AllCoursesPage
+            if="{state.route.page && state.route.page.type === 'homepage'}"
+        ></AllCoursesPage>
+        <!--
+        <HomePage
+            if="{state.route.page && state.route.page.type === 'homepage'}"
+        ></HomePage>
+         -->
+        <CourseOverview
+            if="{state.route.page && state.route.page.type === 'coursepage'}"
+        ></CourseOverview>
+        <LessonOverview
+            if="{state.route.page && state.route.page.type === 'lessonpage'}"
+        ></LessonOverview>
+        <Resources
+            if="{state.route.page && state.route.page.type === 'resourcesroot'}"
+        ></Resources>
+        <ResourceArticle
+            if="{state.route.page && state.route.page.type === 'resourcearticle'}"
+        ></ResourceArticle>
+        
+        <BottomMenu contentType="{state.contentType}"></BottomMenu>
+        <PushSubscription></PushSubscription>
     </template>
 
     <script>
-        import { userShouldLogin } from "js/AuthenticationUtilities";
-        import { getPage } from "js/Routing";
-        import { ON_LOG_IN, ON_LOG_OUT } from "js/Events";
         import {
             isBrowserSupported,
-            areCompletionsReady,
+            getRoute
         } from "ReduxImpl/Interface";
-        import { logPageView } from "js/GoogleAnalytics";
 
-        import { InitialiseCertChain } from "ts/StartUp";
-
-        import HomePageJS from "js/HomePage";
+        import AllCoursesPageJS from "js/AllCoursesPage";
         import CoursePageJS from "js/CoursePage";
         import LessonPageJS from "js/LessonPage";
         import ResourceArticleJS from "js/ResourceArticle";
 
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
-        import LoadCompletions from "RiotTags/Components/LoadCompletions.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
         import Toast from "RiotTags/Components/Toast.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
@@ -78,10 +68,55 @@
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
         import Sync from "RiotTags/Screens/Sync";
 
-        import HomePage from "RiotTags/WagtailPages/HomePage.riot.html";
+        import AllCoursesPage from "RiotTags/WagtailPages/AllCoursesPage.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
+
+
+        function App() {
+            return {
+                state: {
+                    route: getRoute(),
+                    browserSupported: isBrowserSupported(),
+                    wagtailPage: {},
+                    homePageURL: "",
+                    appTitle: "",
+                },
+
+                onUpdated(props, state) {
+                    scrollToFirstUnfinishedContent();
+                },
+
+                storeListener(previousStoreState, storeState) {
+                    if (previousStoreState.language !== storeState.language
+                        || previousStoreState.route.page !== storeState.route.page
+                        || previousStoreState.fetchStatus.fetchingManifest !== storeState.fetchStatus.fetchingManifest
+                    ) {
+                        this.update({
+                            route: getRoute()
+                        });
+                    }
+                }
+            }
+        }
+        App.components = {
+            login: Login,
+            topmenu: TopMenu,
+            bottommenu: BottomMenu,
+            allcoursespage: AllCoursesPage,
+            courseoverview: CourseOverview,
+            lessonoverview: LessonOverview,
+            resources: Resources,
+            profile: Profile,
+            settings: Settings,
+            sync: Sync,
+            pushsubscription: PushSubscription,
+            changebrowser: ChangeBrowser,
+            toast: Toast,
+            resourcearticle: ResourceArticle,
+            loadingdots: LoadingDots,
+        }
 
         const scrollToFirstUnfinishedContent = () => {
             const ongoingCards = document.getElementsByClassName("ongoing");
@@ -99,132 +134,7 @@
             window.scroll(unfinishedContentCoords);
         };
 
-        export default {
-            state: {
-                wagtailPage: {},
-                homePageURL: "",
-                appTitle: "",
-            },
+        export default App;
 
-            components: {
-                login: Login,
-                topmenu: TopMenu,
-                bottommenu: BottomMenu,
-                homepage: HomePage,
-                courseoverview: CourseOverview,
-                lessonoverview: LessonOverview,
-                resources: Resources,
-                profile: Profile,
-                settings: Settings,
-                sync: Sync,
-                loadcompletions: LoadCompletions,
-                pushsubscription: PushSubscription,
-                changebrowser: ChangeBrowser,
-                toast: Toast,
-                resourcearticle: ResourceArticle,
-                loadingdots: LoadingDots,
-            },
-
-            onMounted() {
-                this.setUpEventListeners();
-
-                // Check that the Appelflap wrapper has started, by looking for its global object
-                if (window.canoeHost) {
-                    // Regardless of what happens with Appelflap, we continue starting up Canoe
-                    if (!this.userShouldLogin() && this.areCompletionsReady()) {
-                        // If user returns to site and is logged in.
-                        this.route();
-                    }
-                }
-            },
-
-            onUpdated() {
-                scrollToFirstUnfinishedContent();
-            },
-
-            setUpEventListeners() {
-                window.addEventListener(ON_LOG_IN, async () => {
-                    this.route();
-                });
-
-                window.addEventListener(ON_LOG_OUT, () => {
-                    window.location.hash = "";
-                    this.update();
-                });
-
-                window.addEventListener("hashchange", () => {
-                    if (!this.userShouldLogin()) {
-                        this.route();
-                        logPageView(window.location.hash);
-                    }
-                });
-            },
-
-            storeListener(previousStoreState, storeState) {
-                if (previousStoreState.language != storeState.language) {
-                    this.update();
-                }
-            },
-
-            async route() {
-                if (this.userShouldLogin()) {
-                    // Safety valve - we can get here even if the user hasn't actually logged in
-                    window.location.hash = "";
-                    this.update();
-                    return;
-                }
-
-                const page = await getPage();
-                const pageModel = getWagtailPageModelName(page);
-
-                if (this.areCompletionsReady() && !window.certChain) {
-                    InitialiseCertChain();
-                }
-
-                this.update({
-                    wagtailPage: page,
-                    contentType: pageModel,
-                });
-            },
-
-            isBrowserSupported() {
-                return isBrowserSupported();
-            },
-
-            areCompletionsReady() {
-                return areCompletionsReady();
-            },
-
-            userShouldLogin() {
-                return userShouldLogin();
-            },
-
-            createHomePage(aWagtailPage) {
-                return new HomePageJS(aWagtailPage);
-            },
-
-            createCoursePage(aWagtailPage) {
-                return new CoursePageJS(aWagtailPage);
-            },
-
-            createLessonPage(aWagtailPage) {
-                return new LessonPageJS(aWagtailPage);
-            },
-
-            createResourceArticle(aWagtailPage) {
-                return new ResourceArticleJS(aWagtailPage);
-            },
-        };
-
-        function getWagtailPageModelName(wagtailPage) {
-            if (!!wagtailPage.meta) {
-                // Existing page format
-                const type = wagtailPage.meta.type;
-                return type.substring(type.lastIndexOf(".") + 1);
-            }
-            // New manifest format
-            const type = wagtailPage.loc_hash;
-            return type.substring(type.lastIndexOf("/") + 1);
-        }
     </script>
 </App>

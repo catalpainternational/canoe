@@ -85,18 +85,9 @@
 
                 // try to get the manifest
                 const manifest = new Manifest();
-                if( !manifest.isValid) {
-                    try {
-                        await manifest.initialiseByRequest();
-
-                    } catch {
-                        this.update({
-                            notifications: () => {
-                                return "Could not retrieve manifest";
-                            },
-                        });
-                    }
-                }
+                if (!manifest.data) {
+                    manifest.initialiseFromStore();
+                }                
                 if (manifest.data) {
                     const data = JSON.stringify(manifest.data);
                     this.update({ manifest: "Got a manifest" });

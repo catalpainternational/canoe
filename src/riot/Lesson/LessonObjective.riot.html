@@ -1,11 +1,19 @@
 <LessonObjective>
-    <LessonFrame if="{state.cardIdx < props.objective.cards.length}" extraStyleClasses="objective">
+    <LessonFrame
+        if="{state.cardIdx < props.objective.cards.length}"
+        extraStyleClasses="objective"
+        linkTo="{props.lesson.id}"
+        progressValue="{state.cardIdx + 1}"
+        progressMax="{props.objective.cards.length}"
+    >
         <span class="plant"></span>
         <h3>{ TRANSLATIONS.title() }</h3>
         <p class="center-objective">{props.objective.cards[state.cardIdx].description}</p>
         <div class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
+                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
+                    <span class="arrow"></span>
+                </a>
             </div>
             <div>
                 <button
@@ -24,7 +32,6 @@
                 </button>
             </div>
         </div>
-        <p class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
     <LessonModuleComplete
         if="{state.cardIdx === props.objective.cards.length}"
@@ -52,9 +59,9 @@
             },
 
             TRANSLATIONS: {
-                next: () => gettext('Next'),
-                title: () => gettext('Objectives'),
-                finish: () => gettext('Finish')
+                next: () => gettext("Next"),
+                title: () => gettext("Objectives"),
+                finish: () => gettext("Finish"),
             },
 
             onBeforeMount(props, state) {
@@ -77,15 +84,6 @@
                     this.props.lesson.id,
                     this.props.module,
                     this.state.cardIdx
-                );
-            },
-
-            cardNumberMessage() {
-                // display the number of the current card out of the total number of cards
-                return gettext(
-                    "%1 of %2",
-                    this.state.cardIdx + 1,
-                    this.props.objective.cards.length
                 );
             },
 

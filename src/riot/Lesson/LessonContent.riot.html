@@ -2,6 +2,9 @@
     <LessonFrame
         if="{!props.isLessonPage || state.cardIdx < props.lessonContent.cards.length}"
         extraStyleClasses="content"
+        linkTo="{props.lesson ? props.lesson.id : props.resourceId}"
+        progressValue="{props.lesson ? state.cardIdx + 1 : ''}"
+        progressMax="{props.lesson ? props.lessonContent.cards.length : ''}"
     >
         <Raw
             if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"
@@ -33,7 +36,9 @@
         />
         <div if="{props.isLessonPage}" class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
+                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
+                    <span class="arrow"></span>
+                </a>
             </div>
             <div>
                 <button
@@ -52,7 +57,6 @@
                 </button>
             </div>
         </div>
-        <p if="{props.isLessonPage}" class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
     <LessonModuleComplete
         if="{props.isLessonPage && state.cardIdx === props.lessonContent.cards.length}"
@@ -119,15 +123,6 @@
                     this.props.lesson.id,
                     this.props.module,
                     this.state.cardIdx
-                );
-            },
-
-            cardNumberMessage() {
-                // display the number of the current card out of the total number of cards
-                return gettext(
-                    "%1 of %2",
-                    this.state.cardIdx + 1,
-                    this.props.lessonContent.cards.length
                 );
             },
 
