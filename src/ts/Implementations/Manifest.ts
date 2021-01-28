@@ -149,11 +149,24 @@ export class Manifest implements TManifest {
         return Promise.reject(false);
     }
 
-    async getPageData(locationHash: string): Promise<TWagtailPage> {
+    async getPage(data: TWagtailPageData): Promise<TWagtailPage> {
+        const manifestPage = new Page(data);
+        const pageFilled = await manifestPage.initialiseByRequest();
+        if (pageFilled) {
+            return manifestPage;
+        }
+
+        return Promise.reject(false);
+    }
+
+    async getPageData(
+        locationHash: string,
+        languageCode: string
+    ): Promise<TWagtailPage> {
         const pageManifestData = this.getPageManifestData(locationHash);
 
         if (pageManifestData) {
-            return await this.getPageByUrl(pageManifestData.api_url);
+            return await this.getPage(pageManifestData);
         }
 
         return Promise.reject(false);

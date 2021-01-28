@@ -15,8 +15,8 @@ import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { storeWagtailPage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL } from "js/urls";
 import { getImageRequest, getPageRequest } from "./Fetch";
+import { PAGES_CACHE_NAME } from "ts/Constants";
 
-const PAGES_CACHE = "pages-cache";
 const IMAGES_CACHE = "images-cache";
 
 const trimDomain = (urlWithDomain) => urlWithDomain.replace(/^.*\/\/[^\/]+/, "");
@@ -48,7 +48,7 @@ const cacheAllUrls = async (cacheName, paths, getRequest = (path) => path) => {
 };
 
 const addCachedPagesToRedux = async () => {
-    const pagesCache = await caches.open(PAGES_CACHE);
+    const pagesCache = await caches.open(PAGES_CACHE_NAME);
     const cacheKeys = await pagesCache.keys();
 
     for (const cacheKeyRequest of cacheKeys) {
@@ -69,7 +69,7 @@ export default class SiteDownloader {
         const manifestsPagePaths = new Set([...homePagePaths, ...Object.values(manifest.pages)]);
         const manifestsImagesPaths = new Set(getImagePaths(manifest.images));
 
-        const cachedPagePaths = await getCachedPathsAndDeleteCruft(PAGES_CACHE, manifestsPagePaths);
+        const cachedPagePaths = await getCachedPathsAndDeleteCruft(PAGES_CACHE_NAME, manifestsPagePaths);
         const cachedImagePaths = await getCachedPathsAndDeleteCruft(
             IMAGES_CACHE,
             manifestsImagesPaths
@@ -82,7 +82,7 @@ export default class SiteDownloader {
             dispatchToastEvent(gettext("Site is downloading."));
         }
 
-        // await cacheAllUrls(PAGES_CACHE, pagesToFetch, getPageRequest);
+        // await cacheAllUrls(PAGES_CACHE_NAME, pagesToFetch, getPageRequest);
         // await cacheAllUrls(IMAGES_CACHE, imagesToFetch, getImageRequest);
 
         for (const pagePath of pagesToFetch) {

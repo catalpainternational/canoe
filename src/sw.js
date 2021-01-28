@@ -13,7 +13,7 @@ import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-import { MANIFEST_CACHE_NAME } from "ts/Constants";
+import { MANIFEST_CACHE_NAME, PAGES_CACHE_NAME } from "ts/Constants";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { buildAppelflapRoutes } from "js/RoutingAppelflap";
 
@@ -35,7 +35,7 @@ registerRoute(
 registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.pagesv2),
     new CacheFirst({
-        cacheName: "pages-cache",
+        cacheName: PAGES_CACHE_NAME,
     })
 );
 
