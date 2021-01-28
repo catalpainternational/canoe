@@ -85,7 +85,7 @@ export const initialiseIdentity = () => {
             userId: localStorage.getItem(USER_ID_STORAGE_KEY),
             groups: localStorage.getItem(USER_GROUPS_STORAGE_KEY),
         });
-        InitialiseCertChain();
+        initialiseCertChain(window);
     }
 }
 
