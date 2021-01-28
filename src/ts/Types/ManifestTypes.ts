@@ -3,6 +3,8 @@ import { TPageType } from "./CanoeEnums";
 export type TManifestData = {
     version: string;
     pages: Record<string, TWagtailPage>;
+    // Other fields
+    [x: string]: any;
 };
 
 export type TManifest = TManifestData & TManifestItemState;
@@ -35,6 +37,8 @@ export type TWagtailPage = TWagtailPageData & TManifestItemState;
 export type TAssetEntryData = {
     type: string;
     renditions: Record<string, string>;
+    // Other fields
+    [x: string]: any;
 };
 
 export type TAssetEntry = TAssetEntryData & TManifestItemState;
