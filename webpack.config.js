@@ -59,7 +59,6 @@ module.exports = (env) => {
         },
         entry: {
             canoe: path.resolve(__dirname, "src", "index.js"),
-            render: path.resolve(__dirname, "src", "ts", "Render.ts"),
         },
         output: {
             filename: "[name]-[contenthash].js",

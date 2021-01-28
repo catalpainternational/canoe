@@ -4,6 +4,7 @@ const ADDED_WAGTAIL_PAGE = "site/addedPage";
 const ADDED_HOME_PAGE = "site/addedHome";
 const ADDED_COURSE_PAGE = "site/addedCourse";
 const ADDED_LESSON_PAGE = "site/addedLessons";
+const FETCHING_MANIFEST = "site/fetchingManifest";
 
 // ACTION CREATORS
 export const addManifest = (manifest) => ({ type: ADDED_MANIFEST, manifest });
@@ -11,6 +12,7 @@ export const addPage = (wagtailPage) => ({ type: ADDED_WAGTAIL_PAGE, wagtailPage
 export const addHome = (wagtailPage) => ({ type: ADDED_HOME_PAGE, home: wagtailPage });
 export const addCourse = (wagtailPage) => ({ type: ADDED_COURSE_PAGE, course: wagtailPage });
 export const addLesson = (wagtailPage) => ({ type: ADDED_LESSON_PAGE, lesson: wagtailPage });
+export const fetchingManifestAction = (fetching) => ({ type: FETCHING_MANIFEST, fetching: fetching });
 
 // REDUCERS
 const manifest = (state = {}, action) => {
@@ -117,8 +119,22 @@ const lessons = (state = {}, action) => {
     }
 };
 
+const initialFetchStatus = {
+    fetchingManifest: false,
+}
+const fetchStatus = (state = initialFetchStatus, action) => {
+    switch (action.type) {
+        case FETCHING_MANIFEST:
+            const newState = Object.assign(state, {fetchingManifest: action.fetching});
+            return newState;
+        default:
+            return state;
+    }
+}
+
 // EXPORTED REDUCER
 export default {
+    fetchStatus,
     manifest,
     pages,
     home,

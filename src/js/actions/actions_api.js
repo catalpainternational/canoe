@@ -1,6 +1,5 @@
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { BACKEND_BASE_URL } from "js/urls";
-import { fetch_and_denote_unauthenticatedness as fetch} from "js/Fetch";
 
 const ACTIONS_ENDPOINT_URL = `${BACKEND_BASE_URL}/progress/actions`;
 

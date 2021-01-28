@@ -9,7 +9,11 @@ import {
 } from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
-import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
+import {
+    storeManifest,
+    getManifestFromStore,
+    setFetchingManifest,
+} from "ReduxImpl/Interface";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { Page } from "ts/Implementations/Page";
@@ -72,14 +76,19 @@ export class Manifest implements TManifest {
     }
 
     async initialiseByRequest(): Promise<void> {
-        const resp = await fetch(`${ROUTES_FOR_REGISTRATION.manifest}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `JWT ${getAuthenticationToken()}`,
-            },
-        });
-        this.data = await resp.json();
+        setFetchingManifest(true);
+        try {
+            const resp = await fetch(`${ROUTES_FOR_REGISTRATION.manifest}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `JWT ${getAuthenticationToken()}`,
+                },
+            });
+            this.data = await resp.json();
+        } finally {
+            setFetchingManifest(false);
+        }
         storeManifest(this.data);
     }
 
@@ -114,33 +123,16 @@ export class Manifest implements TManifest {
         return [...images];
     }
 
-    getPageManifestData(
-        locationHash: string,
-        languageCode: string
-    ): TWagtailPageData | undefined {
-        const matchingPages = Object.values(this.data.pages).filter((page) => {
-            // Check there is a location hash and languages
-            // - this is a sanity check only
-            if (!page || !page.loc_hash || !page.language) {
-                return false;
-            }
-
-            // Exact match or match with languageCode at the end
-            if (
-                page.loc_hash !== locationHash &&
-                page.loc_hash !== `${locationHash}-${languageCode}`
-            ) {
-                return false;
-            }
-
-            // Check the language matches
-            // Note: We should be using 'tdt' for Tetun Dili,
-            // but for historical reasons we usually use 'tet'
-            // This test doesn't allow for that
-            return page.language.indexOf(languageCode) === 0;
+    getPageManifestData(locationHash: string): TWagtailPageData | undefined {
+        return Object.values(this.data.pages).find((page) => {
+            return page.loc_hash === locationHash;
         });
+    }
 
-        return matchingPages.length === 1 ? matchingPages[0] : undefined;
+    getLanguageHome(languageCode: string): TWagtailPageData | undefined {
+        return Object.values(this.data.pages).find((page) => {
+            return page.type === "homepage" && page.language === languageCode;
+        });
     }
 
     async getPageById(pageId: string): Promise<TWagtailPage> {
@@ -171,10 +163,7 @@ export class Manifest implements TManifest {
         locationHash: string,
         languageCode: string
     ): Promise<TWagtailPage> {
-        const pageManifestData = this.getPageManifestData(
-            locationHash,
-            languageCode
-        );
+        const pageManifestData = this.getPageManifestData(locationHash);
 
         if (pageManifestData) {
             return await this.getPage(pageManifestData);
