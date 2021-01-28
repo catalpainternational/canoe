@@ -48,7 +48,7 @@ export const initialiseCertChain = async (): Promise<void> => {
             }
         } catch (e) {
             // No signed cert - change this to a proper message, if that is appropriate
-            console.info(e);
+            // console.info(e);
         }
     }
 };
