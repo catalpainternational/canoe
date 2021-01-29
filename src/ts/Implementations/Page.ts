@@ -143,8 +143,10 @@ export class Page implements TWagtailPage {
         }
 
         if (this.assets.length > 0) {
-            return this.assets.every((asset) =>
-                asset.status.startsWith("ready")
+            return this.assets.every(
+                (asset) =>
+                    this.assetInitialised(asset) &&
+                    (asset as Asset).status.startsWith("ready")
             );
         }
 
@@ -162,8 +164,10 @@ export class Page implements TWagtailPage {
         }
 
         if (this.assets.length > 0) {
-            return this.assets.every((asset) =>
-                asset.status.startsWith("ready")
+            return this.assets.every(
+                (asset) =>
+                    this.assetInitialised(asset) &&
+                    (asset as Asset).status.startsWith("ready")
             );
         }
 
@@ -255,8 +259,12 @@ export class Page implements TWagtailPage {
         return true;
     }
 
-    async getAsset(data: TAssetEntryData): Promise<TAssetEntry> {
-        const pageAsset = new Asset(data);
+    private assetInitialised(asset: TAssetEntry): boolean {
+        return asset.initialised || false;
+    }
+
+    async getAsset(asset: TAssetEntryData): Promise<TAssetEntry> {
+        const pageAsset = new Asset(asset);
         const assetFilled = await pageAsset.initialiseByRequest();
         if (assetFilled) {
             return pageAsset;

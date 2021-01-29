@@ -94,7 +94,13 @@
 
                     // try getting a page
                     const aPage = await manifest.getPageData("/site/resources/resource");
-                    this.update({ page: JSON.stringify(aPage.data) });
+                    const pageData = `Page:${aPage.title} at ${aPage.loc_hash} `
+                        + `Assets:${aPage.assets.length} `
+                        + `Valid:${aPage.isValid} `
+                        + `Publishable:${aPage.isPublishable} `
+                        + `Available Offline:${aPage.isAvailableOffline} `
+                        + `Status:${aPage.status} `;
+                    this.update({ page: pageData });
                 }
             }
         }

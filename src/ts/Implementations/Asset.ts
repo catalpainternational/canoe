@@ -135,8 +135,7 @@ export class Asset implements TAssetEntry {
     }
 
     async initialiseFromResponse(resp: Response): Promise<void> {
-        const assetData = await resp.json();
-        this.data = assetData;
+        this.data.blob = await resp.blob();
     }
 
     private async tryCache(cacheName: string): Promise<void> {
