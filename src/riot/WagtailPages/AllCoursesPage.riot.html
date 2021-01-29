@@ -96,7 +96,12 @@
             },
 
             async onMounted(props, state) {
-                const courses = await props.wagtailPage.getFullCourseObjects();
+                let courses = [];
+                try {
+                    courses = await props.wagtailPage.getFullCourseObjects();
+                } catch {
+                    // Do nothing - Peter will fix this later ...
+                }
 
                 const unsortedCourses = courses.filter(course => course.numberOfLessons);
 
