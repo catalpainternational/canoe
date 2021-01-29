@@ -55,11 +55,11 @@ export class Manifest implements TManifest {
     }
 
     get isAvailableOffline(): boolean {
-        return false;
+        return this.isValid;
     }
 
     get isPublishable(): boolean {
-        return false;
+        return this.isValid;
     }
 
     static get emptyItem(): TManifest {

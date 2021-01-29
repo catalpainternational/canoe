@@ -93,7 +93,7 @@
                     this.update({ manifest: "Got a manifest" });
 
                     // try getting a page
-                    const aPage = await manifest.getPageData("/site/home", "en");
+                    const aPage = await manifest.getPageData("/site/resources/resource");
                     this.update({ page: JSON.stringify(aPage.data) });
                 }
             }

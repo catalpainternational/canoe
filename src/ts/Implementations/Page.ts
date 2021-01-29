@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
     TAssetEntry,
+    TAssetEntryData,
     TPage,
     TPageData,
     TWagtailPage,
@@ -13,6 +14,7 @@ import { TPageStatus } from "ts/Types/CanoeEnums";
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { BACKEND_BASE_URL } from "js/urls";
+import { Asset } from "./Asset";
 
 export class Page implements TWagtailPage {
     #cache!: Cache;
@@ -155,7 +157,9 @@ export class Page implements TWagtailPage {
         }
 
         if (this.assets.length > 0) {
-            // do nothing for now
+            return this.assets.every((asset) =>
+                asset.status.startsWith("ready")
+            );
         }
 
         return true;
@@ -202,22 +206,25 @@ export class Page implements TWagtailPage {
     async initialiseFromCache(): Promise<void> {
         this.#cache = await caches.open(PAGES_CACHE_NAME);
 
-        if (this.api_url) {
-            this.#status = "loading:cache";
-            const resp = await this.#cache.match(this.fullUrl, {
-                ignoreSearch: true,
-                ignoreMethod: true,
-                ignoreVary: true,
-            });
-            if (resp) {
-                await this.initialiseFromResponse(resp);
-                this.#status = "ready:cache";
-            } else {
-                this.#status = "prepped:no cache";
-            }
-        } else {
+        if (!this.api_url) {
             this.#status = "prepped:no url";
+            return;
         }
+
+        this.#status = "loading:cache";
+        const resp = await this.#cache.match(this.fullUrl, {
+            ignoreSearch: true,
+            ignoreMethod: true,
+            ignoreVary: true,
+        });
+
+        if (!resp) {
+            this.#status = "prepped:no cache";
+            return;
+        }
+
+        await this.initialiseFromResponse(resp);
+        this.#status = "ready:cache";
     }
 
     async initialiseByRequest(): Promise<boolean> {
@@ -230,14 +237,41 @@ export class Page implements TWagtailPage {
             },
         });
 
-        if (resp.ok) {
-            await this.initialiseFromResponse(resp);
-            this.#status = "ready:fetch";
-        } else {
+        if (!resp.ok) {
             this.#status = "prepped:no fetch";
+            return true;
         }
 
+        await this.initialiseFromResponse(resp);
+        this.#status = "ready:fetch";
+
         return true;
+    }
+
+    async getAsset(data: TAssetEntryData): Promise<TAssetEntry> {
+        const pageAsset = new Asset(data);
+        const assetFilled = await pageAsset.initialiseByRequest();
+        if (assetFilled) {
+            return pageAsset;
+        }
+
+        return Promise.reject(false);
+    }
+
+    async getAssets(): Promise<Array<TAssetEntry>> {
+        if (this.assets.length === 0) {
+            return this.assets;
+        }
+
+        this.assets.forEach(async (asset) => {
+            try {
+                asset = await this.getAsset(asset);
+            } catch {
+                // Could not fill the asset
+            }
+        });
+
+        return this.assets;
     }
 
     async getImages(): Promise<any[]> {
