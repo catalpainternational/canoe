@@ -7,7 +7,6 @@ import {
     TWagtailPage,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
-import { CacheHandler } from "ts/CacheHandler";
 import { PAGES_CACHE_NAME } from "ts/Constants";
 import { TPageStatus } from "ts/Types/CanoeEnums";
 
@@ -141,6 +140,12 @@ export class Page implements TWagtailPage {
         // Is the page's status acceptable
         if (!this.#status.startsWith("ready")) {
             return false;
+        }
+
+        if (this.assets.length > 0) {
+            return this.assets.every((asset) =>
+                asset.status.startsWith("ready")
+            );
         }
 
         return true;

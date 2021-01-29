@@ -66,9 +66,13 @@ export class Asset implements TAssetEntry {
         return rendition;
     }
 
-    /** Alias for rendition */
+    /** Alias for rendition, always prefixed with a '/' */
     get api_url(): string {
-        return this.rendition || "";
+        let rend = this.rendition || "";
+        if (rend && !rend.startsWith("/")) {
+            rend = `/${rend}`;
+        }
+        return rend;
     }
 
     get fullUrl(): string {

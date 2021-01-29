@@ -85,10 +85,10 @@
 
                 // try to get the manifest
                 const manifest = new Manifest();
-                if (!manifest.data) {
+                if (!manifest.isInitialised) {
                     manifest.initialiseFromStore();
                 }                
-                if (manifest.data) {
+                if (manifest.isInitialised) {
                     const data = JSON.stringify(manifest.data);
                     this.update({ manifest: "Got a manifest" });
 

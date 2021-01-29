@@ -34,11 +34,15 @@ export class Manifest implements TManifest {
         return this.data?.pages || { "0": Page.emptyItem };
     }
 
+    get isInitialised(): boolean {
+        return !!this.data?.pages;
+    }
+
     /** This is a basic integrity check.  It ensures that:
      * - All child pages have matching page entries
      */
     get isValid(): boolean {
-        if (this.pages === undefined) {
+        if (!this.isInitialised) {
             return false;
         }
         const allPageNames = Object.keys(this.pages).sort() as string[];
@@ -94,8 +98,12 @@ export class Manifest implements TManifest {
     }
 
     async getLanguageCodes(): Promise<string[]> {
+        if (!this.isInitialised) {
+            return [];
+        }
+
         const languageCodes = new Set(
-            Object.values(this.data.pages).map((page: any) => {
+            Object.values(this.pages).map((page: any) => {
                 return page.languageCode as string;
             })
         );
@@ -104,8 +112,12 @@ export class Manifest implements TManifest {
     }
 
     async getImages(): Promise<any[]> {
+        if (!this.isInitialised) {
+            return [];
+        }
+
         const images = new Set(
-            Object.values(this.data.pages)
+            Object.values(this.pages)
                 .filter((page: TPage) => {
                     return (
                         page.assets &&
@@ -127,7 +139,11 @@ export class Manifest implements TManifest {
     getPageManifestDataByLocationHash(
         locationHash: string
     ): TWagtailPageData | undefined {
-        return Object.values(this.data.pages).find(
+        if (!this.isInitialised) {
+            return undefined;
+        }
+
+        return Object.values(this.pages).find(
             (page) => page.loc_hash === locationHash
         );
     }
@@ -136,7 +152,11 @@ export class Manifest implements TManifest {
         pageType: TPageType | string,
         languageCode = "en"
     ): TWagtailPageData | undefined {
-        return Object.values(this.data.pages).find(
+        if (!this.isInitialised) {
+            return undefined;
+        }
+
+        return Object.values(this.pages).find(
             (page) => page.type === pageType && page.language === languageCode
         );
     }
