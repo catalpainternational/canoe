@@ -201,6 +201,8 @@ export class Page implements TWagtailPage {
             // Merge old and new
             this.data = { ...this.data, ...pageData };
         }
+
+        await this.getAssets();
     }
 
     async initialiseFromCache(): Promise<void> {

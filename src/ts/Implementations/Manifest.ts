@@ -161,20 +161,6 @@ export class Manifest implements TManifest {
         return Promise.reject(false);
     }
 
-    async getPageById(pageId: string): Promise<TWagtailPage> {
-        return await this.getPageByUrl(`/${pageId}/`);
-    }
-
-    async getPageByUrl(url: string): Promise<TWagtailPage> {
-        const manifestPage = new Page(url);
-        const pageFilled = await manifestPage.initialiseByRequest();
-        if (pageFilled) {
-            return manifestPage;
-        }
-
-        return Promise.reject(false);
-    }
-
     async getPage(data: TWagtailPageData): Promise<TWagtailPage> {
         const manifestPage = new Page(data);
         const pageFilled = await manifestPage.initialiseByRequest();
