@@ -260,7 +260,7 @@ export class Page implements TWagtailPage {
     }
 
     private assetInitialised(asset: TAssetEntry): boolean {
-        return asset.initialised || false;
+        return asset.isValid || false;
     }
 
     async getAsset(asset: TAssetEntryData): Promise<TAssetEntry> {
@@ -278,13 +278,16 @@ export class Page implements TWagtailPage {
             return this.assets;
         }
 
+        const assets: Array<any> = [];
         this.assets.forEach(async (asset) => {
             try {
                 asset = await this.getAsset(asset);
             } catch {
                 // Could not fill the asset
             }
+            assets.push(asset);
         });
+        this.data.assets = assets;
 
         return this.assets;
     }
