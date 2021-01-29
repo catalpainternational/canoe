@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TAssetEntry, TPageData } from "ts/Types/ManifestTypes";
 import { TAssetStatus } from "ts/Types/CanoeEnums";
-import {
-    IMAGES_CACHE_NAME,
-    JPEG_RENDITION,
-    MEDIA_CACHE_NAME,
-    WEBP_BROWSERS,
-    WEBP_RENDITION,
-} from "ts/Constants";
+import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "ts/Constants";
 import { getBrowser } from "ts/PlatformDetection";
 
 // See ts/Typings for the type definitions for these imports
@@ -16,8 +10,9 @@ import { BACKEND_BASE_URL } from "js/urls";
 import { MissingImageError } from "js/Errors";
 
 export class Asset implements TAssetEntry {
-    #cache!: Cache;
     data!: TAssetEntry;
+    #contentType?: any;
+    #blob?: any;
     #status!: TAssetStatus;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -37,7 +32,17 @@ export class Asset implements TAssetEntry {
             this.clone(opts);
             this.#status = "prepped:manifest";
         }
-        this.initialiseFromCache();
+        if (this.data.dataUri) {
+            this.#status = "loading:cache";
+            const blobSplit = this.data.dataUri.split(",");
+            this.#blob = atob(blobSplit[1]);
+            this.#contentType = blobSplit[0]
+                .replace("data:", "")
+                .replace(";base64", "");
+            this.#status = "ready:cache";
+        }
+
+        return this.data.dataUri;
     }
 
     get type(): string {
@@ -77,6 +82,10 @@ export class Asset implements TAssetEntry {
 
     get fullUrl(): string {
         return `${BACKEND_BASE_URL}/media${this.api_url}`;
+    }
+
+    get dataUri(): string {
+        return this.data.dataUri || "";
     }
 
     /** This will do a basic integrity check.
@@ -135,44 +144,18 @@ export class Asset implements TAssetEntry {
     }
 
     async initialiseFromResponse(resp: Response): Promise<void> {
-        this.data.blob = await resp.blob();
-    }
-
-    private async tryCache(cacheName: string): Promise<void> {
-        this.#cache = await caches.open(cacheName);
-
-        this.#status = "loading:cache";
-        const resp = await this.#cache.match(this.fullUrl, {
-            ignoreSearch: true,
-            ignoreMethod: true,
-            ignoreVary: true,
-        });
-        if (resp) {
-            await this.initialiseFromResponse(resp);
-            this.#status = "ready:cache";
-        } else {
-            this.#status = "prepped:no cache";
-        }
-    }
-
-    async initialiseFromCache(): Promise<void> {
-        if (!this.type) {
-            this.#status = "prepped:no type";
-            return;
-        }
-
-        await this.tryCache(IMAGES_CACHE_NAME);
-        if (this.#status === "prepped:no cache") {
-            await this.tryCache(MEDIA_CACHE_NAME);
-        }
+        this.#blob = await resp.blob();
+        this.data.dataUri = `data:${this.#contentType};base64,${btoa(
+            this.#blob
+        )}`;
     }
 
     async initialiseByRequest(): Promise<boolean> {
         this.#status = "loading:fetch";
 
-        let contentType = "application/json";
+        this.#contentType = "application/json";
         if (this.type === "image") {
-            contentType =
+            this.#contentType =
                 getBrowser().name in WEBP_BROWSERS
                     ? "image/webp"
                     : "image/jpeg";
@@ -183,7 +166,7 @@ export class Asset implements TAssetEntry {
             mode: "cors",
             method: "GET",
             headers: {
-                "Content-Type": contentType,
+                "Content-Type": this.#contentType,
                 Authorization: `JWT ${getAuthenticationToken()}`,
             },
         };

@@ -214,10 +214,16 @@ export class Page implements TWagtailPage {
         await this.getAssets();
     }
 
+    async accessCache(): Promise<boolean> {
+        this.#cache = await caches.open(PAGES_CACHE_NAME);
+
+        return !!this.api_url;
+    }
+
     async initialiseFromCache(): Promise<void> {
         this.#cache = await caches.open(PAGES_CACHE_NAME);
 
-        if (!this.api_url) {
+        if (!(await this.accessCache())) {
             this.#status = "prepped:no url";
             return;
         }
@@ -236,6 +242,29 @@ export class Page implements TWagtailPage {
 
         await this.initialiseFromResponse(resp);
         this.#status = "ready:cache";
+    }
+
+    async updateCache(): Promise<void> {
+        if (!(await this.accessCache())) {
+            this.#status = "prepped:no url";
+            return;
+        }
+
+        this.#status = "loading:cache";
+        // Get the current responses details
+        const resp = await this.#cache.match(this.fullUrl, {
+            ignoreSearch: true,
+            ignoreMethod: true,
+            ignoreVary: true,
+        });
+        const respInit: ResponseInit = {
+            headers: resp?.headers,
+            status: resp?.status,
+            statusText: resp?.statusText,
+        };
+        // Create the new response to go into the cache
+        const updatedResp = new Response(JSON.stringify(this.data), respInit);
+        await this.#cache.put(this.fullUrl, updatedResp);
     }
 
     async initialiseByRequest(): Promise<boolean> {
@@ -288,6 +317,8 @@ export class Page implements TWagtailPage {
             assets.push(asset);
         });
         this.data.assets = assets;
+
+        await this.updateCache();
 
         return this.assets;
     }
