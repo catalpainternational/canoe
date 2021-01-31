@@ -1,60 +1,54 @@
 <CourseOverview>
     <CoursePage
-        if="{state.hash == null}"
-        wagtailPage="{props.wagtailPage}"
-        examCards="{state.examCards}"
+        if="{!state.showExam}"
+        page="{props.page}"
     ></CoursePage>
     <CourseExam
-        if="{state.hash === EXAM_MODULE && state.examCards.length > 0}"
-        wagtailPage="{props.wagtailPage}"
-        cards="{state.examCards}"
+        if="{state.showExam}"
+        page="{props.page}"
     ></CourseExam>
     <script>
         import CoursePage from "RiotTags/WagtailPages/CoursePage.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
-        import { getHashPieces } from "js/Routing";
+        import { getRoute } from "ReduxImpl/Interface";
 
-        export default {
+        const EXAM_MODULE = "exam";
+
+        function readState() {
+            const route = getRoute();
+            const state = {
+                showExam: route.riotHash === EXAM_MODULE,
+            };
+            return state;
+        }
+
+        function CourseOverview() { return {
             state: {
-                examCards: [],
-                hash: "",
+                ...readState()
             },
 
-            components: {
-                coursepage: CoursePage,
-                courseexam: CourseExam,
-            },
-
-            EXAM_MODULE: "exam",
-
-            onBeforeMount(props, state) {
-                state.hash = getHashPieces()[1];
-                window.addEventListener("hashchange", this.hashChanged);
-            },
-
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
-            },
-
-            onMounted(props, state) {
-                const { exam } = this.props.wagtailPage;
-                if (!exam) {
-                    return;
+            storeListener(previousStoreState, storeState) {
+                const newState = readState() 
+                if (this.state.showExam !== newState.showExam) {
+                    this.update(newState);
                 }
+            },
 
+            /*
                 const examCards = exam.map((card) => {
                     const { id, type, value } = card;
                     const { question, answers } = value;
                     return { id, type, question, answers };
                 });
                 this.update({ examCards });
-            },
+            */
+        }};
 
-            hashChanged() {
-                this.update({
-                    hash: getHashPieces()[1],
-                });
-            },
+        CourseOverview.components = {
+            coursepage: CoursePage,
+            courseexam: CourseExam,
         };
+
+        export default CourseOverview;
     </script>
 </CourseOverview>

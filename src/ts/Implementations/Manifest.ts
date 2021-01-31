@@ -17,6 +17,16 @@ import {
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { Page } from "ts/Implementations/Page";
+import AllCoursesPage from "./Specific/AllCoursesPage";
+import CoursePage from "./Specific/CoursePage";
+import LessonPage from "./Specific/LessonPage";
+
+class ManifestError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "ManifestError";
+    }
+}
 
 export class Manifest implements TManifest {
     data!: TManifestData;
@@ -30,7 +40,7 @@ export class Manifest implements TManifest {
     }
 
     get pages(): Record<string, TWagtailPage> {
-        return this.data?.pages || { "0": Page.emptyItem };
+        return this.data?.pages;
     }
 
     /** This is a basic integrity check.  It ensures that:
@@ -40,7 +50,7 @@ export class Manifest implements TManifest {
         if (this.pages === undefined) {
             return false;
         }
-        const allPageNames = Object.keys(this.pages).sort() as string[];
+        const allPageNames = new Set(Object.keys(this.pages));
         let childPageNames: Set<string> = new Set();
         allPageNames.forEach((pageName) => {
             childPageNames = new Set([
@@ -48,9 +58,11 @@ export class Manifest implements TManifest {
                 ...this.pages[pageName].children.map((c) => c.toString()),
             ]);
         });
-        const matchedPages = new Set([...allPageNames, ...childPageNames]);
+        const unMatchedChildren = new Set(
+            [...childPageNames].filter((x) => !allPageNames.has(x))
+        );
 
-        return matchedPages === childPageNames;
+        return !unMatchedChildren.size;
     }
 
     get isAvailableOffline(): boolean {
@@ -78,18 +90,20 @@ export class Manifest implements TManifest {
     async initialiseByRequest(): Promise<void> {
         setFetchingManifest(true);
         try {
-            const resp = await fetch(`${ROUTES_FOR_REGISTRATION.manifest}`, {
+            const resp = await fetch(ROUTES_FOR_REGISTRATION.manifest, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `JWT ${getAuthenticationToken()}`,
+                    Authorization: "JWT " + getAuthenticationToken(),
                 },
             });
             this.data = await resp.json();
         } finally {
             setFetchingManifest(false);
         }
-        storeManifest(this.data);
+        if (this.isValid) {
+            storeManifest(this.data);
+        }
     }
 
     async getLanguageCodes(): Promise<string[]> {
@@ -123,52 +137,41 @@ export class Manifest implements TManifest {
         return [...images];
     }
 
-    getPageManifestData(locationHash: string): TWagtailPageData | undefined {
-        return Object.values(this.data.pages).find((page) => {
-            return page.loc_hash === locationHash;
-        });
+    getPageManifestData(locationHash: string): Page | undefined {
+        const pageId: string | undefined = Object.keys(this.data.pages).find(
+            (pageId: string) => {
+                const page = this.data.pages[parseInt(pageId)];
+                return page.loc_hash === locationHash;
+            }
+        );
+        if (pageId === undefined) {
+            throw new ManifestError("location not found in manifest");
+        }
+        return this.getSpecificPage(parseInt(pageId));
     }
 
-    getLanguageHome(languageCode: string): TWagtailPageData | undefined {
-        return Object.values(this.data.pages).find((page) => {
+    getSpecificPage(pageId: number): Page {
+        switch (this.data.pages[pageId].type) {
+            case "homepage":
+                return new AllCoursesPage(this, pageId);
+            case "coursepage":
+                return new CoursePage(this, pageId);
+            case "lessonpage":
+                return new LessonPage(this, pageId);
+            default:
+                return new Page(this, pageId);
+        }
+    }
+
+    getLanguageHome(languageCode: string): Page | undefined {
+        const homePageId: string | undefined = Object.keys(
+            this.data.pages
+        ).find((pageId: string) => {
+            const page = this.data.pages[pageId];
             return page.type === "homepage" && page.language === languageCode;
         });
-    }
-
-    async getPageById(pageId: string): Promise<TWagtailPage> {
-        return await this.getPageByUrl(`/${pageId}/`);
-    }
-
-    async getPageByUrl(url: string): Promise<TWagtailPage> {
-        const manifestPage = new Page(url);
-        const pageFilled = await manifestPage.initialiseByRequest();
-        if (pageFilled) {
-            return manifestPage;
-        }
-
-        return Promise.reject(false);
-    }
-
-    async getPage(data: TWagtailPageData): Promise<TWagtailPage> {
-        const manifestPage = new Page(data);
-        const pageFilled = await manifestPage.initialiseByRequest();
-        if (pageFilled) {
-            return manifestPage;
-        }
-
-        return Promise.reject(false);
-    }
-
-    async getPageData(
-        locationHash: string,
-        languageCode: string
-    ): Promise<TWagtailPage> {
-        const pageManifestData = this.getPageManifestData(locationHash);
-
-        if (pageManifestData) {
-            return await this.getPage(pageManifestData);
-        }
-
-        return Promise.reject(false);
+        return homePageId === undefined
+            ? undefined
+            : this.getSpecificPage(parseInt(homePageId));
     }
 }

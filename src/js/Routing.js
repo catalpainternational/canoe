@@ -7,7 +7,6 @@ import {
 import { getLanguage, setRoute } from "ReduxImpl/Interface";
 import { PageLacksTranslationDataError } from "js/Errors";
 import { logPageView } from "js/GoogleAnalytics";
-import { getManifestFromStore } from "./redux/Interface";
 import { Manifest } from "ts/Implementations/Manifest";
 
 const IS_CANOE_PAGE = /#([A-Za-z]+)/;
@@ -21,23 +20,31 @@ export function initialiseRouting() {
     route(window.location.hash);
 }
 
-async function route(hash) {
+async function route(hashWith) {
+    const hash = hashWith.slice(1);
     logPageView(hash);
 
     // If we are a simple canoe page all should be good
     const appPageMatch = hash.match(IS_CANOE_PAGE);
     if(appPageMatch) {
-        setRoute(appPageMatch[1]);
+        setRoute({ page: {type: appPageMatch[1]}});
         return;
     }
 
     // otherwise we need a manifest to understand what to render
     try {
         const manifest = await getValidManifest();
-        const page = hash.length ? manifest.getPageManifestData(hash) : manifest.getLanguageHome(getLanguage());
-        setRoute(page);
-    } catch {
-        setRoute("error");
+        var colonIndex = hash.indexOf(":");
+        let pageHash = hash, riotHash = "";
+        if (colonIndex !== -1) {
+            pageHash = hash.substring(0, colonIndex);
+            riotHash = hash.substring(colonIndex + 1);
+        }
+        const page = pageHash.length ? manifest.getPageManifestData(pageHash) : manifest.getLanguageHome(getLanguage());
+        page.initialiseByRequest();
+        setRoute(page, riotHash);
+    } catch (error){
+        setRoute({type: "error", error});
     }
 }
 

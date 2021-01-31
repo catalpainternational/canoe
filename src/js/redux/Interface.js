@@ -2,11 +2,8 @@ import { store, LANGUAGE_STORAGE_KEY } from "./Store";
 
 import { changeLanguage as changeLanguageAction } from "./ducks/i18n";
 import {
-    addManifest as addManifestAction,
-    addPage as addPageAction,
-    addHome as addHomeAction,
-    addCourse as addCourseAction,
-    addLesson as addLessonAction,
+    addManifestAction,
+    addPageAction,
     fetchingManifestAction
 } from "./ducks/Site";
 import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/ServiceWorker";
@@ -17,36 +14,21 @@ import { changeOnlineAction } from "./ducks/Online";
 import { setAuthenticatedState } from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
 
-export const storeWagtailPage = (wagtailPage) => {
-    const { type } = wagtailPage.meta;
-    switch (type) {
-        case "elearning_content.HomePage":
-            store.dispatch(addHomeAction(wagtailPage));
-            break;
-        case "elearning_content.CoursePage":
-            store.dispatch(addCourseAction(wagtailPage));
-            break;
-        case "elearning_content.LessonPage":
-            store.dispatch(addLessonAction(wagtailPage));
-            break;
-        case "elearning_content.ResourcesRoot":
-            // Ignore the ResourcesRoot' root.
-            return;
-        case "elearning_content.ResourceArticle":
-            // Ignore ResourceArticle.
-            return;
-        case "wagtailtrans.TranslatableSiteRootPage":
-            // Ignore the i18nized site's root.
-            return;
-        default:
-            throw new Error(`${type} is an unreckognized page type.`);
-    }
+export const storePageData = (pageId, pageData) => {
+    store.dispatch(addPageAction(pageId, pageData));
+};
 
-    store.dispatch(addPageAction(wagtailPage));
+export const getPageData = (pageId) => {
+    let pages = store.getState().pages;
+    return pages[pageId];
 };
 
 export const storeManifest = (manifest) => {
     store.dispatch(addManifestAction(manifest));
+};
+
+export const getManifestFromStore = () => {
+    return store.getState().manifest;
 };
 
 export const changeLanguage = (language) => {
@@ -81,10 +63,6 @@ export const storeBrowserSupport = (trueOrFalse) => {
 
 export const getWagtailPageFromStore = (pageId) => {
     return store.getState().pages[pageId];
-};
-
-export const getManifestFromStore = () => {
-    return store.getState().manifest;
 };
 
 export const isBrowserSupported = () => {
@@ -141,8 +119,8 @@ export const setUnauthenticated = () => {
     store.dispatch(setUnAuthenticatedState());
 }
 
-export const setRoute = (route) => {
-    store.dispatch(setCanoePage(route));
+export const setRoute = (route, riotHash) => {
+    store.dispatch(setCanoePage(route, riotHash));
 }
 
 export const getRoute = () => {

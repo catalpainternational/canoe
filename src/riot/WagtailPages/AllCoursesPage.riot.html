@@ -5,7 +5,7 @@
             <h3>{ TRANSLATIONS.allCourses() }</h3>
             <p>{ TRANSLATIONS.coursesIntro() }</p>
             <a
-                if="{Array.isArray(state.sortedListOfCourses) && state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 }"
+                if="{showTagFilter()}"
                 class="filter-icon"
                 onclick="{toggleTagList}"
             ></a>
@@ -13,16 +13,19 @@
 
         <div class="content-wrapper">
             <LoadingDots
-                if="{state.sortedListOfCourses === null}"
+                if="{!state.pageReady}"
                 extrastyleclasses="dark"
             ></LoadingDots>
-            <template if="{Array.isArray(state.sortedListOfCourses)}">
+            <template
+                if="{state.pageReady}">
+
                 <TagList
-                    if="{state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 && state.showTagList}"
-                    tags="{state.listOfTags}"
+                    if="{props.page.tags.length && state.showTagList}"
+                    tags="{props.page.tags}"
                     onTagClick="{onTagClick}"
                     selectedTags="{state.selectedTags}"
                 ></TagList>
+                <!--
                 <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
                     <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
                     <Card
@@ -39,18 +42,21 @@
                 >
                     { TRANSLATIONS.allCourses() }
                 </h5>
+            -->
                 <div class="card-container">
                     <Card
-                        each="{course in state.sortedListOfCourses}"
-                        if="{doesCourseHaveTag(course)}"
+                        each="{course in props.page.coursesCompleteLast}"
+                        if="{showCourse(course)}"
                         status="{courseStatus(course)}"
                         title="{course.title}"
-                        link="{course.id}"
-                        progressValue="{course.numberOfFinishedLessons}"
-                        progressMax="{course.numberOfLessons}"
+                        link="{course.loc_hash}"
+                        progress-value="{course.numberOfFinishedLessons}"
+                        progress-max="{course.numberOfLessons}"
                     ></Card>
                 </div>
+                <!--
                 <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
+-->
             </template>
         </div>
     </div>
@@ -62,26 +68,18 @@
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
+        import { getRoute } from "ReduxImpl/Interface";
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
         import { ON_COMPLETION_CHANGE } from "js/Events";
         import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
         import { getCourseWithLatestCompletion } from "js/utilities";
 
-        export default {
+        function AllCoursesPage() { return {
             state: {
                 currentCourse: null,
                 selectedTags: [],
-                listOfTags: [],
                 sortedListOfCourses: null,
                 showTagList: false,
-            },
-
-            components: {
-                card: Card,
-                taglist: TagList,
-                guestbanner: GuestBanner,
-                loadingdots: LoadingDots,
-                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
@@ -94,28 +92,18 @@
                     ),
             },
 
-            async onMounted(props, state) {
-                const courses = await props.wagtailPage.getFullCourseObjects();
-
-                const unsortedCourses = courses.filter(course => course.numberOfLessons);
-
-                const currentCourse = getCourseWithLatestCompletion(unsortedCourses);
-                const listOfTags = getTagsFromPages(unsortedCourses);
-
-                const sortedListOfCourses = this.sortCourses(visibleCourses);
-
-                this.update({
-                    currentCourse,
-                    listOfTags,
-                    sortedListOfCourses,
-                });
+            storeListener(previousStoreState, storeState) {
+                if (!this.state.pageReady && this.props.page.ready) {
+                    this.update({pageReady: true});
+                }
             },
 
-            sortCourses(courses) {
-                const completedCourses = courses.filter(course => course.isFinished());
-                const incompleteCourses = courses.filter(course => !course.isFinished());
-                const sortedCourses = incompleteCourses.concat(completedCourses);
-                return sortedCourses;
+            onBeforeMount(props, state) {
+                state.pageReady = props.page.ready;
+            },
+
+            showTagFilter() {
+                return this.state.pageReady && this.props.page.tags.length;
             },
 
             toggleTagList() {
@@ -132,12 +120,12 @@
                 this.update();
             },
 
-            doesCourseHaveTag(course) {
-                const { tags } = course;
-                const { selectedTags } = this.state;
-                const lowercaseCourseTags = tags.map(tag => tag.toLowerCase());
-
-                return doPageTagsMatchSelections(lowercaseCourseTags, selectedTags);
+            showCourse(course) {
+                return (
+                    !this.state.showTagList
+                    || !this.state.selectedTags.length
+                    || this.props.page.courseIdHasATagIn(course.id, this.state.selectedTags)
+                )
             },
 
             courseStatus(course) {
@@ -149,6 +137,16 @@
                     return "complete";
                 }
             },
+        }};
+
+        AllCoursesPage.components = {
+            card: Card,
+            taglist: TagList,
+            guestbanner: GuestBanner,
+            loadingdots: LoadingDots,
+            topmenu: TopMenu,
         };
+
+        export default AllCoursesPage;
     </script>
 </AllCoursesPage>

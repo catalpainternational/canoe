@@ -2,13 +2,16 @@
 const SET_ROUTE = "route/set";
 
 // ACTION CREATORS
-export const setCanoePage = (page) => ({ type: SET_ROUTE, route: { page }});
+export const setCanoePage = (page, riotHash) => ({ type: SET_ROUTE, page, riotHash });
 
 // REDUCER
-const route = (state = "", action) => {
+const route = (state = {page:{type:"initial"}}, action) => {
     switch (action.type) {
         case SET_ROUTE:
-            return action.route;
+            return {
+                page: action.page,
+                riotHash: action.riotHash
+            };
         default:
             return state;
     }

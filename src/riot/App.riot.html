@@ -5,17 +5,21 @@
         <Toast></Toast>
 
         <LoadingDots
-            if="{state.loading}"
+            if="{state.page.type === 'initial'}"
             extrastyleclasses="dark app"
         ></LoadingDots>
 
-        <Login if="{state.route.page === 'login'}"></Login>
-        <Settings if="{state.route.page === 'settings'}"></Settings>
-        <Profile if="{state.route.page === 'profile'}"></Profile>
-        <Sync if="{state.route.page === 'sync'}"></Sync>
+        <div if="{state.page.type === 'error'}">
+            { state.page.error }
+        </div>
+        <Login if="{state.page.type === 'login'}"></Login>
+        <Settings if="{state.page.type === 'settings'}"></Settings>
+        <Profile if="{state.page.type === 'profile'}"></Profile>
+        <Sync if="{state.page.type === 'sync'}"></Sync>
 
         <AllCoursesPage
-            if="{state.route.page && state.route.page.type === 'homepage'}"
+            if="{ state.page.type === 'homepage' }"
+            page="{ state.page }"
         ></AllCoursesPage>
         <!--
         <HomePage
@@ -23,19 +27,20 @@
         ></HomePage>
          -->
         <CourseOverview
-            if="{state.route.page && state.route.page.type === 'coursepage'}"
+            if="{ state.page.type === 'coursepage' }"
+            page="{ state.page }"
         ></CourseOverview>
         <LessonOverview
-            if="{state.route.page && state.route.page.type === 'lessonpage'}"
+            if="{state.page.type === 'lessonpage'}"
         ></LessonOverview>
         <Resources
-            if="{state.route.page && state.route.page.type === 'resourcesroot'}"
+            if="{state.page.type === 'resourcesroot'}"
         ></Resources>
         <ResourceArticle
-            if="{state.route.page && state.route.page.type === 'resourcearticle'}"
+            if="{state.page.type === 'resourcearticle'}"
         ></ResourceArticle>
         
-        <BottomMenu contentType="{state.contentType}"></BottomMenu>
+        <BottomMenu contentType="{state.page.type}"></BottomMenu>
         <PushSubscription></PushSubscription>
     </template>
 
@@ -44,11 +49,6 @@
             isBrowserSupported,
             getRoute
         } from "ReduxImpl/Interface";
-
-        import AllCoursesPageJS from "js/AllCoursesPage";
-        import CoursePageJS from "js/CoursePage";
-        import LessonPageJS from "js/LessonPage";
-        import ResourceArticleJS from "js/ResourceArticle";
 
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
@@ -69,14 +69,16 @@
 
 
         function App() {
-            return {
-                state: {
-                    route: getRoute(),
+            function readState() {
+                const route = getRoute();
+                const state = {
+                    page: route.page,
                     browserSupported: isBrowserSupported(),
-                    wagtailPage: {},
-                    homePageURL: "",
-                    appTitle: "",
-                },
+                };
+                return state;
+            }
+            return {
+                state: readState(),
 
                 onUpdated(props, state) {
                     scrollToFirstUnfinishedContent();
@@ -84,12 +86,9 @@
 
                 storeListener(previousStoreState, storeState) {
                     if (previousStoreState.language !== storeState.language
-                        || previousStoreState.route.page !== storeState.route.page
-                        || previousStoreState.fetchStatus.fetchingManifest !== storeState.fetchStatus.fetchingManifest
+                        || previousStoreState.route.page.type !== storeState.route.page.type
                     ) {
-                        this.update({
-                            route: getRoute()
-                        });
+                        this.update(readState());
                     }
                 }
             }

@@ -12,76 +12,95 @@ import { PAGES_CACHE_NAME } from "ts/Constants";
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { BACKEND_BASE_URL } from "js/urls";
+import {
+    getManifestFromStore,
+    getPageData as getPageDataFromStore,
+    storePageData,
+} from "ReduxImpl/Interface";
+import { Manifest } from "./Manifest";
+import { TManifestData } from "../Types/ManifestTypes";
 
 export class Page implements TWagtailPage {
     #cache!: Cache;
-    data!: TWagtailPageData;
+    #manifest: Manifest;
+    #id: number;
+    pageData!: TWagtailPageData;
     #status!: string;
+    #childPages: Page[] | undefined;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(opts?: any) {
-        this.#status = "unset";
-        if (!this.data) {
-            this.data = Page.emptyItem;
-            this.#status = "empty";
+    constructor(manifest: Manifest, id: number) {
+        this.#manifest = manifest;
+        this.#id = id;
+
+        const pageData = getPageDataFromStore(this.id);
+        if (pageData) {
+            this.pageData = pageData;
         }
-        if (typeof opts === "undefined") {
-            return;
+        this.#childPages = this.children.map(
+            this.#manifest.getSpecificPage,
+            this.#manifest
+        );
+    }
+
+    get childPages(): Page[] | undefined {
+        if (this.#childPages === undefined) {
+            this.#childPages = this.children.map((childId: number) => {
+                return this.#manifest.getSpecificPage(childId);
+            });
         }
-        if (typeof opts === "string") {
-            this.data.api_url = opts;
-            this.#status = "prepped:url";
-        } else if (opts as TPageData) {
-            this.clone(opts);
-            this.#status = "prepped:manifest";
-        }
-        this.initialiseFromCache();
+        return this.#childPages;
+    }
+
+    get ready(): boolean {
+        return !!this.#status && this.#status.startsWith("ready");
+    }
+    get manifestData(): any {
+        return this.#manifest.pages[this.id];
+    }
+
+    get title(): string {
+        return this.manifestData?.title || "";
     }
 
     get loc_hash(): string {
-        return this.data?.loc_hash || "";
+        return this.manifestData?.loc_hash || "";
+    }
+
+    get id(): number {
+        return this.#id;
     }
 
     get storage_container(): string {
-        return this.data?.storage_container || "";
+        return this.manifestData?.storage_container || "";
     }
 
     get version(): number {
-        return this.data?.version || 0;
+        return this.manifestData?.version || 0;
     }
 
     get api_url(): string {
-        return this.data?.api_url || "";
+        return this.manifestData?.api_url || "";
+    }
+
+    get type(): string {
+        return this.manifestData?.type || "";
     }
 
     get assets(): Array<TAssetEntry> {
-        return this.data?.assets || [];
+        return this.manifestData?.assets || [];
     }
 
     get language(): string {
-        return this.data?.language || "";
+        return this.manifestData?.language || "";
     }
 
     get children(): Array<number> {
-        return this.data?.children || [];
+        return this.manifestData?.children || [];
     }
 
     get depth(): number {
-        return this.data?.depth || 0;
-    }
-
-    /** From old wagtail page definition */
-    get meta(): Record<string, any> | undefined {
-        return this.data?.meta;
-    }
-
-    get pageId(): string {
-        if (this.data.id) {
-            return this.data.id.toString();
-        }
-
-        const url = this.api_url.split("/").filter((token) => token);
-        return url.length ? url[url.length - 1] : "";
+        return this.manifestData?.depth || 0;
     }
 
     get fullUrl(): string {
@@ -135,20 +154,11 @@ export class Page implements TWagtailPage {
         };
     }
 
-    clone(data: TPage): void {
-        this.data = JSON.parse(JSON.stringify(data));
-    }
-
     async initialiseFromResponse(resp: Response): Promise<void> {
         const pageData = await resp.json();
-        // Merge the existing page definition into this structure
-        if (pageData?.api_url) {
-            // New format
-            this.data = pageData;
-        } else {
-            // Merge old and new
-            this.data = { ...this.data, ...pageData };
-        }
+        this.pageData = pageData;
+        this.#status = "ready";
+        storePageData(pageData.id, pageData);
     }
 
     async initialiseFromCache(): Promise<void> {
@@ -174,11 +184,12 @@ export class Page implements TWagtailPage {
 
     async initialiseByRequest(): Promise<boolean> {
         this.#status = "loading:fetch";
+        const token: string = getAuthenticationToken();
         const resp = await fetch(this.fullUrl, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `JWT ${getAuthenticationToken()}`,
+                Authorization: token ? "JWT " + token : "",
             },
         });
 
