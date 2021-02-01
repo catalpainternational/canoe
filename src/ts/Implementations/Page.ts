@@ -233,7 +233,45 @@ export class Page implements TWagtailPage {
         // Merge the existing page definition into this structure
         if (pageData?.api_url) {
             // New format
-            this.data = pageData;
+            const dataKeys = Object.keys(this.data);
+            const respKeys = Object.keys(pageData);
+            dataKeys.forEach((dataKey) => {
+                if (!respKeys.includes(dataKey)) {
+                    return;
+                }
+                const dataIsArray = Array.isArray(this.data[dataKey]);
+                const respIsArray = Array.isArray(pageData[dataKey]);
+                if (dataIsArray) {
+                    if (!respIsArray || pageData[dataKey].length === 0) {
+                        // Don't bother copying empty arrays
+                        // this protects the existing array coming from manifest
+                        // when the cached version is not quite right
+                        return;
+                    }
+                    // We can add more smarts here to ensure that details from the manifest
+                    // are better persisted
+                }
+                if (typeof this.data[dataKey] === "object" || dataIsArray) {
+                    this.data[dataKey] = JSON.parse(
+                        JSON.stringify(pageData[dataKey])
+                    );
+                } else {
+                    this.data[dataKey] = pageData[dataKey];
+                }
+            });
+            respKeys.forEach((respKey) => {
+                if (dataKeys.includes(respKey)) {
+                    return;
+                }
+                const respIsArray = Array.isArray(pageData[respKey]);
+                if (typeof pageData[respKey] === "object" || respIsArray) {
+                    this.data[respKey] = JSON.parse(
+                        JSON.stringify(pageData[respKey])
+                    );
+                } else {
+                    this.data[respKey] = pageData[respKey];
+                }
+            });
         } else {
             // Merge old and new
             this.data = { ...this.data, ...pageData };
@@ -353,10 +391,10 @@ export class Page implements TWagtailPage {
     async getAsset(asset: TAssetEntryData): Promise<TAssetEntry> {
         const pageAsset = new Asset(asset);
         if (pageAsset.isAvailableOffline) {
-            // The asset was not embedded
+            // The asset was embedded
             return pageAsset;
         }
-        // Asset embedded
+        // Asset not embedded - needs retrieval
         const assetFilled = await pageAsset.initialiseByRequest();
         if (assetFilled) {
             return pageAsset;
