@@ -19,6 +19,8 @@ export class Page implements TWagtailPage {
     #cache!: Cache;
     data!: TWagtailPageData;
     #status!: TPageStatus;
+    /** The original request object that works as the key into the cache */
+    #requestObject?: Request;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
@@ -200,6 +202,33 @@ export class Page implements TWagtailPage {
         this.data = JSON.parse(JSON.stringify(data));
     }
 
+    async GetRequestObject(): Promise<Request | undefined> {
+        if (this.#requestObject) {
+            return this.#requestObject;
+        }
+
+        const requests = await this.#cache.keys(this.fullUrl, {
+            ignoreMethod: true,
+            ignoreSearch: true,
+            ignoreVary: true,
+        });
+        if (requests.length === 0) {
+            console.log(`Could not find ${this.fullUrl} in the cache`);
+            return Promise.resolve(undefined);
+        }
+
+        this.#requestObject = requests[0];
+        if (requests.length > 1) {
+            // We should really clean the cache in this case
+            // But we still don't know how to do that properly
+            requests.slice(1).forEach((request) => {
+                // this.#cache.delete(key);
+            });
+        }
+
+        return this.#requestObject;
+    }
+
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         const pageData = await resp.json();
         // Merge the existing page definition into this structure
@@ -219,27 +248,34 @@ export class Page implements TWagtailPage {
         return !!this.api_url;
     }
 
-    async initialiseFromCache(): Promise<boolean> {
-        this.#cache = await caches.open(PAGES_CACHE_NAME);
+    async getFromCache(request: Request): Promise<Response | undefined> {
+        const response = await this.#cache.match(request);
 
+        return response;
+    }
+
+    async initialiseFromCache(): Promise<boolean> {
         if (!(await this.accessCache())) {
             this.#status = "prepped:no url";
             return false;
         }
 
-        this.#status = "loading:cache";
-        const resp = await this.#cache.match(this.fullUrl, {
-            ignoreSearch: true,
-            ignoreMethod: true,
-            ignoreVary: true,
-        });
-
-        if (!resp) {
+        const reqObj = await this.GetRequestObject();
+        if (!reqObj) {
             this.#status = "prepped:no cache";
             return false;
         }
 
-        const isInitialised = await this.initialiseFromResponse(resp);
+        this.#status = "loading:cache";
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const response = await this.getFromCache(reqObj!);
+
+        if (!response) {
+            this.#status = "prepped:no cache";
+            return false;
+        }
+
+        const isInitialised = await this.initialiseFromResponse(response);
         if (isInitialised) {
             this.#status = "ready:cache";
         }
@@ -252,44 +288,29 @@ export class Page implements TWagtailPage {
             return false;
         }
 
-        this.#status = "loading:cache";
-        // Get the current responses details
-        let resps = await this.#cache.matchAll(this.fullUrl, {
-            ignoreSearch: true,
-            ignoreMethod: true,
-            ignoreVary: true,
-        });
-        if (resps.length > 1) {
-            // Multiple cached items found,
-            // we'll purge everything so that `put` will add in the correct item later
-            // this.#cache.delete(this.fullUrl);
-            resps.forEach((resp) => {
-                console.log(resp.url);
-                console.log(resp.json());
-            });
-            resps = resps.filter((resp) => resp.url === this.fullUrl);
+        const reqObj = await this.GetRequestObject();
+        if (!reqObj) {
+            this.#status = "prepped:no cache";
+            return false;
         }
-        // const respInit: ResponseInit = {
-        //     headers: resps[0]?.headers,
-        //     status: resps[0]?.status,
-        //     statusText: resps[0]?.statusText,
-        // };
+
+        this.#status = "loading:cache";
         // Create the new response to go into the cache
-        // const updatedResp = new Response(JSON.stringify(this.data), respInit);
         const updatedResp = new Response(JSON.stringify(this.data));
+
+        console.log("Changing page to:");
         console.log(JSON.stringify(this.data));
         // cache.put returns a Promise<void>, which means you can't really await it
-        await this.#cache.put(this.fullUrl, updatedResp);
-        const wegot = await this.#cache.match(this.fullUrl, {
-            ignoreSearch: true,
-            ignoreMethod: true,
-            ignoreVary: true,
-        });
-        const wegotPage = await wegot?.json();
-        if (!wegotPage) {
+        /* eslint-disable @typescript-eslint/no-non-null-assertion */
+        await this.#cache.put(reqObj!, updatedResp);
+        const wegot = await this.getFromCache(reqObj!);
+        if (!wegot) {
             console.log("Didn't get the page back");
             return false;
         }
+        const wegotPage = await wegot!.json();
+        /* eslint-enable @typescript-eslint/no-non-null-assertion */
+        console.log("Updated page:");
         console.log(JSON.stringify(wegotPage));
         return true;
     }
