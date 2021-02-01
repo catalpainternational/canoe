@@ -39,7 +39,6 @@ export class Page implements TWagtailPage {
             this.clone(opts);
             this.#status = "prepped:manifest";
         }
-        this.initialiseFromCache();
     }
 
     get loc_hash(): string {
@@ -198,11 +197,11 @@ export class Page implements TWagtailPage {
         };
     }
 
-    clone(data: TPage): void {
+    private clone(data: TPage): void {
         this.data = JSON.parse(JSON.stringify(data));
     }
 
-    async GetRequestObject(): Promise<Request | undefined> {
+    private async GetRequestObject(): Promise<Request | undefined> {
         if (this.#requestObject) {
             return this.#requestObject;
         }
@@ -229,7 +228,7 @@ export class Page implements TWagtailPage {
         return this.#requestObject;
     }
 
-    async initialiseFromResponse(resp: Response): Promise<boolean> {
+    private async initialiseFromResponse(resp: Response): Promise<boolean> {
         const pageData = await resp.json();
         // Merge the existing page definition into this structure
         if (pageData?.api_url) {
@@ -242,20 +241,23 @@ export class Page implements TWagtailPage {
         return !!(await this.getAssets());
     }
 
-    async accessCache(): Promise<boolean> {
+    private async accessCache(): Promise<boolean> {
         this.#cache = await caches.open(PAGES_CACHE_NAME);
 
-        return !!this.api_url;
+        return !!this.#cache;
     }
 
-    async getFromCache(request: Request): Promise<Response | undefined> {
+    private async getFromCache(
+        request: Request
+    ): Promise<Response | undefined> {
         const response = await this.#cache.match(request);
 
         return response;
     }
 
     async initialiseFromCache(): Promise<boolean> {
-        if (!(await this.accessCache())) {
+        const cacheSet = await this.accessCache();
+        if (!this.api_url) {
             this.#status = "prepped:no url";
             return false;
         }
@@ -278,11 +280,13 @@ export class Page implements TWagtailPage {
         const isInitialised = await this.initialiseFromResponse(response);
         if (isInitialised) {
             this.#status = "ready:cache";
+        } else {
+            this.#status = "loading:no cache";
         }
         return isInitialised;
     }
 
-    async updateCache(): Promise<boolean> {
+    private async updateCache(): Promise<boolean> {
         if (!(await this.accessCache())) {
             this.#status = "prepped:no url";
             return false;
@@ -317,6 +321,16 @@ export class Page implements TWagtailPage {
 
     async initialiseByRequest(): Promise<boolean> {
         this.#status = "loading:fetch";
+
+        // const request = new Request(this.fullUrl, {
+        //     cache: "no-cache",
+        //     method: "GET",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         Authorization: `JWT ${getAuthenticationToken()}`,
+        //     },
+        // });
+        // Fetch the page from the network
         const resp = await fetch(this.fullUrl, {
             method: "GET",
             headers: {

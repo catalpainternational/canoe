@@ -158,9 +158,14 @@ export class Manifest implements TManifest {
 
     async getPage(data: TWagtailPageData): Promise<TWagtailPage> {
         const manifestPage = new Page(data);
-        const pageFilled = await manifestPage.initialiseByRequest();
+        const pageFilled = await manifestPage.initialiseFromCache();
         if (pageFilled) {
             return manifestPage;
+        }
+        if (manifestPage.status === "loading:no cache") {
+            if (await manifestPage.initialiseByRequest()) {
+                return manifestPage;
+            }
         }
 
         return Promise.reject(false);

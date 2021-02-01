@@ -25,6 +25,7 @@ export type TPageStatus =
     | "prepped:no url"
     | "prepped:no fetch"
     | "loading:cache"
+    | "loading:no cache"
     | "loading:fetch"
     | "ready:cache"
     | "ready:fetch";
