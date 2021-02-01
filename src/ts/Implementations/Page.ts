@@ -200,7 +200,7 @@ export class Page implements TWagtailPage {
         this.data = JSON.parse(JSON.stringify(data));
     }
 
-    async initialiseFromResponse(resp: Response): Promise<void> {
+    async initialiseFromResponse(resp: Response): Promise<boolean> {
         const pageData = await resp.json();
         // Merge the existing page definition into this structure
         if (pageData?.api_url) {
@@ -210,8 +210,7 @@ export class Page implements TWagtailPage {
             // Merge old and new
             this.data = { ...this.data, ...pageData };
         }
-
-        await this.getAssets();
+        return !!(await this.getAssets());
     }
 
     async accessCache(): Promise<boolean> {
@@ -220,12 +219,12 @@ export class Page implements TWagtailPage {
         return !!this.api_url;
     }
 
-    async initialiseFromCache(): Promise<void> {
+    async initialiseFromCache(): Promise<boolean> {
         this.#cache = await caches.open(PAGES_CACHE_NAME);
 
         if (!(await this.accessCache())) {
             this.#status = "prepped:no url";
-            return;
+            return false;
         }
 
         this.#status = "loading:cache";
@@ -237,34 +236,62 @@ export class Page implements TWagtailPage {
 
         if (!resp) {
             this.#status = "prepped:no cache";
-            return;
+            return false;
         }
 
-        await this.initialiseFromResponse(resp);
-        this.#status = "ready:cache";
+        const isInitialised = await this.initialiseFromResponse(resp);
+        if (isInitialised) {
+            this.#status = "ready:cache";
+        }
+        return isInitialised;
     }
 
-    async updateCache(): Promise<void> {
+    async updateCache(): Promise<boolean> {
         if (!(await this.accessCache())) {
             this.#status = "prepped:no url";
-            return;
+            return false;
         }
 
         this.#status = "loading:cache";
         // Get the current responses details
-        const resp = await this.#cache.match(this.fullUrl, {
+        let resps = await this.#cache.matchAll(this.fullUrl, {
             ignoreSearch: true,
             ignoreMethod: true,
             ignoreVary: true,
         });
-        const respInit: ResponseInit = {
-            headers: resp?.headers,
-            status: resp?.status,
-            statusText: resp?.statusText,
-        };
+        if (resps.length > 1) {
+            // Multiple cached items found,
+            // we'll purge everything so that `put` will add in the correct item later
+            // this.#cache.delete(this.fullUrl);
+            resps.forEach((resp) => {
+                console.log(resp.url);
+                console.log(resp.json());
+            });
+            resps = resps.filter((resp) => resp.url === this.fullUrl);
+        }
+        // const respInit: ResponseInit = {
+        //     headers: resps[0]?.headers,
+        //     status: resps[0]?.status,
+        //     statusText: resps[0]?.statusText,
+        // };
         // Create the new response to go into the cache
-        const updatedResp = new Response(JSON.stringify(this.data), respInit);
+        // const updatedResp = new Response(JSON.stringify(this.data), respInit);
+        const updatedResp = new Response(JSON.stringify(this.data));
+        console.log(JSON.stringify(this.data));
+        // cache.put returns a Promise<void>, which means you can't really await it
         await this.#cache.put(this.fullUrl, updatedResp);
+        const wegot = await this.#cache.match(this.fullUrl, {
+            ignoreSearch: true,
+            ignoreMethod: true,
+            ignoreVary: true,
+        });
+        const wegotPage = await wegot?.json();
+        if (!wegotPage) {
+            console.log("Didn't get the page back");
+            return false;
+        }
+        console.log(JSON.stringify(wegotPage));
+        return true;
     }
 
     async initialiseByRequest(): Promise<boolean> {
@@ -279,13 +306,15 @@ export class Page implements TWagtailPage {
 
         if (!resp.ok) {
             this.#status = "prepped:no fetch";
-            return true;
+            return false;
         }
 
-        await this.initialiseFromResponse(resp);
-        this.#status = "ready:fetch";
+        const isInitialised = await this.initialiseFromResponse(resp);
+        if (isInitialised) {
+            this.#status = "ready:fetch";
+        }
 
-        return true;
+        return isInitialised;
     }
 
     private assetInitialised(asset: TAssetEntry): boolean {
@@ -295,8 +324,10 @@ export class Page implements TWagtailPage {
     async getAsset(asset: TAssetEntryData): Promise<TAssetEntry> {
         const pageAsset = new Asset(asset);
         if (pageAsset.isAvailableOffline) {
+            console.info("Found embedded asset");
             return pageAsset;
         }
+        console.info("Did not find embedded asset");
         const assetFilled = await pageAsset.initialiseByRequest();
         if (assetFilled) {
             return pageAsset;
@@ -321,7 +352,7 @@ export class Page implements TWagtailPage {
         });
         this.data.assets = assets;
 
-        await this.updateCache();
+        const cacheUpdated = await this.updateCache();
 
         return this.assets;
     }

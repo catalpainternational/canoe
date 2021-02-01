@@ -25,12 +25,7 @@ registerRoute(
     })
 );
 
-registerRoute(
-    new RegExp(ROUTES_FOR_REGISTRATION.images),
-    new CacheFirst({
-        cacheName: "images-cache",
-    })
-);
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new NetworkOnly());
 
 registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.pagesv2),

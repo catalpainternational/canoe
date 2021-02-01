@@ -12,7 +12,7 @@ import { MissingImageError } from "js/Errors";
 export class Asset implements TAssetEntry {
     data!: TAssetEntry;
     #contentType?: any;
-    #blob?: any;
+    #blob?: Blob;
     #status!: TAssetStatus;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -34,15 +34,10 @@ export class Asset implements TAssetEntry {
         }
         if (this.data.dataUri) {
             this.#status = "loading:cache";
-            const blobSplit = this.data.dataUri.split(",");
-            this.#blob = atob(blobSplit[1]);
-            this.#contentType = blobSplit[0]
-                .replace("data:", "")
-                .replace(";base64", "");
+            this.#blob = this.CreateBlobFromDataUri(this.data.dataUri);
+            this.#contentType = this.#blob.type;
             this.#status = "ready:cache";
         }
-
-        return this.data.dataUri;
     }
 
     get type(): string {
@@ -143,11 +138,12 @@ export class Asset implements TAssetEntry {
         this.data = JSON.parse(JSON.stringify(data));
     }
 
-    async initialiseFromResponse(resp: Response): Promise<void> {
+    async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.#blob = await resp.blob();
-        this.data.dataUri = `data:${this.#contentType};base64,${btoa(
-            this.#blob
-        )}`;
+        this.InitialiseDataUriFromBlob(this.#blob);
+
+        // This only indicates completion of all calls, not success
+        return true;
     }
 
     async initialiseByRequest(): Promise<boolean> {
@@ -172,13 +168,39 @@ export class Asset implements TAssetEntry {
         };
         const resp = await fetch(this.fullUrl, reqInit);
 
+        let isInitialised = false;
         if (resp.ok) {
-            await this.initialiseFromResponse(resp);
-            this.#status = "ready:fetch";
+            isInitialised = await this.initialiseFromResponse(resp);
         } else {
             this.#status = "prepped:no fetch";
         }
 
-        return true;
+        return isInitialised;
+    }
+
+    private CreateBlobFromDataUri(dataUri: string) {
+        const blobSplit = dataUri.split(",");
+        const contentType = blobSplit[0]
+            .replace("data:", "")
+            .replace(";base64", "");
+        const blobText = atob(blobSplit[1]);
+        const blobBin = new Uint8Array(blobText.length);
+        for (let ix = 0; ix < blobText.length; ix++) {
+            blobBin[ix] = blobText.charCodeAt(ix);
+        }
+        return new Blob([blobBin], { type: contentType });
+    }
+
+    private InitialiseDataUriFromBlob(blob: Blob) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            this.data.dataUri = reader.result as string;
+            this.#status = "ready:fetch";
+        };
+        reader.onerror = () => {
+            this.data.dataUri = "";
+            this.#status = "prepped:no fetch";
+        };
+        reader.readAsDataURL(blob);
     }
 }
