@@ -13,6 +13,7 @@
             <p>{state.appelflapMeta}</p>
             <p>{state.manifest}</p>
             <p>{state.page}</p>
+            <img if="{state.img}" src="{state.img}"/>
             <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
 
             <h5 if="{state.syncs.length > 0}" class="section-title">
@@ -94,13 +95,17 @@
 
                     // try getting a page
                     const aPage = await manifest.getPageData("/site/resources/resource");
+                    const assetCount = aPage.assets.length;
                     const pageData = `Page:${aPage.title} at ${aPage.loc_hash} `
-                        + `Assets:${aPage.assets.length} `
+                        + `Assets:${assetCount} `
                         + `Valid:${aPage.isValid} `
                         + `Publishable:${aPage.isPublishable} `
                         + `Available Offline:${aPage.isAvailableOffline} `
                         + `Status:${aPage.status} `;
                     this.update({ page: pageData });
+                    if (assetCount > 0 && aPage.data.assets[0].data.dataUri) {
+                        this.update({ img: aPage.data.assets[0].data.dataUri });
+                    }
                 }
             }
         }
