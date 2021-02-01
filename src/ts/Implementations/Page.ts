@@ -212,7 +212,7 @@ export class Page implements TWagtailPage {
             ignoreVary: true,
         });
         if (requests.length === 0) {
-            console.log(`Could not find ${this.fullUrl} in the cache`);
+            // `Could not find ${this.fullUrl} in the cache`;
             return Promise.resolve(undefined);
         }
 
@@ -302,26 +302,19 @@ export class Page implements TWagtailPage {
         // Create the new response to go into the cache
         const updatedResp = new Response(JSON.stringify(this.data));
 
-        console.log("Changing page to:");
-        console.log(JSON.stringify(this.data));
         // cache.put returns a Promise<void>, which means you can't really await it
-        /* eslint-disable @typescript-eslint/no-non-null-assertion */
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         await this.#cache.put(reqObj!, updatedResp);
-        const wegot = await this.getFromCache(reqObj!);
-        if (!wegot) {
-            console.log("Didn't get the page back");
-            return false;
-        }
-        const wegotPage = await wegot!.json();
-        /* eslint-enable @typescript-eslint/no-non-null-assertion */
-        console.log("Updated page:");
-        console.log(JSON.stringify(wegotPage));
+
         return true;
     }
 
     async initialiseByRequest(): Promise<boolean> {
         this.#status = "loading:fetch";
 
+        // If we need to use cache.add instead of fetch
+        // then we have to start with building a full Request
+        // to get the RequestInfo object
         // const request = new Request(this.fullUrl, {
         //     cache: "no-cache",
         //     method: "GET",
@@ -330,6 +323,7 @@ export class Page implements TWagtailPage {
         //         Authorization: `JWT ${getAuthenticationToken()}`,
         //     },
         // });
+
         // Fetch the page from the network
         const resp = await fetch(this.fullUrl, {
             method: "GET",
@@ -359,10 +353,10 @@ export class Page implements TWagtailPage {
     async getAsset(asset: TAssetEntryData): Promise<TAssetEntry> {
         const pageAsset = new Asset(asset);
         if (pageAsset.isAvailableOffline) {
-            console.info("Found embedded asset");
+            // The asset was not embedded
             return pageAsset;
         }
-        console.info("Did not find embedded asset");
+        // Asset embedded
         const assetFilled = await pageAsset.initialiseByRequest();
         if (assetFilled) {
             return pageAsset;

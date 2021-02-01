@@ -162,7 +162,10 @@ export class Manifest implements TManifest {
         if (pageFilled) {
             return manifestPage;
         }
-        if (manifestPage.status === "loading:no cache") {
+        const notInCache = ["prepped:no cache", "loading:no cache"].includes(
+            manifestPage.status
+        );
+        if (notInCache) {
             if (await manifestPage.initialiseByRequest()) {
                 return manifestPage;
             }
