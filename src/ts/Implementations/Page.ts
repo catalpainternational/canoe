@@ -146,7 +146,7 @@ export class Page implements TWagtailPage {
             return this.assets.every(
                 (asset) =>
                     this.assetInitialised(asset) &&
-                    (asset as Asset).status.startsWith("ready")
+                    (asset as Asset).isAvailableOffline
             );
         }
 
@@ -294,6 +294,9 @@ export class Page implements TWagtailPage {
 
     async getAsset(asset: TAssetEntryData): Promise<TAssetEntry> {
         const pageAsset = new Asset(asset);
+        if (pageAsset.isAvailableOffline) {
+            return pageAsset;
+        }
         const assetFilled = await pageAsset.initialiseByRequest();
         if (assetFilled) {
             return pageAsset;
@@ -321,13 +324,5 @@ export class Page implements TWagtailPage {
         await this.updateCache();
 
         return this.assets;
-    }
-
-    async getImages(): Promise<any[]> {
-        const images = new Set(
-            this.assets.map((asset: TAssetEntry) => asset.renditions)
-        );
-
-        return [...images];
     }
 }

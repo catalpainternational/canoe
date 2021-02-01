@@ -66,6 +66,20 @@ export class Manifest implements TManifest {
         return this.isValid;
     }
 
+    get languageCodes(): string[] {
+        if (!this.isInitialised) {
+            return [];
+        }
+
+        const languageCodes = new Set(
+            Object.values(this.pages).map((page: any) => {
+                return page.languageCode as string;
+            })
+        );
+
+        return [...languageCodes];
+    }
+
     static get emptyItem(): TManifest {
         return {
             version: "0.0.0",
@@ -95,45 +109,6 @@ export class Manifest implements TManifest {
             setFetchingManifest(false);
         }
         storeManifest(this.data);
-    }
-
-    async getLanguageCodes(): Promise<string[]> {
-        if (!this.isInitialised) {
-            return [];
-        }
-
-        const languageCodes = new Set(
-            Object.values(this.pages).map((page: any) => {
-                return page.languageCode as string;
-            })
-        );
-
-        return [...languageCodes];
-    }
-
-    async getImages(): Promise<any[]> {
-        if (!this.isInitialised) {
-            return [];
-        }
-
-        const images = new Set(
-            Object.values(this.pages)
-                .filter((page: TPage) => {
-                    return (
-                        page.assets &&
-                        page.assets.filter((asset: TAssetEntry) => {
-                            return asset.type && asset.type === "image";
-                        })
-                    );
-                })
-                .map((page: TPage) => {
-                    return page.assets.map(
-                        (asset: TAssetEntry) => asset.renditions
-                    );
-                })
-        );
-
-        return [...images];
     }
 
     getPageManifestDataByLocationHash(
