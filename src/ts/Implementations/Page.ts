@@ -216,4 +216,17 @@ export class Page implements TWagtailPage {
 
         return [...images];
     }
+
+    PETEgetImageRenditions(id: number): string {
+        const assets = this.manifestData.assets;
+        return assets.find((a: any) => {
+            return a.id === id && a.type === "image";
+        });
+    }
+    PETEgetMediaRenditions(id: number): string {
+        const assets = this.manifestData.assets;
+        return assets.find((a: any) => {
+            return a.id === id && a.type === "media";
+        });
+    }
 }

@@ -10,6 +10,10 @@ export default class LessonPage extends Page {
         // Not implemented
         return false;
     }
+    completeSection(section: string): any {
+        // Not implemented
+        return section;
+    }
     get course(): CoursePage {
         return this.parent as CoursePage;
     }
