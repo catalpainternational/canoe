@@ -1,23 +1,23 @@
 <LessonOverview>
     <LessonObjective
-        if="{state.hash === OBJECTIVES}"
+        if="{state.section === OBJECTIVES}"
         module="{OBJECTIVES}"
         nextModule="{CONTENT}"
-        page="{props.page}"
+        lesson="{props.lesson}"
     ></LessonObjective>
     <LessonContent
-        if="{state.hash === CONTENT}"
+        if="{state.section === CONTENT}"
         module="{CONTENT}"
         nextModule="{TEST}"
-        page="{props.page}"
+        lesson="{props.lesson}"
     ></LessonContent>
     <LessonTest
-        if="{state.hash === TEST}"
+        if="{state.section === TEST}"
         module="{TEST}"
-        page="{props.page}"
+        lesson="{props.lesson}"
     >
     </LessonTest>
-    <LessonPage if="{!state.hash}" page="{props.page}"></LessonPage>
+    <LessonPage if="{!state.section}" lesson="{props.lesson}"></LessonPage>
 
     <script>
         import { getRoute } from "ReduxImpl/Interface";
@@ -32,7 +32,7 @@
         function readState() {
             const route = getRoute();
             const state = {
-                hash: route.riotHash,
+                section: route.riotHash.split(":")[0],
             };
             return state;
         }
@@ -44,18 +44,15 @@
             OBJECTIVES: "objectives",
             CONTENT: "content",
             TEST: "test",
-            onBeforeMount(props, state){
-                const o = 0;
+
+            onBeforeMount(props, state) {
+                state.lessonReady = props.lesson.ready;
             },
-            onMounted(props, state){
-                const o = 0;
-            },
-            onUpdated(props, state){
-                const o = 0;
-            },
+
             storeListener(previousStoreState, storeState) {
                 const newState = readState();
-                if (this.state.hash !== newState.hash) {
+                if (!this.state.lessonReady && this.props.lesson.ready
+                    || this.state.section !== newState.section) {
                     this.update(newState);
                 }
             }

@@ -1,17 +1,19 @@
 <App>
     <ChangeBrowser></ChangeBrowser>
 
-    <template if="{state.browserSupported}">
+    <template if="{ state.browserSupported }">
         <Toast></Toast>
 
         <LoadingDots
-            if="{state.page.type === 'initial'}"
+            if="{ state.page.type === 'initial' }"
             extrastyleclasses="dark app"
         ></LoadingDots>
 
-        <div if="{state.page.type === 'error'}">
-            { state.page.error }
-        </div>
+        <HandleError
+            if="{ state.page.type === 'error' }"
+            error="{ state.page.error }"
+        ></HandleError>
+
         <Login if="{state.page.type === 'login'}"></Login>
         <Settings if="{state.page.type === 'settings'}"></Settings>
         <Profile if="{state.page.type === 'profile'}"></Profile>
@@ -23,7 +25,8 @@
         ></AllCoursesPage>
         <!--
         <HomePage
-            if="{state.route.page && state.route.page.type === 'homepage'}"
+            if="{ state.page.type === 'homepage' }"
+            page="{ state.page }"
         ></HomePage>
          -->
         <CourseOverview
@@ -32,6 +35,7 @@
         ></CourseOverview>
         <LessonOverview
             if="{state.page.type === 'lessonpage'}"
+            lesson="{ state.page }"
         ></LessonOverview>
         <Resources
             if="{state.page.type === 'resourcesroot'}"
@@ -54,6 +58,7 @@
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
         import Toast from "RiotTags/Components/Toast.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import HandleError from "RiotTags/Components/HandleError.riot.html";
 
         import Login from "RiotTags/Screens/Login.riot.html";
         import Resources from "RiotTags/Screens/Resources.riot.html";
@@ -94,6 +99,7 @@
             }
         }
         App.components = {
+            handleerror: HandleError,
             login: Login,
             bottommenu: BottomMenu,
             allcoursespage: AllCoursesPage,

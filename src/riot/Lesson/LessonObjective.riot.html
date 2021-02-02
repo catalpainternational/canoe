@@ -1,32 +1,33 @@
 <LessonObjective>
+    { props.lesson.ready }
     <LessonFrame
-        if="{state.cardIdx < props.objective.cards.length}"
+        if="{ props.lesson.ready && state.cardIdx <= state.cards.length }"
         extraStyleClasses="objective"
-        linkTo="{props.lesson.id}"
-        progressValue="{state.cardIdx + 1}"
-        progressMax="{props.objective.cards.length}"
+        progressValue="{ state.cardIdx + 1 }"
+        progressMax="{ state.cards.length }"
+        lesson="{ props.lesson }"
     >
         <span class="plant"></span>
         <h3>{ TRANSLATIONS.title() }</h3>
-        <p class="center-objective">{props.objective.cards[state.cardIdx].description}</p>
+        <p class="center-objective">{state.cards[state.cardIdx].description}</p>
         <div class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
+                <a if="{ state.cardIdx > 0 }" class="has-circle" onclick="{ goBack }">
                     <span class="arrow"></span>
                 </a>
             </div>
             <div>
                 <button
                     class="btn-primary"
-                    onclick="{nextObjectiveCard}"
-                    if="{state.cardIdx < props.objective.cards.length - 1}"
+                    onclick="{ nextObjectiveCard }"
+                    if="{ state.cardIdx < state.cards.length - 1 }"
                 >
                     { TRANSLATIONS.next() }
                 </button>
                 <button
                     class="btn-primary"
-                    onclick="{completeObjectiveModal}"
-                    if="{state.cardIdx === props.objective.cards.length - 1}"
+                    onclick="{ completeObjectiveModal }"
+                    if="{ state.cardIdx === state.cards.length - 1 }"
                 >
                     { TRANSLATIONS.finish() }
                 </button>
@@ -34,11 +35,10 @@
         </div>
     </LessonFrame>
     <LessonModuleComplete
-        if="{state.cardIdx === props.objective.cards.length}"
-        lessonId="{props.lesson.id}"
+        if="{ props.lesson.ready && state.cardIdx === state.cards.length }"
+        lesson="{props.lesson}"
         module="{props.module}"
         nextModule="{props.nextModule}"
-        title="{props.title}"
     ></LessonModuleComplete>
 
     <script>
@@ -47,16 +47,19 @@
 
         import { getLessonCardIdx, getNextCardsUrl, getPreviousCardsUrl } from "js/Routing";
         import { setComplete } from "Actions/completion";
+        import { getRoute } from "ReduxImpl/Interface";
 
-        export default {
-            state: {
-                cardIdx: 0,
-            },
-
-            components: {
-                lessonmodulecomplete: LessonModuleComplete,
-                lessonframe: LessonFrame,
-            },
+        function readState(props) {
+            const route = getRoute();
+            const idx = route.riotHash.split(":")[1];
+            const state = {
+                cards: props.lesson.ready ? props.lesson.objective.cards : [],
+                cards: props.lesson.ready ? props.lesson.objective.cards[idx] : undefined,
+                cardIdx: idx,
+            };
+            return state;
+        }
+        function LessonObjective() { return {
 
             TRANSLATIONS: {
                 next: () => gettext("Next"),
@@ -65,18 +68,10 @@
             },
 
             onBeforeMount(props, state) {
-                state.cardIdx = getLessonCardIdx();
-                window.addEventListener("hashchange", this.hashChanged);
+                this.state = readState(props);
             },
-
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
-            },
-
-            hashChanged() {
-                this.update({
-                    cardIdx: getLessonCardIdx(),
-                });
+            onBeforeUpdate(props, state) {
+                this.state = readState(props);
             },
 
             goBack() {
@@ -104,6 +99,13 @@
                     this.state.cardIdx
                 );
             },
+        }}
+
+        LessonObjective.components = {
+            lessonmodulecomplete: LessonModuleComplete,
+            lessonframe: LessonFrame,
         };
+        
+        export default LessonObjective;
     </script>
 </LessonObjective>

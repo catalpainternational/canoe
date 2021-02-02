@@ -24,31 +24,33 @@ export class Page implements TWagtailPage {
     #cache!: Cache;
     #manifest: Manifest;
     #id: number;
+    #parent: Page | undefined;
     pageData!: TWagtailPageData;
     #status!: string;
-    #childPages: Page[] | undefined;
+    #childPages: Page[];
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(manifest: Manifest, id: number) {
+    constructor(manifest: Manifest, id: number, parent?: Page) {
         this.#manifest = manifest;
         this.#id = id;
 
+        // check the store for data ( maybe set ready here? )
         const pageData = getPageDataFromStore(this.id);
         if (pageData) {
             this.pageData = pageData;
         }
+
+        // populate the parent
+        this.#parent = parent || manifest.findParent(id);
+
+        // populate the children
         this.#childPages = this.children.map(
-            this.#manifest.getSpecificPage,
+            (pageId) => this.#manifest.getSpecificPage(pageId, this),
             this.#manifest
         );
     }
 
-    get childPages(): Page[] | undefined {
-        if (this.#childPages === undefined) {
-            this.#childPages = this.children.map((childId: number) => {
-                return this.#manifest.getSpecificPage(childId);
-            });
-        }
+    get childPages(): Page[] {
         return this.#childPages;
     }
 
@@ -65,6 +67,10 @@ export class Page implements TWagtailPage {
 
     get loc_hash(): string {
         return this.manifestData?.loc_hash || "";
+    }
+
+    get parent(): Page | undefined {
+        return this.#parent;
     }
 
     get id(): number {

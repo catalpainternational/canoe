@@ -150,14 +150,14 @@ export class Manifest implements TManifest {
         return this.getSpecificPage(parseInt(pageId));
     }
 
-    getSpecificPage(pageId: number): Page {
+    getSpecificPage(pageId: number, parent?: Page): Page {
         switch (this.data.pages[pageId].type) {
             case "homepage":
-                return new AllCoursesPage(this, pageId);
+                return new AllCoursesPage(this, pageId, parent);
             case "coursepage":
-                return new CoursePage(this, pageId);
+                return new CoursePage(this, pageId, parent);
             case "lessonpage":
-                return new LessonPage(this, pageId);
+                return new LessonPage(this, pageId, parent);
             default:
                 return new Page(this, pageId);
         }
@@ -173,5 +173,19 @@ export class Manifest implements TManifest {
         return homePageId === undefined
             ? undefined
             : this.getSpecificPage(parseInt(homePageId));
+    }
+
+    findParent(pageId: number): Page | undefined {
+        const parentId: string | undefined = Object.keys(this.data.pages).find(
+            (id: string) => {
+                const page = this.data.pages[parseInt(id)];
+                return page.children.indexOf(pageId) !== -1;
+            }
+        );
+        if (parentId === undefined) {
+            return undefined;
+            throw new ManifestError("parent not found in manifest");
+        }
+        return this.getSpecificPage(parseInt(parentId));
     }
 }
