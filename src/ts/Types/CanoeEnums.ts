@@ -45,9 +45,11 @@ export type TAssetStatus =
     | "prepped:type"
     | "prepped:manifest"
     | "prepped:no cache"
+    | "prepped:no url"
     | "prepped:no type"
     | "prepped:no fetch"
     | "loading:cache"
+    | "loading:no cache"
     | "loading:fetch"
     | "ready:cache"
     | "ready:fetch";

@@ -10,10 +10,14 @@ import { BACKEND_BASE_URL } from "js/urls";
 import { MissingImageError } from "js/Errors";
 
 export class Asset implements TAssetEntry {
-    data!: TAssetEntry;
-    #contentType?: any;
+    #cache!: Cache;
     #blob?: Blob;
+    data!: TAssetEntry;
     #status!: TAssetStatus;
+    /** The original request object that works as the key into the cache */
+    #requestObject?: Request;
+    /** Indicates whether the above requestObject had to have the authorizarion header stripped */
+    #requestObjectCleaned = false;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
@@ -31,12 +35,6 @@ export class Asset implements TAssetEntry {
         } else if (opts as TPageData) {
             this.clone(opts);
             this.#status = "prepped:manifest";
-        }
-        if (this.data.dataUri) {
-            this.#status = "loading:cache";
-            this.#blob = this.CreateBlobFromDataUri(this.data.dataUri);
-            this.#contentType = this.#blob.type;
-            this.#status = "ready:cache";
         }
     }
 
@@ -77,10 +75,6 @@ export class Asset implements TAssetEntry {
 
     get fullUrl(): string {
         return `${BACKEND_BASE_URL}/media${this.api_url}`;
-    }
-
-    get dataUri(): string {
-        return this.data.dataUri || "";
     }
 
     /** This will do a basic integrity check.
@@ -138,69 +132,195 @@ export class Asset implements TAssetEntry {
         this.data = JSON.parse(JSON.stringify(data));
     }
 
-    async initialiseFromResponse(resp: Response): Promise<boolean> {
-        this.#blob = await resp.blob();
-        this.InitialiseDataUriFromBlob(this.#blob);
+    private CleanRequest(srcReq: Request): Request {
+        if (!srcReq.headers.has("authorization")) {
+            this.#requestObjectCleaned = false;
+            return srcReq;
+        }
 
-        // This only indicates completion of all calls, not success
+        const headers = new Headers();
+        for (const key of srcReq.headers.keys()) {
+            if (key !== "authorization") {
+                headers.append(key, srcReq.headers.get(key) || "");
+            }
+        }
+
+        this.#requestObjectCleaned = true;
+        return new Request(srcReq.url, {
+            body: srcReq.body,
+            bodyUsed: srcReq.bodyUsed,
+            cache: srcReq.cache,
+            destination: srcReq.destination,
+            headers: headers,
+            integrity: srcReq.integrity,
+            method: srcReq.method,
+            mode: srcReq.mode,
+            redirect: srcReq.redirect,
+            referrer: srcReq.referrer,
+            referrerPolicy: srcReq.referrerPolicy,
+        } as RequestInit);
+    }
+
+    private get contentType(): string {
+        let contentType = "application/json";
+        if (this.type === "image") {
+            contentType =
+                getBrowser().name in WEBP_BROWSERS
+                    ? "image/webp"
+                    : "image/jpeg";
+        }
+
+        return contentType;
+    }
+
+    /** Build a request object we can use to fetch this item */
+    private BuildRequestObject(): Request {
+        return new Request(this.fullUrl, {
+            cache: "no-cache",
+            headers: {
+                "Content-Type": this.contentType,
+                Authorization: `JWT ${getAuthenticationToken()}`,
+            },
+            method: "GET",
+        } as RequestInit);
+    }
+
+    /** Get the Request Object from the currently cached item */
+    private async GetRequestObject(): Promise<Request | undefined> {
+        if (this.#requestObject && this.#requestObject.url === this.fullUrl) {
+            this.#requestObject = this.CleanRequest(this.#requestObject);
+            return this.#requestObject;
+        }
+
+        const requests = await this.#cache.keys(this.fullUrl, {
+            ignoreMethod: true,
+            ignoreSearch: true,
+            ignoreVary: true,
+        });
+        if (requests.length === 0) {
+            // `Could not find ${this.fullUrl} in the cache`;
+            return Promise.resolve(undefined);
+        }
+
+        if (requests.length > 1) {
+            // We should really clean the cache in this case
+            // But we still don't know how to do that properly
+            requests.slice(1).forEach((request) => {
+                // this.#cache.delete(key);
+            });
+        }
+
+        this.#requestObject = this.CleanRequest(requests[0]);
+        return this.#requestObject;
+    }
+
+    private async initialiseFromResponse(resp: Response): Promise<boolean> {
+        this.#blob = await resp.blob();
+
+        return !!this.#blob;
+    }
+
+    private async accessCache(): Promise<boolean> {
+        this.#cache = await caches.open(this.api_url);
+
+        return !!this.#cache;
+    }
+
+    private async getFromCache(
+        request: Request
+    ): Promise<Response | undefined> {
+        const response = await this.#cache.match(request);
+
+        return response;
+    }
+
+    async initialiseFromCache(): Promise<boolean> {
+        const cacheSet = await this.accessCache();
+        if (!this.api_url) {
+            this.#status = "prepped:no url";
+            return false;
+        }
+
+        const reqObj = await this.GetRequestObject();
+        if (!reqObj) {
+            this.#status = "prepped:no cache";
+            return false;
+        }
+
+        this.#status = "loading:cache";
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const response = await this.getFromCache(reqObj!);
+
+        if (!response) {
+            this.#status = "prepped:no cache";
+            return false;
+        }
+
+        const isInitialised = await this.initialiseFromResponse(response);
+        if (isInitialised) {
+            this.#status = "ready:cache";
+        } else {
+            this.#status = "loading:no cache";
+        }
+        return isInitialised;
+    }
+
+    private async updateCache(): Promise<boolean> {
+        if (!(await this.accessCache())) {
+            this.#status = "prepped:no url";
+            return false;
+        }
+
+        let reqObj = await this.GetRequestObject();
+        if (!reqObj) {
+            this.#status = "prepped:no cache";
+            reqObj = this.BuildRequestObject();
+            this.#requestObject = this.CleanRequest(reqObj);
+        }
+
+        this.#status = "loading:cache";
+        // Create the new response to go into the cache
+        const updatedResp = new Response(this.#blob);
+
+        if (this.#requestObjectCleaned) {
+            // Delete the existing cache entry first to ensure that the auth key gets 'lost'
+            const deleted = await this.#cache.delete(reqObj);
+        }
+
+        // cache.put returns a Promise<void>, which means you can't really await it
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        await this.#cache.put(this.#requestObject!, updatedResp);
+
         return true;
     }
 
     async initialiseByRequest(): Promise<boolean> {
         this.#status = "loading:fetch";
 
-        this.#contentType = "application/json";
-        if (this.type === "image") {
-            this.#contentType =
-                getBrowser().name in WEBP_BROWSERS
-                    ? "image/webp"
-                    : "image/jpeg";
-        }
-        // Need to add the "media" types we'll support
-
-        const reqInit: RequestInit = {
+        const reqObj = new Request(this.fullUrl, {
             mode: "cors",
-            method: "GET",
+            cache: "no-cache",
             headers: {
-                "Content-Type": this.#contentType,
+                "Content-Type": this.contentType,
                 Authorization: `JWT ${getAuthenticationToken()}`,
             },
-        };
-        const resp = await fetch(this.fullUrl, reqInit);
+            method: "GET",
+        } as RequestInit);
+        this.#requestObject = this.CleanRequest(reqObj);
 
-        let isInitialised = false;
-        if (resp.ok) {
-            isInitialised = await this.initialiseFromResponse(resp);
-        } else {
+        // Fetch the page from the network
+        const resp = await fetch(reqObj);
+
+        if (!resp.ok) {
             this.#status = "prepped:no fetch";
+            return false;
+        }
+
+        const isInitialised = await this.initialiseFromResponse(resp);
+        if (isInitialised) {
+            this.#status = "ready:fetch";
         }
 
         return isInitialised;
-    }
-
-    private CreateBlobFromDataUri(dataUri: string) {
-        const blobSplit = dataUri.split(",");
-        const contentType = blobSplit[0]
-            .replace("data:", "")
-            .replace(";base64", "");
-        const blobText = atob(blobSplit[1]);
-        const blobBin = new Uint8Array(blobText.length);
-        for (let ix = 0; ix < blobText.length; ix++) {
-            blobBin[ix] = blobText.charCodeAt(ix);
-        }
-        return new Blob([blobBin], { type: contentType });
-    }
-
-    private InitialiseDataUriFromBlob(blob: Blob) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            this.data.dataUri = reader.result as string;
-            this.#status = "ready:fetch";
-        };
-        reader.onerror = () => {
-            this.data.dataUri = "";
-            this.#status = "prepped:no fetch";
-        };
-        reader.readAsDataURL(blob);
     }
 }
