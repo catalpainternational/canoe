@@ -221,7 +221,7 @@ export class Asset implements TAssetEntry {
     }
 
     private async accessCache(): Promise<boolean> {
-        this.#cache = await caches.open(this.api_url);
+        this.#cache = await caches.open(this.data.parentUrl);
 
         return !!this.#cache;
     }

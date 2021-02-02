@@ -436,15 +436,17 @@ export class Page implements TWagtailPage {
         asset.parentUrl = this.api_url;
         const pageAsset = new Asset(asset);
 
-        if (pageAsset.isAvailableOffline) {
-            // The asset was embedded
-            return pageAsset;
-        }
-
-        // Asset not embedded - needs retrieval
-        const assetFilled = await pageAsset.initialiseByRequest();
+        const assetFilled = await pageAsset.initialiseFromCache();
         if (assetFilled) {
             return pageAsset;
+        }
+        const notInCache = ["prepped:no cache", "loading:no cache"].includes(
+            pageAsset.status
+        );
+        if (notInCache) {
+            if (await pageAsset.initialiseByRequest()) {
+                return pageAsset;
+            }
         }
 
         return Promise.reject(false);
