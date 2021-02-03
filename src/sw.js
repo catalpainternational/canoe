@@ -1,9 +1,11 @@
 import { registerRoute } from "workbox-routing/registerRoute.mjs";
+
 import { setDefaultHandler } from "workbox-routing/setDefaultHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
-import { CacheOnly } from "workbox-strategies/CacheOnly.mjs";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
 import { StaleWhileRevalidate } from "workbox-strategies/StaleWhileRevalidate.mjs";
+import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
+
 import { RangeRequestsPlugin } from "workbox-range-requests";
 
 import * as googleAnalytics from "workbox-google-analytics";
@@ -26,7 +28,7 @@ registerRoute(
     })
 );
 
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheFirst());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheAnyOrFetchOnly());
 
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagesv2), new NetworkOnly());
 
