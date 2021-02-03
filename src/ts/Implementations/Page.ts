@@ -233,9 +233,8 @@ export class Page implements TWagtailPage {
 
     /** Build a request object we can use to fetch this item */
     private BuildRequestObject(): Request {
-        const mode = this.fullUrl.startsWith("https://") ? "cors" : "no-cors";
         return new Request(this.fullUrl, {
-            mode: mode,
+            mode: "cors",
             cache: "no-cache",
             headers: {
                 "Content-Type": "application/json",
@@ -326,7 +325,7 @@ export class Page implements TWagtailPage {
     }
 
     private async accessCache(): Promise<boolean> {
-        this.#cache = await caches.open(this.api_url);
+        this.#cache = await caches.open(this.fullUrl);
 
         return !!this.#cache;
     }
@@ -435,7 +434,7 @@ export class Page implements TWagtailPage {
     async getAsset(asset: TAssetEntryData): Promise<TAssetEntry> {
         // The asset's parentUrl is the same as the cache name
         // See `accessCache` above
-        asset.parentUrl = this.api_url;
+        asset.parentUrl = this.fullUrl;
         const pageAsset = new Asset(asset);
 
         const assetFilled = await pageAsset.initialiseFromCache();

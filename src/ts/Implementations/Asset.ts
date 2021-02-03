@@ -16,7 +16,7 @@ export class Asset implements TAssetEntry {
     #status!: TAssetStatus;
     /** The original request object that works as the key into the cache */
     #requestObject?: Request;
-    /** Indicates whether the above requestObject had to have the authorizarion header stripped */
+    /** Indicates whether the above requestObject had to have the authorization header stripped */
     #requestObjectCleaned = false;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -164,8 +164,9 @@ export class Asset implements TAssetEntry {
     private get contentType(): string {
         let contentType = "application/json";
         if (this.type === "image") {
+            const browser = getBrowser().name;
             contentType =
-                getBrowser().name in WEBP_BROWSERS
+                WEBP_BROWSERS.indexOf(browser) >= 0
                     ? "image/webp"
                     : "image/jpeg";
         }
@@ -174,17 +175,23 @@ export class Asset implements TAssetEntry {
     }
 
     /** Build a request object we can use to fetch this item */
-    private BuildRequestObject(): Request {
-        const mode = this.fullUrl.startsWith("https://") ? "cors" : "no-cors";
-        return new Request(this.fullUrl, {
-            mode: mode,
+    private BuildRequestObject(useAuth: boolean): Request {
+        const headers: any = {
+            "Content-Type": this.contentType,
+        };
+        if (useAuth) {
+            headers.Authorization = `JWT ${getAuthenticationToken()}`;
+        }
+
+        const reqInit: any = {
             cache: "no-cache",
-            headers: {
-                "Content-Type": this.contentType,
-                Authorization: `JWT ${getAuthenticationToken()}`,
-            },
+            headers: headers,
             method: "GET",
-        } as RequestInit);
+            mode: "cors",
+            referrer: BACKEND_BASE_URL,
+        };
+
+        return new Request(this.fullUrl, reqInit as RequestInit);
     }
 
     /** Get the Request Object from the currently cached item */
@@ -270,7 +277,7 @@ export class Asset implements TAssetEntry {
     async initialiseByRequest(): Promise<boolean> {
         this.#status = "loading:fetch";
 
-        const reqObj = this.BuildRequestObject();
+        const reqObj = this.BuildRequestObject(false);
         this.#requestObject = this.CleanRequest(reqObj);
 
         // Fetch the asset from the network, direct into the cache
@@ -283,6 +290,7 @@ export class Asset implements TAssetEntry {
             // * request didn't return successfully
             // * request is a cross-origin no-cors request
             //   (in which case the reported status is always 0.)
+            console.log(tex);
 
             this.#status = "prepped:no fetch";
             return false;

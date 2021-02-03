@@ -26,7 +26,7 @@ registerRoute(
     })
 );
 
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheFirst());
 
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagesv2), new NetworkOnly());
 

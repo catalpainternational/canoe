@@ -103,8 +103,8 @@
                         + `Available Offline:${aPage.isAvailableOffline} `
                         + `Status:${aPage.status} `;
                     this.update({ page: pageData });
-                    if (assetCount > 0 && aPage.data.assets[0].data.dataUri) {
-                        this.update({ img: aPage.data.assets[0].data.dataUri });
+                    if (assetCount > 0 && aPage.data.assets[0].data) {
+                        this.update({ img: aPage.data.assets[0].data });
                     }
                 }
             }
