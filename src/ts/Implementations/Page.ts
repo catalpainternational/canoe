@@ -233,7 +233,9 @@ export class Page implements TWagtailPage {
 
     /** Build a request object we can use to fetch this item */
     private BuildRequestObject(): Request {
+        const mode = this.fullUrl.startsWith("https://") ? "cors" : "no-cors";
         return new Request(this.fullUrl, {
+            mode: mode,
             cache: "no-cache",
             headers: {
                 "Content-Type": "application/json",

@@ -175,7 +175,9 @@ export class Asset implements TAssetEntry {
 
     /** Build a request object we can use to fetch this item */
     private BuildRequestObject(): Request {
+        const mode = this.fullUrl.startsWith("https://") ? "cors" : "no-cors";
         return new Request(this.fullUrl, {
+            mode: mode,
             cache: "no-cache",
             headers: {
                 "Content-Type": this.contentType,
@@ -265,58 +267,28 @@ export class Asset implements TAssetEntry {
         return isInitialised;
     }
 
-    private async updateCache(): Promise<boolean> {
-        if (!(await this.accessCache())) {
-            this.#status = "prepped:no url";
-            return false;
-        }
-
-        let reqObj = await this.GetRequestObject();
-        if (!reqObj) {
-            this.#status = "prepped:no cache";
-            reqObj = this.BuildRequestObject();
-            this.#requestObject = this.CleanRequest(reqObj);
-        }
-
-        this.#status = "loading:cache";
-        // Create the new response to go into the cache
-        const updatedResp = new Response(this.#blob);
-
-        if (this.#requestObjectCleaned) {
-            // Delete the existing cache entry first to ensure that the auth key gets 'lost'
-            const deleted = await this.#cache.delete(reqObj);
-        }
-
-        // cache.put returns a Promise<void>, which means you can't really await it
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        await this.#cache.put(this.#requestObject!, updatedResp);
-
-        return true;
-    }
-
     async initialiseByRequest(): Promise<boolean> {
         this.#status = "loading:fetch";
 
-        const reqObj = new Request(this.fullUrl, {
-            mode: "cors",
-            cache: "no-cache",
-            headers: {
-                "Content-Type": this.contentType,
-                Authorization: `JWT ${getAuthenticationToken()}`,
-            },
-            method: "GET",
-        } as RequestInit);
+        const reqObj = this.BuildRequestObject();
         this.#requestObject = this.CleanRequest(reqObj);
 
-        // Fetch the page from the network
-        const resp = await fetch(reqObj);
+        // Fetch the asset from the network, direct into the cache
+        try {
+            await this.#cache.add(reqObj);
+        } catch (tex: any) {
+            // TypeError if it wasn't `http` or `https`
+            // Also:
+            // Underlying Response status wasn't 200
+            // * request didn't return successfully
+            // * request is a cross-origin no-cors request
+            //   (in which case the reported status is always 0.)
 
-        if (!resp.ok) {
             this.#status = "prepped:no fetch";
             return false;
         }
 
-        const isInitialised = await this.initialiseFromResponse(resp);
+        const isInitialised = await this.initialiseFromCache();
         if (isInitialised) {
             this.#status = "ready:fetch";
         }
