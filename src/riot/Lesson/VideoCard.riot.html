@@ -39,7 +39,7 @@
                 notCached: () => gettext('This video is not available offline.'),
             },
 
-            async onBeforeMount(props, state) {
+            onBeforeMount(props, state) {
                 this.page = getRoute().page;
                 const asset = this.page.PETEgetMediaRenditions(
                     props.media.id
@@ -59,14 +59,6 @@
                 logClickedPlayOnVideo(mediaTitle);
             },
 
-            async toggleAvailableOffline(e) {
-                const url = await resolveMedia(this.props.media.id);
-                const action = this.state.cached
-                    ? deleteItemFromCache(url, "media-cache")
-                    : addToCache(url, "media-cache");
-                await action;
-                this.getCacheInfo();
-            },
         };
     </script>
 </VideoCard>
