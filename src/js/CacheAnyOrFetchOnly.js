@@ -1,7 +1,6 @@
 // See https://developers.google.com/web/tools/workbox/guides/using-bundlers
+import { WorkboxError } from "workbox-core/_private";
 import { Strategy } from "workbox-strategies";
-import { assert, logger, WorkboxError } from "workbox-core";
-
 
 /** This custom strategy first tries to find the request in all caches
  * returning the first result.
@@ -26,6 +25,10 @@ class CacheAnyOrFetchOnly extends Strategy {
         this._matchOptions = options.matchOptions;
     }
 
+    _ownLog(message) {
+        console.info(`workbox ${this.constructor.name} ${message}`);        
+    }
+
     /**
      * @private
      * @param {Request|string} request A request to run this strategy for.
@@ -38,21 +41,14 @@ class CacheAnyOrFetchOnly extends Strategy {
         if (typeof request === "string") {
             request = new Request(request);
         }
-        if (process.env.NODE_ENV !== "production") {
-            assert.isInstance(request, Request, {
-                moduleName: "workbox-strategies",
-                className: this.constructor.name,
-                funcName: "makeRequest",
-                paramName: "request",
-            });
-        }        
 
         // caches.match will return the first match it finds, or undefined
         let response = await caches.match(request, this._matchOptions);
         let error;
         if (!response) {
             if (process.env.NODE_ENV !== "production") {
-                logs.push("No response found in the caches.  Will respond with a network request.");
+                this._ownLog(`No response for ${request.url} found in the caches. ` +
+                    `Will respond with a network request.`);
             }            
 
             try {
@@ -63,32 +59,18 @@ class CacheAnyOrFetchOnly extends Strategy {
 
             if (process.env.NODE_ENV !== "production") {
                 if (response) {
-                    logs.push("Got response from network.");
+                    this._ownLog(`Got response for ${request.url} from the network.`);
                 }
                 else {
-                    logs.push("Unable to get a response from the network.");
+                    this._ownLog(`Unable to get a response for ${request.url} from the network.`);
                 }
             }
         } else {
             if (process.env.NODE_ENV !== "production") {
-                logs.push("Found a cached response in the caches.");
+                this._ownLog(`Found a cached response for ${request.url} in the caches.`);
             }
         }
 
-        if (process.env.NODE_ENV !== "production") {
-            logger.groupCollapsed(`Using ${this.constructor.name} to respond to '${request.url}'`);
-            for (const log of logs) {
-                logger.log(log);
-            }
-            if (response) {
-                logger.groupCollapsed("View the final response here.");
-                logger.log(response);
-                logger.groupEnd();
-            } else {
-                logger.log("[No response returned]");
-            }
-            logger.groupEnd();
-        }
         if (!response) {
             throw new WorkboxError("no-response", { url: request.url, error });
         }
