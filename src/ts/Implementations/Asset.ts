@@ -290,7 +290,8 @@ export class Asset implements TAssetEntry {
             // * request didn't return successfully
             // * request is a cross-origin no-cors request
             //   (in which case the reported status is always 0.)
-            console.log(tex);
+            // eslint-disable-next-line no-console
+            console.error(tex);
 
             this.#status = "prepped:no fetch";
             return false;

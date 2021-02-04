@@ -1,5 +1,4 @@
 // See https://developers.google.com/web/tools/workbox/guides/using-bundlers
-import { WorkboxError } from "workbox-core/_private";
 import { Strategy } from "workbox-strategies";
 
 /** This custom strategy first tries to find the request in all caches
@@ -10,23 +9,10 @@ import { Strategy } from "workbox-strategies";
  * into the correct cache itself.
  */
 class CacheAnyOrFetchOnly extends Strategy {
-    /**
-     * @param {Object} options
-     * @param {string} options.cacheName is NOT supported by this strategy. This strategy searches ALL caches.
-     * @param {Array<Object>} options.plugins is NOT supported by this strategy.
-     * @param {Object} options.fetchOptions Values passed along to the
-     * [`init`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters)
-     * of all fetch() requests made by this strategy.
-     * @param {Object} options.matchOptions [`MultiCacheQueryOptions`](https://w3c.github.io/ServiceWorker/#dictdef-multicachequeryoptions)
-     */
-    constructor(options = {}) {
-        this._plugins = options.plugins || [];
-        this._fetchOptions = options.fetchOptions;
-        this._matchOptions = options.matchOptions;
-    }
-
-    _ownLog(message) {
-        console.info(`workbox ${this.constructor.name} ${message}`);        
+    _ownLog(requestUrl, result, location) {
+        const resultText = result ? "Got response for" : "No response for";
+        const locationText = location ? "found in the caches" : "from the network";
+        console.info(`workbox CacheAnyOrFetchOnly: ${resultText} ${requestUrl} ${locationText}`);
     }
 
     /**
@@ -45,12 +31,10 @@ class CacheAnyOrFetchOnly extends Strategy {
         // caches.match will return the first match it finds, or undefined
         let response = await caches.match(request, this._matchOptions);
         let error;
+        if (process.env.NODE_ENV !== "production") {
+            this._ownLog(request.url, response, true);
+        }        
         if (!response) {
-            if (process.env.NODE_ENV !== "production") {
-                this._ownLog(`No response for ${request.url} found in the caches. ` +
-                    `Will respond with a network request.`);
-            }            
-
             try {
                 response = await handler.fetch(request, this._fetchOptions);
             } catch (err) {
@@ -58,21 +42,12 @@ class CacheAnyOrFetchOnly extends Strategy {
             }
 
             if (process.env.NODE_ENV !== "production") {
-                if (response) {
-                    this._ownLog(`Got response for ${request.url} from the network.`);
-                }
-                else {
-                    this._ownLog(`Unable to get a response for ${request.url} from the network.`);
-                }
-            }
-        } else {
-            if (process.env.NODE_ENV !== "production") {
-                this._ownLog(`Found a cached response for ${request.url} in the caches.`);
+                this._ownLog(request.url, response, false);
             }
         }
 
         if (!response) {
-            throw new WorkboxError("no-response", { url: request.url, error });
+            throw new Error(`no-response for ${request.url}. ${error}`);
         }
         return response;
     }
