@@ -28,12 +28,12 @@ export function initialiseCompletions() {
 function storeListener() {
     const newAuthenticationState = isAuthenticated();
     if (newAuthenticationState !== currentAuthenticatedState) {
+        currentAuthenticatedState = newAuthenticationState;
         if (newAuthenticationState) {
             prepDataForAppLaunch();
         } else {
             clearAppData();
         }
-        currentAuthenticatedState = newAuthenticationState;
     }
 }
 
@@ -48,7 +48,7 @@ async function prepDataForAppLaunch() {
 }
 
 async function clearAppData() {
-    window.clearInterval(this.state.pagesPoller);
+    window.clearInterval(completionPoller);
     signalCompletionsAreNotReady();
     clearInMemoryCompletions();
     clearInMemoryExamData();
