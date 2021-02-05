@@ -1,35 +1,27 @@
 <LessonOverview>
     <LessonObjective
-        if="{state.hash === OBJECTIVES}"
-        objective="{props.wagtailPage.objective}"
+        if="{state.section === OBJECTIVES}"
         module="{OBJECTIVES}"
         nextModule="{CONTENT}"
-        title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage}"
-        course="{props.wagtailPage.course}"
+        lesson="{props.lesson}"
     ></LessonObjective>
     <LessonContent
-        if="{state.hash === CONTENT}"
-        lessonContent="{props.wagtailPage.content}"
+        if="{state.section === CONTENT}"
         module="{CONTENT}"
         nextModule="{TEST}"
-        title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage}"
-        course="{props.wagtailPage.course}"
-        isLessonPage="{true}"
+        lesson="{props.lesson}"
     ></LessonContent>
     <LessonTest
-        if="{state.hash === TEST}"
-        test="{props.wagtailPage.test}"
+        if="{state.section === TEST}"
         module="{TEST}"
-        title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage}"
-        course="{props.wagtailPage.course}"
+        lesson="{props.lesson}"
     >
     </LessonTest>
-    <LessonPage if="{!state.hash}" wagtailPage="{props.wagtailPage}"></LessonPage>
+    <LessonPage if="{!state.section}" lesson="{props.lesson}"></LessonPage>
 
     <script>
+        import { getRoute } from "ReduxImpl/Interface";
+
         import LessonObjective from "RiotTags/Lesson/LessonObjective.riot.html";
         import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
         import LessonTest from "RiotTags/Lesson/LessonTest.riot.html";
@@ -37,36 +29,37 @@
 
         import { getHashPieces } from "js/Routing";
 
-        export default {
-            state: {
-                hash: "",
-            },
-
-            components: {
-                lessonobjective: LessonObjective,
-                lessoncontent: LessonContent,
-                lessontest: LessonTest,
-                lessonpage: LessonPage,
-            },
+        function readState() {
+            const route = getRoute();
+            const state = {
+                section: route.riotHash[0],
+            };
+            return state;
+        }
+        function LessonOverview() { return {
 
             OBJECTIVES: "objectives",
             CONTENT: "content",
             TEST: "test",
 
             onBeforeMount(props, state) {
-                state.hash = getHashPieces()[1];
-                window.addEventListener("hashchange", this.hashChanged);
+            },
+            onBeforeUpdate(props, state) {
+                this.state = {
+                    ...readState(),
+                }
             },
 
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
-            },
+        }}
 
-            hashChanged() {
-                this.update({
-                    hash: getHashPieces()[1],
-                });
-            },
+        LessonOverview.components = {
+            lessonobjective: LessonObjective,
+            lessoncontent: LessonContent,
+            lessontest: LessonTest,
+            lessonpage: LessonPage,
         };
+
+        export default LessonOverview;
+
     </script>
 </LessonOverview>

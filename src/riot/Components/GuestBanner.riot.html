@@ -1,25 +1,36 @@
 <GuestBanner>
-    <div class="{state.isBannerClosing ? 'close' : ''}">
+    <div if="{state.isBannerVisible}" class="{state.isBannerClosing ? 'close' : ''}">
         <a if="{!state.isBannerClosing}" class="cross" onclick="{closingBanner}"></a>
         <p>{ TRANSLATIONS.guest() }</p>
         <p>{ TRANSLATIONS.data() }</p>
+        <a href="#login">LOGIN</a>
     </div>
 
     <script>
-        export default {
+        import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
+
+        export default () => { return {
             state: {
                 isBannerClosing: false,
+                isBannerVisible: isGuestBannerVisible(),
             },
 
             TRANSLATIONS: {
-                guest: () => gettext("You're logged in as a guest user"),
+                guest: () => gettext("You're a guest"),
                 data: () => gettext("No data or progress will be saved"),
+            },
+
+            closeBanner() {
+                toggleGuestBanner(false);
+                this.update({
+                    isBannerVisible: false,
+                });
             },
 
             closingBanner() {
                 this.update({ isBannerClosing: true });
-                setTimeout(() => this.props.closeBanner(), 500);
+                setTimeout(() => this.closeBanner(), 500);
             },
-        };
+        }};
     </script>
 </GuestBanner>

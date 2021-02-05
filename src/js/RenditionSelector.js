@@ -21,8 +21,12 @@ export function getImagePaths(images) {
     return Object.values(images).map(getRenditionPath);
 }
 
-const getRenditionUrl = (renditions) => {
+export const getRenditionUrl = (renditions) => {
     return `${BACKEND_BASE_URL}${getRenditionPath(renditions)}`;
+};
+
+export const getMediaUrl = (mediaPath) => {
+    return `${BACKEND_BASE_URL}${MEDIA_PATH}/${mediaPath}`;
 };
 
 const getRenditionPath = (renditions) => {

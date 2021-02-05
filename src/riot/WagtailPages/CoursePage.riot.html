@@ -7,27 +7,31 @@
 
     <div class="content-wrapper">
         <div>
-            <h3 id="coursePageTitle">{props.wagtailPage.title}</h3>
+            <h3 id="coursePageTitle">{props.page.title}</h3>
         </div>
         <div class="lesson-swoop">
+
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
-            <LoadingDots if="{state.lessons.length === 0}" extrastyleclasses="dark"></LoadingDots>
-            <div class="card-container">
-                <Card
-                    each="{lesson in state.lessons}"
-                    status="{lessonStatus(lesson)}"
-                    title="{lesson.title}"
-                    link="{lesson.id}"
-                ></Card>
-            </div>
-            <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
-                <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
-                <Card
-                    title="{courseExamTitle()}"
-                    description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
-                    link="{props.wagtailPage.id}/exam/0"
-                    status="{examStatus(props.wagtailPage)}"
-                ></Card>
+            <LoadingDots if="{ !props.page.ready }" extrastyleclasses="dark"></LoadingDots>
+            <template if="{ props.page.ready }">
+                <div class="card-container">
+                    <p if="{! props.page.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
+                    <Card
+                        each="{lesson in props.page.lessons}"
+                        status="{lessonStatus(lesson)}"
+                        title="{lesson.title}"
+                        link="{lesson.loc_hash}"
+                    ></Card>
+                </div>
+                <template if="{ props.page.hasExam }">
+                    <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
+                    <Card
+                        title="{examTitle()}"
+                        description="{examDescription()}"
+                        link="{ `${props.page.loc_hash}:exam` }"
+                        status="{examStatus(props.wagtailPage)}"
+                    ></Card>
+                </template>
             </template>
         </div>
     </div>
@@ -40,48 +44,49 @@
 
         import { isGuestUser } from "js/AuthenticationUtilities";
 
-        export default {
+        function CoursePage() { return {
+            state: {
+                coursePageTitle: null,
+                lessons: [],
+            },
             TRANSLATIONS: {
+                no_lessons: () => gettext("There are no lessons yet in this course"),
                 your_lessons: () => gettext("Your lessons"),
                 course_exam: () => gettext("Course exam"),
                 highestScore: () => gettext("Highest score"),
             },
 
-            components: {
-                card: Card,
-                courseexam: CourseExam,
-                loadingdots: LoadingDots,
-                topmenu: TopMenu,
+            storeListener(previousStoreState, storeState) {
+                if (!this.state.pageReady && this.props.page.ready) {
+                    this.update({pageReady: true});
+                }
             },
 
-            state: {
-                coursePageTitle: null,
-                lessons: [],
-            },
-
-            async onMounted(props, state) {
-                const coursePageTitle = this.$("#coursePageTitle");
-                const { wagtailPage: course } = props;
-                const lessons = await course.getFullLessonObjects();
-
-                this.update({ lessons, coursePageTitle });
+            onBeforeMount(props, state) {
+                state.pageReady = props.page.ready;
             },
 
             backToAllCourses() {
                 location.hash = "#";
             },
 
-            isExamDisabled() {
-                // Exams are enabled if you complete all lessons or if you are a
-                // guest user.
-                const { wagtailPage: course } = this.props;
-                const isExamUnlocked =
-                    course.numberOfFinishedLessons === course.numberOfLessons - 1;
-                return !isExamUnlocked && !isGuestUser();
+            examDescription() {
+                const course = this.props.page;
+                return (
+                    course.hasUserTriedExam
+                     ? `${this.TRANSLATIONS.highestScore()}: ${course.examHighScore}%`
+                     : ''
+                );
             },
 
-            courseExamTitle() {
-                let p = gettext("%1's Course Exam", this.props.wagtailPage.title);
+            isExamEnabled() {
+                // Exams are enabled if you complete all lessons or if you are a
+                // guest user.
+                return this.props.page.allLessonsComplete || isGuestUser();
+            },
+
+            examTitle() {
+                let p = gettext("%1's Course Exam", this.props.page.title);
                 return p;
             },
 
@@ -95,15 +100,24 @@
                 }
             },
 
-            examStatus(exam) {
-                if (exam.isExamFinished()) {
+            examStatus() {
+                if (this.props.page.isExamFinished) {
                     return "complete";
-                } else if (this.isExamDisabled()) {
+                } else if (!this.isExamEnabled()) {
                     return "disabled";
                 } else {
                     return "not-started";
                 }
             },
+        }};
+
+        CoursePage.components = {
+            card: Card,
+            courseexam: CourseExam,
+            loadingdots: LoadingDots,
+            topmenu: TopMenu,
         };
+
+        export default CoursePage;
     </script>
 </CoursePage>

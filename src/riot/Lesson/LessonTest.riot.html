@@ -1,23 +1,23 @@
 <LessonTest>
     <LessonFrame
-        if="{state.cardIdx < state.cards.length}"
         id="test"
-        extraStyleClasses="test modal-background"
-        linkTo="{props.lesson.id}"
-        progressValue="{state.cardIdx + 1}"
-        progressMax="{props.test.cards.length}"
+        if="{ props.lesson.ready && state.cardNumber }"
+        extraStyleClasses="test"
+        progressValue="{ state.cardNumber }"
+        progressMax="{ state.cards.length }"
+        lesson="{ props.lesson }"
     >
-        <h3>{state.cardIdx + 1}. {state.cards[state.cardIdx].question}</h3>
+        <h3>{ state.cardNumber }. { state.card.question }</h3>
         <TestSingleAnswer
             if="{state.isSingleAnswer}"
             lessonName="{props.lesson.title}"
-            card="{state.cards[state.cardIdx]}"
+            card="{state.card}"
             toggleModal="{toggleModal}"
         ></TestSingleAnswer>
         <TestMultipleAnswer
             if="{!state.isSingleAnswer}"
             lessonName="{props.lesson.title}"
-            card="{state.cards[state.cardIdx]}"
+            card="{state.card}"
             toggleModal="{toggleModal}"
         ></TestMultipleAnswer>
     </LessonFrame>
@@ -25,21 +25,18 @@
         if="{state.showModal}"
         isQuestionComplete="{state.isQuestionComplete}"
         selectedAnswer="{state.selectedAnswer}"
-        isLastQuestion="{state.cardIdx === state.cards.length - 1}"
+        isLastQuestion="{state.cardNumber === state.cards.length}"
         toggleModal="{toggleModal}"
-        courseSlug="{props.course.slug}"
         lesson="{props.lesson}"
         module="{props.module}"
-        cardIdx="{state.cardIdx}"
+        cardNumber="{state.cardNumber}"
     ></TestPopupModal>
     <LessonFeedback
-        if="{state.cardIdx === state.cards.length}"
+        if="{ !state.cardNumber && state.stage == 'feedback' }"
         lessonName="{props.lesson.title}"
     ></LessonFeedback>
     <LessonComplete
-        if="{state.cardIdx === state.cards.length + 1}"
-        course="{props.course}"
-        title="{props.title}"
+        if="{ !state.cardNumber && state.stage == 'complete' }"
     ></LessonComplete>
 
     <script>
@@ -50,68 +47,42 @@
         import TestPopupModal from "RiotTags/Lesson/TestPopupModal.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
-        import { getLessonCardIdx } from "js/Routing";
         import { logATestAnswer } from "js/GoogleAnalytics";
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
 
-        export default {
-            state: {
-                cards: [],
-                cardIdx: 0,
-                isSingleAnswer: false,
-                showModal: false,
-                selectedAnswer: {},
-            },
+        import { getRoute } from "ReduxImpl/Interface";
 
-            components: {
-                lessoncomplete: LessonComplete,
-                lessonfeedback: LessonFeedback,
-                testsingleanswer: TestSingleAnswer,
-                testmultipleanswer: TestMultipleAnswer,
-                testpopupmodal: TestPopupModal,
-                lessonframe: LessonFrame,
-            },
+        function readState(props) {
+            const route = getRoute();
+            const stage = route.riotHash[1];
+            const cardNumber = parseInt(stage);
+            const card = props.lesson.ready ? props.lesson.test.cards[cardNumber - 1] : undefined;
+            const state = {
+                cards: props.lesson.ready ? props.lesson.test.cards : [],
+                card: card,
+                isSingleAnswer: card ? card.answers.filter(answer => answer.correct).length < 2 : undefined,
+                cardNumber: cardNumber,
+                stage,
+            };
+            return state;
+        }
+        function LessonTest () { return {
 
             onBeforeMount(props, state) {
-                const { cards } = props.test;
-                state.cards = cards;
-                state.cardIdx = getLessonCardIdx();
-                window.addEventListener("hashchange", this.hashChanged);
-
-                window.addEventListener(ON_ANSWERED_TEST_QUESTION, event => {
-                    logATestAnswer(event.detail);
-                });
+                this.state = readState(props);
+            },
+            onBeforeUpdate(props, state) {
+                this.state = Object.assign(this.state, readState(props));
             },
 
-            onMounted(props, state) {
-                const card = this.state.cards[this.state.cardIdx];
-                if (!card) {
-                    return;
-                }
+/*
+                window.addEventListener(ON_ANSWERED_TEST_QUESTION, event => {
+                    logATestAnswer(event.detail);
                 const correctAnswers = card.answers.filter(answer => answer.correct);
                 this.update({
                     isSingleAnswer: correctAnswers.length === 1,
                 });
-            },
-
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
-            },
-
-            hashChanged() {
-                const cardIdx = getLessonCardIdx();
-                const card = this.state.cards[cardIdx];
-                let isSingleAnswer = null;
-                if (card) {
-                    const correctAnswers = card.answers.filter(answer => answer.correct);
-                    isSingleAnswer = correctAnswers.length === 1;
-                }
-
-                this.update({
-                    cardIdx,
-                    isSingleAnswer,
-                });
-            },
+*/
 
             toggleModal(showModal, selectedAnswer, isQuestionComplete) {
                 this.update({
@@ -177,6 +148,16 @@
                     this.state.cardIdx
                 );
             },
+        }}
+        LessonTest.components = {
+            lessoncomplete: LessonComplete,
+            lessonfeedback: LessonFeedback,
+            testsingleanswer: TestSingleAnswer,
+            testmultipleanswer: TestMultipleAnswer,
+            testpopupmodal: TestPopupModal,
+            lessonframe: LessonFrame,
         };
+
+        export default LessonTest;
     </script>
 </LessonTest>

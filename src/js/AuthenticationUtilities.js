@@ -90,7 +90,7 @@ export const initialiseIdentity = () => {
 }
 
 export const getAuthenticationToken = () => {
-    return getCookie(JWT_TOKEN_STORAGE_KEY);
+    return getCookie(JWT_TOKEN_STORAGE_KEY) || "";
 };
 
 export const getUsername = () => {
