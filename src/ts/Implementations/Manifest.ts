@@ -1,28 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-    TAssetEntry,
-    TManifest,
     TManifestData,
-    TPage,
     TWagtailPage,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
+import { IManifest } from "ts/Interfaces/ManifestInterfaces";
 import { TPageType } from "ts/Types/CanoeEnums";
+import { PublishableItem } from "ts/Implementations/PublishableItem";
 import { Page } from "ts/Implementations/Page";
 
 // See ts/Typings for the type definitions for these imports
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import {
     storeManifest,
     getManifestFromStore,
     setFetchingManifest,
 } from "ReduxImpl/Interface";
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
 
-export class Manifest implements TManifest {
-    data!: TManifestData;
+export class Manifest extends PublishableItem<IManifest, TManifestData> {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    constructor(opts?: any) {
+        super(opts);
 
-    constructor() {
+        this.status = "prepped";
         this.initialiseFromStore();
     }
 
@@ -31,20 +31,33 @@ export class Manifest implements TManifest {
     }
 
     get pages(): Record<string, TWagtailPage> {
-        return this.data?.pages || { "0": Page.emptyItem };
+        return this.data?.pages || {};
     }
 
     get isInitialised(): boolean {
         return !!this.data?.pages;
     }
 
+    get fullUrl(): string {
+        return ROUTES_FOR_REGISTRATION.manifest;
+    }
+
+    get contentType(): string {
+        return "application/json";
+    }
+
     /** This is a basic integrity check.  It ensures that:
      * - All child pages have matching page entries
      */
     get isValid(): boolean {
+        if (!super.isValid) {
+            return false;
+        }
+
         if (!this.isInitialised) {
             return false;
         }
+
         const allPageNames = Object.keys(this.pages).sort() as string[];
         let childPageNames: Set<string> = new Set();
         allPageNames.forEach((pageName) => {
@@ -80,35 +93,42 @@ export class Manifest implements TManifest {
         return [...languageCodes];
     }
 
-    static get emptyItem(): TManifest {
-        return {
-            version: "0.0.0",
-            pages: { "0": Page.emptyItem },
-            isValid: false,
-            isAvailableOffline: false,
-            isPublishable: false,
-        };
+    get emptyItem(): TManifestData {
+        const empty = super.emptyItem;
+
+        empty.version = "0.0.0";
+        empty.pages = {};
+
+        return empty;
+    }
+
+    get updatedResp(): Response {
+        return new Response(JSON.stringify(this.data));
+    }
+
+    async accessCache(): Promise<boolean> {
+        this.cache = await caches.open(this.fullUrl);
+
+        return !!this.cache;
     }
 
     initialiseFromStore(): void {
+        this.status = "loading";
+        this.source = "store";
+
         this.data = getManifestFromStore();
+        this.status = "ready";
     }
 
-    async initialiseByRequest(): Promise<void> {
+    async initialiseFromResponse(resp: Response): Promise<boolean> {
         setFetchingManifest(true);
-        try {
-            const resp = await fetch(`${ROUTES_FOR_REGISTRATION.manifest}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `JWT ${getAuthenticationToken()}`,
-                },
-            });
-            this.data = await resp.json();
-        } finally {
-            setFetchingManifest(false);
-        }
+        this.data = await resp.json();
+
         storeManifest(this.data);
+
+        const cacheUpdated = await this.updateCache();
+        setFetchingManifest(false);
+        return cacheUpdated && !!this.data;
     }
 
     getPageManifestDataByLocationHash(
@@ -162,9 +182,7 @@ export class Manifest implements TManifest {
         if (pageFilled) {
             return manifestPage;
         }
-        const notInCache = ["prepped:no cache", "loading:no cache"].includes(
-            manifestPage.status
-        );
+        const notInCache = ["prepped", "loading"].includes(manifestPage.status);
         if (notInCache) {
             if (await manifestPage.initialiseByRequest()) {
                 return manifestPage;

@@ -16,15 +16,20 @@ function buildFakeManifestEntry(
         storage_container: `/site/canoe-${storage_container}`,
         version: version,
         api_url: `/api/v2/pages/${page_no}/`,
+        fullUrl: `/api/v2/pages/${page_no}/`,
+        contentType: "",
         assets: assets,
         language: language,
         children: children,
         depth: depth,
         type: "homepage",
         title: "Noooooooooo",
+        source: "cache",
+        status: "ready",
         isValid: true,
         isAvailableOffline: true,
         isPublishable: true,
+        cache: new Cache(),
     };
 }
 
@@ -46,9 +51,15 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
     return {
         type: type,
         renditions: renditions,
+        api_url: "",
+        fullUrl: "",
+        contentType: "",
+        source: "cache",
+        status: "ready",
         isValid: true,
         isAvailableOffline: true,
         isPublishable: true,
+        cache: new Cache(),
     };
 }
 

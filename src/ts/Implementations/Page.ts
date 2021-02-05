@@ -2,44 +2,19 @@
 import {
     TAssetEntry,
     TAssetEntryData,
-    TPage,
-    TPageData,
-    TWagtailPage,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
-import { TPageStatus } from "ts/Types/CanoeEnums";
+import { IWagtailPage } from "ts/Interfaces/ManifestInterfaces";
+import { PublishableItem } from "ts/Implementations/PublishableItem";
+import { Asset } from "ts/Implementations/Asset";
 
 // See ts/Typings for the type definitions for these imports
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { BACKEND_BASE_URL } from "js/urls";
-import { Asset } from "./Asset";
 
-export class Page implements TWagtailPage {
-    #cache!: Cache;
-    data!: TWagtailPageData;
-    #status!: TPageStatus;
-    /** The original request object that works as the key into the cache */
-    #requestObject?: Request;
-    /** Indicates whether the above requestObject had to have the authorizarion header stripped */
-    #requestObjectCleaned = false;
-
+export class Page extends PublishableItem<IWagtailPage, TWagtailPageData> {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
-        this.#status = "unset";
-        if (!this.data) {
-            this.data = Page.emptyItem;
-            this.#status = "empty";
-        }
-        if (typeof opts === "undefined") {
-            return;
-        }
-        if (typeof opts === "string") {
-            this.data.api_url = opts;
-            this.#status = "prepped:url";
-        } else if (opts as TPageData) {
-            this.clone(opts);
-            this.#status = "prepped:manifest";
-        }
+        super(opts);
     }
 
     get loc_hash(): string {
@@ -52,10 +27,6 @@ export class Page implements TWagtailPage {
 
     get version(): number {
         return this.data?.version || 0;
-    }
-
-    get api_url(): string {
-        return this.data?.api_url || "";
     }
 
     get assets(): Array<TAssetEntry> {
@@ -100,11 +71,19 @@ export class Page implements TWagtailPage {
         return `${BACKEND_BASE_URL}${this.api_url}`;
     }
 
+    get contentType(): string {
+        return "application/json";
+    }
+
     /** This will do a basic integrity check.
      * version is not 0, api_url has a value, etc.
      */
     get isValid(): boolean {
-        if (this.version === 0 || !this.api_url) {
+        if (!super.isValid) {
+            return false;
+        }
+
+        if (this.version === 0) {
             return false;
         }
 
@@ -118,16 +97,8 @@ export class Page implements TWagtailPage {
             return false;
         }
 
-        // Is the page's status acceptable
-        if (
-            [
-                "unset",
-                "empty",
-                "prepped:no cache",
-                "prepped:no url",
-                "prepped:no fetch",
-            ].includes(this.#status)
-        ) {
+        // Is the page's source acceptable
+        if (["unset", "store"].includes(this.source)) {
             return false;
         }
 
@@ -135,12 +106,7 @@ export class Page implements TWagtailPage {
     }
 
     get isAvailableOffline(): boolean {
-        if (!this.isValid) {
-            return false;
-        }
-
-        // Is the page's status acceptable
-        if (!this.#status.startsWith("ready")) {
+        if (!super.isAvailableOffline) {
             return false;
         }
 
@@ -156,12 +122,7 @@ export class Page implements TWagtailPage {
     }
 
     get isPublishable(): boolean {
-        if (!this.isValid) {
-            return false;
-        }
-
-        // Is the page's status acceptable
-        if (!this.#status.startsWith("ready")) {
+        if (!super.isPublishable) {
             return false;
         }
 
@@ -169,111 +130,40 @@ export class Page implements TWagtailPage {
             return this.assets.every(
                 (asset) =>
                     this.assetInitialised(asset) &&
-                    (asset as Asset).status.startsWith("ready")
+                    (asset as Asset).status === "ready"
             );
         }
 
         return true;
     }
 
-    get status(): string {
-        return this.#status;
+    get emptyItem(): TWagtailPageData {
+        const empty = super.emptyItem;
+
+        empty.loc_hash = "";
+        empty.storage_container = "";
+        empty.version = 0;
+        empty.assets = [];
+        empty.language = "";
+        empty.children = [];
+        empty.depth = 0;
+        empty.type = "";
+        empty.title = "";
+
+        return empty;
     }
 
-    static get emptyItem(): TWagtailPage {
-        return {
-            loc_hash: "",
-            storage_container: "",
-            version: 0,
-            api_url: "",
-            assets: [],
-            language: "",
-            children: [],
-            depth: 0,
-            type: "",
-            title: "",
-            isValid: false,
-            isAvailableOffline: false,
-            isPublishable: false,
-        };
+    get updatedResp(): Response {
+        return new Response(JSON.stringify(this.data));
     }
 
-    private clone(data: TPage): void {
-        this.data = JSON.parse(JSON.stringify(data));
+    async accessCache(): Promise<boolean> {
+        this.cache = await caches.open(this.fullUrl);
+
+        return !!this.cache;
     }
 
-    private CleanRequest(srcReq: Request): Request {
-        if (!srcReq.headers.has("authorization")) {
-            this.#requestObjectCleaned = false;
-            return srcReq;
-        }
-
-        const headers = new Headers();
-        for (const key of srcReq.headers.keys()) {
-            if (key !== "authorization") {
-                headers.append(key, srcReq.headers.get(key) || "");
-            }
-        }
-
-        this.#requestObjectCleaned = true;
-        return new Request(srcReq.url, {
-            body: srcReq.body,
-            bodyUsed: srcReq.bodyUsed,
-            cache: srcReq.cache,
-            destination: srcReq.destination,
-            headers: headers,
-            integrity: srcReq.integrity,
-            method: srcReq.method,
-            mode: srcReq.mode,
-            redirect: srcReq.redirect,
-            referrer: srcReq.referrer,
-            referrerPolicy: srcReq.referrerPolicy,
-        } as RequestInit);
-    }
-
-    /** Build a request object we can use to fetch this item */
-    private BuildRequestObject(): Request {
-        return new Request(this.fullUrl, {
-            mode: "cors",
-            cache: "no-cache",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `JWT ${getAuthenticationToken()}`,
-            },
-            method: "GET",
-        } as RequestInit);
-    }
-
-    /** Get the Request Object from the currently cached item */
-    private async GetRequestObject(): Promise<Request | undefined> {
-        if (this.#requestObject && this.#requestObject.url === this.fullUrl) {
-            this.#requestObject = this.CleanRequest(this.#requestObject);
-            return this.#requestObject;
-        }
-
-        const requests = await this.#cache.keys(this.fullUrl, {
-            ignoreMethod: true,
-            ignoreSearch: true,
-            ignoreVary: true,
-        });
-        if (requests.length === 0) {
-            // `Could not find ${this.fullUrl} in the cache`;
-            return Promise.resolve(undefined);
-        }
-
-        if (requests.length > 1) {
-            // We should really clean the cache in this case
-            // But we still don't know how to do that properly
-            requests.slice(1).forEach((request) => {
-                // this.#cache.delete(key);
-            });
-        }
-
-        this.#requestObject = this.CleanRequest(requests[0]);
-        return this.#requestObject;
-    }
-
-    private async initialiseFromResponse(resp: Response): Promise<boolean> {
+    async initialiseFromResponse(resp: Response): Promise<boolean> {
         const pageData = await resp.json();
         // Merge the existing page definition into this structure
         if (pageData?.api_url) {
@@ -321,110 +211,8 @@ export class Page implements TWagtailPage {
             // Merge old and new
             this.data = { ...this.data, ...pageData };
         }
-        return !!(await this.getAssets());
-    }
-
-    private async accessCache(): Promise<boolean> {
-        this.#cache = await caches.open(this.fullUrl);
-
-        return !!this.#cache;
-    }
-
-    private async getFromCache(
-        request: Request
-    ): Promise<Response | undefined> {
-        const response = await this.#cache.match(request);
-
-        return response;
-    }
-
-    async initialiseFromCache(): Promise<boolean> {
-        const cacheSet = await this.accessCache();
-        if (!this.api_url) {
-            this.#status = "prepped:no url";
-            return false;
-        }
-
-        const reqObj = await this.GetRequestObject();
-        if (!reqObj) {
-            this.#status = "prepped:no cache";
-            return false;
-        }
-
-        this.#status = "loading:cache";
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const response = await this.getFromCache(reqObj!);
-
-        if (!response) {
-            this.#status = "prepped:no cache";
-            return false;
-        }
-
-        const isInitialised = await this.initialiseFromResponse(response);
-        if (isInitialised) {
-            this.#status = "ready:cache";
-        } else {
-            this.#status = "loading:no cache";
-        }
-        return isInitialised;
-    }
-
-    private async updateCache(): Promise<boolean> {
-        if (!(await this.accessCache())) {
-            this.#status = "prepped:no url";
-            return false;
-        }
-
-        let reqObj = await this.GetRequestObject();
-        if (!reqObj) {
-            this.#status = "prepped:no cache";
-            reqObj = this.BuildRequestObject();
-            this.#requestObject = this.CleanRequest(reqObj);
-        }
-
-        this.#status = "loading:cache";
-        // Create the new response to go into the cache
-        const updatedResp = new Response(JSON.stringify(this.data));
-
-        if (this.#requestObjectCleaned) {
-            // Delete the existing cache entry first to ensure that the auth key gets 'lost'
-            const deleted = await this.#cache.delete(reqObj);
-        }
-
-        // cache.put returns a Promise<void>, which means you can't really await it
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        await this.#cache.put(this.#requestObject!, updatedResp);
-
-        return true;
-    }
-
-    async initialiseByRequest(): Promise<boolean> {
-        this.#status = "loading:fetch";
-
-        const reqObj = new Request(this.fullUrl, {
-            cache: "no-cache",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `JWT ${getAuthenticationToken()}`,
-            },
-            method: "GET",
-        } as RequestInit);
-        this.#requestObject = this.CleanRequest(reqObj);
-
-        // Fetch the page from the network
-        const resp = await fetch(reqObj);
-
-        if (!resp.ok) {
-            this.#status = "prepped:no fetch";
-            return false;
-        }
-
-        const isInitialised = await this.initialiseFromResponse(resp);
-        if (isInitialised) {
-            this.#status = "ready:fetch";
-        }
-
-        return isInitialised;
+        const cacheUpdated = await this.updateCache();
+        return cacheUpdated && !!(await this.getAssets());
     }
 
     private assetInitialised(asset: TAssetEntry): boolean {
@@ -468,8 +256,6 @@ export class Page implements TWagtailPage {
             assets.push(asset);
         });
         this.data.assets = assets;
-
-        const cacheUpdated = await this.updateCache();
 
         return this.assets;
     }

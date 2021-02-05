@@ -14,21 +14,16 @@ export type TSubscribe = "subscribe" | "unsubscribe";
 /** Accepted Http methods (complete list) */
 export type THttpMethods = "GET" | "PUT" | "POST" | "DELETE";
 
-/** The current state of a given page */
-export type TPageStatus =
-    /** never been set, or deliberately unset */
+/** Where a manifest item was sourced from */
+export type TManifestItemSource = "unset" | "store" | "cache" | "network";
+
+/** The current state of a given manifest item */
+export type TManifestItemStatus =
     | "unset"
     | "empty"
-    | "prepped:url"
-    | "prepped:manifest"
-    | "prepped:no cache"
-    | "prepped:no url"
-    | "prepped:no fetch"
-    | "loading:cache"
-    | "loading:no cache"
-    | "loading:fetch"
-    | "ready:cache"
-    | "ready:fetch";
+    | "prepped"
+    | "loading"
+    | "ready";
 
 export type TPageType =
     | "homepage"
@@ -36,22 +31,5 @@ export type TPageType =
     | "resourcearticle"
     | "coursepage"
     | "lessonpage";
-
-/** The current state of a given asset */
-export type TAssetStatus =
-    /** never been set, or deliberately unset */
-    | "unset"
-    | "empty"
-    | "prepped:type"
-    | "prepped:manifest"
-    | "prepped:no cache"
-    | "prepped:no url"
-    | "prepped:no type"
-    | "prepped:no fetch"
-    | "loading:cache"
-    | "loading:no cache"
-    | "loading:fetch"
-    | "ready:cache"
-    | "ready:fetch";
 
 export type TAssetType = "image" | "media";
