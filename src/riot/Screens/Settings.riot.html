@@ -9,10 +9,10 @@
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
                     onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"
                 >
-                    <input type="checkbox" />
+                    <input type="checkbox" id="notifications-toggle"/>
                     <div class="slider"></div>
                 </div>
-                <p>{ TRANSLATIONS.notifications() }</p>
+                <label for="notifications-toggle">{ TRANSLATIONS.notifications() }</label>
             </div>
 
             <LanguageSelector></LanguageSelector>
