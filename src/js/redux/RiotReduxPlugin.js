@@ -34,6 +34,7 @@ export const installReduxPlugin = function (component) {
     // unsubscribe before unmount
     component.onBeforeUnmount = function reduxOnBeforeUnmount(...args) {
         component.storeUnsubscribe();
+        delete component.storeUnsubscribe;
         // call the original beforeUnmount
         originalOnBeforeUnmount.apply(component, args);
     };

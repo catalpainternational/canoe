@@ -32,30 +32,24 @@
         function readState() {
             const route = getRoute();
             const state = {
-                section: route.riotHash.split(":")[0],
+                section: route.riotHash[0],
             };
             return state;
         }
         function LessonOverview() { return {
-            state: {
-                ...readState(),
-            },
 
             OBJECTIVES: "objectives",
             CONTENT: "content",
             TEST: "test",
 
             onBeforeMount(props, state) {
-                state.lessonReady = props.lesson.ready;
+            },
+            onBeforeUpdate(props, state) {
+                this.state = {
+                    ...readState(),
+                }
             },
 
-            storeListener(previousStoreState, storeState) {
-                const newState = readState();
-                if (!this.state.lessonReady && this.props.lesson.ready
-                    || this.state.section !== newState.section) {
-                    this.update(newState);
-                }
-            }
         }}
 
         LessonOverview.components = {

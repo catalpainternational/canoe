@@ -78,6 +78,7 @@
                 const route = getRoute();
                 const state = {
                     page: route.page,
+                    riotHash: route.riotHash,
                     browserSupported: isBrowserSupported(),
                 };
                 return state;
@@ -92,6 +93,8 @@
                 storeListener(previousStoreState, storeState) {
                     if (previousStoreState.language !== storeState.language
                         || previousStoreState.route.page.type !== storeState.route.page.type
+                        || !this.state.page.ready !== storeState.route.page.ready
+                        || !arrayEquals(this.state.riotHash, storeState.route.riotHash)
                     ) {
                         this.update(readState());
                     }
@@ -131,6 +134,14 @@
             const unfinishedContentCoords = firstUnfinishedContent.getBoundingClientRect();
             window.scroll(unfinishedContentCoords);
         };
+
+        function arrayEquals(a, b) {
+            if (a.length !== b.length) return false;
+            for (const [index, element] of a.entries()) {
+                if (element !== b[index] ) return false;
+            }
+            return true;
+        }
 
         export default App;
 

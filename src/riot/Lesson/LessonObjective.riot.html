@@ -16,8 +16,6 @@
                 </a>
             </div>
             <div>
-                { state.cardNumber}
-                { state.cards.length }
                 <button
                     class="btn-primary"
                     onclick="{ nextObjectiveCard }"
@@ -50,7 +48,7 @@
 
         function readState(props) {
             const route = getRoute();
-            const stage = route.riotHash.split(":")[1];
+            const stage = route.riotHash[1];
             const cardNumber = parseInt(stage);
             const state = {
                 cards: props.lesson.ready ? props.lesson.objective.cards : [],

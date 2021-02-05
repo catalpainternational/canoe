@@ -80,7 +80,7 @@
 
         function readState(props) {
             const route = getRoute();
-            const stage = route.riotHash.split(":")[1];
+            const stage = route.riotHash[1];
             const cardNumber = parseInt(stage);
             const state = {
                 cards: props.lesson.ready ? props.lesson.content.cards : [],

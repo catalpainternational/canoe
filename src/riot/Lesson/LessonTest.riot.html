@@ -1,13 +1,13 @@
 <LessonTest>
     <LessonFrame
         id="test"
-        if="{ props.lesson.ready && state.cardNumber <= state.cards.length }"
-        extraStyleClasses="content"
+        if="{ props.lesson.ready && state.cardNumber }"
+        extraStyleClasses="test"
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
         lesson="{ props.lesson }"
     >
-        <h3>{ state.cardNumber + 1 }. { state.card.question }</h3>
+        <h3>{ state.cardNumber }. { state.card.question }</h3>
         <TestSingleAnswer
             if="{state.isSingleAnswer}"
             lessonName="{props.lesson.title}"
@@ -25,21 +25,18 @@
         if="{state.showModal}"
         isQuestionComplete="{state.isQuestionComplete}"
         selectedAnswer="{state.selectedAnswer}"
-        isLastQuestion="{state.cardNumber === state.cards.length + 1}"
+        isLastQuestion="{state.cardNumber === state.cards.length}"
         toggleModal="{toggleModal}"
-        courseSlug="{props.course.slug}"
         lesson="{props.lesson}"
         module="{props.module}"
-        cardIdx="{state.cardNumber}"
+        cardNumber="{state.cardNumber}"
     ></TestPopupModal>
     <LessonFeedback
-        if="{ props.lesson.ready && state.complete }"
+        if="{ !state.cardNumber && state.stage == 'feedback' }"
         lessonName="{props.lesson.title}"
     ></LessonFeedback>
     <LessonComplete
-        if="{ props.lesson.ready && state.complete }"
-        course="{props.course}"
-        title="{props.title}"
+        if="{ !state.cardNumber && state.stage == 'complete' }"
     ></LessonComplete>
 
     <script>
@@ -57,13 +54,15 @@
 
         function readState(props) {
             const route = getRoute();
-            const stage = route.riotHash.split(":")[1];
+            const stage = route.riotHash[1];
             const cardNumber = parseInt(stage);
+            const card = props.lesson.ready ? props.lesson.test.cards[cardNumber - 1] : undefined;
             const state = {
                 cards: props.lesson.ready ? props.lesson.test.cards : [],
-                card: props.lesson.ready ? props.lesson.test.cards[cardNumber - 1] : undefined,
+                card: card,
+                isSingleAnswer: card ? card.answers.filter(answer => answer.correct).length < 2 : undefined,
                 cardNumber: cardNumber,
-                complete: stage === 'complete'
+                stage,
             };
             return state;
         }
@@ -73,7 +72,7 @@
                 this.state = readState(props);
             },
             onBeforeUpdate(props, state) {
-                this.state = readState(props);
+                this.state = Object.assign(this.state, readState(props));
             },
 
 /*
