@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TAssetEntry } from "ts/Types/ManifestTypes";
-import { IAssetEntry } from "ts/Interfaces/ManifestInterfaces";
+import { TAssetEntry, TManifest } from "ts/Types/ManifestTypes";
 import { PublishableItem } from "ts/Implementations/PublishableItem";
 
 import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "ts/Constants";
@@ -10,12 +9,12 @@ import { getBrowser } from "ts/PlatformDetection";
 import { BACKEND_BASE_URL } from "js/urls";
 import { MissingImageError } from "js/Errors";
 
-export class Asset extends PublishableItem<IAssetEntry, TAssetEntry> {
+export class Asset extends PublishableItem<TAssetEntry> {
     #blob?: Blob;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(opts?: any) {
-        super(opts);
+    constructor(manifest: TManifest, pageId: number) {
+        super(manifest);
     }
 
     get type(): string {
@@ -28,6 +27,10 @@ export class Asset extends PublishableItem<IAssetEntry, TAssetEntry> {
 
     get platformSpecificRendition(): string {
         return getBrowser().name === "Safari" ? JPEG_RENDITION : WEBP_RENDITION;
+    }
+
+    get manifestData(): TAssetEntry {
+        throw new Error("Method not implemented.");
     }
 
     /** The url of the rendition that is most relevant to this platform */
@@ -101,6 +104,10 @@ export class Asset extends PublishableItem<IAssetEntry, TAssetEntry> {
         empty.renditions = {};
 
         return empty;
+    }
+
+    GetDataFromStore(): void {
+        throw new Error("Method not implemented.");
     }
 
     get updatedResp(): Response {

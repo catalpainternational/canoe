@@ -1,32 +1,32 @@
 <LessonObjective>
     <LessonFrame
-        if="{state.cardIdx < props.objective.cards.length}"
+        if="{ props.lesson.ready && state.cardNumber <= state.cards.length }"
         extraStyleClasses="objective"
-        linkTo="{props.lesson.id}"
-        progressValue="{state.cardIdx + 1}"
-        progressMax="{props.objective.cards.length}"
+        progressValue="{ state.cardNumber }"
+        progressMax="{ state.cards.length }"
+        lesson="{ props.lesson }"
     >
         <span class="plant"></span>
         <h3>{ TRANSLATIONS.title() }</h3>
-        <p class="center-objective">{props.objective.cards[state.cardIdx].description}</p>
+        <p class="center-objective">{state.card.description}</p>
         <div class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
+                <a if="{ state.cardNumber > 1 }" class="has-circle" onclick="{ goBack }">
                     <span class="arrow"></span>
                 </a>
             </div>
             <div>
                 <button
                     class="btn-primary"
-                    onclick="{nextObjectiveCard}"
-                    if="{state.cardIdx < props.objective.cards.length - 1}"
+                    onclick="{ nextObjectiveCard }"
+                    if="{ state.cardNumber < state.cards.length }"
                 >
                     { TRANSLATIONS.next() }
                 </button>
                 <button
                     class="btn-primary"
-                    onclick="{completeObjectiveModal}"
-                    if="{state.cardIdx === props.objective.cards.length - 1}"
+                    onclick="{ completeObjectiveModal }"
+                    if="{ state.cardNumber === state.cards.length }"
                 >
                     { TRANSLATIONS.finish() }
                 </button>
@@ -34,29 +34,31 @@
         </div>
     </LessonFrame>
     <LessonModuleComplete
-        if="{state.cardIdx === props.objective.cards.length}"
-        lessonId="{props.lesson.id}"
+        if="{ props.lesson.ready && state.complete }"
+        lesson="{props.lesson}"
         module="{props.module}"
-        nextModule="{props.nextModule}"
-        title="{props.title}"
+        nextModule="content"
     ></LessonModuleComplete>
 
     <script>
         import LessonModuleComplete from "RiotTags/Lesson/LessonModuleComplete.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
-        import { getLessonCardIdx, getNextCardsUrl, getPreviousCardsUrl } from "js/Routing";
-        import { setComplete } from "Actions/completion";
+        import { getRoute } from "ReduxImpl/Interface";
 
-        export default {
-            state: {
-                cardIdx: 0,
-            },
-
-            components: {
-                lessonmodulecomplete: LessonModuleComplete,
-                lessonframe: LessonFrame,
-            },
+        function readState(props) {
+            const route = getRoute();
+            const stage = route.riotHash[1];
+            const cardNumber = parseInt(stage);
+            const state = {
+                cards: props.lesson.ready ? props.lesson.objective.cards : [],
+                card: props.lesson.ready ? props.lesson.objective.cards[cardNumber - 1] : undefined,
+                cardNumber: cardNumber,
+                complete: stage === 'complete'
+            };
+            return state;
+        }
+        function LessonObjective() { return {
 
             TRANSLATIONS: {
                 next: () => gettext("Next"),
@@ -65,45 +67,32 @@
             },
 
             onBeforeMount(props, state) {
-                state.cardIdx = getLessonCardIdx();
-                window.addEventListener("hashchange", this.hashChanged);
+                this.state = readState(props);
             },
-
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
-            },
-
-            hashChanged() {
-                this.update({
-                    cardIdx: getLessonCardIdx(),
-                });
+            onBeforeUpdate(props, state) {
+                this.state = readState(props);
             },
 
             goBack() {
-                location.hash = getPreviousCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
+                location.hash = `${this.props.lesson.loc_hash}:objectives:${this.state.cardNumber - 1}`;
             },
 
             nextObjectiveCard() {
                 window.scroll(0, 0);
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
+                location.hash = `${this.props.lesson.loc_hash}:objectives:${this.state.cardNumber + 1}`;
             },
 
             completeObjectiveModal() {
-                setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
+                this.props.lesson.completeSection(this.props.module);
+                location.hash = `${this.props.lesson.loc_hash}:objectives:complete`;
             },
+        }}
+
+        LessonObjective.components = {
+            lessonmodulecomplete: LessonModuleComplete,
+            lessonframe: LessonFrame,
         };
+        
+        export default LessonObjective;
     </script>
 </LessonObjective>

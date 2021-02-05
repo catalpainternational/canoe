@@ -2,14 +2,11 @@
 
 /** Note that the module name here MUST match how it's used in the .ts files */
 declare module "ReduxImpl/Interface" {
-    import {
-        TManifestData,
-        TWagtailPageData,
-    } from "src/ts/Types/ManifestTypes";
+    import { TManifestData, TWagtailPage } from "src/ts/Types/ManifestTypes";
 
     export function storeManifest(manifest: TManifestData): void;
     export function getManifestFromStore(): TManifestData;
     export function setFetchingManifest(fetching: boolean): void;
-    export function storeWagtailPage(wagtailpage: TWagtailPageData): void;
-    export function getWagtailPageFromStore(pageId: string): TWagtailPageData;
+    export function storePageData(pageId: number, pageData: TWagtailPage): void;
+    export function getPageData(pageId: number | undefined): TWagtailPage;
 }

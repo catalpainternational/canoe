@@ -41,21 +41,13 @@
             nextTestCard() {
                 this.props.toggleModal(false, {});
                 window.scroll(0, 0);
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.props.cardIdx
-                );
+                location.hash = this.props.lesson.loc_hash + ":test:" + parseInt(this.props.cardNumber + 1);
             },
 
             completePage() {
-                this.props.toggleModal(false, {});
-                setComplete(this.props.courseSlug, this.props.lesson.slug, this.props.module);
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.props.cardIdx
-                );
+                // this.props.toggleModal(false, {});
+                this.props.lesson.completeSection(this.props.module);
+                location.hash = this.props.lesson.loc_hash + ":test:feedback";
             },
 
             correctTitleMessage(selectedAnswer) {

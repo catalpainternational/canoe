@@ -87,7 +87,7 @@
                 // try to get the manifest
                 const manifest = new Manifest();
                 if (!manifest.isInitialised) {
-                    manifest.initialiseFromStore();
+                    // manifest.initialiseFromStore();
                 }                
                 if (manifest.isInitialised) {
                     const data = JSON.stringify(manifest.data);

@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-    TManifestData,
-    TWagtailPage,
-    TWagtailPageData,
-} from "ts/Types/ManifestTypes";
-import { IManifest } from "ts/Interfaces/ManifestInterfaces";
-import { TPageType } from "ts/Types/CanoeEnums";
+import { TManifestData, TWagtailPage } from "ts/Types/ManifestTypes";
 import { PublishableItem } from "ts/Implementations/PublishableItem";
 import { Page } from "ts/Implementations/Page";
+import AllCoursesPage from "ts/Implementations/Specific/AllCoursesPage";
+import CoursePage from "ts/Implementations/Specific/CoursePage";
+import LessonPage from "ts/Implementations/Specific/LessonPage";
 
 // See ts/Typings for the type definitions for these imports
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
@@ -17,13 +14,17 @@ import {
     setFetchingManifest,
 } from "ReduxImpl/Interface";
 
-export class Manifest extends PublishableItem<IManifest, TManifestData> {
+class ManifestError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "ManifestError";
+    }
+}
+
+export class Manifest extends PublishableItem<TManifestData> {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
         super(opts);
-
-        this.status = "prepped";
-        this.initialiseFromStore();
     }
 
     get version(): string {
@@ -42,6 +43,10 @@ export class Manifest extends PublishableItem<IManifest, TManifestData> {
         return ROUTES_FOR_REGISTRATION.manifest;
     }
 
+    get manifestData(): TManifestData {
+        return this;
+    }
+
     get contentType(): string {
         return "application/json";
     }
@@ -58,7 +63,7 @@ export class Manifest extends PublishableItem<IManifest, TManifestData> {
             return false;
         }
 
-        const allPageNames = Object.keys(this.pages).sort() as string[];
+        const allPageNames = new Set(Object.keys(this.pages));
         let childPageNames: Set<string> = new Set();
         allPageNames.forEach((pageName) => {
             childPageNames = new Set([
@@ -66,9 +71,11 @@ export class Manifest extends PublishableItem<IManifest, TManifestData> {
                 ...this.pages[pageName].children.map((c) => c.toString()),
             ]);
         });
-        const matchedPages = new Set([...allPageNames, ...childPageNames]);
+        const unMatchedChildren = new Set(
+            [...childPageNames].filter((x) => !allPageNames.has(x))
+        );
 
-        return matchedPages === childPageNames;
+        return !unMatchedChildren.size;
     }
 
     get isAvailableOffline(): boolean {
@@ -102,6 +109,16 @@ export class Manifest extends PublishableItem<IManifest, TManifestData> {
         return empty;
     }
 
+    GetDataFromStore(): void {
+        const manifest = getManifestFromStore();
+        if (manifest) {
+            this.status = "ready";
+            this.data = manifest;
+        } else {
+            this.status = "prepped";
+        }
+    }
+
     get updatedResp(): Response {
         return new Response(JSON.stringify(this.data));
     }
@@ -112,95 +129,61 @@ export class Manifest extends PublishableItem<IManifest, TManifestData> {
         return !!this.cache;
     }
 
-    initialiseFromStore(): void {
-        this.status = "loading";
-        this.source = "store";
-
-        this.data = getManifestFromStore();
-        this.status = "ready";
-    }
-
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         setFetchingManifest(true);
-        this.data = await resp.json();
 
-        storeManifest(this.data);
+        try {
+            this.data = await resp.json();
+        } catch {
+            // Discard errors with getting json from response
+        }
 
-        const cacheUpdated = await this.updateCache();
+        let cacheUpdated = false;
+        if (this.data && this.isValid) {
+            storeManifest(this.data);
+            cacheUpdated = await this.updateCache();
+        }
         setFetchingManifest(false);
-        return cacheUpdated && !!this.data;
+
+        return cacheUpdated && this.isValid;
     }
 
-    getPageManifestDataByLocationHash(
-        locationHash: string
-    ): TWagtailPageData | undefined {
-        if (!this.isInitialised) {
-            return undefined;
-        }
-
-        return Object.values(this.pages).find(
-            (page) => page.loc_hash === locationHash
-        );
-    }
-
-    getPageManifestDataByPageType(
-        pageType: TPageType | string,
-        languageCode = "en"
-    ): TWagtailPageData | undefined {
-        if (!this.isInitialised) {
-            return undefined;
-        }
-
-        return Object.values(this.pages).find(
-            (page) => page.type === pageType && page.language === languageCode
-        );
-    }
-
-    getLanguageHome(languageCode: string): TWagtailPageData | undefined {
-        return this.getPageManifestDataByPageType("homepage", languageCode);
-    }
-
-    async getPageByType(
-        pageType: TPageType | string,
-        languageCode = "en"
-    ): Promise<TWagtailPage> {
-        const pageManifestData = this.getPageManifestDataByPageType(
-            pageType,
-            languageCode
-        );
-
-        if (pageManifestData) {
-            return await this.getPage(pageManifestData);
-        }
-
-        return Promise.reject(false);
-    }
-
-    async getPage(data: TWagtailPageData): Promise<TWagtailPage> {
-        const manifestPage = new Page(data);
-        const pageFilled = await manifestPage.initialiseFromCache();
-        if (pageFilled) {
-            return manifestPage;
-        }
-        const notInCache = ["prepped", "loading"].includes(manifestPage.status);
-        if (notInCache) {
-            if (await manifestPage.initialiseByRequest()) {
-                return manifestPage;
+    getPageManifestData(locationHash: string): Page | undefined {
+        const pageId: string | undefined = Object.keys(this.data.pages).find(
+            (pageId: string) => {
+                const page = this.data.pages[parseInt(pageId)];
+                return page.loc_hash === locationHash;
             }
+        );
+        if (pageId === undefined) {
+            throw new ManifestError("location not found in manifest");
         }
-
-        return Promise.reject(false);
+        return this.getSpecificPage(parseInt(pageId));
     }
 
-    async getPageData(locationHash: string): Promise<TWagtailPage> {
-        const pageManifestData = this.getPageManifestDataByLocationHash(
-            locationHash
-        );
-
-        if (pageManifestData) {
-            return await this.getPage(pageManifestData);
+    getSpecificPage(pageId: number): Page {
+        switch (this.data.pages[pageId].type) {
+            case "homepage":
+                return new AllCoursesPage(this, pageId);
+            case "coursepage":
+                return new CoursePage(this, pageId);
+            case "lessonpage":
+                return new LessonPage(this, pageId);
+            default:
+                return new Page(this, pageId);
         }
+    }
 
-        return Promise.reject(false);
+    getLanguageHome(languageCode: string): Page | undefined {
+        const homePageId: string | undefined = Object.keys(
+            this.data.pages
+        ).find((pageId: string) => {
+            const page = this.data.pages[pageId];
+            return page.type === "homepage" && page.language === languageCode;
+        });
+
+        return homePageId
+            ? this.getSpecificPage(parseInt(homePageId))
+            : undefined;
     }
 }

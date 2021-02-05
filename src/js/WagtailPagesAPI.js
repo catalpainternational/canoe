@@ -1,7 +1,7 @@
 import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
 import { isGuestUser } from "js/AuthenticationUtilities";
 import {
-    storeWagtailPage,
+    // storeWagtailPage,
     getWagtailPageFromStore,
     getManifestFromStore,
     storeManifest,
@@ -55,7 +55,7 @@ export const getOrFetchWagtailPage = async (path) => {
     }
 
     const wagtailPage = await fetchPage(path);
-    storeWagtailPage(wagtailPage);
+    // storeWagtailPage(wagtailPage);
     return wagtailPage;
 };
 

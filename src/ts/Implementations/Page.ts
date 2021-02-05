@@ -2,73 +2,123 @@
 import {
     TAssetEntry,
     TAssetEntryData,
+    TManifest,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
 import { IWagtailPage } from "ts/Interfaces/ManifestInterfaces";
 import { PublishableItem } from "ts/Implementations/PublishableItem";
+import { Manifest } from "ts/Implementations/Manifest";
 import { Asset } from "ts/Implementations/Asset";
 
 // See ts/Typings for the type definitions for these imports
 import { BACKEND_BASE_URL } from "js/urls";
+import {
+    getPageData as getPageDataFromStore,
+    storePageData,
+} from "ReduxImpl/Interface";
 
-export class Page extends PublishableItem<IWagtailPage, TWagtailPageData> {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(opts?: any) {
-        super(opts);
+export class Page extends PublishableItem<TWagtailPageData> {
+    #id: number;
+    #parent: Page | undefined;
+    pageData!: TWagtailPageData;
+    #status!: string;
+    #childPages: Page[];
+
+    constructor(manifest: TManifest, id: number) {
+        super(manifest);
+
+        this.#id = id;
+
+        // Populate the parent and childPages members
+        // with the first call to their respective getter methods
+        this.#parent = this.parent;
+        this.#childPages = this.childPages;
     }
 
-    get loc_hash(): string {
-        return this.data?.loc_hash || "";
+    get childPages(): Page[] {
+        if (this.childPages) {
+            return this.childPages;
+        }
+
+        this.#childPages = this.children.map(
+            (pageId) => this.manifest.getSpecificPage(pageId, this),
+            this.manifest
+        );
+        return this.#childPages;
     }
 
-    get storage_container(): string {
-        return this.data?.storage_container || "";
-    }
-
-    get version(): number {
-        return this.data?.version || 0;
-    }
-
-    get assets(): Array<TAssetEntry> {
-        return this.data?.assets || [];
-    }
-
-    get language(): string {
-        return this.data?.language || "";
-    }
-
-    get children(): Array<number> {
-        return this.data?.children || [];
-    }
-
-    get depth(): number {
-        return this.data?.depth || 0;
-    }
-
-    get type(): string {
-        return this.data?.type || "";
+    get ready(): boolean {
+        return !!this.#status && this.#status.startsWith("ready");
     }
 
     get title(): string {
-        return this.data?.title || "";
+        return this.manifestData?.title || "";
     }
 
-    /** From old wagtail page definition */
-    get meta(): Record<string, any> | undefined {
-        return this.data?.meta;
+    get loc_hash(): string {
+        return this.manifestData?.loc_hash || "";
     }
 
-    get pageId(): string {
-        if (this.data.id) {
-            return this.data.id.toString();
+    get manifestData(): any {
+        return this.manifest.pages[this.id];
+    }
+
+    get parent(): Page | undefined {
+        if (this.#parent) {
+            return this.#parent;
         }
 
-        const url = this.api_url.split("/").filter((token) => token);
-        return url.length ? url[url.length - 1] : "";
+        const parentId: string | undefined = Object.keys(
+            this.manifest.pages
+        ).find((id: string) => {
+            const page = this.manifest.pages[parseInt(id)];
+            return page.children.indexOf(this.id) !== -1;
+        });
+
+        this.#parent = parentId
+            ? this.manifest.getSpecificPage(parseInt(parentId))
+            : undefined;
+        return this.#parent;
+    }
+
+    get id(): number {
+        return this.#id;
+    }
+
+    get storage_container(): string {
+        return this.manifestData?.storage_container || "";
+    }
+
+    get version(): number {
+        return this.manifestData?.version || 0;
+    }
+
+    get api_url(): string {
+        return this.manifestData?.api_url || "";
     }
 
     get fullUrl(): string {
         return `${BACKEND_BASE_URL}${this.api_url}`;
+    }
+
+    get type(): string {
+        return this.manifestData?.type || "";
+    }
+
+    get assets(): Array<TAssetEntry> {
+        return this.manifestData?.assets || [];
+    }
+
+    get language(): string {
+        return this.manifestData?.language || "";
+    }
+
+    get children(): Array<number> {
+        return this.manifestData?.children || [];
+    }
+
+    get depth(): number {
+        return this.manifestData?.depth || 0;
     }
 
     get contentType(): string {
@@ -88,12 +138,7 @@ export class Page extends PublishableItem<IWagtailPage, TWagtailPageData> {
         }
 
         // Has the wagtail version of this page been loaded
-        if (
-            !this.meta ||
-            !this.data.data ||
-            !this.data.id ||
-            !this.data.title
-        ) {
+        if (!this.data.data || !this.data.id || !this.data.title) {
             return false;
         }
 
@@ -151,6 +196,16 @@ export class Page extends PublishableItem<IWagtailPage, TWagtailPageData> {
         empty.title = "";
 
         return empty;
+    }
+
+    GetDataFromStore(): void {
+        const pageData = getPageDataFromStore(this.id);
+        if (pageData) {
+            this.status = "ready";
+            this.data = pageData;
+        } else {
+            this.status = "prepped";
+        }
     }
 
     get updatedResp(): Response {
@@ -212,6 +267,8 @@ export class Page extends PublishableItem<IWagtailPage, TWagtailPageData> {
             this.data = { ...this.data, ...pageData };
         }
         const cacheUpdated = await this.updateCache();
+
+        storePageData(pageData.id, pageData);
         return cacheUpdated && !!(await this.getAssets());
     }
 
@@ -223,9 +280,9 @@ export class Page extends PublishableItem<IWagtailPage, TWagtailPageData> {
         // The asset's parentUrl is the same as the cache name
         // See `accessCache` above
         asset.parentUrl = this.fullUrl;
-        const pageAsset = new Asset(asset);
-
+        const pageAsset = new Asset(this.manifest, this.id);
         const assetFilled = await pageAsset.initialiseFromCache();
+
         if (assetFilled) {
             return pageAsset;
         }
@@ -258,5 +315,18 @@ export class Page extends PublishableItem<IWagtailPage, TWagtailPageData> {
         this.data.assets = assets;
 
         return this.assets;
+    }
+
+    PETEgetImageRenditions(id: number): string {
+        const assets = this.manifestData.assets;
+        return assets.find((a: any) => {
+            return a.id === id && a.type === "image";
+        });
+    }
+    PETEgetMediaRenditions(id: number): string {
+        const assets = this.manifestData.assets;
+        return assets.find((a: any) => {
+            return a.id === id && a.type === "media";
+        });
     }
 }

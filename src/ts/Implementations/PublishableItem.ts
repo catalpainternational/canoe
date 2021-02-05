@@ -2,47 +2,41 @@ import { BACKEND_BASE_URL } from "js/urls";
 
 import { IManifestItemState } from "ts/Interfaces/ManifestInterfaces";
 import { TManifestItemSource, TManifestItemStatus } from "ts/Types/CanoeEnums";
-import { TManifestItem } from "ts/Types/ManifestTypes";
+import { TManifest, TManifestItem } from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
-export abstract class PublishableItem<
-    T extends IManifestItemState,
-    D extends TManifestItem
-> implements IManifestItemState {
-    data!: D;
+export abstract class PublishableItem<T extends TManifestItem>
+    implements IManifestItemState {
+    data!: T;
     cache!: Cache;
 
     status!: TManifestItemStatus;
     source: TManifestItemSource;
+
+    /** A reference to the original manifest itself */
+    manifest: TManifest;
 
     /** The original request object (stripped of any authentication values) that works as the key into the cache */
     #requestObject: Request;
     /** Indicates whether the above #requestObject had to have the authorization header stripped */
     #requestObjectCleaned = false;
 
-    constructor(opts?: undefined | string | T) {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    constructor(manifest: TManifest) {
         this.status = "unset";
         this.source = "unset";
         this.#requestObject = new Request("");
+
+        this.manifest = manifest;
 
         if (!this.data) {
             this.data = this.emptyItem;
             this.status = "empty";
         }
 
-        if (typeof opts === "undefined") {
-            return;
-        }
-
-        if (typeof opts === "string") {
-            this.data.api_url = opts;
-            this.status = "prepped";
-        } else if (opts as T | D) {
-            this.clone(opts);
-            this.status = "prepped";
-        }
+        this.GetDataFromStore();
     }
 
     get api_url(): string {
@@ -51,7 +45,7 @@ export abstract class PublishableItem<
 
     abstract get fullUrl(): string;
 
-    get emptyItem(): D {
+    get emptyItem(): T {
         return ({
             source: "unset",
             status: "unset",
@@ -62,10 +56,13 @@ export abstract class PublishableItem<
             isPublishable: false,
             contentType: "",
             cache: new Cache(),
-        } as unknown) as D;
+        } as unknown) as T;
     }
 
     abstract get contentType(): string;
+
+    /** The data in the manifest that relates specifically to this item */
+    abstract get manifestData(): T;
 
     /** This will do a basic integrity check. */
     get isValid(): boolean {
@@ -114,6 +111,9 @@ export abstract class PublishableItem<
         return true;
     }
 
+    /** Get the data from the store and use it to fill the `data` member */
+    abstract GetDataFromStore(): void;
+
     /** Build a request object we can use to fetch this item */
     private get NewRequestObject(): Request {
         const headers: any = {
@@ -136,10 +136,6 @@ export abstract class PublishableItem<
     abstract get updatedResp(): Response;
 
     abstract accessCache(): Promise<boolean>;
-
-    private clone(data: T): void {
-        this.data = JSON.parse(JSON.stringify(data));
-    }
 
     /** Cleans the supplied request object and uses it to set this item's #requestObject and #requestObjectCleaned values */
     private CleanRequestObject(srcReq: Request): void {
