@@ -12,19 +12,49 @@ Settings {
     }
 }
 
-LanguageSelector #language {
+LanguageSelector {
+  label {
+    color: $gray-1;
+    font-size: 12px;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .select-wrapper {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      border-right: 2px solid $app-accent-color;
+      border-bottom: 2px solid $app-accent-color;
+      width: 8px;
+      height: 8px;
+      top: 14px;
+      right: 15px;
+      transform: rotate(45deg);
+    }
+  }
+
+  #language {
     width: 100%;
-    height: 2.3em;
-    font-size: 18px;
+    height: 40px;
+    font-size: 12px;
+    font-weight: 300;
+    color: $gray-1;
     margin-bottom: 15%;
-    margin-top: 10px;
-    border: 0.5px solid $gray-6;
+    border: 1px solid $gray-7;
+    border-radius: 3px;
     background-color: $white;
     padding-left: 10px;
+    appearance: none;
+    box-shadow: inset 0 2px 3px 0 rgba(42,57,66,0.1);
 
     &:hover {
         cursor: pointer;
     }
+  }
 }
 
 .notifications-toggle {
@@ -79,5 +109,11 @@ LanguageSelector #language {
             width: 22px;
             top: 4px;
         }
+    }
+
+    label {
+      color: $gray-1;
+      font-size: 13px;
+      font-weight: 500;
     }
 }
