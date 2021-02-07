@@ -8,9 +8,6 @@
 
         <LoginForm loginFunction="{login}"></LoginForm>
 
-        <div if="{ state.err }">
-            { TRANSLATIONS.offline() }
-        </div>
         <div class="extra-button-space">
             <a onclick="{toggleLoginHelpModal}" tabindex="0">{ TRANSLATIONS.forgot() }</a>
         </div>
@@ -48,22 +45,18 @@
                 help: () => gettext("Need help?"),
                 send: () => gettext("send us a message"),
                 login: () => gettext("Login"),
-                offline: () => gettext("You have no network connection"),
             },
 
             login(usernameAndPassword) {
                 const route = getRoute();
                 this.update({err: false});
-                login(usernameAndPassword).then(result => {
+                return login(usernameAndPassword).then(result => {
                     if (route.riotHash.length) {
                         location.hash = route.riotHash[0];
                     } else {
                         location.hash = "";
                     }
-                }).catch(err => {
-                    this.update({err});
                 });
-
             },
 
             fadePageBehindModal() {
