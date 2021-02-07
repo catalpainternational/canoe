@@ -20,6 +20,8 @@ import { Page } from "ts/Implementations/Page";
 import AllCoursesPage from "./Specific/AllCoursesPage";
 import CoursePage from "./Specific/CoursePage";
 import LessonPage from "./Specific/LessonPage";
+import ResourcesRootPage from "./Specific/ResourcesRootPage";
+import ResourcePage from "./Specific/ResourcePage";
 
 class ManifestError extends Error {
     constructor(message: string) {
@@ -158,21 +160,28 @@ export class Manifest implements TManifest {
                 return new CoursePage(this, pageId, parent);
             case "lessonpage":
                 return new LessonPage(this, pageId, parent);
+            case "resourcesroot":
+                return new ResourcesRootPage(this, pageId, parent);
+            case "resourcearticle":
+                return new ResourcePage(this, pageId, parent);
             default:
                 return new Page(this, pageId);
         }
     }
 
-    getLanguageHome(languageCode: string): Page | undefined {
-        const homePageId: string | undefined = Object.keys(
-            this.data.pages
-        ).find((pageId: string) => {
-            const page = this.data.pages[pageId];
-            return page.type === "homepage" && page.language === languageCode;
-        });
-        return homePageId === undefined
+    getLanguagePageType(
+        languageCode: string,
+        pageType: string
+    ): Page | undefined {
+        const pageId: string | undefined = Object.keys(this.data.pages).find(
+            (pageId: string) => {
+                const page = this.data.pages[pageId];
+                return page.type === pageType && page.language === languageCode;
+            }
+        );
+        return pageId === undefined
             ? undefined
-            : this.getSpecificPage(parseInt(homePageId));
+            : this.getSpecificPage(parseInt(pageId));
     }
 
     findParent(pageId: number): Page | undefined {
