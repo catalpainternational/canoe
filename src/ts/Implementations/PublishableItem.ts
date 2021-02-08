@@ -23,6 +23,8 @@ export abstract class PublishableItem<T extends TManifestItem>
     #requestObject: Request;
     /** Indicates whether the above #requestObject had to have the authorization header stripped */
     #requestObjectCleaned = false;
+    /** Indicates whether the above #requestObject has had the authorization header stripped */
+    #requestObjectClean = false;
 
     constructor(manifest: TManifest, id: string) {
         this.status = "unset";
@@ -107,6 +109,11 @@ export abstract class PublishableItem<T extends TManifestItem>
             return false;
         }
 
+        // Has the item's cache entry and its request header cleaned of auth data
+        if (!this.#requestObjectClean) {
+            return false;
+        }
+
         // Is the items's status acceptable
         if (this.status === "ready") {
             return false;
@@ -154,6 +161,7 @@ export abstract class PublishableItem<T extends TManifestItem>
     private CleanRequestObject(srcReq: Request): void {
         if (!srcReq.headers.has("authorization")) {
             this.#requestObjectCleaned = false;
+            this.#requestObjectClean = false;
             this.#requestObject = srcReq;
         }
 
@@ -249,6 +257,7 @@ export abstract class PublishableItem<T extends TManifestItem>
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         await this.cache.put(this.#requestObject!, this.updatedResp);
+        this.#requestObjectClean = true;
 
         return true;
     }
