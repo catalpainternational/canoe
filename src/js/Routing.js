@@ -37,7 +37,7 @@ async function route(hashWith) {
     try {
         const manifest = await getValidManifest();
         const page = pageHash.length ? manifest.getPageManifestData(pageHash) : manifest.getLanguageHome(getLanguage());
-        page.initialiseByRequest();
+        await page.initialiseByRequest();
         setRoute(page, riotHash);
     } catch (error){
         setRoute({type: "error", error});

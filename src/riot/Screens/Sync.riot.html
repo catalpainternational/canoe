@@ -97,6 +97,7 @@
                     const aPage = await manifest.getPageManifestData(
                         "/site/resources/resource"
                     );
+                    await aPage.initialiseByRequest();
                     const assetCount = aPage.assets.length;
                     const pageData =
                         `Page:${aPage.title} at ${aPage.loc_hash} ` +
@@ -106,9 +107,9 @@
                         `Available Offline:${aPage.isAvailableOffline} ` +
                         `Status:${aPage.status} `;
                     this.update({ page: pageData });
-                    if (assetCount > 0 && aPage.data.assets[0].data) {
-                        this.update({ img: aPage.data.assets[0].data });
-                    }
+                    aPage.data.assets.forEach((asset) => {
+                        this.update({ img: asset.data });
+                    });
                 }
             },
         };

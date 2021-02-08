@@ -164,7 +164,7 @@ export class Manifest extends PublishableItem<TManifestData> {
     }
 
     getSpecificPage(pageId: string, parent?: Page): Page {
-        switch (this.data.pages[pageId].type) {
+        switch (this.data.pages[parseInt(pageId)].type) {
             case "homepage":
                 return new AllCoursesPage(this, pageId, parent);
             case "coursepage":
@@ -172,7 +172,7 @@ export class Manifest extends PublishableItem<TManifestData> {
             case "lessonpage":
                 return new LessonPage(this, pageId, parent);
             default:
-                return new Page(this, pageId);
+                return new Page(this, pageId, parent);
         }
     }
 
