@@ -98,17 +98,21 @@
                         "/site/resources/resource"
                     );
                     await aPage.initialiseByRequest();
+                    const manifestAssetCount = aPage.manifestAssets.length;
                     const assetCount = aPage.assets.length;
                     const pageData =
                         `Page:${aPage.title} at ${aPage.loc_hash} ` +
-                        `Assets:${assetCount} ` +
+                        `Assets Defined:${manifestAssetCount} ` +
+                        `Assets Found:${assetCount} ` +
                         `Valid:${aPage.isValid} ` +
                         `Publishable:${aPage.isPublishable} ` +
                         `Available Offline:${aPage.isAvailableOffline} ` +
                         `Status:${aPage.status} `;
                     this.update({ page: pageData });
                     aPage.data.assets.forEach((asset) => {
-                        this.update({ img: asset.data });
+                        if (asset.isValid) {
+                            this.update({ img: asset.fullUrl });
+                        }
                     });
                 }
             },

@@ -17,9 +17,10 @@ import {
 
 export class Page extends PublishableItem<TWagtailPageData> {
     #parent: Page | undefined;
-    pageData!: TWagtailPageData;
     #status!: string;
     #childPages: Page[];
+    /** The actual assets referenced by this page */
+    #assets: Asset[];
 
     constructor(manifest: TManifest, id: string, parent?: Page) {
         super(manifest, id);
@@ -27,6 +28,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         // Populate the parent and childPages members
         this.#parent = parent || this.parent;
         this.#childPages = this.childPages;
+        this.#assets = [];
     }
 
     get childPages(): Page[] {
@@ -53,6 +55,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return this.manifestData?.loc_hash || "";
     }
 
+    /** The data for this page as defined in the manifest */
     get manifestData(): any {
         return this.manifest.pages[this.id];
     }
@@ -95,8 +98,14 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return this.manifestData?.type || "";
     }
 
-    get assets(): Array<TAssetEntry> {
+    /** The asset data as defined in the manifest for this page */
+    get manifestAssets(): Array<TAssetEntry> {
         return this.manifestData?.assets || [];
+    }
+
+    /** The assets associated with this page */
+    get assets(): Array<Asset> {
+        return this.#assets || [];
     }
 
     get language(): string {
@@ -145,15 +154,26 @@ export class Page extends PublishableItem<TWagtailPageData> {
             return false;
         }
 
-        if (this.assets.length > 0) {
-            return this.assets.every(
-                (asset) =>
-                    this.assetInitialised(asset) &&
-                    (asset as Asset).isAvailableOffline
-            );
+        // Compare the number of assets defined in the manifest for this page
+        // With the number of actual page objects
+        if (this.manifestAssets.length !== this.#assets.length) {
+            return false;
         }
 
-        return true;
+        if (this.manifestAssets.length === 0 && this.#childPages.length === 0) {
+            return true;
+        }
+
+        const allAssetsAvailableOffline = this.#assets.every(
+            (asset) => this.assetInitialised(asset) && asset.isAvailableOffline
+        );
+        if (!allAssetsAvailableOffline) {
+            return false;
+        }
+
+        return this.#childPages.every(
+            (childPage) => childPage.isAvailableOffline
+        );
     }
 
     get isPublishable(): boolean {
@@ -161,15 +181,26 @@ export class Page extends PublishableItem<TWagtailPageData> {
             return false;
         }
 
-        if (this.assets.length > 0) {
-            return this.assets.every(
-                (asset) =>
-                    this.assetInitialised(asset) &&
-                    (asset as Asset).status === "ready"
-            );
+        // Compare the number of assets defined in the manifest for this page
+        // With the number of actual page objects
+        if (this.assets.length !== this.#assets.length) {
+            return false;
         }
 
-        return true;
+        if (this.assets.length === 0 && this.#childPages.length === 0) {
+            return true;
+        }
+
+        // Assets are not publishable on their own,
+        // so we test that they are availableOffline
+        const allAssetsAvailableOffline = this.#assets.every(
+            (asset) => this.assetInitialised(asset) && asset.isAvailableOffline
+        );
+        if (!allAssetsAvailableOffline) {
+            return false;
+        }
+
+        return this.#childPages.every((childPage) => childPage.isPublishable);
     }
 
     get emptyItem(): TWagtailPageData {
@@ -207,64 +238,23 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
-        const pageData = await resp.json();
-        // Merge the existing page definition into this structure
-        if (pageData?.api_url) {
-            // New format
-            const dataKeys = Object.keys(this.data);
-            const respKeys = Object.keys(pageData);
-            dataKeys.forEach((dataKey) => {
-                if (!respKeys.includes(dataKey)) {
-                    return;
-                }
-                const dataIsArray = Array.isArray(this.data[dataKey]);
-                const respIsArray = Array.isArray(pageData[dataKey]);
-                if (dataIsArray) {
-                    if (!respIsArray || pageData[dataKey].length === 0) {
-                        // Don't bother copying empty arrays
-                        // this protects the existing array coming from manifest
-                        // when the cached version is not quite right
-                        return;
-                    }
-                    // We can add more smarts here to ensure that details from the manifest
-                    // are better persisted
-                }
-                if (typeof this.data[dataKey] === "object" || dataIsArray) {
-                    this.data[dataKey] = JSON.parse(
-                        JSON.stringify(pageData[dataKey])
-                    );
-                } else {
-                    this.data[dataKey] = pageData[dataKey];
-                }
-            });
-            respKeys.forEach((respKey) => {
-                if (dataKeys.includes(respKey)) {
-                    return;
-                }
-                const respIsArray = Array.isArray(pageData[respKey]);
-                if (typeof pageData[respKey] === "object" || respIsArray) {
-                    this.data[respKey] = JSON.parse(
-                        JSON.stringify(pageData[respKey])
-                    );
-                } else {
-                    this.data[respKey] = pageData[respKey];
-                }
-            });
-        } else {
-            // Merge old and new
-            this.data = { ...this.data, ...pageData };
-        }
-        const cacheUpdated = await this.updateCache();
+        this.data = await resp.json();
 
-        storePageData(pageData.id, pageData);
-        return cacheUpdated && !!(await this.getAssets());
+        // Update the cached paged data
+        const cacheUpdated = await this.updateCache();
+        // And store the page data in Redux
+        storePageData(this.data.id, this.data);
+
+        await this.loadAssets();
+
+        return cacheUpdated;
     }
 
     private assetInitialised(asset: TAssetEntry): boolean {
         return asset.isValid || false;
     }
 
-    async getAsset(asset: TAssetEntryData): Promise<TAssetEntry> {
+    async loadAsset(asset: TAssetEntryData): Promise<Asset> {
         // The asset's parentUrl is the same as the cache name
         // (which is the same as this page's full url)
         // See `cacheKey` above
@@ -285,23 +275,24 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return Promise.reject(false);
     }
 
-    async getAssets(): Promise<Array<TAssetEntry>> {
+    /** Load up the assets referenced by this Page */
+    async loadAssets(): Promise<void> {
         if (this.assets.length === 0) {
-            return this.assets;
+            return;
         }
 
-        const assets: Array<any> = [];
-        this.assets.forEach(async (asset) => {
+        const assets: Asset[] = [];
+        this.assets.forEach(async (assetEntry) => {
             try {
-                asset = await this.getAsset(asset);
+                assets.push(await this.loadAsset(assetEntry));
             } catch {
                 // Could not fill the asset
             }
-            assets.push(asset);
         });
-        this.data.assets = assets;
 
-        return this.assets;
+        if (assets.length) {
+            this.#assets = assets;
+        }
     }
 
     PETEgetImageRenditions(id: number): string {
