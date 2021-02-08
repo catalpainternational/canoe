@@ -283,17 +283,14 @@ export class Page extends PublishableItem<TWagtailPageData> {
             return;
         }
 
-        const assets: Asset[] = [];
-        this.manifestAssets.forEach(async (assetEntry, index) => {
+        this.#assets = [];
+        for (let ix = 0; ix < this.manifestAssets.length; ix++) {
             try {
-                assets.push(await this.loadAsset(assetEntry, index));
+                const asset = await this.loadAsset(this.manifestAssets[ix], ix);
+                this.#assets.push(asset);
             } catch {
                 // Could not fill the asset
             }
-        });
-
-        if (assets.length) {
-            this.#assets = assets;
         }
     }
 
