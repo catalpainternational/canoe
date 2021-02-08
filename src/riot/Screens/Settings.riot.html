@@ -26,7 +26,12 @@
                 { TRANSLATIONS.add() }
             </button>
 
-            <button class="btn-secondary" onclick="{logout}">{ TRANSLATIONS.logout() }</button>
+            <button class="btn-secondary" 
+                if="{ showLogout() }"
+                onclick="{logout}"
+            >
+                { TRANSLATIONS.logout() }
+            </button>
 
             <Logos></Logos>
         </div>
@@ -45,6 +50,7 @@
         import { dispatchInstallAppEvent } from "js/Events";
         import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
         import { getPlatform } from "ts/PlatformDetection";
+        import { isAuthenticated } from "ReduxImpl/Interface";
 
         export default {
             state: {
@@ -68,6 +74,7 @@
 
             logout() {
                 logout();
+                window.location.hash = "";
             },
 
             async refreshSettings() {
@@ -134,6 +141,10 @@
             onMounted() {
                 this.refreshSettings();
             },
+
+            showLogout() {
+                return isAuthenticated()
+            }
         };
     </script>
 </Settings>
