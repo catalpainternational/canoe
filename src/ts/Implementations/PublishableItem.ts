@@ -283,7 +283,7 @@ export abstract class PublishableItem<T extends TManifestItem>
 
         this.source = "cache";
         this.status = "loading";
-        const response = await this.getFromCache();
+        const response = (await this.getFromCache())?.clone();
 
         if (!response) {
             this.source = "unset";

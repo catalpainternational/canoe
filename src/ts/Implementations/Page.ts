@@ -17,7 +17,6 @@ import {
 
 export class Page extends PublishableItem<TWagtailPageData> {
     #parent: Page | undefined;
-    #status!: string;
     #childPages: Page[];
     /** The actual assets referenced by this page */
     #assets: Asset[];
@@ -44,7 +43,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     get ready(): boolean {
-        return !!this.#status && this.#status.startsWith("ready");
+        return !!this.status && this.status.startsWith("ready");
     }
 
     get title(): string {
@@ -239,6 +238,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.data = await resp.json();
+        this.status = "ready";
 
         // And store the page data in Redux
         storePageData(parseInt(this.id), this.data);

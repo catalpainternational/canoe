@@ -142,6 +142,7 @@ export class Manifest extends PublishableItem<TManifestData> {
 
         let cacheUpdated = false;
         if (this.data && this.isValid) {
+            this.status = "ready";
             storeManifest(this.data);
             cacheUpdated = await this.updateCache();
         }
