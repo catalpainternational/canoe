@@ -160,10 +160,10 @@ export class Manifest extends PublishableItem<TManifestData> {
         if (pageId === undefined) {
             throw new ManifestError("location not found in manifest");
         }
-        return this.getSpecificPage(parseInt(pageId));
+        return this.getSpecificPage(pageId);
     }
 
-    getSpecificPage(pageId: number): Page {
+    getSpecificPage(pageId: string): Page {
         switch (this.data.pages[pageId].type) {
             case "homepage":
                 return new AllCoursesPage(this, pageId);
@@ -184,8 +184,6 @@ export class Manifest extends PublishableItem<TManifestData> {
             return page.type === "homepage" && page.language === languageCode;
         });
 
-        return homePageId
-            ? this.getSpecificPage(parseInt(homePageId))
-            : undefined;
+        return homePageId ? this.getSpecificPage(homePageId) : undefined;
     }
 }
