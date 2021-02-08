@@ -163,14 +163,14 @@ export class Manifest extends PublishableItem<TManifestData> {
         return this.getSpecificPage(pageId);
     }
 
-    getSpecificPage(pageId: string): Page {
+    getSpecificPage(pageId: string, parent?: Page): Page {
         switch (this.data.pages[pageId].type) {
             case "homepage":
-                return new AllCoursesPage(this, pageId);
+                return new AllCoursesPage(this, pageId, parent);
             case "coursepage":
-                return new CoursePage(this, pageId);
+                return new CoursePage(this, pageId, parent);
             case "lessonpage":
-                return new LessonPage(this, pageId);
+                return new LessonPage(this, pageId, parent);
             default:
                 return new Page(this, pageId);
         }

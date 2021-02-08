@@ -1,5 +1,5 @@
-import { Page } from "../Page";
-import CoursePage from "./CoursePage";
+import { Page } from "ts/Implementations/Page";
+import CoursePage from "ts/Implementations/Specific/CoursePage";
 import { getLatestCompletionInCourse } from "js/actions/completion";
 
 export default class AllCoursesPage extends Page {
@@ -14,12 +14,15 @@ export default class AllCoursesPage extends Page {
         }
         return this.#tags;
     }
+
     get courses(): any {
         return this.childPages;
     }
+
     isCourseComplete(course: Record<string, any>): boolean {
         return !!course;
     }
+
     courseIdHasATagIn(courseId: number, tags: string[]): boolean {
         const course = this.pageData.courses.find(
             (c: any) => c.data.id == courseId
@@ -30,6 +33,7 @@ export default class AllCoursesPage extends Page {
             [...tagsSet].filter((tag: string) => courseTags.has(tag)).length > 0
         );
     }
+
     get coursesCompleteLast(): CoursePage[] {
         const inComplete: any[] = [];
         const complete: any[] = [];
@@ -42,6 +46,7 @@ export default class AllCoursesPage extends Page {
         });
         return inComplete.concat(complete);
     }
+
     get currentCourse(): any {
         return getLatestCompletionInCourse("d", ["D"]);
     }

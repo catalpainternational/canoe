@@ -21,22 +21,21 @@ export class Page extends PublishableItem<TWagtailPageData> {
     #status!: string;
     #childPages: Page[];
 
-    constructor(manifest: TManifest, id: string) {
+    constructor(manifest: TManifest, id: string, parent?: Page) {
         super(manifest, id);
 
         // Populate the parent and childPages members
-        // with the first call to their respective getter methods
-        this.#parent = this.parent;
+        this.#parent = parent || this.parent;
         this.#childPages = this.childPages;
     }
 
     get childPages(): Page[] {
-        if (this.childPages) {
-            return this.childPages;
+        if (this.#childPages) {
+            return this.#childPages;
         }
 
         this.#childPages = this.children.map(
-            (pageId) => this.manifest.getSpecificPage(pageId, this),
+            (pageId) => this.manifest.getSpecificPage(pageId.toString(), this),
             this.manifest
         );
         return this.#childPages;
@@ -66,12 +65,12 @@ export class Page extends PublishableItem<TWagtailPageData> {
         const parentId: string | undefined = Object.keys(
             this.manifest.pages
         ).find((id: string) => {
-            const page = this.manifest.pages[parseInt(id)];
+            const page = this.manifest.pages[id];
             return page.children.indexOf(parseInt(this.id)) !== -1;
         });
 
         this.#parent = parentId
-            ? this.manifest.getSpecificPage(parseInt(parentId))
+            ? this.manifest.getSpecificPage(parentId)
             : undefined;
         return this.#parent;
     }
