@@ -5,9 +5,7 @@ import {
     TManifest,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
-import { IWagtailPage } from "ts/Interfaces/ManifestInterfaces";
 import { PublishableItem } from "ts/Implementations/PublishableItem";
-import { Manifest } from "ts/Implementations/Manifest";
 import { Asset } from "ts/Implementations/Asset";
 
 // See ts/Typings for the type definitions for these imports
@@ -18,16 +16,13 @@ import {
 } from "ReduxImpl/Interface";
 
 export class Page extends PublishableItem<TWagtailPageData> {
-    #id: number;
     #parent: Page | undefined;
     pageData!: TWagtailPageData;
     #status!: string;
     #childPages: Page[];
 
-    constructor(manifest: TManifest, id: number) {
-        super(manifest);
-
-        this.#id = id;
+    constructor(manifest: TManifest, id: string) {
+        super(manifest, id);
 
         // Populate the parent and childPages members
         // with the first call to their respective getter methods
@@ -72,17 +67,13 @@ export class Page extends PublishableItem<TWagtailPageData> {
             this.manifest.pages
         ).find((id: string) => {
             const page = this.manifest.pages[parseInt(id)];
-            return page.children.indexOf(this.id) !== -1;
+            return page.children.indexOf(parseInt(this.id)) !== -1;
         });
 
         this.#parent = parentId
             ? this.manifest.getSpecificPage(parseInt(parentId))
             : undefined;
         return this.#parent;
-    }
-
-    get id(): number {
-        return this.#id;
     }
 
     get storage_container(): string {
@@ -199,7 +190,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     GetDataFromStore(): void {
-        const pageData = getPageDataFromStore(this.id);
+        const pageData = getPageDataFromStore(parseInt(this.id));
         if (pageData) {
             this.status = "ready";
             this.data = pageData;

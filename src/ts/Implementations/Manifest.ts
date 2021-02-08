@@ -24,7 +24,7 @@ class ManifestError extends Error {
 export class Manifest extends PublishableItem<TManifestData> {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
-        super(opts);
+        super(opts, "");
     }
 
     get version(): string {
@@ -37,6 +37,10 @@ export class Manifest extends PublishableItem<TManifestData> {
 
     get isInitialised(): boolean {
         return !!this.data?.pages;
+    }
+
+    get api_url(): string {
+        return "/manifest/v1";
     }
 
     get fullUrl(): string {
@@ -111,7 +115,7 @@ export class Manifest extends PublishableItem<TManifestData> {
 
     GetDataFromStore(): void {
         const manifest = getManifestFromStore();
-        if (manifest) {
+        if (manifest && JSON.stringify(manifest) !== "{}") {
             this.status = "ready";
             this.data = manifest;
         } else {

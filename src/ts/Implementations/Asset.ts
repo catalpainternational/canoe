@@ -13,8 +13,8 @@ export class Asset extends PublishableItem<TAssetEntry> {
     #blob?: Blob;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(manifest: TManifest, pageId: number) {
-        super(manifest);
+    constructor(manifest: TManifest, pageId: string) {
+        super(manifest, pageId);
     }
 
     get type(): string {

@@ -9,6 +9,7 @@ import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
 export abstract class PublishableItem<T extends TManifestItem>
     implements IManifestItemState {
+    #id: string;
     data!: T;
     cache!: Cache;
 
@@ -23,13 +24,13 @@ export abstract class PublishableItem<T extends TManifestItem>
     /** Indicates whether the above #requestObject had to have the authorization header stripped */
     #requestObjectCleaned = false;
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(manifest: TManifest) {
+    constructor(manifest: TManifest, id: string) {
         this.status = "unset";
         this.source = "unset";
         this.#requestObject = new Request("");
 
         this.manifest = manifest;
+        this.#id = id;
 
         if (!this.data) {
             this.data = this.emptyItem;
@@ -56,6 +57,10 @@ export abstract class PublishableItem<T extends TManifestItem>
             isPublishable: false,
             contentType: "",
         } as unknown) as T;
+    }
+
+    get id(): string {
+        return this.#id;
     }
 
     abstract get contentType(): string;
