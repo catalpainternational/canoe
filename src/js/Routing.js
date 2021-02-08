@@ -9,8 +9,8 @@ import { PageLacksTranslationDataError } from "js/Errors";
 import { logPageView } from "js/GoogleAnalytics";
 import { Manifest } from "ts/Implementations/Manifest";
 
-const IS_CANOE_PAGE = /([A-Za-z]+)/;
-const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
+const CANOE_PAGES = ['login', 'profile', 'settings', 'sync'];
+const IS_WAGTAIL_PAGE = /([\d]+)/; // should match '#3' and '#3/objectives'
 const IS_PAGE_PREVIEW = /^\?(.+)/;
 
 export function initialiseRouting() {
@@ -23,20 +23,19 @@ export function initialiseRouting() {
 async function route(hashWith) {
     const hash = hashWith.slice(1);
     logPageView(hash);
+    const hashParts = hash.split(":");
+    const pageHash = hashParts[0];
+    const riotHash = hashParts.slice(1);
 
     // If we are a simple canoe page all should be good
-    const appPageMatch = hash.match(IS_CANOE_PAGE);
-    if(appPageMatch) {
-        setRoute({type: appPageMatch[1]});
+    if(CANOE_PAGES.includes(pageHash)) {
+        setRoute({type: pageHash}, riotHash);
         return;
     }
 
     // otherwise we need a manifest to understand what to render
     try {
         const manifest = await getValidManifest();
-        const hashParts = hash.split(":");
-        const pageHash = hashParts[0];
-        const riotHash = hashParts.slice(1);
         const page = pageHash.length ? manifest.getPageManifestData(pageHash) : manifest.getLanguageHome(getLanguage());
         page.initialiseByRequest();
         setRoute(page, riotHash);

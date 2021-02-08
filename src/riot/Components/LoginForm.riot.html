@@ -55,6 +55,7 @@
                 username: () => gettext("Username"),
                 password: () => gettext("Password"),
                 invalid: () => gettext("Your username or password is incorrect"),
+                offline: () => gettext("We cannot reach the internet, you may be offline"),
                 login: () => gettext("Login"),
                 checking: () => gettext("Checking"),
                 show: () => gettext("show"),
@@ -76,28 +77,28 @@
                 return usernameAndPassword;
             },
 
-            async loginUser(event) {
+            loginUser(event) {
                 event.preventDefault();
                 const usernameAndPassword = this.getUsernameAndPasswordFromForm();
-                await this.disableFormButtonAndLogin(usernameAndPassword);
+                this.disableFormButtonAndLogin(usernameAndPassword);
             },
 
-            async disableFormButtonAndLogin(usernameAndPassword) {
-                try {
-                    this.update({
-                        isLoginButtonDisabled: true,
-                    });
-                    await this.props.loginFunction(usernameAndPassword);
-                } catch (error) {
+            disableFormButtonAndLogin(usernameAndPassword) {
+                this.update({
+                    isLoginButtonDisabled: true,
+                });
+                
+                this.props.loginFunction(usernameAndPassword).catch(error => {
                     if (alertIfRequestWasMadeOffline(error)) {
+                        this.update({ errorExplanation: this.TRANSLATIONS.offline() });
                     } else if (error.message.includes("HTTP status: 400")) {
                         this.update({ errorExplanation: this.TRANSLATIONS.invalid() });
                     }
-                } finally {
+                }).finally(() => {
                     this.update({
                         isLoginButtonDisabled: false,
                     });
-                }
+                });
             },
 
             showPassword() {

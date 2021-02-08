@@ -3,16 +3,16 @@
         <a if="{!state.isBannerClosing}" class="cross" onclick="{closingBanner}"></a>
         <p>{ TRANSLATIONS.guest() }</p>
         <p>{ TRANSLATIONS.data() }</p>
-        <a href="#login">LOGIN</a>
+        <p><a class="btn btn-primary" href="#login">login</a></p>
     </div>
 
     <script>
-        import { toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
+        import { isAuthenticated, toggleGuestBanner, isGuestBannerVisible } from "ReduxImpl/Interface";
 
         export default () => { return {
             state: {
                 isBannerClosing: false,
-                isBannerVisible: isGuestBannerVisible(),
+                isBannerVisible: isGuestBannerVisible() && !isAuthenticated(),
             },
 
             TRANSLATIONS: {

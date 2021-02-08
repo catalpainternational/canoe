@@ -11,7 +11,7 @@ import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanne
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
 import { changeOnlineAction } from "./ducks/Online";
-import { setAuthenticatedState } from "./ducks/Identity";
+import { setAuthenticatedState, setUnAuthenticatedState } from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
 
 export const storePageData = (pageId, pageData) => {
