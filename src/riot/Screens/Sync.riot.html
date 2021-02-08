@@ -109,11 +109,13 @@
                         `Available Offline:${aPage.isAvailableOffline} ` +
                         `Status:${aPage.status} `;
                     this.update({ page: pageData });
-                    aPage.data.assets.forEach((asset) => {
-                        if (asset.isValid) {
-                            this.update({ img: asset.fullUrl });
-                        }
-                    });
+                    if (assetCount) {
+                        aPage.assets.forEach((asset) => {
+                            if (asset.isValid) {
+                                this.update({ img: asset.fullUrl });
+                            }
+                        });
+                    }
                 }
             },
         };

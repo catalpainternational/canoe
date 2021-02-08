@@ -254,12 +254,12 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return asset.isValid || false;
     }
 
-    async loadAsset(asset: TAssetEntryData): Promise<Asset> {
+    async loadAsset(asset: TAssetEntryData, index: number): Promise<Asset> {
         // The asset's parentUrl is the same as the cache name
         // (which is the same as this page's full url)
         // See `cacheKey` above
         asset.parentUrl = this.fullUrl;
-        const pageAsset = new Asset(this.manifest, this.id);
+        const pageAsset = new Asset(this.manifest, this.id, index);
         const assetFilled = await pageAsset.initialiseFromCache();
 
         if (assetFilled) {
@@ -277,14 +277,14 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
     /** Load up the assets referenced by this Page */
     async loadAssets(): Promise<void> {
-        if (this.assets.length === 0) {
+        if (this.manifestAssets.length === 0) {
             return;
         }
 
         const assets: Asset[] = [];
-        this.assets.forEach(async (assetEntry) => {
+        this.manifestAssets.forEach(async (assetEntry, index) => {
             try {
-                assets.push(await this.loadAsset(assetEntry));
+                assets.push(await this.loadAsset(assetEntry, index));
             } catch {
                 // Could not fill the asset
             }

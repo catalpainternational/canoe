@@ -11,18 +11,21 @@ import { MissingImageError } from "js/Errors";
 
 export class Asset extends PublishableItem<TAssetEntry> {
     #blob?: Blob;
+    /** This asset's index within the manifest definition for its parent page */
+    #assetIndex: number;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(manifest: TManifest, pageId: string) {
+    constructor(manifest: TManifest, pageId: string, index: number) {
         super(manifest, pageId);
+        this.#assetIndex = index;
     }
 
     get type(): string {
-        return this.data?.type || "";
+        return this.manifestData?.type || "";
     }
 
     get renditions(): Record<string, string> {
-        return this.data?.renditions || {};
+        return this.manifestData?.renditions || {};
     }
 
     get platformSpecificRendition(): string {
@@ -30,7 +33,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     get manifestData(): TAssetEntry {
-        throw new Error("Method not implemented.");
+        return this.manifest?.pages[this.id]?.assets[this.#assetIndex] || {};
     }
 
     /** The url of the rendition that is most relevant to this platform */
@@ -107,7 +110,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     GetDataFromStore(): void {
-        throw new Error("Method not implemented.");
+        // Does nothing, assets are only stored in the cache
     }
 
     get updatedResp(): Response {
