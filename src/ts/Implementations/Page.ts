@@ -212,10 +212,8 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return new Response(JSON.stringify(this.data));
     }
 
-    async accessCache(): Promise<boolean> {
-        this.cache = await caches.open(this.fullUrl);
-
-        return !!this.cache;
+    get cacheKey(): string {
+        return this.fullUrl;
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
@@ -278,7 +276,8 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
     async getAsset(asset: TAssetEntryData): Promise<TAssetEntry> {
         // The asset's parentUrl is the same as the cache name
-        // See `accessCache` above
+        // (which is the same as this page's full url)
+        // See `cacheKey` above
         asset.parentUrl = this.fullUrl;
         const pageAsset = new Asset(this.manifest, this.id);
         const assetFilled = await pageAsset.initialiseFromCache();
@@ -286,9 +285,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         if (assetFilled) {
             return pageAsset;
         }
-        const notInCache = ["prepped:no cache", "loading:no cache"].includes(
-            pageAsset.status
-        );
+        const notInCache = ["prepped", "loading"].includes(pageAsset.status);
         if (notInCache) {
             if (await pageAsset.initialiseByRequest()) {
                 return pageAsset;

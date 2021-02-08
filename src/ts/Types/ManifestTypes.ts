@@ -78,4 +78,7 @@ export type TManifestItemState = {
 
     /** The cache where this manifest item is stored */
     cache: Cache;
+
+    /** The key to the cache where this manifest item is stored */
+    cacheKey: string;
 } & TManifestItem;

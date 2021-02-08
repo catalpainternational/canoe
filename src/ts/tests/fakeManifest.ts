@@ -30,6 +30,7 @@ function buildFakeManifestEntry(
         isAvailableOffline: true,
         isPublishable: true,
         cache: new Cache(),
+        cacheKey: "",
     };
 }
 
@@ -60,6 +61,7 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
         isAvailableOffline: true,
         isPublishable: true,
         cache: new Cache(),
+        cacheKey: "",
     };
 }
 

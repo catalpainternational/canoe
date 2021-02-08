@@ -123,10 +123,8 @@ export class Manifest extends PublishableItem<TManifestData> {
         return new Response(JSON.stringify(this.data));
     }
 
-    async accessCache(): Promise<boolean> {
-        this.cache = await caches.open(this.fullUrl);
-
-        return !!this.cache;
+    get cacheKey(): string {
+        return this.fullUrl;
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {

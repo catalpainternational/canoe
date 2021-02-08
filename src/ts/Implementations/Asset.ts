@@ -114,10 +114,8 @@ export class Asset extends PublishableItem<TAssetEntry> {
         return new Response(this.#blob);
     }
 
-    async accessCache(): Promise<boolean> {
-        this.cache = await caches.open(this.data.parentUrl);
-
-        return !!this.cache;
+    get cacheKey(): string {
+        return this.data.parentUrl;
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {

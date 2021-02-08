@@ -55,7 +55,6 @@ export abstract class PublishableItem<T extends TManifestItem>
             isAvailableOffline: false,
             isPublishable: false,
             contentType: "",
-            cache: new Cache(),
         } as unknown) as T;
     }
 
@@ -111,6 +110,17 @@ export abstract class PublishableItem<T extends TManifestItem>
         return true;
     }
 
+    abstract get cacheKey(): string;
+
+    /** Returns the opened cache or tries to open it */
+    async accessCache(): Promise<boolean> {
+        if (!this.cache) {
+            this.cache = await caches.open(this.cacheKey);
+        }
+
+        return !!this.cache;
+    }
+
     /** Get the data from the store and use it to fill the `data` member */
     abstract GetDataFromStore(): void;
 
@@ -134,8 +144,6 @@ export abstract class PublishableItem<T extends TManifestItem>
 
     /** Create the new response to go into the cache */
     abstract get updatedResp(): Response;
-
-    abstract accessCache(): Promise<boolean>;
 
     /** Cleans the supplied request object and uses it to set this item's #requestObject and #requestObjectCleaned values */
     private CleanRequestObject(srcReq: Request): void {
@@ -169,9 +177,16 @@ export abstract class PublishableItem<T extends TManifestItem>
 
     /** Get the Request Object from the currently cached item */
     private async GetRequestObject(): Promise<Request | undefined> {
+        const cacheOpen = await this.accessCache();
+
         if (this.#requestObject && this.#requestObject.url === this.fullUrl) {
             this.CleanRequestObject(this.#requestObject);
             return this.#requestObject;
+        }
+
+        if (!cacheOpen) {
+            // Couldn't get the cache open (this is a very unusual circumstance)
+            return Promise.resolve(undefined);
         }
 
         const requests = await this.cache.keys(this.fullUrl, {
@@ -197,7 +212,9 @@ export abstract class PublishableItem<T extends TManifestItem>
     }
 
     private async getFromCache(): Promise<Response | undefined> {
-        return this.#requestObject
+        const cacheOpen = await this.accessCache();
+
+        return this.#requestObject && cacheOpen
             ? await this.cache.match(this.#requestObject)
             : undefined;
     }
@@ -236,8 +253,8 @@ export abstract class PublishableItem<T extends TManifestItem>
 
     /** Initialise this item from the cache */
     async initialiseFromCache(): Promise<boolean> {
-        const cacheSet = await this.accessCache();
-        if (!cacheSet || !this.api_url) {
+        const cacheOpen = await this.accessCache();
+        if (!cacheOpen || !this.api_url) {
             this.source = "unset";
             this.status = "prepped";
             return false;
@@ -275,8 +292,17 @@ export abstract class PublishableItem<T extends TManifestItem>
         this.source = "network";
         this.status = "loading";
 
+        const cacheOpen = await this.accessCache();
+
         const reqObj = this.NewRequestObject;
         this.CleanRequestObject(reqObj);
+
+        if (!cacheOpen) {
+            // Couldn't get the cache open (this is a very unusual circumstance)
+            this.source = "unset";
+            this.status = "prepped";
+            return false;
+        }
 
         // Fetch the asset from the network, direct into the cache
         try {
