@@ -220,7 +220,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     GetDataFromStore(): void {
-        const pageData = getPageDataFromStore(this.id);
+        const pageData = getPageDataFromStore(parseInt(this.id));
         if (pageData) {
             this.status = "ready";
             this.data = pageData;
@@ -240,10 +240,11 @@ export class Page extends PublishableItem<TWagtailPageData> {
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.data = await resp.json();
 
+        // And store the page data in Redux
+        storePageData(parseInt(this.id), this.data);
+
         // Update the cached paged data
         const cacheUpdated = await this.updateCache();
-        // And store the page data in Redux
-        storePageData(this.id, this.data);
 
         await this.loadAssets();
 
@@ -260,6 +261,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         // See `cacheKey` above
         asset.parentUrl = this.fullUrl;
         const pageAsset = new Asset(this.manifest, this.id, index);
+        pageAsset.parentUrl = this.fullUrl;
         const assetFilled = await pageAsset.initialiseFromCache();
 
         if (assetFilled) {

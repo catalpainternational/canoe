@@ -11,8 +11,8 @@ declare module "ReduxImpl/Interface" {
     export function getManifestFromStore(): TManifestData;
     export function setFetchingManifest(fetching: boolean): void;
     export function storePageData(
-        pageId: string,
+        pageId: any,
         pageData: TWagtailPageData
     ): void;
-    export function getPageData(pageId: string): TWagtailPageData;
+    export function getPageData(pageId: any): TWagtailPageData;
 }

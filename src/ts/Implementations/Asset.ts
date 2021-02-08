@@ -11,6 +11,8 @@ import { MissingImageError } from "js/Errors";
 
 export class Asset extends PublishableItem<TAssetEntry> {
     #blob?: Blob;
+    /** The url of the parent page (used to point to the correct cache) */
+    parentUrl?: string;
     /** This asset's index within the manifest definition for its parent page */
     #assetIndex: number;
 
@@ -118,7 +120,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     get cacheKey(): string {
-        return this.data.parentUrl;
+        return this.parentUrl || "";
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
