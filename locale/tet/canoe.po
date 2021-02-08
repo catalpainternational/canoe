@@ -306,7 +306,7 @@ msgid "You just completed the lesson \"%1\""
 msgstr "Ita foin halo remata lisaun \"%1\""
 
 #. message when user passed the exam
-msgid "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam."
+msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
 msgstr "Ita pasa ezame ne'e ho valór %1%. Karik hakarak hadiak liu tan ita nian valór, ita bele foti tan ezame ne'e."
 
 msgid "You're logged in as a guest user"
