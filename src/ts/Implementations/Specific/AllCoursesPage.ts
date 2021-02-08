@@ -7,7 +7,7 @@ export default class AllCoursesPage extends Page {
 
     get tags(): string[] {
         if (this.#tags === undefined) {
-            this.#tags = this.pageData.courses
+            this.#tags = this.data.courses
                 .map((c: any) => c.tags)
                 .flat()
                 .map((tag: string) => tag.toLowerCase());
@@ -24,7 +24,7 @@ export default class AllCoursesPage extends Page {
     }
 
     courseIdHasATagIn(courseId: number, tags: string[]): boolean {
-        const course = this.pageData.courses.find(
+        const course = this.data.courses.find(
             (c: any) => c.data.id == courseId
         );
         const courseTags = new Set(course.tags);

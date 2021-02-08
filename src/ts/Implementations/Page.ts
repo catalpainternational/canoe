@@ -220,7 +220,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     GetDataFromStore(): void {
-        const pageData = getPageDataFromStore(parseInt(this.id));
+        const pageData = getPageDataFromStore(this.id);
         if (pageData) {
             this.status = "ready";
             this.data = pageData;
@@ -243,7 +243,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         // Update the cached paged data
         const cacheUpdated = await this.updateCache();
         // And store the page data in Redux
-        storePageData(this.data.id, this.data);
+        storePageData(this.id, this.data);
 
         await this.loadAssets();
 
