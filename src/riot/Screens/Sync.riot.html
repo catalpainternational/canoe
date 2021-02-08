@@ -13,7 +13,7 @@
             <p>{state.appelflapMeta}</p>
             <p>{state.manifest}</p>
             <p>{state.page}</p>
-            <img if="{state.img}" src="{state.img}"/>
+            <img if="{state.img}" src="{state.img}" />
             <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
 
             <h5 if="{state.syncs.length > 0}" class="section-title">
@@ -86,28 +86,31 @@
 
                 // try to get the manifest
                 const manifest = new Manifest();
-                if (!manifest.isInitialised) {
-                    // manifest.initialiseFromStore();
-                }                
-                if (manifest.isInitialised) {
+                if (!manifest.isValid) {
+                    await manifest.initialiseByRequest();
+                }
+                if (manifest.isValid) {
                     const data = JSON.stringify(manifest.data);
                     this.update({ manifest: "Got a manifest" });
 
                     // try getting a page
-                    const aPage = await manifest.getPageData("/site/resources/resource");
+                    const aPage = await manifest.getPageManifestData(
+                        "/site/resources/resource"
+                    );
                     const assetCount = aPage.assets.length;
-                    const pageData = `Page:${aPage.title} at ${aPage.loc_hash} `
-                        + `Assets:${assetCount} `
-                        + `Valid:${aPage.isValid} `
-                        + `Publishable:${aPage.isPublishable} `
-                        + `Available Offline:${aPage.isAvailableOffline} `
-                        + `Status:${aPage.status} `;
+                    const pageData =
+                        `Page:${aPage.title} at ${aPage.loc_hash} ` +
+                        `Assets:${assetCount} ` +
+                        `Valid:${aPage.isValid} ` +
+                        `Publishable:${aPage.isPublishable} ` +
+                        `Available Offline:${aPage.isAvailableOffline} ` +
+                        `Status:${aPage.status} `;
                     this.update({ page: pageData });
                     if (assetCount > 0 && aPage.data.assets[0].data) {
                         this.update({ img: aPage.data.assets[0].data });
                     }
                 }
-            }
-        }
+            },
+        };
     </script>
 </Sync>
