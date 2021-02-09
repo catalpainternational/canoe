@@ -140,8 +140,11 @@ export abstract class PublishableItem<T extends TManifestItem>
     private get NewRequestObject(): Request {
         const headers: any = {
             "Content-Type": this.contentType,
-            Authorization: `JWT ${getAuthenticationToken()}`,
         };
+        const token = getAuthenticationToken();
+        if (token) {
+            headers["Authorization"] = `JWT ${token}`;
+        }
 
         const reqInit: any = {
             cache: "no-cache",
