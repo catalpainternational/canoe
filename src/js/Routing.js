@@ -59,7 +59,9 @@ async function route(hashWith) {
     } else {
         page = manifest.getPageManifestData(pageHash);
     }
-    page.initialiseByRequest();
+    if (!page.ready) {
+        page.initialiseByRequest();
+    }
     setRoute(page, riotHash);
 }
 
