@@ -11,6 +11,7 @@
 
         <div class="content-wrapper">
             <p>{state.appelflapMeta}</p>
+            <p>{state.publications}</p>
             <p>{state.manifest}</p>
             <p>{state.page}</p>
             <img if="{state.img}" src="{state.img}" />
@@ -62,6 +63,7 @@
             state: {
                 syncs: [],
                 appelflapMeta: "Hello",
+                publications: "",
                 manifest: "",
                 page: "",
             },
@@ -82,6 +84,9 @@
                 const appelflapConnect = new AppelflapConnect();
                 appelflapConnect.getMetaStatus().then((response) => {
                     this.update({ appelflapMeta: JSON.stringify(response) });
+                });
+                appelflapConnect.getPublications().then((response) => {
+                    this.update(({ publications: JSON.stringify(response) }));
                 });
 
                 // try to get the manifest
