@@ -50,6 +50,7 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
     });
 
     return {
+        id: "",
         type: type,
         renditions: renditions,
         api_url: "",

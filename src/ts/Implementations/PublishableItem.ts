@@ -140,8 +140,11 @@ export abstract class PublishableItem<T extends TManifestItem>
     private get NewRequestObject(): Request {
         const headers: any = {
             "Content-Type": this.contentType,
-            Authorization: `JWT ${getAuthenticationToken()}`,
         };
+        const token = getAuthenticationToken();
+        if (token) {
+            headers["Authorization"] = `JWT ${token}`;
+        }
 
         const reqInit: any = {
             cache: "no-cache",
@@ -192,6 +195,10 @@ export abstract class PublishableItem<T extends TManifestItem>
     private async GetRequestObject(): Promise<Request | undefined> {
         const cacheOpen = await this.accessCache();
 
+        if (!this.fullUrl) {
+            // "The full url could not be determined for this item, it is not retrievable";
+            return Promise.resolve(undefined);
+        }
         if (this.#requestObject && this.#requestObject.url === this.fullUrl) {
             this.CleanRequestObject(this.#requestObject);
             return this.#requestObject;
@@ -243,8 +250,14 @@ export abstract class PublishableItem<T extends TManifestItem>
         if (!reqObj) {
             this.source = "unset";
             this.status = "prepped";
-            reqObj = this.NewRequestObject;
-            this.CleanRequestObject(reqObj);
+            if (this.fullUrl) {
+                reqObj = this.NewRequestObject;
+                this.CleanRequestObject(reqObj);
+            } else {
+                // Without a fullUrl we cannot retrieve this item
+                // from either the cache or the network
+                return false;
+            }
         }
 
         this.source = "cache";
