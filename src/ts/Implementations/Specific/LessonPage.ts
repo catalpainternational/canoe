@@ -1,5 +1,5 @@
-import { Page } from "../Page";
-import CoursePage from "./CoursePage";
+import { Page } from "ts/Implementations/Page";
+import CoursePage from "ts/Implementations/Specific/CoursePage";
 
 export default class LessonPage extends Page {
     isFinished(): boolean {
@@ -19,19 +19,19 @@ export default class LessonPage extends Page {
     }
 
     get shortDescription(): string {
-        return this.pageData.data?.description;
+        return this.data.data?.description;
     }
     get longDescription(): string {
-        return this.pageData.data?.long_description;
+        return this.data.data?.long_description;
     }
     get objective(): any {
-        return this.pageData.objective;
+        return this.data.objective;
     }
     get content(): any {
-        return this.pageData.content;
+        return this.data.content;
     }
     get test(): any {
-        return this.pageData.test;
+        return this.data.test;
     }
     isModuleComplete(module: string): boolean {
         // Not implemented

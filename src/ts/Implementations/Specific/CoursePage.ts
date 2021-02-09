@@ -1,4 +1,4 @@
-import { Page } from "../Page";
+import { Page } from "ts/Implementations/Page";
 import { getLatestCompletionInCourse } from "js/actions/completion";
 
 export default class CoursePage extends Page {
@@ -6,7 +6,7 @@ export default class CoursePage extends Page {
         return this.childPages;
     }
     get tags(): string[] {
-        return this.pageData.tags;
+        return this.data.tags;
     }
 
     get hasExam(): boolean {

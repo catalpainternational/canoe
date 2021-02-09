@@ -1,64 +1,49 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
     TAssetEntry,
-    TPage,
-    TPageData,
-    TWagtailPage,
+    TAssetEntryData,
+    TManifest,
     TWagtailPageData,
 } from "ts/Types/ManifestTypes";
-import { CacheHandler } from "ts/CacheHandler";
-import { PAGES_CACHE_NAME } from "ts/Constants";
+import { PublishableItem } from "ts/Implementations/PublishableItem";
+import { Asset } from "ts/Implementations/Asset";
 
 // See ts/Typings for the type definitions for these imports
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { BACKEND_BASE_URL } from "js/urls";
 import {
-    getManifestFromStore,
     getPageData as getPageDataFromStore,
     storePageData,
 } from "ReduxImpl/Interface";
-import { Manifest } from "./Manifest";
-import { TManifestData } from "../Types/ManifestTypes";
 
-export class Page implements TWagtailPage {
-    #cache!: Cache;
-    #manifest: Manifest;
-    #id: number;
+export class Page extends PublishableItem<TWagtailPageData> {
     #parent: Page | undefined;
-    pageData!: TWagtailPageData;
-    #status!: string;
     #childPages: Page[];
+    /** The actual assets referenced by this page */
+    #assets: Asset[];
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(manifest: Manifest, id: number, parent?: Page) {
-        this.#manifest = manifest;
-        this.#id = id;
+    constructor(manifest: TManifest, id: string, parent?: Page) {
+        super(manifest, id);
 
-        // check the store for data ( maybe set ready here? )
-        const pageData = getPageDataFromStore(this.id);
-        if (pageData) {
-            this.pageData = pageData;
-        }
-
-        // populate the parent
-        this.#parent = parent || manifest.findParent(id);
-
-        // populate the children
-        this.#childPages = this.children.map(
-            (pageId) => this.#manifest.getSpecificPage(pageId, this),
-            this.#manifest
-        );
+        // Populate the parent and childPages members
+        this.#parent = parent || this.parent;
+        this.#childPages = this.childPages;
+        this.#assets = [];
     }
 
     get childPages(): Page[] {
+        if (this.#childPages) {
+            return this.#childPages;
+        }
+
+        this.#childPages = this.children.map(
+            (pageId) => this.manifest.getSpecificPage(pageId, this),
+            this.manifest
+        );
         return this.#childPages;
     }
 
     get ready(): boolean {
-        return !!this.#status && this.#status.startsWith("ready");
-    }
-    get manifestData(): any {
-        return this.#manifest.pages[this.id];
+        return !!this.status && this.status.startsWith("ready");
     }
 
     get title(): string {
@@ -69,12 +54,27 @@ export class Page implements TWagtailPage {
         return this.manifestData?.loc_hash || "";
     }
 
-    get parent(): Page | undefined {
-        return this.#parent;
+    /** The data for this page as defined in the manifest */
+    get manifestData(): TWagtailPageData {
+        return this.manifest.pages[this.id] || {};
     }
 
-    get id(): number {
-        return this.#id;
+    get parent(): Page | undefined {
+        if (this.#parent) {
+            return this.#parent;
+        }
+
+        const parentId: string | undefined = Object.keys(
+            this.manifest.pages
+        ).find((id: string) => {
+            const page = this.manifest.pages[id];
+            return page.children.indexOf(this.id) !== -1;
+        });
+
+        this.#parent = parentId
+            ? this.manifest.getSpecificPage(parentId)
+            : undefined;
+        return this.#parent;
     }
 
     get storage_container(): string {
@@ -89,19 +89,29 @@ export class Page implements TWagtailPage {
         return this.manifestData?.api_url || "";
     }
 
+    get fullUrl(): string {
+        return `${BACKEND_BASE_URL}${this.api_url}`;
+    }
+
     get type(): string {
         return this.manifestData?.type || "";
     }
 
-    get assets(): Array<TAssetEntry> {
+    /** The asset data as defined in the manifest for this page */
+    get manifestAssets(): Array<TAssetEntry> {
         return this.manifestData?.assets || [];
+    }
+
+    /** The assets associated with this page */
+    get assets(): Array<Asset> {
+        return this.#assets || [];
     }
 
     get language(): string {
         return this.manifestData?.language || "";
     }
 
-    get children(): Array<number> {
+    get children(): Array<string> {
         return this.manifestData?.children || [];
     }
 
@@ -109,15 +119,29 @@ export class Page implements TWagtailPage {
         return this.manifestData?.depth || 0;
     }
 
-    get fullUrl(): string {
-        return `${BACKEND_BASE_URL}${this.api_url}`;
+    get contentType(): string {
+        return "application/json";
     }
 
     /** This will do a basic integrity check.
-     * But for now it just checks that page details have actually been loaded, same as isPublishable
+     * version is not 0, api_url has a value, etc.
      */
     get isValid(): boolean {
+        if (!super.isValid) {
+            return false;
+        }
+
         if (this.version === 0) {
+            return false;
+        }
+
+        // Has the wagtail version of this page been loaded
+        if (!this.data.data || !this.data.id || !this.data.title) {
+            return false;
+        }
+
+        // Is the page's source acceptable
+        if (["unset", "store"].includes(this.source)) {
             return false;
         }
 
@@ -125,108 +149,163 @@ export class Page implements TWagtailPage {
     }
 
     get isAvailableOffline(): boolean {
-        if (this.version === 0) {
+        if (!super.isAvailableOffline) {
             return false;
         }
 
-        return this.isValid;
+        // Compare the number of assets defined in the manifest for this page
+        // With the number of actual page objects
+        if (this.manifestAssets.length !== this.#assets.length) {
+            return false;
+        }
+
+        if (this.manifestAssets.length === 0 && this.#childPages.length === 0) {
+            return true;
+        }
+
+        const allAssetsAvailableOffline = this.#assets.every(
+            (asset) => this.assetInitialised(asset) && asset.isAvailableOffline
+        );
+        if (!allAssetsAvailableOffline) {
+            return false;
+        }
+
+        return this.#childPages.every(
+            (childPage) => childPage.isAvailableOffline
+        );
     }
 
     get isPublishable(): boolean {
-        if (this.version === 0) {
+        if (!super.isPublishable) {
             return false;
         }
 
-        return true;
-    }
-
-    get status(): string {
-        return this.#status;
-    }
-
-    static get emptyItem(): TWagtailPage {
-        return {
-            loc_hash: "",
-            storage_container: "",
-            version: 0,
-            api_url: "",
-            assets: [],
-            language: "",
-            children: [],
-            depth: 0,
-            isValid: false,
-            isAvailableOffline: false,
-            isPublishable: false,
-        };
-    }
-
-    async initialiseFromResponse(resp: Response): Promise<void> {
-        const pageData = await resp.json();
-        this.pageData = pageData;
-        this.#status = "ready";
-        storePageData(pageData.id, pageData);
-    }
-
-    async initialiseFromCache(): Promise<void> {
-        this.#cache = await caches.open(PAGES_CACHE_NAME);
-
-        if (this.api_url) {
-            this.#status = "loading:cache";
-            const resp = await this.#cache.match(this.fullUrl, {
-                ignoreSearch: true,
-                ignoreMethod: true,
-                ignoreVary: true,
-            });
-            if (resp) {
-                await this.initialiseFromResponse(resp);
-                this.#status = "ready:cache";
-            } else {
-                this.#status = "prepped:no cache";
-            }
-        } else {
-            this.#status = "prepped:no url";
-        }
-    }
-
-    async initialiseByRequest(): Promise<boolean> {
-        this.#status = "loading:fetch";
-        const token: string = getAuthenticationToken();
-        const resp = await fetch(this.fullUrl, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: token ? "JWT " + token : "",
-            },
-        });
-
-        if (resp.ok) {
-            await this.initialiseFromResponse(resp);
-            this.#status = "ready:fetch";
-        } else {
-            this.#status = "prepped:no fetch";
+        // Compare the number of assets defined in the manifest for this page
+        // With the number of actual page objects
+        if (this.assets.length !== this.#assets.length) {
+            return false;
         }
 
-        return true;
-    }
+        if (this.assets.length === 0 && this.#childPages.length === 0) {
+            return true;
+        }
 
-    async getImages(): Promise<any[]> {
-        const images = new Set(
-            this.assets.map((asset: TAssetEntry) => asset.renditions)
+        // Assets are not publishable on their own,
+        // so we test that they are availableOffline
+        const allAssetsAvailableOffline = this.#assets.every(
+            (asset) => this.assetInitialised(asset) && asset.isAvailableOffline
         );
+        if (!allAssetsAvailableOffline) {
+            return false;
+        }
 
-        return [...images];
+        return this.#childPages.every((childPage) => childPage.isPublishable);
     }
 
-    PETEgetImageRenditions(id: number): string {
+    get emptyItem(): TWagtailPageData {
+        const empty = super.emptyItem;
+
+        empty.loc_hash = "";
+        empty.storage_container = "";
+        empty.version = 0;
+        empty.assets = [];
+        empty.language = "";
+        empty.children = [];
+        empty.depth = 0;
+        empty.type = "";
+        empty.title = "";
+
+        return empty;
+    }
+
+    GetDataFromStore(): void {
+        const pageData = getPageDataFromStore(this.id);
+        if (pageData) {
+            this.status = "ready";
+            this.data = pageData;
+        } else {
+            this.status = "prepped";
+        }
+    }
+
+    get updatedResp(): Response {
+        return new Response(JSON.stringify(this.data));
+    }
+
+    get cacheKey(): string {
+        return this.fullUrl;
+    }
+
+    async initialiseFromResponse(resp: Response): Promise<boolean> {
+        this.data = await resp.json();
+        this.status = "ready";
+
+        // And store the page data in Redux
+        storePageData(this.id, this.data);
+
+        // Update the cached paged data
+        const cacheUpdated = await this.updateCache();
+
+        await this.loadAssets();
+
+        return cacheUpdated;
+    }
+
+    private assetInitialised = (asset: TAssetEntry): boolean =>
+        asset.isValid || false;
+
+    async loadAsset(asset: TAssetEntryData, index: number): Promise<Asset> {
+        // The asset's parentUrl is the same as the cache name
+        // (which is the same as this page's full url)
+        // See `cacheKey` above
+        asset.parentUrl = this.fullUrl;
+        const pageAsset = new Asset(this.manifest, this.id, index);
+        pageAsset.parentUrl = this.fullUrl;
+        const assetFilled = await pageAsset.initialiseFromCache();
+
+        if (assetFilled) {
+            return pageAsset;
+        }
+        const notInCache = ["prepped", "loading"].includes(pageAsset.status);
+        if (notInCache) {
+            if (await pageAsset.initialiseByRequest()) {
+                return pageAsset;
+            }
+        }
+
+        return Promise.reject(false);
+    }
+
+    /** Load up the assets referenced by this Page */
+    async loadAssets(): Promise<void> {
+        if (this.manifestAssets.length === 0) {
+            return;
+        }
+
+        this.#assets = [];
+        for (let ix = 0; ix < this.manifestAssets.length; ix++) {
+            try {
+                const asset = await this.loadAsset(this.manifestAssets[ix], ix);
+                this.#assets.push(asset);
+            } catch {
+                // Could not fill the asset
+            }
+        }
+    }
+
+    getAssetsByIdAndType(
+        id: number,
+        assetType: string
+    ): TAssetEntry | undefined {
         const assets = this.manifestData.assets;
-        return assets.find((a: any) => {
-            return a.id === id && a.type === "image";
+        return assets.find((a: TAssetEntry) => {
+            return a.id === id && a.type === assetType;
         });
     }
-    PETEgetMediaRenditions(id: number): string {
-        const assets = this.manifestData.assets;
-        return assets.find((a: any) => {
-            return a.id === id && a.type === "media";
-        });
-    }
+
+    PETEgetImageRenditions = (id: number): TAssetEntry | undefined =>
+        this.getAssetsByIdAndType(id, "image");
+
+    PETEgetMediaRenditions = (id: number): TAssetEntry | undefined =>
+        this.getAssetsByIdAndType(id, "media");
 }
