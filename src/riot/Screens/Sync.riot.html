@@ -102,17 +102,6 @@
                 cacheUtilities.cacheKeys().then((response) => {
                     cacheKeys = response;
                     this.update({ cacheKeys: cacheKeys });
-                    const cachesToPublish = cacheKeys.map((key) => { return {
-                        webOrigin: btoa(self.origin),
-                        cacheName: btoa(key),
-                        version: 1
-                    }});
-                    cachesToPublish.forEach((cacheToPublish) => {
-                        cachePublish.publish(cacheToPublish).then((response) => {}).catch((error) => {
-                            console.info("Publish didn't work");
-                        })
-                    })
-                    
                 });
                 cachePublish.publications().then((response) => {
                     this.update(({ publications: JSON.stringify(response) }));
@@ -150,6 +139,9 @@
                             }
                         });
                     }
+
+                    // try publishing the page
+                    aPage.publish(appelflapConnect);
                 }
             },
         };
