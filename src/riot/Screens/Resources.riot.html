@@ -4,27 +4,27 @@
     </TopMenu>
     <div class="content-wrapper" if="{state.hash == null}">
         <SearchBar
-            if="{state.articles.length > 0}"
+            if="{state.page.resources.length > 0}"
             searchString="{state.searchString}"
             submitSearch="{submitSearch}"
         ></SearchBar>
         <TagList
-            if="{state.listOfAllTags.length > 0 && state.articles.length > 0}"
+            if="{state.listOfAllTags.length > 0 && state.page.resources.length > 0}"
             tags="{state.listOfAllTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
         <div class="card-container">
             <Card
-                each="{article in state.articles}"
-                if="{isResourceArticleVisible(article)}"
-                title="{article.title}"
-                link="{article.id}"
+                each="{resource in state.page.resources}"
+                if="{isResourceVisible(resource)}"
+                title="{resource.title}"
+                link="{resource.loc_hash}"
                 status="not-started"
             ></Card>
         </div>
         <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
-        <p if="{!state.isLoading && state.articles.length === 0}">
+        <p if="{!state.isLoading && state.page.resources.length === 0}">
             { TRANSLATIONS.noArticlesYet() }
         </p>
     </div>
@@ -35,6 +35,8 @@
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+
+        import { getRoute } from "ReduxImpl/Interface";
 
         import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
         import { getResources } from "js/WagtailPagesAPI";
@@ -68,6 +70,14 @@
                 noArticlesYet: () => gettext("There are no resources yet. Check back soon!"),
             },
 
+            onBeforeMount() {
+                this.state.page = getRoute().page;
+                this.state.isLoading = !this.state.page.ready;
+            },
+            onBeforeUpdate() {
+                this.state.isLoading = !this.state.page.ready;
+            },
+            /*
             async onMounted() {
                 this.toggleLoadingMessage();
                 const articles = (await getResources()).map(
@@ -97,6 +107,7 @@
                 }
                 this.toggleLoadingMessage();
             },
+            */
 
             toggleLoadingMessage() {
                 this.update({ isLoading: !this.state.isLoading });
@@ -139,20 +150,20 @@
                 this.update({ searchString });
             },
 
-            isResourceArticleVisible(article) {
+            isResourceVisible(resource) {
                 const { searchString, selectedTags } = this.state;
 
                 const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,
-                    article.title,
-                    article.description
+                    resource.title,
+                    resource.description
                 );
 
-                const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
-                const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
+                const lowercaseTags = resource.tags.map((tag) => tag.toLowerCase());
+                const isTagMatch = doPageTagsMatchSelections(lowercaseTags, selectedTags);
 
-                const showArticle = isQueryMatch && isTagMatch;
-                return showArticle;
+                const show = isQueryMatch && isTagMatch;
+                return show;
             },
 
             replaceUrlQuery(urlParams) {

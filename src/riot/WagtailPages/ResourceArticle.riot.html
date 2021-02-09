@@ -1,16 +1,68 @@
 <ResourceArticle>
-    <LessonContent
-        lessonContent="{props.wagtailPage.cards}"
-        title="{props.wagtailPage.title}"
-        isLessonPage="{false}"
-        resourceId="{'resources'}"
-    ></LessonContent>
+    <LoadingDots if="{ state.isLoading }" extrastyleclasses="dark"></LoadingDots>
+    <template if="{ !state.isLoading }">
+        <template each="{ card in state.resource.cards }">
+            <Raw
+                if="{card.tag === 'raw'}"
+                html="{card.content}"
+            />
+            <BasicCard
+                if="{card.tag === 'basic'}"
+                card="{card}"
+            />
+            <AudioCard
+                if="{card.media_type === 'audio'}"
+                media="{card}"
+            />
+            <VideoCard
+                if="{card.media_type === 'video'}"
+                media="{card}"
+            />
+            <QuoteCard
+                if="{card.tag === 'quote'}"
+                card="{card}"
+            />
+            <ListCard
+                if="{card.tag === 'list'}"
+                card="{card}"
+            />
+            <PdfCard
+                if="{card.tag === 'pdf'}"
+                card="{card}"
+            />
+
+        </template>
+    </template>
+
     <script>
-        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
+        import Raw from "RiotTags/Components/Raw.riot.html";
+        import BasicCard from "RiotTags/Components/BasicCard.riot.html";
+        import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
+        import AudioCard from "RiotTags/Lesson/AudioCard.riot.html";
+        import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
+        import ListCard from "RiotTags/Lesson/ListCard.riot.html";
+        import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+
+        import { getRoute } from "ReduxImpl/Interface";
 
         export default {
             components: {
-                lessoncontent: LessonContent,
+                loadingdots: LoadingDots,
+                basiccard: BasicCard,
+                quotecard: QuoteCard,
+                listcard: ListCard,
+                raw: Raw,
+                videocard: VideoCard,
+                audiocard: AudioCard,
+                pdfcard: PdfCard,
+            },
+            onBeforeMount() {
+                this.state.resource = getRoute().page;
+                this.state.isLoading = !this.state.resource.ready;
+            },
+            onBeforeUpdate() {
+                this.state.isLoading = !this.state.resource.ready;
             },
         }
     </script>
