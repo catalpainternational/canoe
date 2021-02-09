@@ -5,6 +5,8 @@ import { Page } from "ts/Implementations/Page";
 import AllCoursesPage from "ts/Implementations/Specific/AllCoursesPage";
 import CoursePage from "ts/Implementations/Specific/CoursePage";
 import LessonPage from "ts/Implementations/Specific/LessonPage";
+import ResourcesRootPage from "ts/Implementations/Specific/ResourcesRootPage";
+import ResourcePage from "ts/Implementations/Specific/ResourcePage";
 
 // See ts/Typings for the type definitions for these imports
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
@@ -172,19 +174,25 @@ export class Manifest extends PublishableItem<TManifestData> {
                 return new CoursePage(this, pageId, parent);
             case "lessonpage":
                 return new LessonPage(this, pageId, parent);
+            case "resourcesroot":
+                return new ResourcesRootPage(this, pageId, parent);
+            case "resourcearticle":
+                return new ResourcePage(this, pageId, parent);
             default:
                 return new Page(this, pageId, parent);
         }
     }
 
-    getLanguageHome(languageCode: string): Page | undefined {
-        const homePageId: string | undefined = Object.keys(
-            this.data.pages
-        ).find((pageId: string) => {
-            const page = this.data.pages[pageId];
-            return page.type === "homepage" && page.language === languageCode;
-        });
-
-        return homePageId ? this.getSpecificPage(homePageId) : undefined;
+    getLanguagePageType(
+        languageCode: string,
+        pageType: string
+    ): Page | undefined {
+        const pageId: string | undefined = Object.keys(this.data.pages).find(
+            (pageId: string) => {
+                const page = this.data.pages[pageId];
+                return page.type === pageType && page.language === languageCode;
+            }
+        );
+        return pageId === undefined ? undefined : this.getSpecificPage(pageId);
     }
 }
