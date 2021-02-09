@@ -11,6 +11,8 @@
 
         <div class="content-wrapper">
             <p>{state.appelflapMeta}</p>
+            <p>{state.cacheStatus}</p>
+            <p>{state.cacheKeys}</p>
             <p>{state.publications}</p>
             <p>{state.manifest}</p>
             <p>{state.page}</p>
@@ -55,6 +57,7 @@
         import relativeTime from "dayjs/plugin/relativeTime";
 
         import { AppelflapConnect } from "ts/AppelflapConnect";
+        import { CacheUtilities } from "ts/CacheUtilities";
         import { Manifest } from "ts/Implementations/Manifest";
 
         dayjs.extend(relativeTime);
@@ -63,6 +66,8 @@
             state: {
                 syncs: [],
                 appelflapMeta: "Hello",
+                cacheStatus: "",
+                cacheKeys: "",
                 publications: "",
                 manifest: "",
                 page: "",
@@ -85,7 +90,15 @@
                 appelflapConnect.getMetaStatus().then((response) => {
                     this.update({ appelflapMeta: JSON.stringify(response) });
                 });
-                appelflapConnect.getPublications().then((response) => {
+                const cacheUtilities = new CacheUtilities(appelflapConnect);
+                cacheUtilities.status.then((response) => {
+                    this.update({ cacheStatus: JSON.stringify(response) });
+                });
+                cacheUtilities.cacheKeys.then((response) => {
+                    this.update({ cacheKeys: JSON.stringify(response) });
+                });
+                const cachePublish = new CachePublish(appelflapConnect);
+                cachePublish.publications().then((response) => {
                     this.update(({ publications: JSON.stringify(response) }));
                 });
 
