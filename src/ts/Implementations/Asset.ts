@@ -7,7 +7,6 @@ import { getBrowser } from "ts/PlatformDetection";
 
 // See ts/Typings for the type definitions for these imports
 import { BACKEND_BASE_URL } from "js/urls";
-import { MissingImageError } from "js/Errors";
 
 export class Asset extends PublishableItem<TAssetEntry> {
     #blob?: Blob;
@@ -45,15 +44,16 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     get manifestData(): TAssetEntry {
-        const parentPage = this.manifest?.pages[this.id];
+        const parentPage = this.manifest?.pages[this.pageId];
         if (!parentPage) {
             return this.emptyItem;
         }
 
-        return (
-            parentPage?.assets.find((asset) => asset.id === this.id) ||
-            this.emptyItem
+        const asset = parentPage?.assets.find(
+            (asset) => asset.id.toString() === this.id.toString()
         );
+
+        return asset || this.emptyItem;
     }
 
     /** The url of the rendition that is most relevant to this platform */
@@ -62,9 +62,9 @@ export class Asset extends PublishableItem<TAssetEntry> {
         const rendition = this.renditions[renditionType];
 
         if (!rendition) {
-            const error = `${renditionType} image doesn't exist.
-            Renditions: ${JSON.stringify(this.renditions)}`;
-            throw new MissingImageError(error);
+            // Do NOT throw a MissingImageError here
+            // because it will silently screw up the rest of the asset instantiation
+            return "";
         }
 
         return rendition;

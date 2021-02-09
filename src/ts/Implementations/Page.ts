@@ -259,7 +259,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         const pageAsset = new Asset(
             this.manifest,
             this.id,
-            asset.id,
+            asset.id.toString(),
             this.cacheKey
         );
         const assetFilled = await pageAsset.initialiseFromCache();
