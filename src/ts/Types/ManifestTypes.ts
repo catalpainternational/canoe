@@ -17,7 +17,7 @@ export type TPageData = {
     version: number;
     assets: Array<TAssetEntry>;
     language: string;
-    children: Array<number>;
+    children: Array<string>;
     depth: number;
     type: TPageType | string;
     title: string;

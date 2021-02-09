@@ -36,7 +36,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         }
 
         this.#childPages = this.children.map(
-            (pageId) => this.manifest.getSpecificPage(pageId.toString(), this),
+            (pageId) => this.manifest.getSpecificPage(pageId, this),
             this.manifest
         );
         return this.#childPages;
@@ -55,8 +55,8 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     /** The data for this page as defined in the manifest */
-    get manifestData(): any {
-        return this.manifest.pages[this.id];
+    get manifestData(): TWagtailPageData {
+        return this.manifest.pages[this.id] || {};
     }
 
     get parent(): Page | undefined {
@@ -68,7 +68,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
             this.manifest.pages
         ).find((id: string) => {
             const page = this.manifest.pages[id];
-            return page.children.indexOf(parseInt(this.id)) !== -1;
+            return page.children.indexOf(this.id) !== -1;
         });
 
         this.#parent = parentId
@@ -111,7 +111,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return this.manifestData?.language || "";
     }
 
-    get children(): Array<number> {
+    get children(): Array<string> {
         return this.manifestData?.children || [];
     }
 
@@ -219,7 +219,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     GetDataFromStore(): void {
-        const pageData = getPageDataFromStore(parseInt(this.id));
+        const pageData = getPageDataFromStore(this.id);
         if (pageData) {
             this.status = "ready";
             this.data = pageData;
@@ -241,7 +241,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         this.status = "ready";
 
         // And store the page data in Redux
-        storePageData(parseInt(this.id), this.data);
+        storePageData(this.id, this.data);
 
         // Update the cached paged data
         const cacheUpdated = await this.updateCache();
@@ -251,9 +251,8 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return cacheUpdated;
     }
 
-    private assetInitialised(asset: TAssetEntry): boolean {
-        return asset.isValid || false;
-    }
+    private assetInitialised = (asset: TAssetEntry): boolean =>
+        asset.isValid || false;
 
     async loadAsset(asset: TAssetEntryData, index: number): Promise<Asset> {
         // The asset's parentUrl is the same as the cache name
@@ -294,16 +293,19 @@ export class Page extends PublishableItem<TWagtailPageData> {
         }
     }
 
-    PETEgetImageRenditions(id: number): string {
+    getAssetsByIdAndType(
+        id: number,
+        assetType: string
+    ): TAssetEntry | undefined {
         const assets = this.manifestData.assets;
-        return assets.find((a: any) => {
-            return a.id === id && a.type === "image";
+        return assets.find((a: TAssetEntry) => {
+            return a.id === id && a.type === assetType;
         });
     }
-    PETEgetMediaRenditions(id: number): string {
-        const assets = this.manifestData.assets;
-        return assets.find((a: any) => {
-            return a.id === id && a.type === "media";
-        });
-    }
+
+    PETEgetImageRenditions = (id: number): TAssetEntry | undefined =>
+        this.getAssetsByIdAndType(id, "image");
+
+    PETEgetMediaRenditions = (id: number): TAssetEntry | undefined =>
+        this.getAssetsByIdAndType(id, "media");
 }

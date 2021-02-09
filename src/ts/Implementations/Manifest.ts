@@ -72,7 +72,7 @@ export class Manifest extends PublishableItem<TManifestData> {
         allPageNames.forEach((pageName) => {
             childPageNames = new Set([
                 ...childPageNames,
-                ...this.pages[pageName].children.map((c) => c.toString()),
+                ...this.pages[pageName].children,
             ]);
         });
         const unMatchedChildren = new Set(
@@ -154,7 +154,7 @@ export class Manifest extends PublishableItem<TManifestData> {
     getPageManifestData(locationHash: string): Page | undefined {
         const pageId: string | undefined = Object.keys(this.data.pages).find(
             (pageId: string) => {
-                const page = this.data.pages[parseInt(pageId)];
+                const page = this.data.pages[pageId];
                 return page.loc_hash === locationHash;
             }
         );
@@ -165,7 +165,7 @@ export class Manifest extends PublishableItem<TManifestData> {
     }
 
     getSpecificPage(pageId: string, parent?: Page): Page {
-        switch (this.data.pages[parseInt(pageId)].type) {
+        switch (this.data.pages[pageId].type) {
             case "homepage":
                 return new AllCoursesPage(this, pageId, parent);
             case "coursepage":
