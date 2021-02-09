@@ -20,16 +20,18 @@ TopMenu {
     }
 
     .has-circle {
-        height: 40px;
-        width: 40px;
-        border-radius: 20px;
+        height: 35px;
+        width: 35px;
+        border-radius: 50%;
         display: inline-block;
         box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
+        background-color: white;
 
         .arrow {
             position: absolute;
-            top: 13px;
-            left: 11px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     }
 

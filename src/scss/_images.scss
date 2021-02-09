@@ -2,13 +2,13 @@
 @mixin mask-icons-shared($image, $contain-or-cover, $color) {
     -webkit-mask-image: url($image);
     mask-image: url($image);
-    
+
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    
+
     -webkit-mask-size: $contain-or-cover;
     mask-size: $contain-or-cover;
-    
+
     background-color: $color;
     display: inline-block;
 }
@@ -177,8 +177,8 @@
 
 .arrow {
     @include mask-icons-shared("~img/arrow.svg", contain, $blue);
-    height: 14px;
-    width: 20px;
+    height: 12px;
+    width: 17px;
 }
 
 .incorrect-flag {
@@ -236,8 +236,6 @@
         background-color: $white;
         height: 15px;
         width: 15px;
-        -webkit-mask-size: cover;
-        mask-size: cover;
         margin: auto;
     }
 }
