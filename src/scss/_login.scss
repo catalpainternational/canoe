@@ -76,7 +76,7 @@ Login .modal-background {
 
             label {
                 left: 0;
-                top: 30%;
+                top: 25%;
                 margin: 0;
                 padding-left: 15px;
                 position: absolute;
@@ -95,15 +95,15 @@ Login .modal-background {
                 border: 1px solid $gray-4;
 
                 label {
-                    font-size: 0.75em;
-                    top: 5%;
+                    font-size: 0.7em;
+                    top: 10%;
                 }
             }
 
             &.is-filled {
                 label {
-                    font-size: 0.75em;
-                    top: 5%;
+                    font-size: 0.7em;
+                    top: 10%;
                 }
             }
         }
@@ -154,6 +154,7 @@ Login .modal-background {
         border: none;
         padding-top: 15px;
         background-color: unset;
+        font-size: 16px;
 
         &:focus {
             outline: none;
