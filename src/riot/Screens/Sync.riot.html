@@ -58,6 +58,7 @@
 
         import { AppelflapConnect } from "ts/AppelflapConnect";
         import { CacheUtilities } from "ts/CacheUtilities";
+        import { CachePublish } from "ts/CachePublish";
         import { Manifest } from "ts/Implementations/Manifest";
 
         dayjs.extend(relativeTime);
@@ -91,13 +92,28 @@
                     this.update({ appelflapMeta: JSON.stringify(response) });
                 });
                 const cacheUtilities = new CacheUtilities(appelflapConnect);
-                cacheUtilities.status.then((response) => {
+                const cachePublish = new CachePublish(appelflapConnect);
+                /* Not yet implemented
+                cacheUtilities.status().then((response) => {
                     this.update({ cacheStatus: JSON.stringify(response) });
                 });
-                cacheUtilities.cacheKeys.then((response) => {
-                    this.update({ cacheKeys: JSON.stringify(response) });
+                */
+                let cacheKeys = [];
+                cacheUtilities.cacheKeys().then((response) => {
+                    cacheKeys = response;
+                    this.update({ cacheKeys: cacheKeys });
+                    const cachesToPublish = cacheKeys.map((key) => { return {
+                        webOrigin: btoa(self.origin),
+                        cacheName: btoa(key),
+                        version: 1
+                    }});
+                    cachesToPublish.forEach((cacheToPublish) => {
+                        cachePublish.publish(cacheToPublish).then((response) => {}).catch((error) => {
+                            console.info("Publish didn't work");
+                        })
+                    })
+                    
                 });
-                const cachePublish = new CachePublish(appelflapConnect);
                 cachePublish.publications().then((response) => {
                     this.update(({ publications: JSON.stringify(response) }));
                 });
