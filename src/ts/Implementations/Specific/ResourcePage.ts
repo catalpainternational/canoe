@@ -10,6 +10,6 @@ export default class ResourcePage extends Page {
     }
 
     get cards(): any {
-        return this.pageData.cards.cards;
+        return this.data.cards.cards;
     }
 }

@@ -7,7 +7,7 @@ function buildFakeManifestEntry(
     version: number,
     language: string,
     assets: Array<TAssetEntry> = [],
-    children: Array<number> = [],
+    children: Array<string> = [],
     depth: number
 ): TWagtailPage {
     const storage_container = loc_hash;
@@ -16,13 +16,21 @@ function buildFakeManifestEntry(
         storage_container: `/site/canoe-${storage_container}`,
         version: version,
         api_url: `/api/v2/pages/${page_no}/`,
+        fullUrl: `/api/v2/pages/${page_no}/`,
+        contentType: "",
         assets: assets,
         language: language,
         children: children,
         depth: depth,
+        type: "homepage",
+        title: "Noooooooooo",
+        source: "cache",
+        status: "ready",
         isValid: true,
         isAvailableOffline: true,
         isPublishable: true,
+        cache: new Cache(),
+        cacheKey: "",
     };
 }
 
@@ -44,9 +52,16 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
     return {
         type: type,
         renditions: renditions,
+        api_url: "",
+        fullUrl: "",
+        contentType: "",
+        source: "cache",
+        status: "ready",
         isValid: true,
         isAvailableOffline: true,
         isPublishable: true,
+        cache: new Cache(),
+        cacheKey: "",
     };
 }
 
@@ -59,7 +74,7 @@ export function buildFakeManifest(): TManifest {
         3,
         "en",
         [],
-        [10],
+        ["10"],
         3
     );
     fakeMani.data.pages["10"] = buildFakeManifestEntry(
@@ -68,7 +83,7 @@ export function buildFakeManifest(): TManifest {
         21,
         "en",
         [],
-        [12],
+        ["12"],
         4
     );
     fakeMani.data.pages["12"] = buildFakeManifestEntry(
@@ -91,7 +106,7 @@ export function buildFakeManifest(): TManifest {
         4,
         "tet",
         [],
-        [11],
+        ["11"],
         3
     );
     fakeMani.data.pages["5"] = buildFakeManifestEntry(
@@ -100,7 +115,7 @@ export function buildFakeManifest(): TManifest {
         18,
         "tet",
         [],
-        [13],
+        ["13"],
         4
     );
     fakeMani.data.pages["13"] = buildFakeManifestEntry(
@@ -123,7 +138,7 @@ export function buildFakeManifest(): TManifest {
         6,
         "en",
         [],
-        [8],
+        ["8"],
         3
     );
     fakeMani.data.pages["8"] = buildFakeManifestEntry(
@@ -146,7 +161,7 @@ export function buildFakeManifest(): TManifest {
         7,
         "tet",
         [],
-        [9],
+        ["9"],
         3
     );
     fakeMani.data.pages["9"] = buildFakeManifestEntry(

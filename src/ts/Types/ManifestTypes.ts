@@ -1,7 +1,13 @@
+import {
+    TManifestItemSource,
+    TManifestItemStatus,
+    TPageType,
+} from "ts/Types/CanoeEnums";
+
 export type TManifestData = {
     version: string;
     pages: Record<string, TWagtailPage>;
-};
+} & TManifestItem;
 
 export type TManifest = TManifestData & TManifestItemState;
 
@@ -9,21 +15,20 @@ export type TPageData = {
     loc_hash: string;
     storage_container: string;
     version: number;
-    api_url: string;
     assets: Array<TAssetEntry>;
     language: string;
-    children: Array<number>;
+    children: Array<string>;
     depth: number;
-};
+    type: TPageType | string;
+    title: string;
+} & TManifestItem;
 
 export type TPage = TPageData & TManifestItemState;
 
 export type TWagtailPageData = {
     id?: number;
     meta?: Record<string, any>;
-    title?: string;
     data?: Record<string, any>;
-    [x: string]: any;
 } & TPageData;
 
 export type TWagtailPage = TWagtailPageData & TManifestItemState;
@@ -31,9 +36,17 @@ export type TWagtailPage = TWagtailPageData & TManifestItemState;
 export type TAssetEntryData = {
     type: string;
     renditions: Record<string, string>;
-};
+} & TManifestItem;
 
 export type TAssetEntry = TAssetEntryData & TManifestItemState;
+
+/** Describes the common fields for a manifest, page or asset item */
+export type TManifestItem = {
+    /** The routable part of the URL (ignoring the host) */
+    api_url: string;
+    // Other fields
+    [x: string]: any;
+};
 
 /** Describe the state of a manifest, page or asset item */
 export type TManifestItemState = {
@@ -51,4 +64,21 @@ export type TManifestItemState = {
      * @returns true is this item itself is complete - all descendant pages and assets are in the cache
      */
     isPublishable: boolean;
-};
+
+    /** Where a manifest item was sourced from */
+    source: TManifestItemSource;
+
+    status: TManifestItemStatus;
+
+    /** The fullUrl of this item that can be used to build a fetch Request object for it */
+    fullUrl: string;
+
+    /** The content type of this item that can be used to build a fetch Request object for it */
+    contentType: string;
+
+    /** The cache where this manifest item is stored */
+    cache: Cache;
+
+    /** The key to the cache where this manifest item is stored */
+    cacheKey: string;
+} & TManifestItem;

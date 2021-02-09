@@ -1,27 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-    TAssetEntry,
-    TManifest,
-    TManifestData,
-    TPage,
-    TWagtailPage,
-    TWagtailPageData,
-} from "ts/Types/ManifestTypes";
+import { TManifestData, TWagtailPage } from "ts/Types/ManifestTypes";
+import { PublishableItem } from "ts/Implementations/PublishableItem";
+import { Page } from "ts/Implementations/Page";
+import AllCoursesPage from "ts/Implementations/Specific/AllCoursesPage";
+import CoursePage from "ts/Implementations/Specific/CoursePage";
+import LessonPage from "ts/Implementations/Specific/LessonPage";
+import ResourcesRootPage from "ts/Implementations/Specific/ResourcesRootPage";
+import ResourcePage from "ts/Implementations/Specific/ResourcePage";
 
 // See ts/Typings for the type definitions for these imports
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import {
     storeManifest,
     getManifestFromStore,
     setFetchingManifest,
 } from "ReduxImpl/Interface";
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import { Page } from "ts/Implementations/Page";
-import AllCoursesPage from "./Specific/AllCoursesPage";
-import CoursePage from "./Specific/CoursePage";
-import LessonPage from "./Specific/LessonPage";
-import ResourcesRootPage from "./Specific/ResourcesRootPage";
-import ResourcePage from "./Specific/ResourcePage";
 
 class ManifestError extends Error {
     constructor(message: string) {
@@ -30,11 +23,10 @@ class ManifestError extends Error {
     }
 }
 
-export class Manifest implements TManifest {
-    data!: TManifestData;
-
-    constructor() {
-        this.initialiseFromStore();
+export class Manifest extends PublishableItem<TManifestData> {
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    constructor(opts?: any) {
+        super(opts, "");
     }
 
     get version(): string {
@@ -42,22 +34,47 @@ export class Manifest implements TManifest {
     }
 
     get pages(): Record<string, TWagtailPage> {
-        return this.data?.pages;
+        return this.data?.pages || {};
+    }
+
+    get isInitialised(): boolean {
+        return !!this.data?.pages;
+    }
+
+    get api_url(): string {
+        return "/manifest/v1";
+    }
+
+    get fullUrl(): string {
+        return ROUTES_FOR_REGISTRATION.manifest;
+    }
+
+    get manifestData(): TManifestData {
+        return this;
+    }
+
+    get contentType(): string {
+        return "application/json";
     }
 
     /** This is a basic integrity check.  It ensures that:
      * - All child pages have matching page entries
      */
     get isValid(): boolean {
-        if (this.pages === undefined) {
+        if (!super.isValid) {
             return false;
         }
+
+        if (!this.isInitialised) {
+            return false;
+        }
+
         const allPageNames = new Set(Object.keys(this.pages));
         let childPageNames: Set<string> = new Set();
         allPageNames.forEach((pageName) => {
             childPageNames = new Set([
                 ...childPageNames,
-                ...this.pages[pageName].children.map((c) => c.toString()),
+                ...this.pages[pageName].children,
             ]);
         });
         const unMatchedChildren = new Set(
@@ -68,49 +85,20 @@ export class Manifest implements TManifest {
     }
 
     get isAvailableOffline(): boolean {
-        return false;
+        return this.isValid;
     }
 
     get isPublishable(): boolean {
-        return false;
+        return this.isValid;
     }
 
-    static get emptyItem(): TManifest {
-        return {
-            version: "0.0.0",
-            pages: { "0": Page.emptyItem },
-            isValid: false,
-            isAvailableOffline: false,
-            isPublishable: false,
-        };
-    }
-
-    initialiseFromStore(): void {
-        this.data = getManifestFromStore();
-    }
-
-    async initialiseByRequest(): Promise<void> {
-        setFetchingManifest(true);
-        try {
-            const resp = await fetch(ROUTES_FOR_REGISTRATION.manifest, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "JWT " + getAuthenticationToken(),
-                },
-            });
-            this.data = await resp.json();
-        } finally {
-            setFetchingManifest(false);
+    get languageCodes(): string[] {
+        if (!this.isInitialised) {
+            return [];
         }
-        if (this.isValid) {
-            storeManifest(this.data);
-        }
-    }
 
-    async getLanguageCodes(): Promise<string[]> {
         const languageCodes = new Set(
-            Object.values(this.data.pages).map((page: any) => {
+            Object.values(this.pages).map((page: any) => {
                 return page.languageCode as string;
             })
         );
@@ -118,41 +106,67 @@ export class Manifest implements TManifest {
         return [...languageCodes];
     }
 
-    async getImages(): Promise<any[]> {
-        const images = new Set(
-            Object.values(this.data.pages)
-                .filter((page: TPage) => {
-                    return (
-                        page.assets &&
-                        page.assets.filter((asset: TAssetEntry) => {
-                            return asset.type && asset.type === "image";
-                        })
-                    );
-                })
-                .map((page: TPage) => {
-                    return page.assets.map(
-                        (asset: TAssetEntry) => asset.renditions
-                    );
-                })
-        );
+    get emptyItem(): TManifestData {
+        const empty = super.emptyItem;
 
-        return [...images];
+        empty.version = "0.0.0";
+        empty.pages = {};
+
+        return empty;
+    }
+
+    GetDataFromStore(): void {
+        const manifest = getManifestFromStore();
+        if (manifest && JSON.stringify(manifest) !== "{}") {
+            this.status = "ready";
+            this.data = manifest;
+        } else {
+            this.status = "prepped";
+        }
+    }
+
+    get updatedResp(): Response {
+        return new Response(JSON.stringify(this.data));
+    }
+
+    get cacheKey(): string {
+        return this.fullUrl;
+    }
+
+    async initialiseFromResponse(resp: Response): Promise<boolean> {
+        setFetchingManifest(true);
+
+        try {
+            this.data = await resp.json();
+        } catch {
+            // Discard errors with getting json from response
+        }
+
+        let cacheUpdated = false;
+        if (this.data && this.isValid) {
+            this.status = "ready";
+            storeManifest(this.data);
+            cacheUpdated = await this.updateCache();
+        }
+        setFetchingManifest(false);
+
+        return cacheUpdated && this.isValid;
     }
 
     getPageManifestData(locationHash: string): Page | undefined {
         const pageId: string | undefined = Object.keys(this.data.pages).find(
             (pageId: string) => {
-                const page = this.data.pages[parseInt(pageId)];
+                const page = this.data.pages[pageId];
                 return page.loc_hash === locationHash;
             }
         );
         if (pageId === undefined) {
             throw new ManifestError("location not found in manifest");
         }
-        return this.getSpecificPage(parseInt(pageId));
+        return this.getSpecificPage(pageId);
     }
 
-    getSpecificPage(pageId: number, parent?: Page): Page {
+    getSpecificPage(pageId: string, parent?: Page): Page {
         switch (this.data.pages[pageId].type) {
             case "homepage":
                 return new AllCoursesPage(this, pageId, parent);
@@ -165,7 +179,7 @@ export class Manifest implements TManifest {
             case "resourcearticle":
                 return new ResourcePage(this, pageId, parent);
             default:
-                return new Page(this, pageId);
+                return new Page(this, pageId, parent);
         }
     }
 
@@ -179,22 +193,6 @@ export class Manifest implements TManifest {
                 return page.type === pageType && page.language === languageCode;
             }
         );
-        return pageId === undefined
-            ? undefined
-            : this.getSpecificPage(parseInt(pageId));
-    }
-
-    findParent(pageId: number): Page | undefined {
-        const parentId: string | undefined = Object.keys(this.data.pages).find(
-            (id: string) => {
-                const page = this.data.pages[parseInt(id)];
-                return page.children.indexOf(pageId) !== -1;
-            }
-        );
-        if (parentId === undefined) {
-            return undefined;
-            throw new ManifestError("parent not found in manifest");
-        }
-        return this.getSpecificPage(parseInt(parentId));
+        return pageId === undefined ? undefined : this.getSpecificPage(pageId);
     }
 }

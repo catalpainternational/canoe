@@ -1,8 +1,11 @@
 import { registerRoute } from "workbox-routing/registerRoute.mjs";
+
 import { setDefaultHandler } from "workbox-routing/setDefaultHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
-import { StaleWhileRevalidate } from "workbox-strategies/StaleWhileRevalidate.mjs";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
+import { StaleWhileRevalidate } from "workbox-strategies/StaleWhileRevalidate.mjs";
+import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
+
 import { RangeRequestsPlugin } from "workbox-range-requests";
 
 import * as googleAnalytics from "workbox-google-analytics";
@@ -13,7 +16,7 @@ import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-import { MANIFEST_CACHE_NAME, PAGES_CACHE_NAME } from "ts/Constants";
+import { MANIFEST_CACHE_NAME } from "ts/Constants";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { buildAppelflapRoutes } from "js/RoutingAppelflap";
 
@@ -25,19 +28,9 @@ registerRoute(
     })
 );
 
-registerRoute(
-    new RegExp(ROUTES_FOR_REGISTRATION.images),
-    new CacheFirst({
-        cacheName: "images-cache",
-    })
-);
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheAnyOrFetchOnly());
 
-registerRoute(
-    new RegExp(ROUTES_FOR_REGISTRATION.pagesv2),
-    new CacheFirst({
-        cacheName: PAGES_CACHE_NAME,
-    })
-);
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagesv2), new NetworkOnly());
 
 registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.manifest),

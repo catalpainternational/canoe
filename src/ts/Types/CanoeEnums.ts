@@ -13,3 +13,23 @@ export type TSubscribe = "subscribe" | "unsubscribe";
 
 /** Accepted Http methods (complete list) */
 export type THttpMethods = "GET" | "PUT" | "POST" | "DELETE";
+
+/** Where a manifest item was sourced from */
+export type TManifestItemSource = "unset" | "store" | "cache" | "network";
+
+/** The current state of a given manifest item */
+export type TManifestItemStatus =
+    | "unset"
+    | "empty"
+    | "prepped"
+    | "loading"
+    | "ready";
+
+export type TPageType =
+    | "homepage"
+    | "resourcesroot"
+    | "resourcearticle"
+    | "coursepage"
+    | "lessonpage";
+
+export type TAssetType = "image" | "media";
