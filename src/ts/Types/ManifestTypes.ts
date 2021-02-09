@@ -26,7 +26,7 @@ export type TPageData = {
 export type TPage = TPageData & TManifestItemState;
 
 export type TWagtailPageData = {
-    id?: number;
+    id?: string;
     meta?: Record<string, any>;
     data?: Record<string, any>;
 } & TPageData;
@@ -34,6 +34,7 @@ export type TWagtailPageData = {
 export type TWagtailPage = TWagtailPageData & TManifestItemState;
 
 export type TAssetEntryData = {
+    id: string;
     type: string;
     renditions: Record<string, string>;
 } & TManifestItem;
