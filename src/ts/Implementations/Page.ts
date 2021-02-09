@@ -233,7 +233,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     get cacheKey(): string {
-        return this.fullUrl;
+        return this.storage_container;
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
@@ -254,13 +254,14 @@ export class Page extends PublishableItem<TWagtailPageData> {
     private assetInitialised = (asset: TAssetEntry): boolean =>
         asset.isValid || false;
 
-    async loadAsset(asset: TAssetEntryData, index: number): Promise<Asset> {
-        // The asset's parentUrl is the same as the cache name
-        // (which is the same as this page's full url)
-        // See `cacheKey` above
-        asset.parentUrl = this.fullUrl;
-        const pageAsset = new Asset(this.manifest, this.id, index);
-        pageAsset.parentUrl = this.fullUrl;
+    async loadAsset(asset: TAssetEntryData): Promise<Asset> {
+        // The asset's cache name is the same as the Page's cache name
+        const pageAsset = new Asset(
+            this.manifest,
+            this.id,
+            asset.id,
+            this.cacheKey
+        );
         const assetFilled = await pageAsset.initialiseFromCache();
 
         if (assetFilled) {
@@ -285,7 +286,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         this.#assets = [];
         for (let ix = 0; ix < this.manifestAssets.length; ix++) {
             try {
-                const asset = await this.loadAsset(this.manifestAssets[ix], ix);
+                const asset = await this.loadAsset(this.manifestAssets[ix]);
                 this.#assets.push(asset);
             } catch {
                 // Could not fill the asset
@@ -294,18 +295,18 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     getAssetsByIdAndType(
-        id: number,
+        id: number | string,
         assetType: string
     ): TAssetEntry | undefined {
         const assets = this.manifestData.assets;
         return assets.find((a: TAssetEntry) => {
-            return a.id === id && a.type === assetType;
+            return a.id === id.toString() && a.type === assetType;
         });
     }
 
-    PETEgetImageRenditions = (id: number): TAssetEntry | undefined =>
+    PETEgetImageRenditions = (id: number | string): TAssetEntry | undefined =>
         this.getAssetsByIdAndType(id, "image");
 
-    PETEgetMediaRenditions = (id: number): TAssetEntry | undefined =>
+    PETEgetMediaRenditions = (id: number | string): TAssetEntry | undefined =>
         this.getAssetsByIdAndType(id, "media");
 }

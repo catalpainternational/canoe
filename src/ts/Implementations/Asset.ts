@@ -11,15 +11,25 @@ import { MissingImageError } from "js/Errors";
 
 export class Asset extends PublishableItem<TAssetEntry> {
     #blob?: Blob;
-    /** The url of the parent page (used to point to the correct cache) */
-    parentUrl?: string;
-    /** This asset's index within the manifest definition for its parent page */
-    #assetIndex: number;
+    /** The cache of the parent page (used to point to the correct cache) */
+    #pageCache: string;
+    /** This asset's parent Id within the manifest definition for its parent */
+    #pageId: string;
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(manifest: TManifest, pageId: string, index: number) {
-        super(manifest, pageId);
-        this.#assetIndex = index;
+    constructor(
+        manifest: TManifest,
+        pageId: string,
+        id: string,
+        pageCache: string
+    ) {
+        super(manifest, id);
+        this.#pageId = pageId;
+        this.#pageCache = pageCache;
+    }
+
+    get pageId(): string {
+        return this.#pageId;
     }
 
     get type(): string {
@@ -35,7 +45,15 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     get manifestData(): TAssetEntry {
-        return this.manifest?.pages[this.id]?.assets[this.#assetIndex] || {};
+        const parentPage = this.manifest?.pages[this.id];
+        if (!parentPage) {
+            return this.emptyItem;
+        }
+
+        return (
+            parentPage?.assets.find((asset) => asset.id === this.id) ||
+            this.emptyItem
+        );
     }
 
     /** The url of the rendition that is most relevant to this platform */
@@ -105,6 +123,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
     get emptyItem(): TAssetEntry {
         const empty = super.emptyItem;
 
+        empty.id = "";
         empty.type = "";
         empty.renditions = {};
 
@@ -120,7 +139,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     get cacheKey(): string {
-        return this.parentUrl || "";
+        return this.#pageCache || "";
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
