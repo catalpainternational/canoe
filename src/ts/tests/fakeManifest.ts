@@ -7,7 +7,7 @@ function buildFakeManifestEntry(
     version: number,
     language: string,
     assets: Array<TAssetEntry> = [],
-    children: Array<number> = [],
+    children: Array<string> = [],
     depth: number
 ): TWagtailPage {
     const storage_container = loc_hash;
@@ -74,7 +74,7 @@ export function buildFakeManifest(): TManifest {
         3,
         "en",
         [],
-        [10],
+        ["10"],
         3
     );
     fakeMani.data.pages["10"] = buildFakeManifestEntry(
@@ -83,7 +83,7 @@ export function buildFakeManifest(): TManifest {
         21,
         "en",
         [],
-        [12],
+        ["12"],
         4
     );
     fakeMani.data.pages["12"] = buildFakeManifestEntry(
@@ -106,7 +106,7 @@ export function buildFakeManifest(): TManifest {
         4,
         "tet",
         [],
-        [11],
+        ["11"],
         3
     );
     fakeMani.data.pages["5"] = buildFakeManifestEntry(
@@ -115,7 +115,7 @@ export function buildFakeManifest(): TManifest {
         18,
         "tet",
         [],
-        [13],
+        ["13"],
         4
     );
     fakeMani.data.pages["13"] = buildFakeManifestEntry(
@@ -138,7 +138,7 @@ export function buildFakeManifest(): TManifest {
         6,
         "en",
         [],
-        [8],
+        ["8"],
         3
     );
     fakeMani.data.pages["8"] = buildFakeManifestEntry(
@@ -161,7 +161,7 @@ export function buildFakeManifest(): TManifest {
         7,
         "tet",
         [],
-        [9],
+        ["9"],
         3
     );
     fakeMani.data.pages["9"] = buildFakeManifestEntry(
