@@ -85,10 +85,6 @@ msgstr ""
 msgid "Course Progress"
 msgstr ""
 
-#: src/riot/Screens/Settings.riot.html:64
-msgid "Do you want to receive app notifications?"
-msgstr ""
-
 #: src/riot/Lesson/PdfCard.riot.html:11
 msgid "Download this PDF to your device"
 msgstr ""
@@ -140,16 +136,22 @@ msgstr ""
 msgid "I need help accessing my account"
 msgstr ""
 
+<<<<<<< HEAD
 #: src/riot/Screens/ChangeBrowser.riot.html:18
+||||||| 676ab30
+#: src/riot/Screens/ChangeBrowser.riot.html:19
+=======
+#: src/riot/Screens/Settings.riot.html:64
+msgid "I would like to receive notifications"
+msgstr "Hau hakarak simu notifikasaun sira"
+
+#: src/riot/Screens/ChangeBrowser.riot.html:19
+>>>>>>> origin/FT-New-Design-System
 msgid "In the meantime please use Safari."
 msgstr ""
 
 #: src/riot/Lesson/LessonModuleComplete.riot.html:28
 msgid "Keep going"
-msgstr ""
-
-#: src/riot/Components/LanguageSelector.riot.html:19
-msgid "Language"
 msgstr ""
 
 #: src/riot/Screens/Notifications.riot.html:59
@@ -216,11 +218,17 @@ msgstr ""
 msgid "No notifications."
 msgstr ""
 
+<<<<<<< HEAD
 #: src/riot/Screens/Sync.riot.html:70
 msgid "No syncs."
 msgstr ""
 
 #: src/riot/Lesson/LessonFeedback.riot.html:55
+||||||| 676ab30
+#: src/riot/Lesson/LessonFeedback.riot.html:57
+=======
+#: src/riot/Lesson/LessonFeedback.riot.html:55
+>>>>>>> origin/FT-New-Design-System
 msgid "No thanks"
 msgstr ""
 
@@ -274,6 +282,10 @@ msgstr ""
 #: src/riot/WagtailPages/LessonPage.riot.html:74
 msgid "See more"
 msgstr ""
+
+#: src/riot/Components/LanguageSelector.riot.html:21
+msgid "Select your language"
+msgstr "Hili ita bo’ot nia lian"
 
 #: src/riot/Components/ContactInformation.riot.html:22
 msgid "Send SMS"

@@ -1,5 +1,5 @@
 Login .modal-background {
-    $content-width: 18.75em;
+    $content-width: calc(100vw - 40px);
 
     min-height: 100vh;
     flex-direction: column;
@@ -12,8 +12,8 @@ Login .modal-background {
         display: flex;
         align-items: center;
         flex-direction: column;
-        height: 300px;
-        margin-bottom: 20px;
+        height: 270px;
+        margin-bottom: 30px;
 
         span {
             margin-bottom: 20px;
@@ -21,6 +21,9 @@ Login .modal-background {
 
         h4 {
             margin: 0 auto 10px;
+            color: $gray-1;
+            font-weight: 400;
+            font-size: 1.3em;
         }
     }
 
@@ -29,8 +32,8 @@ Login .modal-background {
     }
 
     LoginForm {
-        max-width: $content-width;
-        width: 100%;
+        max-width: $tablet;
+        width: $content-width;
         display: flex;
         justify-content: center;
     }
@@ -65,8 +68,8 @@ Login .modal-background {
         div.form-group {
             flex-direction: column;
             margin-bottom: 15px;
-            border-radius: 5px;
-            padding: 5px 15px;
+            border-radius: 3px;
+            padding: 0 15px;
             display: flex;
             background-color: $white;
             box-shadow: inset 0 2px 3px 0 rgba(42, 57, 66, 0.1);
@@ -76,7 +79,7 @@ Login .modal-background {
 
             label {
                 left: 0;
-                top: 30%;
+                top: 25%;
                 margin: 0;
                 padding-left: 15px;
                 position: absolute;
@@ -95,15 +98,15 @@ Login .modal-background {
                 border: 1px solid $gray-4;
 
                 label {
-                    font-size: 0.75em;
-                    top: 5%;
+                    font-size: 0.7em;
+                    top: 10%;
                 }
             }
 
             &.is-filled {
                 label {
-                    font-size: 0.75em;
-                    top: 5%;
+                    font-size: 0.7em;
+                    top: 10%;
                 }
             }
         }
@@ -136,9 +139,9 @@ Login .modal-background {
     .extra-button-space {
         display: flex;
 
-        max-width: $content-width;
-        width: 100%;
-        margin-top: 20px;
+        max-width: $tablet;
+        width: $content-width;
+        margin-top: 30px;
 
         a {
             font-size: 0.875em;
