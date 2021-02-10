@@ -94,6 +94,10 @@ input {
     font-weight: 300;
 }
 
+input[type="text"] {
+  font-size: 1em;
+}
+
 ul,
 ol {
     font-family: $app-typography;

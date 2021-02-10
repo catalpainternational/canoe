@@ -22,7 +22,7 @@
 
 .site-logo {
     @include unmaskable-icons-shared("~img/site_logo.svg", contain);
-    height: 30px;
+    height: 36px;
     width: 87px;
 }
 
@@ -145,8 +145,8 @@
 
 .login-image {
     @include unmaskable-icons-shared("~img/login_image.svg", contain);
-    width: 125px;
-    height: 125px;
+    width: 130px;
+    height: 130px;
 }
 
 .eye {
