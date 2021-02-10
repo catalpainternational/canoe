@@ -1,38 +1,26 @@
 <CourseOverview>
-    <CoursePage
-        if="{!state.showExam}"
-        page="{props.page}"
-    ></CoursePage>
-    <CourseExam
-        if="{state.showExam}"
-        page="{props.page}"
-    ></CourseExam>
+    <CoursePage if="{!state.showExam}"></CoursePage>
+    <CourseExam if="{state.showExam}"></CourseExam>
+
     <script>
         import CoursePage from "RiotTags/WagtailPages/CoursePage.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
+
         import { getRoute } from "ReduxImpl/Interface";
 
         const EXAM_MODULE = "exam";
 
-        function readState() {
-            const route = getRoute();
-            const state = {
-                showExam: route.riotHash === EXAM_MODULE,
-            };
-            return state;
-        }
-
         function CourseOverview() { return {
-            state: {
-                ...readState()
-            },
 
-            storeListener(previousStoreState, storeState) {
-                const newState = readState() 
-                if (this.state.showExam !== newState.showExam) {
-                    this.update(newState);
-                }
+            onBeforeMount(props, state) {
+                this.readHash();
             },
+            onBeforeUpdate(props, state) {
+                this.readHash();
+            },
+            readHash() {
+                this.state.showExam = getRoute().riotHash === EXAM_MODULE;
+            }
 
             /*
                 const examCards = exam.map((card) => {

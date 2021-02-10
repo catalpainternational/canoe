@@ -1,6 +1,5 @@
 import { Page } from "ts/Implementations/Page";
 import CoursePage from "ts/Implementations/Specific/CoursePage";
-import { getLatestCompletionInCourse } from "js/actions/completion";
 
 export default class AllCoursesPage extends Page {
     #tags!: string[];
@@ -48,6 +47,22 @@ export default class AllCoursesPage extends Page {
     }
 
     get currentCourse(): any {
-        return getLatestCompletionInCourse("d", ["D"]);
+        let lastWorkedOnCourse = null;
+        const coursesWithCompletions = this.courses.filter(
+            (course: any) => course.latestCompletion
+        );
+
+        for (const course of coursesWithCompletions) {
+            if (
+                lastWorkedOnCourse &&
+                !course.isComplete &&
+                course.getLatestCompletion().completionDate <
+                    lastWorkedOnCourse.getLatestCompletion().completionDate
+            ) {
+                continue;
+            }
+            lastWorkedOnCourse = course;
+        }
+        return lastWorkedOnCourse;
     }
 }

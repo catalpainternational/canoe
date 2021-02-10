@@ -1,18 +1,18 @@
 import { Page } from "ts/Implementations/Page";
 import CoursePage from "ts/Implementations/Specific/CoursePage";
 
+import { setComplete, isComplete } from "js/actions/completion";
+
 export default class LessonPage extends Page {
     isFinished(): boolean {
-        // Not implemented
-        return false;
+        return isComplete(this.course.slug, this.slug, undefined);
     }
     isComingSoon(): boolean {
-        // Not implemented
-        return false;
+        return this.data.data?.coming_soon;
     }
     completeSection(section: string): any {
-        // Not implemented
-        return section;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        setComplete(this.parent!.slug, this.slug, section);
     }
     get course(): CoursePage {
         return this.parent as CoursePage;
@@ -35,6 +35,6 @@ export default class LessonPage extends Page {
     }
     isModuleComplete(module: string): boolean {
         // Not implemented
-        return !module.length;
+        return isComplete(this.course.slug, this.slug, module);
     }
 }

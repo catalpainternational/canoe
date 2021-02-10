@@ -54,6 +54,10 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return this.manifestData?.loc_hash || "";
     }
 
+    get slug(): string {
+        return this.manifestData.slug;
+    }
+
     /** The data for this page as defined in the manifest */
     get manifestData(): TWagtailPageData {
         return this.manifest.pages[this.id] || {};

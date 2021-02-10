@@ -39,7 +39,14 @@ export default class CoursePage extends Page {
     get numberOfLessons(): number {
         return 3;
     }
-    isComplete(): boolean {
-        return true;
+    get isComplete(): boolean {
+        return this.numberOfFinishedLessons === this.numberOfLessons;
+    }
+
+    get latestCompletion(): any {
+        return getLatestCompletionInCourse(
+            this.slug,
+            this.childPages.map((c) => c.slug)
+        );
     }
 }
