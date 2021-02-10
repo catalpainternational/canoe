@@ -51,6 +51,7 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
 
     return {
         id: "",
+        version: -1,
         type: type,
         renditions: renditions,
         api_url: "",
@@ -68,7 +69,7 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
 
 export function buildFakeManifest(): TManifest {
     const fakeMani = new Manifest();
-    fakeMani.data.version = "0.0.1";
+    fakeMani.data.version = 1;
     fakeMani.data.pages["4"] = buildFakeManifestEntry(
         4,
         "home",

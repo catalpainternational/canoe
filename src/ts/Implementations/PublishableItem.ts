@@ -9,7 +9,6 @@ import { TManifest, TManifestItem } from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { url } from "inspector";
 
 export abstract class PublishableItem<T extends TManifestItem>
     implements IManifestItemState {
@@ -315,7 +314,7 @@ export abstract class PublishableItem<T extends TManifestItem>
         const reqUrl = new URL(reqObj.url);
         const params = reqUrl.searchParams;
         const version = parseInt(params.get("version") || "-1");
-        this.version = isNaN(version) ? -1 : version;
+        this.#version = isNaN(version) ? -1 : version;
 
         this.source = "cache";
         this.status = "loading";
