@@ -4,6 +4,7 @@
         <TopMenu extrastyleclasses="with-swoop">
             <h3>{ TRANSLATIONS.allCourses() }</h3>
             <p>{ TRANSLATIONS.coursesIntro() }</p>
+            <p>{ availabilityStatus() }</p>
             <a
                 if="{showTagFilter()}"
                 class="filter-icon"
@@ -48,6 +49,7 @@
                         each="{course in props.page.coursesCompleteLast}"
                         if="{showCourse(course)}"
                         status="{courseStatus(course)}"
+                        availability="{course.isAvailableOffline}"
                         title="{course.title}"
                         link="{course.loc_hash}"
                         progress-value="{course.numberOfFinishedLessons}"
@@ -141,6 +143,10 @@
                     return "complete";
                 }
             },
+
+            availabilityStatus() {
+                return this.state.isAvailableOffline ? "Available Offline" : "Not Available Offline";
+            }
         }};
 
         AllCoursesPage.components = {

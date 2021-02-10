@@ -14,6 +14,7 @@
                 max="{props.progressMax}"
             ></progress>
             <progress if="{props.status === 'complete'}" value="1" max="1"></progress>
+            <p>{ !props.availabililty ? "Not " : "" }Available Offline</p>
         </div>
     </a>
 </Card>

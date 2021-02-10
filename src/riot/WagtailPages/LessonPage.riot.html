@@ -30,6 +30,7 @@
                         title="1. {props.lesson.objective.title}"
                         link="{props.lesson.loc_hash}:{OBJECTIVES}:1"
                         status="{moduleStatus(OBJECTIVES)}"
+                        availability="{props.lesson.isAvailableOffline}"
                         class="objective-stock-image"
                     >
                     </Card>
@@ -38,6 +39,7 @@
                         title="2. {props.lesson.content.title}"
                         link="{props.lesson.loc_hash}:{CONTENT}:1"
                         status="{moduleStatus(CONTENT)}"
+                        availability="{props.lesson.isAvailableOffline}"
                         class="content-stock-image"
                     >
                     </Card>
@@ -46,6 +48,7 @@
                         title="3. {props.lesson.test.title}"
                         link="{props.lesson.loc_hash}:{TEST}:1"
                         status="{moduleStatus(TEST)}"
+                        availability="{props.lesson.isAvailableOffline}"
                         class="test-stock-image"
                     >
                     </Card>
