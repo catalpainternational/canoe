@@ -27,6 +27,11 @@
         LoadingDots {
             top: 0;
             position: absolute;
+            margin-left: 12px;
+
+            & > .loader {
+              margin: 1em auto;
+            }
         }
     }
 }
