@@ -80,6 +80,10 @@ export abstract class PublishableItem<T extends TManifestItem>
     /** The data in the manifest that relates specifically to this item */
     abstract get manifestData(): T;
 
+    get ready(): boolean {
+        return !!this.status && this.status === "ready";
+    }
+
     /** This will do a basic integrity check. */
     get isValid(): boolean {
         if (!this.api_url) {
@@ -109,11 +113,7 @@ export abstract class PublishableItem<T extends TManifestItem>
         }
 
         // Is the item's status acceptable
-        if (this.status !== "ready") {
-            return false;
-        }
-
-        return true;
+        return this.status !== "ready";
     }
 
     /** This is only a very basic check.
@@ -133,11 +133,7 @@ export abstract class PublishableItem<T extends TManifestItem>
         }
 
         // Is the items's status acceptable
-        if (this.status === "ready") {
-            return false;
-        }
-
-        return true;
+        return this.status === "ready";
     }
 
     abstract get cacheKey(): string;

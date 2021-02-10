@@ -27,6 +27,12 @@ export class Asset extends PublishableItem<TAssetEntry> {
         this.#pageCache = pageCache;
     }
 
+    /** Assets don't (yet) have a version, so we set them to a +ve value if they are `ready` */
+    get version(): number {
+        const ver = super.version;
+        return ver !== -1 ? ver : this.ready ? 1 : ver;
+    }
+
     get pageId(): string {
         return this.#pageId;
     }
