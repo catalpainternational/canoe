@@ -3,12 +3,14 @@
         <GuestBanner if="{showBanner()}" closeBanner="{closeBanner}"></GuestBanner>
         <TopMenu extrastyleclasses="with-swoop">
             <h3>{ TRANSLATIONS.allCourses() }</h3>
-            <p>{ TRANSLATIONS.coursesIntro() }</p>
-            <a
-                if="{Array.isArray(state.sortedListOfCourses) && state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 }"
-                class="filter-icon"
-                onclick="{toggleTagList}"
-            ></a>
+            <div class="filter-copy-container">
+              <p>{ TRANSLATIONS.coursesIntro() }</p>
+              <a
+                  if="{Array.isArray(state.sortedListOfCourses) && state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 }"
+                  class="filter-icon"
+                  onclick="{toggleTagList}"
+              ></a>
+            </div>
         </TopMenu>
 
         <div class="content-wrapper">
