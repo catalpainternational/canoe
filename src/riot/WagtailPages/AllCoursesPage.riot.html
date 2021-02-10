@@ -93,8 +93,12 @@
             },
 
             storeListener(previousStoreState, storeState) {
-                if (!this.state.pageReady && this.props.page.ready) {
-                    this.update({pageReady: true});
+                const page = this.props.page;
+                if (!this.state.pageReady && page.ready) {
+                    this.update({ pageReady: true });
+                }
+                if (!this.state.availableOffline || this.state.availableOffline !== page.isAvailableOffline) {
+                    this.update({ isAvailableOffline: page.isAvailableOffline });
                 }
             },
 
