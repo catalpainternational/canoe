@@ -42,10 +42,6 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return this.#childPages;
     }
 
-    get ready(): boolean {
-        return !!this.status && this.status.startsWith("ready");
-    }
-
     get title(): string {
         return this.manifestData?.title || "";
     }

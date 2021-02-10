@@ -1,9 +1,9 @@
 CoursePage {
     .lesson-swoop {
-		@extend %bottom-swoop;
-	}
-	
-	.card-image {
-		@extend %stock-lesson;
-	}
+        @extend %bottom-swoop;
+    }
+
+    .card-image {
+        @extend %stock-lesson;
+    }
 }

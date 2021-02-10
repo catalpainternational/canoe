@@ -1,6 +1,6 @@
 h2 {
-    font-family: $app-typography;
-    font-size: 1.8em;
+    font-family: "TiemposHeadline";
+    font-size: 1.5em;
     color: $gray-1;
     font-weight: 600;
     margin: 0.8em 0;
@@ -92,6 +92,10 @@ input {
     padding: 0;
     background-color: $white;
     font-weight: 300;
+}
+
+input[type="text"] {
+  font-size: 1em;
 }
 
 ul,

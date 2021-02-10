@@ -154,7 +154,7 @@ export class AppelflapConnect {
         )}`;
         const commandInit = {
             method: method,
-            headers: { "version-number": publication.version.toString() },
+            headers: { Version: publication.version.toString() },
         };
 
         return await this.performCommand(requestPath, commandInit, "text");
