@@ -29,10 +29,6 @@ export class Manifest extends PublishableItem<TManifestData> {
         super(opts, "");
     }
 
-    get version(): string {
-        return this.data?.version || "";
-    }
-
     get pages(): Record<string, TWagtailPage> {
         return this.data?.pages || {};
     }
@@ -109,7 +105,7 @@ export class Manifest extends PublishableItem<TManifestData> {
     get emptyItem(): TManifestData {
         const empty = super.emptyItem;
 
-        empty.version = "0.0.0";
+        empty.version = -1;
         empty.pages = {};
 
         return empty;
@@ -193,6 +189,7 @@ export class Manifest extends PublishableItem<TManifestData> {
                 return page.type === pageType && page.language === languageCode;
             }
         );
-        return pageId === undefined ? undefined : this.getSpecificPage(pageId);
+
+        return pageId ? this.getSpecificPage(pageId) : undefined;
     }
 }

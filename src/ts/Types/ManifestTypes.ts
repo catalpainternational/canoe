@@ -5,7 +5,6 @@ import {
 } from "ts/Types/CanoeEnums";
 
 export type TManifestData = {
-    version: string;
     pages: Record<string, TWagtailPage>;
 } & TManifestItem;
 
@@ -14,7 +13,6 @@ export type TManifest = TManifestData & TManifestItemState;
 export type TPageData = {
     loc_hash: string;
     storage_container: string;
-    version: number;
     assets: Array<TAssetEntry>;
     language: string;
     children: Array<string>;
@@ -43,6 +41,7 @@ export type TAssetEntry = TAssetEntryData & TManifestItemState;
 
 /** Describes the common fields for a manifest, page or asset item */
 export type TManifestItem = {
+    version: number;
     /** The routable part of the URL (ignoring the host) */
     api_url: string;
     // Other fields

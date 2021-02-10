@@ -11,6 +11,9 @@
 
         <div class="content-wrapper">
             <p>{state.appelflapMeta}</p>
+            <p>{state.cacheStatus}</p>
+            <p>{state.cacheKeys}</p>
+            <p>{state.publications}</p>
             <p>{state.manifest}</p>
             <p>{state.page}</p>
             <img if="{state.img}" src="{state.img}" />
@@ -54,6 +57,8 @@
         import relativeTime from "dayjs/plugin/relativeTime";
 
         import { AppelflapConnect } from "ts/AppelflapConnect";
+        import { CacheUtilities } from "ts/CacheUtilities";
+        import { CachePublish } from "ts/CachePublish";
         import { Manifest } from "ts/Implementations/Manifest";
 
         dayjs.extend(relativeTime);
@@ -62,6 +67,9 @@
             state: {
                 syncs: [],
                 appelflapMeta: "Hello",
+                cacheStatus: "",
+                cacheKeys: "",
+                publications: "",
                 manifest: "",
                 page: "",
             },
@@ -82,6 +90,21 @@
                 const appelflapConnect = new AppelflapConnect();
                 appelflapConnect.getMetaStatus().then((response) => {
                     this.update({ appelflapMeta: JSON.stringify(response) });
+                });
+                const cacheUtilities = new CacheUtilities(appelflapConnect);
+                const cachePublish = new CachePublish(appelflapConnect);
+                /* Not yet implemented
+                cacheUtilities.status().then((response) => {
+                    this.update({ cacheStatus: JSON.stringify(response) });
+                });
+                */
+                let cacheKeys = [];
+                cacheUtilities.cacheKeys().then((response) => {
+                    cacheKeys = response;
+                    this.update({ cacheKeys: cacheKeys });
+                });
+                cachePublish.publications().then((response) => {
+                    this.update(({ publications: JSON.stringify(response) }));
                 });
 
                 // try to get the manifest
@@ -116,6 +139,9 @@
                             }
                         });
                     }
+
+                    // try publishing the page
+                    aPage.publish(appelflapConnect);
                 }
             },
         };

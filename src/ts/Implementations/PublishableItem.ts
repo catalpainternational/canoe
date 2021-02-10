@@ -1,5 +1,8 @@
 import { BACKEND_BASE_URL } from "js/urls";
 
+import { AppelflapConnect } from "ts/AppelflapConnect";
+import { CachePublish } from "ts/CachePublish";
+
 import { IManifestItemState } from "ts/Interfaces/ManifestInterfaces";
 import { TManifestItemSource, TManifestItemStatus } from "ts/Types/CanoeEnums";
 import { TManifest, TManifestItem } from "ts/Types/ManifestTypes";
@@ -9,6 +12,7 @@ import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
 export abstract class PublishableItem<T extends TManifestItem>
     implements IManifestItemState {
+    #version: number;
     #id: string;
     data!: T;
     cache!: Cache;
@@ -29,10 +33,11 @@ export abstract class PublishableItem<T extends TManifestItem>
     constructor(manifest: TManifest, id: string) {
         this.status = "unset";
         this.source = "unset";
+        this.#version = -1;
         this.#requestObject = new Request("");
 
-        this.manifest = manifest;
         this.#id = id;
+        this.manifest = manifest;
 
         if (!this.data) {
             this.data = this.emptyItem;
@@ -40,6 +45,10 @@ export abstract class PublishableItem<T extends TManifestItem>
         }
 
         this.GetDataFromStore();
+    }
+
+    get version(): number {
+        return this.#version || -1;
     }
 
     get api_url(): string {
@@ -50,6 +59,7 @@ export abstract class PublishableItem<T extends TManifestItem>
 
     get emptyItem(): T {
         return ({
+            version: -1,
             source: "unset",
             status: "unset",
             api_url: "",
@@ -69,6 +79,10 @@ export abstract class PublishableItem<T extends TManifestItem>
 
     /** The data in the manifest that relates specifically to this item */
     abstract get manifestData(): T;
+
+    get ready(): boolean {
+        return !!this.status && this.status === "ready";
+    }
 
     /** This will do a basic integrity check. */
     get isValid(): boolean {
@@ -94,12 +108,12 @@ export abstract class PublishableItem<T extends TManifestItem>
             return false;
         }
 
-        // Is the item's status acceptable
-        if (this.status !== "ready") {
+        if (this.version < 0) {
             return false;
         }
 
-        return true;
+        // Is the item's status acceptable
+        return this.status !== "ready";
     }
 
     /** This is only a very basic check.
@@ -109,17 +123,17 @@ export abstract class PublishableItem<T extends TManifestItem>
             return false;
         }
 
+        if (this.version < 0) {
+            return false;
+        }
+
         // Has the item's cache entry and its request header cleaned of auth data
         if (!this.#requestObjectClean) {
             return false;
         }
 
         // Is the items's status acceptable
-        if (this.status === "ready") {
-            return false;
-        }
-
-        return true;
+        return this.status === "ready";
     }
 
     abstract get cacheKey(): string;
@@ -293,6 +307,10 @@ export abstract class PublishableItem<T extends TManifestItem>
             this.status = "prepped";
             return false;
         }
+        const reqUrl = new URL(reqObj.url);
+        const params = reqUrl.searchParams;
+        const version = parseInt(params.get("version") || "-1");
+        this.#version = isNaN(version) ? -1 : version;
 
         this.source = "cache";
         this.status = "loading";
@@ -355,5 +373,31 @@ export abstract class PublishableItem<T extends TManifestItem>
         }
 
         return isInitialised;
+    }
+
+    /** Tells Appelflap to publish this item's cache
+     * @returns
+     * - resolve(true) on success,
+     * - resolve(false) if isPublishable is false or appelflap connect wasn't provided,
+     * - reject(false) on error
+     */
+    async publish(appelflapConnect: AppelflapConnect): Promise<boolean> {
+        if (!this.isPublishable || !appelflapConnect) {
+            return Promise.resolve(false);
+        }
+
+        const cachePublish = new CachePublish(appelflapConnect);
+
+        const cacheToPublish = {
+            webOrigin: btoa(self.origin),
+            cacheName: btoa(this.cacheKey),
+            version: this.version,
+        };
+        try {
+            await cachePublish.publish(cacheToPublish);
+            return await Promise.resolve(true);
+        } catch (error) {
+            return await Promise.reject(false);
+        }
     }
 }
