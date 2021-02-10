@@ -74,10 +74,6 @@ msgstr "Ezama ba kursu"
 msgid "Course Progress"
 msgstr "Ezama ba kursu"
 
-#, fuzzy
-msgid "Do you want to receive app notifications?"
-msgstr "Ita hakarak simu notifikasaun husi aplikasaun ne'e? "
-
 msgid "Download this PDF to your device"
 msgstr "Download PDF ne’e ba ita nian telemovel"
 
@@ -114,14 +110,14 @@ msgstr "Valór aas liu"
 msgid "I need help accessing my account"
 msgstr "Ha’u presiza apoiu atu asesu ha’u nian perfil"
 
+msgid "I would like to receive notifications"
+msgstr "Hau hakarak simu notifikasaun sira"
+
 msgid "In the meantime please use Safari."
 msgstr "Iha tempu leet, favór uza Safari"
 
 msgid "Keep going"
 msgstr "Favór kontinua nafatin"
-
-msgid "Language"
-msgstr "Lian"
 
 msgid "Latest notifications"
 msgstr "Notifikasaun ikus liu"
@@ -212,6 +208,9 @@ msgstr "Haree ouituan"
 
 msgid "See more"
 msgstr "Haree liután"
+
+msgid "Select your language"
+msgstr "Hili ita bo’ot nia lian"
 
 msgid "Send SMS"
 msgstr "Manda SMS"
@@ -322,8 +321,14 @@ msgid "You just completed the lesson \"%1\""
 msgstr "Ita foin halo remata lisaun \"%1\""
 
 #. message when user passed the exam
+<<<<<<< HEAD
 #, fuzzy
 msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
+||||||| 676ab30
+msgid "You passed this exam with a score of %1%. If you would like to improve your score you can retake this exam."
+=======
+msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
+>>>>>>> origin/FT-New-Design-System
 msgstr "Ita pasa ezame ne'e ho valór %1%. Karik hakarak hadiak liu tan ita nian valór, ita bele foti tan ezame ne'e."
 
 msgid "You're logged in as a guest user"
@@ -364,6 +369,9 @@ msgstr "Ita-nia konfigurasaun"
 #, fuzzy
 msgid "Your username or password is incorrect"
 msgstr "Haluha uzuáriu ka seña?"
+
+#~ msgid "Language"
+#~ msgstr "Lian"
 
 #~ msgid "%1 min"
 #~ msgid_plural "%1 mins"

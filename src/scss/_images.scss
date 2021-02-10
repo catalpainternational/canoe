@@ -2,13 +2,13 @@
 @mixin mask-icons-shared($image, $contain-or-cover, $color) {
     -webkit-mask-image: url($image);
     mask-image: url($image);
-    
+
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    
+
     -webkit-mask-size: $contain-or-cover;
     mask-size: $contain-or-cover;
-    
+
     background-color: $color;
     display: inline-block;
 }
@@ -22,7 +22,7 @@
 
 .site-logo {
     @include unmaskable-icons-shared("~img/site_logo.svg", contain);
-    height: 30px;
+    height: 36px;
     width: 87px;
 }
 
@@ -145,8 +145,8 @@
 
 .login-image {
     @include unmaskable-icons-shared("~img/login_image.svg", contain);
-    width: 125px;
-    height: 125px;
+    width: 130px;
+    height: 130px;
 }
 
 .eye {
@@ -177,8 +177,8 @@
 
 .arrow {
     @include mask-icons-shared("~img/arrow.svg", contain, $blue);
-    height: 14px;
-    width: 20px;
+    height: 12px;
+    width: 17px;
 }
 
 .incorrect-flag {
@@ -236,8 +236,6 @@
         background-color: $white;
         height: 15px;
         width: 15px;
-        -webkit-mask-size: cover;
-        mask-size: cover;
         margin: auto;
     }
 }
