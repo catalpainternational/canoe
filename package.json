@@ -11,7 +11,7 @@
         "build": "webpack",
         "start": "webpack-dev-server",
         "makemessages": "node messages_scan.js && msgmerge --update --no-location --no-wrap locale/tet/canoe.po locale/canoe.pot",
-        "compilemessages": "node_modules/gettext.js/bin/po2json locale/tet/canoe.po locale/json/tet.json -p",
+        "compilemessages": "yarn run po2json-gettextjs locale/tet/canoe.po locale/json/tet.json -p",
         "translate": "yarn makemessages && yarn compilemessages"
     },
     "devDependencies": {

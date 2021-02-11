@@ -28,10 +28,7 @@ TopMenu {
         background-color: white;
 
         .arrow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            @extend %absolutely-center;
         }
     }
 
