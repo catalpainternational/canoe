@@ -1,12 +1,9 @@
 <LessonFeedback>
     <LessonFrame linkTo="{backToLesson()}">
         <template if="{!state.madeFeedbackDecision}">
-            <div class="feedback-icon">
-                <div class="sun"></div>
-                <h2>{ TRANSLATIONS.feedback() }</h2>
-            </div>
             <div class="feedback-container">
                 <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
+                <h5>{ TRANSLATIONS.let_us_know() }</h5>
                 <div class="feedback-buttons">
                     <button onclick="{() => clickedThisLessonIs('fine')}">
                         <span class="neutral-smiley"></span>
@@ -55,6 +52,7 @@
                 no: () => gettext("No thanks"),
                 sent: () => gettext("Successfully sent!"),
                 continue: () => gettext("Continue"),
+                let_us_know: () => gettext("Let us know how you feel"),
             },
             components: {
                 lessonframe: LessonFrame,
