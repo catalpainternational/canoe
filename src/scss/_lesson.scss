@@ -484,6 +484,11 @@ LessonFeedback {
                 }
             }
         }
+
+        & .button-label {
+            color: $gray-4;
+            margin-top: 11px;
+        }
     }
 
     // .feedback-icon {
