@@ -29,10 +29,6 @@
             <button class="btn-secondary" onclick="{clickedNoThanks}">{ TRANSLATIONS.no() }</button>
         </template>
         <template if="{state.madeFeedbackDecision}">
-            <!-- <div class="feedback-icon">
-                <div class="sun"></div>
-                <h2>{ TRANSLATIONS.feedback() }</h2>
-            </div> -->
             <div class="thank-you-container">
                 <h3>{ TRANSLATIONS.sent() }</h3>
                 <div class="correct-flag"></div>
@@ -50,7 +46,6 @@
 
         export default {
             TRANSLATIONS: {
-                feedback: () => gettext("FEEDBACK"),
                 enjoying_lesson: () => gettext("Are you enjoying this lesson?"),
                 give_feedback: () =>
                     gettext("We value your feedback and all feedback is confidential."),
