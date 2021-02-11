@@ -36,7 +36,8 @@ LessonPage {
 
 LessonFrame {
     .frame-background {
-        min-height: calc(100vh - #{$top-menu-height});
+        // the 10px adds some room for the stacked cards below
+        min-height: calc(100vh - #{$top-menu-height} - 10px);
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
@@ -61,7 +62,7 @@ LessonFrame {
         padding: 30px 20px;
         width: 100%;
         max-width: $tablet;
-        background-color: $white;
+        background-color: $gray-10;
         border-radius: 8px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
         box-sizing: border-box;
@@ -69,6 +70,26 @@ LessonFrame {
         @media only screen and (min-width: 610px) {
             margin: 0 auto 1.5em;
         }
+    }
+
+    .card-shadow {
+        background-color: $gray-10;
+        height: 20px;
+        width: 90%;
+        position: absolute;
+        bottom: 24px;
+        left: 5%;
+        border-radius: 7.5px;
+        z-index: -1;
+        box-shadow: 0 5px 10px 0 rgba(42,57,66,0.2);
+    }
+
+    .card-shadow:nth-child(3) {
+        width: 80%;
+        bottom: 15px;
+        z-index: -2;
+        left: 10%;
+        border-radius: 7px;
     }
 }
 
@@ -491,39 +512,8 @@ LessonFeedback {
         }
     }
 
-    // .feedback-icon {
-    //     display: flex;
-    //     flex-flow: column nowrap;
-    //
-    //     .sun {
-    //         height: 3em;
-    //         width: 3em;
-    //         margin: auto;
-    //     }
-    //
-    //     h2 {
-    //         font-size: 1em;
-    //         font-weight: 500;
-    //         color: $gray-3;
-    //         letter-spacing: 0.8px;
-    //         text-transform: capitalize;
-    //         text-align: center;
-    //         border: none;
-    //         padding: 0;
-    //     }
-    // }
-
     .feedback-container {
         text-align: center;
-
-        & > h5 {
-            text-transform: uppercase;
-            font-weight: 300;
-        }
-
-        & > p {
-            color: $gray-1;
-        }
     }
 
     .thank-you-container {
@@ -532,7 +522,19 @@ LessonFeedback {
         .correct-flag {
             height: 6em;
             width: 6em;
-            margin: auto;
+            margin: 2em auto;
+        }
+    }
+
+    .feedback-container,
+    .thank-you-container {
+        & > h5 {
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        & > p {
+            color: $gray-1;
         }
     }
 
