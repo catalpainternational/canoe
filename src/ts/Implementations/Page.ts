@@ -132,16 +132,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         }
 
         // Has the wagtail version of this page been loaded
-        if (!this.data.data || !this.data.id || !this.data.title) {
-            return false;
-        }
-
-        // Is the page's source acceptable
-        if (["unset", "store"].includes(this.source)) {
-            return false;
-        }
-
-        return true;
+        return !!this.data.data && !!this.data.id && !!this.data.title;
     }
 
     get isAvailableOffline(): boolean {
@@ -217,6 +208,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     GetDataFromStore(): void {
         const pageData = getPageDataFromStore(this.id);
         if (pageData) {
+            this.source = "store";
             this.status = "ready";
             this.data = pageData;
         } else {
