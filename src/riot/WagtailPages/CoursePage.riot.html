@@ -116,7 +116,7 @@
             },
             
             availabilityStatus() {
-                return this.state.isAvailableOffline ? "Available Offline" : "Not Available Offline";
+                return (this.state.isAvailableOffline ? "" : "Not ") + "Available Offline";
             },
         }};
 
