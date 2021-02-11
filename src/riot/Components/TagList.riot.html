@@ -1,10 +1,10 @@
 <TagList>
     <div class="tag-container">
-        <a  
+        <a
             each="{tag in props.tags}"
-            class="tag {props.selectedTags && props.selectedTags.includes(tag) ? 'selected' : ''}" 
+            class="tag {props.selectedTags && props.selectedTags.includes(tag) ? 'selected' : ''}"
             onclick="{e => { 
-                props.onTagClick(e.srcElement.innerText, false)
+                props.onTagClick(e.srcElement.innerText.toLowerCase(), false)
             }}"
         >
             <p>{tag}</p>
