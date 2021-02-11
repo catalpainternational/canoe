@@ -23,6 +23,8 @@
                 onclick="{toggleLessonDescription}"
                 >{ TRANSLATIONS.more() }</a
             >
+            <p>{ availabilityStatus() }</p>
+
             <div class="activity-swoop">
                 <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
                 <div class="card-container">
@@ -125,6 +127,10 @@
                     return "not-started";
                 }
             },
+
+            availabilityStatus() {
+                return (this.props.lesson.isAvailableOffline ? "" : "Not ") + "Available Offline";
+            },            
         }};
 
         LessonPage.components = {
