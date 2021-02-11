@@ -1,19 +1,12 @@
 <LessonModuleComplete>
-    <LessonFrame linkTo="{props.lessonId}">
-        <div class="sun"></div>
-        <div class="body">
-            <h2>{ TRANSLATIONS.great() }</h2>
-            <h3>{ moduleCompleteMessage() }</h3>
-            <p>{ nextModuleMessage() }</p>
-        </div>
-        <div>
-            <button class="btn-primary" onclick="{goToNextModule}">
-                { TRANSLATIONS.continue_button() }
-            </button>
-            <button class="btn-secondary" onclick="{backToLessonPage}">
-                { TRANSLATIONS.back_button() }
-            </button>
-        </div>
+    <LessonFrame linkTo="{props.lessonId}" extrastyleclasses="message-container">
+        <h3>{ TRANSLATIONS.great() }</h3>
+        <h5>{ moduleCompleteMessage() }</h5>
+        <span class="high-fivers"></span>
+        <p>{ nextModuleMessage() }</p>
+        <button class="btn-primary" onclick="{goToNextModule}">
+            { TRANSLATIONS.continue_button() }
+        </button>
     </LessonFrame>
 
     <script>
@@ -37,10 +30,6 @@
                 location.hash = `#${this.props.lessonId}/${this.props.nextModule}/1`;
             },
 
-            backToLessonPage() {
-                location.hash = `#${this.props.lessonId}`;
-            },
-
             moduleCompleteMessage() {
                 // message on completing objectives, content or test ( %1 )
                 return gettext(
@@ -52,7 +41,7 @@
             nextModuleMessage() {
                 // message to say what module is next ( %1 is content or test )
                 return gettext(
-                    "You're ready to start the %1.",
+                    "You're ready to start the %1",
                     this.TRANSLATIONS[this.props.nextModule]().toLowerCase()
                 );
             },
