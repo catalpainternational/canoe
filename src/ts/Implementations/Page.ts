@@ -136,11 +136,6 @@ export class Page extends PublishableItem<TWagtailPageData> {
             return false;
         }
 
-        // Is the page's source acceptable
-        if (["unset", "store"].includes(this.source)) {
-            return false;
-        }
-
         return true;
     }
 
@@ -217,6 +212,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     GetDataFromStore(): void {
         const pageData = getPageDataFromStore(this.id);
         if (pageData) {
+            this.source = "store";
             this.status = "ready";
             this.data = pageData;
         } else {

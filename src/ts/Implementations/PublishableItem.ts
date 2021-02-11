@@ -113,7 +113,7 @@ export abstract class PublishableItem<T extends TManifestItem>
         }
 
         // Is the item's status acceptable
-        return this.status !== "ready";
+        return this.status === "ready";
     }
 
     /** This is only a very basic check.

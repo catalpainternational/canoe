@@ -114,6 +114,7 @@ export class Manifest extends PublishableItem<TManifestData> {
     GetDataFromStore(): void {
         const manifest = getManifestFromStore();
         if (manifest && JSON.stringify(manifest) !== "{}") {
+            this.source = "store";
             this.status = "ready";
             this.data = manifest;
         } else {
