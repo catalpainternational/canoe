@@ -25,7 +25,7 @@ msgid "Add to Home Screen"
 msgstr "Aumenta ba pájina prinsipál"
 
 msgid "All courses"
-msgstr ""
+msgstr "Lista Kursu Sira"
 
 msgid "Amazing work!"
 msgstr "Parabéns! Serbisu diak loos!"
@@ -49,7 +49,7 @@ msgid "Check answers"
 msgstr "Cek resposta"
 
 msgid "Checking"
-msgstr ""
+msgstr "Hein lai"
 
 msgid "Code of conduct"
 msgstr " Kindut"
@@ -63,22 +63,20 @@ msgstr "Konteúdu"
 msgid "Continue"
 msgstr "Kontinua"
 
-#, fuzzy
 msgid "Continue Learning"
 msgstr "Kontinua aprende"
 
 msgid "Course exam"
 msgstr "Ezama ba kursu"
 
-#, fuzzy
 msgid "Course Progress"
-msgstr "Ezama ba kursu"
+msgstr "Ita nia progresu ba kursu"
 
 msgid "Download this PDF to your device"
 msgstr "Download PDF ne’e ba ita nian telemovel"
 
 msgid "Explore a range of courses to suit your needs, expertise, and interests."
-msgstr ""
+msgstr "Esplora kursu sira ne'ebé tuir ita-nia presiza, espesialidadi no interese"
 
 msgid "FEEDBACK"
 msgstr "Komentáriu"
@@ -128,13 +126,11 @@ msgstr "Estatístika aprendizajen "
 msgid "Lesson Activities"
 msgstr "Atividade sira husi lisaun"
 
-#, fuzzy
 msgid "lessons completed"
-msgstr "%1 lisaun kompletu"
+msgstr "lisaun sira ne'ebé kompleta ona"
 
-#, fuzzy
 msgid "lessons remaining"
-msgstr "Lisaun ne'ebé sei presiza atu kompleta hodi remata ita-nia estudu"
+msgstr "lisaun ne'ebé seidauk remata "
 
 msgid "Log out"
 msgstr "Sai"
@@ -203,7 +199,7 @@ msgid "See more"
 msgstr "Haree liután"
 
 msgid "Select your language"
-msgstr "Hili ita bo’ot nia lian"
+msgstr "Hili ita-nia lian"
 
 msgid "Send SMS"
 msgstr "Manda SMS"
@@ -236,7 +232,7 @@ msgid "Submit answers"
 msgstr "Submete"
 
 msgid "Successfully sent!"
-msgstr "Avaliasaun manda ona ho susesu!"
+msgstr "Komentáriu manda ona ho susesu!"
 
 msgid "Take Exam"
 msgstr "Foti Ezame"
@@ -248,9 +244,8 @@ msgstr "Foti ezame agora atu kompleta kursu \"%1\""
 msgid "Test"
 msgstr "Teste"
 
-#, fuzzy
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
-msgstr "Obrigado ba ita-nia komentáriu. Ita-nia opiniaun importante mai ami. Ami sei servisu maka'as atu hadia ita-nia esperensia."
+msgstr "Obrigado ba ita nia komentáriu. Ita nia opiniaun importante ba ami no ami servisu atu hadiak ita-nia esperiensia."
 
 msgid "There are no courses yet. Check back soon!"
 msgstr "Seidauk iha kursu. Favor cek fila fali iha tempu badak!"
@@ -283,9 +278,8 @@ msgstr "Uzuáriu"
 msgid "View Resources"
 msgstr "Haree Rekursu"
 
-#, fuzzy
 msgid "We value your feedback and all feedback is confidential."
-msgstr "Favor fó hatene ami ita-nia opiniaun kona-ba lisaun ne'e. Ami apresia ita-nia komentáriu no konsidera ida-ne'e konfidensiál"
+msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál"
 
 msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
 msgstr "Ami husu deskulpa! Ami sei aumenta suporta balun ba Asteroid uza ho Chrome iha iOS."
@@ -306,7 +300,7 @@ msgstr "Ita foin halo remata lisaun \"%1\""
 
 #. message when user passed the exam
 msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
-msgstr "Ita pasa ezame ne'e ho valór %1%. Karik hakarak hadiak liu tan ita nian valór, ita bele foti tan ezame ne'e."
+msgstr "Ita pasa ezame ho %1%. Se ita hakarak hadiak liutan ita nia klasifikasaun, ita bele tuir fali tan ezame nee."
 
 msgid "You're logged in as a guest user"
 msgstr "Ita asesu hela app ne'e nu’udar bainaka"
@@ -338,12 +332,11 @@ msgid "Your lessons"
 msgstr "Ita-nia lisaun"
 
 msgid "Your profile"
-msgstr ""
+msgstr "Ita-nia perfil"
 
 msgid "Your settings"
 msgstr "Ita-nia konfigurasaun"
 
-#, fuzzy
 msgid "Your username or password is incorrect"
 msgstr "Haluha uzuáriu ka seña?"
 
