@@ -58,11 +58,11 @@ LessonFrame {
 
     .card-frame {
         margin: 0 5px 1.5em;
-        padding: 30px;
+        padding: 30px 20px;
         width: 100%;
         max-width: $tablet;
         background-color: $white;
-        border-radius: 30px;
+        border-radius: 8px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
         box-sizing: border-box;
 
@@ -508,8 +508,9 @@ LessonFeedback {
         }
     }
 
-    .feedback-container {
-        text-align: center;
+        & > p {
+            color: $gray-1;
+        }
     }
 
     .thank-you-container {
