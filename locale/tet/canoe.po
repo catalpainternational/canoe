@@ -309,7 +309,7 @@ msgid "You're logging in as a guest"
 msgstr "Ita asesu hela app ne'e nu’udar bainaka"
 
 #. message to say what module is next ( %1 is content or test )
-msgid "You're ready to start the %1."
+msgid "You're ready to start the %1"
 msgstr "Ita prontu atu hahú %1"
 
 #. message on completing objectives, content or test ( %1 )
