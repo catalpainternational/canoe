@@ -6,19 +6,19 @@
                 <h5>{ TRANSLATIONS.let_us_know() }</h5>
                 <div class="feedback-buttons">
                     <div class="button-container">
-                        <button onclick="{() => clickedThisLessonIs('fine')}" class="neutral">
+                        <button onclick="{() => clickedThisLessonIs('fine')}" class="neutral {state.activeSelection === 'fine' ? 'active' : ''}">
                             <span class="neutral-smiley"></span>
                         </button>
                         <p class="button-label">{ TRANSLATIONS.not_great() }</p>
                     </div>
                     <div class="button-container">
-                        <button onclick="{() => clickedThisLessonIs('good')}" class="smiling">
+                        <button onclick="{() => clickedThisLessonIs('good')}" class="smiling {state.activeSelection === 'good' ? 'active' : ''}">
                             <span class="smiling-smiley"></span>
                         </button>
                         <p class="button-label">{ TRANSLATIONS.good() }</p>
                     </div>
                     <div class="button-container">
-                        <button onclick="{() => clickedThisLessonIs('great')}" class="thrilled">
+                        <button onclick="{() => clickedThisLessonIs('great')}" class="thrilled {state.activeSelection === 'great' ? 'active' : ''}">
                             <span class="thrilled-smiley"></span>
                         </button>
                         <p class="button-label">{ TRANSLATIONS.really_great() }</p>
@@ -26,6 +26,9 @@
                 </div>
                 <p>{ TRANSLATIONS.give_feedback() }</p>
             </div>
+            <template if="{state.activeSelection}">
+                <button class="btn-secondary" onclick="{clickedSubmit}">{ TRANSLATIONS.submit() }</button>
+            </template>
             <button class="btn-secondary" onclick="{clickedNoThanks}">{ TRANSLATIONS.no() }</button>
         </template>
         <template if="{state.madeFeedbackDecision}">
@@ -60,6 +63,7 @@
                 not_great: () => gettext("Not great"),
                 good: () => gettext("Good"),
                 really_great: () => gettext("Really great!"),
+                submit: () => gettext("Submit feedback"),
             },
             components: {
                 lessonframe: LessonFrame,
@@ -67,9 +71,17 @@
 
             state: {
                 madeFeedbackDecision: false,
+                activeSelection: null,
             },
 
             clickedThisLessonIs(rating) {
+                this.update({
+                    activeSelection: rating,
+                })
+            },
+
+            clickedSubmit() {
+                const rating = this.state.activeSelection;
                 if (["fine", "good", "great"].includes(rating)) {
                     this.sendFeedback(rating);
                     this.update({
