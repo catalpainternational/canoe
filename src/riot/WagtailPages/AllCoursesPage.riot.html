@@ -3,12 +3,14 @@
         <GuestBanner></GuestBanner>
         <TopMenu extrastyleclasses="with-swoop">
             <h3>{ TRANSLATIONS.allCourses() }</h3>
-            <p>{ TRANSLATIONS.coursesIntro() }</p>
-            <a
-                if="{showTagFilter()}"
-                class="filter-icon"
-                onclick="{toggleTagList}"
-            ></a>
+            <div class="filter-copy-container">
+              <p>{ TRANSLATIONS.coursesIntro() }</p>
+              <a
+                  if="{showTagFilter()}"
+                  class="filter-icon"
+                  onclick="{toggleTagList}"
+              ></a>
+            </div>
         </TopMenu>
 
         <div class="content-wrapper">

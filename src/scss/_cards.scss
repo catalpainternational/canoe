@@ -5,7 +5,7 @@
     border: 1px solid $gray-7;
     box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
     background-color: $gray-10;
-    height: 180px;
+    height: 175px;
     position: relative;
 
     .card-image {
@@ -22,11 +22,12 @@
     .card-title {
         box-sizing: border-box;
         min-height: 70px;
-        padding: 10px;
+        padding: 15px;
         overflow: hidden;
 
         h5 {
             margin: 0;
+            color: $gray-1;
         }
     }
 

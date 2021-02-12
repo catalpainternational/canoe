@@ -5,9 +5,20 @@ AllCoursesPage {
 
     .with-swoop {
         height: 200px;
+
+        & > .filter-copy-container {
+          display: grid;
+          grid-template-columns: 1fr 20px;
+          column-gap: 15px;
+          align-items: center;
+        }
     }
 
     .card-image {
         @extend %stock-course;
+    }
+
+    h5.section-title {
+      color: $gray-1;
     }
 }
