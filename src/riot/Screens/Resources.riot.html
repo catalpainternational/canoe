@@ -62,7 +62,7 @@
                 card: Card,
                 searchbar: SearchBar,
                 loadingdots: LoadingDots,
-                topmenu: TopMenu
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
@@ -99,9 +99,9 @@
 
                 const filter = urlParams.getAll("filter");
                 if (filter.length > 0) {
-                    for (var i = 0; i < filter.length; ++i) {
-                        if (listOfAllTags.includes(filter[i])) {
-                            this.onTagClick(decodeURIComponent(filter[i]), true);
+                    for (const tag of filter) {
+                        if (listOfAllTags.includes(tag)) {
+                            this.onTagClick(decodeURIComponent(tag), true);
                         }
                     }
                 }
@@ -127,8 +127,8 @@
                     urlParams.delete("filter");
 
                     if (this.state.selectedTags.length > 0) {
-                        for (var i = 0; i < this.state.selectedTags.length; ++i) {
-                            const pendingTag = this.state.selectedTags[i].toLowerCase();
+                        for (const tag of this.state.selectedTags) {
+                            const pendingTag = tag.toLowerCase();
                             urlParams.append("filter", pendingTag);
                         }
                     }

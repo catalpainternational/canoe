@@ -18,7 +18,7 @@ msgstr ""
 msgid "Add to Home Screen"
 msgstr ""
 
-#: src/riot/WagtailPages/AllCoursesPage.riot.html:90
+#: src/riot/WagtailPages/AllCoursesPage.riot.html:92
 msgid "All courses"
 msgstr ""
 
@@ -72,7 +72,7 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: src/riot/WagtailPages/AllCoursesPage.riot.html:91
+#: src/riot/WagtailPages/AllCoursesPage.riot.html:93
 msgid "Continue Learning"
 msgstr ""
 
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Download this PDF to your device"
 msgstr ""
 
-#: src/riot/WagtailPages/AllCoursesPage.riot.html:93
+#: src/riot/WagtailPages/AllCoursesPage.riot.html:95
 msgid "Explore a range of courses to suit your needs, expertise, and interests."
 msgstr ""
 
@@ -143,7 +143,7 @@ msgstr ""
 =======
 #: src/riot/Screens/Settings.riot.html:64
 msgid "I would like to receive notifications"
-msgstr "Hau hakarak simu notifikasaun sira"
+msgstr ""
 
 #: src/riot/Screens/ChangeBrowser.riot.html:19
 >>>>>>> origin/FT-New-Design-System
@@ -285,7 +285,7 @@ msgstr ""
 
 #: src/riot/Components/LanguageSelector.riot.html:21
 msgid "Select your language"
-msgstr "Hili ita bo’ot nia lian"
+msgstr ""
 
 #: src/riot/Components/ContactInformation.riot.html:22
 msgid "Send SMS"
@@ -353,7 +353,7 @@ msgstr ""
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
 msgstr ""
 
-#: src/riot/WagtailPages/AllCoursesPage.riot.html:89
+#: src/riot/WagtailPages/AllCoursesPage.riot.html:91
 msgid "There are no courses yet. Check back soon!"
 msgstr ""
 
