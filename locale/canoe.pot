@@ -411,7 +411,7 @@ msgstr ""
 
 #. message to say what module is next ( %1 is content or test )
 #: src/riot/Lesson/LessonModuleComplete.riot.html:54
-msgid "You're ready to start the %1."
+msgid "You're ready to start the %1"
 msgstr ""
 
 #. message on completing objectives, content or test ( %1 )

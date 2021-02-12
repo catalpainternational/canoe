@@ -7,10 +7,10 @@ AllCoursesPage {
         height: 200px;
 
         & > .filter-copy-container {
-          display: grid;
-          grid-template-columns: 1fr 20px;
-          column-gap: 15px;
-          align-items: center;
+            display: grid;
+            grid-template-columns: 1fr 20px;
+            column-gap: 15px;
+            align-items: center;
         }
     }
 
@@ -19,6 +19,6 @@ AllCoursesPage {
     }
 
     h5.section-title {
-      color: $gray-1;
+        color: $gray-1;
     }
 }
