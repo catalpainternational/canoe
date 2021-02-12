@@ -470,6 +470,15 @@ LessonFeedback {
         }
     }
 
+    .button-container {
+        width: 100%;
+        // button height (50px) * 2, + 20px margin
+        height: 120px;
+
+        & .btn-primary + .btn-secondary {
+            margin-top: 20px;
+        }
+    }
 
     .thank-you-container {
         text-align: center;
