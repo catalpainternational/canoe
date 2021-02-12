@@ -437,10 +437,6 @@ LessonFeedback {
                 }
             }
 
-            &.border-blue-1 {
-                border-color: 2px solid $app-accent-color;
-            }
-
             &:hover {
                 cursor: pointer;
             }
@@ -556,11 +552,6 @@ ExamResults {
     flex-direction: row;
     align-items: center;
     width: 100%;
-
-    .arrow {
-        display: inline-block;
-        position: relative;
-    }
 
     .btn-primary {
         min-width: 120px;

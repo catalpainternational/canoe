@@ -20,6 +20,20 @@
     background-position: center;
 }
 
+.has-circle {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 6px 9px 0 rgba(42, 57, 66, 0.1);
+    background-color: white;
+    position: relative;
+
+    .arrow {
+        @extend %absolutely-center;
+    }
+}
+
 .site-logo {
     @include unmaskable-icons-shared("~img/site_logo.svg", contain);
     height: 36px;
