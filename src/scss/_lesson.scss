@@ -504,28 +504,6 @@ LessonFeedback {
         }
     }
 
-    .thank-you-container {
-        text-align: center;
-
-        .correct-flag {
-            height: 6em;
-            width: 6em;
-            margin: 2em auto;
-        }
-    }
-
-    .message-container,
-    .thank-you-container {
-        & > h5 {
-            text-transform: uppercase;
-            font-weight: 300;
-        }
-
-        & > p {
-            color: $gray-1;
-        }
-    }
-
     // Pedro needs smaller buttons at 441px. Better to target an industry
     // breakpoint and add the extra pixels.
 
@@ -550,6 +528,12 @@ LessonFeedback {
 
     p {
         color: $gray-1;
+    }
+
+    .correct-flag {
+        height: 6em;
+        width: 6em;
+        margin: 2em auto;
     }
 }
 
