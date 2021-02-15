@@ -1,12 +1,12 @@
 .modal {
     position: fixed;
     bottom: 0;
-    background-color: white;
+    background-color: $gray-10;
     width: 100%;
     text-align: center;
     height: auto;
     border-radius: 8px 8px 0 0;
-    box-shadow: 0 0 10px 5px $gray-3;
+    box-shadow: 0 0 40px 0 rgba($gray-1, 0.15);
     animation-duration: 0.6s;
     animation-name: slideDown;
     padding: 20px;
@@ -91,5 +91,7 @@
     height: 100%;
     top: 0;
     left: 0;
-    background-color: rgba(black, 0.4);
+    background-color: rgba($gray-8, 0.7);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
 }
