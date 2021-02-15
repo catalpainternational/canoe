@@ -18,10 +18,6 @@ export default class AllCoursesPage extends Page {
         return this.childPages;
     }
 
-    isCourseComplete(course: Record<string, any>): boolean {
-        return !!course;
-    }
-
     courseIdHasATagIn(courseId: number, tags: string[]): boolean {
         const course = this.data.courses.find(
             (c: any) => c.data.id == courseId
@@ -37,7 +33,7 @@ export default class AllCoursesPage extends Page {
         const inComplete: any[] = [];
         const complete: any[] = [];
         this.courses.forEach((course: any) => {
-            if (this.isCourseComplete(course)) {
+            if (course.isComplete) {
                 complete.push(course);
             } else {
                 inComplete.push(course);

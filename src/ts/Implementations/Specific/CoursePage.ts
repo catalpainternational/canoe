@@ -45,7 +45,10 @@ export default class CoursePage extends Page {
         return this.lessons.length;
     }
     get isComplete(): boolean {
-        return this.numberOfFinishedLessons === this.numberOfLessons;
+        return (
+            !!this.numberOfLessons &&
+            this.numberOfFinishedLessons === this.numberOfLessons
+        );
     }
 
     get latestCompletion(): any {
