@@ -132,11 +132,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         }
 
         // Has the wagtail version of this page been loaded
-        if (!this.data.data || !this.data.id || !this.data.title) {
-            return false;
-        }
-
-        return true;
+        return !!this.data.data && !!this.data.id && !!this.data.title;
     }
 
     get isAvailableOffline(): boolean {
