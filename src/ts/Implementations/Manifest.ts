@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TManifestData, TWagtailPage } from "ts/Types/ManifestTypes";
+import { TManifestData } from "ts/Types/ManifestTypes";
+import { TWagtailPage } from "ts/Types/PageTypes";
+
 import { PublishableItem } from "ts/Implementations/PublishableItem";
 import { Page } from "ts/Implementations/Page";
+
 import AllCoursesPage from "ts/Implementations/Specific/AllCoursesPage";
 import CoursePage from "ts/Implementations/Specific/CoursePage";
 import LessonPage from "ts/Implementations/Specific/LessonPage";
@@ -114,11 +117,10 @@ export class Manifest extends PublishableItem<TManifestData> {
     GetDataFromStore(): void {
         const manifest = getManifestFromStore();
         if (manifest && JSON.stringify(manifest) !== "{}") {
-            this.source = "store";
-            this.status = "ready";
+            this.cacheStatus = "ready";
             this.data = manifest;
         } else {
-            this.status = "prepped";
+            this.cacheStatus = "prepared";
         }
     }
 
@@ -141,7 +143,7 @@ export class Manifest extends PublishableItem<TManifestData> {
 
         let cacheUpdated = false;
         if (this.data && this.isValid) {
-            this.status = "ready";
+            this.cacheStatus = "ready";
             storeManifest(this.data);
             cacheUpdated = await this.updateCache();
         }

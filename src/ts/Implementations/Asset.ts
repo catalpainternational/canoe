@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TAssetEntry, TManifest } from "ts/Types/ManifestTypes";
+import { TManifest } from "ts/Types/ManifestTypes";
+import { TAssetEntry } from "ts/Types/AssetTypes";
 import { PublishableItem } from "ts/Implementations/PublishableItem";
 
+import { AppelflapConnect } from "ts/AppelflapConnect";
 import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "ts/Constants";
 import { getBrowser } from "ts/PlatformDetection";
 
@@ -110,11 +112,6 @@ export class Asset extends PublishableItem<TAssetEntry> {
             return false;
         }
 
-        // Is the asset's source acceptable
-        if (["unset", "store"].includes(this.source)) {
-            return false;
-        }
-
         return true;
     }
 
@@ -122,9 +119,11 @@ export class Asset extends PublishableItem<TAssetEntry> {
         return super.isAvailableOffline;
     }
 
-    /** Always returns false, an Asset is not publishable on its own */
+    /** An Asset is not publishable on its own.
+     * So this value is only relevant to this asset's parent page.
+     */
     get isPublishable(): boolean {
-        return false;
+        return super.isPublishable;
     }
 
     get emptyItem(): TAssetEntry {
@@ -151,9 +150,17 @@ export class Asset extends PublishableItem<TAssetEntry> {
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.#blob = await resp.blob();
-        this.status = "ready";
+        this.cacheStatus = "ready";
 
         const cacheUpdated = await this.updateCache();
         return cacheUpdated && !!this.#blob;
+    }
+
+    /** Tells Appelflap to (not) publish this Asset's entry in the cache
+     * @returns
+     * - resolve(false) because Assets cannot be published on their own
+     */
+    async publish(appelflapConnect: AppelflapConnect): Promise<boolean> {
+        return Promise.resolve(false);
     }
 }

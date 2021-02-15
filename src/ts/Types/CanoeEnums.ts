@@ -14,16 +14,15 @@ export type TSubscribe = "subscribe" | "unsubscribe";
 /** Accepted Http methods (complete list) */
 export type THttpMethods = "GET" | "PUT" | "POST" | "DELETE";
 
-/** Where a manifest item was sourced from */
-export type TManifestItemSource = "unset" | "store" | "cache" | "network";
-
-/** The current state of a given manifest item */
-export type TManifestItemStatus =
+/** The current state of a given publishable item in the cache */
+export type TItemCacheStatus =
     | "unset"
     | "empty"
-    | "prepped"
+    | "prepared"
     | "loading"
     | "ready";
+
+export type TItemStoreStatus = "unset" | "ready";
 
 export type TPageType =
     | "homepage"

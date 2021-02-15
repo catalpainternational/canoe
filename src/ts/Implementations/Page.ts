@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-    TAssetEntry,
-    TAssetEntryData,
-    TManifest,
-    TWagtailPageData,
-} from "ts/Types/ManifestTypes";
+import { TManifest } from "ts/Types/ManifestTypes";
+import { TWagtailPageData } from "ts/Types/PageTypes";
+import { TAssetEntry, TAssetEntryData } from "ts/Types/AssetTypes";
+
 import { PublishableItem } from "ts/Implementations/PublishableItem";
 import { Asset } from "ts/Implementations/Asset";
 
@@ -178,11 +176,8 @@ export class Page extends PublishableItem<TWagtailPageData> {
         }
 
         // Assets are not publishable on their own,
-        // so we test that they are availableOffline
-        const allAssetsAvailableOffline = this.#assets.every(
-            (asset) => this.assetInitialised(asset) && asset.isAvailableOffline
-        );
-        if (!allAssetsAvailableOffline) {
+        // Their isPublishable status is only relevant here
+        if (!this.#assets.every((asset) => asset.isPublishable)) {
             return false;
         }
 
@@ -208,11 +203,10 @@ export class Page extends PublishableItem<TWagtailPageData> {
     GetDataFromStore(): void {
         const pageData = getPageDataFromStore(this.id);
         if (pageData) {
-            this.source = "store";
-            this.status = "ready";
+            this.cacheStatus = "ready";
             this.data = pageData;
         } else {
-            this.status = "prepped";
+            this.cacheStatus = "prepared";
         }
     }
 
@@ -226,7 +220,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.data = await resp.json();
-        this.status = "ready";
+        this.cacheStatus = "ready";
 
         // And store the page data in Redux
         storePageData(this.id, this.data);
@@ -255,7 +249,9 @@ export class Page extends PublishableItem<TWagtailPageData> {
         if (assetFilled) {
             return pageAsset;
         }
-        const notInCache = ["prepped", "loading"].includes(pageAsset.status);
+        const notInCache = ["prepared", "loading"].includes(
+            pageAsset.cacheStatus
+        );
         if (notInCache) {
             if (await pageAsset.initialiseByRequest()) {
                 return pageAsset;
