@@ -52,8 +52,8 @@ export default class AllCoursesPage extends Page {
             if (
                 lastWorkedOnCourse &&
                 !course.isComplete &&
-                course.getLatestCompletion().completionDate <
-                    lastWorkedOnCourse.getLatestCompletion().completionDate
+                course.latestCompletion.completionDate <
+                    lastWorkedOnCourse.latestCompletion.completionDate
             ) {
                 continue;
             }
