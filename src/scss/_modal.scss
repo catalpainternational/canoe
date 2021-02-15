@@ -27,19 +27,20 @@
     }
 
     button {
-        margin-top: 1em;
+        margin: 1em 0;
     }
 
     p {
         margin: 0 0 1em;
         padding: 0 1.3em;
+        color: $gray-1;
     }
 
-    .correct-flag,
-    .incorrect-flag {
+    .incorrect-cross,
+    .correct-checkmark {
         width: 3.125em;
         height: 3.125em;
-        margin-top: 0.625em;
+        margin-top: 1em;
     }
 
     .cross.close-btn {
