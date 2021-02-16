@@ -45,7 +45,7 @@
             },
 
             completePage() {
-                // this.props.toggleModal(false, {});
+                this.props.toggleModal(false, {});
                 this.props.lesson.completeSection(this.props.module);
                 location.hash = this.props.lesson.loc_hash + ":test:feedback";
             },

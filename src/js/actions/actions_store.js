@@ -13,6 +13,7 @@ import {
 import { postAction, getActions } from "./actions_api";
 import { make_uuid32 } from "./make_uuid32";
 import { ON_ACTION_CHANGE } from "js/Events";
+import { isAuthenticated } from "ReduxImpl/Interface";
 
 const COMPLETION_ACTION_TYPE = "completion";
 const EXAM_ACTION_TYPE = "exam";
@@ -31,6 +32,11 @@ const storeAction = async (actionType, data) => {
         await writeAction(action);
     } catch (err) {
         console.error(err);
+    }
+
+    if (!isAuthenticated()) {
+        // don't continue to post the action if we are not logged in!
+        return;
     }
 
     try {
@@ -70,6 +76,10 @@ export function getCompletions() {
 }
 
 export function updateApi() {
+    if (!isAuthenticated()) {
+        // don't continue to post the action if we are not logged in!
+        return;
+    }
     // send any unsynced actions to the server
     unsyncedActions()
         .then((actions) => {
@@ -96,6 +106,11 @@ export function updateApi() {
 }
 
 export async function updateIdb() {
+    if (!isAuthenticated()) {
+        // don't continue to post the action if we are not logged in!
+        return;
+    }
+    
     // get server actions and ensure we have them in idb
     const actions = await getActions();
     for (const action of actions) {

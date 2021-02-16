@@ -7,28 +7,28 @@
 
     <div class="content-wrapper">
         <div>
-            <h2 id="coursePageTitle">{props.page.title}</h2>
+            <h2 id="coursePageTitle">{course.title}</h2>
         </div>
         <div class="lesson-swoop">
 
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
-            <LoadingDots if="{ !props.page.ready }" extrastyleclasses="dark"></LoadingDots>
-            <template if="{ props.page.ready }">
+            <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
+            <template if="{ course.ready }">
                 <div class="card-container">
-                    <p if="{! props.page.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
+                    <p if="{! course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
                     <Card
-                        each="{lesson in props.page.lessons}"
+                        each="{lesson in course.lessons}"
                         status="{lessonStatus(lesson)}"
                         title="{lesson.title}"
                         link="{lesson.loc_hash}"
                     ></Card>
                 </div>
-                <template if="{ props.page.hasExam }">
+                <template if="{ course.hasExam }">
                     <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                     <Card
                         title="{examTitle()}"
                         description="{examDescription()}"
-                        link="{ `${props.page.loc_hash}:exam` }"
+                        link="{ `${course.loc_hash}:exam` }"
                         status="{examStatus(props.wagtailPage)}"
                     ></Card>
                 </template>
@@ -42,13 +42,9 @@
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
-        import { isGuestUser } from "js/AuthenticationUtilities";
+        import { isAuthenticated, getRoute } from "ReduxImpl/Interface";
 
         function CoursePage() { return {
-            state: {
-                coursePageTitle: null,
-                lessons: [],
-            },
             TRANSLATIONS: {
                 no_lessons: () => gettext("There are no lessons yet in this course"),
                 your_lessons: () => gettext("Your lessons"),
@@ -56,22 +52,16 @@
                 highestScore: () => gettext("Highest score"),
             },
 
-            storeListener(previousStoreState, storeState) {
-                if (!this.state.pageReady && this.props.page.ready) {
-                    this.update({pageReady: true});
-                }
-            },
-
             onBeforeMount(props, state) {
-                state.pageReady = props.page.ready;
+                this.course = getRoute().page;
             },
 
             backToAllCourses() {
-                location.hash = "#";
+                location.hash = "";
             },
 
             examDescription() {
-                const course = this.props.page;
+                const course = this.course;
                 return (
                     course.hasUserTriedExam
                      ? `${this.TRANSLATIONS.highestScore()}: ${course.examHighScore}%`
@@ -82,11 +72,11 @@
             isExamEnabled() {
                 // Exams are enabled if you complete all lessons or if you are a
                 // guest user.
-                return this.props.page.allLessonsComplete || isGuestUser();
+                return this.course.allLessonsComplete || !isAuthenticated();
             },
 
             examTitle() {
-                let p = gettext("%1's Course Exam", this.props.page.title);
+                let p = gettext("%1's Course Exam", this.course.title);
                 return p;
             },
 
@@ -101,7 +91,7 @@
             },
 
             examStatus() {
-                if (this.props.page.isExamFinished) {
+                if (this.course.isExamFinished) {
                     return "complete";
                 } else if (!this.isExamEnabled()) {
                     return "disabled";

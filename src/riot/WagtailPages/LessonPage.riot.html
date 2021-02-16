@@ -3,48 +3,47 @@
         <a class="top-icon left has-circle" onclick="{backToCoursePage}">
             <span class="arrow"></span>
         </a>
-        <h4>{ props.lesson.title }</h4>
+        <h4>{ lesson.title }</h4>
     </TopMenu>
     <div class="content-wrapper">
-        <h3 id="lessonPageTitle">{props.lesson.title}</h3>
-        <template if="{ props.lesson.ready }">
-
-            <p>{props.lesson.shortDescription}</p>
-            <p if="{props.lesson.longDescription && state.showLongDescription}">
-                {props.lesson.longDescription}
+        <h3 id="lessonPageTitle">{lesson.title}</h3>
+        <template if="{ lesson.ready }">
+            <p>{lesson.shortDescription}</p>
+            <p if="{lesson.longDescription && state.showLongDescription}">
+                {lesson.longDescription}
             </p>
             <a
-                if="{props.lesson.longDescription && state.showLongDescription}"
+                if="{lesson.longDescription && state.showLongDescription}"
                 onclick="{toggleLessonDescription}"
                 >{ TRANSLATIONS.less() }</a
             >
             <a
-                if="{props.lesson.longDescription && !state.showLongDescription}"
+                if="{lesson.longDescription && !state.showLongDescription}"
                 onclick="{toggleLessonDescription}"
                 >{ TRANSLATIONS.more() }</a
             >
-            <div class="activity-swoop">
+            <div class="module-swoop">
                 <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
                 <div class="card-container">
                     <Card
-                        title="1. {props.lesson.objective.title}"
-                        link="{props.lesson.loc_hash}:{OBJECTIVES}:1"
+                        title="1. {lesson.objective.title}"
+                        link="{lesson.loc_hash}:{OBJECTIVES}:1"
                         status="{moduleStatus(OBJECTIVES)}"
                         class="objective-stock-image"
                     >
                     </Card>
 
                     <Card
-                        title="2. {props.lesson.content.title}"
-                        link="{props.lesson.loc_hash}:{CONTENT}:1"
+                        title="2. {lesson.content.title}"
+                        link="{lesson.loc_hash}:{CONTENT}:1"
                         status="{moduleStatus(CONTENT)}"
                         class="content-stock-image"
                     >
                     </Card>
 
                     <Card
-                        title="3. {props.lesson.test.title}"
-                        link="{props.lesson.loc_hash}:{TEST}:1"
+                        title="3. {lesson.test.title}"
+                        link="{lesson.loc_hash}:{TEST}:1"
                         status="{moduleStatus(TEST)}"
                         class="test-stock-image"
                     >
@@ -58,13 +57,11 @@
         import Card from "RiotTags/Components/Card.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
-        import { isComplete } from "Actions/completion";
+        import { getRoute } from "ReduxImpl/Interface";
 
         function LessonPage() { return {
             state: {
                 showLongDescription: false,
-                header: null,
-                lessonPageTitle: null,
             },
 
             TRANSLATIONS: {
@@ -77,6 +74,10 @@
             CONTENT: "content",
             TEST: "test",
 
+            onBeforeMount(props, state) {
+                this.lesson = getRoute().page;
+            },
+
             onMounted(props, state) {
                 this.disableBlockedLessonModules();
             },
@@ -86,7 +87,7 @@
             },
 
             backToCoursePage() {
-                location.hash = "#" + this.props.lesson.course.loc_hash;
+                location.hash = "#" + this.lesson.course.loc_hash;
             },
 
             toggleLessonDescription() {
@@ -98,7 +99,7 @@
             disableBlockedLessonModules() {
                 const ongoingCards = [...document.getElementsByClassName("ongoing")];
 
-                const isComingSoon = this.props.lesson.isComingSoon();
+                const isComingSoon = this.lesson.isComingSoon();
                 let sliceFrom = 1;
 
                 if (isComingSoon) {
@@ -113,7 +114,7 @@
 
             moduleStatus(module) {
                 if (
-                    this.props.lesson.isModuleComplete(
+                    this.lesson.isModuleComplete(
                         module
                     )
                 ) {
