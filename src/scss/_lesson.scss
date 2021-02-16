@@ -36,7 +36,8 @@ LessonPage {
 
 LessonFrame {
     .frame-background {
-        min-height: calc(100vh - #{$top-menu-height});
+        // the 10px adds some room for the stacked cards below
+        min-height: calc(100vh - #{$top-menu-height} - 10px);
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
@@ -61,14 +62,37 @@ LessonFrame {
         padding: 30px 20px;
         width: 100%;
         max-width: $tablet;
-        background-color: $white;
+        background-color: $gray-10;
         border-radius: 8px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
         box-sizing: border-box;
+        position: relative;
 
         @media only screen and (min-width: 610px) {
             margin: 0 auto 1.5em;
         }
+    }
+
+    .card-shadow {
+        background-color: $gray-10;
+        height: 20px;
+        width: 96%;
+        position: absolute;
+        bottom: -11px;
+        left: 2%;
+        border-radius: 7.5px;
+        z-index: -1;
+        box-shadow: 0 5px 10px 0 rgba(42,57,66,0.2);
+        opacity: 0.9;
+    }
+
+    .card-shadow:nth-child(3) {
+        width: 90%;
+        bottom: -21px;
+        z-index: -2;
+        left: 5%;
+        border-radius: 7px;
+        opacity: 0.55;
     }
 }
 
@@ -476,16 +500,6 @@ LessonFeedback {
         }
     }
 
-    .thank-you-container {
-        text-align: center;
-
-        .correct-flag {
-            height: 6em;
-            width: 6em;
-            margin: auto;
-        }
-    }
-
     // Pedro needs smaller buttons at 441px. Better to target an industry
     // breakpoint and add the extra pixels.
 
@@ -510,6 +524,12 @@ LessonFeedback {
 
     p {
         color: $gray-1;
+    }
+
+    .correct-flag {
+        height: 6em;
+        width: 6em;
+        margin: 2em auto;
     }
 }
 
