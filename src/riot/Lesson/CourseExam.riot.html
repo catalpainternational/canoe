@@ -1,16 +1,16 @@
 <CourseExam>
-    <LessonFrame if="{isAtHonorCode(state.cardIdx)}" linkTo="{props.wagtailPage.id}">
-        <HonorCode courseId="{props.wagtailPage.id}" minimumScore="{MINIMUM_SCORE}"></HonorCode>
+    <LessonFrame if="{ state.stage === 'code' }" linkTo="{ course.loc_hash }">
+        <HonorCode minimumScore="{ MINIMUM_SCORE }"></HonorCode>
     </LessonFrame>
     <LessonFrame
-        if="{state.cardIdx >= 0 && state.cardIdx < state.cards.length && state.card}"
+        if="{ state.card }"
         id="test"
         extraStyleClasses="test"
-        linkTo="{props.wagtailPage.id}"
-        progressValue="{state.cardIdx + 1}"
-        progressMax="{state.cards.length}"
+        linkTo="{ course.loc_hash }"
+        progressValue="{ state.cardNumber }"
+        progressMax="{ state.cards.length + 1 }"
     >
-        <h3>{state.cardIdx + 1}. {state.card.question}</h3>
+        <h3>{state.cardNumber }. {state.card.question}</h3>
         <TestSingleAnswer
             if="{state.card.type === SINGLE_CHOICE}"
             isCourseExam="{true}"
@@ -27,23 +27,23 @@
         ></TestMultipleAnswer>
         <div class="bottom-buttons">
             <div>
-                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{previousExamCard}">
+                <a if="{state.cardNumber > 1}" class="has-circle" onclick="{previousExamCard}">
                     <span class="arrow"></span>
                 </a>
             </div>
             <div>
                 <button
-                    if="{state.cardIdx < state.cards.length - 1}"
+                    if="{ state.cardNumber < state.cards.length }"
                     class="btn-primary"
-                    onclick="{nextExamCard}"
+                    onclick="{ nextExamCard }"
                     disabled="{Object.keys(state.currentAnswer).length === 0}"
                 >
                     { TRANSLATIONS.next() }
                 </button>
                 <button
-                    if="{state.cardIdx === state.cards.length - 1}"
+                    if="{ state.cardNumber === state.cards.length }"
                     class="btn-primary"
-                    onclick="{nextExamCard}"
+                    onclick="{ nextExamCard }"
                     disabled="{Object.keys(state.currentAnswer).length === 0}"
                 >
                     { TRANSLATIONS.submit() }
@@ -52,9 +52,9 @@
         </div>
     </LessonFrame>
     <ExamResults
-        if="{isAtResults(state.cardIdx)}"
-        course="{props.wagtailPage}"
-        title="{props.wagtailPage.title}"
+        if="{ state.stage === 'results' }"
+        course="{ this.course }"
+        title="{ this.course.title }"
         finalScore="{calculateFinalScore()}"
         minimumScore="{MINIMUM_SCORE}"
     ></ExamResults>
@@ -66,7 +66,8 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import HonorCode from "RiotTags/Lesson/HonorCode.riot.html";
 
-        import { getLessonCardIdx, getPreviousCardsUrl, getNextCardsUrl } from "js/Routing";
+        import { getRoute } from "ReduxImpl/Interface";
+
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
         import { URLDoesntExist, ExamIsMissingAnAnswer } from "js/Errors";
 
@@ -74,8 +75,6 @@
 
         export default {
             state: {
-                cardIdx: 0,
-                card: null,
                 currentAnswer: {},
             },
 
@@ -96,35 +95,35 @@
             SINGLE_CHOICE: "single_choice",
             SECTION: "exam",
 
-            onBeforeMount(props, state) {
-                window.addEventListener("hashchange", this.onHashChange);
-
-                const { cards } = props;
-                this.state.cards = cards;
-                this.shuffleCards(this.state.cards);
-
-                if (cards.length > 5) {
-                    this.state.cards = this.state.cards.slice(0, 5);
+            readState() {
+                const route = getRoute()
+                const stage = route.riotHash[1] || 'code';
+                const cardNumber = parseInt(stage);
+                this.state.cardNumber = cardNumber;
+                this.state.stage = stage;
+                if (this.state.cards === undefined && this.course.ready) {
+                    this.state.cards = this.shuffleCards(this.course.examCards).slice(0, 5);
+                }
+                if (this.state.cards && this.state.cardNumber) {
+                    this.state.card = this.state.cards[this.state.cardNumber - 1];
                 }
             },
 
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.onHashChange);
+            onBeforeMount(props, state) {
+                this.course = getRoute().page;
+                this.readState();
             },
 
-            onMounted(props, state) {
-                this.onHashChange();
+            onBeforeUpdate() {
+                this.readState();
             },
 
             shuffleCards(cards) {
-                cards.sort(() => Math.random() - 0.5);
+                return cards.slice().sort(() => Math.random() - 0.5);
             },
 
+                /*
             onHashChange() {
-                const cardIdx = getLessonCardIdx();
-                this.update({
-                    cardIdx,
-                });
 
                 if (this.isAtHonorCode(cardIdx) || this.isAtResults(cardIdx)) {
                     return;
@@ -144,7 +143,7 @@
                 });
 
                 window.scroll(0, 0);
-            },
+            },*/
 
             isAtHonorCode(cardIdx) {
                 return cardIdx === -1;
@@ -152,16 +151,6 @@
 
             isAtResults(cardIdx) {
                 return cardIdx === this.state.cards.length;
-            },
-
-            getCard(cardIdx) {
-                const card = this.state.cards[cardIdx];
-                if (!card) {
-                    throw new URLDoesntExist(
-                        `Cannot find exam question at ${window.location.hash}`
-                    );
-                }
-                return card;
             },
 
             recordAnswer(response) {
@@ -173,16 +162,14 @@
             },
 
             previousExamCard() {
-                const { wagtailPage } = this.props;
-                const { cardIdx } = this.state;
-                location.hash = getPreviousCardsUrl(wagtailPage.id, this.SECTION, cardIdx);
+                location.hash = `${this.course.loc_hash}:exam:${this.state.cardNumber - 1}`;
             },
 
             nextExamCard() {
-                const { wagtailPage } = this.props;
                 const { cardIdx, card, currentAnswer } = this.state;
                 ExamGrader.saveExamAnswer(card.id, currentAnswer);
-                location.hash = getNextCardsUrl(wagtailPage.id, this.SECTION, cardIdx);
+                location.hash = `${this.course.loc_hash}:exam:${this.state.cardNumber + 1}`;
+                //location.hash = getNextCardsUrl(wagtailPage.id, this.SECTION, cardIdx);
             },
 
             calculateFinalScore() {

@@ -19,7 +19,7 @@
                 this.readHash();
             },
             readHash() {
-                this.state.showExam = getRoute().riotHash === EXAM_MODULE;
+                this.state.showExam = getRoute().riotHash[0] === EXAM_MODULE;
             }
 
             /*
