@@ -18,11 +18,19 @@ let currentAuthenticatedState = false;
 
 export function initialiseCompletions() {
     currentAuthenticatedState = isAuthenticated();
-    if (currentAuthenticatedState) {
-        prepDataForAppLaunch();
-    }
 
-    subscribeToStore(storeListener);
+    updateIdb()
+        .then(pullCompletionsIntoMemory)
+        .then(pullExamDataIntoMemory)
+        .then(() => {
+            signalCompletionsAreReady();
+
+            if (isAuthenticated()) {
+                startUpdateApiPolling();
+            }
+
+            subscribeToStore(storeListener);
+        });
 };
 
 function storeListener() {
@@ -30,21 +38,15 @@ function storeListener() {
     if (newAuthenticationState !== currentAuthenticatedState) {
         currentAuthenticatedState = newAuthenticationState;
         if (newAuthenticationState) {
-            prepDataForAppLaunch();
+            startUpdateApiPolling();
         } else {
             clearAppData();
         }
     }
 }
 
-async function prepDataForAppLaunch() {
-    await updateIdb();
+async function startUpdateApiPolling() {
     completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
-
-    await pullCompletionsIntoMemory();
-    await pullExamDataIntoMemory();
-
-    signalCompletionsAreReady();
 }
 
 async function clearAppData() {

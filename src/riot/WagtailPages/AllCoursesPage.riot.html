@@ -14,40 +14,38 @@
         </TopMenu>
 
         <div class="content-wrapper">
-            <LoadingDots
-                if="{!state.pageReady}"
+            <LoadingDots if="{!page.ready}"
                 extrastyleclasses="dark"
             ></LoadingDots>
-            <template
-                if="{state.pageReady}">
+            <template if="{page.ready}">
 
                 <TagList
-                    if="{props.page.tags.length && state.showTagList}"
-                    tags="{props.page.tags}"
+                    if="{page.tags.length && state.showTagList}"
+                    tags="{page.tags}"
                     onTagClick="{onTagClick}"
                     selectedTags="{state.selectedTags}"
                 ></TagList>
-                <!--
-                <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
+
+                <template if="{page.currentCourse && !page.currentCourse.isComplete}">
                     <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
                     <Card
-                        status="{courseStatus(state.currentCourse)}"
-                        title="{state.currentCourse.title}"
-                        link="{state.currentCourse.id}"
-                        progressValue="{state.currentCourse.numberOfFinishedLessons}"
-                        progressMax="{state.currentCourse.numberOfLessons}"
+                        status="{courseStatus(page.currentCourse)}"
+                        title="{page.currentCourse.title}"
+                        link="{page.currentCourse.loc_hash}"
+                        progressValue="{page.currentCourse.numberOfFinishedLessons}"
+                        progressMax="{page.currentCourse.numberOfLessons}"
                     ></Card>
                 </template>
                 <h5
-                    if="{state.currentCourse && !state.currentCourse.isFinished()}"
+                    if="{page.currentCourse && !page.currentCourse.isComplete}"
                     class="section-title"
                 >
                     { TRANSLATIONS.allCourses() }
                 </h5>
-            -->
+
                 <div class="card-container">
                     <Card
-                        each="{course in props.page.coursesCompleteLast}"
+                        each="{course in page.coursesCompleteLast}"
                         if="{showCourse(course)}"
                         status="{courseStatus(course)}"
                         title="{course.title}"
@@ -56,9 +54,8 @@
                         progress-max="{course.numberOfLessons}"
                     ></Card>
                 </div>
-                <!--
-                <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
--->
+
+                <p if="{page.coursesCompleteLast.length === 0}">{ TRANSLATIONS.noCourses() }</p>
             </template>
         </div>
     </div>
@@ -71,10 +68,6 @@
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
-        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { ON_COMPLETION_CHANGE } from "js/Events";
-        import { getTagsFromPages, doPageTagsMatchSelections } from "js/SearchAndFiltering";
-        import { getCourseWithLatestCompletion } from "js/utilities";
 
         function AllCoursesPage() { return {
             state: {
@@ -94,18 +87,14 @@
                     ),
             },
 
-            storeListener(previousStoreState, storeState) {
-                if (!this.state.pageReady && this.props.page.ready) {
-                    this.update({pageReady: true});
-                }
-            },
-
             onBeforeMount(props, state) {
-                state.pageReady = props.page.ready;
+                this.page = getRoute().page;
             },
 
             showTagFilter() {
-                return this.state.pageReady && this.props.page.tags.length;
+                // we don't know the tags until the page data is available
+                // and we don't show the filter unless we have some tags
+                return this.page.ready && this.page.tags.length;
             },
 
             toggleTagList() {
@@ -126,7 +115,7 @@
                 return (
                     !this.state.showTagList
                     || !this.state.selectedTags.length
-                    || this.props.page.courseIdHasATagIn(course.id, this.state.selectedTags)
+                    || this.page.courseIdHasATagIn(course.id, this.state.selectedTags)
                 )
             },
 

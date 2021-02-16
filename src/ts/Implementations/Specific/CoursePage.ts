@@ -1,5 +1,13 @@
 import { Page } from "ts/Implementations/Page";
-import { getLatestCompletionInCourse } from "js/actions/completion";
+import {
+    getLatestCompletionInCourse,
+    getFinishedLessonSlugs,
+} from "js/actions/completion";
+import {
+    getExamHighScore as getHighScore,
+    hasUserTriedExam as hasTriedExam,
+} from "js/actions/exam";
+import ExamGrader from "js/ExamGrader";
 
 export default class CoursePage extends Page {
     get lessons(): any {
@@ -10,36 +18,43 @@ export default class CoursePage extends Page {
     }
 
     get hasExam(): boolean {
-        // NOT IMPLEMENTED
-        return true;
+        return this.data.has_exam;
     }
     get hasUserTriedExam(): boolean {
-        // NOT IMPLEMENTED
-        return true;
+        return hasTriedExam(this.slug);
     }
     get examHighScore(): number {
-        // NOT IMPLEMENTED
-        return 46;
+        return getHighScore(this.slug);
     }
     get allLessonsComplete(): boolean {
         // NOT IMPLEMENTED
         return true;
     }
     get isExamFinished(): boolean {
-        // NOT IMPLEMENTED
-        return true;
+        return ExamGrader.isExamFinished(this.slug);
     }
 
-    get currentCourse(): any {
-        return getLatestCompletionInCourse("d", ["D"]);
-    }
     get numberOfFinishedLessons(): number {
-        return 0;
+        const lessonSlugs = this.lessons.map((lesson: any) => lesson.slug);
+        if (this.hasExam) {
+            lessonSlugs.push("exam");
+        }
+        return getFinishedLessonSlugs(this.slug, lessonSlugs).length;
     }
     get numberOfLessons(): number {
-        return 3;
+        return this.lessons.length;
     }
-    isComplete(): boolean {
-        return true;
+    get isComplete(): boolean {
+        return (
+            !!this.numberOfLessons &&
+            this.numberOfFinishedLessons === this.numberOfLessons
+        );
+    }
+
+    get latestCompletion(): any {
+        return getLatestCompletionInCourse(
+            this.slug,
+            this.childPages.map((c) => c.slug)
+        );
     }
 }
