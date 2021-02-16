@@ -58,7 +58,7 @@ export class Manifest extends PublishableItem<TManifestData> {
         return "application/json";
     }
 
-    set isValid(value: boolean) {
+    SetIsValid(value: boolean): void {
         if (!this.isInitialised) {
             super.isValid = false;
             return;
@@ -84,11 +84,11 @@ export class Manifest extends PublishableItem<TManifestData> {
         super.isValid = !unMatchedChildren.size;
     }
 
-    set isAvailableOffline(value: boolean) {
+    SetIsAvailableOffline(value: boolean): void {
         super.isAvailableOffline = value && this.isValid;
     }
 
-    set isPublishable(value: boolean) {
+    SetIsPublishable(value: boolean): void {
         super.isPublishable = value && this.isValid;
     }
 

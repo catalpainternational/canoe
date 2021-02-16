@@ -134,13 +134,13 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return "application/json";
     }
 
-    set isValid(value: boolean) {
+    SetIsValid(value: boolean): void {
         const wagtailLoaded =
             !!this.data.data && !!this.data.id && !!this.data.title;
         super.isValid = wagtailLoaded && value;
     }
 
-    set isAvailableOffline(value: boolean) {
+    SetIsAvailableOffline(value: boolean): void {
         // Compare the number of assets defined in the manifest for this page
         // With the number of actual page objects
         if (this.manifestAssets.length !== this.#assets.length) {
@@ -166,7 +166,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
             this.#childPages.every((childPage) => childPage.isAvailableOffline);
     }
 
-    set isPublishable(value: boolean) {
+    SetIsPublishable(value: boolean): void {
         // Compare the number of assets defined in the manifest for this page
         // With the number of actual page objects
         if (this.assets.length !== this.#assets.length) {

@@ -66,9 +66,9 @@ export abstract class PublishableItem<T extends TPublishableItem>
         // Changing the version number will force a refresh of
         // isValid, isAvailableOffline and isPublishable
         const validVersion = this.#version >= 0;
-        this.isValid = validVersion;
-        this.isAvailableOffline = validVersion;
-        this.isPublishable = validVersion;
+        this.SetIsValid(validVersion);
+        this.SetIsAvailableOffline(validVersion);
+        this.SetIsPublishable(validVersion);
     }
 
     get api_url(): string {
@@ -116,6 +116,8 @@ export abstract class PublishableItem<T extends TPublishableItem>
         this.status.isValid = this.#version >= 0 && value;
     }
 
+    abstract SetIsValid(value: boolean): void;
+
     /** This is only a very basic check. */
     get isAvailableOffline(): boolean {
         return this.status.isAvailableOffline;
@@ -125,6 +127,8 @@ export abstract class PublishableItem<T extends TPublishableItem>
     set isAvailableOffline(value: boolean) {
         this.status.isAvailableOffline = value;
     }
+
+    abstract SetIsAvailableOffline(value: boolean): void;
 
     /** This is only a very basic check. */
     get isPublishable(): boolean {
@@ -138,6 +142,8 @@ export abstract class PublishableItem<T extends TPublishableItem>
         this.status.isPublishable =
             this.version >= 0 && this.#requestObjectClean && value;
     }
+
+    abstract SetIsPublishable(value: boolean): void;
 
     abstract get cacheKey(): string;
 
@@ -187,14 +193,14 @@ export abstract class PublishableItem<T extends TPublishableItem>
             this.#requestObject = srcReq;
 
             // Of itself, this item is now publishable
-            this.isPublishable = this.#requestObjectClean;
+            this.SetIsPublishable(this.#requestObjectClean);
             return;
         }
 
         this.#requestObjectCleaned = false;
         this.#requestObjectClean = false;
         // Of itself, this item is no longer publishable
-        this.isPublishable = this.#requestObjectClean;
+        this.SetIsPublishable(this.#requestObjectClean);
 
         const headers = new Headers();
         for (const key of srcReq.headers.keys()) {
@@ -298,7 +304,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
         await this.cache.put(this.#requestObject!, this.updatedResp);
         this.#requestObjectClean = true;
         // Of itself, this item is now publishable
-        this.isPublishable = this.#requestObjectClean;
+        this.SetIsPublishable(this.#requestObjectClean);
 
         return true;
     }
