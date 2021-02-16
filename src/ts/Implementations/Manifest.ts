@@ -117,10 +117,10 @@ export class Manifest extends PublishableItem<TManifestData> {
     GetDataFromStore(): void {
         const manifest = getManifestFromStore();
         if (manifest && JSON.stringify(manifest) !== "{}") {
-            this.cacheStatus = "ready";
+            this.status.cacheStatus = "ready";
             this.data = manifest;
         } else {
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
         }
     }
 
@@ -143,7 +143,7 @@ export class Manifest extends PublishableItem<TManifestData> {
 
         let cacheUpdated = false;
         if (this.data && this.isValid) {
-            this.cacheStatus = "ready";
+            this.status.cacheStatus = "ready";
             storeManifest(this.data);
             cacheUpdated = await this.updateCache();
         }

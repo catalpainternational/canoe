@@ -207,10 +207,10 @@ export class Page extends PublishableItem<TWagtailPageData> {
     GetDataFromStore(): void {
         const pageData = getPageDataFromStore(this.id);
         if (pageData) {
-            this.cacheStatus = "ready";
+            this.status.cacheStatus = "ready";
             this.data = pageData;
         } else {
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
         }
     }
 
@@ -224,7 +224,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.data = await resp.json();
-        this.cacheStatus = "ready";
+        this.status.cacheStatus = "ready";
 
         // And store the page data in Redux
         storePageData(this.id, this.data);
@@ -254,7 +254,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
             return pageAsset;
         }
         const notInCache = ["prepared", "loading"].includes(
-            pageAsset.cacheStatus
+            pageAsset.status.cacheStatus
         );
         if (notInCache) {
             if (await pageAsset.initialiseByRequest()) {

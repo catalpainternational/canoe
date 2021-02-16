@@ -1,7 +1,9 @@
 import { BACKEND_BASE_URL } from "js/urls";
 
-import { TItemCacheStatus, TItemStoreStatus } from "ts/Types/CanoeEnums";
-import { TPublishableItem, TPublishableItemStatus } from "ts/Types/PublishableItemTypes";
+import {
+    TPublishableItem,
+    TPublishableItemStatus,
+} from "ts/Types/PublishableItemTypes";
 import { TManifest } from "ts/Types/ManifestTypes";
 
 import { IPublishableItemState } from "ts/Interfaces/PublishableItemInterfaces";
@@ -92,7 +94,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
     abstract get manifestData(): T;
 
     get ready(): boolean {
-        return !!this.cacheStatus && this.cacheStatus === "ready";
+        return !!this.status.cacheStatus && this.status.cacheStatus === "ready";
     }
 
     /** This will do a basic integrity check. */
@@ -121,7 +123,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
         }
 
         // Is the item's status acceptable
-        return this.cacheStatus === "ready";
+        return this.status.cacheStatus === "ready";
     }
 
     /** This is only a very basic check.
@@ -141,7 +143,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
         }
 
         // Is the items's status acceptable
-        return this.cacheStatus === "ready";
+        return this.status.cacheStatus === "ready";
     }
 
     abstract get cacheKey(): string;
@@ -158,10 +160,10 @@ export abstract class PublishableItem<T extends TPublishableItem>
     GetStateFromStore(): void {
         const state = getPublishableItemStatus(this.id);
         if (state !== null) {
-            this.cacheStatus = "ready";
+            this.status.cacheStatus = "ready";
             // this.data = manifest;
         } else {
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
         }
     }
 
@@ -273,13 +275,13 @@ export abstract class PublishableItem<T extends TPublishableItem>
 
     async updateCache(): Promise<boolean> {
         if (!(await this.accessCache())) {
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
         let reqObj = await this.GetRequestObject();
         if (!reqObj) {
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
             if (this.fullUrl) {
                 reqObj = this.NewRequestObject;
                 this.CleanRequestObject(reqObj);
@@ -290,7 +292,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
             }
         }
 
-        this.cacheStatus = "loading";
+        this.status.cacheStatus = "loading";
 
         if (this.#requestObjectCleaned) {
             // Delete the existing cache entry first to ensure that the auth key gets 'lost'
@@ -311,13 +313,13 @@ export abstract class PublishableItem<T extends TPublishableItem>
     async initialiseFromCache(): Promise<boolean> {
         const cacheOpen = await this.accessCache();
         if (!cacheOpen || !this.api_url) {
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
         const reqObj = await this.GetRequestObject();
         if (!reqObj) {
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
             return false;
         }
         const reqUrl = new URL(reqObj.url);
@@ -325,26 +327,26 @@ export abstract class PublishableItem<T extends TPublishableItem>
         const version = parseInt(params.get("version") || "-1");
         this.#version = isNaN(version) ? -1 : version;
 
-        this.cacheStatus = "loading";
+        this.status.cacheStatus = "loading";
         const response = (await this.getFromCache())?.clone();
 
         if (!response) {
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
         const isInitialised = await this.initialiseFromResponse(response);
         if (isInitialised) {
-            this.cacheStatus = "ready";
+            this.status.cacheStatus = "ready";
         } else {
-            this.cacheStatus = "loading";
+            this.status.cacheStatus = "loading";
         }
         return isInitialised;
     }
 
     /** Initialise this item from a network request */
     async initialiseByRequest(): Promise<boolean> {
-        this.cacheStatus = "loading";
+        this.status.cacheStatus = "loading";
 
         const cacheOpen = await this.accessCache();
 
@@ -353,7 +355,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
 
         if (!cacheOpen) {
             // Couldn't get the cache open (this is a very unusual circumstance)
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
@@ -370,13 +372,13 @@ export abstract class PublishableItem<T extends TPublishableItem>
             // eslint-disable-next-line no-console
             console.error(tex);
 
-            this.cacheStatus = "prepared";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
         const isInitialised = await this.initialiseFromCache();
         if (isInitialised) {
-            this.cacheStatus = "ready";
+            this.status.cacheStatus = "ready";
         }
 
         return isInitialised;
