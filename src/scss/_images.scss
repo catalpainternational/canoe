@@ -195,12 +195,12 @@
     width: 17px;
 }
 
-.incorrect-flag {
-    @include unmaskable-icons-shared("~img/incorrect_flag.svg", contain);
+.incorrect-cross {
+    @include unmaskable-icons-shared("~img/incorrect_cross.svg", contain);
 }
 
-.correct-flag {
-    @include unmaskable-icons-shared("~img/correct_flag.svg", contain);
+.correct-checkmark {
+    @include unmaskable-icons-shared("~img/correct_checkmark.svg", contain);
 }
 
 %feedback-icons {
