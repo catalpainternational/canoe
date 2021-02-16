@@ -461,10 +461,6 @@ LessonFeedback {
                 }
             }
 
-            &.border-blue-1 {
-                border-color: 2px solid $app-accent-color;
-            }
-
             &:hover {
                 cursor: pointer;
             }
@@ -557,9 +553,26 @@ ExamResults {
             font-size: 1.2em;
         }
 
-        .btn-primary,
-        .btn-secondary {
+        p {
+            color: $gray-1;
+            margin: 0.5em 1em;
+        }
+
+        .btn-primary {
             margin-top: 1em;
+            width: 220px;
+            position: relative;
+
+            span {
+                @extend %chevron;
+                position: absolute;
+                right: 20px;
+            }
+        }
+
+        .btn-secondary {
+            margin-top: 1.5em;
+            width: 220px;
         }
     }
 
@@ -578,11 +591,6 @@ ExamResults {
     flex-direction: row;
     align-items: center;
     width: 100%;
-
-    .arrow {
-        display: inline-block;
-        position: relative;
-    }
 
     .btn-primary {
         min-width: 120px;
