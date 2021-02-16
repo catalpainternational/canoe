@@ -21,15 +21,6 @@
             readHash() {
                 this.state.showExam = getRoute().riotHash[0] === EXAM_MODULE;
             }
-
-            /*
-                const examCards = exam.map((card) => {
-                    const { id, type, value } = card;
-                    const { question, answers } = value;
-                    return { id, type, question, answers };
-                });
-                this.update({ examCards });
-            */
         }};
 
         CourseOverview.components = {
