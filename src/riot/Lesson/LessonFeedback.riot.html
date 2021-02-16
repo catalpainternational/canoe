@@ -30,12 +30,13 @@
                 <template if="{state.activeSelection}">
                     <button class="btn-primary" onclick="{clickedSubmit}">{ TRANSLATIONS.submit() }</button>
                 </template>
-                <button class="btn-secondary" onclick="{clickedNoThanks}">{ TRANSLATIONS.no() }</button>                
+                <button class="btn-secondary" onclick="{clickedNoThanks}">{ TRANSLATIONS.no() }</button>
             </div>
         </template>
         <template if="{state.madeFeedbackDecision}">
-            <div class="thank-you-container">
+            <div class="message-container">
                 <h3>{ TRANSLATIONS.sent() }</h3>
+                <h5>{ TRANSLATIONS.value_feedback() }</h5>
                 <div class="correct-flag"></div>
                 <p>{ TRANSLATIONS.feedback_sent() }</p>
             </div>
@@ -59,12 +60,13 @@
                         "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
                     ),
                 no: () => gettext("Maybe later"),
-                sent: () => gettext("Successfully sent!"),
+                sent: () => gettext("Thanks so much"),
                 continue: () => gettext("Continue"),
                 let_us_know: () => gettext("Let us know how you feel"),
                 not_great: () => gettext("Not great"),
                 good: () => gettext("Good"),
                 really_great: () => gettext("Really great!"),
+                value_feedback: () => gettext("We value your feedback"),
                 submit: () => gettext("Submit feedback"),
             },
             components: {
