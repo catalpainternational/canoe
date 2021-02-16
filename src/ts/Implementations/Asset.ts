@@ -144,9 +144,10 @@ export class Asset extends PublishableItem<TAssetEntry> {
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.#blob = await resp.blob();
-        this.status.cacheStatus = "ready";
+        this.status.cacheStatus = "loading";
 
         const cacheUpdated = await this.updateCache();
+
         return cacheUpdated && !!this.#blob;
     }
 

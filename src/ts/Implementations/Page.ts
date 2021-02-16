@@ -243,7 +243,6 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
         // Update the cached paged data
         const cacheUpdated = await this.updateCache();
-        this.status.cacheStatus = "ready";
 
         await this.loadAssets();
 

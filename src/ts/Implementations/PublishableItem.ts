@@ -47,7 +47,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
 
         if (!this.data) {
             this.data = this.emptyItem;
-            this.status.cacheStatus = "empty";
+            this.status.storeStatus = "unset";
         }
     }
 
@@ -242,6 +242,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
             : undefined;
     }
 
+    /** Updates the cache and ensures it is 'cleaned' ready for publishing */
     async updateCache(): Promise<boolean> {
         if (!(await this.accessCache())) {
             this.status.cacheStatus = "prepared";
@@ -272,6 +273,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         await this.cache.put(this.#requestObject!, this.updatedResp);
         this.#requestObjectClean = true;
+        this.status.cacheStatus = "ready";
 
         return true;
     }
