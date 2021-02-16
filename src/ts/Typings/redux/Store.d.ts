@@ -7,7 +7,9 @@ declare module "ReduxImpl/Store" {
 
     interface Store {
         dispatch(action: TPublishableItemStatusActionType): void;
-        getState(): { publishableItemStates: TPublishableItemStatus | unknown };
+        getState(): {
+            publishableItemStatuses: TPublishableItemStatus[] | unknown;
+        };
     }
 
     export const store: Store;

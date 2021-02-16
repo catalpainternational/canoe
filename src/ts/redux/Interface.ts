@@ -18,7 +18,7 @@ export const storePublishableItemStatus = (
 export const getPublishableItemStatus = (
     itemId: string
 ): TPublishableItemStatus | unknown => {
-    const publishableItemStatuses = store.getState().publishableItemStates;
+    const publishableItemStatuses = store.getState().publishableItemStatuses;
     if (publishableItemStatuses === null) {
         return publishableItemStatuses;
     }
@@ -34,7 +34,7 @@ export const getPublishableItemStatus = (
  * @returns each publishable item's status as an array
  */
 export const getPublishableItemStatuses = (): TPublishableItemStatus[] => {
-    const publishableItemStatuses = store.getState().publishableItemStates;
+    const publishableItemStatuses = store.getState().publishableItemStatuses;
     if (publishableItemStatuses === null) {
         return [];
     }

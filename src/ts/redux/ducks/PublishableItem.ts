@@ -1,7 +1,7 @@
 import { TPublishableItemStatus } from "src/ts/Types/PublishableItemTypes";
 
 // ACTIONS
-const ADDED_PUBLISHABLEITEM_STATUS = "site/addedPublishableItemState";
+const ADDED_PUBLISHABLEITEM_STATUS = "site/addedPublishableItemStatus";
 
 // ACTION TYPE
 export type TPublishableItemStatusActionType = {
