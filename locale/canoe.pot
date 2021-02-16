@@ -22,7 +22,7 @@ msgstr ""
 msgid "All courses"
 msgstr ""
 
-#: src/riot/Lesson/ExamResults.riot.html:49
+#: src/riot/Lesson/ExamResults.riot.html:41
 msgid "Amazing work!"
 msgstr ""
 
@@ -30,17 +30,17 @@ msgstr ""
 msgid "Are you enjoying this lesson?"
 msgstr ""
 
-#: src/riot/Lesson/ExamResults.riot.html:55
+#: src/riot/Lesson/ExamResults.riot.html:47
 #: src/riot/Lesson/HonorCode.riot.html:39
-#: src/riot/Lesson/LessonComplete.riot.html:50
+#: src/riot/Lesson/LessonComplete.riot.html:45
 msgid "Back to Course"
 msgstr ""
 
-#: src/riot/Lesson/ExamResults.riot.html:51
+#: src/riot/Lesson/ExamResults.riot.html:43
 msgid "Back to Courses"
 msgstr ""
 
-#: src/riot/Lesson/LessonModuleComplete.riot.html:22
+#: src/riot/Lesson/LessonModuleComplete.riot.html:24
 msgid "Back to lesson overview"
 msgstr ""
 
@@ -60,11 +60,11 @@ msgstr ""
 msgid "Code of conduct"
 msgstr ""
 
-#: src/riot/Lesson/LessonComplete.riot.html:46
+#: src/riot/Lesson/LessonComplete.riot.html:41
 msgid "Congratulations!"
 msgstr ""
 
-#: src/riot/Lesson/LessonModuleComplete.riot.html:18
+#: src/riot/Lesson/LessonModuleComplete.riot.html:20
 msgid "Content"
 msgstr ""
 
@@ -111,7 +111,7 @@ msgstr ""
 msgid "Good"
 msgstr ""
 
-#: src/riot/Lesson/LessonComplete.riot.html:48
+#: src/riot/Lesson/LessonComplete.riot.html:43
 msgid "Good job!"
 msgstr ""
 
@@ -120,7 +120,7 @@ msgstr ""
 msgid "Great"
 msgstr ""
 
-#: src/riot/Lesson/LessonModuleComplete.riot.html:20
+#: src/riot/Lesson/LessonModuleComplete.riot.html:22
 msgid "Great job!"
 msgstr ""
 
@@ -144,7 +144,7 @@ msgstr ""
 msgid "In the meantime please use Safari."
 msgstr ""
 
-#: src/riot/Lesson/LessonModuleComplete.riot.html:21
+#: src/riot/Lesson/LessonModuleComplete.riot.html:23
 msgid "Keep going"
 msgstr ""
 
@@ -200,7 +200,7 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: src/riot/Lesson/LessonComplete.riot.html:47
+#: src/riot/Lesson/LessonComplete.riot.html:42
 msgid "Next Lesson"
 msgstr ""
 
@@ -224,7 +224,7 @@ msgstr ""
 msgid "Not great"
 msgstr ""
 
-#: src/riot/Lesson/ExamResults.riot.html:53
+#: src/riot/Lesson/ExamResults.riot.html:45
 msgid "Not quite!"
 msgstr ""
 
@@ -232,7 +232,7 @@ msgstr ""
 msgid "Notifications"
 msgstr ""
 
-#: src/riot/Lesson/LessonModuleComplete.riot.html:17
+#: src/riot/Lesson/LessonModuleComplete.riot.html:19
 #: src/riot/Lesson/LessonObjective.riot.html:63
 msgid "Objectives"
 msgstr ""
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Resources"
 msgstr ""
 
-#: src/riot/Lesson/ExamResults.riot.html:54
+#: src/riot/Lesson/ExamResults.riot.html:46
 msgid "Retake Exam"
 msgstr ""
 
@@ -315,24 +315,24 @@ msgstr ""
 msgid "Start lesson"
 msgstr ""
 
+#: src/riot/Lesson/LessonFeedback.riot.html:70
+msgid "Submit"
+msgstr ""
+
 #: src/riot/Lesson/CourseExam.riot.html:92
 msgid "Submit answers"
 msgstr ""
 
-#: src/riot/Lesson/LessonFeedback.riot.html:70
-msgid "Submit feedback"
-msgstr ""
-
-#: src/riot/Lesson/LessonComplete.riot.html:49
+#: src/riot/Lesson/LessonComplete.riot.html:44
 msgid "Take Exam"
 msgstr ""
 
 #. message on completion of lesson and prompt to take course exam
-#: src/riot/Lesson/LessonComplete.riot.html:92
+#: src/riot/Lesson/LessonComplete.riot.html:87
 msgid "Take the exam now to complete the course \"%1\""
 msgstr ""
 
-#: src/riot/Lesson/LessonModuleComplete.riot.html:19
+#: src/riot/Lesson/LessonModuleComplete.riot.html:21
 msgid "Test"
 msgstr ""
 
@@ -381,7 +381,7 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: src/riot/Lesson/ExamResults.riot.html:52
+#: src/riot/Lesson/ExamResults.riot.html:44
 msgid "View Resources"
 msgstr ""
 
@@ -407,17 +407,17 @@ msgid "Yes, I agree"
 msgstr ""
 
 #. message when user did not pass exam
-#: src/riot/Lesson/ExamResults.riot.html:95
+#: src/riot/Lesson/ExamResults.riot.html:87
 msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later."
 msgstr ""
 
 #. message on completion of a lesson %1 is replaced by the lesson title
-#: src/riot/Lesson/LessonComplete.riot.html:87
+#: src/riot/Lesson/LessonComplete.riot.html:82
 msgid "You just completed the lesson \"%1\""
 msgstr ""
 
 #. message when user passed the exam
-#: src/riot/Lesson/ExamResults.riot.html:87
+#: src/riot/Lesson/ExamResults.riot.html:79
 msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
 msgstr ""
 
@@ -430,16 +430,16 @@ msgid "You're logging in as a guest"
 msgstr ""
 
 #. message to say what module is next ( %1 is content or test )
-#: src/riot/Lesson/LessonModuleComplete.riot.html:43
+#: src/riot/Lesson/LessonModuleComplete.riot.html:45
 msgid "You're ready to start the %1"
 msgstr ""
 
 #. message on completing objectives, content or test ( %1 )
-#: src/riot/Lesson/LessonModuleComplete.riot.html:35
+#: src/riot/Lesson/LessonModuleComplete.riot.html:37
 msgid "You've completed the %1"
 msgstr ""
 
-#: src/riot/Lesson/ExamResults.riot.html:50
+#: src/riot/Lesson/ExamResults.riot.html:42
 msgid "You've completed the course"
 msgstr ""
 

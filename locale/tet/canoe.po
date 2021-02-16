@@ -237,10 +237,10 @@ msgstr "Komesa Ezame"
 msgid "Start lesson"
 msgstr "Komesa lisaun"
 
-msgid "Submit answers"
+msgid "Submit"
 msgstr "Submete"
 
-msgid "Submit"
+msgid "Submit answers"
 msgstr "Submete"
 
 msgid "Take Exam"
