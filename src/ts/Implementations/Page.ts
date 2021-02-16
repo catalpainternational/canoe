@@ -85,7 +85,15 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     get version(): number {
-        return this.manifestData?.version || 0;
+        if (super.version === -1) {
+            this.version = this.manifestData?.version || 0;
+        }
+
+        return super.version;
+    }
+
+    set version(value: number) {
+        super.version = value;
     }
 
     get api_url(): string {

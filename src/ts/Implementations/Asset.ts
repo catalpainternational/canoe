@@ -31,11 +31,16 @@ export class Asset extends PublishableItem<TAssetEntry> {
         this.#pageCache = pageCache;
     }
 
+    /** Assets don't have a version as such */
+    get version(): number {
+        return super.version;
+    }
+
     /** Assets don't have a version as such,
      * we set them to a +ve value if they are `ready`.
      * This ensure that isAvailableOffline will work correctly. */
-    get version(): number {
-        return this.ready ? 1 : -1;
+    set version(value: number) {
+        super.version = this.ready ? 1 : -1;
     }
 
     get pageId(): string {
