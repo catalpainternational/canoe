@@ -4,12 +4,12 @@
         <TopMenu extrastyleclasses="with-swoop">
             <h3>{ TRANSLATIONS.allCourses() }</h3>
             <div class="filter-copy-container">
-              <p>{ TRANSLATIONS.coursesIntro() }</p>
-              <a
+                <p>{ TRANSLATIONS.coursesIntro() }</p>
+                <a
                   if="{Array.isArray(state.sortedListOfCourses) && state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 }"
                   class="filter-icon"
                   onclick="{toggleTagList}"
-              ></a>
+                ></a>
             </div>
         </TopMenu>
 

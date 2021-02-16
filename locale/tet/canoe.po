@@ -78,9 +78,6 @@ msgstr "Download PDF ne’e ba ita nian telemovel"
 msgid "Explore a range of courses to suit your needs, expertise, and interests."
 msgstr "Esplora kursu sira ne'ebé tuir ita-nia presiza, espesialidadi no interese"
 
-msgid "FEEDBACK"
-msgstr "Komentáriu"
-
 msgid "Find and check all correct answers and uncheck incorrect answers"
 msgstr "Buka no hili resposta hotu ne’ebé lo’os"
 
@@ -89,6 +86,9 @@ msgstr "Remata"
 
 msgid "Forgot username or password?"
 msgstr "Haluha uzuáriu ka seña?"
+
+msgid "Good"
+msgstr "Di'ak"
 
 msgid "Good job!"
 msgstr "Serbisu di'ak tebes!"
@@ -132,6 +132,9 @@ msgstr "lisaun sira ne'ebé kompleta ona"
 msgid "lessons remaining"
 msgstr "lisaun ne'ebé seidauk remata "
 
+msgid "Let us know how you feel"
+msgstr "Favor dehan mai saida mak ita sente"
+
 msgid "Log out"
 msgstr "Sai"
 
@@ -140,6 +143,9 @@ msgstr "Tama"
 
 msgid "Login as a guest"
 msgstr "Tama nu’udar bainaka deit"
+
+msgid "Maybe later"
+msgstr "Karik orasida"
 
 msgid "Need help?"
 msgstr "Presiza ajuda?"
@@ -159,11 +165,11 @@ msgstr "Tamba ita asesu app ne'e nu’udar bainaka, progresu aprendizajen sira n
 msgid "No notifications."
 msgstr "La iha notifikasaun. "
 
-msgid "No thanks"
-msgstr "Lae, Obrigado. "
-
 msgid "No WhatsApp?"
 msgstr "Laiha WhatsApp?"
+
+msgid "Not great"
+msgstr "Ladi'ak"
 
 msgid "Not quite!"
 msgstr "Resposta ne'e ladun lo'os ida!"
@@ -182,6 +188,9 @@ msgstr "Seña "
 
 msgid "Read the question more carefully!"
 msgstr "Koko lee didi'ak ninia pergunta"
+
+msgid "Really great!"
+msgstr "Di'ak loos!"
 
 msgid "Resources"
 msgstr "Rekursu"
@@ -231,8 +240,8 @@ msgstr "Komesa lisaun"
 msgid "Submit answers"
 msgstr "Submete"
 
-msgid "Successfully sent!"
-msgstr "Komentáriu manda ona ho susesu!"
+msgid "Submit feedback"
+msgstr "Hatama komentáriu"
 
 msgid "Take Exam"
 msgstr "Foti Ezame"
@@ -246,6 +255,9 @@ msgstr "Teste"
 
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
 msgstr "Obrigado ba ita nia komentáriu. Ita nia opiniaun importante ba ami no ami servisu atu hadiak ita-nia esperiensia."
+
+msgid "Thanks so much"
+msgstr "Obrigado barak"
 
 msgid "There are no courses yet. Check back soon!"
 msgstr "Seidauk iha kursu. Favor cek fila fali iha tempu badak!"
@@ -278,6 +290,9 @@ msgstr "Uzuáriu"
 msgid "View Resources"
 msgstr "Haree Rekursu"
 
+msgid "We value your feedback"
+msgstr "Ami apresia ita-nia komentáriu"
+
 msgid "We value your feedback and all feedback is confidential."
 msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál"
 
@@ -309,7 +324,7 @@ msgid "You're logging in as a guest"
 msgstr "Ita asesu hela app ne'e nu’udar bainaka"
 
 #. message to say what module is next ( %1 is content or test )
-msgid "You're ready to start the %1."
+msgid "You're ready to start the %1"
 msgstr "Ita prontu atu hahú %1"
 
 #. message on completing objectives, content or test ( %1 )
@@ -339,6 +354,15 @@ msgstr "Ita-nia konfigurasaun"
 
 msgid "Your username or password is incorrect"
 msgstr "Haluha uzuáriu ka seña?"
+
+#~ msgid "FEEDBACK"
+#~ msgstr "Komentáriu"
+
+#~ msgid "No thanks"
+#~ msgstr "Lae, Obrigado. "
+
+#~ msgid "Successfully sent!"
+#~ msgstr "Komentáriu manda ona ho susesu!"
 
 #~ msgid "Language"
 #~ msgstr "Lian"
