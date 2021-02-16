@@ -49,26 +49,10 @@ export abstract class PublishableItem<T extends TPublishableItem>
             this.data = this.emptyItem;
             this.status.cacheStatus = "empty";
         }
-        if (this.version < 0) {
-            // Trigger all the is* status values to be (re)set
-            const invalidVersion = this.version;
-            this.version = invalidVersion;
-        }
     }
 
     get version(): number {
         return this.#version || -1;
-    }
-
-    set version(value: number) {
-        this.#version = value;
-
-        // Changing the version number will force a refresh of
-        // isValid, isAvailableOffline and isPublishable
-        const validVersion = this.#version >= 0;
-        this.SetIsValid(validVersion);
-        this.SetIsAvailableOffline(validVersion);
-        this.SetIsPublishable(validVersion);
     }
 
     get api_url(): string {
@@ -83,6 +67,9 @@ export abstract class PublishableItem<T extends TPublishableItem>
             api_url: "",
             fullUrl: "",
             status: this.status.emptyStatus,
+            isValid: false,
+            isAvailableOffline: false,
+            isPublishable: false,
             contentType: "",
         } as unknown) as T;
     }
@@ -108,42 +95,29 @@ export abstract class PublishableItem<T extends TPublishableItem>
 
     /** This will do a basic integrity check. */
     get isValid(): boolean {
-        return this.status.isValid;
+        if (!this.statusId) {
+            return false;
+        }
+
+        // Is the item's status acceptable
+        if (["unset", "empty", "prepped"].includes(this.status.cacheStatus)) {
+            return false;
+        }
+
+        return this.status.storeStatus !== "unset";
     }
 
-    /** `super` this in the derived class to test isValid from additional class members */
-    set isValid(value: boolean) {
-        this.status.isValid = this.#version >= 0 && value;
-    }
-
-    abstract SetIsValid(value: boolean): void;
-
-    /** This is only a very basic check. */
+    /** This is only a very basic check.
+     * Implementing classes must call this via super, and extend to meet their requirements. */
     get isAvailableOffline(): boolean {
-        return this.status.isAvailableOffline;
+        return this.isValid && this.version >= 0;
     }
 
-    /** `super` this in the derived class to set isAvailableOffline from various class members */
-    set isAvailableOffline(value: boolean) {
-        this.status.isAvailableOffline = value;
-    }
-
-    abstract SetIsAvailableOffline(value: boolean): void;
-
-    /** This is only a very basic check. */
+    /** This is only a very basic check.
+     * Implementing classes must call this via super, and extend to meet their requirements. */
     get isPublishable(): boolean {
-        return this.status.isPublishable;
+        return this.isValid && this.version >= 0 && this.#requestObjectClean;
     }
-
-    /** `super` this in the derived class to set isPublishable from various class members */
-    set isPublishable(value: boolean) {
-        // Has the item's cache entry and its request header been cleaned of auth data
-        // and is the version number OK
-        this.status.isPublishable =
-            this.version >= 0 && this.#requestObjectClean && value;
-    }
-
-    abstract SetIsPublishable(value: boolean): void;
 
     abstract get cacheKey(): string;
 
@@ -191,16 +165,11 @@ export abstract class PublishableItem<T extends TPublishableItem>
             this.#requestObjectCleaned = false;
             this.#requestObjectClean = true;
             this.#requestObject = srcReq;
-
-            // Of itself, this item is now publishable
-            this.SetIsPublishable(this.#requestObjectClean);
             return;
         }
 
         this.#requestObjectCleaned = false;
         this.#requestObjectClean = false;
-        // Of itself, this item is no longer publishable
-        this.SetIsPublishable(this.#requestObjectClean);
 
         const headers = new Headers();
         for (const key of srcReq.headers.keys()) {
@@ -303,8 +272,6 @@ export abstract class PublishableItem<T extends TPublishableItem>
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         await this.cache.put(this.#requestObject!, this.updatedResp);
         this.#requestObjectClean = true;
-        // Of itself, this item is now publishable
-        this.SetIsPublishable(this.#requestObjectClean);
 
         return true;
     }
@@ -328,7 +295,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
         const reqUrl = new URL(reqObj.url);
         const params = reqUrl.searchParams;
         const version = parseInt(params.get("version") || "-1");
-        this.version = isNaN(version) ? -1 : version;
+        this.#version = isNaN(version) ? -1 : version;
 
         this.status.cacheStatus = "loading";
         const response = (await this.getFromCache())?.clone();

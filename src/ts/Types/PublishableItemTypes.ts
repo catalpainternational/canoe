@@ -11,6 +11,18 @@ export type TPublishableItem = {
 
 /** Describe the status of the manifest, page or asset item */
 export type TPublishableItemStatus = {
+    /** What is the state of this manifest, page or asset item within the cache? */
+    cacheStatus: TItemCacheStatus;
+
+    /** What is the state of this manifest, page or asset item within the redux store? */
+    storeStatus: TItemStoreStatus;
+};
+
+/** Describe the state of a manifest, page or asset item */
+export type TPublishableItemState = {
+    /** The composite status of this item */
+    status: TPublishableItemStatus;
+
     /** Is this manifest, page or asset item valid? */
     isValid: boolean;
 
@@ -25,18 +37,6 @@ export type TPublishableItemStatus = {
      * @returns true is this item itself is complete - all descendant pages and assets are in the cache
      */
     isPublishable: boolean;
-
-    /** What is the state of this manifest, page or asset item within the cache? */
-    cacheStatus: TItemCacheStatus;
-
-    /** What is the state of this manifest, page or asset item within the redux store? */
-    storeStatus: TItemStoreStatus;
-};
-
-/** Describe the state of a manifest, page or asset item */
-export type TPublishableItemState = {
-    /** The composite status of this item */
-    status: TPublishableItemStatus;
 
     /** The fullUrl of this item that can be used to build a fetch Request object for it */
     fullUrl: string;

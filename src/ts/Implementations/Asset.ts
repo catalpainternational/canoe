@@ -31,16 +31,11 @@ export class Asset extends PublishableItem<TAssetEntry> {
         this.#pageCache = pageCache;
     }
 
-    /** Assets don't have a version as such */
-    get version(): number {
-        return super.version;
-    }
-
     /** Assets don't have a version as such,
      * we set them to a +ve value if they are `ready`.
      * This ensure that isAvailableOffline will work correctly. */
-    set version(value: number) {
-        super.version = this.ready ? 1 : -1;
+    get version(): number {
+        return this.ready ? 1 : -1;
     }
 
     get pageId(): string {
@@ -112,22 +107,11 @@ export class Asset extends PublishableItem<TAssetEntry> {
         return contentType;
     }
 
-    SetIsValid(value: boolean): void {
-        // Call straight back to the base class isValid setter
-        super.isValid = value;
-    }
-
-    SetIsAvailableOffline(value: boolean): void {
-        // Call straight back to the base class isAvailableOffline setter
-        super.isAvailableOffline = value;
-    }
-
     /** An Asset is not publishable on its own.
-     * So this value is only relevant to this asset's parent page.
+     * So its isPublishable value is only relevant to its parent page.
      */
-    SetIsPublishable(value: boolean): void {
-        // Call straight back to the base class isAvailableOffline setter
-        super.isPublishable = value;
+    get isPublishable(): boolean {
+        return super.isPublishable;
     }
 
     get emptyItem(): TAssetEntry {

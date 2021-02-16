@@ -58,15 +58,16 @@ export class Manifest extends PublishableItem<TManifestData> {
         return "application/json";
     }
 
-    SetIsValid(value: boolean): void {
-        if (!this.isInitialised) {
-            super.isValid = false;
-            return;
+    /** This is a basic integrity check.  It ensures that:
+     * - All child pages have matching page entries
+     */
+    get isValid(): boolean {
+        if (!super.isValid) {
+            return false;
         }
 
-        if (!value) {
-            super.isValid = false;
-            return;
+        if (!this.isInitialised) {
+            return false;
         }
 
         const allPageNames = new Set(Object.keys(this.pages));
@@ -81,15 +82,15 @@ export class Manifest extends PublishableItem<TManifestData> {
             [...childPageNames].filter((x) => !allPageNames.has(x))
         );
 
-        super.isValid = !unMatchedChildren.size;
+        return !unMatchedChildren.size;
     }
 
-    SetIsAvailableOffline(value: boolean): void {
-        super.isAvailableOffline = value && this.isValid;
+    get isAvailableOffline(): boolean {
+        return this.isValid;
     }
 
-    SetIsPublishable(value: boolean): void {
-        super.isPublishable = value && this.isValid;
+    get isPublishable(): boolean {
+        return this.isValid;
     }
 
     get languageCodes(): string[] {

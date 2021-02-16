@@ -29,10 +29,10 @@ function buildFakeManifestEntry(
         status: {
             cacheStatus: "ready",
             storeStatus: "ready",
-            isValid: true,
-            isAvailableOffline: true,
-            isPublishable: true,
         },
+        isValid: true,
+        isAvailableOffline: true,
+        isPublishable: true,
         cache: new Cache(),
         cacheKey: "",
     };
@@ -64,10 +64,10 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
         status: {
             cacheStatus: "ready",
             storeStatus: "ready",
-            isValid: true,
-            isAvailableOffline: true,
-            isPublishable: true,
         },
+        isValid: true,
+        isAvailableOffline: true,
+        isPublishable: true,
         cache: new Cache(),
         cacheKey: "",
     };

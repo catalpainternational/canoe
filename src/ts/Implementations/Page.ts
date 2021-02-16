@@ -85,15 +85,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     get version(): number {
-        if (super.version === -1) {
-            this.version = this.manifestData?.version || 0;
-        }
-
-        return super.version;
-    }
-
-    set version(value: number) {
-        super.version = value;
+        return this.manifestData?.version || -1;
     }
 
     get api_url(): string {
@@ -134,58 +126,71 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return "application/json";
     }
 
-    SetIsValid(value: boolean): void {
-        const wagtailLoaded =
-            !!this.data.data && !!this.data.id && !!this.data.title;
-        super.isValid = wagtailLoaded && value;
+    /** This will do a basic integrity check.
+     * version is not < 0, wagtail data loaded
+     */
+    get isValid(): boolean {
+        if (!super.isValid) {
+            return false;
+        }
+
+        if (this.version < 0) {
+            return false;
+        }
+
+        // Has the wagtail version of this page been loaded
+        return !!this.data.data && !!this.data.id && !!this.data.title;
     }
 
-    SetIsAvailableOffline(value: boolean): void {
+    get isAvailableOffline(): boolean {
+        if (!super.isAvailableOffline) {
+            return false;
+        }
+
         // Compare the number of assets defined in the manifest for this page
         // With the number of actual page objects
         if (this.manifestAssets.length !== this.#assets.length) {
-            super.isAvailableOffline = false;
-            return;
+            return false;
         }
 
         if (this.manifestAssets.length === 0 && this.#childPages.length === 0) {
-            super.isAvailableOffline = true;
-            return;
+            return true;
         }
 
         const allAssetsAvailableOffline = this.#assets.every(
             (asset) => this.assetInitialised(asset) && asset.isAvailableOffline
         );
         if (!allAssetsAvailableOffline) {
-            super.isAvailableOffline = false;
-            return;
+            return false;
         }
 
-        super.isAvailableOffline =
-            value &&
-            this.#childPages.every((childPage) => childPage.isAvailableOffline);
+        return this.#childPages.every(
+            (childPage) => childPage.isAvailableOffline
+        );
     }
 
-    SetIsPublishable(value: boolean): void {
+    get isPublishable(): boolean {
+        if (!super.isPublishable) {
+            return false;
+        }
+
         // Compare the number of assets defined in the manifest for this page
         // With the number of actual page objects
         if (this.manifestAssets.length !== this.#assets.length) {
-            super.isPublishable = false;
+            return false;
         }
 
         if (this.manifestAssets.length === 0 && this.#childPages.length === 0) {
-            super.isPublishable = true;
+            return true;
         }
 
         // Assets are not publishable on their own,
         // Their isPublishable status is only relevant here
         if (!this.#assets.every((asset) => asset.isPublishable)) {
-            super.isPublishable = false;
+            return false;
         }
 
-        super.isPublishable =
-            value &&
-            this.#childPages.every((childPage) => childPage.isPublishable);
+        return this.#childPages.every((childPage) => childPage.isPublishable);
     }
 
     get emptyItem(): TWagtailPageData {
