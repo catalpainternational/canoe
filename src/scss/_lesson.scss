@@ -533,9 +533,26 @@ ExamResults {
             font-size: 1.2em;
         }
 
-        .btn-primary,
-        .btn-secondary {
+        p {
+            color: $gray-1;
+            margin: 0.5em 1em;
+        }
+
+        .btn-primary {
             margin-top: 1em;
+            width: 220px;
+            position: relative;
+
+            span {
+                @extend %chevron;
+                position: absolute;
+                right: 20px;
+            }
+        }
+
+        .btn-secondary {
+            margin-top: 1.5em;
+            width: 220px;
         }
     }
 

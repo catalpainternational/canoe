@@ -238,6 +238,12 @@
     @include mask-icons-shared("~img/film.svg", contain, $gray-3);
 }
 
+%chevron {
+    @include mask-icons-shared("~img/chevron_right.svg", contain, $white);
+    height: 15px;
+    width: 15px;
+}
+
 // Icons for card status
 %status-play {
     background-color: $blue;
@@ -246,10 +252,7 @@
     box-sizing: border-box;
 
     span {
-        @include mask-icons-shared("~img/chevron_right.svg", contain, $gray-3);
-        background-color: $white;
-        height: 15px;
-        width: 15px;
+        @extend %chevron;
         margin: auto;
     }
 }

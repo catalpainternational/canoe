@@ -9,6 +9,7 @@
                 </div>
                 <button class="btn-primary" onclick="{goToCourseOverview}">
                     { TRANSLATIONS.next() }
+                    <span></span>
                 </button>
             </template>
             <template if="{isCourseComplete()}">
@@ -19,6 +20,7 @@
                 </div>
                 <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
                     { TRANSLATIONS.exam() }
+                    <span></span>
                 </button>
                 <button class="btn-secondary" onclick="{goToCourseOverview}">
                     { TRANSLATIONS.course() }
