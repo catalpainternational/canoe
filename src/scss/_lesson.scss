@@ -462,10 +462,6 @@ LessonFeedback {
                 }
             }
 
-            &.border-blue-1 {
-                border-color: 2px solid $app-accent-color;
-            }
-
             &:hover {
                 cursor: pointer;
             }
@@ -521,7 +517,7 @@ LessonFeedback {
         color: $gray-1;
     }
 
-    .correct-flag {
+    .correct-checkmark {
         height: 6em;
         width: 6em;
         margin: 2em auto;
@@ -548,15 +544,34 @@ ExamResults {
             font-size: 1.2em;
         }
 
-        .btn-primary,
-        .btn-secondary {
+        p {
+            color: $gray-1;
+            margin: 0.5em 1em;
+        }
+
+        .btn-primary {
             margin-top: 1em;
+            width: 220px;
+            position: relative;
+
+            span {
+                @extend %chevron;
+                position: absolute;
+                right: 20px;
+            }
+        }
+
+        .btn-secondary {
+            margin-top: 1.5em;
+            width: 220px;
         }
     }
 
-    .incorrect-flag {
-        height: 150px;
-        width: 150px;
+    .incorrect-cross {
+        height: 40px;
+        width: 40px;
+        display: block;
+        margin: 1em auto;
     }
 }
 

@@ -19,10 +19,6 @@ TopMenu {
         margin: auto;
     }
 
-    .has-circle {
-        @extend %has-circle;
-    }
-
     h4 {
         text-align: center;
         color: $gray-3;

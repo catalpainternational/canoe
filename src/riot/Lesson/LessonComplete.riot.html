@@ -1,49 +1,38 @@
 <LessonComplete>
-    <LessonFrame linkTo="{props.course.id}">
-        <span class="confetti"></span>
-        <template if="{state.lessonSlugs.length}">
-            <div class="congratulations-container">
-                <template if="{!isCourseComplete()}">
-                    <div>
-                        <h2>{ TRANSLATIONS.congrats() }</h2>
-                        <p>{ lessonCompleteMessage() }</p>
-                    </div>
-                </template>
-                <template if="{isCourseComplete()}">
-                    <div>
-                        <h2>{ TRANSLATIONS.good() }</h2>
-                        <p>{ lessonCompleteMessage() }</p>
-                        <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
-                    </div>
-                </template>
-            </div>
-        </template>
-    </LessonFrame>
-        <template if="{state.lessonSlugs.length}">
-            <div if="{!isCourseComplete()}" class="bottom-buttons">
+    <template if="{state.lessonSlugs.length}">
+        <div class="congratulations-container">
+            <span class="superman-success"></span>
+            <template if="{!isCourseComplete()}">
+                <div>
+                    <h2>{ TRANSLATIONS.congrats() }</h2>
+                    <p>{ lessonCompleteMessage() }</p>
+                </div>
                 <button class="btn-primary" onclick="{goToCourseOverview}">
                     { TRANSLATIONS.next() }
+                    <span></span>
                 </button>
-            </div>
-            <div if="{isCourseComplete()}" class="bottom-buttons">
+            </template>
+            <template if="{isCourseComplete()}">
+                <div>
+                    <h2>{ TRANSLATIONS.good() }</h2>
+                    <p>{ lessonCompleteMessage() }</p>
+                    <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
+                </div>
                 <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
                     { TRANSLATIONS.exam() }
+                    <span></span>
                 </button>
                 <button class="btn-secondary" onclick="{goToCourseOverview}">
                     { TRANSLATIONS.course() }
                 </button>
-            </div>
-        </template>
+            </template>
+        </div>
+    </template>
     <script>
-        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { getACoursesLessons } from "js/WagtailPagesAPI";
         import { countFinishedLessonsAmongSlugs } from "js/CompletionInterface";
 
         export default {
-            components: {
-                lessonframe: LessonFrame,
-            },
-
             state: {
                 lessonSlugs: [],
             },
@@ -62,7 +51,7 @@
 
             async loadLessonsForIsCourseComplete() {
                 const lessons = await getACoursesLessons(this.props.course.id);
-                const lessonSlugs = lessons.map(lesson => lesson.slug);
+                const lessonSlugs = lessons.map((lesson) => lesson.slug);
                 this.update({ lessonSlugs });
             },
 
