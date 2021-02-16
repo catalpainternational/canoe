@@ -169,11 +169,11 @@ export class Page extends PublishableItem<TWagtailPageData> {
     SetIsPublishable(value: boolean): void {
         // Compare the number of assets defined in the manifest for this page
         // With the number of actual page objects
-        if (this.assets.length !== this.#assets.length) {
+        if (this.manifestAssets.length !== this.#assets.length) {
             super.isPublishable = false;
         }
 
-        if (this.assets.length === 0 && this.#childPages.length === 0) {
+        if (this.manifestAssets.length === 0 && this.#childPages.length === 0) {
             super.isPublishable = true;
         }
 
