@@ -26,12 +26,6 @@
                 </div>
                 <p>{ TRANSLATIONS.give_feedback() }</p>
             </div>
-            <div class="button-container">
-                <template if="{state.activeSelection}">
-                    <button class="btn-primary" onclick="{clickedSubmit}">{ TRANSLATIONS.submit() }</button>
-                </template>
-                <button class="btn-secondary" onclick="{clickedNoThanks}">{ TRANSLATIONS.no() }</button>
-            </div>
         </template>
         <template if="{state.madeFeedbackDecision}">
             <div class="message-container">
@@ -40,11 +34,17 @@
                 <div class="correct-flag"></div>
                 <p>{ TRANSLATIONS.feedback_sent() }</p>
             </div>
-            <button class="btn-primary thank-you-container" onclick="{clickedContinue}">
-                { TRANSLATIONS.continue() }
-            </button>
         </template>
     </LessonFrame>
+    <div if="{!state.madeFeedbackDecision}" class="bottom-buttons">
+        <button class="btn-secondary" onclick="{clickedNoThanks}">{ TRANSLATIONS.no() }</button>
+        <button class="btn-primary" onclick="{clickedSubmit}" disabled="{!state.activeSelection}">{ TRANSLATIONS.submit() }</button>
+    </div>
+    <div if="{state.madeFeedbackDecision}" class="bottom-buttons">
+        <button class="btn-primary thank-you-container" onclick="{clickedContinue}">
+            { TRANSLATIONS.continue() }
+        </button>
+    </div>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { logLessonFeedback } from "js/GoogleAnalytics";
@@ -67,7 +67,7 @@
                 good: () => gettext("Good"),
                 really_great: () => gettext("Really great!"),
                 value_feedback: () => gettext("We value your feedback"),
-                submit: () => gettext("Submit feedback"),
+                submit: () => gettext("Submit"),
             },
             components: {
                 lessonframe: LessonFrame,

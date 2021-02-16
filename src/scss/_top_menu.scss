@@ -20,16 +20,7 @@ TopMenu {
     }
 
     .has-circle {
-        height: 35px;
-        width: 35px;
-        border-radius: 50%;
-        display: inline-block;
-        box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
-        background-color: white;
-
-        .arrow {
-            @extend %absolutely-center;
-        }
+        @extend %has-circle;
     }
 
     h4 {

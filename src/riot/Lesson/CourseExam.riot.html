@@ -25,32 +25,32 @@
             recordAnswer="{recordAnswer}"
             savedAnswer="{state.currentAnswer.answers}"
         ></TestMultipleAnswer>
-        <div class="bottom-buttons">
-            <div>
-                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{previousExamCard}">
-                    <span class="arrow"></span>
-                </a>
-            </div>
-            <div>
-                <button
-                    if="{state.cardIdx < state.cards.length - 1}"
-                    class="btn-primary"
-                    onclick="{nextExamCard}"
-                    disabled="{Object.keys(state.currentAnswer).length === 0}"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    if="{state.cardIdx === state.cards.length - 1}"
-                    class="btn-primary"
-                    onclick="{nextExamCard}"
-                    disabled="{Object.keys(state.currentAnswer).length === 0}"
-                >
-                    { TRANSLATIONS.submit() }
-                </button>
-            </div>
-        </div>
     </LessonFrame>
+    <div if="{!isAtHonorCode(state.cardIdx) && !isAtResults(state.cardIdx)}" class="bottom-buttons">
+        <div>
+            <a if="{state.cardIdx > 0}" class="has-circle" onclick="{previousExamCard}">
+                <span class="arrow"></span>
+            </a>
+        </div>
+        <div>
+            <button
+                if="{state.cardIdx < state.cards.length - 1}"
+                class="btn-primary"
+                onclick="{nextExamCard}"
+                disabled="{Object.keys(state.currentAnswer).length === 0}"
+            >
+                { TRANSLATIONS.next() }
+            </button>
+            <button
+                if="{state.cardIdx === state.cards.length - 1}"
+                class="btn-primary"
+                onclick="{nextExamCard}"
+                disabled="{Object.keys(state.currentAnswer).length === 0}"
+            >
+                { TRANSLATIONS.submit() }
+            </button>
+        </div>
+    </div>
     <ExamResults
         if="{isAtResults(state.cardIdx)}"
         course="{props.wagtailPage}"

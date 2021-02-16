@@ -8,9 +8,6 @@
                         <h2>{ TRANSLATIONS.congrats() }</h2>
                         <p>{ lessonCompleteMessage() }</p>
                     </div>
-                    <button class="btn-primary" onclick="{goToCourseOverview}">
-                        { TRANSLATIONS.next() }
-                    </button>
                 </template>
                 <template if="{isCourseComplete()}">
                     <div>
@@ -18,16 +15,25 @@
                         <p>{ lessonCompleteMessage() }</p>
                         <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
                     </div>
-                    <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
-                        { TRANSLATIONS.exam() }
-                    </button>
-                    <button class="btn-secondary" onclick="{goToCourseOverview}">
-                        { TRANSLATIONS.course() }
-                    </button>
                 </template>
             </div>
         </template>
     </LessonFrame>
+        <template if="{state.lessonSlugs.length}">
+            <div if="{!isCourseComplete()}" class="bottom-buttons">
+                <button class="btn-primary" onclick="{goToCourseOverview}">
+                    { TRANSLATIONS.next() }
+                </button>
+            </div>
+            <div if="{isCourseComplete()}" class="bottom-buttons">
+                <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
+                    { TRANSLATIONS.exam() }
+                </button>
+                <button class="btn-secondary" onclick="{goToCourseOverview}">
+                    { TRANSLATIONS.course() }
+                </button>
+            </div>
+        </template>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { getACoursesLessons } from "js/WagtailPagesAPI";

@@ -28,3 +28,18 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+%has-circle {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: block;
+    box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
+    background-color: white;
+    position: relative;
+
+    .arrow {
+        @extend %absolutely-center;
+        transform: translate(-50%, -42%);
+    }
+}
