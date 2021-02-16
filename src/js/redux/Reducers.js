@@ -9,6 +9,7 @@ import areCompletionsReady from "./ducks/Actions";
 import online from "./ducks/Online";
 import identity from "./ducks/Identity";
 import route from "./ducks/Route";
+import publishableItemStatuses from "ts/redux/ducks/PublishableItem";
 
 export const reducers = combineReducers({
     ...siteReducer,
@@ -20,4 +21,5 @@ export const reducers = combineReducers({
     ...online,
     ...identity,
     ...route,
+    ...publishableItemStatuses,
 });
