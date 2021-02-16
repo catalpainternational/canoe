@@ -1,14 +1,11 @@
 import { BACKEND_BASE_URL } from "js/urls";
 
-import {
-    TPublishableItem,
-    TPublishableItemStatus,
-} from "ts/Types/PublishableItemTypes";
+import { TPublishableItem } from "ts/Types/PublishableItemTypes";
 import { TManifest } from "ts/Types/ManifestTypes";
 
 import { IPublishableItemState } from "ts/Interfaces/PublishableItemInterfaces";
 
-import { getPublishableItemStatus } from "ts/redux/Interface";
+import { Status } from "ts/Implementations/Status";
 
 import { AppelflapConnect } from "ts/AppelflapConnect";
 import { CachePublish } from "ts/CachePublish";
@@ -20,10 +17,11 @@ export abstract class PublishableItem<T extends TPublishableItem>
     implements IPublishableItemState {
     #version: number;
     #id: string;
+    #statusId: string;
     data!: T;
     cache!: Cache;
 
-    status!: TPublishableItemStatus;
+    status!: Status;
 
     /** A reference to the original manifest itself */
     manifest: TManifest;
@@ -35,31 +33,42 @@ export abstract class PublishableItem<T extends TPublishableItem>
     /** Indicates whether the above #requestObject has had the authorization header stripped */
     #requestObjectClean = false;
 
-    constructor(manifest: TManifest, id: string) {
-        this.status = {
-            cacheStatus: "unset",
-            storeStatus: "unset",
-            isValid: false,
-            isAvailableOffline: false,
-            isPublishable: false,
-        };
+    constructor(manifest: TManifest, id: string, statusId: string) {
+        this.manifest = manifest;
+        this.#id = id;
+        // Normally statusId will be the same as data.api_url
+        this.#statusId = statusId;
+
         this.#version = -1;
+        this.status = new Status(this.#statusId);
         this.#requestObject = new Request("");
 
-        this.#id = id;
-        this.manifest = manifest;
+        this.GetDataFromStore();
 
         if (!this.data) {
             this.data = this.emptyItem;
             this.status.cacheStatus = "empty";
         }
-
-        this.GetStateFromStore();
-        this.GetDataFromStore();
+        if (this.version < 0) {
+            // Trigger all the is* status values to be (re)set
+            const invalidVersion = this.version;
+            this.version = invalidVersion;
+        }
     }
 
     get version(): number {
         return this.#version || -1;
+    }
+
+    set version(value: number) {
+        this.#version = value;
+
+        // Changing the version number will force a refresh of
+        // isValid, isAvailableOffline and isPublishable
+        const validVersion = this.#version >= 0;
+        this.isValid = validVersion;
+        this.isAvailableOffline = validVersion;
+        this.isPublishable = validVersion;
     }
 
     get api_url(): string {
@@ -73,19 +82,19 @@ export abstract class PublishableItem<T extends TPublishableItem>
             version: -1,
             api_url: "",
             fullUrl: "",
-            status: {
-                cacheStatus: "unset",
-                storeStatus: "unset",
-                isValid: false,
-                isAvailableOffline: false,
-                isPublishable: false,
-            },
+            status: this.status.emptyStatus,
             contentType: "",
         } as unknown) as T;
     }
 
+    /** The id for this item's data (but not its status) within the redux store */
     get id(): string {
         return this.#id;
+    }
+
+    /** The id for this item's status (but not its data) within the redux store */
+    get statusId(): string {
+        return this.#statusId;
     }
 
     abstract get contentType(): string;
@@ -94,56 +103,40 @@ export abstract class PublishableItem<T extends TPublishableItem>
     abstract get manifestData(): T;
 
     get ready(): boolean {
-        return !!this.status.cacheStatus && this.status.cacheStatus === "ready";
+        return this.status.ready;
     }
 
     /** This will do a basic integrity check. */
     get isValid(): boolean {
-        if (!this.api_url) {
-            return false;
-        }
-
-        // Is the item's status acceptable
-        if (["unset", "empty", "prepared"].includes(this.status.cacheStatus)) {
-            return false;
-        }
-
-        return true;
+        return this.status.isValid;
     }
 
-    /** This is only a very basic check.
-     * Implementing classes must call this via super, and extend to meet their requirements. */
+    /** `super` this in the derived class to test isValid from additional class members */
+    set isValid(value: boolean) {
+        this.status.isValid = this.#version >= 0 && value;
+    }
+
+    /** This is only a very basic check. */
     get isAvailableOffline(): boolean {
-        if (!this.isValid) {
-            return false;
-        }
-
-        if (this.version < 0) {
-            return false;
-        }
-
-        // Is the item's status acceptable
-        return this.status.cacheStatus === "ready";
+        return this.status.isAvailableOffline;
     }
 
-    /** This is only a very basic check.
-     * Implementing classes must call this via super, and extend to meet their requirements. */
+    /** `super` this in the derived class to set isAvailableOffline from various class members */
+    set isAvailableOffline(value: boolean) {
+        this.status.isAvailableOffline = value;
+    }
+
+    /** This is only a very basic check. */
     get isPublishable(): boolean {
-        if (!this.isValid) {
-            return false;
-        }
+        return this.status.isPublishable;
+    }
 
-        if (this.version < 0) {
-            return false;
-        }
-
-        // Has the item's cache entry and its request header cleaned of auth data
-        if (!this.#requestObjectClean) {
-            return false;
-        }
-
-        // Is the items's status acceptable
-        return this.status.cacheStatus === "ready";
+    /** `super` this in the derived class to set isPublishable from various class members */
+    set isPublishable(value: boolean) {
+        // Has the item's cache entry and its request header been cleaned of auth data
+        // and is the version number OK
+        this.status.isPublishable =
+            this.version >= 0 && this.#requestObjectClean && value;
     }
 
     abstract get cacheKey(): string;
@@ -157,18 +150,10 @@ export abstract class PublishableItem<T extends TPublishableItem>
         return !!this.cache;
     }
 
-    GetStateFromStore(): void {
-        const state = getPublishableItemStatus(this.id);
-        if (state !== null) {
-            this.status.cacheStatus = "ready";
-            // this.data = manifest;
-        } else {
-            this.status.cacheStatus = "prepared";
-        }
-    }
-
     /** Get the data from the store and use it to fill the `data` member */
     abstract GetDataFromStore(): void;
+
+    abstract StoreDataToStore(): void;
 
     /** Build a request object we can use to fetch this item */
     private get NewRequestObject(): Request {
@@ -198,9 +183,18 @@ export abstract class PublishableItem<T extends TPublishableItem>
     private CleanRequestObject(srcReq: Request): void {
         if (!srcReq.headers.has("authorization")) {
             this.#requestObjectCleaned = false;
-            this.#requestObjectClean = false;
+            this.#requestObjectClean = true;
             this.#requestObject = srcReq;
+
+            // Of itself, this item is now publishable
+            this.isPublishable = this.#requestObjectClean;
+            return;
         }
+
+        this.#requestObjectCleaned = false;
+        this.#requestObjectClean = false;
+        // Of itself, this item is no longer publishable
+        this.isPublishable = this.#requestObjectClean;
 
         const headers = new Headers();
         for (const key of srcReq.headers.keys()) {
@@ -297,11 +291,14 @@ export abstract class PublishableItem<T extends TPublishableItem>
         if (this.#requestObjectCleaned) {
             // Delete the existing cache entry first to ensure that the auth key gets 'lost'
             await this.cache.delete(reqObj);
+            this.#requestObjectCleaned = false;
         }
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         await this.cache.put(this.#requestObject!, this.updatedResp);
         this.#requestObjectClean = true;
+        // Of itself, this item is now publishable
+        this.isPublishable = this.#requestObjectClean;
 
         return true;
     }
@@ -325,7 +322,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
         const reqUrl = new URL(reqObj.url);
         const params = reqUrl.searchParams;
         const version = parseInt(params.get("version") || "-1");
-        this.#version = isNaN(version) ? -1 : version;
+        this.version = isNaN(version) ? -1 : version;
 
         this.status.cacheStatus = "loading";
         const response = (await this.getFromCache())?.clone();
@@ -336,11 +333,8 @@ export abstract class PublishableItem<T extends TPublishableItem>
         }
 
         const isInitialised = await this.initialiseFromResponse(response);
-        if (isInitialised) {
-            this.status.cacheStatus = "ready";
-        } else {
-            this.status.cacheStatus = "loading";
-        }
+        this.status.cacheStatus = isInitialised ? "ready" : "loading";
+
         return isInitialised;
     }
 

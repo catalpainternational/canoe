@@ -29,3 +29,15 @@ export const getPublishableItemStatus = (
         ] || null
     );
 };
+
+/** Get the status for all publishable items
+ * @returns each publishable item's status as an array
+ */
+export const getPublishableItemStatuses = (): TPublishableItemStatus[] => {
+    const publishableItemStatuses = store.getState().publishableItemStates;
+    if (publishableItemStatuses === null) {
+        return [];
+    }
+
+    return publishableItemStatuses as TPublishableItemStatus[];
+};

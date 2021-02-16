@@ -19,8 +19,13 @@ export class Page extends PublishableItem<TWagtailPageData> {
     /** The actual assets referenced by this page */
     #assets: Asset[];
 
-    constructor(manifest: TManifest, id: string, parent?: Page) {
-        super(manifest, id);
+    constructor(
+        manifest: TManifest,
+        id: string,
+        statusId: string,
+        parent?: Page
+    ) {
+        super(manifest, id, statusId);
 
         // Populate the parent and childPages members
         this.#parent = parent || this.parent;
@@ -121,71 +126,58 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return "application/json";
     }
 
-    /** This will do a basic integrity check.
-     * version is not 0, api_url has a value, etc.
-     */
-    get isValid(): boolean {
-        if (!super.isValid) {
-            return false;
-        }
-
-        if (this.version === 0) {
-            return false;
-        }
-
-        // Has the wagtail version of this page been loaded
-        return !!this.data.data && !!this.data.id && !!this.data.title;
+    set isValid(value: boolean) {
+        const wagtailLoaded =
+            !!this.data.data && !!this.data.id && !!this.data.title;
+        super.isValid = wagtailLoaded && value;
     }
 
-    get isAvailableOffline(): boolean {
-        if (!super.isAvailableOffline) {
-            return false;
-        }
-
+    set isAvailableOffline(value: boolean) {
         // Compare the number of assets defined in the manifest for this page
         // With the number of actual page objects
         if (this.manifestAssets.length !== this.#assets.length) {
-            return false;
+            super.isAvailableOffline = false;
+            return;
         }
 
         if (this.manifestAssets.length === 0 && this.#childPages.length === 0) {
-            return true;
+            super.isAvailableOffline = true;
+            return;
         }
 
         const allAssetsAvailableOffline = this.#assets.every(
             (asset) => this.assetInitialised(asset) && asset.isAvailableOffline
         );
         if (!allAssetsAvailableOffline) {
-            return false;
+            super.isAvailableOffline = false;
+            return;
         }
 
-        return this.#childPages.every(
-            (childPage) => childPage.isAvailableOffline
-        );
+        super.isAvailableOffline =
+            value &&
+            this.#childPages.every((childPage) => childPage.isAvailableOffline);
     }
 
-    get isPublishable(): boolean {
-        if (!super.isPublishable) {
-            return false;
-        }
-
+    set isPublishable(value: boolean) {
         // Compare the number of assets defined in the manifest for this page
         // With the number of actual page objects
         if (this.assets.length !== this.#assets.length) {
-            return false;
+            super.isPublishable = false;
         }
 
         if (this.assets.length === 0 && this.#childPages.length === 0) {
-            return true;
+            super.isPublishable = true;
         }
 
         // Assets are not publishable on their own,
         // Their isPublishable status is only relevant here
         if (!this.#assets.every((asset) => asset.isPublishable)) {
-            return false;
+            super.isPublishable = false;
         }
 
-        return this.#childPages.every((childPage) => childPage.isPublishable);
+        super.isPublishable =
+            value &&
+            this.#childPages.every((childPage) => childPage.isPublishable);
     }
 
     get emptyItem(): TWagtailPageData {
@@ -207,11 +199,18 @@ export class Page extends PublishableItem<TWagtailPageData> {
     GetDataFromStore(): void {
         const pageData = getPageDataFromStore(this.id);
         if (pageData) {
-            this.status.cacheStatus = "ready";
             this.data = pageData;
+            this.status.storeStatus = "ready";
         } else {
-            this.status.cacheStatus = "prepared";
+            this.status.storeStatus = "unset";
         }
+    }
+
+    StoreDataToStore(): void {
+        // And store the page data in Redux
+        this.status.storeStatus = "unset";
+        storePageData(this.id, this.data);
+        this.status.storeStatus = "ready";
     }
 
     get updatedResp(): Response {
@@ -223,14 +222,15 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
+        this.status.cacheStatus = "loading";
         this.data = await resp.json();
-        this.status.cacheStatus = "ready";
 
         // And store the page data in Redux
-        storePageData(this.id, this.data);
+        this.StoreDataToStore();
 
         // Update the cached paged data
         const cacheUpdated = await this.updateCache();
+        this.status.cacheStatus = "ready";
 
         await this.loadAssets();
 
@@ -246,6 +246,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
             this.manifest,
             this.id,
             asset.id.toString(),
+            asset.api_url,
             this.cacheKey
         );
         const assetFilled = await pageAsset.initialiseFromCache();

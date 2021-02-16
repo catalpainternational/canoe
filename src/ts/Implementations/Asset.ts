@@ -22,9 +22,11 @@ export class Asset extends PublishableItem<TAssetEntry> {
         manifest: TManifest,
         pageId: string,
         id: string,
+        statusId: string,
         pageCache: string
     ) {
-        super(manifest, id);
+        super(manifest, id, statusId);
+
         this.#pageId = pageId;
         this.#pageCache = pageCache;
     }
@@ -137,7 +139,13 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     GetDataFromStore(): void {
-        // Does nothing, assets are only stored in the cache
+        // Does almost nothing, assets are only stored in the cache
+        this.status.storeStatus = "ready";
+    }
+
+    StoreDataToStore(): void {
+        // Does almost nothing, assets are only stored in the cache
+        this.status.storeStatus = "ready";
     }
 
     get updatedResp(): Response {
