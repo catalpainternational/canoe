@@ -4,7 +4,6 @@ import {
 } from "ts/Types/PublishableItemTypes";
 
 import { Manifest } from "ts/Implementations/Manifest";
-import { TWagtailPage } from "./Types/PageTypes";
 import {
     getPageData as getPageDataFromStore,
     getItemStorageStatus,
@@ -55,8 +54,7 @@ export class AppDataStatus {
         };
     }
 
-    PageListing(value: any[]): TItemListing {
-        const [pageId, manifestPage] = value;
+    PageListing([pageId, manifestPage]: any[]): TItemListing {
         const pageStatus = getItemStorageStatus(manifestPage.api_url);
         const status =
             pageStatus !== null
@@ -96,7 +94,7 @@ export class AppDataStatus {
         this.itemListings = [];
         this.itemListings.push(this.ManifestListing());
         this.itemListings.push(
-            ...Object.entries(this.manifest.pages).map(this.PageListing)
+            ...Object.entries(this.manifest.pages).map(this.PageListing, this)
         );
     }
 }

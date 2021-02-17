@@ -108,23 +108,24 @@ export abstract class PublishableItem<T extends TItemCommon>
 
     /** This will do a basic integrity check. */
     get isValid(): boolean {
-        return (
-            this.statusIdValid &&
-            this.cacheStatusAcceptable &&
-            this.storeStatusAcceptable
-        );
+        return this.statusIdValid && this.storeStatusAcceptable;
     }
 
     /** This is only a very basic check.
      * Implementing classes must call this via super, and extend to meet their requirements. */
     get isAvailableOffline(): boolean {
-        return this.isValid && this.version >= 0;
+        return this.isValid && this.cacheStatusAcceptable && this.version >= 0;
     }
 
     /** This is only a very basic check.
      * Implementing classes must call this via super, and extend to meet their requirements. */
     get isPublishable(): boolean {
-        return this.isValid && this.version >= 0 && this.#requestObjectClean;
+        return (
+            this.isValid &&
+            this.cacheStatusAcceptable &&
+            this.version >= 0 &&
+            this.#requestObjectClean
+        );
     }
 
     abstract get cacheKey(): string;
