@@ -1,17 +1,16 @@
 import { store, LANGUAGE_STORAGE_KEY } from "./Store";
 
 import { changeLanguage as changeLanguageAction } from "./ducks/i18n";
-import {
-    addManifestAction,
-    addPageAction,
-    fetchingManifestAction
-} from "./ducks/Site";
+import { addManifestAction, addPageAction } from "./ducks/Site";
 import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/ServiceWorker";
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
 import { changeOnlineAction } from "./ducks/Online";
-import { setAuthenticatedState, setUnAuthenticatedState } from "./ducks/Identity";
+import {
+    setAuthenticatedState,
+    setUnAuthenticatedState,
+} from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
 import { addItemStorageStatusAction } from "./ducks/ItemStorageStatus";
 
@@ -98,11 +97,11 @@ export const isOnline = () => {
 
 export const setOnline = () => {
     store.dispatch(changeOnlineAction(true));
-}
+};
 
 export const setOffline = () => {
     store.dispatch(changeOnlineAction(false));
-}
+};
 
 export const isAuthenticated = () => {
     return store.getState().identity.isAuthenticated;
@@ -114,22 +113,18 @@ export const getUser = () => {
 
 export const setAuthenticated = (user) => {
     store.dispatch(setAuthenticatedState(user));
-}
+};
 
 export const setUnauthenticated = () => {
     store.dispatch(setUnAuthenticatedState());
-}
+};
 
 export const setRoute = (route, riotHash) => {
     store.dispatch(setCanoePage(route, riotHash));
-}
+};
 
 export const getRoute = () => {
     return store.getState().route;
-};
-
-export const setFetchingManifest = (fetching) => {
-    store.dispatch(fetchingManifestAction(fetching));
 };
 
 export const subscribeToStore = (subscriptionFunction) => {
