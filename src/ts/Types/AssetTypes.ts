@@ -1,12 +1,8 @@
-import {
-    TPublishableItem,
-    TPublishableItemState,
-} from "ts/Types/PublishableItemTypes";
+import { TItemCommon, TPublishableItem } from "ts/Types/PublishableItemTypes";
 
 export type TAssetEntryData = {
-    id: string;
     type: string;
     renditions: Record<string, string>;
-} & TPublishableItem;
+} & TItemCommon;
 
-export type TAssetEntry = TAssetEntryData & TPublishableItemState;
+export type TAssetEntry = TAssetEntryData & TPublishableItem;

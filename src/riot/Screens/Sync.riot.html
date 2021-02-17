@@ -10,33 +10,26 @@
         </div>
 
         <div class="content-wrapper">
-            <p>{state.appelflapMeta}</p>
             <p>{state.cacheStatus}</p>
             <p>{state.cacheKeys}</p>
             <p>{state.publications}</p>
-            <p>{state.manifest}</p>
-            <p>{state.page}</p>
-            <img if="{state.img}" src="{state.img}" />
-            <p if="{state.syncs.length === 0}">{ TRANSLATIONS.none() }</p>
-
-            <h5 if="{state.syncs.length > 0}" class="section-title">
-                { TRANSLATIONS.notifications() }
-            </h5>
-
             <ol class="sync-list">
                 <li
-                    each="{(sync, index) in state.syncs}"
-                    class="sync-card {markOldNotifications(index)}"
-                >
+                    each="{(statusListing, index) in state.statusListings}">
                     <div class="sync-header">
-                        <h6>{sync.title}</h6>
+                        <h6>{ `${statusListing.id}:${statusListing.type}:${statusListing.api_url}`}</h6>
                     </div>
 
                     <div class="sync-body">
-                        <p>{sync.body}</p>
+                        <span>Version:{ statusListing.version }</span>
+                        <span>Store:{ statusListing.storeStatus }</span>
+                        <span>Cache:{ statusListing.storeStatus }</span>
+                        <span>Validity:{ statusListing.isValid }</span>
+                        <span>Availablity:{ statusListing.isAvailableOffline }</span>
+                        <span>Publishable:{ statusListing.isPublishable }</span>
                     </div>
 
-                    <div class="sync-footer">
+                    <!-- <div class="sync-footer">
                         <a class="action">
                             <span class="arrow-blue"></span>
                             <p>{ TRANSLATIONS.start() }</p>
@@ -44,29 +37,22 @@
                         <div>
                             <p>{showTimeAgoFromNow(sync.timestamp)}</p>
                         </div>
-                    </div>
+                    </div> -->
                 </li>
             </ol>
         </div>
     </div>
 
     <script>
-        import { getNotifications } from "js/Notifications";
-
-        import dayjs from "dayjs";
-        import relativeTime from "dayjs/plugin/relativeTime";
-
+        import { AppDataStatus } from "ts/AppDataStatus";
         import { AppelflapConnect } from "ts/AppelflapConnect";
         import { CacheUtilities } from "ts/CacheUtilities";
         import { CachePublish } from "ts/CachePublish";
         import { Manifest } from "ts/Implementations/Manifest";
 
-        dayjs.extend(relativeTime);
-
         export default {
             state: {
-                syncs: [],
-                appelflapMeta: "Hello",
+                statusListings: [],
                 cacheStatus: "",
                 cacheKeys: "",
                 publications: "",
@@ -74,23 +60,12 @@
                 page: "",
             },
 
-            TRANSLATIONS: {
-                latest: () => gettext("Latest syncs"),
-                none: () => gettext("No syncs."),
-                notifications: () => gettext("Syncs"),
-                start: () => gettext("Start lesson"),
-            },
-
             onMounted() {
                 this.appelflapStatus();
             },
 
             async appelflapStatus() {
-                this.update({ appelflapMeta: "Getting" });
                 const appelflapConnect = new AppelflapConnect();
-                appelflapConnect.getMetaStatus().then((response) => {
-                    this.update({ appelflapMeta: JSON.stringify(response) });
-                });
                 const cacheUtilities = new CacheUtilities(appelflapConnect);
                 const cachePublish = new CachePublish(appelflapConnect);
                 /* Not yet implemented
@@ -107,42 +82,48 @@
                     this.update(({ publications: JSON.stringify(response) }));
                 });
 
+                // Get the Item Status Listing
+                const appDataStatus = new AppDataStatus();
+                await appDataStatus.Initialise();
+                appDataStatus.BuildList();
+                this.update({statusListings: appDataStatus.itemListings});
+
                 // try to get the manifest
-                const manifest = new Manifest();
-                if (!manifest.isValid) {
-                    await manifest.initialiseByRequest();
-                }
-                if (manifest.isValid) {
-                    const data = JSON.stringify(manifest.data);
-                    this.update({ manifest: "Got a manifest" });
+                // const manifest = new Manifest();
+                // if (!manifest.isValid) {
+                //     await manifest.initialiseByRequest();
+                // }
+                // if (manifest.isValid) {
+                //     const data = JSON.stringify(manifest.data);
+                //     this.update({ manifest: "Got a manifest" });
 
-                    // try getting a page
-                    const aPage = await manifest.getPageManifestData(
-                        "/site/resources/resource"
-                    );
-                    await aPage.initialiseByRequest();
-                    const manifestAssetCount = aPage.manifestAssets.length;
-                    const assetCount = aPage.assets.length;
-                    const pageData =
-                        `Page:${aPage.title} at ${aPage.loc_hash} ` +
-                        `Assets Defined:${manifestAssetCount} ` +
-                        `Assets Found:${assetCount} ` +
-                        `Valid:${aPage.isValid} ` +
-                        `Publishable:${aPage.isPublishable} ` +
-                        `Available Offline:${aPage.isAvailableOffline} ` +
-                        `Status:${aPage.status} `;
-                    this.update({ page: pageData });
-                    if (assetCount) {
-                        aPage.assets.forEach((asset) => {
-                            if (asset.isValid) {
-                                this.update({ img: asset.fullUrl });
-                            }
-                        });
-                    }
+                //     // try getting a page
+                //     const aPage = await manifest.getPageManifestData(
+                //         "/site/resources/resource"
+                //     );
+                //     await aPage.initialiseByRequest();
+                //     const manifestAssetCount = aPage.manifestAssets.length;
+                //     const assetCount = aPage.assets.length;
+                //     const pageData =
+                //         `Page:${aPage.title} at ${aPage.loc_hash} ` +
+                //         `Assets Defined:${manifestAssetCount} ` +
+                //         `Assets Found:${assetCount} ` +
+                //         `Valid:${aPage.isValid} ` +
+                //         `Publishable:${aPage.isPublishable} ` +
+                //         `Available Offline:${aPage.isAvailableOffline} ` +
+                //         `Status:${aPage.status} `;
+                //     this.update({ page: pageData });
+                //     if (assetCount) {
+                //         aPage.assets.forEach((asset) => {
+                //             if (asset.isValid) {
+                //                 this.update({ img: asset.fullUrl });
+                //             }
+                //         });
+                //     }
 
-                    // try publishing the page
-                    aPage.publish(appelflapConnect);
-                }
+                //     // try publishing the page
+                //     aPage.publish(appelflapConnect);
+                // }
             },
         };
     </script>

@@ -1,8 +1,5 @@
 import { TPageType } from "ts/Types/CanoeEnums";
-import {
-    TPublishableItem,
-    TPublishableItemState,
-} from "ts/Types/PublishableItemTypes";
+import { TItemCommon, TPublishableItem } from "ts/Types/PublishableItemTypes";
 import { TAssetEntry } from "ts/Types/AssetTypes";
 
 export type TPageData = {
@@ -14,14 +11,13 @@ export type TPageData = {
     depth: number;
     type: TPageType | string;
     title: string;
-} & TPublishableItem;
+} & TItemCommon;
 
-export type TPage = TPageData & TPublishableItemState;
+export type TPage = TPageData & TPublishableItem;
 
 export type TWagtailPageData = {
-    id?: string;
     meta?: Record<string, any>;
     data?: Record<string, any>;
 } & TPageData;
 
-export type TWagtailPage = TWagtailPageData & TPublishableItemState;
+export type TWagtailPage = TWagtailPageData & TPublishableItem;

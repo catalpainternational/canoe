@@ -1,9 +1,9 @@
 import { BACKEND_BASE_URL } from "js/urls";
 
-import { TPublishableItem } from "ts/Types/PublishableItemTypes";
+import { TItemCommon } from "ts/Types/PublishableItemTypes";
 import { TManifest } from "ts/Types/ManifestTypes";
 
-import { IPublishableItemState } from "ts/Interfaces/PublishableItemInterfaces";
+import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
 
 import { StorageStatus } from "src/ts/Implementations/StorageStatus";
 
@@ -13,8 +13,8 @@ import { CachePublish } from "ts/CachePublish";
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
-export abstract class PublishableItem<T extends TPublishableItem>
-    implements IPublishableItemState {
+export abstract class PublishableItem<T extends TItemCommon>
+    implements IPublishableItem {
     #version: number;
     #id: string;
     #statusId: string;
@@ -74,7 +74,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
         } as unknown) as T;
     }
 
-    /** The id for this item's data (but not its status) within the redux store */
+    /** The id for this item's data (but not its status) within the redux store and the manifest */
     get id(): string {
         return this.#id;
     }

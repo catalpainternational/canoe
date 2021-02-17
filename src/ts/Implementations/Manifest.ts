@@ -26,12 +26,12 @@ class ManifestError extends Error {
     }
 }
 
-const apiUrl = "/manifest/v1";
+export const ManifestAPIURL = "/manifest/v1";
 
 export class Manifest extends PublishableItem<TManifestData> {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
-        super(opts, "", apiUrl);
+        super(opts, "", ManifestAPIURL);
     }
 
     get pages(): Record<string, TWagtailPage> {
@@ -43,7 +43,7 @@ export class Manifest extends PublishableItem<TManifestData> {
     }
 
     get api_url(): string {
-        return apiUrl;
+        return ManifestAPIURL;
     }
 
     get fullUrl(): string {

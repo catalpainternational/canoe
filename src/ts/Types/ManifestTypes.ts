@@ -1,11 +1,8 @@
 import { TWagtailPage } from "ts/Types/PageTypes";
-import {
-    TPublishableItem,
-    TPublishableItemState,
-} from "ts/Types/PublishableItemTypes";
+import { TItemCommon, TPublishableItem } from "ts/Types/PublishableItemTypes";
 
 export type TManifestData = {
     pages: Record<string, TWagtailPage>;
-} & TPublishableItem;
+} & TItemCommon;
 
-export type TManifest = TManifestData & TPublishableItemState;
+export type TManifest = TManifestData & TPublishableItem;
