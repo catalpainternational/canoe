@@ -49,6 +49,7 @@ export type TItemStatus = {
 /** A convenience structure for listing the overall status of a manifest, page or asset item */
 export type TItemListing = {
     type: TItemType;
+    cacheKey: string;
 } & TItemId &
     TItemStorageStatus &
     TItemStatus;

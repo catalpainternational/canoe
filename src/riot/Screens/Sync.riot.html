@@ -15,15 +15,19 @@
                 <li
                     each="{(statusListing, index) in state.statusListings}">
                     <div class="sync-header">
-                        <h5>{ `ID:${statusListing.id} Type:${statusListing.type} URL:${statusListing.api_url} Version:${statusListing.version}`}</h5>
+                        <h5>{ `ID:${statusListing.id} Type:${statusListing.type} Version:${statusListing.version}`}</h5>
                     </div>
 
                     <div class="sync-body">
-                        <span>Store:{ statusListing.storeStatus } </span>
-                        <span>Cache:{ statusListing.storeStatus } </span>
-                        <span>Validity:{ statusListing.isValid } </span>
-                        <span>Availablity:{ statusListing.isAvailableOffline } </span>
-                        <span>Publishable:{ statusListing.isPublishable } </span>
+                        <span>URL:{ statusListing.api_url }, </span>
+                        <span>Store:{ statusListing.storeStatus }, </span>
+
+                        <span>CacheKey:{ statusListing.cacheKey }, </span>
+                        <span>Cache:{ statusListing.storeStatus }, </span>
+
+                        <span>Validity:{ statusListing.isValid },  </span>
+                        <span>Availablity:{ statusListing.isAvailableOffline },  </span>
+                        <span>Publishable:{ statusListing.isPublishable }, </span>
                     </div>
 
                     <!-- <div class="sync-footer">

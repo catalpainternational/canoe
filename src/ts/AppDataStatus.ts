@@ -45,6 +45,7 @@ export class AppDataStatus {
         return {
             id: this.manifest.id,
             api_url: this.manifest.api_url,
+            cacheKey: this.manifest.cacheKey,
             version: this.manifest.version,
             type: "manifest",
             storeStatus: this.manifest.status.storeStatus,
@@ -59,8 +60,7 @@ export class AppDataStatus {
         pageId: string,
         manifestPage: TWagtailPage
     ): Promise<TItemListing> {
-        const apiUrl = new URL(manifestPage.api_url);
-        const statusId = apiUrl.pathname;
+        const statusId = manifestPage.api_url;
         const pageStatus = getItemStorageStatus(statusId);
         const status =
             pageStatus !== null
@@ -87,6 +87,7 @@ export class AppDataStatus {
         return {
             id: pageId,
             api_url: statusId,
+            cacheKey: manifestPage.storage_container,
             version: manifestPage.version,
             type: "page",
             storeStatus: status.storeStatus,

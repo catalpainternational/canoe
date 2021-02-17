@@ -37,8 +37,7 @@ export abstract class PublishableItem<T extends TItemCommon>
         this.manifest = manifest;
         this.#id = id;
         // Normally statusId will be the same as data.api_url minus any params
-        const fullUrl = new URL(statusId);
-        this.#statusId = fullUrl.pathname;
+        this.#statusId = statusId;
 
         this.#version = -1;
         this.status = new StorageStatus(this.#statusId);
