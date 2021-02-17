@@ -10,23 +10,20 @@
         </div>
 
         <div class="content-wrapper">
-            <p>{state.cacheStatus}</p>
             <p>{state.cacheKeys}</p>
-            <p>{state.publications}</p>
             <ol class="sync-list">
                 <li
                     each="{(statusListing, index) in state.statusListings}">
                     <div class="sync-header">
-                        <h6>{ `${statusListing.id}:${statusListing.type}:${statusListing.api_url}`}</h6>
+                        <h5>{ `ID:${statusListing.id} Type:${statusListing.type} URL:${statusListing.api_url} Version:{ statusListing.version }`}</h5>
                     </div>
 
                     <div class="sync-body">
-                        <span>Version:{ statusListing.version }</span>
-                        <span>Store:{ statusListing.storeStatus }</span>
-                        <span>Cache:{ statusListing.storeStatus }</span>
-                        <span>Validity:{ statusListing.isValid }</span>
-                        <span>Availablity:{ statusListing.isAvailableOffline }</span>
-                        <span>Publishable:{ statusListing.isPublishable }</span>
+                        <span>Store:{ statusListing.storeStatus } </span>
+                        <span>Cache:{ statusListing.storeStatus } </span>
+                        <span>Validity:{ statusListing.isValid } </span>
+                        <span>Availablity:{ statusListing.isAvailableOffline } </span>
+                        <span>Publishable:{ statusListing.isPublishable } </span>
                     </div>
 
                     <!-- <div class="sync-footer">
