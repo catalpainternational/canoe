@@ -1,7 +1,7 @@
 <TestPopupModal>
     <PopupModal>
-        <span class="{ props.isQuestionComplete ? 'correct-flag' : 'incorrect-flag'}"></span>
-        <h2>{ props.isQuestionComplete ? correctTitleMessage(props.selectedAnswer) : incorrectTitleMessage(props.selectedAnswer) }</h2>
+        <span class="{ props.isQuestionComplete ? 'correct-checkmark' : 'incorrect-cross'}"></span>
+        <h3>{ props.isQuestionComplete ? correctTitleMessage(props.selectedAnswer) : incorrectTitleMessage(props.selectedAnswer) }</h3>
         <div>
             <p>{ props.isQuestionComplete ? correctTextMessage(props.selectedAnswer) : incorrectTextMessage(props.selectedAnswer) }</p>
         </div>
@@ -15,10 +15,10 @@
             class="btn-primary" 
             onclick="{ completePage }" 
         >{ TRANSLATIONS.finish() }</button>
-        <button 
-            if="{!props.isQuestionComplete}" 
-            class="btn-primary btn-wrong" 
-            onclick="{ () => props.toggleModal(false, {}) }" 
+        <button
+            if="{!props.isQuestionComplete}"
+            class="btn-primary"
+            onclick="{ () => props.toggleModal(false, {}) }"
         >{ TRANSLATIONS.try() }</button>
     </PopupModal>
 

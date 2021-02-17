@@ -4,10 +4,12 @@
         <h5>{ moduleCompleteMessage() }</h5>
         <span class="high-fivers"></span>
         <p>{ nextModuleMessage() }</p>
+    </LessonFrame>
+    <div class="bottom-buttons">
         <button class="btn-primary" onclick="{goToNextModule}">
             { TRANSLATIONS.continue_button() }
         </button>
-    </LessonFrame>
+    </div>
 
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";

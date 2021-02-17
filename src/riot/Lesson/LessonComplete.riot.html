@@ -1,43 +1,39 @@
 <LessonComplete>
-    <LessonFrame linkTo="{state.lesson.course.loc_hash}">
-        <span class="confetti"></span>
-        <div class="congratulations-container">
-            <template if="{!isCourseComplete()}">
-                <div>
-                    <h2>{ TRANSLATIONS.congrats() }</h2>
-                    <p>{ lessonCompleteMessage() }</p>
-                </div>
-                <button class="btn-primary" onclick="{goToCourseOverview}">
-                    { TRANSLATIONS.next() }
-                </button>
-            </template>
-            <template if="{isCourseComplete()}">
-                <div>
-                    <h2>{ TRANSLATIONS.good() }</h2>
-                    <p>{ lessonCompleteMessage() }</p>
-                    <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
-                </div>
-                <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
-                    { TRANSLATIONS.exam() }
-                </button>
-                <button class="btn-secondary" onclick="{goToCourseOverview}">
-                    { TRANSLATIONS.course() }
-                </button>
-            </template>
-        </div>
-    </LessonFrame>
+    <div class="congratulations-container">
+        <span class="superman-success"></span>
+        <template if="{!isCourseComplete()}">
+            <div>
+                <h2>{ TRANSLATIONS.congrats() }</h2>
+                <p>{ lessonCompleteMessage() }</p>
+            </div>
+            <button class="btn-primary" onclick="{goToCourseOverview}">
+                { TRANSLATIONS.next() }
+                <span></span>
+            </button>
+        </template>
+        <template if="{isCourseComplete()}">
+            <div>
+                <h2>{ TRANSLATIONS.good() }</h2>
+                <p>{ lessonCompleteMessage() }</p>
+                <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
+            </div>
+            <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
+                { TRANSLATIONS.exam() }
+                <span></span>
+            </button>
+            <button class="btn-secondary" onclick="{goToCourseOverview}">
+                { TRANSLATIONS.course() }
+            </button>
+        </template>
+    </div>
+    
     <script>
-        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { getRoute } from "ReduxImpl/Interface";
 
         export default {
 
             onBeforeMount(props, state) {
                 this.state.lesson = getRoute().page;
-            },
-
-            components: {
-                lessonframe: LessonFrame,
             },
 
             TRANSLATIONS: {

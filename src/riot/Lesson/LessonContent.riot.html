@@ -34,30 +34,30 @@
             if="{state.card.tag === 'pdf'}"
             card="{state.card}"
         />
-        <div if="{props.lesson}" class="bottom-buttons">
-            <div>
-                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
-                    <span class="arrow"></span>
-                </a>
-            </div>
-            <div>
-                <button
-                    class="btn-primary"
-                    onclick="{nextContentCard}"
-                    if="{ state.cardNumber < state.cards.length }"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    class="btn-primary"
-                    onclick="{completeContentModal}"
-                    if="{ state.cardNumber === state.cards.length }"
-                >
-                    { TRANSLATIONS.finish() }
-                </button>
-            </div>
-        </div>
     </LessonFrame>
+    <div if="{props.lesson && state.cardNumber <= state.cards.length}" class="bottom-buttons">
+        <div>
+            <a if="{state.cardNumber > 1}" class="has-circle" onclick="{goBack}">
+                <span class="arrow"></span>
+            </a>
+        </div>
+        <div>
+            <button
+                class="btn-primary"
+                onclick="{nextContentPage}"
+                if="{ state.cardNumber < state.cards.length }"
+            >
+                { TRANSLATIONS.next() }
+            </button>
+            <button
+                class="btn-primary"
+                onclick="{completeContentModal}"
+                if="{ state.cardNumber === state.cards.length }"
+            >
+                { TRANSLATIONS.finish() }
+            </button>
+        </div>
+    </div>
     <LessonModuleComplete
         if="{ props.lesson.ready && state.complete }"
         lesson="{props.lesson}"

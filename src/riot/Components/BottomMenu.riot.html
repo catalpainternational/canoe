@@ -27,7 +27,7 @@
         function getState() {
             const route = getRoute();
             return {
-                section: route.riotHash ? route.riotHash : ""
+                section: route.riotHash ? route.riotHash[0] : ""
             }
         }
         export default {
@@ -37,10 +37,13 @@
                 return inAppelflap();
             },
             showBottomMenu() {
-                return (
-                    this.props.page.type !== 'lessonpage'
-                    || this.state.section === ""
-                );
+                if (this.props.page.type === 'lessonpage' && this.state.section) {
+                    return false;
+                }
+                if (this.props.page.type === 'coursepage' && this.state.section) {
+                    return false;
+                }
+                return true;
             },
 
             storeListener(previousStoreState, storeState) {
