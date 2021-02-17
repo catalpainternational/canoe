@@ -1,7 +1,11 @@
-import { TItemListing } from "ts/Types/PublishableItemTypes";
+import {
+    TItemListing,
+    TItemStorageStatus,
+} from "ts/Types/PublishableItemTypes";
 
 import { Manifest } from "ts/Implementations/Manifest";
 import { TWagtailPage } from "./Types/PageTypes";
+import { getItemStorageStatus } from "ReduxImpl/Interface";
 
 /** An overview of the status for all data used by the app */
 export class AppDataStatus {
@@ -48,16 +52,25 @@ export class AppDataStatus {
     }
 
     PageListing(page: TWagtailPage): TItemListing {
+        const pageStatus = getItemStorageStatus(page.api_url);
+        const status =
+            pageStatus !== null
+                ? (pageStatus as TItemStorageStatus)
+                : ({
+                      storeStatus: "unset",
+                      cacheStatus: "unset",
+                  } as TItemStorageStatus);
+        // TODO: add code to get item status (isValid, etc.)
         return {
             id: page.id,
             api_url: page.api_url,
             version: page.version,
             type: "page",
-            storeStatus: page.status.storeStatus,
-            cacheStatus: page.status.cacheStatus,
-            isValid: page.isValid,
-            isAvailableOffline: page.isAvailableOffline,
-            isPublishable: page.isPublishable,
+            storeStatus: status.storeStatus,
+            cacheStatus: status.cacheStatus,
+            isValid: false,
+            isAvailableOffline: false,
+            isPublishable: false,
         };
     }
 

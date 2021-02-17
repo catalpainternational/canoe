@@ -99,7 +99,7 @@ export abstract class PublishableItem<T extends TItemCommon>
 
     /** Is the item's cache status acceptable */
     get cacheStatusAcceptable(): boolean {
-        return ["unset", "empty", "prepped"].includes(this.status.cacheStatus);
+        return !["unset", "empty", "prepped"].includes(this.status.cacheStatus);
     }
 
     get storeStatusAcceptable(): boolean {
