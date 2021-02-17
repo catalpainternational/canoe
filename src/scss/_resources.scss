@@ -7,12 +7,46 @@ Resources {
         @extend %center-with-flex;
     }
 
-    .tag-container {
-        margin: 0;
+    .list-resources {
+        display: flex;
+        flex-direction: column;
+
+        > :last-child {
+            margin-bottom: $bottom-menu-height;
+        }
+    }
+
+    .resource-card {
+        background-color: $gray-10;
+        margin-bottom: 3px;
+        padding: 35px 20px;
+        height: 110px;
+        display: block;
+        box-sizing: border-box;
+
+        h5 {
+            color: $gray-1;
+        }
+    }
+
+    TagList .tag {
+        height: 25px;
+        width: 75px;
+        background-color: $gray-8;
+        padding: 0 3px;
+
+        &:first-of-type {
+            margin-left: 15px;
+        }
+
+        p {
+            color: $gray-1;
+            font-weight: 300;
+        }
     }
 }
 
-searchbar {
+SearchBar {
     input {
         width: 95%;
         font-size: 1.1em;
@@ -42,8 +76,7 @@ searchbar {
     div.form-group {
         border: 0.0625em solid $gray-5;
         box-shadow: inset 0 0.125em 0.1875em 0 rgba(42, 57, 66, 0.1);
-        margin-bottom: 1em;
-        margin-top: 1em;
+        margin: 1em;
         border-radius: 0.3125em;
         padding: 0.3125em 0.625em;
         align-items: center;

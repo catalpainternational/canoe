@@ -1,13 +1,12 @@
 TagList {
     .tag {
-        border-radius: 50%;
+        border-radius: 35px;
         background-color: $gray-10;
         height: 65px;
         width: 65px;
         position: relative;
-        margin: 0 1.4em 1em 0;
+        margin: 0 0.5em 1em 0;
         display: inline-block;
-        box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
 
         p {
             @extend %absolutely-center;
