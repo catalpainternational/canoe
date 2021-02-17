@@ -54,18 +54,10 @@ export class Manifest extends PublishableItem<TManifestData> {
         return "application/json";
     }
 
-    /** This is a basic integrity check.  It ensures that:
+    /** This ensures that:
      * - All child pages have matching page entries
      */
-    get isValid(): boolean {
-        if (!super.isValid) {
-            return false;
-        }
-
-        if (!this.isInitialised) {
-            return false;
-        }
-
+    get childPagesValid(): boolean {
         const allPageNames = new Set(Object.keys(this.pages));
         let childPageNames: Set<string> = new Set();
         allPageNames.forEach((pageName) => {
@@ -79,6 +71,24 @@ export class Manifest extends PublishableItem<TManifestData> {
         );
 
         return !unMatchedChildren.size;
+    }
+
+    /** This is a basic integrity check.  It ensures that:
+     * - This item has a valid statusId (api_url)
+     * - The store and cache status values are acceptable
+     * - It has been initialised (it has a `data` value)
+     * - All child pages have matching page entries
+     */
+    get isValid(): boolean {
+        if (!super.isValid) {
+            return false;
+        }
+
+        if (!this.isInitialised) {
+            return false;
+        }
+
+        return this.childPagesValid;
     }
 
     get isAvailableOffline(): boolean {
@@ -143,6 +153,8 @@ export class Manifest extends PublishableItem<TManifestData> {
         const respData: Partial<TManifestData> = response;
         if (respData) {
             this.data = this.emptyItem;
+            this.data.id = "";
+            this.data.api_url = ManifestAPIURL;
             Object.keys(respData).forEach((key) => {
                 this.data[key] = respData[key];
             });
@@ -160,8 +172,14 @@ export class Manifest extends PublishableItem<TManifestData> {
             );
         }
 
+        const isAcceptable =
+            this.statusIdValid &&
+            this.cacheStatusAcceptable &&
+            this.isInitialised &&
+            this.childPagesValid;
+
         let cacheUpdated = false;
-        if (this.data && this.isValid) {
+        if (this.data && isAcceptable) {
             this.StoreDataToStore();
             cacheUpdated = await this.updateCache();
         }

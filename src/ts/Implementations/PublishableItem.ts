@@ -93,18 +93,26 @@ export abstract class PublishableItem<T extends TItemCommon>
         return this.status.ready;
     }
 
+    get statusIdValid(): boolean {
+        return !!this.statusId;
+    }
+
+    /** Is the item's cache status acceptable */
+    get cacheStatusAcceptable(): boolean {
+        return ["unset", "empty", "prepped"].includes(this.status.cacheStatus);
+    }
+
+    get storeStatusAcceptable(): boolean {
+        return this.status.storeStatus !== "unset";
+    }
+
     /** This will do a basic integrity check. */
     get isValid(): boolean {
-        if (!this.statusId) {
-            return false;
-        }
-
-        // Is the item's status acceptable
-        if (["unset", "empty", "prepped"].includes(this.status.cacheStatus)) {
-            return false;
-        }
-
-        return this.status.storeStatus !== "unset";
+        return (
+            this.statusIdValid &&
+            this.cacheStatusAcceptable &&
+            this.storeStatusAcceptable
+        );
     }
 
     /** This is only a very basic check.
