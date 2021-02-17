@@ -116,13 +116,6 @@ export class Manifest extends PublishableItem<TManifestData> {
         return empty;
     }
 
-    StoreDataToStore(): void {
-        // And store the page data in Redux
-        this.status.storeStatus = "unset";
-        storeManifest(this.data);
-        this.status.storeStatus = "ready";
-    }
-
     GetDataFromStore(): void {
         const manifest = getManifestFromStore();
         if (manifest && JSON.stringify(manifest) !== "{}") {
@@ -131,6 +124,13 @@ export class Manifest extends PublishableItem<TManifestData> {
         } else {
             this.status.storeStatus = "unset";
         }
+    }
+
+    StoreDataToStore(): void {
+        // And store the manifest data in Redux
+        this.status.storeStatus = "unset";
+        storeManifest(this.data);
+        this.status.storeStatus = "ready";
     }
 
     get updatedResp(): Response {
