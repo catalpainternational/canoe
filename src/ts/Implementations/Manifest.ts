@@ -13,11 +13,7 @@ import ResourcePage from "ts/Implementations/Specific/ResourcePage";
 
 // See ts/Typings for the type definitions for these imports
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import {
-    storeManifest,
-    getManifestFromStore,
-    setFetchingManifest,
-} from "ReduxImpl/Interface";
+import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 
 class ManifestError extends Error {
     constructor(message: string) {
@@ -110,6 +106,8 @@ export class Manifest extends PublishableItem<TManifestData> {
     get emptyItem(): TManifestData {
         const empty = super.emptyItem;
 
+        empty.id = "";
+        empty.api_url = ManifestAPIURL;
         empty.version = -1;
         empty.pages = {};
 
@@ -141,13 +139,25 @@ export class Manifest extends PublishableItem<TManifestData> {
         return this.fullUrl;
     }
 
-    async initialiseFromResponse(resp: Response): Promise<boolean> {
-        setFetchingManifest(true);
+    BuildManifestData(response: Record<string, any>): void {
+        const respData: Partial<TManifestData> = response;
+        if (respData) {
+            this.data = this.emptyItem;
+            Object.keys(respData).forEach((key) => {
+                this.data[key] = respData[key];
+            });
+        }
+    }
 
+    async initialiseFromResponse(resp: Response): Promise<boolean> {
         try {
-            this.data = await resp.json();
+            this.BuildManifestData(await resp.json());
         } catch {
             // Discard errors with getting json from response
+            // eslint-disable-next-line no-console
+            console.info(
+                "Manifest in the Response (cache or network) could not be parsed."
+            );
         }
 
         let cacheUpdated = false;
@@ -155,7 +165,6 @@ export class Manifest extends PublishableItem<TManifestData> {
             this.StoreDataToStore();
             cacheUpdated = await this.updateCache();
         }
-        setFetchingManifest(false);
 
         return cacheUpdated && this.isValid;
     }
