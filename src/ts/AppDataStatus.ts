@@ -9,6 +9,7 @@ import {
     getItemStorageStatus,
 } from "ReduxImpl/Interface";
 import { Page } from "./Implementations/Page";
+import { TWagtailPage } from "./Types/PageTypes";
 
 /** An overview of the status for all data used by the app */
 export class AppDataStatus {
@@ -54,8 +55,13 @@ export class AppDataStatus {
         };
     }
 
-    PageListing([pageId, manifestPage]: any[]): TItemListing {
-        const pageStatus = getItemStorageStatus(manifestPage.api_url);
+    async PageListing(
+        pageId: string,
+        manifestPage: TWagtailPage
+    ): Promise<TItemListing> {
+        const apiUrl = new URL(manifestPage.api_url);
+        const statusId = apiUrl.pathname;
+        const pageStatus = getItemStorageStatus(statusId);
         const status =
             pageStatus !== null
                 ? (pageStatus as TItemStorageStatus)
@@ -69,7 +75,8 @@ export class AppDataStatus {
         let isPublishable = false;
         if (pageData) {
             status.storeStatus = "ready";
-            const page = new Page(this.manifest, pageId, manifestPage.api_url);
+            const page = new Page(this.manifest, pageId, statusId);
+            await page.initialiseFromCache();
             isValid = page.isValid;
             isAvailableOffline = page.isAvailableOffline;
             isPublishable = page.isPublishable;
@@ -79,7 +86,7 @@ export class AppDataStatus {
         // TODO: add code to get item status (isValid, etc.)
         return {
             id: pageId,
-            api_url: manifestPage.api_url,
+            api_url: statusId,
             version: manifestPage.version,
             type: "page",
             storeStatus: status.storeStatus,
@@ -90,11 +97,15 @@ export class AppDataStatus {
         };
     }
 
-    BuildList(): void {
+    async BuildList(): Promise<void> {
         this.itemListings = [];
         this.itemListings.push(this.ManifestListing());
-        this.itemListings.push(
-            ...Object.entries(this.manifest.pages).map(this.PageListing, this)
-        );
+        const pageIds = Object.keys(this.manifest.pages);
+        for (let ix = 0; ix < pageIds.length; ix++) {
+            const pageId = pageIds[ix];
+            const manifestPage = this.manifest.pages[pageId];
+            const pageListing = await this.PageListing(pageId, manifestPage);
+            this.itemListings.push(pageListing);
+        }
     }
 }

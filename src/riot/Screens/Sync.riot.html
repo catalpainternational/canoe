@@ -87,7 +87,7 @@
                 // Get the Item Status Listing
                 const appDataStatus = new AppDataStatus();
                 await appDataStatus.Initialise();
-                appDataStatus.BuildList();
+                await appDataStatus.BuildList();
                 this.update({statusListings: appDataStatus.itemListings});
 
                 // try to get the manifest
