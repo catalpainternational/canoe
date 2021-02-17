@@ -4,7 +4,7 @@
 declare module "ReduxImpl/Interface" {
     import { TManifestData } from "ts/Types/ManifestTypes";
     import { TWagtailPageData } from "ts/Types/PageTypes";
-    import { TPublishableItemStatus } from "ts/Types/PublishableItemTypes";
+    import { TItemStorageStatus } from "ts/Types/PublishableItemTypes";
 
     export function storeManifest(manifest: TManifestData): void;
     export function getManifestFromStore(): TManifestData;
@@ -16,21 +16,21 @@ declare module "ReduxImpl/Interface" {
     ): void;
     export function getPageData(pageId: any): TWagtailPageData;
 
-    export function storePublishableItemStatus(
+    export function storeItemStorageStatus(
         itemId: string,
-        itemState: TPublishableItemStatus
+        itemState: TItemStorageStatus
     ): void;
 
     /** Get the publishable item's status
      * @returns the publishable item's status or null
-     * @remarks test for null first, before casting the return `as TPublishableItemStatus`
+     * @remarks test for null first, before casting the return `as TItemStorageStatus`
      */
-    export function getPublishableItemStatus(
+    export function getItemStorageStatus(
         itemId: string
-    ): TPublishableItemStatus | unknown;
+    ): TItemStorageStatus | unknown;
 
     /** Get the status for all publishable items
      * @returns each publishable item's status as an array
      */
-    export function getPublishableItemStatuses(): TPublishableItemStatus[];
+    export function getItemStorageStatuses(): TItemStorageStatus[];
 }

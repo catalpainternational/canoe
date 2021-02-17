@@ -9,8 +9,8 @@ export type TPublishableItem = {
     [x: string]: any;
 };
 
-/** Describe the status of the manifest, page or asset item */
-export type TPublishableItemStatus = {
+/** Describe the storage status of the manifest, page or asset item */
+export type TItemStorageStatus = {
     /** What is the state of this manifest, page or asset item within the cache? */
     cacheStatus: TItemCacheStatus;
 
@@ -20,8 +20,8 @@ export type TPublishableItemStatus = {
 
 /** Describe the state of a manifest, page or asset item */
 export type TPublishableItemState = {
-    /** The composite status of this item */
-    status: TPublishableItemStatus;
+    /** The storage status of this item */
+    status: TItemStorageStatus;
 
     /** Is this manifest, page or asset item valid? */
     isValid: boolean;

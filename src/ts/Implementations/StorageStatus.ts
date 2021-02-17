@@ -1,12 +1,12 @@
 import { TItemCacheStatus, TItemStoreStatus } from "ts/Types/CanoeEnums";
-import { TPublishableItemStatus } from "ts/Types/PublishableItemTypes";
+import { TItemStorageStatus } from "ts/Types/PublishableItemTypes";
 
 import {
-    getPublishableItemStatus,
-    storePublishableItemStatus,
+    getItemStorageStatus,
+    storeItemStorageStatus,
 } from "ReduxImpl/Interface";
 
-export class Status implements TPublishableItemStatus {
+export class StorageStatus implements TItemStorageStatus {
     #id: string;
     #cacheStatus: TItemCacheStatus;
     #storeStatus: TItemStoreStatus;
@@ -42,25 +42,25 @@ export class Status implements TPublishableItemStatus {
     }
 
     GetStatusFromStore(): void {
-        const status = getPublishableItemStatus(this.id);
+        const status = getItemStorageStatus(this.id);
 
         if (status !== null) {
-            const itemStatus = status as TPublishableItemStatus;
+            const itemStatus = status as TItemStorageStatus;
             this.#cacheStatus = itemStatus.cacheStatus;
             this.#storeStatus = itemStatus.storeStatus;
         }
     }
 
     StoreStatus(): void {
-        const status: TPublishableItemStatus = {
+        const status: TItemStorageStatus = {
             cacheStatus: this.#cacheStatus,
             storeStatus: this.#storeStatus,
         };
 
-        storePublishableItemStatus(this.#id, status);
+        storeItemStorageStatus(this.#id, status);
     }
 
-    get emptyStatus(): TPublishableItemStatus {
+    get emptyStatus(): TItemStorageStatus {
         return {
             cacheStatus: "unset",
             storeStatus: "unset",

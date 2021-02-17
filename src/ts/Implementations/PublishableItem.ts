@@ -5,7 +5,7 @@ import { TManifest } from "ts/Types/ManifestTypes";
 
 import { IPublishableItemState } from "ts/Interfaces/PublishableItemInterfaces";
 
-import { Status } from "ts/Implementations/Status";
+import { StorageStatus } from "src/ts/Implementations/StorageStatus";
 
 import { AppelflapConnect } from "ts/AppelflapConnect";
 import { CachePublish } from "ts/CachePublish";
@@ -21,7 +21,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
     data!: T;
     cache!: Cache;
 
-    status!: Status;
+    status!: StorageStatus;
 
     /** A reference to the original manifest itself */
     manifest: TManifest;
@@ -40,7 +40,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
         this.#statusId = statusId;
 
         this.#version = -1;
-        this.status = new Status(this.#statusId);
+        this.status = new StorageStatus(this.#statusId);
         this.#requestObject = new Request("");
 
         this.GetDataFromStore();

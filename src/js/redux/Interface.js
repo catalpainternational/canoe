@@ -13,7 +13,7 @@ import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./duc
 import { changeOnlineAction } from "./ducks/Online";
 import { setAuthenticatedState, setUnAuthenticatedState } from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
-import { addPublishableItemStatusAction } from "src/js/redux/ducks/PublishableItem";
+import { addItemStorageStatusAction } from "src/js/redux/ducks/PublishableItem";
 
 export const storePageData = (pageId, pageData) => {
     store.dispatch(addPageAction(pageId, pageData));
@@ -136,31 +136,31 @@ export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);
 };
 
-export const storePublishableItemStatus = (itemId, itemState) => {
-    store.dispatch(addPublishableItemStatusAction(itemId, itemState));
+export const storeItemStorageStatus = (itemId, itemState) => {
+    store.dispatch(addItemStorageStatusAction(itemId, itemState));
 };
 
-/** Get the publishable item's status
- * @returns the publishable item's status or null
- * @remarks test for null first, before casting the return `as TPublishableItemStatus`
+/** Get the publishable item's storage status
+ * @returns the publishable item's storage status or null
+ * @remarks test for null first, before casting the return `as TItemStorageStatus`
  */
-export const getPublishableItemStatus = (itemId) => {
-    const publishableItemStatuses = store.getState().publishableItemStatuses;
-    if (publishableItemStatuses === null) {
-        return publishableItemStatuses;
+export const getItemStorageStatus = (itemId) => {
+    const itemStorageStatuses = store.getState().itemStorageStatuses;
+    if (itemStorageStatuses === null) {
+        return itemStorageStatuses;
     }
 
-    return publishableItemStatuses[itemId] || null;
+    return itemStorageStatuses[itemId] || null;
 };
 
-/** Get the status for all publishable items
- * @returns each publishable item's status as an array
+/** Get the status for all publishable items storage statuses
+ * @returns each publishable item's storage status as an array
  */
-export const getPublishableItemStatuses = () => {
-    const publishableItemStatuses = store.getState().publishableItemStatuses;
-    if (publishableItemStatuses === null) {
+export const getItemStorageStatuses = () => {
+    const itemStorageStatuses = store.getState().itemStorageStatuses;
+    if (itemStorageStatuses === null) {
         return [];
     }
 
-    return publishableItemStatuses;
+    return itemStorageStatuses;
 };

@@ -1,32 +1,32 @@
-import { TPublishableItemStatus } from "ts/Types/PublishableItemTypes";
+import { TItemStorageStatus } from "ts/Types/PublishableItemTypes";
 
 // ACTIONS
-const ADDED_PUBLISHABLEITEM_STATUS = "site/addedPublishableItemStatus";
+const ADDED_ITEMSTORAGESTATUS = "site/addedItemStorageStatus";
 
 // ACTION TYPE
-export type TPublishableItemStatusActionType = {
-    type: typeof ADDED_PUBLISHABLEITEM_STATUS;
+export type TItemStorageStatusActionType = {
+    type: typeof ADDED_ITEMSTORAGESTATUS;
     itemId: string;
-    itemState: TPublishableItemStatus;
+    itemState: TItemStorageStatus;
 };
 
 // ACTION CREATORS
-export const addPublishableItemStatusAction = (
+export const addItemStorageStatusAction = (
     itemId: string,
-    itemState: TPublishableItemStatus
-): TPublishableItemStatusActionType => ({
-    type: ADDED_PUBLISHABLEITEM_STATUS,
+    itemState: TItemStorageStatus
+): TItemStorageStatusActionType => ({
+    type: ADDED_ITEMSTORAGESTATUS,
     itemId,
     itemState,
 });
 
 // REDUCERS
-const publishableItemStatuses = (
+const itemStorageStatuses = (
     state: Record<string, any> = {},
-    action: TPublishableItemStatusActionType
-): TPublishableItemStatus | unknown => {
+    action: TItemStorageStatusActionType
+): TItemStorageStatus | unknown => {
     switch (action.type) {
-        case ADDED_PUBLISHABLEITEM_STATUS:
+        case ADDED_ITEMSTORAGESTATUS:
             // eslint-disable-next-line no-case-declarations
             const nextState = Object.assign({}, state);
             nextState[action.itemId] = action.itemState;
@@ -38,5 +38,5 @@ const publishableItemStatuses = (
 
 // EXPORTED REDUCER
 export default {
-    publishableItemStatuses,
+    itemStorageStatuses,
 };
