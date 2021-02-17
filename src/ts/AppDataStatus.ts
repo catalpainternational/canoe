@@ -5,7 +5,11 @@ import {
 
 import { Manifest } from "ts/Implementations/Manifest";
 import { TWagtailPage } from "./Types/PageTypes";
-import { getItemStorageStatus } from "ReduxImpl/Interface";
+import {
+    getPageData as getPageDataFromStore,
+    getItemStorageStatus,
+} from "ReduxImpl/Interface";
+import { Page } from "./Implementations/Page";
 
 /** An overview of the status for all data used by the app */
 export class AppDataStatus {
@@ -51,8 +55,9 @@ export class AppDataStatus {
         };
     }
 
-    PageListing(page: TWagtailPage): TItemListing {
-        const pageStatus = getItemStorageStatus(page.api_url);
+    PageListing(value: any[]): TItemListing {
+        const [pageId, manifestPage] = value;
+        const pageStatus = getItemStorageStatus(manifestPage.api_url);
         const status =
             pageStatus !== null
                 ? (pageStatus as TItemStorageStatus)
@@ -60,17 +65,30 @@ export class AppDataStatus {
                       storeStatus: "unset",
                       cacheStatus: "unset",
                   } as TItemStorageStatus);
+        const pageData = getPageDataFromStore(pageId);
+        let isValid = false;
+        let isAvailableOffline = false;
+        let isPublishable = false;
+        if (pageData) {
+            status.storeStatus = "ready";
+            const page = new Page(this.manifest, pageId, manifestPage.api_url);
+            isValid = page.isValid;
+            isAvailableOffline = page.isAvailableOffline;
+            isPublishable = page.isPublishable;
+        } else {
+            status.storeStatus = "unset";
+        }
         // TODO: add code to get item status (isValid, etc.)
         return {
-            id: page.id,
-            api_url: page.api_url,
-            version: page.version,
+            id: pageId,
+            api_url: manifestPage.api_url,
+            version: manifestPage.version,
             type: "page",
             storeStatus: status.storeStatus,
             cacheStatus: status.cacheStatus,
-            isValid: false,
-            isAvailableOffline: false,
-            isPublishable: false,
+            isValid: isValid,
+            isAvailableOffline: isAvailableOffline,
+            isPublishable: isPublishable,
         };
     }
 
@@ -78,7 +96,7 @@ export class AppDataStatus {
         this.itemListings = [];
         this.itemListings.push(this.ManifestListing());
         this.itemListings.push(
-            ...Object.values(this.manifest.pages).map(this.PageListing)
+            ...Object.entries(this.manifest.pages).map(this.PageListing)
         );
     }
 }
