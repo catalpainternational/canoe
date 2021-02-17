@@ -9,30 +9,30 @@
         <span class="plant"></span>
         <h3>{ TRANSLATIONS.title() }</h3>
         <p class="center-objective">{props.objective.cards[state.cardIdx].description}</p>
-        <div class="bottom-buttons">
-            <div>
-                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
-                    <span class="arrow"></span>
-                </a>
-            </div>
-            <div>
-                <button
-                    class="btn-primary"
-                    onclick="{nextObjectiveCard}"
-                    if="{state.cardIdx < props.objective.cards.length - 1}"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    class="btn-primary"
-                    onclick="{completeObjectiveModal}"
-                    if="{state.cardIdx === props.objective.cards.length - 1}"
-                >
-                    { TRANSLATIONS.finish() }
-                </button>
-            </div>
-        </div>
     </LessonFrame>
+    <div if="{state.cardIdx < props.objective.cards.length}" class="bottom-buttons">
+        <div>
+            <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
+                <span class="arrow"></span>
+            </a>
+        </div>
+        <div>
+            <button
+                class="btn-primary"
+                onclick="{nextObjectiveCard}"
+                if="{state.cardIdx < props.objective.cards.length - 1}"
+            >
+                { TRANSLATIONS.next() }
+            </button>
+            <button
+                class="btn-primary"
+                onclick="{completeObjectiveModal}"
+                if="{state.cardIdx === props.objective.cards.length - 1}"
+            >
+                { TRANSLATIONS.finish() }
+            </button>
+        </div>
+    </div>
     <LessonModuleComplete
         if="{state.cardIdx === props.objective.cards.length}"
         lessonId="{props.lesson.id}"

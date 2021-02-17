@@ -34,30 +34,30 @@
             if="{props.lessonContent.cards[state.cardIdx].tag === 'pdf'}"
             card="{props.lessonContent.cards[state.cardIdx]}"
         />
-        <div if="{props.isLessonPage}" class="bottom-buttons">
-            <div>
-                <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
-                    <span class="arrow"></span>
-                </a>
-            </div>
-            <div>
-                <button
-                    class="btn-primary"
-                    onclick="{nextContentPage}"
-                    if="{state.cardIdx < props.lessonContent.cards.length - 1}"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    class="btn-primary"
-                    onclick="{completeContentModal}"
-                    if="{state.cardIdx === props.lessonContent.cards.length - 1}"
-                >
-                    { TRANSLATIONS.finish() }
-                </button>
-            </div>
-        </div>
     </LessonFrame>
+    <div if="{props.isLessonPage && state.cardIdx !== props.lessonContent.cards.length}" class="bottom-buttons">
+        <div>
+            <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
+                <span class="arrow"></span>
+            </a>
+        </div>
+        <div>
+            <button
+                class="btn-primary"
+                onclick="{nextContentPage}"
+                if="{state.cardIdx < props.lessonContent.cards.length - 1}"
+            >
+                { TRANSLATIONS.next() }
+            </button>
+            <button
+                class="btn-primary"
+                onclick="{completeContentModal}"
+                if="{state.cardIdx === props.lessonContent.cards.length - 1}"
+            >
+                { TRANSLATIONS.finish() }
+            </button>
+        </div>
+    </div>
     <LessonModuleComplete
         if="{props.isLessonPage && state.cardIdx === props.lessonContent.cards.length}"
         lessonId="{props.lesson.id}"
