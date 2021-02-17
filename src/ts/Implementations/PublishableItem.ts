@@ -36,7 +36,8 @@ export abstract class PublishableItem<T extends TItemCommon>
     constructor(manifest: TManifest, id: string, statusId: string) {
         this.manifest = manifest;
         this.#id = id;
-        // Normally statusId will be the same as data.api_url minus any params
+        // Normally statusId will be the same as data.storage_location (the cache name)
+        // Except for assets
         this.#statusId = statusId;
 
         this.#version = -1;
@@ -74,12 +75,12 @@ export abstract class PublishableItem<T extends TItemCommon>
         } as unknown) as T;
     }
 
-    /** The id for this item's data (but not its status) within the redux store and the manifest */
+    /** The id for this item's data (but not its status) within the redux store (and the manifest) */
     get id(): string {
         return this.#id;
     }
 
-    /** The id for this item's status (but not its data) within the redux store */
+    /** The id for this item's status (but not its data) within the redux store (and normally the cache) */
     get statusId(): string {
         return this.#statusId;
     }

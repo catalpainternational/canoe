@@ -11,6 +11,8 @@ import LessonPage from "ts/Implementations/Specific/LessonPage";
 import ResourcesRootPage from "ts/Implementations/Specific/ResourcesRootPage";
 import ResourcePage from "ts/Implementations/Specific/ResourcePage";
 
+import { MANIFEST_CACHE_NAME } from "ts/Constants";
+
 // See ts/Typings for the type definitions for these imports
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
@@ -27,7 +29,7 @@ export const ManifestAPIURL = "/manifest/v1";
 export class Manifest extends PublishableItem<TManifestData> {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
-        super(opts, "", ManifestAPIURL);
+        super(opts, "", MANIFEST_CACHE_NAME);
     }
 
     get pages(): Record<string, TWagtailPage> {
@@ -202,7 +204,7 @@ export class Manifest extends PublishableItem<TManifestData> {
 
     getSpecificPage(pageId: string, parent?: Page): Page {
         const pageType = this.data.pages[pageId].type;
-        const pageStatusId = this.data.pages[pageId].api_url;
+        const pageStatusId = this.data.pages[pageId].storage_container;
 
         switch (pageType) {
             case "homepage":
