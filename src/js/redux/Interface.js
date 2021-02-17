@@ -13,6 +13,7 @@ import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./duc
 import { changeOnlineAction } from "./ducks/Online";
 import { setAuthenticatedState, setUnAuthenticatedState } from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
+import { addPublishableItemStatusAction } from "src/js/redux/ducks/PublishableItem";
 
 export const storePageData = (pageId, pageData) => {
     store.dispatch(addPageAction(pageId, pageData));
@@ -133,4 +134,33 @@ export const setFetchingManifest = (fetching) => {
 
 export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);
+};
+
+export const storePublishableItemStatus = (itemId, itemState) => {
+    store.dispatch(addPublishableItemStatusAction(itemId, itemState));
+};
+
+/** Get the publishable item's status
+ * @returns the publishable item's status or null
+ * @remarks test for null first, before casting the return `as TPublishableItemStatus`
+ */
+export const getPublishableItemStatus = (itemId) => {
+    const publishableItemStatuses = store.getState().publishableItemStatuses;
+    if (publishableItemStatuses === null) {
+        return publishableItemStatuses;
+    }
+
+    return publishableItemStatuses[itemId] || null;
+};
+
+/** Get the status for all publishable items
+ * @returns each publishable item's status as an array
+ */
+export const getPublishableItemStatuses = () => {
+    const publishableItemStatuses = store.getState().publishableItemStatuses;
+    if (publishableItemStatuses === null) {
+        return [];
+    }
+
+    return publishableItemStatuses;
 };

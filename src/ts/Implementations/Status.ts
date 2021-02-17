@@ -4,7 +4,7 @@ import { TPublishableItemStatus } from "ts/Types/PublishableItemTypes";
 import {
     getPublishableItemStatus,
     storePublishableItemStatus,
-} from "ts/redux/Interface";
+} from "ReduxImpl/Interface";
 
 export class Status implements TPublishableItemStatus {
     #id: string;

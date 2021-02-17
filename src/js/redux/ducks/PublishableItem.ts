@@ -1,4 +1,4 @@
-import { TPublishableItemStatus } from "src/ts/Types/PublishableItemTypes";
+import { TPublishableItemStatus } from "ts/Types/PublishableItemTypes";
 
 // ACTIONS
 const ADDED_PUBLISHABLEITEM_STATUS = "site/addedPublishableItemStatus";
