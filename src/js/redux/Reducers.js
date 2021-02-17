@@ -9,7 +9,7 @@ import areCompletionsReady from "./ducks/Actions";
 import online from "./ducks/Online";
 import identity from "./ducks/Identity";
 import route from "./ducks/Route";
-import itemStorageStatuses from "./ducks/PublishableItem";
+import itemStorageStatuses from "./ducks/ItemStorageStatus";
 
 export const reducers = combineReducers({
     ...siteReducer,

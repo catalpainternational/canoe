@@ -13,7 +13,7 @@ import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./duc
 import { changeOnlineAction } from "./ducks/Online";
 import { setAuthenticatedState, setUnAuthenticatedState } from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
-import { addItemStorageStatusAction } from "src/js/redux/ducks/PublishableItem";
+import { addItemStorageStatusAction } from "./ducks/ItemStorageStatus";
 
 export const storePageData = (pageId, pageData) => {
     store.dispatch(addPageAction(pageId, pageData));
