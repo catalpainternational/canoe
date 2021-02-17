@@ -18,7 +18,15 @@ export default class CoursePage extends Page {
     }
 
     get hasExam(): boolean {
-        return this.data.has_exam;
+        return this.data.data?.has_exam;
+    }
+    get examCards(): any[] {
+        const examCards = this.data.exam.map((card: any) => {
+            const { id, type, value } = card;
+            const { question, answers } = value;
+            return { id, type, question, answers };
+        });
+        return examCards;
     }
     get hasUserTriedExam(): boolean {
         return hasTriedExam(this.slug);
