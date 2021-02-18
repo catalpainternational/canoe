@@ -114,7 +114,7 @@ export class AppDataStatus {
         for (let ix = 0; ix < pageIds.length; ix++) {
             const pageId = pageIds[ix];
             const manifestPage = this.manifest.pages[pageId];
-            const inCache = cacheKeys.includes(manifestPage.cacheKey);
+            const inCache = cacheKeys.includes(manifestPage.storage_container);
             const pageListing = await this.PageListing(
                 pageId,
                 manifestPage,
