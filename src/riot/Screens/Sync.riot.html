@@ -10,7 +10,6 @@
         </div>
 
         <div class="content-wrapper">
-            <p>{state.cacheKeys}</p>
             <ol class="sync-list">
                 <li
                     each="{(statusListing, index) in state.statusListings}">
@@ -57,7 +56,6 @@
             state: {
                 statusListings: [],
                 cacheStatus: "",
-                cacheKeys: "",
                 publications: "",
                 manifest: "",
                 page: "",
@@ -81,11 +79,6 @@
                     this.update({ cacheStatus: JSON.stringify(response) });
                 });
                 */
-                let cacheKeys = [];
-                cacheUtilities.cacheKeys().then((response) => {
-                    cacheKeys = response;
-                    this.update({ cacheKeys: cacheKeys });
-                });
                 cachePublish.publications().then((response) => {
                     this.update(({ publications: JSON.stringify(response) }));
                 });

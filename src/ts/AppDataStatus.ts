@@ -2,14 +2,17 @@ import {
     TItemListing,
     TItemStorageStatus,
 } from "ts/Types/PublishableItemTypes";
+import { TWagtailPage } from "ts/Types/PageTypes";
 
 import { Manifest } from "ts/Implementations/Manifest";
+import { Page } from "ts/Implementations/Page";
+
+import { CacheUtilities } from "ts/CacheUtilities";
+
 import {
     getPageData as getPageDataFromStore,
     getItemStorageStatus,
 } from "ReduxImpl/Interface";
-import { Page } from "./Implementations/Page";
-import { TWagtailPage } from "./Types/PageTypes";
 
 /** An overview of the status for all data used by the app */
 export class AppDataStatus {
@@ -58,7 +61,8 @@ export class AppDataStatus {
 
     async PageListing(
         pageId: string,
-        manifestPage: TWagtailPage
+        manifestPage: TWagtailPage,
+        inCache: boolean
     ): Promise<TItemListing> {
         const statusId = manifestPage.storage_container;
         const pageStatus = getItemStorageStatus(statusId);
@@ -76,8 +80,8 @@ export class AppDataStatus {
         const pageData = getPageDataFromStore(pageId);
         status.storeStatus = pageData ? "ready" : "unset";
 
-        const page = new Page(this.manifest, pageId, statusId);
-        if (page) {
+        if (inCache) {
+            const page = new Page(this.manifest, pageId, statusId);
             await page.initialiseFromCache();
             status.cacheStatus = page.status.cacheStatus;
             isValid = page.isValid;
@@ -103,11 +107,19 @@ export class AppDataStatus {
     async BuildList(): Promise<void> {
         this.itemListings = [];
         this.itemListings.push(this.ManifestListing());
+
         const pageIds = Object.keys(this.manifest.pages);
+        const cacheKeys = await CacheUtilities.cacheKeys();
+
         for (let ix = 0; ix < pageIds.length; ix++) {
             const pageId = pageIds[ix];
             const manifestPage = this.manifest.pages[pageId];
-            const pageListing = await this.PageListing(pageId, manifestPage);
+            const inCache = cacheKeys.includes(manifestPage.cacheKey);
+            const pageListing = await this.PageListing(
+                pageId,
+                manifestPage,
+                inCache
+            );
             this.itemListings.push(pageListing);
         }
     }
