@@ -36,7 +36,7 @@ export abstract class PublishableItem<T extends TItemCommon>
     constructor(manifest: TManifest, id: string, statusId: string) {
         this.manifest = manifest;
         this.#id = id;
-        // Normally statusId will be the same as data.storage_location (the cache name)
+        // Normally statusId will be the same as data.storage_container (the cache name)
         // Except for assets
         this.#statusId = statusId;
 

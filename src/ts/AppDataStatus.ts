@@ -60,7 +60,7 @@ export class AppDataStatus {
         pageId: string,
         manifestPage: TWagtailPage
     ): Promise<TItemListing> {
-        const statusId = manifestPage.api_url;
+        const statusId = manifestPage.storage_container;
         const pageStatus = getItemStorageStatus(statusId);
         const status =
             pageStatus !== null
@@ -69,20 +69,22 @@ export class AppDataStatus {
                       storeStatus: "unset",
                       cacheStatus: "unset",
                   } as TItemStorageStatus);
-        const pageData = getPageDataFromStore(pageId);
         let isValid = false;
         let isAvailableOffline = false;
         let isPublishable = false;
-        if (pageData) {
-            status.storeStatus = "ready";
-            const page = new Page(this.manifest, pageId, statusId);
+
+        const pageData = getPageDataFromStore(pageId);
+        status.storeStatus = pageData ? "ready" : "unset";
+
+        const page = new Page(this.manifest, pageId, statusId);
+        if (page) {
             await page.initialiseFromCache();
+            status.cacheStatus = page.status.cacheStatus;
             isValid = page.isValid;
             isAvailableOffline = page.isAvailableOffline;
             isPublishable = page.isPublishable;
-        } else {
-            status.storeStatus = "unset";
         }
+
         // TODO: add code to get item status (isValid, etc.)
         return {
             id: pageId,
