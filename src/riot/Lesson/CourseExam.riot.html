@@ -27,32 +27,32 @@
             recordAnswer="{recordAnswer}"
             savedAnswer="{state.currentAnswer.answers}"
         ></TestMultipleAnswer>
-        <div class="bottom-buttons">
-            <div>
-                <a if="{state.cardNumber > 1}" class="has-circle" onclick="{previousExamCard}">
-                    <span class="arrow"></span>
-                </a>
-            </div>
-            <div>
-                <button
-                    if="{ state.cardNumber < state.cards.length }"
-                    class="btn-primary"
-                    onclick="{ nextExamCard }"
-                    disabled="{Object.keys(state.currentAnswer).length === 0}"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    if="{ state.cardNumber === state.cards.length }"
-                    class="btn-primary"
-                    onclick="{ nextExamCard }"
-                    disabled="{Object.keys(state.currentAnswer).length === 0}"
-                >
-                    { TRANSLATIONS.submit() }
-                </button>
-            </div>
-        </div>
     </LessonFrame>
+    <div if="{ !isNaN(state.cardNumber) }" class="bottom-buttons">
+        <div>
+            <a if="{state.cardNumber > 1}" class="has-circle" onclick="{previousExamCard}">
+                <span class="arrow"></span>
+            </a>
+        </div>
+        <div>
+            <button
+                if="{ state.cardNumber < state.cards.length }"
+                class="btn-primary"
+                onclick="{nextExamCard}"
+                disabled="{Object.keys(state.currentAnswer).length === 0}"
+            >
+                { TRANSLATIONS.next() }
+            </button>
+            <button
+                if="{ state.cardNumber === state.cards.length }"
+                class="btn-primary"
+                onclick="{nextExamCard}"
+                disabled="{Object.keys(state.currentAnswer).length === 0}"
+            >
+                { TRANSLATIONS.submit() }
+            </button>
+        </div>
+    </div>
     <ExamResults
         if="{ course.ready && state.stage === 'results' }"
         course="{ course }"

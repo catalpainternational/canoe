@@ -238,11 +238,11 @@ msgstr "Komesa Ezame"
 msgid "Start lesson"
 msgstr "Komesa lisaun"
 
-msgid "Submit answers"
+msgid "Submit"
 msgstr "Submete"
 
-msgid "Submit feedback"
-msgstr "Hatama komentáriu"
+msgid "Submit answers"
+msgstr "Submete"
 
 msgid "Syncs"
 msgstr ""

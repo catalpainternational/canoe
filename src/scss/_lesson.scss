@@ -36,8 +36,9 @@ LessonPage {
 
 LessonFrame {
     .frame-background {
-        // the 10px adds some room for the stacked cards below
-        min-height: calc(100vh - #{$top-menu-height} - 10px);
+        // the 10px adds some room for the stacked cards below, the 50px is
+        // for the buttons
+        min-height: calc(100vh - #{$top-menu-height} - 10px - 50px);
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
@@ -461,10 +462,6 @@ LessonFeedback {
                 }
             }
 
-            &.border-blue-1 {
-                border-color: 2px solid $app-accent-color;
-            }
-
             &:hover {
                 cursor: pointer;
             }
@@ -494,16 +491,6 @@ LessonFeedback {
         }
     }
 
-    .button-container {
-        width: 100%;
-        // button height (50px) * 2, + 20px margin
-        height: 120px;
-
-        & .btn-primary + .btn-secondary {
-            margin-top: 20px;
-        }
-    }
-
     // Pedro needs smaller buttons at 441px. Better to target an industry
     // breakpoint and add the extra pixels.
 
@@ -530,7 +517,7 @@ LessonFeedback {
         color: $gray-1;
     }
 
-    .correct-flag {
+    .correct-checkmark {
         height: 6em;
         width: 6em;
         margin: 2em auto;
@@ -557,15 +544,34 @@ ExamResults {
             font-size: 1.2em;
         }
 
-        .btn-primary,
-        .btn-secondary {
+        p {
+            color: $gray-1;
+            margin: 0.5em 1em;
+        }
+
+        .btn-primary {
             margin-top: 1em;
+            width: 220px;
+            position: relative;
+
+            span {
+                @extend %chevron;
+                position: absolute;
+                right: 20px;
+            }
+        }
+
+        .btn-secondary {
+            margin-top: 1.5em;
+            width: 220px;
         }
     }
 
-    .incorrect-flag {
-        height: 150px;
-        width: 150px;
+    .incorrect-cross {
+        height: 40px;
+        width: 40px;
+        display: block;
+        margin: 1em auto;
     }
 }
 
@@ -575,14 +581,14 @@ ExamResults {
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
+    column-gap: 10px;
     width: 100%;
+    max-width: $tablet;
+    padding: 7px 20px 12px;
+    box-sizing: border-box;
+    margin: 0 auto;
 
-    .arrow {
-        display: inline-block;
-        position: relative;
-    }
-
-    .btn-primary {
+    button {
         min-width: 120px;
     }
 }
