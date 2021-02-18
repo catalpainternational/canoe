@@ -20,6 +20,20 @@
     background-position: center;
 }
 
+.has-circle {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 6px 9px 0 rgba(42, 57, 66, 0.1);
+    background-color: white;
+    position: relative;
+
+    .arrow {
+        @extend %absolutely-center;
+    }
+}
+
 .site-logo {
     @include unmaskable-icons-shared("~img/site_logo.svg", contain);
     height: 36px;
@@ -161,11 +175,9 @@
     width: 20px;
 }
 
-.confetti {
-    @include unmaskable-icons-shared("~img/confetti.svg", contain);
-    background-position: left;
-    height: 100%;
-    min-height: 100px;
+.superman-success {
+    @include unmaskable-icons-shared("~img/superman_success.png", contain);
+    height: 45vh;
     width: 100%;
 }
 
@@ -183,12 +195,12 @@
     width: 17px;
 }
 
-.incorrect-flag {
-    @include unmaskable-icons-shared("~img/incorrect_flag.svg", contain);
+.incorrect-cross {
+    @include unmaskable-icons-shared("~img/incorrect_cross.svg", contain);
 }
 
-.correct-flag {
-    @include unmaskable-icons-shared("~img/correct_flag.svg", contain);
+.correct-checkmark {
+    @include unmaskable-icons-shared("~img/correct_checkmark.svg", contain);
 }
 
 %feedback-icons {
@@ -226,6 +238,12 @@
     @include mask-icons-shared("~img/film.svg", contain, $gray-3);
 }
 
+%chevron {
+    @include mask-icons-shared("~img/chevron_right.svg", contain, $white);
+    height: 15px;
+    width: 15px;
+}
+
 // Icons for card status
 %status-play {
     background-color: $blue;
@@ -234,10 +252,7 @@
     box-sizing: border-box;
 
     span {
-        @include mask-icons-shared("~img/chevron_right.svg", contain, $gray-3);
-        background-color: $white;
-        height: 15px;
-        width: 15px;
+        @extend %chevron;
         margin: auto;
     }
 }

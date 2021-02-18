@@ -9,30 +9,30 @@
         <span class="plant"></span>
         <h3>{ TRANSLATIONS.title() }</h3>
         <p class="center-objective">{state.card.description}</p>
-        <div class="bottom-buttons">
-            <div>
-                <a if="{ state.cardNumber > 1 }" class="has-circle" onclick="{ goBack }">
-                    <span class="arrow"></span>
-                </a>
-            </div>
-            <div>
-                <button
-                    class="btn-primary"
-                    onclick="{ nextObjectiveCard }"
-                    if="{ state.cardNumber < state.cards.length }"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    class="btn-primary"
-                    onclick="{ completeObjectiveModal }"
-                    if="{ state.cardNumber === state.cards.length }"
-                >
-                    { TRANSLATIONS.finish() }
-                </button>
-            </div>
-        </div>
     </LessonFrame>
+    <div if="{ props.lesson.ready && state.cardNumber <= state.cards.length }" class="bottom-buttons">
+        <div>
+            <a if="{ state.cardNumber > 1 }" class="has-circle" onclick="{ goBack }">
+                <span class="arrow"></span>
+            </a>
+        </div>
+        <div>
+            <button
+                class="btn-primary"
+                onclick="{nextObjectiveCard}"
+                if="{ state.cardNumber < state.cards.length }"
+            >
+                { TRANSLATIONS.next() }
+            </button>
+            <button
+                class="btn-primary"
+                onclick="{completeObjectiveModal}"
+                if="{ state.cardNumber === state.cards.length }"
+            >
+                { TRANSLATIONS.finish() }
+            </button>
+        </div>
+    </div>
     <LessonModuleComplete
         if="{ props.lesson.ready && state.complete }"
         lesson="{props.lesson}"
