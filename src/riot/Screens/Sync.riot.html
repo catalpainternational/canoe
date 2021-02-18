@@ -65,23 +65,29 @@
                 latest: () => gettext("Latest syncs"),
                 start: () => gettext("Start lesson"),
             },
-    
-            onMounted() {
-                this.appelflapStatus();
+
+            async onMounted() {
+                await this.appelflapStatus();
             },
 
             async appelflapStatus() {
+                this.update({ appelflapMeta: "Getting" });
+                
                 const appelflapConnect = new AppelflapConnect();
+                const metaStatus = await appelflapConnect.getMetaStatus();
+                this.update({ appelflapMeta: JSON.stringify(metaStatus) });
+
                 const cacheUtilities = new CacheUtilities(appelflapConnect);
                 const cachePublish = new CachePublish(appelflapConnect);
                 /* Not yet implemented
-                cacheUtilities.status().then((response) => {
-                    this.update({ cacheStatus: JSON.stringify(response) });
-                });
+                const cacheStatus = await cacheUtilities.status();
+                this.update({ cacheStatus: JSON.stringify(cacheStatus) });
                 */
-                cachePublish.publications().then((response) => {
-                    this.update(({ publications: JSON.stringify(response) }));
-                });
+                const cacheKeys = await cacheUtilities.cacheKeys();
+                this.update({ cacheKeys: cacheKeys });
+
+                const publications = await cachePublish.publications();
+                this.update(({ publications: JSON.stringify(publications) }));
 
                 // Get the Item Status Listing
                 const appDataStatus = new AppDataStatus();
