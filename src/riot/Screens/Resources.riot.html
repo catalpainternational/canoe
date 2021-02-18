@@ -15,12 +15,15 @@
             selectedTags="{state.selectedTags}"
         ></TagList>
         <div class="list-resources">
-            <ResourceCard
+            <a
                 each="{article in state.articles}"
                 if="{isResourceArticleVisible(article)}"
-                title="{article.title}"
-                link="{article.id}"
-            ></ResourceCard>
+                class="resource-card"
+                href="#{article.id}"
+            >
+                <h5>{article.title}</h5>
+                <h6>This is testing text, something temporary that will be cut off</h6>
+            </a>
         </div>
         <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
         <p if="{!state.isLoading && state.articles.length === 0}">
@@ -33,7 +36,6 @@
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
-        import ResourceCard from "RiotTags/Components/ResourceCard.riot.html";
 
         import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
         import { getResources } from "js/WagtailPagesAPI";
@@ -59,7 +61,6 @@
                 searchbar: SearchBar,
                 loadingdots: LoadingDots,
                 topmenu: TopMenu,
-                resourcecard: ResourceCard,
             },
 
             TRANSLATIONS: {
@@ -78,7 +79,6 @@
                     listOfAllTags,
                     selectedTags: [],
                 });
-                console.log(this.state.articles);
 
                 const urlParams = this.generateUrlParams();
 

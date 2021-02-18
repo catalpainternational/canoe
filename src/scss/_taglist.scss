@@ -10,10 +10,8 @@ TagList {
 
         p {
             @extend %absolutely-center;
+            @extend %truncate-with-ellipsis;
             max-width: 8ch;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
             margin: 0;
 
             text-transform: uppercase;

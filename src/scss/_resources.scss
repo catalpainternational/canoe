@@ -11,21 +11,28 @@ Resources {
         display: flex;
         flex-direction: column;
 
-        > :last-child {
-            margin-bottom: $bottom-menu-height;
+        a.resource-card {
+            background-color: $gray-10;
+            margin-bottom: 3px;
+            padding: 35px 20px;
+            height: 110px;
+            display: block;
+            box-sizing: border-box;
+
+            h5 {
+                color: $gray-1;
+                margin-top: 0;
+            }
+
+            h6 {
+                color: $gray-3;
+                font-size: 14px;
+                @extend %truncate-with-ellipsis;
+            }
         }
-    }
 
-    .resource-card {
-        background-color: $gray-10;
-        margin-bottom: 3px;
-        padding: 35px 20px;
-        height: 110px;
-        display: block;
-        box-sizing: border-box;
-
-        h5 {
-            color: $gray-1;
+        > a.resource-card:last-child {
+            margin-bottom: calc(#{$bottom-menu-height} + 10px);
         }
     }
 
