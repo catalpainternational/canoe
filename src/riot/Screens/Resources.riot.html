@@ -2,7 +2,7 @@
     <TopMenu extrastyleclasses="without-swoop">
         <h4>{ TRANSLATIONS.resources() }</h4>
     </TopMenu>
-    <div if="{state.hash == null}">
+    <div if="{state.hash == null}" class="content-wrapper">
         <SearchBar
             if="{state.articles.length > 0}"
             searchString="{state.searchString}"
@@ -21,8 +21,12 @@
                 class="resource-card"
                 href="#{article.id}"
             >
+                <span each="{card in article.cards.cards}">
+                    <p>{card.tag}</p>
+                    <span if="{article.cards.cards.length > 1}">,</span>
+                </span>
                 <h5>{article.title}</h5>
-                <h6>This is testing text, something temporary that will be cut off</h6>
+                <h6>{article.description}</h6>
             </a>
         </div>
         <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>

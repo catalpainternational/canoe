@@ -1,23 +1,16 @@
 TagList {
     .tag {
-        border-radius: 35px;
-        background-color: $gray-10;
-        height: 65px;
-        width: 65px;
         position: relative;
-        margin: 0 0.5em 1em 0;
+        margin: 0 1em 1em 0;
         display: inline-block;
+        font-size: 0.6em;
 
         p {
             @extend %absolutely-center;
             @extend %truncate-with-ellipsis;
-            max-width: 8ch;
             margin: 0;
-
             text-transform: uppercase;
-            font-size: 0.7em;
             font-weight: 400;
-            color: $app-accent-color;
             text-align: center;
         }
 
@@ -38,6 +31,5 @@ TagList {
     .tag-container {
         overflow: auto;
         white-space: nowrap;
-        margin: 0 0 10px 0;
     }
 }
