@@ -1,8 +1,8 @@
 <Resources>
-    <TopMenu extrastyleclasses="with-swoop">
+    <TopMenu extrastyleclasses="without-swoop">
         <h4>{ TRANSLATIONS.resources() }</h4>
     </TopMenu>
-    <div class="content-wrapper" if="{state.hash == null}">
+    <div if="{state.hash == null}" class="content-wrapper">
         <SearchBar
             if="{state.articles.length > 0}"
             searchString="{state.searchString}"
@@ -14,14 +14,20 @@
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
-        <div class="card-container">
-            <Card
+        <div class="list-resources">
+            <a
                 each="{article in state.articles}"
                 if="{isResourceArticleVisible(article)}"
-                title="{article.title}"
-                link="{article.id}"
-                status="not-started"
-            ></Card>
+                class="resource-card"
+                href="#{article.id}"
+            >
+                <span each="{card in article.cards.cards}">
+                    <p>{card.tag}</p>
+                    <span if="{article.cards.cards.length > 1}">,</span>
+                </span>
+                <h5>{article.title}</h5>
+                <h6>{article.description}</h6>
+            </a>
         </div>
         <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
         <p if="{!state.isLoading && state.articles.length === 0}">
@@ -31,7 +37,6 @@
 
     <script>
         import TagList from "RiotTags/Components/TagList.riot.html";
-        import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
@@ -57,7 +62,6 @@
 
             components: {
                 taglist: TagList,
-                card: Card,
                 searchbar: SearchBar,
                 loadingdots: LoadingDots,
                 topmenu: TopMenu,
