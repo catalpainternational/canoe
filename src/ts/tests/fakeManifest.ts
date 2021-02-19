@@ -1,5 +1,7 @@
 import { Manifest } from "ts/Implementations/Manifest";
-import { TManifest, TAssetEntry, TWagtailPage } from "ts/Types/ManifestTypes";
+import { TManifest } from "ts/Types/ManifestTypes";
+import { TWagtailPage } from "ts/Types/PageTypes";
+import { TAssetEntry } from "ts/Types/AssetTypes";
 
 function buildFakeManifestEntry(
     page_no: number,
@@ -24,8 +26,10 @@ function buildFakeManifestEntry(
         depth: depth,
         type: "homepage",
         title: "Noooooooooo",
-        source: "cache",
-        status: "ready",
+        status: {
+            cacheStatus: "ready",
+            storeStatus: "ready",
+        },
         isValid: true,
         isAvailableOffline: true,
         isPublishable: true,
@@ -57,8 +61,10 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
         api_url: "",
         fullUrl: "",
         contentType: "",
-        source: "cache",
-        status: "ready",
+        status: {
+            cacheStatus: "ready",
+            storeStatus: "ready",
+        },
         isValid: true,
         isAvailableOffline: true,
         isPublishable: true,

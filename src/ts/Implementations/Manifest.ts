@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TManifestData, TWagtailPage } from "ts/Types/ManifestTypes";
+import { TManifestData } from "ts/Types/ManifestTypes";
+import { TWagtailPage } from "ts/Types/PageTypes";
+
 import { PublishableItem } from "ts/Implementations/PublishableItem";
 import { Page } from "ts/Implementations/Page";
+
 import AllCoursesPage from "ts/Implementations/Specific/AllCoursesPage";
 import CoursePage from "ts/Implementations/Specific/CoursePage";
 import LessonPage from "ts/Implementations/Specific/LessonPage";
@@ -23,10 +26,12 @@ class ManifestError extends Error {
     }
 }
 
+const apiUrl = "/manifest/v1";
+
 export class Manifest extends PublishableItem<TManifestData> {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
-        super(opts, "");
+        super(opts, "", apiUrl);
     }
 
     get pages(): Record<string, TWagtailPage> {
@@ -38,7 +43,7 @@ export class Manifest extends PublishableItem<TManifestData> {
     }
 
     get api_url(): string {
-        return "/manifest/v1";
+        return apiUrl;
     }
 
     get fullUrl(): string {
@@ -114,12 +119,18 @@ export class Manifest extends PublishableItem<TManifestData> {
     GetDataFromStore(): void {
         const manifest = getManifestFromStore();
         if (manifest && JSON.stringify(manifest) !== "{}") {
-            this.source = "store";
-            this.status = "ready";
             this.data = manifest;
+            this.status.storeStatus = "ready";
         } else {
-            this.status = "prepped";
+            this.status.storeStatus = "unset";
         }
+    }
+
+    StoreDataToStore(): void {
+        // And store the manifest data in Redux
+        this.status.storeStatus = "unset";
+        storeManifest(this.data);
+        this.status.storeStatus = "ready";
     }
 
     get updatedResp(): Response {
@@ -141,8 +152,7 @@ export class Manifest extends PublishableItem<TManifestData> {
 
         let cacheUpdated = false;
         if (this.data && this.isValid) {
-            this.status = "ready";
-            storeManifest(this.data);
+            this.StoreDataToStore();
             cacheUpdated = await this.updateCache();
         }
         setFetchingManifest(false);
@@ -164,19 +174,27 @@ export class Manifest extends PublishableItem<TManifestData> {
     }
 
     getSpecificPage(pageId: string, parent?: Page): Page {
-        switch (this.data.pages[pageId].type) {
+        const pageType = this.data.pages[pageId].type;
+        const pageStatusId = this.data.pages[pageId].api_url;
+
+        switch (pageType) {
             case "homepage":
-                return new AllCoursesPage(this, pageId, parent);
+                return new AllCoursesPage(this, pageId, pageStatusId, parent);
             case "coursepage":
-                return new CoursePage(this, pageId, parent);
+                return new CoursePage(this, pageId, pageStatusId, parent);
             case "lessonpage":
-                return new LessonPage(this, pageId, parent);
+                return new LessonPage(this, pageId, pageStatusId, parent);
             case "resourcesroot":
-                return new ResourcesRootPage(this, pageId, parent);
+                return new ResourcesRootPage(
+                    this,
+                    pageId,
+                    pageStatusId,
+                    parent
+                );
             case "resourcearticle":
-                return new ResourcePage(this, pageId, parent);
+                return new ResourcePage(this, pageId, pageStatusId, parent);
             default:
-                return new Page(this, pageId, parent);
+                return new Page(this, pageId, pageStatusId, parent);
         }
     }
 

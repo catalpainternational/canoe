@@ -81,31 +81,28 @@
                 start: () => gettext("Start lesson"),
             },
 
-            onMounted() {
-                this.appelflapStatus();
+            async onMounted() {
+                await this.appelflapStatus();
             },
 
             async appelflapStatus() {
                 this.update({ appelflapMeta: "Getting" });
+                
                 const appelflapConnect = new AppelflapConnect();
-                appelflapConnect.getMetaStatus().then((response) => {
-                    this.update({ appelflapMeta: JSON.stringify(response) });
-                });
+                const metaStatus = await appelflapConnect.getMetaStatus();
+                this.update({ appelflapMeta: JSON.stringify(metaStatus) });
+
                 const cacheUtilities = new CacheUtilities(appelflapConnect);
                 const cachePublish = new CachePublish(appelflapConnect);
                 /* Not yet implemented
-                cacheUtilities.status().then((response) => {
-                    this.update({ cacheStatus: JSON.stringify(response) });
-                });
+                const cacheStatus = await cacheUtilities.status();
+                this.update({ cacheStatus: JSON.stringify(cacheStatus) });
                 */
-                let cacheKeys = [];
-                cacheUtilities.cacheKeys().then((response) => {
-                    cacheKeys = response;
-                    this.update({ cacheKeys: cacheKeys });
-                });
-                cachePublish.publications().then((response) => {
-                    this.update(({ publications: JSON.stringify(response) }));
-                });
+                const cacheKeys = await cacheUtilities.cacheKeys();
+                this.update({ cacheKeys: cacheKeys });
+
+                const publications = await cachePublish.publications();
+                this.update(({ publications: JSON.stringify(publications) }));
 
                 // try to get the manifest
                 const manifest = new Manifest();
