@@ -138,13 +138,21 @@ export class AppDataStatus {
         for (let ix = 0; ix < publishable.length; ix++) {
             const item = publishable[ix];
             if (item.type === "manifest") {
-                published["manifest"] = await this.manifest.publish(
-                    appelflapConnect
-                );
+                try {
+                    published["manifest"] = await this.manifest.publish(
+                        appelflapConnect
+                    );
+                } catch {
+                    published["manifest"] = false;
+                }
             } else if (item.type === "page") {
                 const page = this.manifest.getPageManifestData(item.cacheKey);
-                published[item.cacheKey] =
-                    (await page?.publish(appelflapConnect)) || false;
+                try {
+                    published[item.cacheKey] =
+                        (await page?.publish(appelflapConnect)) || false;
+                } catch {
+                    published[item.cacheKey] = false;
+                }
             }
         }
 
