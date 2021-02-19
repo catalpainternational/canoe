@@ -97,6 +97,41 @@ LessonFrame {
     }
 }
 
+ResourceArticle {
+    .no-card {
+        margin: 0 18px 70px;
+        max-width: $tablet;
+
+        @media only screen and (min-width: $tablet) {
+            margin: 0 auto 1.5em;
+        }
+
+        ImageWrapper img.richtext-image {
+            width: calc(100% + (2 * 18px);
+            margin-left: -18px;
+            margin-right: -18px;
+        }
+    }
+
+    .card-content > * + * {
+        margin-top: 20px;
+    }
+
+    BasicCard h3,
+    AudioCard h3,
+    VideoCard h3,
+    QuoteCard h3,
+    ListCard h3,
+    PdfCard h3,
+    Raw h2 {
+        font-family: "TiemposHeadline";
+        font-size: 1.5em;
+        color: $gray-1;
+        font-weight: 300;
+        margin: 0.8em 0;
+    }
+}
+
 LessonObjective .objective {
     h3 {
         text-transform: uppercase;
