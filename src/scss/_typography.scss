@@ -108,6 +108,10 @@ ol {
     list-style-position: inside;
 }
 
+li::marker {
+    color: $gray-1;
+}
+
 // lists within lists
 ul ul,
 ul ol,
