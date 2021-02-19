@@ -97,6 +97,41 @@ LessonFrame {
     }
 }
 
+ResourceArticle {
+    .no-card {
+        margin: 0 18px 70px;
+        max-width: $tablet;
+
+        @media only screen and (min-width: $tablet) {
+            margin: 0 auto 1.5em;
+        }
+
+        ImageWrapper img.richtext-image {
+            width: calc(100% + (2 * 18px);
+            margin-left: -18px;
+            margin-right: -18px;
+        }
+    }
+
+    .card-content > * + * {
+        margin-top: 20px;
+    }
+
+    BasicCard h3,
+    AudioCard h3,
+    VideoCard h3,
+    QuoteCard h3,
+    ListCard h3,
+    PdfCard h3,
+    Raw h2 {
+        font-family: "TiemposHeadline";
+        font-size: 1.5em;
+        color: $gray-1;
+        font-weight: 300;
+        margin: 0.8em 0;
+    }
+}
+
 LessonObjective .objective {
     h3 {
         text-transform: uppercase;
@@ -144,11 +179,6 @@ LessonContent .content {
         text-align: left;
     }
 
-    VideoCard,
-    AudioCard {
-        text-align: center;
-    }
-
     audio {
         min-width: 250px;
         width: 70%;
@@ -165,9 +195,7 @@ LessonContent .content {
         font-size: 1.125em;
 
         .quote-container {
-            display: flex;
-            flex-direction: row;
-            margin-top: 2em;
+            margin: 2em;
 
             &.long {
                 margin-top: 0;
@@ -175,25 +203,21 @@ LessonContent .content {
         }
 
         h3 {
-            font-weight: 500;
-            flex: 1;
+            font-weight: 200;
             margin: 0;
         }
 
         span {
+            display: block;
+            font-family: cursive;
+            font-weight: 200;
             color: $app-accent-color;
-            margin: -0.1em 0.1em;
-            align-self: flex-start;
-            font-size: 1.7em;
-
-            &:last-of-type {
-                align-self: flex-end;
-            }
+            font-size: 3em;
+            margin: -20px 0;
         }
 
         & p {
-            padding-top: 2em;
-            margin-left: 1em;
+            padding-top: 0.7em;
 
             &.long {
                 padding-top: 0;
@@ -206,8 +230,8 @@ LessonContent .content {
         width: 100%;
 
         span {
-            margin-right: 7px;
-            color: $app-accent-color;
+            margin-right: 18px;
+            color: $gray-1;
             font-weight: 600;
         }
     }
@@ -229,22 +253,12 @@ LessonContent .content {
         margin: 0.3em 0;
     }
 
-    ul,
-    ol {
-        padding-left: 20px;
-    }
-
     p.media-description {
         font-size: 18px;
     }
 
     p.error-message {
         color: red;
-    }
-
-    .speaker,
-    .film {
-        margin: 0 auto;
     }
 }
 

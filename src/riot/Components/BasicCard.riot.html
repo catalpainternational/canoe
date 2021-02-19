@@ -1,12 +1,12 @@
 <BasicCard>
-    <h3 if="{ props.card.header }">{ props.card.header }</h3>
-
     <ImageWrapper
         if="{ props.card.image }"
         imageId="{ props.card.image.id }"
         alt="{ props.card.image.alt }"
     >
     </ImageWrapper>
+
+    <h3 if="{ props.card.header }">{ props.card.header }</h3>
 
     <div class="richtext" />
 

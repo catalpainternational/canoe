@@ -238,16 +238,6 @@
     background: $teal;
 }
 
-.speaker {
-    @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/speaker.svg", contain, $gray-3);
-}
-
-.film {
-    @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/film.svg", contain, $gray-3);
-}
-
 %chevron {
     @include mask-icons-shared("~img/chevron_right.svg", contain, $white);
     height: 15px;

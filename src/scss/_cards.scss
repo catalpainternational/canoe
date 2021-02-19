@@ -41,8 +41,6 @@
     }
 
     &.complete {
-        box-shadow: none;
-
         .card-status {
             @extend %status-complete;
         }

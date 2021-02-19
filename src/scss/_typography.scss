@@ -105,6 +105,11 @@ ol {
     font-size: 13px;
     color: $gray-3;
     font-weight: 300;
+    list-style-position: inside;
+}
+
+li::marker {
+    color: $gray-1;
 }
 
 // lists within lists
