@@ -7,6 +7,7 @@ import { TWagtailPage } from "ts/Types/PageTypes";
 import { Manifest } from "ts/Implementations/Manifest";
 import { Page } from "ts/Implementations/Page";
 
+import { AppelflapConnect } from "ts/AppelflapConnect";
 import { CacheUtilities } from "ts/CacheUtilities";
 
 import {
@@ -124,5 +125,29 @@ export class AppDataStatus {
             );
             this.itemListings.push(pageListing);
         }
+    }
+
+    /** Publish everything currently flagged as isPublishable */
+    async PublishAll(): Promise<Record<string, boolean>> {
+        const appelflapConnect = new AppelflapConnect();
+        const publishable = this.itemListings.filter(
+            (listing) => listing.isPublishable
+        );
+
+        const published: Record<string, boolean> = {};
+        for (let ix = 0; ix < publishable.length; ix++) {
+            const item = publishable[ix];
+            if (item.type === "manifest") {
+                published["manifest"] = await this.manifest.publish(
+                    appelflapConnect
+                );
+            } else if (item.type === "page") {
+                const page = this.manifest.getPageManifestData(item.cacheKey);
+                published[item.cacheKey] =
+                    (await page?.publish(appelflapConnect)) || false;
+            }
+        }
+
+        return published;
     }
 }

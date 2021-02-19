@@ -12,11 +12,7 @@
                 <li
                     each="{(statusListing, index) in state.statusListings}">
                     <div class="sync-header">
-                        <h5>ID:${statusListing.id} ${statusListing.type}:${statusListing.title} Version:${statusListing.version}</h5>
-                    </div>
-
-                    <div class="sync-body">
-                        <span>Version:${statusListing.version}</span>
+                        <h5>ID:{statusListing.id} {statusListing.type}:{statusListing.title} <small>({statusListing.version})</small> </h5>
                     </div>
 
                     <div
@@ -70,6 +66,7 @@
                 publications: "",
                 manifest: "",
                 page: "",
+                appDataStatus: null,
             },
 
             TRANSLATIONS: {
@@ -99,51 +96,16 @@
                 this.update(({ publications: JSON.stringify(publications) }));
 
                 // Get the Item Status Listing
-                const appDataStatus = new AppDataStatus();
-                await appDataStatus.Initialise();
-                await appDataStatus.BuildList();
-                this.update({statusListings: appDataStatus.itemListings});
-
-                // try to get the manifest
-                // const manifest = new Manifest();
-                // if (!manifest.isValid) {
-                //     await manifest.initialiseByRequest();
-                // }
-                // if (manifest.isValid) {
-                //     const data = JSON.stringify(manifest.data);
-                //     this.update({ manifest: "Got a manifest" });
-
-                //     // try getting a page
-                //     const aPage = await manifest.getPageManifestData(
-                //         "/site/resources/resource"
-                //     );
-                //     await aPage.initialiseByRequest();
-                //     const manifestAssetCount = aPage.manifestAssets.length;
-                //     const assetCount = aPage.assets.length;
-                //     const pageData =
-                //         `Page:${aPage.title} at ${aPage.loc_hash} ` +
-                //         `Assets Defined:${manifestAssetCount} ` +
-                //         `Assets Found:${assetCount} ` +
-                //         `Valid:${aPage.isValid} ` +
-                //         `Publishable:${aPage.isPublishable} ` +
-                //         `Available Offline:${aPage.isAvailableOffline} ` +
-                //         `Status:${aPage.status} `;
-                //     this.update({ page: pageData });
-                //     if (assetCount) {
-                //         aPage.assets.forEach((asset) => {
-                //             if (asset.isValid) {
-                //                 this.update({ img: asset.fullUrl });
-                //             }
-                //         });
-                //     }
-
-                //     // try publishing the page
-                //     aPage.publish(appelflapConnect);
-                // }
+                this.state.appDataStatus = new AppDataStatus();
+                await this.state.appDataStatus.Initialise();
+                await this.state.appDataStatus.BuildList();
+                this.update({statusListings: this.state.appDataStatus.itemListings});
             },
 
-            syncMe() {
+            async syncMe() {
                 // Identify what needs to be subscribed to, and what needs to be published
+                const published = await this.state.appDataStatus.PublishAll();
+                window.alert(`Published: ${JSON.stringify(published)}`);
             },
         };
     </script>
