@@ -195,9 +195,7 @@ LessonContent .content {
         font-size: 1.125em;
 
         .quote-container {
-            display: flex;
-            flex-direction: row;
-            margin-top: 2em;
+            margin: 2em;
 
             &.long {
                 margin-top: 0;
@@ -205,25 +203,21 @@ LessonContent .content {
         }
 
         h3 {
-            font-weight: 500;
-            flex: 1;
+            font-weight: 200;
             margin: 0;
         }
 
         span {
+            display: block;
+            font-family: cursive;
+            font-weight: 200;
             color: $app-accent-color;
-            margin: -0.1em 0.1em;
-            align-self: flex-start;
-            font-size: 1.7em;
-
-            &:last-of-type {
-                align-self: flex-end;
-            }
+            font-size: 3em;
+            margin: -20px 0;
         }
 
         & p {
-            padding-top: 2em;
-            margin-left: 1em;
+            padding-top: 0.7em;
 
             &.long {
                 padding-top: 0;
