@@ -52,6 +52,7 @@ export abstract class PublishableItem<T extends TItemCommon>
         }
     }
 
+    /** Override this in the implementing class to return the correct value */
     get version(): number {
         return this.#version || -1;
     }

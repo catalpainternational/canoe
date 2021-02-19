@@ -40,6 +40,10 @@ export class Manifest extends PublishableItem<TManifestData> {
         return !!this.data?.pages;
     }
 
+    get version(): number {
+        return this.data?.version || -1;
+    }
+
     get api_url(): string {
         return ManifestAPIURL;
     }
