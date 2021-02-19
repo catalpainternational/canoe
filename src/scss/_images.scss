@@ -189,6 +189,16 @@
     display: inline-block;
 }
 
+.launch-feedback {
+    @include unmaskable-icons-shared("~img/launch_feedback.png", contain);
+    height: 20vh;
+    min-height: 100px;
+    max-height: 200px;
+    width: 100%;
+    display: inline-block;
+    margin: 1.5em auto;
+}
+
 .arrow {
     @include mask-icons-shared("~img/arrow.svg", contain, $blue);
     height: 12px;
