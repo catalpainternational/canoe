@@ -47,6 +47,7 @@ export class AppDataStatus {
     ManifestListing(): TItemListing {
         return {
             id: this.manifest.id,
+            title: "manifest",
             api_url: this.manifest.api_url,
             cacheKey: this.manifest.cacheKey,
             version: this.manifest.version,
@@ -92,6 +93,7 @@ export class AppDataStatus {
         // TODO: add code to get item status (isValid, etc.)
         return {
             id: pageId,
+            title: manifestPage.title,
             api_url: statusId,
             cacheKey: manifestPage.storage_container,
             version: manifestPage.version,

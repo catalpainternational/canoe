@@ -1,27 +1,35 @@
 <Sync>
     <div class="sync">
-        <div class="sync-header">
-            <div class="header-box">
-                <div class="left-block">
-                    <h3>{ TRANSLATIONS.latest() }</h3>
-                </div>
-                <span class="syncs-image"></span>
+        <TopMenu extrastyleclasses="with-swoop">
+            <h3>{ TRANSLATIONS.latest() }</h3>
+            <div class="filter-copy-container">
+                <a class="btn btn-primary" onclick="{syncMe}">Sync Me</a>
             </div>
-        </div>
+        </TopMenu>        
 
         <div class="content-wrapper">
             <ol class="sync-list">
                 <li
                     each="{(statusListing, index) in state.statusListings}">
                     <div class="sync-header">
-                        <h5>{ `ID:${statusListing.id} Type:${statusListing.type} Version:${statusListing.version}`}</h5>
+                        <h5>ID:${statusListing.id} ${statusListing.type}:${statusListing.title} Version:${statusListing.version}</h5>
                     </div>
 
                     <div class="sync-body">
+                        <span>Version:${statusListing.version}</span>
+                    </div>
+
+                    <div
+                        class="sync-body"
+                        if="{statusListing.storeStatus !== 'unset' || statusListing.cacheStatus !== 'unset'}"
+                    >
                         <span>Store URL:{ statusListing.api_url }, status:{ statusListing.storeStatus }</span>
                     </div>
 
-                    <div class="sync-body">
+                    <div
+                        class="sync-body"
+                        if="{statusListing.storeStatus !== 'unset' || statusListing.cacheStatus !== 'unset'}"
+                    >
                         <span>Cache Key:{ statusListing.cacheKey }, status:{ statusListing.cacheStatus }</span>
                     </div>
 
@@ -132,6 +140,10 @@
                 //     // try publishing the page
                 //     aPage.publish(appelflapConnect);
                 // }
+            },
+
+            syncMe() {
+                // Identify what needs to be subscribed to, and what needs to be published
             },
         };
     </script>
