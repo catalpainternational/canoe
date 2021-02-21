@@ -113,7 +113,7 @@ ResourceArticle {
         }
     }
 
-    .card-content > * + * {
+    .content-block + .content-block {
         margin-top: 20px;
     }
 

@@ -9,13 +9,13 @@
         resourceTitle="{props.resourceId === 'resources' ? props.lessonContent.title : ''}"
     >
         <template if="{props.resourceId === 'resources'}" each="{card in props.lessonContent.cards}">
-            <Raw if="{card.tag === 'raw'}" html="{card.content}"></Raw>
-            <BasicCard if="{card.tag === 'basic'}" card="{card}"></BasicCard>
-            <AudioCard if="{card.media_type === 'audio'}" media="{card}"></AudioCard>
-            <VideoCard if="{card.media_type === 'video'}" media="{card}"></VideoCard>
-            <QuoteCard if="{card.tag === 'quote'}" card="{card}"></QuoteCard>
-            <ListCard if="{card.tag === 'list'}" card="{card}"></ListCard>
-            <PdfCard if="{card.tag === 'pdf'}" card="{card}"></PdfCard>
+            <Raw if="{card.tag === 'raw'}" html="{card.content}" class="content-block"></Raw>
+            <BasicCard if="{card.tag === 'basic'}" card="{card}" class="content-block"></BasicCard>
+            <AudioCard if="{card.media_type === 'audio'}" media="{card}" class="content-block"></AudioCard>
+            <VideoCard if="{card.media_type === 'video'}" media="{card}" class="content-block"></VideoCard>
+            <QuoteCard if="{card.tag === 'quote'}" card="{card}" class="content-block"></QuoteCard>
+            <ListCard if="{card.tag === 'list'}" card="{card}" class="content-block"></ListCard>
+            <PdfCard if="{card.tag === 'pdf'}" card="{card}" class="content-block"></PdfCard>
         </template>
         <template if="{props.resourceId !== 'resources'}">
             <Raw
