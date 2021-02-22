@@ -6,6 +6,39 @@ Profile {
     .with-swoop {
         @extend %center-with-flex;
     }
+
+    .tab-titles {
+        display: flex;
+        justify-content: center;
+        margin: 1em 0 2em 0;
+
+        a {
+            width: 50%;
+            border-bottom: 2px solid $gray-7;
+
+            h5.section-title {
+                font-weight: 300;
+                font-size: 0.8em;
+                color: $gray-4;
+                letter-spacing: 1px;
+                justify-content: center;
+            }
+
+            &.selected {
+                border-bottom: 2px solid $app-accent-color;
+
+                h5.section-title {
+                    color: $gray-1;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    h2.sub-title {
+        font-size: 1em;
+        font-weight: 300;
+    }
 }
 
 .stats {

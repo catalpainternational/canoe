@@ -40,10 +40,8 @@
         height: 40px;
     }
 
-    &.complete {
-        .card-status {
-            @extend %status-complete;
-        }
+    &.complete .card-status {
+        @extend %status-complete;
     }
 
     &.in-progress .card-status {

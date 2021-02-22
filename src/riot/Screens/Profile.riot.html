@@ -1,17 +1,30 @@
 <Profile>
-    <TopMenu extrastyleclasses="with-swoop">
+    <TopMenu extrastyleclasses="without-swoop">
         <h4>{ TRANSLATIONS.yourProfile() }</h4>
         <a class="top-icon right extra-clickable-space" href="#settings">
             <span class="settings-icon"> </span>
         </a>
     </TopMenu>
-
     <div class="content-wrapper">
-        <h5 class="section-title">{ TRANSLATIONS.courseProgress() }</h5>
+        <h2 class="sub-title">{ TRANSLATIONS.courseProgress() }</h2>
+        <div class="tab-titles">
+            <a
+                class="{state.selectedInProgress ? 'selected' : ''}"
+                onclick="{() => selectTab('in-progress')}"
+            >
+                <h5 class="section-title">in progress</h5>
+            </a>
+            <a
+                class="{!state.selectedInProgress ? 'selected' : ''}"
+                onclick="{() => selectTab('completed')}"
+            >
+                <h5 class="section-title">completed</h5>
+            </a>
+        </div>
         <LoadingDots if="{state.loading}" extrastyleclasses="dark"></LoadingDots>
-        <div class="card-container">
+        <div if="{state.selectedInProgress}" class="card-container">
             <Card
-                each="{course in state.courses}"
+                each="{course in state.inProgressCourses}"
                 title="{course.title}"
                 link="{course.id}"
                 status="{courseStatus(course)}"
@@ -19,8 +32,17 @@
                 progressMax="{course.numberOfLessons}"
             ></Card>
         </div>
-
-        <h5 class="section-title">{ TRANSLATIONS.learning() }</h5>
+        <div if="{!state.selectedInProgress}" class="card-container">
+            <Card
+                each="{course in state.completedCourses}"
+                title="{course.title}"
+                link="{course.id}"
+                status="{courseStatus(course)}"
+                progressValue="{course.numberOfFinishedLessons}"
+                progressMax="{course.numberOfLessons}"
+            ></Card>
+        </div>
+        <h2 class="sub-title">{ TRANSLATIONS.learning() }</h2>
         <div class="stats">
             <div class="card stat">
                 <div class="profile-card">
@@ -29,7 +51,6 @@
                     <h5>{ TRANSLATIONS.lessonsCompleted() }</h5>
                 </div>
             </div>
-
             <div class="card stat">
                 <div class="profile-card">
                     <span class="road-sign"></span>
@@ -39,7 +60,6 @@
             </div>
         </div>
     </div>
-
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
@@ -56,6 +76,9 @@
                 courses: [],
                 currentCourse: null,
                 loading: false,
+                inProgressCourses: [],
+                completedCourses: [],
+                selectedInProgress: true,
             },
 
             components: {
@@ -66,7 +89,7 @@
 
             TRANSLATIONS: {
                 yourProfile: () => gettext("Your profile"),
-                courseProgress: () => gettext("Course Progress"),
+                courseProgress: () => gettext("Course progress"),
                 learning: () => gettext("Learning statistics"),
                 lessonsCompleted: () => gettext("lessons completed"),
                 lessonsLeft: () => gettext("lessons remaining"),
@@ -80,13 +103,28 @@
                 let courses = await allCoursesPage.getFullCourseObjects();
 
                 if (isGuestUser()) {
-                    courses = courses.filter(course => course.isVisibleToGuests());
+                    courses = courses.filter((course) => course.isVisibleToGuests());
                 }
                 const lastWorkedOnCourse = getCourseWithLatestCompletion(courses);
+
+                let inProgressCourses = [];
+                let completedCourses = [];
+                for (const course of courses) {
+                    const status = this.courseStatus(course);
+                    if (status === "not-started") {
+                        continue;
+                    } else if (status === "in-progress") {
+                        inProgressCourses.push(course);
+                    } else if (status === "complete") {
+                        completedCourses.push(course);
+                    }
+                }
 
                 this.update({
                     loading: false,
                     courses,
+                    inProgressCourses,
+                    completedCourses,
                     currentCourse: lastWorkedOnCourse,
                 });
             },
@@ -116,6 +154,14 @@
                     return "in-progress";
                 } else {
                     return "complete";
+                }
+            },
+
+            selectTab(tabName) {
+                if (tabName === "in-progress") {
+                    this.update({ selectedInProgress: true });
+                } else {
+                    this.update({ selectedInProgress: false });
                 }
             },
         };

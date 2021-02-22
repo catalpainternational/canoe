@@ -27,10 +27,6 @@ LessonPage {
 
     .module-swoop {
         @extend %bottom-swoop;
-
-        a:hover {
-            cursor: pointer;
-        }
     }
 }
 
@@ -575,6 +571,7 @@ ExamResults {
                 @extend %chevron;
                 position: absolute;
                 right: 20px;
+                top: 12px;
             }
         }
 

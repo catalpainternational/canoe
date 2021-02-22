@@ -67,6 +67,10 @@ a {
     font-size: 1em;
     color: $app-accent-color;
     font-weight: 300;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 button {
