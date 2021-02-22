@@ -142,6 +142,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return !!this.data.data && !!this.data.id && !!this.data.title;
     }
 
+    /** A page isAvailableOffline if it, and all of its assets and child pages, are available offline. */
     get isAvailableOffline(): boolean {
         if (!super.isAvailableOffline) {
             return false;
@@ -169,6 +170,8 @@ export class Page extends PublishableItem<TWagtailPageData> {
         );
     }
 
+    /** A page isPublishable if it, and all of its assets, are publishable.
+     * That is, are they all present in this page's cache. */
     get isPublishable(): boolean {
         if (!super.isPublishable) {
             return false;
@@ -186,11 +189,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
         // Assets are not publishable on their own,
         // Their isPublishable status is only relevant here
-        if (!this.#assets.every((asset) => asset.isPublishable)) {
-            return false;
-        }
-
-        return this.#childPages.every((childPage) => childPage.isPublishable);
+        return this.#assets.every((asset) => asset.isPublishable);
     }
 
     get emptyItem(): TWagtailPageData {
