@@ -109,8 +109,15 @@ ResourceArticle {
         }
     }
 
-    .card-content > * + * {
+    .content-block + .content-block {
         margin-top: 20px;
+    }
+
+    .content .resource-description {
+        color: $gray-1;
+        font-size: 1.2em;
+        margin: 1em 0;
+        width: 100%;
     }
 
     BasicCard h3,
@@ -203,13 +210,9 @@ LessonContent .content {
             margin: 0;
         }
 
-        span {
+        .quotation-mark {
             display: block;
-            font-family: cursive;
-            font-weight: 200;
-            color: $app-accent-color;
-            font-size: 3em;
-            margin: -20px 0;
+            margin-bottom: 10px;
         }
 
         & p {
