@@ -8,6 +8,9 @@
         noCardStyle="{props.resourceId === 'resources' ? true : false}"
         resourceTitle="{props.resourceId === 'resources' ? props.lessonContent.title : ''}"
     >
+        <template if="{props.description}">
+            <p class="resource-description">{ props.description }</p>
+        </template>
         <template if="{props.resourceId === 'resources'}" each="{card in props.lessonContent.cards}">
             <Raw if="{card.tag === 'raw'}" html="{card.content}" class="content-block"></Raw>
             <BasicCard if="{card.tag === 'basic'}" card="{card}" class="content-block"></BasicCard>

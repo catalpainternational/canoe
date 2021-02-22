@@ -117,6 +117,13 @@ ResourceArticle {
         margin-top: 20px;
     }
 
+    .content .resource-description {
+        color: $gray-1;
+        font-size: 1.2em;
+        margin: 1em 0;
+        width: 100%;
+    }
+
     BasicCard h3,
     AudioCard h3,
     VideoCard h3,
