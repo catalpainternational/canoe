@@ -91,6 +91,7 @@ export abstract class PublishableItem<T extends TItemCommon>
     /** The data in the manifest that relates specifically to this item */
     abstract get manifestData(): T;
 
+    /** Is this item `ready` to be used now!? */
     get ready(): boolean {
         return this.status.ready;
     }

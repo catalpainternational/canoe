@@ -71,7 +71,8 @@ export class StorageStatus implements TItemStorageStatus {
         return this.#id;
     }
 
+    /** Is this item `ready` to be used now!? */
     get ready(): boolean {
-        return this.#cacheStatus === "ready" && this.#storeStatus === "ready";
+        return this.#storeStatus === "ready";
     }
 }
