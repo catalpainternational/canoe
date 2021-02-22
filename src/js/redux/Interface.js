@@ -13,6 +13,7 @@ import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./duc
 import { changeOnlineAction } from "./ducks/Online";
 import { setAuthenticatedState, setUnAuthenticatedState } from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
+import { addItemStorageStatusAction } from "./ducks/ItemStorageStatus";
 
 export const storePageData = (pageId, pageData) => {
     store.dispatch(addPageAction(pageId, pageData));
@@ -133,4 +134,33 @@ export const setFetchingManifest = (fetching) => {
 
 export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);
+};
+
+export const storeItemStorageStatus = (itemId, itemState) => {
+    store.dispatch(addItemStorageStatusAction(itemId, itemState));
+};
+
+/** Get the publishable item's storage status
+ * @returns the publishable item's storage status or null
+ * @remarks test for null first, before casting the return `as TItemStorageStatus`
+ */
+export const getItemStorageStatus = (itemId) => {
+    const itemStorageStatuses = store.getState().itemStorageStatuses;
+    if (itemStorageStatuses === null) {
+        return itemStorageStatuses;
+    }
+
+    return itemStorageStatuses[itemId] || null;
+};
+
+/** Get the status for all publishable items storage statuses
+ * @returns each publishable item's storage status as an array
+ */
+export const getItemStorageStatuses = () => {
+    const itemStorageStatuses = store.getState().itemStorageStatuses;
+    if (itemStorageStatuses === null) {
+        return [];
+    }
+
+    return itemStorageStatuses;
 };

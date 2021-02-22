@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TAssetEntry, TManifest } from "ts/Types/ManifestTypes";
+import { TManifest } from "ts/Types/ManifestTypes";
+import { TAssetEntry } from "ts/Types/AssetTypes";
 import { PublishableItem } from "ts/Implementations/PublishableItem";
 
+import { AppelflapConnect } from "ts/AppelflapConnect";
 import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "ts/Constants";
 import { getBrowser } from "ts/PlatformDetection";
 
@@ -20,9 +22,11 @@ export class Asset extends PublishableItem<TAssetEntry> {
         manifest: TManifest,
         pageId: string,
         id: string,
+        statusId: string,
         pageCache: string
     ) {
-        super(manifest, id);
+        super(manifest, id, statusId);
+
         this.#pageId = pageId;
         this.#pageCache = pageCache;
     }
@@ -103,28 +107,11 @@ export class Asset extends PublishableItem<TAssetEntry> {
         return contentType;
     }
 
-    /** This will do a basic integrity check.
+    /** An Asset is not publishable on its own.
+     * So its isPublishable value is only relevant to its parent page.
      */
-    get isValid(): boolean {
-        if (!super.isValid) {
-            return false;
-        }
-
-        // Is the asset's source acceptable
-        if (["unset", "store"].includes(this.source)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    get isAvailableOffline(): boolean {
-        return super.isAvailableOffline;
-    }
-
-    /** Always returns false, an Asset is not publishable on its own */
     get isPublishable(): boolean {
-        return false;
+        return super.isPublishable;
     }
 
     get emptyItem(): TAssetEntry {
@@ -138,7 +125,13 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     GetDataFromStore(): void {
-        // Does nothing, assets are only stored in the cache
+        // Does almost nothing, assets are only stored in the cache
+        this.status.storeStatus = "ready";
+    }
+
+    StoreDataToStore(): void {
+        // Does almost nothing, assets are only stored in the cache
+        this.status.storeStatus = "ready";
     }
 
     get updatedResp(): Response {
@@ -151,9 +144,18 @@ export class Asset extends PublishableItem<TAssetEntry> {
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.#blob = await resp.blob();
-        this.status = "ready";
+        this.status.cacheStatus = "loading";
 
         const cacheUpdated = await this.updateCache();
+
         return cacheUpdated && !!this.#blob;
+    }
+
+    /** Tells Appelflap to (not) publish this Asset's entry in the cache
+     * @returns
+     * - resolve(false) because Assets cannot be published on their own
+     */
+    async publish(appelflapConnect: AppelflapConnect): Promise<boolean> {
+        return Promise.resolve(false);
     }
 }

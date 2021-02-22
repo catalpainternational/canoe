@@ -1,24 +1,27 @@
 import { BACKEND_BASE_URL } from "js/urls";
 
+import { TPublishableItem } from "ts/Types/PublishableItemTypes";
+import { TManifest } from "ts/Types/ManifestTypes";
+
+import { IPublishableItemState } from "ts/Interfaces/PublishableItemInterfaces";
+
+import { StorageStatus } from "src/ts/Implementations/StorageStatus";
+
 import { AppelflapConnect } from "ts/AppelflapConnect";
 import { CachePublish } from "ts/CachePublish";
-
-import { IManifestItemState } from "ts/Interfaces/ManifestInterfaces";
-import { TManifestItemSource, TManifestItemStatus } from "ts/Types/CanoeEnums";
-import { TManifest, TManifestItem } from "ts/Types/ManifestTypes";
 
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
-export abstract class PublishableItem<T extends TManifestItem>
-    implements IManifestItemState {
+export abstract class PublishableItem<T extends TPublishableItem>
+    implements IPublishableItemState {
     #version: number;
     #id: string;
+    #statusId: string;
     data!: T;
     cache!: Cache;
 
-    status!: TManifestItemStatus;
-    source: TManifestItemSource;
+    status!: StorageStatus;
 
     /** A reference to the original manifest itself */
     manifest: TManifest;
@@ -30,21 +33,22 @@ export abstract class PublishableItem<T extends TManifestItem>
     /** Indicates whether the above #requestObject has had the authorization header stripped */
     #requestObjectClean = false;
 
-    constructor(manifest: TManifest, id: string) {
-        this.status = "unset";
-        this.source = "unset";
+    constructor(manifest: TManifest, id: string, statusId: string) {
+        this.manifest = manifest;
+        this.#id = id;
+        // Normally statusId will be the same as data.api_url
+        this.#statusId = statusId;
+
         this.#version = -1;
+        this.status = new StorageStatus(this.#statusId);
         this.#requestObject = new Request("");
 
-        this.#id = id;
-        this.manifest = manifest;
+        this.GetDataFromStore();
 
         if (!this.data) {
             this.data = this.emptyItem;
-            this.status = "empty";
+            this.status.storeStatus = "unset";
         }
-
-        this.GetDataFromStore();
     }
 
     get version(): number {
@@ -60,10 +64,9 @@ export abstract class PublishableItem<T extends TManifestItem>
     get emptyItem(): T {
         return ({
             version: -1,
-            source: "unset",
-            status: "unset",
             api_url: "",
             fullUrl: "",
+            status: this.status.emptyStatus,
             isValid: false,
             isAvailableOffline: false,
             isPublishable: false,
@@ -71,8 +74,14 @@ export abstract class PublishableItem<T extends TManifestItem>
         } as unknown) as T;
     }
 
+    /** The id for this item's data (but not its status) within the redux store */
     get id(): string {
         return this.#id;
+    }
+
+    /** The id for this item's status (but not its data) within the redux store */
+    get statusId(): string {
+        return this.#statusId;
     }
 
     abstract get contentType(): string;
@@ -80,60 +89,35 @@ export abstract class PublishableItem<T extends TManifestItem>
     /** The data in the manifest that relates specifically to this item */
     abstract get manifestData(): T;
 
+    /** Is this item `ready` to be used now!? */
     get ready(): boolean {
-        return !!this.status && this.status === "ready";
+        return this.status.ready;
     }
 
     /** This will do a basic integrity check. */
     get isValid(): boolean {
-        if (!this.api_url) {
+        if (!this.statusId) {
             return false;
         }
 
         // Is the item's status acceptable
-        if (
-            this.source === "unset" ||
-            ["unset", "empty", "prepped"].includes(this.status)
-        ) {
+        if (["unset", "empty", "prepped"].includes(this.status.cacheStatus)) {
             return false;
         }
 
-        return true;
+        return this.status.storeStatus !== "unset";
     }
 
     /** This is only a very basic check.
-     * Implementing classes must call this via super, and extend to meet their requirements. */
+     * @remarks Implementing classes must call this via super, and extend to meet their requirements. */
     get isAvailableOffline(): boolean {
-        if (!this.isValid) {
-            return false;
-        }
-
-        if (this.version < 0) {
-            return false;
-        }
-
-        // Is the item's status acceptable
-        return this.status === "ready";
+        return this.isValid && this.version >= 0;
     }
 
     /** This is only a very basic check.
-     * Implementing classes must call this via super, and extend to meet their requirements. */
+     * @remarks Implementing classes must call this via super, and extend to meet their requirements. */
     get isPublishable(): boolean {
-        if (!this.isValid) {
-            return false;
-        }
-
-        if (this.version < 0) {
-            return false;
-        }
-
-        // Has the item's cache entry and its request header cleaned of auth data
-        if (!this.#requestObjectClean) {
-            return false;
-        }
-
-        // Is the items's status acceptable
-        return this.status === "ready";
+        return this.isValid && this.version >= 0 && this.#requestObjectClean;
     }
 
     abstract get cacheKey(): string;
@@ -149,6 +133,8 @@ export abstract class PublishableItem<T extends TManifestItem>
 
     /** Get the data from the store and use it to fill the `data` member */
     abstract GetDataFromStore(): void;
+
+    abstract StoreDataToStore(): void;
 
     /** Build a request object we can use to fetch this item */
     private get NewRequestObject(): Request {
@@ -178,9 +164,13 @@ export abstract class PublishableItem<T extends TManifestItem>
     private CleanRequestObject(srcReq: Request): void {
         if (!srcReq.headers.has("authorization")) {
             this.#requestObjectCleaned = false;
-            this.#requestObjectClean = false;
+            this.#requestObjectClean = true;
             this.#requestObject = srcReq;
+            return;
         }
+
+        this.#requestObjectCleaned = false;
+        this.#requestObjectClean = false;
 
         const headers = new Headers();
         for (const key of srcReq.headers.keys()) {
@@ -253,17 +243,16 @@ export abstract class PublishableItem<T extends TManifestItem>
             : undefined;
     }
 
+    /** Updates the cache and ensures it is 'cleaned' ready for publishing */
     async updateCache(): Promise<boolean> {
         if (!(await this.accessCache())) {
-            this.source = "unset";
-            this.status = "prepped";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
         let reqObj = await this.GetRequestObject();
         if (!reqObj) {
-            this.source = "unset";
-            this.status = "prepped";
+            this.status.cacheStatus = "prepared";
             if (this.fullUrl) {
                 reqObj = this.NewRequestObject;
                 this.CleanRequestObject(reqObj);
@@ -274,17 +263,18 @@ export abstract class PublishableItem<T extends TManifestItem>
             }
         }
 
-        this.source = "cache";
-        this.status = "loading";
+        this.status.cacheStatus = "loading";
 
         if (this.#requestObjectCleaned) {
             // Delete the existing cache entry first to ensure that the auth key gets 'lost'
             await this.cache.delete(reqObj);
+            this.#requestObjectCleaned = false;
         }
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         await this.cache.put(this.#requestObject!, this.updatedResp);
         this.#requestObjectClean = true;
+        this.status.cacheStatus = "ready";
 
         return true;
     }
@@ -296,15 +286,13 @@ export abstract class PublishableItem<T extends TManifestItem>
     async initialiseFromCache(): Promise<boolean> {
         const cacheOpen = await this.accessCache();
         if (!cacheOpen || !this.api_url) {
-            this.source = "unset";
-            this.status = "prepped";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
         const reqObj = await this.GetRequestObject();
         if (!reqObj) {
-            this.source = "unset";
-            this.status = "prepped";
+            this.status.cacheStatus = "prepared";
             return false;
         }
         const reqUrl = new URL(reqObj.url);
@@ -312,30 +300,23 @@ export abstract class PublishableItem<T extends TManifestItem>
         const version = parseInt(params.get("version") || "-1");
         this.#version = isNaN(version) ? -1 : version;
 
-        this.source = "cache";
-        this.status = "loading";
+        this.status.cacheStatus = "loading";
         const response = (await this.getFromCache())?.clone();
 
         if (!response) {
-            this.source = "unset";
-            this.status = "prepped";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
         const isInitialised = await this.initialiseFromResponse(response);
-        if (isInitialised) {
-            this.status = "ready";
-        } else {
-            this.source = "unset";
-            this.status = "loading";
-        }
+        this.status.cacheStatus = isInitialised ? "ready" : "loading";
+
         return isInitialised;
     }
 
     /** Initialise this item from a network request */
     async initialiseByRequest(): Promise<boolean> {
-        this.source = "network";
-        this.status = "loading";
+        this.status.cacheStatus = "loading";
 
         const cacheOpen = await this.accessCache();
 
@@ -344,8 +325,7 @@ export abstract class PublishableItem<T extends TManifestItem>
 
         if (!cacheOpen) {
             // Couldn't get the cache open (this is a very unusual circumstance)
-            this.source = "unset";
-            this.status = "prepped";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
@@ -362,14 +342,13 @@ export abstract class PublishableItem<T extends TManifestItem>
             // eslint-disable-next-line no-console
             console.error(tex);
 
-            this.source = "unset";
-            this.status = "prepped";
+            this.status.cacheStatus = "prepared";
             return false;
         }
 
         const isInitialised = await this.initialiseFromCache();
         if (isInitialised) {
-            this.status = "ready";
+            this.status.cacheStatus = "ready";
         }
 
         return isInitialised;
