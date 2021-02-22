@@ -2,13 +2,11 @@ import { BACKEND_BASE_URL } from "js/urls";
 
 import { TItemCommon } from "ts/Types/PublishableItemTypes";
 import { TManifest } from "ts/Types/ManifestTypes";
+import { TPublication } from "ts/Types/CacheTypes";
 
 import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
 
 import { StorageStatus } from "src/ts/Implementations/StorageStatus";
-
-import { AppelflapConnect } from "ts/AppelflapConnect";
-import { CachePublish } from "ts/CachePublish";
 
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
@@ -170,6 +168,15 @@ export abstract class PublishableItem<T extends TItemCommon>
 
     /** Create the new response to go into the cache */
     abstract get updatedResp(): Response;
+
+    /** Define the 'target' within the cache for Appelflap */
+    get cacheTarget(): TPublication {
+        return {
+            webOrigin: btoa(self.origin),
+            cacheName: btoa(this.cacheKey),
+            version: this.version,
+        };
+    }
 
     /** Cleans the supplied request object and uses it to set this item's #requestObject and #requestObjectCleaned values */
     private CleanRequestObject(srcReq: Request): void {
@@ -363,31 +370,5 @@ export abstract class PublishableItem<T extends TItemCommon>
         }
 
         return isInitialised;
-    }
-
-    /** Tells Appelflap to publish this item's cache
-     * @returns
-     * - resolve(true) on success,
-     * - resolve(false) if isPublishable is false or appelflap connect wasn't provided,
-     * - reject(false) on error
-     */
-    async publish(appelflapConnect: AppelflapConnect): Promise<boolean> {
-        if (!this.isPublishable || !appelflapConnect) {
-            return Promise.resolve(false);
-        }
-
-        const cachePublish = new CachePublish(appelflapConnect);
-
-        const cacheToPublish = {
-            webOrigin: btoa(self.origin),
-            cacheName: btoa(this.cacheKey),
-            version: this.version,
-        };
-        try {
-            await cachePublish.publish(cacheToPublish);
-            return await Promise.resolve(true);
-        } catch (error) {
-            return await Promise.reject(false);
-        }
     }
 }

@@ -103,8 +103,10 @@
 
             async syncMe() {
                 // Identify what needs to be subscribed to, and what needs to be published
-                const published = await this.state.appDataStatus.PublishAll();
-                window.alert(`Published: ${JSON.stringify(published)}`);
+                const appDataStatus = this.state.appDataStatus;
+                const syncStatus = await appDataStatus.SyncAll();
+
+                window.alert(`Published: ${JSON.stringify(syncStatus)}`);
             },
         };
     </script>
