@@ -154,7 +154,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
             return false;
         }
 
-        if (this.manifestAssets.length === 0 && this.#assets.length === 0) {
+        if (this.manifestAssets.length === 0 && this.#childPages.length === 0) {
             return true;
         }
 
@@ -183,17 +183,13 @@ export class Page extends PublishableItem<TWagtailPageData> {
             return false;
         }
 
-        if (this.manifestAssets.length === 0 && this.#assets.length === 0) {
+        if (this.manifestAssets.length === 0 && this.#childPages.length === 0) {
             return true;
         }
 
         // Assets are not publishable on their own,
         // Their isPublishable status is only relevant here
-        if (!this.#assets.every((asset) => asset.isPublishable)) {
-            return false;
-        }
-
-        return this.#childPages.every((childPage) => childPage.isPublishable);
+        return this.#assets.every((asset) => asset.isPublishable);
     }
 
     get emptyItem(): TWagtailPageData {
