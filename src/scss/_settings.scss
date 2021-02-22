@@ -16,7 +16,7 @@ LanguageSelector {
   label {
     color: $gray-1;
     font-size: 1em;
-    font-weight: 500;
+    font-weight: 400;
     display: block;
     margin-bottom: 10px;
   }
@@ -31,7 +31,7 @@ LanguageSelector {
       border-bottom: 2px solid $app-accent-color;
       width: 8px;
       height: 8px;
-      top: 14px;
+      top: 13px;
       right: 15px;
       transform: rotate(45deg);
     }
@@ -40,14 +40,15 @@ LanguageSelector {
   #language {
     width: 100%;
     height: 40px;
-    font-size: 1em;
+    font-size: 0.9em;
     font-weight: 300;
     color: $gray-1;
-    margin-bottom: 15%;
+    margin-bottom: 10%;
     border: 1px solid $gray-7;
     border-radius: 3px;
     background-color: $white;
     padding-left: 10px;
+    -webkit-appearance: none;
     appearance: none;
     box-shadow: inset 0 2px 3px 0 rgba(42,57,66,0.1);
 
@@ -113,7 +114,6 @@ LanguageSelector {
 
     label {
       color: $gray-1;
-      font-size: 1em;
-      font-weight: 500;
+      font-weight: 400;
     }
 }
