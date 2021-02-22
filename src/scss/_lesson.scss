@@ -27,10 +27,6 @@ LessonPage {
 
     .module-swoop {
         @extend %bottom-swoop;
-
-        a:hover {
-            cursor: pointer;
-        }
     }
 }
 

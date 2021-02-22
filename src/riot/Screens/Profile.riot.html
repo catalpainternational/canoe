@@ -9,22 +9,32 @@
         <h2 class="sub-title">{ TRANSLATIONS.courseProgress() }</h2>
         <div class="tab-titles">
             <a
-                class="{state.selectedTab === 'IN PROGRESS' ? 'selected' : ''}"
-                onclick="{() => selectTab('IN PROGRESS')}"
+                class="{state.selectedInProgress ? 'selected' : ''}"
+                onclick="{() => selectTab('in-progress')}"
             >
                 <h5 class="section-title">in progress</h5>
             </a>
             <a
-                class="{state.selectedTab === 'COMPLETED' ? 'selected' : ''}"
-                onclick="{() => selectTab('COMPLETED')}"
+                class="{!state.selectedInProgress ? 'selected' : ''}"
+                onclick="{() => selectTab('completed')}"
             >
                 <h5 class="section-title">completed</h5>
             </a>
         </div>
         <LoadingDots if="{state.loading}" extrastyleclasses="dark"></LoadingDots>
-        <div class="card-container">
+        <div if="{state.selectedInProgress}" class="card-container">
             <Card
-                each="{course in state.courses}"
+                each="{course in state.inProgressCourses}"
+                title="{course.title}"
+                link="{course.id}"
+                status="{courseStatus(course)}"
+                progressValue="{course.numberOfFinishedLessons}"
+                progressMax="{course.numberOfLessons}"
+            ></Card>
+        </div>
+        <div if="{!state.selectedInProgress}" class="card-container">
+            <Card
+                each="{course in state.completedCourses}"
                 title="{course.title}"
                 link="{course.id}"
                 status="{courseStatus(course)}"
@@ -68,7 +78,7 @@
                 loading: false,
                 inProgressCourses: [],
                 completedCourses: [],
-                selectedTab: "IN PROGRESS",
+                selectedInProgress: true,
             },
 
             components: {
@@ -100,23 +110,21 @@
                 let inProgressCourses = [];
                 let completedCourses = [];
                 for (const course of courses) {
-                    const courseStatus = this.courseStatus(course);
-                    if (courseStatus === "not-started") {
-                        return;
-                    } else if (courseStatus === "in-progress") {
+                    const status = this.courseStatus(course);
+                    if (status === "not-started") {
+                        continue;
+                    } else if (status === "in-progress") {
                         inProgressCourses.push(course);
-                    } else if (courseStatus === "completed") {
+                    } else if (status === "complete") {
                         completedCourses.push(course);
                     }
                 }
-                console.log(completedCourses);
-                console.log(inProgressCourses);
 
                 this.update({
                     loading: false,
                     courses,
-                    inProgressCourses,
-                    completedCourses,
+                    inProgressCourses: [],
+                    completedCourses: [],
                     currentCourse: lastWorkedOnCourse,
                 });
             },
@@ -150,7 +158,11 @@
             },
 
             selectTab(tabName) {
-                this.update({ selectedTab: tabName });
+                if (tabName === "in-progress") {
+                    this.update({ selectedInProgress: true });
+                } else {
+                    this.update({ selectedInProgress: false });
+                }
             },
         };
     </script>
