@@ -115,13 +115,13 @@ export abstract class PublishableItem<T extends TItemCommon>
     }
 
     /** This is only a very basic check.
-     * Implementing classes must call this via super, and extend to meet their requirements. */
+     * @remarks Implementing classes must call this via super, and extend to meet their requirements. */
     get isAvailableOffline(): boolean {
         return this.isValid && this.cacheStatusAcceptable && this.version >= 0;
     }
 
     /** This is only a very basic check.
-     * Implementing classes must call this via super, and extend to meet their requirements. */
+     * @remarks Implementing classes must call this via super, and extend to meet their requirements. */
     get isPublishable(): boolean {
         return (
             this.isValid &&
