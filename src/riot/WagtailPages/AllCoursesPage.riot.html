@@ -6,11 +6,19 @@
             <div class="filter-copy-container">
                 <p>{ TRANSLATIONS.coursesIntro() }</p>
                 <a
-                  if="{showTagFilter()}"
-                  class="filter-icon"
-                  onclick="{toggleTagList}"
-                ></a>
+                    if="{showTagFilter()}"
+                    class="has-circle {state.showTagList ? 'show-tags' : ''}"
+                    onclick="{toggleTagList}"
+                >
+                    <span class="filter-icon"></span>
+                </a>
             </div>
+            <TagList
+                if="{Array.isArray(state.sortedListOfCourses) && state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 && state.showTagList}"
+                tags="{state.listOfTags}"
+                onTagClick="{onTagClick}"
+                selectedTags="{state.selectedTags}"
+            ></TagList>
         </TopMenu>
 
         <div class="content-wrapper">
@@ -18,15 +26,7 @@
                 extrastyleclasses="dark"
             ></LoadingDots>
             <template if="{page.ready}">
-
-                <TagList
-                    if="{page.tags.length && state.showTagList}"
-                    tags="{page.tags}"
-                    onTagClick="{onTagClick}"
-                    selectedTags="{state.selectedTags}"
-                ></TagList>
-
-                <template if="{page.currentCourse && !page.currentCourse.isComplete}">
+                <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
                     <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
                     <Card
                         status="{courseStatus(page.currentCourse)}"
