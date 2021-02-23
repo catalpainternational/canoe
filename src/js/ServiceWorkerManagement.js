@@ -3,7 +3,6 @@
  */
 import { Workbox } from "workbox-window";
 
-import { changeServiceWorkerState } from "ReduxImpl/Interface";
 import { logNotificationReceived } from "js/GoogleAnalytics";
 import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
@@ -42,7 +41,6 @@ const recordBootstate = async () => {
 
 export async function initializeServiceWorker() {
     if (!navigator.serviceWorker) {
-        changeServiceWorkerState("notsupported");
         return;
     }
 
