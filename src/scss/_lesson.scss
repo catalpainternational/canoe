@@ -100,7 +100,8 @@ ResourceArticle {
         background-color: $gray-10;
 
         @media only screen and (min-width: $tablet) {
-            padding: 0 auto 1.5em;
+            padding-bottom: 1.5em;
+            margin: 0 auto;
         }
 
         ImageWrapper img.richtext-image {
