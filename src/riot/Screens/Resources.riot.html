@@ -1,8 +1,8 @@
 <Resources>
-    <TopMenu extrastyleclasses="with-swoop">
+    <TopMenu extrastyleclasses="without-swoop">
         <h4>{ TRANSLATIONS.resources() }</h4>
     </TopMenu>
-    <div class="content-wrapper" if="{state.hash == null}">
+    <div if="{state.hash == null}" class="content-wrapper">
         <SearchBar
             if="{state.page.resources.length > 0}"
             searchString="{state.searchString}"
@@ -14,14 +14,22 @@
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
-        <div class="card-container">
-            <Card
+        <div class="list-resources">
+            <a
                 each="{resource in state.page.resources}"
                 if="{isResourceVisible(resource)}"
-                title="{resource.title}"
-                link="{resource.loc_hash}"
-                status="not-started"
-            ></Card>
+                class="resource-card"
+                href="#{resource.loc_hash}"
+            >
+                <template if="{ resource.ready }">
+                    <span each="{card in resource.cards}">
+                        <p>{card.tag}</p>
+                        <span if="{resource.cards.length > 1}">,</span>
+                    </span>
+                </template>
+                <h5>{resource.title}</h5>
+                <h6 if="{ resource.ready }">{resource.description}</h6>
+            </a>
         </div>
         <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
         <p if="{!state.isLoading && state.page.resources.length === 0}">
@@ -31,7 +39,6 @@
 
     <script>
         import TagList from "RiotTags/Components/TagList.riot.html";
-        import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
@@ -59,7 +66,6 @@
 
             components: {
                 taglist: TagList,
-                card: Card,
                 searchbar: SearchBar,
                 loadingdots: LoadingDots,
                 topmenu: TopMenu,
@@ -69,7 +75,7 @@
                 resources: () => gettext("Resources"),
                 noArticlesYet: () => gettext("There are no resources yet. Check back soon!"),
             },
-
+            
             onBeforeMount() {
                 this.state.page = getRoute().page;
                 this.state.isLoading = !this.state.page.ready;
