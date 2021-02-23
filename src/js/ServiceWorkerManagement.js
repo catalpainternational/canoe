@@ -2,11 +2,43 @@
  * ServiceWorkerManagement module
  */
 import { Workbox } from "workbox-window";
+
 import { changeServiceWorkerState } from "ReduxImpl/Interface";
 import { logNotificationReceived } from "js/GoogleAnalytics";
 import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { MANIFEST_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
-const SW_UPDATE_INTERVAL = 1000 * 10 * 60 * 4;
+/** Sets a sessionStorage item signifying whether we are booting into a:
+ * - preseeded state (either through Appelflap cache injection, or autonomous buildup), or
+ * - blank slate.
+ *
+ * We use the presence of the manifest as an indication for this.
+ * @remarks Can be used as a fence by awaiting its promise.
+ * @returns true when a manifest can be found, false otherwise.
+ */
+const recordBootstate = async () => {
+    let manifestIsExtant = false;
+    const cacheNames = await caches.keys();
+    if (cacheNames.indexOf(MANIFEST_CACHE_NAME) === -1) {
+        return manifestIsExtant;
+    }
+
+    try {
+        const aMatch = await caches
+            .open(MANIFEST_CACHE_NAME)
+            .match(ROUTES_FOR_REGISTRATION.manifest);
+        manifestIsExtant = aMatch !== undefined;
+    } catch {
+        // Do nothing - manifestIsExtant is still false
+    }
+
+    // indicate 'empty'
+    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !manifestIsExtant);
+
+    // indicate we've got everything
+    return manifestIsExtant;
+};
 
 export async function initializeServiceWorker() {
     if (!navigator.serviceWorker) {
@@ -16,35 +48,16 @@ export async function initializeServiceWorker() {
 
     const wb = new Workbox("/sw.js");
 
-    wb.controlling.then((sw) => {
-        // This happens:
-        // a fresh first time visit once the sw is in control
-        // a refresh when there is an active sw to take control
-        changeServiceWorkerState("controlling");
-
-        function checkForNewVersion() {
-            console.log("checking for new version");
-            if (wb) {
-                wb.update();
+    wb.addEventListener("installed", (event) => {
+        if (event.isUpdate) {
+            if (confirm(`New content is available!. Click OK to refresh`)) {
+                window.location.reload();
             }
         }
-
-        const swUpdatePoller = window.setInterval(
-            checkForNewVersion,
-            SW_UPDATE_INTERVAL
-        );
     });
 
-    wb.addEventListener("externalinstalled", (e) => {
-        // workbox detects a new service worker installed ready for activation ( sometimes )
-        changeServiceWorkerState("update-waiting");
-    });
-
-    wb.addEventListener("redundant", (e) => {
-        // This happens:
-        // when service worker fails to install
-        // when a new service worker takes over control ( sometimes )
-        changeServiceWorkerState("redundant");
+    wb.addEventListener("controlling", () => {
+        recordBootstate();
     });
 
     wb.addEventListener("message", (event) => {

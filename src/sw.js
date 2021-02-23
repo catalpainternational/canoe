@@ -4,12 +4,13 @@ import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
 import { StaleWhileRevalidate } from "workbox-strategies/StaleWhileRevalidate.mjs";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
 import { RangeRequestsPlugin } from "workbox-range-requests";
-
+import { precacheAndRoute } from "workbox-precaching";
 import * as googleAnalytics from "workbox-google-analytics";
 
 googleAnalytics.initialize();
 
-import { precacheAndRoute } from "workbox-precaching";
+self.skipWaiting();
+self.clients.claim();
 
 precacheAndRoute(self.__WB_MANIFEST);
 
@@ -110,12 +111,4 @@ self.addEventListener("push", async (event) => {
 
 self.addEventListener("notificationclick", function (event) {
     event.notification.close();
-});
-
-self.addEventListener("install", () => {
-    self.skipWaiting();
-});
-
-self.addEventListener("activate", () => {
-    self.clients.claim();
 });
