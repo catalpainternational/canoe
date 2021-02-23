@@ -4,7 +4,6 @@
 import { Workbox } from "workbox-window";
 
 import { logNotificationReceived } from "js/GoogleAnalytics";
-import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { MANIFEST_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 import { gettext } from "js/Translation";
@@ -68,13 +67,4 @@ export async function initializeServiceWorker() {
     });
 
     wb.register();
-
-    window.addEventListener("beforeinstallprompt", async (e) => {
-        e.preventDefault();
-        const deferredPrompt = e;
-
-        window.addEventListener(ON_ADD_TO_HOME_SCREEN, async () => {
-            deferredPrompt.prompt();
-        });
-    });
 }
