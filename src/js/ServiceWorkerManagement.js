@@ -7,6 +7,7 @@ import { logNotificationReceived } from "js/GoogleAnalytics";
 import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { MANIFEST_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
+import { gettext } from "js/Translation";
 
 /** Sets a sessionStorage item signifying whether we are booting into a:
  * - preseeded state (either through Appelflap cache injection, or autonomous buildup), or
@@ -48,7 +49,10 @@ export async function initializeServiceWorker() {
 
     wb.addEventListener("installed", (event) => {
         if (event.isUpdate) {
-            if (confirm(`New content is available!. Click OK to refresh`)) {
+            const refreshForNewVersionMessage = gettext(
+                `New content is available! Click OK to refresh.`
+            );
+            if (confirm(refreshForNewVersionMessage)) {
                 window.location.reload();
             }
         }
