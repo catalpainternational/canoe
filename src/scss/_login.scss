@@ -35,6 +35,7 @@ Login .modal-background {
         width: $content-width;
         display: flex;
         justify-content: center;
+        margin-top: 1em;
     }
 
     form {
@@ -50,25 +51,30 @@ Login .modal-background {
                 margin-bottom: 0;
             }
 
-            p {
-                color: $red;
-                font-size: 0.8em;
-                margin-left: 5px;
-            }
-
             .error-message {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 margin: 10px 0;
+
+                p {
+                    color: $red;
+                    font-size: 0.8em;
+                    margin-left: 5px;
+                }
             }
+        }
+
+        input[type='password'] {
+            font-family: caption;
+            letter-spacing: 2px;
         }
 
         div.form-group {
             flex-direction: column;
             margin-bottom: 15px;
             border-radius: 3px;
-            padding: 0 15px;
+            padding: 3px 15px;
             display: flex;
             background-color: $white;
             box-shadow: inset 0 2px 3px 0 rgba(42, 57, 66, 0.1);
@@ -78,7 +84,7 @@ Login .modal-background {
 
             label {
                 left: 0;
-                top: 25%;
+                top: 28%;
                 margin: 0;
                 padding-left: 15px;
                 position: absolute;
@@ -95,17 +101,13 @@ Login .modal-background {
 
             &.has-focus {
                 border: 1px solid $gray-4;
-
-                label {
-                    font-size: 0.7em;
-                    top: 10%;
-                }
             }
 
+            &.has-focus,
             &.is-filled {
                 label {
                     font-size: 0.7em;
-                    top: 10%;
+                    top: 13%;
                 }
             }
         }
@@ -120,7 +122,6 @@ Login .modal-background {
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            z-index: 1;
 
             &:hover {
                 cursor: pointer;
@@ -154,7 +155,7 @@ Login .modal-background {
 
     input {
         border: none;
-        padding-top: 15px;
+        padding-top: 16px;
         background-color: unset;
 
         &:focus {
@@ -168,6 +169,17 @@ Login .modal-background {
     input:-webkit-autofill:focus,
     input:-webkit-autofill:active {
         box-shadow: 0 0 0 1000px white inset !important;
+        color: $gray-1 !important;
+        font-size: 1em;
+    }
+
+    .has-error {
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            box-shadow: 0 0 0 1000px rgba(237, 30, 79, 0.05) inset !important;
+        }
     }
 }
 
