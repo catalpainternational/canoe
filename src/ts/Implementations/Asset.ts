@@ -39,6 +39,13 @@ export class Asset extends PublishableItem<TAssetEntry> {
         return this.ready ? 1 : -1;
     }
 
+    set version(value: number) {
+        if (value < 0 && this.ready) {
+            value = 1;
+        }
+        super.version = value;
+    }
+
     get pageId(): string {
         return this.#pageId;
     }

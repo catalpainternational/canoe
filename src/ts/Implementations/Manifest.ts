@@ -45,6 +45,14 @@ export class Manifest extends PublishableItem<TManifestData> {
         return this.data?.version || -1;
     }
 
+    set version(value: number) {
+        if (this.data) {
+            this.data.version = value;
+        }
+
+        super.version = value;
+    }
+
     get api_url(): string {
         return ManifestAPIURL;
     }

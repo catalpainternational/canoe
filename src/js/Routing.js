@@ -39,8 +39,9 @@ async function route(hashWith) {
     // otherwise we need a manifest to understand what to render
     try {
         manifest = await getValidManifest();
-    } catch {
-        setRoute({type: "error", error: "no manifest found"});
+    } catch (err) {
+        // Note that this may leak information that we don't want leaked
+        setRoute({type: "error", error: `No manifest found. Error: ${err}`});
         return;
     }
 
