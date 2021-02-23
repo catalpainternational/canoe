@@ -102,9 +102,14 @@
             },
 
             async syncMe() {
+                const cacheUtilities = new CacheUtilities(appelflapConnect);
+                await cacheUtilities.unlock();
+
                 // Identify what needs to be subscribed to, and what needs to be published
                 const appDataStatus = this.state.appDataStatus;
                 const syncStatus = await appDataStatus.SyncAll();
+
+                await cacheUtilities.lock();
 
                 window.alert(`Published: ${JSON.stringify(syncStatus)}`);
             },
