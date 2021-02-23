@@ -17,6 +17,11 @@ TopMenu {
         @extend %center-with-flex;
         height: $top-menu-height;
         margin: auto;
+
+        h4 {
+            color: $gray-1;
+            font-size: 1em;
+        }
     }
 
     h4 {

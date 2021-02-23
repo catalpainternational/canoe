@@ -10,11 +10,16 @@ import {
     getLanguage,
     changeLanguage,
 } from "ReduxImpl/Interface";
-import { token_authed_fetch } from "js/Fetch";
+import { token_authed_fetch, unauthed_fetch } from "js/Fetch";
 
 export async function fetchManifest() {
     const allPagesMetadata = await token_authed_fetch(ROUTES_FOR_REGISTRATION.manifest);
     return allPagesMetadata;
+}
+
+export async function fetchPageNoAuth(path) {
+    const pageMetadata = await unauthed_fetch(`${BACKEND_BASE_URL}${path}`);
+    return pageMetadata;
 }
 
 export async function fetchPage(path) {

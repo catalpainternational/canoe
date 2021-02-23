@@ -6,15 +6,8 @@ Logos {
     margin-bottom: 20px;
 
     .logo {
-        -webkit-mask-image: url("~img/logo.svg");
-        mask-image: url("~img/logo.svg");
+        @include unmaskable-icons-shared("~img/logo.svg", contain);
         width: 50px;
         height: 50px;
-        -webkit-mask-position: center;
-        mask-position: center;
-        -webkit-mask-repeat: no-repeat;
-        mask-repeat: no-repeat;
-        -webkit-mask-size: contain;
-        mask-size: contain;
     }
 }

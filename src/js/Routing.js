@@ -1,5 +1,5 @@
 import {
-    fetchPage,
+    fetchPageNoAuth,
     getOrFetchWagtailPage,
     getOrFetchManifest,
     getHomePage,
@@ -144,7 +144,8 @@ export const getPage = async () => {
     } else if (wagtailPreviewMatch) {
         const queryString = wagtailPreviewMatch[1];
         pageUrl = getPreviewPageUrl(queryString);
-        page = await fetchPage(pageUrl);
+        //page = await fetchPage(pageUrl);
+        page = await fetchPageNoAuth(pageUrl);
     } else if (appPageMatch) {
         const pageType = appPageMatch[1];
         page = {

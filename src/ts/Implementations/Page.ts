@@ -235,7 +235,12 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.status.cacheStatus = "loading";
-        this.data = await resp.json();
+        try {
+            this.data = await resp.json();
+        } catch {
+            // We assume a bad cached entry, i.e. bad json
+            return false;
+        }
 
         // And store the page data in Redux
         this.StoreDataToStore();
