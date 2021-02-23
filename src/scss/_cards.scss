@@ -36,8 +36,8 @@
     &.disabled .card-status,
     &.coming-soon .card-status {
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
     }
 
     &.complete .card-status {
@@ -74,7 +74,7 @@
 
 .card-container {
     display: grid;
-    grid-gap: 15px 7%;
+    grid-gap: 20px 7%;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
     justify-content: space-between;

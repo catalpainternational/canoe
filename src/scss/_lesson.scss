@@ -567,8 +567,7 @@ ExamResults {
             width: 220px;
             position: relative;
 
-            span {
-                @extend %chevron;
+            .chevron {
                 position: absolute;
                 right: 20px;
                 top: 12px;
