@@ -2,6 +2,7 @@
 import { TManifest } from "ts/Types/ManifestTypes";
 import { TAssetEntry } from "ts/Types/AssetTypes";
 import { PublishableItem } from "ts/Implementations/PublishableItem";
+import { UpdateCachedItem } from "ts/Implementations/CacheItem";
 
 import { AppelflapConnect } from "ts/AppelflapConnect";
 import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "ts/Constants";
@@ -146,7 +147,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
         this.#blob = await resp.blob();
         this.status.cacheStatus = "loading";
 
-        const cacheUpdated = await this.updateCache();
+        const cacheUpdated = await UpdateCachedItem(this);
 
         return cacheUpdated && !!this.#blob;
     }

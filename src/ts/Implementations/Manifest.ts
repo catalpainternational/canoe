@@ -4,6 +4,7 @@ import { TWagtailPage } from "ts/Types/PageTypes";
 
 import { PublishableItem } from "ts/Implementations/PublishableItem";
 import { Page } from "ts/Implementations/Page";
+import { UpdateCachedItem } from "ts/Implementations/CacheItem";
 
 import AllCoursesPage from "ts/Implementations/Specific/AllCoursesPage";
 import CoursePage from "ts/Implementations/Specific/CoursePage";
@@ -187,7 +188,7 @@ export class Manifest extends PublishableItem<TManifestData> {
         let cacheUpdated = false;
         if (this.data && isAcceptable) {
             this.StoreDataToStore();
-            cacheUpdated = await this.updateCache();
+            cacheUpdated = await UpdateCachedItem(this);
         }
 
         return cacheUpdated && this.isValid;

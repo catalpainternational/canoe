@@ -1,9 +1,19 @@
 import { TAppelflapResult } from "ts/Types/CanoeEnums";
+import { TPublication } from "ts/Types/CacheTypes";
 import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
 
 import { AppelflapConnect } from "ts/AppelflapConnect";
 import { CachePublish } from "ts/CachePublish";
 import { CacheSubscribe } from "ts/CacheSubscribe";
+
+/** Define the 'target' within the cache for Appelflap */
+const CacheTarget = (item: IPublishableItem): TPublication => {
+    return {
+        webOrigin: btoa(self.origin),
+        cacheName: btoa(item.cacheKey),
+        version: item.version,
+    };
+};
 
 /** Tells Appelflap to publish this item's cache
  * @returns
@@ -22,7 +32,7 @@ export async function publishItem(
     const cachePublish = new CachePublish(appelflapConnect);
 
     try {
-        await cachePublish.publish(item.cacheTarget);
+        await cachePublish.publish(CacheTarget(item));
         return await Promise.resolve("succeeded");
     } catch (error) {
         return await Promise.reject("failed");
@@ -46,7 +56,7 @@ export async function unpublishItem(
     const cachePublish = new CachePublish(appelflapConnect);
 
     try {
-        await cachePublish.unpublish(item.cacheTarget);
+        await cachePublish.unpublish(CacheTarget(item));
         return await Promise.resolve("succeeded");
     } catch (error) {
         return await Promise.reject("failed");
@@ -70,7 +80,7 @@ export async function subscribeItem(
     const cacheSubscribe = new CacheSubscribe(appelflapConnect);
 
     try {
-        await cacheSubscribe.subscribe(item.cacheTarget);
+        await cacheSubscribe.subscribe(CacheTarget(item));
         return await Promise.resolve("succeeded");
     } catch (error) {
         return await Promise.reject("failed");
@@ -94,7 +104,7 @@ export async function unsubscribeItem(
     const cacheSubscribe = new CacheSubscribe(appelflapConnect);
 
     try {
-        await cacheSubscribe.unsubscribe(item.cacheTarget);
+        await cacheSubscribe.unsubscribe(CacheTarget(item));
         return await Promise.resolve("succeeded");
     } catch (error) {
         return await Promise.reject("failed");

@@ -5,6 +5,11 @@ import { TAssetEntry, TAssetEntryData } from "ts/Types/AssetTypes";
 
 import { PublishableItem } from "ts/Implementations/PublishableItem";
 import { Asset } from "ts/Implementations/Asset";
+import {
+    InitialiseByRequest,
+    InitialiseFromCache,
+    UpdateCachedItem,
+} from "ts/Implementations/CacheItem";
 
 // See ts/Typings for the type definitions for these imports
 import { BACKEND_BASE_URL } from "js/urls";
@@ -246,7 +251,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         this.StoreDataToStore();
 
         // Update the cached paged data
-        const cacheUpdated = await this.updateCache();
+        const cacheUpdated = await UpdateCachedItem(this);
 
         await this.loadAssets();
 
@@ -266,7 +271,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
             asset.api_url,
             this.cacheKey
         );
-        const assetFilled = await pageAsset.initialiseFromCache();
+        const assetFilled = await InitialiseFromCache(pageAsset);
 
         if (assetFilled) {
             return pageAsset;
@@ -275,7 +280,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
             pageAsset.status.cacheStatus
         );
         if (notInCache) {
-            if (await pageAsset.initialiseByRequest()) {
+            if (await InitialiseByRequest(pageAsset)) {
                 return pageAsset;
             }
         }

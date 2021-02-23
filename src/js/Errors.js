@@ -14,13 +14,6 @@ export class MissingImageError extends Error {
     }
 }
 
-export class PageLacksTranslationDataError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "PageLacksTranslationDataError";
-    }
-}
-
 export class URLDoesntExist extends Error {
     constructor(message) {
         super(message);

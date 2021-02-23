@@ -17,11 +17,6 @@ export async function fetchManifest() {
     return allPagesMetadata;
 }
 
-export async function fetchPageNoAuth(path) {
-    const pageMetadata = await unauthed_fetch(`${BACKEND_BASE_URL}${path}`);
-    return pageMetadata;
-}
-
 export async function fetchPage(path) {
     const pageMetadata = await token_authed_fetch(`${BACKEND_BASE_URL}${path}`);
     return pageMetadata;
