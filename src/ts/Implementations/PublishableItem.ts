@@ -16,7 +16,6 @@ export abstract class PublishableItem<T extends TItemCommon>
     #id: string;
     #statusId: string;
     data!: T;
-    cache!: Cache;
 
     status!: StorageStatus;
 

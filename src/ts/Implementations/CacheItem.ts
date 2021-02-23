@@ -14,15 +14,9 @@ export const CacheKeys = async (): Promise<string[]> => {
     return keys.filter((key) => key.indexOf("workbox") === -1);
 };
 
-/** Gets the already opened cache or tries to open it
- * @returns {boolean} true on success, false is the cache couldn't be opened
- */
-const AccessCache = async (item: IPublishableItem): Promise<boolean> => {
-    if (!item.cache) {
-        item.cache = await caches.open(item.cacheKey);
-    }
-
-    return !!item.cache;
+/** Tries to open the cache identified by the cacheKey */
+const AccessCache = async (cacheKey: string): Promise<Cache> => {
+    return await caches.open(cacheKey);
 };
 
 /** Build a request object we can use to fetch the item */
@@ -85,7 +79,7 @@ const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
 const GetRequestObject = async (
     item: IPublishableItem
 ): Promise<Request | undefined> => {
-    const cacheOpen = await AccessCache(item);
+    const itemCache = await AccessCache(item.cacheKey);
 
     if (!item.fullUrl) {
         // "The full url could not be determined for this item, it is not retrievable";
@@ -96,12 +90,12 @@ const GetRequestObject = async (
         return item.requestObject;
     }
 
-    if (!cacheOpen) {
+    if (!itemCache) {
         // Couldn't get the cache open (this is a very unusual circumstance)
         return Promise.resolve(undefined);
     }
 
-    const requests = await item.cache.keys(item.fullUrl, {
+    const requests = await itemCache.keys(item.fullUrl, {
         ignoreMethod: true,
         ignoreSearch: true,
         ignoreVary: true,
@@ -115,7 +109,7 @@ const GetRequestObject = async (
         // We should really clean the cache in this case
         // But we still don't know how to do that properly
         // requests.slice(1).forEach((request) => {
-        //     item.cache.delete(request);
+        //     itemCache.delete(request);
         // });
     }
 
@@ -127,10 +121,10 @@ const GetRequestObject = async (
 const GetFromCache = async (
     item: IPublishableItem
 ): Promise<Response | undefined> => {
-    const cacheOpen = await AccessCache(item);
+    const itemCache = await AccessCache(item.cacheKey);
 
-    return item.requestObject && cacheOpen
-        ? await item.cache.match(item.requestObject)
+    return item.requestObject && !!itemCache
+        ? await itemCache.match(item.requestObject)
         : undefined;
 };
 
@@ -138,8 +132,8 @@ const GetFromCache = async (
 export const InitialiseFromCache = async (
     item: IPublishableItem
 ): Promise<boolean> => {
-    const cacheOpen = await AccessCache(item);
-    if (!cacheOpen || !item.api_url) {
+    const itemCache = await AccessCache(item.cacheKey);
+    if (!itemCache || !item.api_url) {
         item.status.cacheStatus = "prepared";
         return false;
     }
@@ -174,9 +168,9 @@ export const InitialiseByRequest = async (
 ): Promise<boolean> => {
     item.status.cacheStatus = "loading";
 
-    const cacheOpen = await AccessCache(item);
+    const itemCache = await AccessCache(item.cacheKey);
 
-    if (!cacheOpen) {
+    if (!itemCache) {
         // Couldn't get the cache open (this is a very unusual circumstance)
         item.status.cacheStatus = "prepared";
         return false;
@@ -187,7 +181,7 @@ export const InitialiseByRequest = async (
 
     // Fetch the asset from the network, direct into the cache
     try {
-        await item.cache.add(reqObj);
+        await itemCache.add(reqObj);
     } catch (tex: any) {
         // TypeError if it wasn't `http` or `https`
         // Also:
@@ -214,7 +208,8 @@ export const InitialiseByRequest = async (
 export const UpdateCachedItem = async (
     item: IPublishableItem
 ): Promise<boolean> => {
-    if (!(await AccessCache(item))) {
+    const itemCache = await AccessCache(item.cacheKey);
+    if (!itemCache) {
         item.status.cacheStatus = "prepared";
         return false;
     }
@@ -236,12 +231,12 @@ export const UpdateCachedItem = async (
 
     if (item.requestObjectCleaned) {
         // Delete the existing cache entry first to ensure that the auth key gets 'lost'
-        await item.cache.delete(reqObj);
+        await itemCache.delete(reqObj);
         item.requestObjectCleaned = false;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await item.cache.put(item.requestObject!, item.updatedResp);
+    await itemCache.put(item.requestObject!, item.updatedResp);
     item.requestObjectClean = true;
     item.status.cacheStatus = "ready";
 
