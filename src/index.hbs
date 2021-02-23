@@ -31,31 +31,19 @@
 </head>
 
 <body>
-    <div id="preapp-messages">
-        <div id="service-worker-loading">
-            {{> $index_partials/loading_screen.hbs}}
-        </div>
-        <div id="service-worker-notsupported" hidden>
-            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" class="favicon" />
-            {{> $index_partials/update_browser.hbs}}
-        </div>
-        <div id="service-worker-failed" onclick="location.reload()" hidden>
-            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" class="favicon" />
-            {{> $index_partials/try_again.hbs}}
-        </div>
-    </div>
     <App> </App>
     <style>
         html {
             height: 100%;
-            background-color: #f4f8fa;;
+            background-color: #f4f8fa;
+            ;
         }
 
         body {
             margin: 0;
         }
 
-        #service-worker-notsupported, 
+        #service-worker-notsupported,
         #service-worker-failed {
             height: 100%;
             margin: -8px;
@@ -64,11 +52,18 @@
             font-family: Verdana;
             font-size: xx-large;
             text-align: center;
-            color: {{ htmlWebpackPlugin.options.theme_color }};           
+
+            color: {
+                    {
+                    htmlWebpackPlugin.options.theme_color
+                }
+            }
+
+            ;
         }
 
         #preapp-messages {
-            background-color: #E8EEF1; 
+            background-color: #E8EEF1;
         }
 
         #preapp-messages img.favicon {

@@ -15,20 +15,12 @@ subscribeToStore(() => {
     switch (newServiceWorkerState) {
         case "install-failed":
             // show a retry message
-            document.querySelector("#service-worker-loading").hidden = true;
-            document.querySelector("#service-worker-notsupported").hidden = true;
-            document.querySelector("#service-worker-failed").hidden = false;
             break;
         case "notsupported":
-            document.querySelector("#service-worker-loading").hidden = true;
-            document.querySelector("#service-worker-notsupported").hidden = false;
             break;
         case "controlling":
             // hide the loading splash
-            record_bootstate().then(_is_nonblank_slate => {
-                document.querySelector("#preapp-messages").hidden = true;
-                import(/* webpackChunkName: "app" */ "./app.js");
-            });
+            recordBootstate();
             break;
         case "update-waiting":
             // TODO should we reload? it might interrupt something
@@ -42,6 +34,29 @@ subscribeToStore(() => {
     currentServiceWorkerState = getServiceWorkerState();
 });
 
+/** Sets a sessionStorage item signifying whether we are booting into a:
+ * - preseeded state (either through Appelflap cache injection, or autonomous buildup), or
+ * - blank slate.
+ *
+ * We use the presence of the manifest as an indication for this.
+ * @remarks Can be used as a fence by awaiting its promise.
+ * @returns true when a manifest can be found, false otherwise.
+ */
+const recordBootstate = async () => {
+    let manifestIsExtant = false;
+    const cacheNames = await caches.keys();
+    if (cacheNames.indexOf(MANIFEST_CACHE_NAME) === -1) {
+        return manifestIsExtant;
+    }
+
+    try {
+        const aMatch = await caches
+            .open(MANIFEST_CACHE_NAME)
+            .match(ROUTES_FOR_REGISTRATION.manifest);
+        manifestIsExtant = aMatch !== undefined;
+    } catch {
+        // Do nothing - manifestIsExtant is still false
+    }
 
 const record_bootstate = () => {
     // Sets a sessionStorage item signifying whether we are booting into a preseeded state
@@ -65,3 +80,5 @@ const record_bootstate = () => {
 };
 
 initializeServiceWorker();
+
+import(/* webpackChunkName: "app" */ "./app.js");
