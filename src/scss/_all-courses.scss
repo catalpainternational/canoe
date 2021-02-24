@@ -32,6 +32,10 @@ AllCoursesPage {
         }
     }
 
+    .tag-container > .tag p {
+        text-transform: none;
+    }
+
     .card-image {
         @extend %stock-course;
     }

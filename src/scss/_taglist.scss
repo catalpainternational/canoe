@@ -9,6 +9,7 @@ TagList {
             @extend %absolutely-center;
             @extend %truncate-with-ellipsis;
             margin: 0;
+            text-transform: uppercase;
             font-weight: 400;
             text-align: center;
         }
