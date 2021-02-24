@@ -36,17 +36,9 @@
             line-height: 1.2em;
             height: calc(3 * 1.2em);
             overflow: hidden;
-            position: relative;
-
-            &::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                width: 7ch;
-                height: 1.2em;
-                background: linear-gradient(to right,rgba($white, 0),rgba($white, 1) 70%);
-            }
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
         }
     }
 
