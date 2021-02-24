@@ -22,12 +22,14 @@
             </div>
             <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
-                <Card
-                    title="{courseExamTitle()}"
-                    description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
-                    link="{props.wagtailPage.id}/exam/0"
-                    status="{examStatus(props.wagtailPage)}"
-                ></Card>
+                <div class="card-container full-width">
+                    <Card
+                        title="{courseExamTitle()}"
+                        description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
+                        link="{props.wagtailPage.id}/exam/0"
+                        status="{examStatus(props.wagtailPage)}"
+                    ></Card>
+                </div>
             </template>
         </div>
     </div>

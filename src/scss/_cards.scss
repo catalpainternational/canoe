@@ -93,6 +93,14 @@
     @media only screen and (min-width: 500px) {
         grid-template-columns: repeat(3, 1fr);
     }
+
+    &.full-width {
+        grid-template-columns: 1fr;
+
+        .card {
+            max-width: unset;
+        }
+    }
 }
 
 // Legacy needs this (?)
