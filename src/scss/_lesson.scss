@@ -95,12 +95,11 @@ LessonFrame {
 
 ResourceArticle {
     .no-card {
-        margin: 0 18px 70px;
+        padding: 0 18px 1.5em;
+        width: 100%;
+        margin: 7px auto 70px;
         max-width: $tablet;
-
-        @media only screen and (min-width: $tablet) {
-            margin: 0 auto 1.5em;
-        }
+        background-color: $gray-10;
 
         ImageWrapper img.richtext-image {
             width: calc(100% + (2 * 18px));
