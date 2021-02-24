@@ -112,8 +112,8 @@ SearchBar {
         padding: 0.3125em 0.625em;
         align-items: center;
         display: flex;
-        flex-direction: row-reverse;
         background-color: $gray-9;
+        height: 30px;
     }
 
     label {
