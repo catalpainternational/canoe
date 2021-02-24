@@ -1,14 +1,21 @@
 <LessonFrame>
     <TopMenu extrastyleclasses="without-swoop">
         <template if="{props.progressValue}">
-            <p class="card-number">{ props.progressValue } / { props.progressMax }</p>
+            <p class="card-number">
+                <span class="current-card">{ props.progressValue }</span
+                ><span class="slash">/</span>{ props.progressMax }
+            </p>
             <progress value="{props.progressValue}" max="{props.progressMax}"></progress>
         </template>
         <a if="{props.noCardStyle}" class="has-circle top-icon left" href="#{props.linkTo}">
             <span class="arrow"></span>
         </a>
         <h5 if="{props.resourceTitle}">{props.resourceTitle}</h5>
-        <a if="{!props.noCardStyle}" class="top-icon right extra-clickable-space" href="#{props.linkTo}">
+        <a
+            if="{!props.noCardStyle}"
+            class="top-icon right extra-clickable-space"
+            href="#{props.linkTo}"
+        >
             <span class="cross gray"></span>
         </a>
     </TopMenu>
