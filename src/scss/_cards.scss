@@ -5,7 +5,9 @@
     border: 1px solid $gray-7;
     box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
     background-color: $gray-10;
-    height: 175px;
+    height: 200px;
+    max-width: 170px;
+    margin: 0 auto;
     position: relative;
 
     .card-image {
@@ -95,6 +97,10 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
     justify-content: space-between;
+
+    @media only screen and (min-width: 500px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 // Legacy needs this (?)
