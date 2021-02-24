@@ -3,10 +3,6 @@ Profile {
         @extend %stock-course;
     }
 
-    .with-swoop {
-        @extend %center-with-flex;
-    }
-
     .tab-titles {
         display: flex;
         justify-content: center;
