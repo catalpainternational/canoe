@@ -28,3 +28,15 @@
     src: url("../fonts/TiemposHeadline-Black.otf") format("opentype");
     font-weight: 400;
 }
+
+@font-face {
+    font-family: "TiemposHeadline";
+    src: url("../fonts/TiemposHeadline-Medium.otf") format("opentype");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "TiemposHeadline";
+    src: url("../fonts/TiemposHeadline-Regular.otf") format("opentype");
+    font-weight: 200;
+}
