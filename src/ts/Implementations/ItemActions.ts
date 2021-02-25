@@ -69,23 +69,23 @@ export async function unpublishItem(
  * - resolve("not relevant") if isPublishable is true or appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
-export async function subscribeItem(
-    item: IPublishableItem,
-    appelflapConnect: AppelflapConnect
-): Promise<TAppelflapResult> {
-    if (!item || item.isPublishable || !appelflapConnect) {
-        return Promise.resolve("not relevant");
-    }
+// export async function subscribeItem(
+//     item: IPublishableItem,
+//     appelflapConnect: AppelflapConnect
+// ): Promise<TAppelflapResult> {
+//     if (!item || item.isPublishable || !appelflapConnect) {
+//         return Promise.resolve("not relevant");
+//     }
 
-    const cacheSubscribe = new CacheSubscribe(appelflapConnect);
+//     const cacheSubscribe = new CacheSubscribe(appelflapConnect);
 
-    try {
-        await cacheSubscribe.subscribe(CacheTarget(item));
-        return await Promise.resolve("succeeded");
-    } catch (error) {
-        return await Promise.reject("failed");
-    }
-}
+//     try {
+//         await cacheSubscribe.subscribe(CacheTarget(item));
+//         return await Promise.resolve("succeeded");
+//     } catch (error) {
+//         return await Promise.reject("failed");
+//     }
+// }
 
 /** Tells Appelflap to unsubscribe for this item
  * @returns
@@ -93,20 +93,20 @@ export async function subscribeItem(
  * - resolve("not relevant") if isPublishable is false or appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
-export async function unsubscribeItem(
-    item: IPublishableItem,
-    appelflapConnect: AppelflapConnect
-): Promise<TAppelflapResult> {
-    if (!item || !item.isPublishable || !appelflapConnect) {
-        return Promise.resolve("not relevant");
-    }
+// export async function unsubscribeItem(
+//     item: IPublishableItem,
+//     appelflapConnect: AppelflapConnect
+// ): Promise<TAppelflapResult> {
+//     if (!item || !item.isPublishable || !appelflapConnect) {
+//         return Promise.resolve("not relevant");
+//     }
 
-    const cacheSubscribe = new CacheSubscribe(appelflapConnect);
+//     const cacheSubscribe = new CacheSubscribe(appelflapConnect);
 
-    try {
-        await cacheSubscribe.unsubscribe(CacheTarget(item));
-        return await Promise.resolve("succeeded");
-    } catch (error) {
-        return await Promise.reject("failed");
-    }
-}
+//     try {
+//         await cacheSubscribe.unsubscribe(CacheTarget(item));
+//         return await Promise.resolve("succeeded");
+//     } catch (error) {
+//         return await Promise.reject("failed");
+//     }
+// }

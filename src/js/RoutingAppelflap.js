@@ -59,15 +59,7 @@ export const APPELFLAPCOMMANDS = {
         commandPath: `${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`,
         method: "GET",
     },
-    subscribe: {
-        commandPath: `${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`,
-        method: "PUT",
-    },
-    unsubscribe: {
-        commandPath: `${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`,
-        method: "DELETE",
-    },
-    bulkSubscribe: {
+    setSubscriptions: {
         commandPath: `${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`,
         method: "POST",
     },

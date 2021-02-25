@@ -18,7 +18,20 @@ import {
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_LOCALHOSTURI, AF_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT, AppelflapPortNo, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "js/RoutingAppelflap";
+import {
+    AF_LOCALHOSTURI,
+    AF_META_API,
+    AF_CACHE_API,
+    AF_ACTION_API,
+    AF_INS_LOCK,
+    AF_PUBLICATIONS,
+    AF_SUBSCRIPTIONS,
+    AF_STATUS,
+    AF_REBOOT,
+    AppelflapPortNo,
+    AF_CERTCHAIN,
+    AF_CERTCHAIN_LENGTH_HEADER,
+} from "js/RoutingAppelflap";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -317,89 +330,43 @@ test("Cache: getSubscriptions", async (t: any) => {
     fetchMock.reset();
 });
 
-test("Cache: subscribe", async (t: any) => {
-    const afc = t.context.afc as AppelflapConnect;
-    const successResponse = t.context.successResponse as Response;
-    const authFailureResponse = t.context.authFailureResponse as Response;
-    const conflictResponse = t.context.conflictResponse as Response;
+// {
+//     "origins": {
+//         "some-web-origin": {
+//             "caches": {
+//                 "some-cache-name": {
+//                     "injection_version_min": 10,
+//                     "injection_version_max": 20,
+//                     "p2p_version_min": 200,
+//                     "p2p_version_max": 888,
+//                     "injected_version": 12
+//                 },
+//                 "another-cache-name": {
+//                     "injection_version_min": 42,
+//                     "injection_version_max": 42,
+//                     "p2p_version_min": 1,
+//                     "p2p_version_max": 9000,
+//                     "injected_version": null
+//                 }
+//             }
+//         },
+//         "some-other-web-origin": {
+//             "caches": {
+//                 "yet-another-cache-name": {
+//                     "injection_version_min": 42,
+//                     "injection_version_max": 42,
+//                     "p2p_version_min": 1,
+//                     "p2p_version_max": 9000,
+//                     "injected_version": null
+//                 }
+//             }
+//         }
+//     }
+// }
+// When doing throwsAsync tests, expect 2 assertions returned for each test
+// And do the 'ok' test last to ensure that all tests are awaited
 
-    const webOrigin = "some-web-origin";
-    const cacheName = "some-cache-name";
-    const versionMin = 10;
-    const versionMax = 9000;
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_SUBSCRIPTIONS}/${webOrigin}/${cacheName}`;
-    const subscription: TSubscription = {
-        webOrigin: webOrigin,
-        cacheName: cacheName,
-        versionMin: versionMin,
-        versionMax: versionMax,
-    };
-    const badSubscription: TSubscription = {
-        webOrigin: webOrigin,
-        cacheName: cacheName,
-        versionMin: versionMax,
-        versionMax: versionMin,
-    };
-
-    // When doing throwsAsync tests, expect 2 assertions returned for each test
-    // And do the 'ok' test last to ensure that all tests are awaited
-    t.plan(7);
-    [authFailureResponse, conflictResponse].forEach(async (response) => {
-        fetchMock.put(testUri, response, { overwriteRoutes: true });
-        const failureResult = await t.throwsAsync(afc.subscribe(subscription));
-        t.is(failureResult.message, response.statusText);
-    });
-
-    fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
-    const failureResult = await t.throwsAsync(afc.subscribe(badSubscription));
-    t.is(
-        failureResult.message,
-        "versionMin must be less than or equal to versionMax"
-    );
-
-    fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
-    const successResult = await afc.subscribe(subscription);
-    t.is(successResult, "ok");
-
-    fetchMock.reset();
-});
-
-test("Cache: unsubscribe", async (t: any) => {
-    const afc = t.context.afc as AppelflapConnect;
-    const successResponse = t.context.successResponse as Response;
-    const authFailureResponse = t.context.authFailureResponse as Response;
-    const notFoundResponse = t.context.notFoundResponse as Response;
-    const conflictResponse = t.context.conflictResponse as Response;
-
-    const webOrigin = "some-web-origin";
-    const cacheName = "some-cache-name";
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_SUBSCRIPTIONS}/${webOrigin}/${cacheName}`;
-    const subscription: TPublicationTarget = {
-        webOrigin: webOrigin,
-        cacheName: cacheName,
-    };
-
-    // When doing throwsAsync tests, expect 2 assertions returned for each test
-    // And do the 'ok' test last to ensure that all tests are awaited
-    t.plan(7);
-    [authFailureResponse, notFoundResponse, conflictResponse].forEach(
-        async (response) => {
-            fetchMock.delete(testUri, response, { overwriteRoutes: true });
-            const failureResult = await t.throwsAsync(
-                afc.unsubscribe(subscription)
-            );
-            t.is(failureResult.message, response.statusText);
-        }
-    );
-
-    fetchMock.delete(testUri, successResponse, { overwriteRoutes: true });
-    const successResult = await afc.unsubscribe(subscription);
-    t.is(successResult, "ok");
-
-    fetchMock.reset();
-});
-
-test("Cache: bulkSubscribe", async (t: any) => {
+test("Cache: setSubscriptions", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const successResponse = t.context.successResponse as Response;
     const badRequestResponse = t.context.badRequestResponse as Response;
@@ -431,13 +398,13 @@ test("Cache: bulkSubscribe", async (t: any) => {
     [badRequestResponse, authFailureResponse].forEach(async (response) => {
         fetchMock.post(testUri, response, { overwriteRoutes: true });
         const failureResult = await t.throwsAsync(
-            afc.bulkSubscribe(subscriptions)
+            afc.setSubscriptions(subscriptions)
         );
         t.is(failureResult.message, response.statusText);
     });
 
     fetchMock.post(testUri, successResponse, { overwriteRoutes: true });
-    const successResult = await afc.bulkSubscribe(subscriptions);
+    const successResult = await afc.setSubscriptions(subscriptions);
     t.is(successResult, "ok");
 
     fetchMock.reset();

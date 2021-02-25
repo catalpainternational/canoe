@@ -225,35 +225,10 @@ export class AppelflapConnect {
         return undefined;
     };
 
-    public subscribe = async (subscription: TSubscription): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.subscribe;
-        const requestPath = `${commandPath}/${this.publicationPath(
-            subscription
-        )}`;
-        const commandInit = { method: method } as RequestInit;
-        const headers = this.buildVersionHeaders(subscription);
-        if (headers) {
-            commandInit.headers = headers;
-        }
-
-        return await this.performCommand(requestPath, commandInit, "text");
-    };
-
-    public unsubscribe = async (
-        publication: TPublicationTarget
-    ): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.unsubscribe;
-        const requestPath = `${commandPath}/${this.publicationPath(
-            publication
-        )}`;
-
-        return await this.performCommand(requestPath, { method }, "text");
-    };
-
-    public bulkSubscribe = async (
+    public setSubscriptions = async (
         subscriptions: TSubscriptions
     ): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.bulkSubscribe;
+        const { commandPath, method } = APPELFLAPCOMMANDS.setSubscriptions;
         const requestPath = `${commandPath}`;
         const commandInit = {
             method: method,

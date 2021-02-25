@@ -21,40 +21,40 @@ export class CacheSubscribe {
         this.#subscriptions = subscriptions;
 
         async () => {
-            await this.#afc.bulkSubscribe(subscriptions);
+            await this.#afc.setSubscriptions(subscriptions);
         };
     }
 
-    /** Adds a single subscription to the existing list of subscriptions */
-    subscribe = async (subscription: TSubscription): Promise<void> => {
-        this.#subscriptions[subscription.webOrigin] =
-            this.#subscriptions[subscription.webOrigin] || {};
-        this.#subscriptions[subscription.webOrigin][subscription.cacheName] =
-            this.#subscriptions[subscription.webOrigin][
-                subscription.cacheName
-            ] || {};
+    // /** Adds a single subscription to the existing list of subscriptions */
+    // subscribe = async (subscription: TSubscription): Promise<void> => {
+    //     this.#subscriptions[subscription.webOrigin] =
+    //         this.#subscriptions[subscription.webOrigin] || {};
+    //     this.#subscriptions[subscription.webOrigin][subscription.cacheName] =
+    //         this.#subscriptions[subscription.webOrigin][
+    //             subscription.cacheName
+    //         ] || {};
 
-        await this.#afc.subscribe(subscription);
-    };
+    //     await this.#afc.subscribe(subscription);
+    // };
 
-    /** Deletes a single subscription from the existing list of subscriptions */
-    unsubscribe = async (subscription: TPublicationTarget): Promise<void> => {
-        if (
-            this.#subscriptions[subscription.webOrigin]?.[
-                subscription.cacheName
-            ]
-        ) {
-            delete this.#subscriptions[subscription.webOrigin][
-                subscription.cacheName
-            ];
-        }
-        if (
-            this.#subscriptions[subscription.webOrigin] &&
-            JSON.stringify(this.#subscriptions[subscription.webOrigin]) === "{}"
-        ) {
-            delete this.#subscriptions[subscription.webOrigin];
-        }
+    // /** Deletes a single subscription from the existing list of subscriptions */
+    // unsubscribe = async (subscription: TPublicationTarget): Promise<void> => {
+    //     if (
+    //         this.#subscriptions[subscription.webOrigin]?.[
+    //             subscription.cacheName
+    //         ]
+    //     ) {
+    //         delete this.#subscriptions[subscription.webOrigin][
+    //             subscription.cacheName
+    //         ];
+    //     }
+    //     if (
+    //         this.#subscriptions[subscription.webOrigin] &&
+    //         JSON.stringify(this.#subscriptions[subscription.webOrigin]) === "{}"
+    //     ) {
+    //         delete this.#subscriptions[subscription.webOrigin];
+    //     }
 
-        await this.#afc.unsubscribe(subscription);
-    };
+    //     await this.#afc.unsubscribe(subscription);
+    // };
 }

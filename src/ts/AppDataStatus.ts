@@ -11,9 +11,9 @@ import { Manifest } from "ts/Implementations/Manifest";
 import { Page } from "ts/Implementations/Page";
 import {
     publishItem,
-    subscribeItem,
+    // subscribeItem,
     unpublishItem,
-    unsubscribeItem,
+    // unsubscribeItem,
 } from "ts/Implementations/ItemActions";
 import {
     CacheKeys,
@@ -197,20 +197,20 @@ export class AppDataStatus {
     }
 
     /** Subscribe for everything currently not flagged as isPublishable */
-    async SubscribeAll(): Promise<Record<string, TAppelflapResult>> {
-        return this.PerformAll(
-            (listing) => !listing.isPublishable,
-            subscribeItem
-        );
-    }
+    // async SubscribeAll(): Promise<Record<string, TAppelflapResult>> {
+    //     return this.PerformAll(
+    //         (listing) => !listing.isPublishable,
+    //         subscribeItem
+    //     );
+    // }
 
     /** Unsubscribe everything currently flagged as isPublishable */
-    async UnsubscribeAll(): Promise<Record<string, TAppelflapResult>> {
-        return this.PerformAll(
-            (listing) => listing.isPublishable,
-            unsubscribeItem
-        );
-    }
+    // async UnsubscribeAll(): Promise<Record<string, TAppelflapResult>> {
+    //     return this.PerformAll(
+    //         (listing) => listing.isPublishable,
+    //         unsubscribeItem
+    //     );
+    // }
 
     async SyncAll(): Promise<
         Record<
@@ -244,8 +244,8 @@ export class AppDataStatus {
 
         const published = await this.PublishAll();
         const unpublished = await this.UnpublishAll();
-        const subscribed = await this.SubscribeAll();
-        const unsubscribed = await this.UnsubscribeAll();
+        // const subscribed = await this.SubscribeAll();
+        // const unsubscribed = await this.UnsubscribeAll();
 
         Object.entries(published).forEach((pub) => {
             syncAllStatus[pub[0]].published = pub[1];
@@ -253,12 +253,12 @@ export class AppDataStatus {
         Object.entries(unpublished).forEach((pub) => {
             syncAllStatus[pub[0]].unpublished = pub[1];
         });
-        Object.entries(subscribed).forEach((pub) => {
-            syncAllStatus[pub[0]].subscribed = pub[1];
-        });
-        Object.entries(unsubscribed).forEach((pub) => {
-            syncAllStatus[pub[0]].unsubscribed = pub[1];
-        });
+        // Object.entries(subscribed).forEach((pub) => {
+        //     syncAllStatus[pub[0]].subscribed = pub[1];
+        // });
+        // Object.entries(unsubscribed).forEach((pub) => {
+        //     syncAllStatus[pub[0]].unsubscribed = pub[1];
+        // });
 
         return syncAllStatus;
     }
