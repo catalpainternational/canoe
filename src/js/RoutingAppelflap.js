@@ -61,7 +61,7 @@ export const APPELFLAPCOMMANDS = {
     },
     setSubscriptions: {
         commandPath: `${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`,
-        method: "POST",
+        method: "PUT",
     },
     getCertificate: {
         commandPath: `${AF_CACHE_API}/${AF_CERTCHAIN}`,

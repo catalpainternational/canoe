@@ -4,15 +4,18 @@ import {
     TPublication,
     TPublications,
     TPublicationTarget,
-    TSubscription,
     TSubscriptions,
-    TSubscriptionVersion,
 } from "ts/Types/CacheTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS, AppelflapPortNo } from "js/RoutingAppelflap";
+import {
+    AF_CERTCHAIN_LENGTH_HEADER,
+    AF_LOCALHOSTURI,
+    APPELFLAPCOMMANDS,
+    AppelflapPortNo,
+} from "js/RoutingAppelflap";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -179,55 +182,9 @@ export class AppelflapConnect {
         )) as Promise<TSubscriptions>;
     };
 
-    /** Build the Version Min and Max headers.
-     * This method 'assumes responsibility' for the values provided to it.
-     * @param { TSubscription | TSubscriptionVersion } versionRange
-     * - A subscription or subscriptionVersion that identifies none, either or both a version min and a version max value
-     * @returns { Record<string, string> | undefined }
-     * undefined if there were no version min or max values, otherwise a header with the relevant values
-     * @throws { RangeError } If both a min and max are provided and they are incorrectly ordered
-     */
-    // private buildVersionHeaders = (
-    //     versionRange: TSubscription | TSubscriptionVersion
-    // ): Record<string, string> | undefined => {
-    //     let min = -1;
-    //     let max = -1;
-    //     const hasMin = typeof versionRange.versionMin === "number";
-    //     const hasMax = typeof versionRange.versionMax === "number";
-    //     if (hasMin || hasMax) {
-    //         if (
-    //             hasMin &&
-    //             hasMax &&
-    //             versionRange.versionMin! > versionRange.versionMax!
-    //         ) {
-    //             throw new RangeError(
-    //                 "versionMin must be less than or equal to versionMax"
-    //             );
-    //         }
-    //         if (hasMin && versionRange.versionMin! > 0) {
-    //             min = versionRange.versionMin!;
-    //         }
-    //         if (hasMax && versionRange.versionMax! > 0) {
-    //             max = versionRange.versionMax!;
-    //         }
-    //     }
-    //     if (min > -1 || max > -1) {
-    //         const headers: Record<string, string> = {};
-    //         if (min > -1) {
-    //             headers["Version-Min"] = min.toString();
-    //         }
-    //         if (max > -1) {
-    //             headers["Version-Max"] = max.toString();
-    //         }
-    //         return headers;
-    //     }
-
-    //     return undefined;
-    // };
-
     public setSubscriptions = async (
         subscriptions: TSubscriptions
-    ): Promise<string> => {
+    ): Promise<TSubscriptions> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.setSubscriptions;
         const requestPath = `${commandPath}`;
         const commandInit = {
@@ -238,7 +195,10 @@ export class AppelflapConnect {
             body: JSON.stringify(subscriptions),
         };
 
-        return await this.performCommand(requestPath, commandInit, "text");
+        return (await this.performCommand(
+            requestPath,
+            commandInit
+        )) as Promise<TSubscriptions>;
     };
 
     public getCertificate = async (): Promise<TCertificate> => {

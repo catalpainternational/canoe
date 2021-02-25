@@ -34,9 +34,9 @@ export async function publishItem(
 
     try {
         await cachePublish.publish(CacheTarget(item));
-        return await Promise.resolve("succeeded");
+        return Promise.resolve("succeeded");
     } catch (error) {
-        return await Promise.reject("failed");
+        return Promise.reject("failed");
     }
 }
 
@@ -58,9 +58,9 @@ export async function unpublishItem(
 
     try {
         await cachePublish.unpublish(CacheTarget(item));
-        return await Promise.resolve("succeeded");
+        return Promise.resolve("succeeded");
     } catch (error) {
-        return await Promise.reject("failed");
+        return Promise.reject("failed");
     }
 }
 
@@ -72,7 +72,7 @@ export async function unpublishItem(
  */
 export async function getSubscriptions(
     appelflapConnect: AppelflapConnect
-): Promise<any> {
+): Promise<TSubscriptions | string> {
     if (!appelflapConnect) {
         return Promise.resolve("not relevant");
     }
@@ -81,9 +81,9 @@ export async function getSubscriptions(
 
     try {
         const subscriptions = await cacheSubscribe.getSubscriptions();
-        return await Promise.resolve(subscriptions);
+        return Promise.resolve(subscriptions);
     } catch (error) {
-        return await Promise.reject("failed");
+        return Promise.reject("failed");
     }
 }
 
@@ -96,7 +96,7 @@ export async function getSubscriptions(
 export async function setSubscriptions(
     items: TItemListing[],
     appelflapConnect: AppelflapConnect
-): Promise<any> {
+): Promise<TSubscriptions | string> {
     if (
         !items ||
         !items.length ||
@@ -127,57 +127,9 @@ export async function setSubscriptions(
         });
 
     try {
-        const result = cacheSubscribe.setSubscriptions(subscriptions);
-        return await Promise.resolve(subscriptions);
+        const result = await cacheSubscribe.setSubscriptions(subscriptions);
+        return Promise.resolve(result);
     } catch (error) {
-        return await Promise.reject("failed");
+        return Promise.reject("failed");
     }
 }
-
-/** Tells Appelflap to subscribe for this item
- * @returns
- * - resolve("succeeded") on success (200),
- * - resolve("not relevant") if isPublishable is true or appelflap connect wasn't provided,
- * - reject("failed") on error (404 or 500)
- */
-// export async function subscribeItem(
-//     item: IPublishableItem,
-//     appelflapConnect: AppelflapConnect
-// ): Promise<TAppelflapResult> {
-//     if (!item || item.isPublishable || !appelflapConnect) {
-//         return Promise.resolve("not relevant");
-//     }
-
-//     const cacheSubscribe = new CacheSubscribe(appelflapConnect);
-
-//     try {
-//         await cacheSubscribe.subscribe(CacheTarget(item));
-//         return await Promise.resolve("succeeded");
-//     } catch (error) {
-//         return await Promise.reject("failed");
-//     }
-// }
-
-/** Tells Appelflap to unsubscribe for this item
- * @returns
- * - resolve("succeeded") on success (200),
- * - resolve("not relevant") if isPublishable is false or appelflap connect wasn't provided,
- * - reject("failed") on error (404 or 500)
- */
-// export async function unsubscribeItem(
-//     item: IPublishableItem,
-//     appelflapConnect: AppelflapConnect
-// ): Promise<TAppelflapResult> {
-//     if (!item || !item.isPublishable || !appelflapConnect) {
-//         return Promise.resolve("not relevant");
-//     }
-
-//     const cacheSubscribe = new CacheSubscribe(appelflapConnect);
-
-//     try {
-//         await cacheSubscribe.unsubscribe(CacheTarget(item));
-//         return await Promise.resolve("succeeded");
-//     } catch (error) {
-//         return await Promise.reject("failed");
-//     }
-// }
