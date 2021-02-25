@@ -4,10 +4,6 @@ Resources {
         padding-right: 0;
     }
 
-    .card-image {
-        @extend %stock-resource;
-    }
-
     .with-swoop {
         @extend %center-with-flex;
     }

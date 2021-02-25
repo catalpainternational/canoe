@@ -12,6 +12,7 @@ googleAnalytics.initialize();
 import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
+self.__WB_DISABLE_DEV_LOGS = true;
 
 import { BACKEND_BASE_URL } from "./js/urls";
 
