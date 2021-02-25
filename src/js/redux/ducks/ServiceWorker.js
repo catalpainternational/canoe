@@ -20,6 +20,8 @@ const serviceWorkerState = (state = "unknown", action) => {
                     return state === "controlling" ? "update-waiting" : "install-failed";
                 case "update-waiting":
                     return "update-waiting";
+                case "skip_sw":
+                    return "skip_sw";
                 case "notsupported":
                     return "notsupported";
                 default:
