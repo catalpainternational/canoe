@@ -31,6 +31,35 @@ LessonPage {
 }
 
 LessonFrame {
+    .without-swoop {
+        justify-content: space-between;
+
+        .card-number {
+            color: $gray-1;
+            font-size: 0.7em;
+            margin: 0 10px;
+            min-width: 45px;
+
+            .current-card {
+                font-size: 2em;
+            }
+
+            .slash {
+                margin: 0 4px;
+            }
+        }
+
+        a.extra-clickable-space.right {
+            position: relative;
+            align-self: end;
+            margin-left: 10px;
+        }
+
+        progress {
+            flex: 2;
+        }
+    }
+
     .frame-background {
         // the 10px adds some room for the stacked cards below, the 50px is
         // for the buttons
@@ -38,11 +67,6 @@ LessonFrame {
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
-    }
-
-    progress {
-        width: 70vw;
-        max-width: 470px;
     }
 
     .card-content {
@@ -79,7 +103,7 @@ LessonFrame {
         left: 2%;
         border-radius: 7.5px;
         z-index: -1;
-        box-shadow: 0 5px 10px 0 rgba(42,57,66,0.2);
+        box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
         opacity: 0.9;
     }
 
@@ -603,10 +627,4 @@ ExamResults {
     button {
         min-width: 120px;
     }
-}
-
-.card-number {
-    position: absolute;
-    left: 15px;
-    color: $gray-4;
 }

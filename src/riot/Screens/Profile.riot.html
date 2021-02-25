@@ -12,13 +12,13 @@
                 class="{state.selectedInProgress ? 'selected' : ''}"
                 onclick="{() => selectTab('in-progress')}"
             >
-                <h5 class="section-title">in progress</h5>
+                <h5 class="section-title">{ TRANSLATIONS.inProgress() }</h5>
             </a>
             <a
                 class="{!state.selectedInProgress ? 'selected' : ''}"
                 onclick="{() => selectTab('completed')}"
             >
-                <h5 class="section-title">completed</h5>
+                <h5 class="section-title">{ TRANSLATIONS.completed() }</h5>
             </a>
         </div>
         <LoadingDots if="{state.loading}" extrastyleclasses="dark"></LoadingDots>
@@ -93,6 +93,8 @@
                 learning: () => gettext("Learning statistics"),
                 lessonsCompleted: () => gettext("lessons completed"),
                 lessonsLeft: () => gettext("lessons remaining"),
+                inProgress: () => gettext("in progress"),
+                completed: () => gettext("completed"),
             },
 
             async onMounted() {

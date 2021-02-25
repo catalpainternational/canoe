@@ -28,21 +28,17 @@
             <template if="{page.ready}">
                 <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
                     <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
-                    <Card
-                        status="{courseStatus(page.currentCourse)}"
-                        title="{page.currentCourse.title}"
-                        link="{page.currentCourse.loc_hash}"
-                        progressValue="{page.currentCourse.numberOfFinishedLessons}"
-                        progressMax="{page.currentCourse.numberOfLessons}"
-                    ></Card>
+                    <div class="card-container full-width">
+                        <Card
+                            status="{courseStatus(page.currentCourse)}"
+                            title="{page.currentCourse.title}"
+                            link="{page.currentCourse.loc_hash}"
+                            progressValue="{page.currentCourse.numberOfFinishedLessons}"
+                            progressMax="{page.currentCourse.numberOfLessons}"
+                        ></Card>
+                    </div>
                 </template>
-                <h5
-                    if="{page.currentCourse && !page.currentCourse.isComplete}"
-                    class="section-title"
-                >
-                    { TRANSLATIONS.allCourses() }
-                </h5>
-
+                <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
                 <div class="card-container">
                     <Card
                         each="{course in page.coursesCompleteLast}"
