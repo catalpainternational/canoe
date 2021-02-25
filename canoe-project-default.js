@@ -15,5 +15,5 @@ module.exports = {
     SITE_NAME: "Canoe",
     SITE_SHORT_NAME: "Canoe",
     SITE_DESCRIPTION: "An online education platform",
-    FAVICON_PATH: "./src/favicon.ico"
+    FAVICON_PATH: "./src/favicon.svg"
 };
