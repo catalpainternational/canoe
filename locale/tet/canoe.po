@@ -54,6 +54,9 @@ msgstr "Hein lai"
 msgid "Code of conduct"
 msgstr " Kindut"
 
+msgid "completed"
+msgstr "Kompleta ona"
+
 msgid "Congratulations!"
 msgstr "Parabéns! "
 
@@ -69,7 +72,7 @@ msgstr "Kontinua aprende"
 msgid "Course exam"
 msgstr "Ezama ba kursu"
 
-msgid "Course Progress"
+msgid "Course progress"
 msgstr "Ita nia progresu ba kursu"
 
 msgid "Download this PDF to your device"
@@ -100,7 +103,7 @@ msgid "Great job!"
 msgstr "Serbisu di'ak tebes!"
 
 msgid "hide"
-msgstr ""
+msgstr "subar"
 
 msgid "Highest score"
 msgstr "Valór aas liu"
@@ -110,6 +113,9 @@ msgstr "Ha’u presiza apoiu atu asesu ha’u nian perfil"
 
 msgid "I would like to receive notifications"
 msgstr "Hau hakarak simu notifikasaun sira"
+
+msgid "in progress"
+msgstr "Ita nia progresu ba kursu"
 
 msgid "In the meantime please use Safari."
 msgstr "Iha tempu leet, favór uza Safari"
@@ -223,7 +229,7 @@ msgid "Send WhatsApp"
 msgstr "Manda WhatsApp"
 
 msgid "show"
-msgstr ""
+msgstr "hatudu"
 
 msgid "Site download is complete!"
 msgstr "Kompletu ona download sítiu ida ne'e!"
@@ -382,9 +388,6 @@ msgstr "Haluha uzuáriu ka seña?"
 
 #~ msgid "Coming Soon!"
 #~ msgstr "Lisaun tuir mai!"
-
-#~ msgid "completed"
-#~ msgstr "Kompleta ona"
 
 #~ msgid "Course"
 #~ msgstr "Kursu"
