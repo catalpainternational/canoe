@@ -10,6 +10,7 @@ import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
 import { Manifest } from "ts/Implementations/Manifest";
 import { Page } from "ts/Implementations/Page";
 import {
+    allSubscriptions,
     publishItem,
     // subscribeItem,
     unpublishItem,
@@ -196,13 +197,15 @@ export class AppDataStatus {
         );
     }
 
-    /** Subscribe for everything currently not flagged as isPublishable */
-    // async SubscribeAll(): Promise<Record<string, TAppelflapResult>> {
-    //     return this.PerformAll(
-    //         (listing) => !listing.isPublishable,
-    //         subscribeItem
-    //     );
-    // }
+    /** Get all current subscriptions */
+    async AllSubscriptions(): Promise<Record<string, TAppelflapResult>> {
+        const appelflapConnect = new AppelflapConnect();
+        const subscriptions = await allSubscriptions(appelflapConnect);
+        if (typeof subscriptions === "string") {
+            return {};
+        }
+        return subscriptions;
+    }
 
     /** Unsubscribe everything currently flagged as isPublishable */
     // async UnsubscribeAll(): Promise<Record<string, TAppelflapResult>> {
@@ -244,7 +247,7 @@ export class AppDataStatus {
 
         const published = await this.PublishAll();
         const unpublished = await this.UnpublishAll();
-        // const subscribed = await this.SubscribeAll();
+        const subscribed = await this.AllSubscriptions();
         // const unsubscribed = await this.UnsubscribeAll();
 
         Object.entries(published).forEach((pub) => {
@@ -253,9 +256,9 @@ export class AppDataStatus {
         Object.entries(unpublished).forEach((pub) => {
             syncAllStatus[pub[0]].unpublished = pub[1];
         });
-        // Object.entries(subscribed).forEach((pub) => {
-        //     syncAllStatus[pub[0]].subscribed = pub[1];
-        // });
+        Object.entries(subscribed).forEach((pub) => {
+            syncAllStatus[pub[0]].subscribed = pub[1];
+        });
         // Object.entries(unsubscribed).forEach((pub) => {
         //     syncAllStatus[pub[0]].unsubscribed = pub[1];
         // });

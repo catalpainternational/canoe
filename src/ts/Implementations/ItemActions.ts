@@ -63,6 +63,29 @@ export async function unpublishItem(
     }
 }
 
+/** Tells Appelflap to retrieve all current subscriptions
+ * @returns
+ * - resolve("succeeded") on success (200),
+ * - resolve("not relevant") if appelflap connect wasn't provided,
+ * - reject("failed") on error (404 or 500)
+ */
+export async function allSubscriptions(
+    appelflapConnect: AppelflapConnect
+): Promise<any> {
+    if (!appelflapConnect) {
+        return Promise.resolve("not relevant");
+    }
+
+    const cacheSubscribe = new CacheSubscribe(appelflapConnect);
+
+    try {
+        const subscriptions = await cacheSubscribe.subscriptions;
+        return await Promise.resolve(subscriptions);
+    } catch (error) {
+        return await Promise.reject("failed");
+    }
+}
+
 /** Tells Appelflap to subscribe for this item
  * @returns
  * - resolve("succeeded") on success (200),
