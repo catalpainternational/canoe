@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="43px" height="43px" viewBox="0 0 43 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
-    <title>Favicon@3x</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Favicon">
-            <circle id="Oval" fill="#FAFAF5" fill-rule="nonzero" cx="21.5" cy="21.5" r="21.5"></circle>
-            <path d="M36.266,26.117 L28.64,26.117 C28.346,26.117 28.148,26.332 28.089,26.438 C27.035,28.338 24.755,29.867 22.115,29.867 C17.969,29.867 14.615,26.061 14.615,21.459 C14.615,16.741 17.969,12.878 22.115,12.878 C24.712,12.878 26.949,14.421 28.043,16.288 C28.095,16.381 28.303,16.572 28.571,16.572 L36.21,16.572 C34.505,9.978 29.163,6 22.115,6 C13.307,6 7,12.935 7,21.4 C7,29.867 13.307,36.687 22.115,36.687 C29.219,36.687 34.561,32.765 36.266,26.117" id="Fill-" fill="#22ADB5"></path>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="43" height="43"  fill-rule="evenodd" xmlns:v="https://vecta.io/nano"><circle fill="#fafaf5" fill-rule="nonzero" cx="21.5" cy="21.5" r="21.5"/><path d="M36.266 26.117H28.64a.67.67 0 0 0-.551.321c-1.054 1.9-3.334 3.429-5.974 3.429-4.146 0-7.5-3.806-7.5-8.408 0-4.718 3.354-8.581 7.5-8.581 2.597 0 4.834 1.543 5.928 3.41.052.093.26.284.528.284h7.639C34.505 9.978 29.163 6 22.115 6 13.307 6 7 12.935 7 21.4s6.307 15.287 15.115 15.287c7.104 0 12.446-3.922 14.151-10.57" fill="#22adb5"/></svg>
