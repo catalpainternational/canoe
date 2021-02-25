@@ -102,14 +102,12 @@
             async onMounted(props, state) {
                 const courses = await props.wagtailPage.getFullCourseObjects();
 
-                const unsortedCourses = courses.filter((course) => course.numberOfLessons);
-
-                const currentCourse = getCourseWithLatestCompletion(unsortedCourses);
-                const listOfTags = getTagsFromPages(unsortedCourses);
+                const currentCourse = getCourseWithLatestCompletion(courses);
+                const listOfTags = getTagsFromPages(courses);
 
                 const visibleCourses = isGuestUser()
-                    ? unsortedCourses.filter((course) => course.isVisibleToGuests())
-                    : unsortedCourses;
+                    ? courses.filter((course) => course.isVisibleToGuests())
+                    : courses;
 
                 const sortedListOfCourses = this.sortCourses(visibleCourses);
 

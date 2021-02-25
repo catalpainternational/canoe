@@ -1,42 +1,26 @@
 /*
  * ServiceWorkerManagement module
  */
-import { Workbox } from "workbox-window";
+import { register } from "register-service-worker";
 
 import { logNotificationReceived } from "js/GoogleAnalytics";
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import { MANIFEST_CACHE_NAME, EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 import { gettext } from "js/Translation";
 
-/** Sets a sessionStorage item signifying whether we are booting into a:
- * - preseeded state (either through Appelflap cache injection, or autonomous buildup), or
- * - blank slate.
- *
- * We use the presence of the manifest as an indication for this.
- * @remarks Can be used as a fence by awaiting its promise.
- * @returns true when a manifest can be found, false otherwise.
- */
-const recordBootstate = async () => {
-    let manifestIsExtant = false;
-    const cacheNames = await caches.keys();
-    if (cacheNames.indexOf(MANIFEST_CACHE_NAME) === -1) {
-        return manifestIsExtant;
-    }
+const reloadIfNewServiceWorkerIsAvailable = () => {
+    let refreshing;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+        // We'll also need to add 'refreshing' to our data originally set to false.
+        if (refreshing) return;
+        refreshing = true;
+        // Here the actual reload of the page occurs
+        window.location.reload();
+    });
+};
 
-    try {
-        const aMatch = await caches
-            .open(MANIFEST_CACHE_NAME)
-            .match(ROUTES_FOR_REGISTRATION.manifest);
-        manifestIsExtant = aMatch !== undefined;
-    } catch {
-        // Do nothing - manifestIsExtant is still false
-    }
-
-    // indicate 'empty'
-    sessionStorage.setItem(EMPTY_SLATE_BOOT_KEY, !manifestIsExtant);
-
-    // indicate we've got everything
-    return manifestIsExtant;
+const ENG_STRINGS = {
+    updatesAreAvailable: gettext(
+        `A new version of the application is available. Click OK to load the new version.`
+    ),
 };
 
 export async function initializeServiceWorker() {
@@ -44,27 +28,42 @@ export async function initializeServiceWorker() {
         return;
     }
 
-    const wb = new Workbox("/sw.js");
-
-    wb.addEventListener("installed", (event) => {
-        if (event.isUpdate) {
-            const refreshForNewVersionMessage = gettext(
-                `New content is available! Click OK to refresh.`
-            );
-            if (confirm(refreshForNewVersionMessage)) {
-                window.location.reload();
+    register("/sw.js", {
+        registrationOptions: { scope: "./" },
+        ready(registration) {
+            reloadIfNewServiceWorkerIsAvailable();
+            console.log("Service worker is active.");
+        },
+        registered(registration) {
+            console.log("Service worker has been registered.");
+        },
+        cached(registration) {
+            console.log("Content has been cached for offline use.");
+        },
+        updatefound(registration) {
+            console.log("New content is downloading.");
+        },
+        updated(registration) {
+            console.log("New content is available; please refresh.");
+            if (!registration.waiting) {
+                return;
             }
-        }
+            const shouldUpdate = confirm(ENG_STRINGS.updatesAreAvailable);
+
+            if (shouldUpdate) {
+                registration.waiting.postMessage({ type: "SKIP_WAITING" });
+            }
+        },
+        offline() {
+            console.log("No internet connection found. App is running in offline mode.");
+        },
+        error(error) {
+            console.error("Error during service worker registration:", error);
+        },
     });
 
-    wb.addEventListener("controlling", () => {
-        recordBootstate();
-    });
-
-    wb.addEventListener("message", (event) => {
+    window.addEventListener("message", (event) => {
         const type = event.data;
         logNotificationReceived(type);
     });
-
-    wb.register();
 }

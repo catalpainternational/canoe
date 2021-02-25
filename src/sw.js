@@ -7,14 +7,14 @@ import { RangeRequestsPlugin } from "workbox-range-requests";
 import { precacheAndRoute } from "workbox-precaching";
 import * as googleAnalytics from "workbox-google-analytics";
 
+import { BACKEND_BASE_URL } from "./js/urls";
+
 googleAnalytics.initialize();
 
 self.skipWaiting();
 self.clients.claim();
 
 precacheAndRoute(self.__WB_MANIFEST);
-
-import { BACKEND_BASE_URL } from "./js/urls";
 
 registerRoute(
     new RegExp(`${BACKEND_BASE_URL}/media/media/.+`),
