@@ -391,16 +391,16 @@ test("Cache: setSubscriptions", async (t: any) => {
     // And do the 'ok' test last to ensure that all tests are awaited
     t.plan(5);
     [badRequestResponse, authFailureResponse].forEach(async (response) => {
-        fetchMock.post(testUri, response, { overwriteRoutes: true });
+        fetchMock.put(testUri, response, { overwriteRoutes: true });
         const failureResult = await t.throwsAsync(
             afc.setSubscriptions(subscriptions)
         );
         t.is(failureResult.message, response.statusText);
     });
 
-    fetchMock.post(testUri, successResponse, { overwriteRoutes: true });
+    fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.setSubscriptions(subscriptions);
-    t.is(successResult, "ok");
+    t.deepEqual(successResult, subscriptions);
 
     fetchMock.reset();
 });
