@@ -1,5 +1,6 @@
 import { TAppelflapResult } from "ts/Types/CanoeEnums";
-import { TPublication } from "ts/Types/CacheTypes";
+import { TPublication, TSubscriptions } from "ts/Types/CacheTypes";
+import { TItemListing } from "ts/Types/PublishableItemTypes";
 import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
 
 import { AppelflapConnect } from "ts/AppelflapConnect";
@@ -69,7 +70,7 @@ export async function unpublishItem(
  * - resolve("not relevant") if appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
-export async function allSubscriptions(
+export async function getSubscriptions(
     appelflapConnect: AppelflapConnect
 ): Promise<any> {
     if (!appelflapConnect) {
@@ -79,7 +80,54 @@ export async function allSubscriptions(
     const cacheSubscribe = new CacheSubscribe(appelflapConnect);
 
     try {
-        const subscriptions = await cacheSubscribe.subscriptions;
+        const subscriptions = await cacheSubscribe.getSubscriptions();
+        return await Promise.resolve(subscriptions);
+    } catch (error) {
+        return await Promise.reject("failed");
+    }
+}
+
+/** Tells Appelflap to set all current subscriptions
+ * @returns
+ * - resolve("succeeded") on success (200),
+ * - resolve("not relevant") if no items, none of the items are publishable, or appelflap connect wasn't provided,
+ * - reject("failed") on error (404 or 500)
+ */
+export async function setSubscriptions(
+    items: TItemListing[],
+    appelflapConnect: AppelflapConnect
+): Promise<any> {
+    if (
+        !items ||
+        !items.length ||
+        !items.some((item) => !item.isPublishable) ||
+        !appelflapConnect
+    ) {
+        return Promise.resolve("not relevant");
+    }
+
+    const cacheSubscribe = new CacheSubscribe(appelflapConnect);
+
+    const subscriptions: TSubscriptions = {
+        origins: {},
+    };
+
+    subscriptions.origins[self.origin] = { caches: {} };
+
+    items
+        .filter((item) => !item.isPublishable)
+        .forEach((item) => {
+            subscriptions.origins[self.origin].caches[item.cacheKey] = {
+                injection_version_min: item.version,
+                injection_version_max: item.version,
+                p2p_version_min: item.version,
+                p2p_version_max: item.version,
+                injected_version: null,
+            };
+        });
+
+    try {
+        const result = cacheSubscribe.setSubscriptions(subscriptions);
         return await Promise.resolve(subscriptions);
     } catch (error) {
         return await Promise.reject("failed");

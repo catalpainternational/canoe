@@ -187,43 +187,43 @@ export class AppelflapConnect {
      * undefined if there were no version min or max values, otherwise a header with the relevant values
      * @throws { RangeError } If both a min and max are provided and they are incorrectly ordered
      */
-    private buildVersionHeaders = (
-        versionRange: TSubscription | TSubscriptionVersion
-    ): Record<string, string> | undefined => {
-        let min = -1;
-        let max = -1;
-        const hasMin = typeof versionRange.versionMin === "number";
-        const hasMax = typeof versionRange.versionMax === "number";
-        if (hasMin || hasMax) {
-            if (
-                hasMin &&
-                hasMax &&
-                versionRange.versionMin! > versionRange.versionMax!
-            ) {
-                throw new RangeError(
-                    "versionMin must be less than or equal to versionMax"
-                );
-            }
-            if (hasMin && versionRange.versionMin! > 0) {
-                min = versionRange.versionMin!;
-            }
-            if (hasMax && versionRange.versionMax! > 0) {
-                max = versionRange.versionMax!;
-            }
-        }
-        if (min > -1 || max > -1) {
-            const headers: Record<string, string> = {};
-            if (min > -1) {
-                headers["Version-Min"] = min.toString();
-            }
-            if (max > -1) {
-                headers["Version-Max"] = max.toString();
-            }
-            return headers;
-        }
+    // private buildVersionHeaders = (
+    //     versionRange: TSubscription | TSubscriptionVersion
+    // ): Record<string, string> | undefined => {
+    //     let min = -1;
+    //     let max = -1;
+    //     const hasMin = typeof versionRange.versionMin === "number";
+    //     const hasMax = typeof versionRange.versionMax === "number";
+    //     if (hasMin || hasMax) {
+    //         if (
+    //             hasMin &&
+    //             hasMax &&
+    //             versionRange.versionMin! > versionRange.versionMax!
+    //         ) {
+    //             throw new RangeError(
+    //                 "versionMin must be less than or equal to versionMax"
+    //             );
+    //         }
+    //         if (hasMin && versionRange.versionMin! > 0) {
+    //             min = versionRange.versionMin!;
+    //         }
+    //         if (hasMax && versionRange.versionMax! > 0) {
+    //             max = versionRange.versionMax!;
+    //         }
+    //     }
+    //     if (min > -1 || max > -1) {
+    //         const headers: Record<string, string> = {};
+    //         if (min > -1) {
+    //             headers["Version-Min"] = min.toString();
+    //         }
+    //         if (max > -1) {
+    //             headers["Version-Max"] = max.toString();
+    //         }
+    //         return headers;
+    //     }
 
-        return undefined;
-    };
+    //     return undefined;
+    // };
 
     public setSubscriptions = async (
         subscriptions: TSubscriptions

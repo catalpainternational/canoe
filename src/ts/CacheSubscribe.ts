@@ -6,23 +6,24 @@ import {
 } from "./Types/CacheTypes";
 
 export class CacheSubscribe {
-    #subscriptions: TSubscriptions = {};
+    #subscriptions: TSubscriptions = { origins: {} };
     #afc: AppelflapConnect;
 
     constructor(afc: AppelflapConnect) {
         this.#afc = afc;
     }
 
-    get subscriptions(): TSubscriptions {
+    async getSubscriptions(): Promise<TSubscriptions> {
+        this.#subscriptions = await this.#afc.getSubscriptions();
         return this.#subscriptions;
     }
 
-    set subscriptions(subscriptions: TSubscriptions) {
+    async setSubscriptions(subscriptions: TSubscriptions): Promise<string> {
         this.#subscriptions = subscriptions;
 
-        async () => {
-            await this.#afc.setSubscriptions(subscriptions);
-        };
+        const result = await this.#afc.setSubscriptions(subscriptions);
+
+        return result;
     }
 
     // /** Adds a single subscription to the existing list of subscriptions */
