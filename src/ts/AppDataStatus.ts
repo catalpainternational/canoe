@@ -249,7 +249,11 @@ export class AppDataStatus {
         const published = await this.PublishAll();
         const unpublished = await this.UnpublishAll();
         let subscriptions = await this.GetSubscriptions();
-        let subscribed = Object.entries(subscriptions.origins[0].caches);
+        let origins = Object.keys(subscriptions.origins);
+        let subscribed =
+            origins.length === 1
+                ? Object.entries(subscriptions.origins[origins[0]].caches)
+                : [];
         let publishSubscribeMismatch = false;
         if (this.itemListings.length !== subscribed.length) {
             publishSubscribeMismatch = true;
@@ -266,7 +270,10 @@ export class AppDataStatus {
 
         if (publishSubscribeMismatch) {
             subscriptions = await this.SetSubscriptions();
-            subscribed = Object.entries(subscriptions.origins[0].caches);
+            origins = Object.keys(subscriptions.origins);
+            subscribed = Object.entries(
+                subscriptions.origins[origins[0]].caches
+            );
         }
 
         Object.entries(published).forEach((pub) => {
