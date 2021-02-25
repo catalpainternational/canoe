@@ -76,7 +76,10 @@ module.exports = env => {
                 {
                     test: /\.hbs$/,
                     loader: "handlebars-loader",
-                    query: { inlineRequires: '\/public\/' }
+                    query: {
+                        inlineRequires: 'img\/',
+                        rootRelative: '',
+                    }
                 },
                 {
                     test: /\.riot.html$/,
@@ -207,5 +210,6 @@ module.exports = env => {
         environmentConfiguration.WEBPACK_CONFIG,
         productionWebpackConfig
     );
+    console.log(config);
     return config;
 };
