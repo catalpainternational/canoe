@@ -16,20 +16,7 @@ import {
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import {
-    AppelflapPortNo,
-    AF_LOCALHOSTURI,
-    AF_META_API,
-    AF_CACHE_API,
-    AF_ACTION_API,
-    AF_INS_LOCK,
-    AF_PUBLICATIONS,
-    AF_SUBSCRIPTIONS,
-    AF_STATUS,
-    AF_REBOOT,
-    AF_CERTCHAIN,
-    AF_CERTCHAIN_LENGTH_HEADER,
-} from "js/RoutingAppelflap";
+import { AF_LOCALHOSTURI, AF_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT, AppelflapPortNo, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "js/RoutingAppelflap";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
