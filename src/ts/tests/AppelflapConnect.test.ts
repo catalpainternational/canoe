@@ -10,8 +10,6 @@ import { AppelflapConnect } from "ts/AppelflapConnect";
 import {
     TCertificate,
     TPublication,
-    TPublicationTarget,
-    TSubscription,
     TSubscriptions,
 } from "ts/Types/CacheTypes";
 
@@ -19,6 +17,7 @@ import {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
 import {
+    AppelflapPortNo,
     AF_LOCALHOSTURI,
     AF_META_API,
     AF_CACHE_API,
@@ -28,7 +27,6 @@ import {
     AF_SUBSCRIPTIONS,
     AF_STATUS,
     AF_REBOOT,
-    AppelflapPortNo,
     AF_CERTCHAIN,
     AF_CERTCHAIN_LENGTH_HEADER,
 } from "js/RoutingAppelflap";
@@ -308,8 +306,36 @@ test("Cache: getSubscriptions", async (t: any) => {
 
     const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`;
     const testResponse = {
-        "some-web-origin": {
-            "some-cache-name": { versionMin: 10, versionMax: 9000 },
+        origins: {
+            "some-web-origin": {
+                caches: {
+                    "some-cache-name": {
+                        injection_version_min: 10,
+                        injection_version_max: 20,
+                        p2p_version_min: 200,
+                        p2p_version_max: 888,
+                        injected_version: 12,
+                    },
+                    "another-cache-name": {
+                        injection_version_min: 42,
+                        injection_version_max: 42,
+                        p2p_version_min: 1,
+                        p2p_version_max: 9000,
+                        injected_version: null,
+                    },
+                },
+            },
+            "some-other-web-origin": {
+                caches: {
+                    "yet-another-cache-name": {
+                        injection_version_min: 42,
+                        injection_version_max: 42,
+                        p2p_version_min: 1,
+                        p2p_version_max: 9000,
+                        injected_version: null,
+                    },
+                },
+            },
         },
     };
 
@@ -330,39 +356,6 @@ test("Cache: getSubscriptions", async (t: any) => {
     fetchMock.reset();
 });
 
-// {
-//     "origins": {
-//         "some-web-origin": {
-//             "caches": {
-//                 "some-cache-name": {
-//                     "injection_version_min": 10,
-//                     "injection_version_max": 20,
-//                     "p2p_version_min": 200,
-//                     "p2p_version_max": 888,
-//                     "injected_version": 12
-//                 },
-//                 "another-cache-name": {
-//                     "injection_version_min": 42,
-//                     "injection_version_max": 42,
-//                     "p2p_version_min": 1,
-//                     "p2p_version_max": 9000,
-//                     "injected_version": null
-//                 }
-//             }
-//         },
-//         "some-other-web-origin": {
-//             "caches": {
-//                 "yet-another-cache-name": {
-//                     "injection_version_min": 42,
-//                     "injection_version_max": 42,
-//                     "p2p_version_min": 1,
-//                     "p2p_version_max": 9000,
-//                     "injected_version": null
-//                 }
-//             }
-//         }
-//     }
-// }
 // When doing throwsAsync tests, expect 2 assertions returned for each test
 // And do the 'ok' test last to ensure that all tests are awaited
 

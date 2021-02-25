@@ -114,17 +114,15 @@ export async function setSubscriptions(
 
     subscriptions.origins[self.origin] = { caches: {} };
 
-    items
-        .filter((item) => !item.isPublishable)
-        .forEach((item) => {
-            subscriptions.origins[self.origin].caches[item.cacheKey] = {
-                injection_version_min: item.version,
-                injection_version_max: item.version,
-                p2p_version_min: item.version,
-                p2p_version_max: item.version,
-                injected_version: null,
-            };
-        });
+    items.forEach((item) => {
+        subscriptions.origins[self.origin].caches[item.cacheKey] = {
+            injection_version_min: item.version,
+            injection_version_max: item.version,
+            p2p_version_min: item.version,
+            p2p_version_max: item.version,
+            injected_version: item.isPublishable ? item.version : null,
+        };
+    });
 
     try {
         const result = await cacheSubscribe.setSubscriptions(subscriptions);
