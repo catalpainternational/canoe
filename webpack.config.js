@@ -210,6 +210,5 @@ module.exports = env => {
         environmentConfiguration.WEBPACK_CONFIG,
         productionWebpackConfig
     );
-    console.log(config);
     return config;
 };
