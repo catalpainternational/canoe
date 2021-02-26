@@ -1,10 +1,11 @@
 <QuoteCard>
+    <hr>
     <div class="quote-container {styleLength()}">
-        <span>"</span>
+        <span class="quotation-mark"></span>
         <h3>{props.card.quote}</h3>
-        <span>"</span>
+        <p class="{styleLength()}">&ndash; {props.card.attribution}</p>
     </div>
-    <p class="{styleLength()}">- {props.card.attribution}</p>
+    <hr>
 
     <script>
         export default {

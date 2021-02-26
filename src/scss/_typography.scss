@@ -58,7 +58,7 @@ p {
 h5.section-title {
     text-transform: uppercase;
     display: flex;
-    margin: 1em 0;
+    margin: 1.5em 0;
 }
 
 a {
@@ -67,6 +67,10 @@ a {
     font-size: 1em;
     color: $app-accent-color;
     font-weight: 300;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 button {
@@ -105,6 +109,11 @@ ol {
     font-size: 13px;
     color: $gray-3;
     font-weight: 300;
+    list-style-position: inside;
+}
+
+li::marker {
+    color: $gray-1;
 }
 
 // lists within lists

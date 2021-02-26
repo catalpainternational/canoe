@@ -6,4 +6,10 @@ CoursePage {
     .card-image {
         @extend %stock-lesson;
     }
+
+    .content-wrapper {
+        h2 {
+            margin-bottom: 35px;
+        }
+    }
 }
