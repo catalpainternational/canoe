@@ -192,7 +192,8 @@ LessonContent .content {
     listcard,
     VideoCard,
     AudioCard,
-    PdfCard {
+    PdfCard,
+    Html5Card {
         flex: 1;
         width: 100%;
     }
@@ -279,6 +280,10 @@ LessonContent .content {
 
     p.error-message {
         color: red;
+    }
+
+    iframe {
+        border: none;
     }
 }
 
