@@ -43,7 +43,6 @@ Profile {
 }
 
 .stats {
-    margin-top: 10px;
     display: flex;
 
     h5 {
@@ -57,6 +56,10 @@ Profile {
     width: 50%;
     background-color: white;
     box-shadow: none;
+
+    &:first-of-type {
+        margin-left: 0;
+    }
 
     &:nth-child(odd) {
         margin-right: 5px;
