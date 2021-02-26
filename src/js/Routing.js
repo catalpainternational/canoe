@@ -13,6 +13,11 @@ const CANOE_SHORTCUTS = {
     'resources': 'resourcesroot',
 };
 
+// pages from the CMS ( we might not use this )
+const IS_WAGTAIL_PAGE = /([\d]+)/; // should match '#3' and '#3/objectives'
+
+const IS_PAGE_PREVIEW = /^\?(.+)/;
+
 export function initialiseRouting() {
     window.addEventListener("hashchange", async () => {
         route(window.location.hash);

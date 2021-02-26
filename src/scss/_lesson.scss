@@ -27,14 +27,39 @@ LessonPage {
 
     .module-swoop {
         @extend %bottom-swoop;
-
-        a:hover {
-            cursor: pointer;
-        }
     }
 }
 
 LessonFrame {
+    .without-swoop {
+        justify-content: space-between;
+
+        .card-number {
+            color: $gray-1;
+            font-size: 0.7em;
+            margin: 0 10px;
+            min-width: 45px;
+
+            .current-card {
+                font-size: 2em;
+            }
+
+            .slash {
+                margin: 0 4px;
+            }
+        }
+
+        a.extra-clickable-space.right {
+            position: relative;
+            align-self: end;
+            margin-left: 10px;
+        }
+
+        progress {
+            flex: 2;
+        }
+    }
+
     .frame-background {
         // the 10px adds some room for the stacked cards below, the 50px is
         // for the buttons
@@ -42,11 +67,6 @@ LessonFrame {
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
-    }
-
-    progress {
-        width: 70vw;
-        max-width: 470px;
     }
 
     .card-content {
@@ -83,7 +103,7 @@ LessonFrame {
         left: 2%;
         border-radius: 7.5px;
         z-index: -1;
-        box-shadow: 0 5px 10px 0 rgba(42,57,66,0.2);
+        box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
         opacity: 0.9;
     }
 
@@ -94,6 +114,47 @@ LessonFrame {
         left: 5%;
         border-radius: 7px;
         opacity: 0.55;
+    }
+}
+
+ResourceArticle {
+    .no-card {
+        padding: 0 18px 1.5em;
+        width: 100%;
+        margin: 7px auto 70px;
+        max-width: $tablet;
+        background-color: $gray-10;
+
+        ImageWrapper img.richtext-image {
+            width: calc(100% + (2 * 18px));
+            margin-left: -18px;
+            margin-right: -18px;
+        }
+    }
+
+    .content-block + .content-block {
+        margin-top: 20px;
+    }
+
+    .content .resource-description {
+        color: $gray-1;
+        font-size: 1.2em;
+        margin: 1em 0;
+        width: 100%;
+    }
+
+    BasicCard h3,
+    AudioCard h3,
+    VideoCard h3,
+    QuoteCard h3,
+    ListCard h3,
+    PdfCard h3,
+    Raw h2 {
+        font-family: "TiemposHeadline";
+        font-size: 1.5em;
+        color: $gray-1;
+        font-weight: 300;
+        margin: 0.8em 0;
     }
 }
 
@@ -144,11 +205,6 @@ LessonContent .content {
         text-align: left;
     }
 
-    VideoCard,
-    AudioCard {
-        text-align: center;
-    }
-
     audio {
         min-width: 250px;
         width: 70%;
@@ -165,9 +221,7 @@ LessonContent .content {
         font-size: 1.125em;
 
         .quote-container {
-            display: flex;
-            flex-direction: row;
-            margin-top: 2em;
+            margin: 2em;
 
             &.long {
                 margin-top: 0;
@@ -175,25 +229,17 @@ LessonContent .content {
         }
 
         h3 {
-            font-weight: 500;
-            flex: 1;
+            font-weight: 200;
             margin: 0;
         }
 
-        span {
-            color: $app-accent-color;
-            margin: -0.1em 0.1em;
-            align-self: flex-start;
-            font-size: 1.7em;
-
-            &:last-of-type {
-                align-self: flex-end;
-            }
+        .quotation-mark {
+            display: block;
+            margin-bottom: 10px;
         }
 
         & p {
-            padding-top: 2em;
-            margin-left: 1em;
+            padding-top: 0.7em;
 
             &.long {
                 padding-top: 0;
@@ -206,8 +252,8 @@ LessonContent .content {
         width: 100%;
 
         span {
-            margin-right: 7px;
-            color: $app-accent-color;
+            margin-right: 18px;
+            color: $gray-1;
             font-weight: 600;
         }
     }
@@ -229,22 +275,12 @@ LessonContent .content {
         margin: 0.3em 0;
     }
 
-    ul,
-    ol {
-        padding-left: 20px;
-    }
-
     p.media-description {
         font-size: 18px;
     }
 
     p.error-message {
         color: red;
-    }
-
-    .speaker,
-    .film {
-        margin: 0 auto;
     }
 }
 
@@ -554,10 +590,10 @@ ExamResults {
             width: 220px;
             position: relative;
 
-            span {
-                @extend %chevron;
+            .chevron {
                 position: absolute;
                 right: 20px;
+                top: 12px;
             }
         }
 
@@ -591,10 +627,4 @@ ExamResults {
     button {
         min-width: 120px;
     }
-}
-
-.card-number {
-    position: absolute;
-    left: 15px;
-    color: $gray-4;
 }

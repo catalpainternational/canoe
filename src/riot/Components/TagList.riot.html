@@ -3,7 +3,7 @@
         <a
             each="{tag in props.tags}"
             class="tag {props.selectedTags && props.selectedTags.includes(tag) ? 'selected' : ''}"
-            onclick="{e => { 
+            onclick="{e => {
                 props.onTagClick(e.srcElement.innerText.toLowerCase(), false)
             }}"
         >

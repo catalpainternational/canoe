@@ -30,11 +30,15 @@ TopMenu {
         font-weight: 200;
     }
 
+    h4, h5 {
+        max-width: 70%;
+    }
+
     span {
         display: inline-block;
     }
 
-    a.top-icon {
+    .top-icon {
         position: absolute;
         top: 15px;
         -webkit-mask-position: center;
