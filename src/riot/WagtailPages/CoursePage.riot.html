@@ -25,12 +25,14 @@
                 </div>
                 <template if="{ course.hasExam }">
                     <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
-                    <Card
-                        title="{examTitle()}"
-                        description="{examDescription()}"
-                        link="{ `${course.loc_hash}:exam` }"
-                        status="{examStatus(props.wagtailPage)}"
-                    ></Card>
+                    <div class="card-container full-width">
+                        <Card
+                            title="{examTitle()}"
+                            description="{examDescription()}"
+                            link="{ `${course.loc_hash}:exam` }"
+                            status="{examStatus(props.wagtailPage)}"
+                        ></Card>
+                    </div>
                 </template>
             </template>
         </div>

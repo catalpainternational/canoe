@@ -12,7 +12,7 @@
     @extend %buttons-shared;
     box-shadow: 0 10px 8px 0 rgba(42, 57, 66, 0.2);
     background-color: $app-accent-color;
-    min-height: 40px;
+    min-height: 45px;
     color: $white;
     border: none;
     padding-right: 0.5em;
@@ -33,6 +33,10 @@
               margin: 0.5em auto;
             }
         }
+    }
+
+    &:active {
+        box-shadow: 0 10px 8px 0 rgba(42, 57, 66, 0.2) inset;
     }
 }
 

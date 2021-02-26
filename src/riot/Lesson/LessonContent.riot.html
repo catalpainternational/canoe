@@ -5,35 +5,51 @@
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
         lesson="{ props.lesson }"
+        noCardStyle="{props.resourceId === 'resources' ? true : false}"
+        resourceTitle="{props.resourceId === 'resources' ? props.lessonContent.title : ''}"
     >
-        <Raw
-            if="{state.card.tag === 'raw'}"
-            html="{state.card.content}"
-        />
-        <BasicCard
-            if="{state.card.tag === 'basic'}"
-            card="{state.card}"
-        />
-        <AudioCard
-            if="{state.card.media_type === 'audio'}"
-            media="{state.card}"
-        />
-        <VideoCard
-            if="{state.card.media_type === 'video'}"
-            media="{state.card}"
-        />
-        <QuoteCard
-            if="{state.card.tag === 'quote'}"
-            card="{state.card}"
-        />
-        <ListCard
-            if="{state.card.tag === 'list'}"
-            card="{state.card}"
-        />
-        <PdfCard
-            if="{state.card.tag === 'pdf'}"
-            card="{state.card}"
-        />
+        <template if="{props.description}">
+            <p class="resource-description">{ props.description }</p>
+        </template>
+        <template if="{props.resourceId === 'resources'}" each="{card in props.lessonContent.cards}">
+            <Raw if="{card.tag === 'raw'}" html="{card.content}" class="content-block"></Raw>
+            <BasicCard if="{card.tag === 'basic'}" card="{card}" class="content-block"></BasicCard>
+            <AudioCard if="{card.media_type === 'audio'}" media="{card}" class="content-block"></AudioCard>
+            <VideoCard if="{card.media_type === 'video'}" media="{card}" class="content-block"></VideoCard>
+            <QuoteCard if="{card.tag === 'quote'}" card="{card}" class="content-block"></QuoteCard>
+            <ListCard if="{card.tag === 'list'}" card="{card}" class="content-block"></ListCard>
+            <PdfCard if="{card.tag === 'pdf'}" card="{card}" class="content-block"></PdfCard>
+        </template>
+        <template if="{props.resourceId !== 'resources'}">
+            <Raw
+                if="{state.card.tag === 'raw'}"
+                html="{state.card.content}"
+            />
+            <BasicCard
+                if="{state.card.tag === 'basic'}"
+                card="{state.card}"
+            />
+            <AudioCard
+                if="{state.card.media_type === 'audio'}"
+                media="{state.card}"
+            />
+            <VideoCard
+                if="{state.card.media_type === 'video'}"
+                media="{state.card}"
+            />
+            <QuoteCard
+                if="{state.card.tag === 'quote'}"
+                card="{state.card}"
+            />
+            <ListCard
+                if="{state.card.tag === 'list'}"
+                card="{state.card}"
+            />
+            <PdfCard
+                if="{state.card.tag === 'pdf'}"
+                card="{state.card}"
+            />
+        </template>
     </LessonFrame>
     <div if="{props.lesson && state.cardNumber <= state.cards.length}" class="bottom-buttons">
         <div>

@@ -5,7 +5,9 @@
     border: 1px solid $gray-7;
     box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
     background-color: $gray-10;
-    height: 175px;
+    height: 200px;
+    max-width: 170px;
+    margin: 0 auto;
     position: relative;
 
     .card-image {
@@ -21,13 +23,22 @@
 
     .card-title {
         box-sizing: border-box;
-        min-height: 70px;
+        min-height: 100px;
         padding: 15px;
         overflow: hidden;
 
         h5 {
             margin: 0;
             color: $gray-1;
+        }
+
+        .clamp-3-lines {
+            line-height: 1.2em;
+            height: calc(3 * 1.2em);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
         }
     }
 
@@ -36,16 +47,12 @@
     &.disabled .card-status,
     &.coming-soon .card-status {
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
     }
 
-    &.complete {
-        box-shadow: none;
-
-        .card-status {
-            @extend %status-complete;
-        }
+    &.complete .card-status {
+        @extend %status-complete;
     }
 
     &.in-progress .card-status {
@@ -78,10 +85,22 @@
 
 .card-container {
     display: grid;
-    grid-gap: 15px 7%;
+    grid-gap: 20px 7%;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
     justify-content: space-between;
+
+    @media only screen and (min-width: 500px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    &.full-width {
+        grid-template-columns: 1fr;
+
+        .card {
+            max-width: unset;
+        }
+    }
 }
 
 // Legacy needs this (?)

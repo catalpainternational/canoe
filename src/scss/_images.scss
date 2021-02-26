@@ -189,10 +189,26 @@
     display: inline-block;
 }
 
+.launch-feedback {
+    @include unmaskable-icons-shared("~img/launch_feedback.png", contain);
+    height: 20vh;
+    min-height: 100px;
+    max-height: 200px;
+    width: 100%;
+    display: inline-block;
+    margin: 1.5em auto;
+}
+
 .arrow {
     @include mask-icons-shared("~img/arrow.svg", contain, $blue);
     height: 12px;
     width: 17px;
+}
+
+.quotation-mark {
+    @include mask-icons-shared("~img/quotation_mark.svg", contain, $blue);
+    height: 25px;
+    width: 25px;
 }
 
 .incorrect-cross {
@@ -228,41 +244,52 @@
     background: $teal;
 }
 
-.speaker {
-    @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/speaker.svg", contain, $gray-3);
-}
-
-.film {
-    @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/film.svg", contain, $gray-3);
-}
-
-%chevron {
+.chevron {
     @include mask-icons-shared("~img/chevron_right.svg", contain, $white);
-    height: 15px;
-    width: 15px;
+    height: 17px;
+    width: 10px;
+    margin-left: 1px;
 }
 
 // Icons for card status
-%status-play {
-    background-color: $blue;
-    border: 0.1px solid $gray-5;
+@mixin status-icon($icon, $circle-color) {
+    background-color: $circle-color;
     display: flex;
     box-sizing: border-box;
 
-    span {
-        @extend %chevron;
-        margin: auto;
+    .icon {
+        @include mask-icons-shared($icon, contain, $white);
+        @extend %absolutely-center;
+        width: 15px;
+        height: 15px;
+    }
+}
+
+%status-play {
+    @include status-icon("~img/chevron_right.svg", $blue);
+    border: 0.1px solid $gray-5;
+
+    .icon {
+        width: 13px;
+        margin-left: 2px;
     }
 }
 
 %status-complete {
-    @include unmaskable-icons-shared("~img/status_complete.svg", contain);
+    @include status-icon("~img/checkmark.svg", $teal);
+
+    .icon {
+        width: 20px;
+    }
 }
 
 %status-lock {
-    @include unmaskable-icons-shared("~img/status_lock.svg", contain);
+    @include status-icon("~img/lock.svg", $gray-4);
+
+    .icon {
+        height: 19px;
+        width: 19px;
+    }
 }
 
 // Stock card images
