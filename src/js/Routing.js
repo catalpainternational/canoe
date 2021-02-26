@@ -20,6 +20,11 @@ export function initialiseRouting() {
     route(window.location.hash);
 }
 
+// pages from the CMS ( we might not use this )
+const IS_WAGTAIL_PAGE = /([\d]+)/; // should match '#3' and '#3/objectives'
+
+const IS_PAGE_PREVIEW = /^\?(.+)/;
+
 async function route(hashWith) {
     const hash = hashWith.slice(1);
     const hashParts = hash.split(":");
