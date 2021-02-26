@@ -8,7 +8,7 @@ export const AF_LOCALHOSTURI = "http://localhost";
 export const AF_API_PREFIX = "appelflap";
 
 export const AF_EIKEL_API = `${AF_API_PREFIX}/eikel`;
-export const AF_META_API = `${AF_API_PREFIX}/eikel-meta`;
+export const AF_EIKEL_META_API = `${AF_API_PREFIX}/eikel-meta`;
 export const AF_CACHE_API = `${AF_API_PREFIX}/ingeblikt`;
 export const AF_ACTION_API = `${AF_API_PREFIX}/do`;
 
@@ -23,8 +23,8 @@ export const AF_CERTCHAIN_LENGTH_HEADER = "X-Appelflap-Chain-Length";
 
 /** These are all of the commands provided by Appelflap across its API surface */
 export const APPELFLAPCOMMANDS = {
-    getMetaStatus: {
-        commandPath: `${AF_META_API}/${AF_STATUS}`,
+    getLargeObjectIndexStatus: {
+        commandPath: `${AF_EIKEL_META_API}/${AF_STATUS}`,
         method: "GET",
     },
     setLock: {

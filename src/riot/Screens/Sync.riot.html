@@ -62,7 +62,6 @@
         export default {
             state: {
                 statusListings: [],
-                cacheStatus: "",
                 publications: "",
                 manifest: "",
                 page: "",
@@ -83,8 +82,6 @@
                 this.update({ appelflapMeta: "Getting" });
                 
                 this.state.appelflapConnect = new AppelflapConnect();
-                const metaStatus = await this.state.appelflapConnect.getMetaStatus();
-                this.update({ appelflapMeta: JSON.stringify(metaStatus) });
 
                 /* Not yet implemented
                 const cacheUtilities = new CacheUtilities(this.state.appelflapConnect);

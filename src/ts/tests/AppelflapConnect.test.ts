@@ -16,7 +16,7 @@ import {
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_LOCALHOSTURI, AF_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT, AppelflapPortNo, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "js/RoutingAppelflap";
+import { AF_LOCALHOSTURI, AF_EIKEL_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT, AppelflapPortNo, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "js/RoutingAppelflap";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -70,10 +70,10 @@ test("AppelflapPortNo", (t: any) => {
     );
 });
 
-/** meta status is not expected to be used by the Canoe-Appelflap cache API */
-test("getMetaStatus", async (t: any) => {
+/** eikel meta status (index of stored large objects) is not expected to be used by the Canoe-Appelflap cache API */
+test("getLargeObjectIndexStatus", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_META_API}/${AF_STATUS}`;
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_EIKEL_META_API}/${AF_STATUS}`;
 
     const state = {
         diskused: 554058,
@@ -93,7 +93,7 @@ test("getMetaStatus", async (t: any) => {
     };
     fetchMock.get(testUri, state);
 
-    const result = await afc.getMetaStatus();
+    const result = await afc.getLargeObjectIndexStatus();
     fetchMock.reset();
     t.deepEqual(result, state);
 });

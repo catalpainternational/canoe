@@ -107,8 +107,8 @@ export class AppelflapConnect {
         }
     };
 
-    public getMetaStatus = async (): Promise<any> => {
-        const { commandPath } = APPELFLAPCOMMANDS.getMetaStatus;
+    public getLargeObjectIndexStatus = async (): Promise<any> => {
+        const { commandPath } = APPELFLAPCOMMANDS.getLargeObjectIndexStatus;
         return await this.performCommand(commandPath);
     };
 
