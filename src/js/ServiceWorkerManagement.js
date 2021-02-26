@@ -1,65 +1,69 @@
-/* ServiceWorkerManagement module
- * 
- *
+/*
+ * ServiceWorkerManagement module
  */
-import { Workbox } from "workbox-window";
-import { changeServiceWorkerState } from "ReduxImpl/Interface";
-import { logNotificationReceived } from "js/GoogleAnalytics"
-import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
+import { register } from "register-service-worker";
 
-const SW_UPDATE_INTERVAL = 1000 * 10 * 60 * 4;
+import { logNotificationReceived } from "js/GoogleAnalytics";
+import { gettext } from "js/Translation";
+
+const reloadIfNewServiceWorkerIsAvailable = () => {
+    let refreshing;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+        // We'll also need to add 'refreshing' to our data originally set to false.
+        if (refreshing) return;
+        refreshing = true;
+        // Here the actual reload of the page occurs
+        window.location.reload();
+    });
+};
+
+const ENG_STRINGS = {
+    updatesAreAvailable: gettext(
+        `A new version of the application is available. Click OK to load the new version.`
+    ),
+};
 
 export async function initializeServiceWorker() {
     if (!navigator.serviceWorker) {
-        changeServiceWorkerState("notsupported")
         return;
     }
 
-    const wb = new Workbox("/sw.js");
-
-    wb.controlling.then(sw => {
-        // This happens:
-        // a fresh first time visit once the sw is in control
-        // a refresh when there is an active sw to take control
-        changeServiceWorkerState("controlling")
-
-        function checkForNewVersion() {
-            console.log("checking for new version");
-            if( wb ) {
-                wb.update();
+    register("/sw.js", {
+        registrationOptions: { scope: "./" },
+        ready(registration) {
+            reloadIfNewServiceWorkerIsAvailable();
+            console.log("Service worker is active.");
+        },
+        registered(registration) {
+            console.log("Service worker has been registered.");
+        },
+        cached(registration) {
+            console.log("Content has been cached for offline use.");
+        },
+        updatefound(registration) {
+            console.log("New content is downloading.");
+        },
+        updated(registration) {
+            console.log("New content is available; please refresh.");
+            if (!registration.waiting) {
+                return;
             }
-        }
+            const shouldUpdate = confirm(ENG_STRINGS.updatesAreAvailable);
 
-        const swUpdatePoller = window.setInterval(checkForNewVersion, SW_UPDATE_INTERVAL);
+            if (shouldUpdate) {
+                registration.waiting.postMessage({ type: "SKIP_WAITING" });
+            }
+        },
+        offline() {
+            console.log("No internet connection found. App is running in offline mode.");
+        },
+        error(error) {
+            console.error("Error during service worker registration:", error);
+        },
     });
 
-
-    wb.addEventListener("externalinstalled", (e) => {
-        // workbox detects a new service worker installed ready for activation ( sometimes )
-        changeServiceWorkerState("update-waiting")
-    });
-
-    wb.addEventListener("redundant", (e) => {
-        // This happens:
-        // when service worker fails to install
-        // when a new service worker takes over control ( sometimes )
-        changeServiceWorkerState("redundant")
-    });
-
-    wb.addEventListener("message", (event) => {
+    window.addEventListener("message", (event) => {
         const type = event.data;
         logNotificationReceived(type);
     });
-
-    wb.register();
-
-    window.addEventListener("beforeinstallprompt", async (e) => {
-        e.preventDefault();
-        const deferredPrompt = e;
-
-        window.addEventListener(ON_ADD_TO_HOME_SCREEN, async () => {
-            deferredPrompt.prompt();
-        });
-    });
-
 }

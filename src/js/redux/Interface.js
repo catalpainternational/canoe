@@ -8,7 +8,6 @@ import {
     addCourse as addCourseAction,
     addLesson as addLessonAction,
 } from "./ducks/Site";
-import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/ServiceWorker";
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
@@ -53,14 +52,6 @@ export const changeLanguage = (language) => {
 
 export const getLanguage = () => {
     return store.getState().language;
-};
-
-export const changeServiceWorkerState = (eventType) => {
-    store.dispatch(serviceWorkerStateAction(eventType));
-};
-
-export const getServiceWorkerState = () => {
-    return store.getState().serviceWorkerState;
 };
 
 export const toggleGuestBanner = (trueOrFalse) => {

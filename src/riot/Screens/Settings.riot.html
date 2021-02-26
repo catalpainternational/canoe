@@ -4,27 +4,23 @@
             <h4>{ TRANSLATIONS.settings() }</h4>
         </TopMenu>
         <div class="content-wrapper">
-            <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
+            <div
+                if="{state.browserSupportsNotifications}"
+                class="notifications-toggle"
+            >
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
                     onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"
                 >
-                    <input type="checkbox" id="notifications-toggle"/>
+                    <input type="checkbox" id="notifications-toggle" />
                     <div class="slider"></div>
                 </div>
-                <label for="notifications-toggle">{ TRANSLATIONS.notifications() }</label>
+                <label for="notifications-toggle">
+                    { TRANSLATIONS.notifications() }
+                </label>
             </div>
 
             <LanguageSelector></LanguageSelector>
-
-            <button
-                if="{state.canAddToHomeScreen}"
-                class="btn-secondary"
-                onclick="{promptUserToInstallApp}"
-                translation-comment="This button adds an icon to the device homescreen"
-            >
-                { TRANSLATIONS.add() }
-            </button>
 
             <button class="btn-secondary" onclick="{logout}">{ TRANSLATIONS.logout() }</button>
 
@@ -42,16 +38,13 @@
             unsubscribeFromNotifications,
             isSubscribedToNotifications,
         } from "js/Notifications";
-        import { dispatchInstallAppEvent } from "js/Events";
         import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
-        import { getPlatform } from "js/PlatformDetection";
 
         export default {
             state: {
                 browserSupportsNotifications: false,
                 isSubscribedToNotifications: false,
                 disableNotificationsButton: false,
-                canAddToHomeScreen: false,
             },
             components: {
                 languageselector: LanguageSelector,
@@ -61,8 +54,8 @@
 
             TRANSLATIONS: {
                 settings: () => gettext("Your settings"),
-                notifications: () => gettext("I would like to receive notifications"),
-                add: () => gettext("Add to Home Screen"),
+                notifications: () =>
+                    gettext("I would like to receive notifications"),
                 logout: () => gettext("Log out"),
             },
 
@@ -71,10 +64,6 @@
             },
 
             async refreshSettings() {
-                this.update({
-                    canAddToHomeScreen: this.shouldShowAddToHomeScreen(),
-                });
-
                 const browserSupportsNotifications = await supportsPushManager();
 
                 if (!browserSupportsNotifications) {
@@ -103,7 +92,9 @@
             },
 
             async subscribe() {
-                await this.disableNotificationsButtonAnd(subscribeToNotifications);
+                await this.disableNotificationsButtonAnd(
+                    subscribeToNotifications
+                );
                 this.refreshSettings();
             },
 
@@ -116,19 +107,11 @@
                 const wantsToUnsubscribe = confirm(message);
 
                 if (wantsToUnsubscribe) {
-                    await this.disableNotificationsButtonAnd(unsubscribeFromNotifications);
+                    await this.disableNotificationsButtonAnd(
+                        unsubscribeFromNotifications
+                    );
                     this.refreshSettings();
                 }
-            },
-
-            promptUserToInstallApp() {
-                dispatchInstallAppEvent();
-                this.refreshSettings();
-            },
-
-            shouldShowAddToHomeScreen() {
-                const { browser, inAppelflap, inPWAMode } = getPlatform();
-                return !(browser.name === "Safari" || inPWAMode || inAppelflap);
             },
 
             onMounted() {

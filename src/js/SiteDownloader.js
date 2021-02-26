@@ -85,7 +85,9 @@ export default class SiteDownloader {
             await fetchPage(pagePath);
         }
         for (const imagePath of imagesToFetch) {
-            await fetchImage(imagePath);
+            try {
+                await fetchImage(imagePath);
+            } catch (err) {}
         }
         await addCachedPagesToRedux();
 
