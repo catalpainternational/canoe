@@ -55,7 +55,7 @@
     <script>
         import { AppDataStatus } from "ts/AppDataStatus";
         import { AppelflapConnect } from "ts/AppelflapConnect";
-        // import { CacheUtilities } from "ts/CacheUtilities";
+        import { CacheUtilities } from "ts/CacheUtilities";
         import { CachePublish } from "ts/CachePublish";
         import { Manifest } from "ts/Implementations/Manifest";
 
@@ -67,6 +67,7 @@
                 manifest: "",
                 page: "",
                 appDataStatus: new AppDataStatus(),
+                appelflapConnect: null,
             },
 
             TRANSLATIONS: {
@@ -81,17 +82,17 @@
             async appelflapStatus() {
                 this.update({ appelflapMeta: "Getting" });
                 
-                const appelflapConnect = new AppelflapConnect();
-                const metaStatus = await appelflapConnect.getMetaStatus();
+                this.state.appelflapConnect = new AppelflapConnect();
+                const metaStatus = await this.state.appelflapConnect.getMetaStatus();
                 this.update({ appelflapMeta: JSON.stringify(metaStatus) });
 
                 /* Not yet implemented
-                const cacheUtilities = new CacheUtilities(appelflapConnect);
+                const cacheUtilities = new CacheUtilities(this.state.appelflapConnect);
                 const cacheStatus = await cacheUtilities.status();
                 this.update({ cacheStatus: JSON.stringify(cacheStatus) });
                 */
 
-                const cachePublish = new CachePublish(appelflapConnect);
+                const cachePublish = new CachePublish(this.state.appelflapConnect);
                 const publications = await cachePublish.publications();
                 this.update(({ publications: JSON.stringify(publications) }));
 
@@ -102,9 +103,16 @@
             },
 
             async syncMe() {
+                const cacheUtilities = new CacheUtilities(this.state.appelflapConnect);
+                await cacheUtilities.unlock();
+
                 // Identify what needs to be subscribed to, and what needs to be published
-                const published = await this.state.appDataStatus.PublishAll();
-                window.alert(`Published: ${JSON.stringify(published)}`);
+                const appDataStatus = this.state.appDataStatus;
+                const syncStatus = await appDataStatus.SyncAll();
+
+                await cacheUtilities.lock();
+
+                window.alert(`Published: ${JSON.stringify(syncStatus)}`);
             },
         };
     </script>
