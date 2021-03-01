@@ -10,7 +10,6 @@ import { ExpirationPlugin } from "workbox-expiration";
 import * as googleAnalytics from "workbox-google-analytics";
 
 googleAnalytics.initialize();
-self.__WB_DISABLE_DEV_LOGS = true;
 
 import { precacheAndRoute, matchPrecache } from "workbox-precaching";
 

@@ -43,7 +43,6 @@ const syncFeedback = async () => {
 };
 
 const initialiseFeedback = () => {
-    console.log("initializing feedback");
     syncFeedback();
     window.setInterval(syncFeedback, EVERY_THIRTY_MINUTES);
 };
