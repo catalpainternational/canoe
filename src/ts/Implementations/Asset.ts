@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TManifest } from "ts/Types/ManifestTypes";
-import { TAssetEntry } from "ts/Types/AssetTypes";
-import { PublishableItem } from "ts/Implementations/PublishableItem";
-import { UpdateCachedItem } from "ts/Implementations/CacheItem";
+import { TManifest } from "../Types/ManifestTypes";
+import { TAssetEntry } from "../Types/AssetTypes";
+import { PublishableItem } from "./PublishableItem";
+import { UpdateCachedItem } from "./CacheItem";
 
-import { AppelflapConnect } from "ts/AppelflapConnect";
-import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "ts/Constants";
-import { getBrowser } from "ts/PlatformDetection";
+import { AppelflapConnect } from "../AppelflapConnect";
+import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "../Constants";
+import { getBrowser } from "../PlatformDetection";
 
 // See ts/Typings for the type definitions for these imports
 import { BACKEND_BASE_URL } from "js/urls";

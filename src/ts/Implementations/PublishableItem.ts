@@ -1,9 +1,9 @@
-import { TItemCommon } from "ts/Types/PublishableItemTypes";
-import { TManifest } from "ts/Types/ManifestTypes";
+import { TItemCommon } from "../Types/PublishableItemTypes";
+import { TManifest } from "../Types/ManifestTypes";
 
-import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
+import { IPublishableItem } from "../Interfaces/PublishableItemInterfaces";
 
-import { StorageStatus } from "ts/Implementations/StorageStatus";
+import { StorageStatus } from "../Implementations/StorageStatus";
 
 /** A 'Publishable' item is one that is stored in the cache as well as the redux store
  * and which Appelflap can be requested to publish or subscribe to,

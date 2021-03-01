@@ -1,4 +1,4 @@
-import { Page } from "ts/Implementations/Page";
+import { Page } from "../Page";
 import {
     getLatestCompletionInCourse,
     getFinishedLessonSlugs,

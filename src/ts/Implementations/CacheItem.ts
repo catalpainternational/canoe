@@ -1,4 +1,4 @@
-import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
+import { IPublishableItem } from "../Interfaces/PublishableItemInterfaces";
 
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
