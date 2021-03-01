@@ -14,6 +14,7 @@ function buildFakeManifestEntry(
 ): TWagtailPage {
     const storage_container = loc_hash;
     return {
+        id: `${page_no}`,
         loc_hash: `/site/canoe-${loc_hash}`,
         storage_container: `/site/canoe-${storage_container}`,
         version: version,

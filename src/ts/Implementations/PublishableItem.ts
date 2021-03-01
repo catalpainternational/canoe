@@ -1,9 +1,9 @@
 import { BACKEND_BASE_URL } from "js/urls";
 
-import { TPublishableItem } from "ts/Types/PublishableItemTypes";
+import { TItemCommon } from "ts/Types/PublishableItemTypes";
 import { TManifest } from "ts/Types/ManifestTypes";
 
-import { IPublishableItemState } from "ts/Interfaces/PublishableItemInterfaces";
+import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
 
 import { StorageStatus } from "src/ts/Implementations/StorageStatus";
 
@@ -13,8 +13,8 @@ import { CachePublish } from "ts/CachePublish";
 // See ts/Typings for the type definitions for these imports
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
-export abstract class PublishableItem<T extends TPublishableItem>
-    implements IPublishableItemState {
+export abstract class PublishableItem<T extends TItemCommon>
+    implements IPublishableItem {
     #version: number;
     #id: string;
     #statusId: string;
@@ -36,7 +36,8 @@ export abstract class PublishableItem<T extends TPublishableItem>
     constructor(manifest: TManifest, id: string, statusId: string) {
         this.manifest = manifest;
         this.#id = id;
-        // Normally statusId will be the same as data.api_url
+        // Normally statusId will be the same as data.storage_container (the cache name)
+        // Except for assets
         this.#statusId = statusId;
 
         this.#version = -1;
@@ -51,6 +52,7 @@ export abstract class PublishableItem<T extends TPublishableItem>
         }
     }
 
+    /** Override this in the implementing class to return the correct value */
     get version(): number {
         return this.#version || -1;
     }
@@ -74,12 +76,12 @@ export abstract class PublishableItem<T extends TPublishableItem>
         } as unknown) as T;
     }
 
-    /** The id for this item's data (but not its status) within the redux store */
+    /** The id for this item's data (but not its status) within the redux store (and the manifest) */
     get id(): string {
         return this.#id;
     }
 
-    /** The id for this item's status (but not its data) within the redux store */
+    /** The id for this item's status (but not its data) within the redux store (and normally the cache) */
     get statusId(): string {
         return this.#statusId;
     }
@@ -94,30 +96,39 @@ export abstract class PublishableItem<T extends TPublishableItem>
         return this.status.ready;
     }
 
+    get statusIdValid(): boolean {
+        return !!this.statusId;
+    }
+
+    /** Is the item's cache status acceptable */
+    get cacheStatusAcceptable(): boolean {
+        return !["unset", "empty", "prepped"].includes(this.status.cacheStatus);
+    }
+
+    get storeStatusAcceptable(): boolean {
+        return this.status.storeStatus !== "unset";
+    }
+
     /** This will do a basic integrity check. */
     get isValid(): boolean {
-        if (!this.statusId) {
-            return false;
-        }
-
-        // Is the item's status acceptable
-        if (["unset", "empty", "prepped"].includes(this.status.cacheStatus)) {
-            return false;
-        }
-
-        return this.status.storeStatus !== "unset";
+        return this.statusIdValid && this.storeStatusAcceptable;
     }
 
     /** This is only a very basic check.
      * @remarks Implementing classes must call this via super, and extend to meet their requirements. */
     get isAvailableOffline(): boolean {
-        return this.isValid && this.version >= 0;
+        return this.isValid && this.cacheStatusAcceptable && this.version >= 0;
     }
 
     /** This is only a very basic check.
      * @remarks Implementing classes must call this via super, and extend to meet their requirements. */
     get isPublishable(): boolean {
-        return this.isValid && this.version >= 0 && this.#requestObjectClean;
+        return (
+            this.isValid &&
+            this.cacheStatusAcceptable &&
+            this.version >= 0 &&
+            this.#requestObjectClean
+        );
     }
 
     abstract get cacheKey(): string;

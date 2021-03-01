@@ -32,3 +32,5 @@ export type TPageType =
     | "lessonpage";
 
 export type TAssetType = "image" | "media";
+
+export type TItemType = "manifest" | "page" | "asset";

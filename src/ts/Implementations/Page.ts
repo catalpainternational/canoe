@@ -258,6 +258,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
     async loadAsset(asset: TAssetEntryData): Promise<Asset> {
         // The asset's cache name is the same as the Page's cache name
+        // However its statusId points to its api_url
         const pageAsset = new Asset(
             this.manifest,
             this.id,

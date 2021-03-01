@@ -1,16 +1,16 @@
-import { TPublishableItemState } from "ts/Types/PublishableItemTypes";
+import { TPublishableItem } from "ts/Types/PublishableItemTypes";
 import { TManifest } from "ts/Types/ManifestTypes";
 import { TPage, TWagtailPage } from "ts/Types/PageTypes";
 import { TAssetEntry } from "ts/Types/AssetTypes";
 
-export interface IPublishableItemState extends TPublishableItemState {
+export interface IPublishableItem extends TPublishableItem {
     accessCache(): Promise<boolean>;
 }
 
-export interface IManifest extends TManifest, IPublishableItemState {}
+export interface IManifest extends TManifest, IPublishableItem {}
 
-export interface IPage extends TPage, IPublishableItemState {}
+export interface IPage extends TPage, IPublishableItem {}
 
-export interface IWagtailPage extends TWagtailPage, IPublishableItemState {}
+export interface IWagtailPage extends TWagtailPage, IPublishableItem {}
 
-export interface IAssetEntry extends TAssetEntry, IPublishableItemState {}
+export interface IAssetEntry extends TAssetEntry, IPublishableItem {}

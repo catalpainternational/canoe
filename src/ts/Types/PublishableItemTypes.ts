@@ -1,13 +1,23 @@
-import { TItemCacheStatus, TItemStoreStatus } from "ts/Types/CanoeEnums";
+import {
+    TItemCacheStatus,
+    TItemStoreStatus,
+    TItemType,
+} from "ts/Types/CanoeEnums";
 
-/** Describes the common fields for a manifest, page or asset item */
-export type TPublishableItem = {
+/** The id fields for a manifest, page or asset item */
+export type TItemId = {
+    /** The id of this item within the manifest, and within the redux store */
+    id: string;
     version: number;
     /** The routable part of the URL (ignoring the host) */
     api_url: string;
+};
+
+/** Describes the common fields for a manifest, page or asset item */
+export type TItemCommon = {
     // Other fields
     [x: string]: any;
-};
+} & TItemId;
 
 /** Describe the storage status of the manifest, page or asset item */
 export type TItemStorageStatus = {
@@ -18,11 +28,8 @@ export type TItemStorageStatus = {
     storeStatus: TItemStoreStatus;
 };
 
-/** Describe the state of a manifest, page or asset item */
-export type TPublishableItemState = {
-    /** The storage status of this item */
-    status: TItemStorageStatus;
-
+/** Describe the status of this manifest, page or asset item itself */
+export type TItemStatus = {
     /** Is this manifest, page or asset item valid? */
     isValid: boolean;
 
@@ -37,6 +44,21 @@ export type TPublishableItemState = {
      * @returns true is this item itself is complete - all descendant pages and assets are in the cache
      */
     isPublishable: boolean;
+};
+
+/** A convenience structure for listing the overall status of a manifest, page or asset item */
+export type TItemListing = {
+    title: string;
+    type: TItemType;
+    cacheKey: string;
+} & TItemId &
+    TItemStorageStatus &
+    TItemStatus;
+
+/** Describe the state of a manifest, page or asset item */
+export type TPublishableItem = {
+    /** The storage status of this item */
+    status: TItemStorageStatus;
 
     /** The fullUrl of this item that can be used to build a fetch Request object for it */
     fullUrl: string;
@@ -49,4 +71,5 @@ export type TPublishableItemState = {
 
     /** The key to the cache where this publishable item is stored */
     cacheKey: string;
-} & TPublishableItem;
+} & TItemStatus &
+    TItemCommon;

@@ -11,13 +11,11 @@ import LessonPage from "ts/Implementations/Specific/LessonPage";
 import ResourcesRootPage from "ts/Implementations/Specific/ResourcesRootPage";
 import ResourcePage from "ts/Implementations/Specific/ResourcePage";
 
+import { MANIFEST_CACHE_NAME } from "ts/Constants";
+
 // See ts/Typings for the type definitions for these imports
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import {
-    storeManifest,
-    getManifestFromStore,
-    setFetchingManifest,
-} from "ReduxImpl/Interface";
+import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 
 class ManifestError extends Error {
     constructor(message: string) {
@@ -26,12 +24,12 @@ class ManifestError extends Error {
     }
 }
 
-const apiUrl = "/manifest/v1";
+export const ManifestAPIURL = "/manifest/v1";
 
 export class Manifest extends PublishableItem<TManifestData> {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
-        super(opts, "", apiUrl);
+        super(opts, "", MANIFEST_CACHE_NAME);
     }
 
     get pages(): Record<string, TWagtailPage> {
@@ -42,8 +40,12 @@ export class Manifest extends PublishableItem<TManifestData> {
         return !!this.data?.pages;
     }
 
+    get version(): number {
+        return this.data?.version || -1;
+    }
+
     get api_url(): string {
-        return apiUrl;
+        return ManifestAPIURL;
     }
 
     get fullUrl(): string {
@@ -58,18 +60,10 @@ export class Manifest extends PublishableItem<TManifestData> {
         return "application/json";
     }
 
-    /** This is a basic integrity check.  It ensures that:
+    /** This ensures that:
      * - All child pages have matching page entries
      */
-    get isValid(): boolean {
-        if (!super.isValid) {
-            return false;
-        }
-
-        if (!this.isInitialised) {
-            return false;
-        }
-
+    get childPagesValid(): boolean {
         const allPageNames = new Set(Object.keys(this.pages));
         let childPageNames: Set<string> = new Set();
         allPageNames.forEach((pageName) => {
@@ -83,6 +77,24 @@ export class Manifest extends PublishableItem<TManifestData> {
         );
 
         return !unMatchedChildren.size;
+    }
+
+    /** This is a basic integrity check.  It ensures that:
+     * - This item has a valid statusId (api_url)
+     * - The store and cache status values are acceptable
+     * - It has been initialised (it has a `data` value)
+     * - All child pages have matching page entries
+     */
+    get isValid(): boolean {
+        if (!super.isValid) {
+            return false;
+        }
+
+        if (!this.isInitialised) {
+            return false;
+        }
+
+        return this.childPagesValid;
     }
 
     get isAvailableOffline(): boolean {
@@ -110,6 +122,8 @@ export class Manifest extends PublishableItem<TManifestData> {
     get emptyItem(): TManifestData {
         const empty = super.emptyItem;
 
+        empty.id = "";
+        empty.api_url = ManifestAPIURL;
         empty.version = -1;
         empty.pages = {};
 
@@ -141,21 +155,40 @@ export class Manifest extends PublishableItem<TManifestData> {
         return this.fullUrl;
     }
 
-    async initialiseFromResponse(resp: Response): Promise<boolean> {
-        setFetchingManifest(true);
+    BuildManifestData(response: Record<string, any>): void {
+        const respData: Partial<TManifestData> = response;
+        if (respData) {
+            this.data = this.emptyItem;
+            this.data.id = "";
+            this.data.api_url = ManifestAPIURL;
+            Object.keys(respData).forEach((key) => {
+                this.data[key] = respData[key];
+            });
+        }
+    }
 
+    async initialiseFromResponse(resp: Response): Promise<boolean> {
         try {
-            this.data = await resp.json();
+            this.BuildManifestData(await resp.json());
         } catch {
             // Discard errors with getting json from response
+            // eslint-disable-next-line no-console
+            console.info(
+                "Manifest in the Response (cache or network) could not be parsed."
+            );
         }
 
+        const isAcceptable =
+            this.statusIdValid &&
+            this.cacheStatusAcceptable &&
+            this.isInitialised &&
+            this.childPagesValid;
+
         let cacheUpdated = false;
-        if (this.data && this.isValid) {
+        if (this.data && isAcceptable) {
             this.StoreDataToStore();
             cacheUpdated = await this.updateCache();
         }
-        setFetchingManifest(false);
 
         return cacheUpdated && this.isValid;
     }
@@ -175,7 +208,7 @@ export class Manifest extends PublishableItem<TManifestData> {
 
     getSpecificPage(pageId: string, parent?: Page): Page {
         const pageType = this.data.pages[pageId].type;
-        const pageStatusId = this.data.pages[pageId].api_url;
+        const pageStatusId = this.data.pages[pageId].storage_container;
 
         switch (pageType) {
             case "homepage":

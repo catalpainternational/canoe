@@ -8,7 +8,6 @@ declare module "ReduxImpl/Interface" {
 
     export function storeManifest(manifest: TManifestData): void;
     export function getManifestFromStore(): TManifestData;
-    export function setFetchingManifest(fetching: boolean): void;
 
     export function storePageData(
         pageId: any,
