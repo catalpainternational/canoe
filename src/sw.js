@@ -7,18 +7,18 @@ import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
 
 import { RangeRequestsPlugin } from "workbox-range-requests";
 import { ExpirationPlugin } from "workbox-expiration";
+import { precacheAndRoute, matchPrecache } from "workbox-precaching";
 
 import * as googleAnalytics from "workbox-google-analytics";
 
-googleAnalytics.initialize();
-
-import { precacheAndRoute, matchPrecache } from "workbox-precaching";
-
-precacheAndRoute(self.__WB_MANIFEST);
-self.__WB_DISABLE_DEV_LOGS = true;
-
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { buildAppelflapRoutes } from "js/RoutingAppelflap";
+
+googleAnalytics.initialize();
+
+
+precacheAndRoute(self.__WB_MANIFEST);
+
 
 const cardImageFallbackUrl = (url) => {
     if (url.match(/cardImageFallback=([^&]*)/)[1]) {
@@ -84,26 +84,48 @@ registerRoute(
 );
 
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly());
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly(), "POST");
+registerRoute(
+    new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth),
+    new NetworkOnly(),
+    "POST"
+);
 
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagePreviewv2), new NetworkOnly());
+registerRoute(
+    new RegExp(ROUTES_FOR_REGISTRATION.pagePreviewv2),
+    new NetworkOnly()
+);
 
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly());
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly(), "POST");
+registerRoute(
+    new RegExp(ROUTES_FOR_REGISTRATION.actions),
+    new NetworkOnly(),
+    "POST"
+);
 
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly());
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly(), "POST");
+registerRoute(
+    new RegExp(ROUTES_FOR_REGISTRATION.subscribe),
+    new NetworkOnly(),
+    "POST"
+);
 
 // Set up routes to Appelflap, if Canoe is not hosted by Appelflap this does nothing
 buildAppelflapRoutes().forEach((routeDef) => {
     registerRoute(new RegExp(routeDef[0]), new NetworkOnly(), routeDef[1]);
 });
 
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.appelflapPKIsign), new NetworkOnly(), "POST");
+registerRoute(
+    new RegExp(ROUTES_FOR_REGISTRATION.appelflapPKIsign),
+    new NetworkOnly(),
+    "POST"
+);
 
 // webpack-dev-server communicates over this endpoint. Without this clause, the
 // service worker caches these requests and breaks webpack-dev-server.
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.socketInfo), new NetworkOnly());
+registerRoute(
+    new RegExp(ROUTES_FOR_REGISTRATION.socketInfo),
+    new NetworkOnly()
+);
 
 const getNotificationTitleMessageAndTag = (eventData) => {
     let title = null;
@@ -128,7 +150,12 @@ const getNotificationTitleMessageAndTag = (eventData) => {
 };
 
 self.addEventListener("push", async (event) => {
-    const { title, message, messageTag, type } = getNotificationTitleMessageAndTag(event.data);
+    const {
+        title,
+        message,
+        messageTag,
+        type,
+    } = getNotificationTitleMessageAndTag(event.data);
     const options = {
         body: message,
         icon: "/img/icon_120.png",
