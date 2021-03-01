@@ -1,15 +1,19 @@
 <Html5Card>
     <div>
         <h3>{props.card.title}</h3>
-        <iframe src="{props.card.url}" title="{props.card.title}"></iframe>
+        <!-- <iframe src="{props.card.url}" title="{props.card.title}"></iframe> -->
+        <iframe id="animation" title="{props.card.title}"></iframe>
+        <!-- <iframe src="http://catalpa.io"></iframe> -->
+        <!-- <iframe src="https://www.youtube.com/embed/93hq0YU3Gqk" title="{props.card.title}"></iframe> -->
     </div>
     <script>
         import { getHtmlUrl } from "js/utilities";
 
         export default {
-            onMounted() {
+            onMounted(props, state) {
+                document.getElementById("animation").src = "https://catalpa.io"; //props.card.url;
                 console.log(this.props.card);
-                console.log(getHtmlUrl(this.props.card.url));
+                // console.log(getHtmlUrl(this.props.card.url));
             },
 
             getHtmlUrl(documentPath) {
