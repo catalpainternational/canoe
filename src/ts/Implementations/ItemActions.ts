@@ -1,11 +1,11 @@
-import { TAppelflapResult } from "ts/Types/CanoeEnums";
-import { TPublication, TSubscriptions } from "ts/Types/CacheTypes";
-import { TItemListing } from "ts/Types/PublishableItemTypes";
-import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
+import { TPublication, TSubscriptions } from "../Types/CacheTypes";
+import { TAppelflapResult } from "../Types/CanoeEnums";
+import { TItemListing } from "../Types/PublishableItemTypes";
+import { IPublishableItem } from "../Interfaces/PublishableItemInterfaces";
 
-import { AppelflapConnect } from "ts/AppelflapConnect";
-import { CachePublish } from "ts/CachePublish";
-import { CacheSubscribe } from "ts/CacheSubscribe";
+import { AppelflapConnect } from "../AppelflapConnect";
+import { CachePublish } from "../CachePublish";
+import { CacheSubscribe } from "../CacheSubscribe";
 
 /** Define the 'target' within the cache for Appelflap */
 const CacheTarget = (item: IPublishableItem): TPublication => {

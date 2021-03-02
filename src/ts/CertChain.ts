@@ -1,7 +1,9 @@
+import { TCertificate } from "./Types/CacheTypes";
+
+import { AppelflapConnect } from "./AppelflapConnect";
+
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import { AppelflapConnect } from "ts/AppelflapConnect";
-import { TCertificate } from "./Types/CacheTypes";
 
 export class CertChain {
     #afc?: AppelflapConnect;

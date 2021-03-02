@@ -5,7 +5,7 @@ import {
     TPublications,
     TPublicationTarget,
     TSubscriptions,
-} from "ts/Types/CacheTypes";
+} from "./Types/CacheTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

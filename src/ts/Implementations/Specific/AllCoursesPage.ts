@@ -1,5 +1,5 @@
-import { Page } from "ts/Implementations/Page";
-import CoursePage from "ts/Implementations/Specific/CoursePage";
+import { Page } from "../Page";
+import CoursePage from "./CoursePage";
 
 export default class AllCoursesPage extends Page {
     #tags!: string[];

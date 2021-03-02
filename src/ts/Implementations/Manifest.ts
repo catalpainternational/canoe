@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TManifestData } from "ts/Types/ManifestTypes";
-import { TWagtailPage } from "ts/Types/PageTypes";
+import { TManifestData } from "../Types/ManifestTypes";
+import { TWagtailPage } from "../Types/PageTypes";
 
-import { PublishableItem } from "ts/Implementations/PublishableItem";
-import { Page } from "ts/Implementations/Page";
-import { UpdateCachedItem } from "ts/Implementations/CacheItem";
+import { PublishableItem } from "./PublishableItem";
+import { Page } from "./Page";
+import { UpdateCachedItem } from "./CacheItem";
 
-import AllCoursesPage from "ts/Implementations/Specific/AllCoursesPage";
-import CoursePage from "ts/Implementations/Specific/CoursePage";
-import LessonPage from "ts/Implementations/Specific/LessonPage";
-import ResourcesRootPage from "ts/Implementations/Specific/ResourcesRootPage";
-import ResourcePage from "ts/Implementations/Specific/ResourcePage";
+import AllCoursesPage from "./Specific/AllCoursesPage";
+import CoursePage from "./Specific/CoursePage";
+import LessonPage from "./Specific/LessonPage";
+import ResourcesRootPage from "./Specific/ResourcesRootPage";
+import ResourcePage from "./Specific/ResourcePage";
 
-import { MANIFEST_CACHE_NAME } from "ts/Constants";
+import { MANIFEST_CACHE_NAME } from "../Constants";
 
 // See ts/Typings for the type definitions for these imports
 import { ROUTES_FOR_REGISTRATION } from "js/urls";

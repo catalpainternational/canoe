@@ -1,33 +1,30 @@
+import { TSubscriptions } from "./Types/CacheTypes";
+import { TAppelflapResult } from "./Types/CanoeEnums";
+import { TWagtailPage } from "./Types/PageTypes";
+import { TItemListing, TItemStorageStatus } from "./Types/PublishableItemTypes";
+
+import { IPublishableItem } from "./Interfaces/PublishableItemInterfaces";
+
 import {
-    TItemListing,
-    TItemStorageStatus,
-} from "ts/Types/PublishableItemTypes";
-import { TWagtailPage } from "ts/Types/PageTypes";
-import { TAppelflapResult } from "ts/Types/CanoeEnums";
-
-import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
-
-import { Manifest } from "ts/Implementations/Manifest";
-import { Page } from "ts/Implementations/Page";
+    CacheKeys,
+    InitialiseByRequest,
+    InitialiseFromCache,
+} from "./Implementations/CacheItem";
 import {
     getSubscriptions,
     publishItem,
     setSubscriptions,
     unpublishItem,
-} from "ts/Implementations/ItemActions";
-import {
-    CacheKeys,
-    InitialiseByRequest,
-    InitialiseFromCache,
-} from "ts/Implementations/CacheItem";
+} from "./Implementations/ItemActions";
+import { Manifest } from "./Implementations/Manifest";
+import { Page } from "./Implementations/Page";
 
-import { AppelflapConnect } from "ts/AppelflapConnect";
+import { AppelflapConnect } from "./AppelflapConnect";
 
 import {
     getPageData as getPageDataFromStore,
     getItemStorageStatus,
 } from "ReduxImpl/Interface";
-import { TSubscriptions } from "./Types/CacheTypes";
 
 type AfcFunction = (
     item: IPublishableItem,
