@@ -105,7 +105,7 @@ const getLanguageCodes = (manifest) => {
     return [...languageCodes];
 }
 
-const getRootPage = (manifest, rootName = "home", languageCode = "en") => {
+const getRootPageUrl = (manifest, rootName = "home", languageCode = "en") => {
     const matchingPages = Object.values(manifest.pages).filter(
         (page) => {
             // Check there is a location hash and languages
@@ -135,66 +135,47 @@ const getRootPage = (manifest, rootName = "home", languageCode = "en") => {
     );
 
     return matchingPages.length === 1
-        ? matchingPages[0]
-        : undefined;
+        ? matchingPages[0].api_url || ""
+        : "";
 };
 
-export const getHomePage = async () => {
+const getRootPage = async (rootPath) => {
     // Uses new manifest format
     const currentLanguage = getLanguage();
     const manifest = await getOrFetchManifest();
 
-    const getHomePageUrl = (languageCode) => {
-        const homePage = getRootPage(manifest, "home", languageCode);
-        return homePage.api_url || "";
-    };
-
-    let homePagePath = getHomePageUrl(currentLanguage);
-    if (homePagePath) {
-        return await getOrFetchWagtailPage(homePagePath);
+    let rootPage = null;
+    let rootPagePath = getRootPageUrl(manifest, rootPath, currentLanguage);
+    if (rootPagePath) {
+        rootPage = await getOrFetchWagtailPage(rootPagePath);
     }
 
-    const manifestLanguages = getLanguageCodes(manifest);
-    manifestLanguages.forEach((languageCode) => {
-        homePagePath = getHomePageUrl(languageCode);
-        if (homePagePath) {
-            return;
-        }
-    });
-    if (homePagePath) {
-        return await getOrFetchWagtailPage(homePagePath);
-    }
-    // No page to return
-};
-
-export const getResources = async () => {
-    // Uses new manifest format
-    const currentLanguage = getLanguage();
-    const manifest = await getOrFetchManifest();
-
-    const getResourcePageUrl = (languageCode) => {
-        const resourcePage = getRootPage(manifest, "resources", languageCode);
-        return resourcePage.api_url || "";
-    };
-
-    let resourcesRoot = null;
-    let resourcePagePath = getResourcePageUrl(currentLanguage);
-    if (resourcePagePath) {
-        resourcesRoot = await getOrFetchWagtailPage(resourcePagePath);
-    }
-
-    if (!resourcesRoot) {
+    if (!rootPage) {
         const manifestLanguages = getLanguageCodes(manifest);
         manifestLanguages.forEach((languageCode) => {
-            resourcePagePath = getResourcePageUrl(languageCode);
-            if (resourcePagePath) {
+            rootPagePath = getResourcePageUrl(languageCode);
+            if (rootPagePath) {
                 return;
             }
         });
-        if (resourcePagePath) {
-            resourcesRoot = await getOrFetchWagtailPage(resourcePagePath);
+        if (rootPagePath) {
+            rootPage = await getOrFetchWagtailPage(rootPagePath);
         }
     }
+
+    return rootPage;
+}
+
+export const getHomePage = async () => {
+    return await getRootPage("home");
+};
+
+export const getLearningActivitiesHomePage = async () => {
+    return await getRootPage("learningactivities");
+};
+
+export const getResources = async () => {
+    const resourcesRoot = await getRootPage("resources");
 
     const resources = [];
     if (resourcesRoot) {

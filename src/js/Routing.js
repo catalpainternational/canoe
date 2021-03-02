@@ -10,6 +10,7 @@ const CANOE_PAGES = ['login', 'profile', 'settings', 'sync'];
 const CANOE_SHORTCUTS = {
     '': 'homepage',
     'home': 'homepage',
+    'learningactivities': 'learningactivitieshomepage',
     'resources': 'resourcesroot',
 };
 
