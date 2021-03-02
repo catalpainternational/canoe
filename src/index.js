@@ -34,6 +34,7 @@ subscribeToStore(() => {
             document.querySelector("#service-worker-notsupported").hidden = false;
             break;
         case "controlling":
+        case "skip_sw":
             // hide the loading splash
             record_bootstate().then(_is_nonblank_slate => {
                 document.querySelector("#preapp-messages").hidden = true;

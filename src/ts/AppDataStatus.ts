@@ -1,22 +1,23 @@
-import { TItemListing, TItemStorageStatus } from "./Types/PublishableItemTypes";
-import { TWagtailPage } from "./Types/PageTypes";
+import { TSubscriptions } from "./Types/CacheTypes";
 import { TAppelflapResult } from "./Types/CanoeEnums";
+import { TWagtailPage } from "./Types/PageTypes";
+import { TItemListing, TItemStorageStatus } from "./Types/PublishableItemTypes";
 
 import { IPublishableItem } from "./Interfaces/PublishableItemInterfaces";
 
-import { Manifest } from "./Implementations/Manifest";
-import { Page } from "./Implementations/Page";
-import {
-    publishItem,
-    subscribeItem,
-    unpublishItem,
-    unsubscribeItem,
-} from "./Implementations/ItemActions";
 import {
     CacheKeys,
     InitialiseByRequest,
     InitialiseFromCache,
 } from "./Implementations/CacheItem";
+import {
+    getSubscriptions,
+    publishItem,
+    setSubscriptions,
+    unpublishItem,
+} from "./Implementations/ItemActions";
+import { Manifest } from "./Implementations/Manifest";
+import { Page } from "./Implementations/Page";
 
 import { AppelflapConnect } from "./AppelflapConnect";
 
@@ -193,20 +194,27 @@ export class AppDataStatus {
         );
     }
 
-    /** Subscribe for everything currently not flagged as isPublishable */
-    async SubscribeAll(): Promise<Record<string, TAppelflapResult>> {
-        return this.PerformAll(
-            (listing) => !listing.isPublishable,
-            subscribeItem
-        );
+    /** Get all current subscriptions */
+    async GetSubscriptions(): Promise<TSubscriptions> {
+        const appelflapConnect = new AppelflapConnect();
+        const subscriptions = await getSubscriptions(appelflapConnect);
+        if (typeof subscriptions === "string") {
+            return { origins: {} };
+        }
+        return subscriptions;
     }
 
-    /** Unsubscribe everything currently flagged as isPublishable */
-    async UnsubscribeAll(): Promise<Record<string, TAppelflapResult>> {
-        return this.PerformAll(
-            (listing) => listing.isPublishable,
-            unsubscribeItem
+    /** Set all current subscriptions */
+    async SetSubscriptions(): Promise<TSubscriptions> {
+        const appelflapConnect = new AppelflapConnect();
+        const subscriptions = await setSubscriptions(
+            this.itemListings,
+            appelflapConnect
         );
+        if (typeof subscriptions === "string") {
+            return { origins: {} };
+        }
+        return subscriptions;
     }
 
     async SyncAll(): Promise<
@@ -215,8 +223,6 @@ export class AppDataStatus {
             {
                 published: TAppelflapResult;
                 unpublished: TAppelflapResult;
-                subscribed: TAppelflapResult;
-                unsubscribed: TAppelflapResult;
             }
         >
     > {
@@ -225,8 +231,6 @@ export class AppDataStatus {
             {
                 published: TAppelflapResult;
                 unpublished: TAppelflapResult;
-                subscribed: TAppelflapResult;
-                unsubscribed: TAppelflapResult;
             }
         > = {};
 
@@ -234,27 +238,44 @@ export class AppDataStatus {
             syncAllStatus[listing.cacheKey] = {
                 published: "failed",
                 unpublished: "failed",
-                subscribed: "failed",
-                unsubscribed: "failed",
             };
         });
 
         const published = await this.PublishAll();
         const unpublished = await this.UnpublishAll();
-        const subscribed = await this.SubscribeAll();
-        const unsubscribed = await this.UnsubscribeAll();
+        let subscriptions = await this.GetSubscriptions();
+        let origins = Object.keys(subscriptions.origins);
+        let subscribed =
+            origins.length === 1
+                ? Object.entries(subscriptions.origins[origins[0]].caches)
+                : [];
+        let publishSubscribeMismatch = false;
+        if (this.itemListings.length !== subscribed.length) {
+            publishSubscribeMismatch = true;
+        } else {
+            publishSubscribeMismatch = subscribed.some((sub) => {
+                const cacheName = sub[0];
+                const version = sub[1].injected_version;
+                return (
+                    (!published[cacheName] && version !== null) ||
+                    (published[cacheName] && version === null)
+                );
+            });
+        }
+
+        if (publishSubscribeMismatch) {
+            subscriptions = await this.SetSubscriptions();
+            origins = Object.keys(subscriptions.origins);
+            subscribed = Object.entries(
+                subscriptions.origins[origins[0]].caches
+            );
+        }
 
         Object.entries(published).forEach((pub) => {
             syncAllStatus[pub[0]].published = pub[1];
         });
         Object.entries(unpublished).forEach((pub) => {
             syncAllStatus[pub[0]].unpublished = pub[1];
-        });
-        Object.entries(subscribed).forEach((pub) => {
-            syncAllStatus[pub[0]].subscribed = pub[1];
-        });
-        Object.entries(unsubscribed).forEach((pub) => {
-            syncAllStatus[pub[0]].unsubscribed = pub[1];
         });
 
         return syncAllStatus;

@@ -20,16 +20,22 @@ export type TPublications = {
 };
 
 export type TSubscriptionVersion = {
-    versionMin?: number;
-    versionMax?: number;
+    injection_version_min?: number;
+    injection_version_max?: number;
+    p2p_version_min?: number;
+    p2p_version_max?: number;
+    injected_version?: number | null;
 };
 
 export type TSubscription = TPublicationTarget & TSubscriptionVersion;
 
 export type TSubscriptions = {
-    [name: string]: {
-        [name: string]: TSubscriptionVersion;
-    };
+    origins: Record<
+        string,
+        {
+            caches: Record<string, TSubscriptionVersion>;
+        }
+    >;
 };
 
 export type TCertificate = {

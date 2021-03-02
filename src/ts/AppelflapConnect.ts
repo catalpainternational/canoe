@@ -4,9 +4,7 @@ import {
     TPublication,
     TPublications,
     TPublicationTarget,
-    TSubscription,
     TSubscriptions,
-    TSubscriptionVersion,
 } from "./Types/CacheTypes";
 
 /* eslint-disable prettier/prettier */
@@ -109,8 +107,8 @@ export class AppelflapConnect {
         }
     };
 
-    public getMetaStatus = async (): Promise<any> => {
-        const { commandPath } = APPELFLAPCOMMANDS.getMetaStatus;
+    public getLargeObjectIndexStatus = async (): Promise<any> => {
+        const { commandPath } = APPELFLAPCOMMANDS.getLargeObjectIndexStatus;
         return await this.performCommand(commandPath);
     };
 
@@ -179,81 +177,10 @@ export class AppelflapConnect {
         )) as Promise<TSubscriptions>;
     };
 
-    /** Build the Version Min and Max headers.
-     * This method 'assumes responsibility' for the values provided to it.
-     * @param { TSubscription | TSubscriptionVersion } versionRange
-     * - A subscription or subscriptionVersion that identifies none, either or both a version min and a version max value
-     * @returns { Record<string, string> | undefined }
-     * undefined if there were no version min or max values, otherwise a header with the relevant values
-     * @throws { RangeError } If both a min and max are provided and they are incorrectly ordered
-     */
-    private buildVersionHeaders = (
-        versionRange: TSubscription | TSubscriptionVersion
-    ): Record<string, string> | undefined => {
-        let min = -1;
-        let max = -1;
-        const hasMin = typeof versionRange.versionMin === "number";
-        const hasMax = typeof versionRange.versionMax === "number";
-        if (hasMin || hasMax) {
-            if (
-                hasMin &&
-                hasMax &&
-                versionRange.versionMin! > versionRange.versionMax!
-            ) {
-                throw new RangeError(
-                    "versionMin must be less than or equal to versionMax"
-                );
-            }
-            if (hasMin && versionRange.versionMin! > 0) {
-                min = versionRange.versionMin!;
-            }
-            if (hasMax && versionRange.versionMax! > 0) {
-                max = versionRange.versionMax!;
-            }
-        }
-        if (min > -1 || max > -1) {
-            const headers: Record<string, string> = {};
-            if (min > -1) {
-                headers["Version-Min"] = min.toString();
-            }
-            if (max > -1) {
-                headers["Version-Max"] = max.toString();
-            }
-            return headers;
-        }
-
-        return undefined;
-    };
-
-    public subscribe = async (subscription: TSubscription): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.subscribe;
-        const requestPath = `${commandPath}/${this.publicationPath(
-            subscription
-        )}`;
-        const commandInit = { method: method } as RequestInit;
-        const headers = this.buildVersionHeaders(subscription);
-        if (headers) {
-            commandInit.headers = headers;
-        }
-
-        return await this.performCommand(requestPath, commandInit, "text");
-    };
-
-    public unsubscribe = async (
-        publication: TPublicationTarget
-    ): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.unsubscribe;
-        const requestPath = `${commandPath}/${this.publicationPath(
-            publication
-        )}`;
-
-        return await this.performCommand(requestPath, { method }, "text");
-    };
-
-    public bulkSubscribe = async (
+    public setSubscriptions = async (
         subscriptions: TSubscriptions
-    ): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.bulkSubscribe;
+    ): Promise<TSubscriptions> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.setSubscriptions;
         const requestPath = `${commandPath}`;
         const commandInit = {
             method: method,
@@ -263,7 +190,10 @@ export class AppelflapConnect {
             body: JSON.stringify(subscriptions),
         };
 
-        return await this.performCommand(requestPath, commandInit, "text");
+        return (await this.performCommand(
+            requestPath,
+            commandInit
+        )) as Promise<TSubscriptions>;
     };
 
     public getCertificate = async (): Promise<TCertificate> => {
