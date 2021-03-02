@@ -221,10 +221,13 @@ export class Manifest extends PublishableItem<TManifestData> {
 
         switch (pageType) {
             case "homepage":
+            case "learningactivitieshomepage":
                 return new AllCoursesPage(this, pageId, pageStatusId, parent);
             case "coursepage":
+            case "learningactivitytopicpage":
                 return new CoursePage(this, pageId, pageStatusId, parent);
             case "lessonpage":
+            case "learningactivitypage":
                 return new LessonPage(this, pageId, pageStatusId, parent);
             case "resourcesroot":
                 return new ResourcesRootPage(

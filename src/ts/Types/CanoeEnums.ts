@@ -29,10 +29,13 @@ export type TItemStoreStatus = "unset" | "ready";
 
 export type TPageType =
     | "homepage"
-    | "resourcesroot"
-    | "resourcearticle"
     | "coursepage"
-    | "lessonpage";
+    | "lessonpage"
+    | "learningactivitieshomepage"
+    | "learningactivitytopicpage"
+    | "learningactivitypage"
+    | "resourcesroot"
+    | "resourcearticle";
 
 export type TAssetType = "image" | "media";
 

@@ -2,7 +2,7 @@
     <footer if="{showBottomMenu()}">
         <div class="bottom-menu">
             <a href="#">
-                <span class="all-courses-icon { props.page.type === 'homepage' ? 'active' : ''}">
+                <span class="all-courses-icon { props.page.type === 'homepage' || props.page.type === 'learningactivitieshomepage' ? 'active' : ''}">
                 </span>
             </a>
             <a href="#profile">
@@ -30,18 +30,22 @@
                 section: route.riotHash ? route.riotHash[0] : ""
             }
         }
+
         export default {
             state: getState(),
 
             shouldShowSync() {
                 return inAppelflap();
             },
+
             showBottomMenu() {
-                if (this.props.page.type === 'lessonpage' && this.state.section) {
-                    return false;
-                }
-                if (this.props.page.type === 'coursepage' && this.state.section) {
-                    return false;
+                if (this.state.section) {
+                    if (this.props.page.type === "lessonpage" ||
+                        this.props.page.type === "learningactivitypage" ||
+                        this.props.page.type === "coursepage" ||
+                        this.props.page.type === "learningactivitytopicpage") {
+                        return false;
+                    }
                 }
                 return true;
             },

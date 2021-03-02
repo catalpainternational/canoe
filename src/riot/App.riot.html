@@ -19,16 +19,10 @@
         <Profile if="{state.page.type === 'profile'}"></Profile>
         <Sync if="{state.page.type === 'sync'}"></Sync>
 
-        <AllCoursesPage if="{ state.page.type === 'homepage' }" ></AllCoursesPage>
-        <CourseOverview if="{ state.page.type === 'coursepage' }" ></CourseOverview>
-        <!--
-        <HomePage
-            if="{ state.page.type === 'homepage' }"
-            page="{ state.page }"
-        ></HomePage>
-         -->
+        <AllCoursesPage if="{ state.page.type === 'homepage' || state.page.type === 'learningactivitieshomepage' }" ></AllCoursesPage>
+        <CourseOverview if="{ state.page.type === 'coursepage' || state.page.type === 'learningactivitytopicpage' }" ></CourseOverview>
         <LessonOverview
-            if="{state.page.type === 'lessonpage'}"
+            if="{ state.page.type === 'lessonpage' || state.page.type === 'learningactivitypage' }"
             lesson="{ state.page }"
         ></LessonOverview>
         <Resources
