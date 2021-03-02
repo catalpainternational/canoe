@@ -301,10 +301,6 @@
     @include unmaskable-icons-shared("~img/stock_lesson.svg", cover);
 }
 
-%stock-resource {
-    @include unmaskable-icons-shared("~img/stock_resource.svg", cover);
-}
-
 %stock-objective {
     @include unmaskable-icons-shared("~img/stock_objective.svg", cover);
 }

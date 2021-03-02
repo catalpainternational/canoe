@@ -15,6 +15,7 @@ googleAnalytics.initialize();
 import { precacheAndRoute } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
+self.__WB_DISABLE_DEV_LOGS = true;
 
 import { MANIFEST_CACHE_NAME } from "ts/Constants";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";

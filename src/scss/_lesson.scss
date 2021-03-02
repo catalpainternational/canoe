@@ -32,7 +32,7 @@ LessonPage {
 
 LessonFrame {
     .without-swoop {
-        justify-content: space-between;
+        justify-content: center;
 
         .card-number {
             color: $gray-1;
@@ -50,13 +50,11 @@ LessonFrame {
         }
 
         a.extra-clickable-space.right {
-            position: relative;
-            align-self: end;
-            margin-left: 10px;
+            position: absolute;
         }
 
         progress {
-            flex: 2;
+            margin-right: 70px;
         }
     }
 
