@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TManifest } from "ts/Types/ManifestTypes";
-import { TAssetEntry } from "ts/Types/AssetTypes";
-import { PublishableItem } from "ts/Implementations/PublishableItem";
+import { TManifest } from "../Types/ManifestTypes";
+import { TAssetEntry } from "../Types/AssetTypes";
+import { PublishableItem } from "./PublishableItem";
+import { UpdateCachedItem } from "./CacheItem";
 
-import { AppelflapConnect } from "ts/AppelflapConnect";
-import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "ts/Constants";
-import { getBrowser } from "ts/PlatformDetection";
+import { AppelflapConnect } from "../AppelflapConnect";
+import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "../Constants";
+import { getBrowser } from "../PlatformDetection";
 
 // See ts/Typings for the type definitions for these imports
 import { BACKEND_BASE_URL } from "js/urls";
@@ -36,6 +37,13 @@ export class Asset extends PublishableItem<TAssetEntry> {
      * This ensure that isAvailableOffline will work correctly. */
     get version(): number {
         return this.ready ? 1 : -1;
+    }
+
+    set version(value: number) {
+        if (value < 0 && this.ready) {
+            value = 1;
+        }
+        super.version = value;
     }
 
     get pageId(): string {
@@ -146,7 +154,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
         this.#blob = await resp.blob();
         this.status.cacheStatus = "loading";
 
-        const cacheUpdated = await this.updateCache();
+        const cacheUpdated = await UpdateCachedItem(this);
 
         return cacheUpdated && !!this.#blob;
     }

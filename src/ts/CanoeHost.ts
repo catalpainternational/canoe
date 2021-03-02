@@ -1,5 +1,5 @@
-import { inAppelflap } from "ts/PlatformDetection";
-import { AppelflapConnect } from "ts/AppelflapConnect";
+import { inAppelflap } from "./PlatformDetection";
+import { AppelflapConnect } from "./AppelflapConnect";
 
 export class CanoeHost {
     #afc?: AppelflapConnect;

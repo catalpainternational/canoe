@@ -66,9 +66,6 @@ export type TPublishableItem = {
     /** The content type of this item that can be used to build a fetch Request object for it */
     contentType: string;
 
-    /** The cache where this publishable item is stored */
-    cache: Cache;
-
     /** The key to the cache where this publishable item is stored */
     cacheKey: string;
 } & TItemStatus &

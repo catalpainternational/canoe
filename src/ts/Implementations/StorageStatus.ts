@@ -1,5 +1,5 @@
-import { TItemCacheStatus, TItemStoreStatus } from "ts/Types/CanoeEnums";
-import { TItemStorageStatus } from "ts/Types/PublishableItemTypes";
+import { TItemCacheStatus, TItemStoreStatus } from "../Types/CanoeEnums";
+import { TItemStorageStatus } from "../Types/PublishableItemTypes";
 
 import {
     getItemStorageStatus,

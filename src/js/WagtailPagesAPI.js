@@ -17,6 +17,7 @@ export async function fetchManifest() {
     return allPagesMetadata;
 }
 
+/** Intended for use by Wagtail to generate previews */
 export async function fetchPageNoAuth(path) {
     const pageMetadata = await unauthed_fetch(`${BACKEND_BASE_URL}${path}`);
     return pageMetadata;
@@ -170,7 +171,7 @@ export const getResources = async () => {
     // Uses new manifest format
     const currentLanguage = getLanguage();
     const manifest = await getOrFetchManifest();
-    
+
     const getResourcePageUrl = (languageCode) => {
         const resourcePage = getRootPage(manifest, "resources", languageCode);
         return resourcePage.api_url || "";
@@ -192,7 +193,7 @@ export const getResources = async () => {
         });
         if (resourcePagePath) {
             resourcesRoot = await getOrFetchWagtailPage(resourcePagePath);
-        }        
+        }
     }
 
     const resources = [];

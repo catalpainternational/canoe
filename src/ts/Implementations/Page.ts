@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { TManifest } from "ts/Types/ManifestTypes";
-import { TWagtailPageData } from "ts/Types/PageTypes";
-import { TAssetEntry, TAssetEntryData } from "ts/Types/AssetTypes";
+import { TManifest } from "../Types/ManifestTypes";
+import { TWagtailPageData } from "../Types/PageTypes";
+import { TAssetEntry, TAssetEntryData } from "../Types/AssetTypes";
 
-import { PublishableItem } from "ts/Implementations/PublishableItem";
-import { Asset } from "ts/Implementations/Asset";
+import { PublishableItem } from "../Implementations/PublishableItem";
+import { Asset } from "../Implementations/Asset";
+import {
+    InitialiseByRequest,
+    InitialiseFromCache,
+    UpdateCachedItem,
+} from "../Implementations/CacheItem";
 
 // See ts/Typings for the type definitions for these imports
 import { BACKEND_BASE_URL } from "js/urls";
@@ -86,6 +91,14 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
     get version(): number {
         return this.manifestData?.version || -1;
+    }
+
+    set version(value: number) {
+        if (this.manifestData) {
+            this.manifestData.version = value;
+        }
+
+        super.version = value;
     }
 
     get api_url(): string {
@@ -246,7 +259,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
         this.StoreDataToStore();
 
         // Update the cached paged data
-        const cacheUpdated = await this.updateCache();
+        const cacheUpdated = await UpdateCachedItem(this);
 
         await this.loadAssets();
 
@@ -266,7 +279,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
             asset.api_url,
             this.cacheKey
         );
-        const assetFilled = await pageAsset.initialiseFromCache();
+        const assetFilled = await InitialiseFromCache(pageAsset);
 
         if (assetFilled) {
             return pageAsset;
@@ -275,7 +288,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
             pageAsset.status.cacheStatus
         );
         if (notInCache) {
-            if (await pageAsset.initialiseByRequest()) {
+            if (await InitialiseByRequest(pageAsset)) {
                 return pageAsset;
             }
         }

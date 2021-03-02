@@ -1,23 +1,24 @@
-import {
-    TItemListing,
-    TItemStorageStatus,
-} from "ts/Types/PublishableItemTypes";
-import { TWagtailPage } from "ts/Types/PageTypes";
-import { TAppelflapResult } from "ts/Types/CanoeEnums";
+import { TItemListing, TItemStorageStatus } from "./Types/PublishableItemTypes";
+import { TWagtailPage } from "./Types/PageTypes";
+import { TAppelflapResult } from "./Types/CanoeEnums";
 
-import { IPublishableItem } from "ts/Interfaces/PublishableItemInterfaces";
+import { IPublishableItem } from "./Interfaces/PublishableItemInterfaces";
 
-import { Manifest } from "ts/Implementations/Manifest";
-import { Page } from "ts/Implementations/Page";
+import { Manifest } from "./Implementations/Manifest";
+import { Page } from "./Implementations/Page";
 import {
     publishItem,
     subscribeItem,
     unpublishItem,
     unsubscribeItem,
-} from "ts/Implementations/ItemActions";
+} from "./Implementations/ItemActions";
+import {
+    CacheKeys,
+    InitialiseByRequest,
+    InitialiseFromCache,
+} from "./Implementations/CacheItem";
 
-import { AppelflapConnect } from "ts/AppelflapConnect";
-import { CacheUtilities } from "ts/CacheUtilities";
+import { AppelflapConnect } from "./AppelflapConnect";
 
 import {
     getPageData as getPageDataFromStore,
@@ -42,7 +43,7 @@ export class AppDataStatus {
     async Initialise(): Promise<string> {
         if (!this.manifest.isValid) {
             try {
-                await this.manifest.initialiseByRequest();
+                await InitialiseByRequest(this.manifest);
             } catch {
                 return Promise.reject(
                     "Manifest is not valid, and could not be initialised from the network"
@@ -98,7 +99,7 @@ export class AppDataStatus {
 
         if (inCache) {
             const page = new Page(this.manifest, pageId, statusId);
-            await page.initialiseFromCache();
+            await InitialiseFromCache(page);
             status.cacheStatus = page.status.cacheStatus;
             isValid = page.isValid;
             isAvailableOffline = page.isAvailableOffline;
@@ -126,7 +127,7 @@ export class AppDataStatus {
         this.itemListings.push(this.ManifestListing());
 
         const pageIds = Object.keys(this.manifest.pages);
-        const cacheKeys = await CacheUtilities.cacheKeys();
+        const cacheKeys = await CacheKeys();
 
         for (let ix = 0; ix < pageIds.length; ix++) {
             const pageId = pageIds[ix];

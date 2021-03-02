@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { CanoeHost } from "ts/CanoeHost";
-import { CertChain } from "ts/CertChain";
+import { CanoeHost } from "./CanoeHost";
+import { CertChain } from "./CertChain";
 
 /** Initialise the CanoeHost (a wrapper around Appelflap)
  * @param { function } startup - an optional void returning function that is performed after the attempt to start Appelflap.
