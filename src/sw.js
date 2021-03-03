@@ -32,6 +32,16 @@ registerRoute(
 );
 
 registerRoute(
+    function(request) {
+        console.log(request.url.href, ':', request.url.searchParams && request.url.searchParams.has('cardImageFallback'));
+        return request.url.searchParams && request.url.searchParams.has('cardImageFallback')
+    },
+    new CacheFirst({
+        cacheName: "card-images-cache",
+    })
+);
+
+registerRoute(
     new RegExp(`${BACKEND_BASE_URL}/api/v2/pages/.*`),
     new CacheFirst({
         cacheName: "pages-cache",

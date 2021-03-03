@@ -5,7 +5,8 @@
             <!-- <img if="{!props.imageUrl}" src="{getStockImage()}" class="card-hero-image"> -->
 
             <!-- this isn't working, all images are hitting onerror regardless of whether they errored or not -->
-            <img src="{getMediaUrl()}" onerror="{imageError()}" class="card-hero-image">
+            <!-- <img src="{getMediaUrl()}" onerror="{imageError()}" class="card-hero-image"> -->
+            <img src="{getMediaUrl()}" class="card-hero-image">
             <!-- <img onerror="{imageError()}" src="https://www.fillmurray.com/300/200" alt="card hero image" class="card-hero-image"> -->
             <!-- https://www.fillmurray.com/300/200 -->
 
@@ -23,7 +24,8 @@
     </a>
     <script>
         import { getMediaUrl } from "js/utilities";
-        import stockCourseImg from "img/stock_course.svg";
+        // import stockCourseImg from "img/stock_course.svg";
+        import stockCourseImg from "img/high_fivers.png";
 
         export default {
             // myImage: stockCourseImg,
@@ -37,7 +39,7 @@
             getMediaUrl() {
                 // console.log('imageUrl:', imageUrl, 'typeof imageUrl:', typeof imageUrl, '!!imageUrl:', !!imageUrl)
                 // console.log('ternary:', imageUrl ? `${getMediaUrl(imageUrl)}` : null)
-                return this.props.imageUrl ? `${getMediaUrl(this.props.imageUrl)}` : null;
+                return this.props.imageUrl ? `${getMediaUrl(this.props.imageUrl)}?cardImageFallback=${stockCourseImg}` : null;
             },
 
             getStockImage() {
@@ -56,6 +58,10 @@
                 if (! (this.$('.card-hero-image').src)) {
                     this.$('.card-hero-image').src = this.myImage;
                 }
+
+                // evening thoughts: perhaps with the serviceworker implementation we don't have to worry about the
+                // `onerror` issues. We may have a 'loadImage' function, in which we request the image and if it then
+                // doesn't exist we can just serve the fallback url, and so the img simply has a src tag which gets a variable? idk, i'm tired
             },
         };
     </script>
