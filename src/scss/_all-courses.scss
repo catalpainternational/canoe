@@ -44,6 +44,10 @@ AllCoursesPage {
         color: $gray-1;
     }
 
+    .card-container + .section-title {
+        margin-top: 3em;
+    }
+
     TagList {
         .tag {
             border-radius: 50%;

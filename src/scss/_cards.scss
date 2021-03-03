@@ -32,7 +32,7 @@
             color: $gray-1;
         }
 
-        .clamp-3-lines {
+        .clamp-lines {
             line-height: 1.2em;
             height: calc(3 * 1.2em);
             overflow: hidden;
@@ -99,6 +99,15 @@
 
         .card {
             max-width: unset;
+        }
+
+        .card-title {
+            min-height: 80px;
+
+            .clamp-lines {
+                height: calc(2 * 1.2em);
+                -webkit-line-clamp: 2;
+            }
         }
     }
 }
