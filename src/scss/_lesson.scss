@@ -198,6 +198,24 @@ LessonContent .content {
         width: 100%;
     }
 
+    Html5Card {
+        height: inherit;
+
+        .html-card {
+            display: flex;
+            flex-direction: column;
+            height: inherit;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        button {
+            margin-top: 1em;
+        }
+    }
+
     basiccard,
     quotecard,
     listcard {
@@ -285,7 +303,7 @@ LessonContent .content {
     iframe {
         border: 3px solid $app-accent-color;
         width: 100%;
-        height: 400px;
+        flex: 1;
         border-radius: 15px;
     }
 }
