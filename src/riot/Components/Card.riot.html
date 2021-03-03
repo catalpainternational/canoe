@@ -6,7 +6,7 @@
 
             <!-- this isn't working, all images are hitting onerror regardless of whether they errored or not -->
             <!-- <img src="{getMediaUrl()}" onerror="{imageError()}" class="card-hero-image"> -->
-            <img src="{getMediaUrl()}" class="card-hero-image">
+            <!-- <img crossorigin="anonymous" src="{getMediaUrl()}" class="card-hero-image"> -->
             <!-- <img onerror="{imageError()}" src="https://www.fillmurray.com/300/200" alt="card hero image" class="card-hero-image"> -->
             <!-- https://www.fillmurray.com/300/200 -->
 
@@ -31,10 +31,6 @@
             // myImage: stockCourseImg,
             myImage: 'https://www.fillmurray.com/300/200',
             // cardImage: getMediaUrl(props.imageUrl),
-            //
-            // state: {
-            //     cardImage: getMediaUrl(this.props.imageUrl),
-            // },
 
             getMediaUrl() {
                 // console.log('imageUrl:', imageUrl, 'typeof imageUrl:', typeof imageUrl, '!!imageUrl:', !!imageUrl)
