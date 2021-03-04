@@ -267,7 +267,6 @@
 
 %status-play {
     @include status-icon("~img/chevron_right.svg", $blue);
-    border: 0.1px solid $gray-5;
 
     .icon {
         width: 13px;
