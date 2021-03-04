@@ -192,7 +192,8 @@ export class AppelflapConnect {
 
         return (await this.performCommand(
             requestPath,
-            commandInit
+            commandInit,
+            "text"
         )) as Promise<TSubscriptions>;
     };
 

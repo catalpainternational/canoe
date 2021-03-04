@@ -400,7 +400,7 @@ test("Cache: setSubscriptions", async (t: any) => {
 
     fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.setSubscriptions(subscriptions);
-    t.deepEqual(successResult, subscriptions);
+    t.is(successResult, "ok");
 
     fetchMock.reset();
 });
