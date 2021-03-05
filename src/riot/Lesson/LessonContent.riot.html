@@ -11,11 +11,22 @@
         <template if="{props.description}">
             <p class="resource-description">{ props.description }</p>
         </template>
-        <template if="{props.resourceId === 'resources'}" each="{card in props.lessonContent.cards}">
+        <template
+            if="{props.resourceId === 'resources'}"
+            each="{card in props.lessonContent.cards}"
+        >
             <Raw if="{card.tag === 'raw'}" html="{card.content}" class="content-block"></Raw>
             <BasicCard if="{card.tag === 'basic'}" card="{card}" class="content-block"></BasicCard>
-            <AudioCard if="{card.media_type === 'audio'}" media="{card}" class="content-block"></AudioCard>
-            <VideoCard if="{card.media_type === 'video'}" media="{card}" class="content-block"></VideoCard>
+            <AudioCard
+                if="{card.media_type === 'audio'}"
+                media="{card}"
+                class="content-block"
+            ></AudioCard>
+            <VideoCard
+                if="{card.media_type === 'video'}"
+                media="{card}"
+                class="content-block"
+            ></VideoCard>
             <QuoteCard if="{card.tag === 'quote'}" card="{card}" class="content-block"></QuoteCard>
             <ListCard if="{card.tag === 'list'}" card="{card}" class="content-block"></ListCard>
             <PdfCard if="{card.tag === 'pdf'}" card="{card}" class="content-block"></PdfCard>
@@ -49,9 +60,16 @@
                 if="{props.lessonContent.cards[state.cardIdx].tag === 'pdf'}"
                 card="{props.lessonContent.cards[state.cardIdx]}"
             />
+            <Html5Card
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'html5'}"
+                card="{props.lessonContent.cards[state.cardIdx]}"
+            />
         </template>
     </LessonFrame>
-    <div if="{props.isLessonPage && state.cardIdx !== props.lessonContent.cards.length}" class="bottom-buttons">
+    <div
+        if="{props.isLessonPage && state.cardIdx !== props.lessonContent.cards.length}"
+        class="bottom-buttons"
+    >
         <div>
             <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
                 <span class="arrow"></span>
@@ -92,6 +110,7 @@
         import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
         import ListCard from "RiotTags/Lesson/ListCard.riot.html";
         import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
+        import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
 
         import { getLessonCardIdx, getNextCardsUrl, getPreviousCardsUrl } from "js/Routing";
         import { setComplete } from "Actions/completion";
@@ -112,6 +131,7 @@
                 videocard: VideoCard,
                 audiocard: AudioCard,
                 pdfcard: PdfCard,
+                html5card: Html5Card,
             },
 
             TRANSLATIONS: {
