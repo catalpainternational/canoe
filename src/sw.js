@@ -1,15 +1,17 @@
 import { registerRoute } from "workbox-routing/registerRoute.mjs";
 import { setDefaultHandler } from "workbox-routing/setDefaultHandler.mjs";
+import { setCatchHandler } from "workbox-routing/setCatchHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
 import { StaleWhileRevalidate } from "workbox-strategies/StaleWhileRevalidate.mjs";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
 import { RangeRequestsPlugin } from "workbox-range-requests";
+import { ExpirationPlugin } from "workbox-expiration";
 
 import * as googleAnalytics from "workbox-google-analytics";
 
 googleAnalytics.initialize();
 
-import { precacheAndRoute } from "workbox-precaching";
+import { precacheAndRoute, matchPrecache } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 self.__WB_DISABLE_DEV_LOGS = true;
@@ -31,15 +33,50 @@ registerRoute(
     })
 );
 
+const cardImageFallbackUrl = (url) => {
+    console.log('cardImageFallbackUrl requested');
+    if (url.match(/cardImageFallback=([^&]*)/)[1]) {
+        return matchPrecache(url.match(/cardImageFallback=([^&]*)/)[1]);
+    };
+    return null;
+};
+
+
+const cardFallbackPlugin = {
+    fetchDidFail: async ({originalRequest, request, error, event, state}) => {
+        return cardImageFallbackUrl(request.url);
+    },
+    fetchDidSucceed: async ({request, response, event, state}) => {
+        if (response.status === 404) {
+            return cardImageFallbackUrl(response.url);
+        }
+        return response;
+    },
+}
+
 registerRoute(
     function(request) {
-        console.log(request.url.href, ':', request.url.searchParams && request.url.searchParams.has('cardImageFallback'));
         return request.url.searchParams && request.url.searchParams.has('cardImageFallback')
     },
     new CacheFirst({
         cacheName: "card-images-cache",
+        plugins: [
+            cardFallbackPlugin,
+            new ExpirationPlugin({
+                maxEntries: 1,
+                maxAgeSeconds: 30 * 24 * 60 * 60,
+                purgeOnQuotaError: true,
+            }),
+        ],
     })
 );
+
+setCatchHandler(({url, event, params}) => {
+    if (url.searchParams.has('cardImageFallback')) {
+        return cardImageFallbackUrl(url.search);
+   }
+   return Response.error();
+});
 
 registerRoute(
     new RegExp(`${BACKEND_BASE_URL}/api/v2/pages/.*`),
