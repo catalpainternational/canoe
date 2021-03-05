@@ -13,7 +13,7 @@
     </div>
     <script>
         import { getHtmlUrl } from "js/utilities";
-        
+
         export default {
             state: {
                 iFrameElement: undefined,
@@ -34,22 +34,8 @@
             openFullScreen() {
                 if (this.state.iFrameElement.requestFullscreen) {
                     this.state.iFrameElement.requestFullscreen();
-                } //else if (iFrameEl.webkitRequestFullscreen) {
-                //     iFrameEl.webkitRequestFullscreen();
-                // } else if (iFrameEl.msRequestFullscreen) {
-                //     iFrameEl.msRequestFullscreen();
-                // }
+                }
             },
-
-            // closeFullScreen() {
-            //     if (document.exitFullscreen) {
-            //         document.exitFullscreen();
-            //     } else if (document.webkitExitFullscreen) {
-            //         document.webkitExitFullscreen();
-            //     } else if (document.msExitFullscreen) {
-            //         document.msExitFullscreen();
-            //     }
-            // },
         };
     </script>
 </Html5Card>
