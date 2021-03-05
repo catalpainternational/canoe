@@ -34,7 +34,6 @@ registerRoute(
 );
 
 const cardImageFallbackUrl = (url) => {
-    console.log('cardImageFallbackUrl requested');
     if (url.match(/cardImageFallback=([^&]*)/)[1]) {
         return matchPrecache(url.match(/cardImageFallback=([^&]*)/)[1]);
     };
@@ -51,6 +50,9 @@ const cardFallbackPlugin = {
             return cardImageFallbackUrl(response.url);
         }
         return response;
+    },
+    handlerDidError: async ({request, event, error, state}) => {
+        return cardImageFallbackUrl(response.url);
     },
 }
 
