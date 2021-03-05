@@ -1,15 +1,7 @@
 <Card>
     <a class="card {props.status}" href="#{props.link}">
         <div class="card-image">
-            <!-- <img if="{props.imageUrl}" src="{getMediaUrl(props.imageUrl)}" class="card-hero-image"> -->
-            <!-- <img if="{!props.imageUrl}" src="{getStockImage()}" class="card-hero-image"> -->
-
-            <!-- this isn't working, all images are hitting onerror regardless of whether they errored or not -->
-            <!-- <img src="{getMediaUrl()}" onerror="{imageError()}" class="card-hero-image"> -->
-            <!-- <img crossorigin="anonymous" src="{getMediaUrl()}" class="card-hero-image"> -->
-            <!-- <img onerror="{imageError()}" src="https://www.fillmurray.com/300/200" alt="card hero image" class="card-hero-image"> -->
-            <!-- https://www.fillmurray.com/300/200 -->
-
+            <img crossorigin="anonymous" src="{getCardImageUrl()}" class="card-hero-image">
             <span class="card-status"><span class="icon"></span></span>
         </div>
         <div class="card-title">
@@ -23,41 +15,25 @@
         </div>
     </a>
     <script>
+        // TODO waiting for higher quality fallback images from Andy
         import { getMediaUrl } from "js/utilities";
-        // import stockCourseImg from "img/stock_course.svg";
-        import stockCourseImg from "img/high_fivers.png";
+        import contentStockImg from "img/stock_content.gif";
+        import courseStockImg from "img/stock_course.gif";
+        import lessonStockImg from "img/stock_lesson.gif";
+        import objectiveStockImg from "img/stock_objective.gif";
+        import testStockImg from "img/stock_test.gif";
 
         export default {
-            // myImage: stockCourseImg,
-            myImage: 'https://www.fillmurray.com/300/200',
-            // cardImage: getMediaUrl(props.imageUrl),
+            getCardImageUrl() {
+                const cardType = this.props.cardtype;
+                // we should have a default fallback just in case we don't have a cardType passed through
+                let fallbackImg = contentStockImg;
+                if (cardType === 'course') fallbackImg = courseStockImg;
+                if (cardType === 'lesson') fallbackImg = lessonStockImg;
+                if (cardType === 'objective') fallbackImg = objectiveStockImg;
+                if (cardType === 'test') fallbackImg = testStockImg;
 
-            getMediaUrl() {
-                // console.log('imageUrl:', imageUrl, 'typeof imageUrl:', typeof imageUrl, '!!imageUrl:', !!imageUrl)
-                // console.log('ternary:', imageUrl ? `${getMediaUrl(imageUrl)}` : null)
-                return this.props.imageUrl ? `${getMediaUrl(this.props.imageUrl)}?cardImageFallback=${stockCourseImg}` : null;
-            },
-
-            getStockImage() {
-                return stockCourseImg;
-            },
-
-            imageError() {
-                // not working - even when the image is there it still hits the onerror handler ¯\_(ツ)_/¯
-                // it's also just... a really ugly solution code wise
-                console.log('there was an error loading the image for:', this.props.title)
-                // console.log(this.$('.card-hero-image'))
-                // console.log(this.$('.card-hero-image').src)
-                this.$('.card-hero-image').onerror = null;
-                // console.log(typeof imgSrc);
-                // SHOULD NOT need this conditional?? why is the onerror handler not firing as expected?
-                if (! (this.$('.card-hero-image').src)) {
-                    this.$('.card-hero-image').src = this.myImage;
-                }
-
-                // evening thoughts: perhaps with the serviceworker implementation we don't have to worry about the
-                // `onerror` issues. We may have a 'loadImage' function, in which we request the image and if it then
-                // doesn't exist we can just serve the fallback url, and so the img simply has a src tag which gets a variable? idk, i'm tired
+                return this.props.imageUrl ? `${getMediaUrl(this.props.imageUrl)}?cardImageFallback=${fallbackImg}` : fallbackImg;
             },
         };
     </script>
