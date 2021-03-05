@@ -30,7 +30,6 @@
                 status="{courseStatus(course)}"
                 progressValue="{course.numberOfFinishedLessons}"
                 progressMax="{course.numberOfLessons}"
-                cardType="course"
             ></Card>
         </div>
         <div if="{!state.selectedInProgress}" class="card-container">
@@ -41,7 +40,6 @@
                 status="{courseStatus(course)}"
                 progressValue="{course.numberOfFinishedLessons}"
                 progressMax="{course.numberOfLessons}"
-                cardType="course"
             ></Card>
         </div>
         <h2 class="sub-title">{ TRANSLATIONS.learning() }</h2>

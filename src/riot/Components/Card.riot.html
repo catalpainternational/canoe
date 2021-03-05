@@ -15,23 +15,17 @@
         </div>
     </a>
     <script>
-        // TODO waiting for higher quality fallback images from Andy
         import { getMediaUrl } from "js/utilities";
-        import contentStockImg from "img/stock_content.gif";
-        import courseStockImg from "img/stock_course.gif";
-        import lessonStockImg from "img/stock_lesson.gif";
-        import objectiveStockImg from "img/stock_objective.gif";
-        import testStockImg from "img/stock_test.gif";
+        import stockImg1 from "img/stock_image_1.png";
+        import stockImg2 from "img/stock_image_2.png";
+        import stockImg3 from "img/stock_image_3.png";
+        import stockImg4 from "img/stock_image_4.png";
+        import stockImg5 from "img/stock_image_5.png";
 
         export default {
             getCardImageUrl() {
-                const cardType = this.props.cardtype;
-                // we should have a default fallback just in case we don't have a cardType passed through
-                let fallbackImg = contentStockImg;
-                if (cardType === 'course') fallbackImg = courseStockImg;
-                if (cardType === 'lesson') fallbackImg = lessonStockImg;
-                if (cardType === 'objective') fallbackImg = objectiveStockImg;
-                if (cardType === 'test') fallbackImg = testStockImg;
+                const stockImages = [stockImg1, stockImg2, stockImg3, stockImg4, stockImg5];
+                const fallbackImg = stockImages[Math.floor(Math.random() * stockImages.length)];
 
                 return this.props.imageUrl ? `${getMediaUrl(this.props.imageUrl)}?cardImageFallback=${fallbackImg}` : fallbackImg;
             },
