@@ -1,22 +1,60 @@
 <AllTopicsPage>
-	<LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
-    <div>{page.title}</div>
+    <TopMenu extrastyleclasses="with-swoop">
+        <h3>{ state.page.title }</h3>
+        <div class="filter-copy-container">
+            <p>{ state.page.description }</p>
+            <a
+                if="{showTagFilter()}"
+                class="has-circle {state.showTagList ? 'show-tags' : ''}"
+                onclick="{toggleTagList}"
+            >
+                <span class="filter-icon"></span>
+            </a>
+        </div>
+        <TagList
+            if="{showTagFilter() && state.showTagList}"
+            tags="{state.listOfTags}"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
+    </TopMenu>
+    <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
 
     <script>
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+        import TagList from "RiotTags/Components/TagList.riot.html";
         import { getRoute } from "ReduxImpl/Interface";
 
-        function AllTopicsPage() { return {
-			state: {
-				isLoading: false,
-			}, 
-			onBeforeMount(props, state) {
-				this.page = getRoute().page;
-				this.state.isLoading = !this.page.ready;
-			},
-			onBeforeUpdate(props, state) {
-				this.state.isLoading = !this.page.ready;
-			}
-		}};
+        function AllTopicsPage() {
+            return {
+                state: {
+                    isLoading: false,
+                    showTagList: false,
+                    listOfTags: [],
+                },
+                onBeforeMount(props, state) {
+                    this.state.page = getRoute().page;
+                    this.state.isLoading = !this.state.page.ready;
+                },
+                onBeforeUpdate(props, state) {
+                    this.state.isLoading = !this.state.page.ready;
+                },
+                showTagFilter() {
+                    // we don't know the tags until the page data is available
+                    // and we don't show the filter unless we have some tags
+                    return (
+                        this.state.page.ready &&
+                        this.state.page.tags &&
+                        this.page.tags.length
+                    );
+                },
+            };
+        }
+
+        AllTopicsPage.components = {
+            topmenu: TopMenu,
+            taglist: TagList,
+        };
 
         export default AllTopicsPage;
     </script>
