@@ -15,7 +15,6 @@
         </div>
     </a>
     <script>
-        import { getMediaUrl } from "js/utilities";
         import contentStockImg from "img/stock_content.png";
         import courseStockImg from "img/stock_course.png";
         import lessonStockImg from "img/stock_lesson.png";
@@ -33,7 +32,7 @@
                 if (cardType === 'test') fallbackImg = testStockImg;
 
                 return this.props.imageUrl
-                    ? `${getMediaUrl(this.props.imageUrl)}?cardImageFallback=${fallbackImg}`
+                    ? `${process.env.API_BASE_URL}${this.props.imageUrl}?cardImageFallback=${fallbackImg}`
                     : fallbackImg;
             },
         };
