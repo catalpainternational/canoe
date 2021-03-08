@@ -1,0 +1,23 @@
+<AllTopicsPage>
+	<LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
+    <div>{page.title}</div>
+
+    <script>
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function AllTopicsPage() { return {
+			state: {
+				isLoading: false,
+			}, 
+			onBeforeMount(props, state) {
+				this.page = getRoute().page;
+				this.state.isLoading = !this.page.ready;
+			},
+			onBeforeUpdate(props, state) {
+				this.state.isLoading = !this.page.ready;
+			}
+		}};
+
+        export default AllTopicsPage;
+    </script>
+</AllTopicsPage>

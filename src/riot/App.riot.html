@@ -21,12 +21,6 @@
 
         <AllCoursesPage if="{ state.page.type === 'homepage' }" ></AllCoursesPage>
         <CourseOverview if="{ state.page.type === 'coursepage' }" ></CourseOverview>
-        <!--
-        <HomePage
-            if="{ state.page.type === 'homepage' }"
-            page="{ state.page }"
-        ></HomePage>
-         -->
         <LessonOverview
             if="{state.page.type === 'lessonpage'}"
             lesson="{ state.page }"
@@ -37,7 +31,8 @@
         <ResourceArticle
             if="{state.page.type === 'resourcearticle'}"
         ></ResourceArticle>
-        
+        <AllTopicsPage if="{ state.page.type === 'learningactivitieshomepage'}"></AllTopicsPage>
+
         <BottomMenu page="{state.page}"></BottomMenu>
         <PushSubscription></PushSubscription>
     </template>
@@ -65,7 +60,7 @@
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
-
+        import AllTopicsPage from "RiotTags/WagtailPages/AllTopicsPage.riot.html";
 
         function App() {
             function readState() {
@@ -75,6 +70,7 @@
                     riotHash: route.riotHash,
                     browserSupported: isBrowserSupported(),
                 };
+                // console.log(state.page.type)
                 return state;
             }
             return {
@@ -110,6 +106,7 @@
             changebrowser: ChangeBrowser,
             toast: Toast,
             resourcearticle: ResourceArticle,
+            alltopicspage: AllTopicsPage,
             loadingdots: LoadingDots,
         }
 
