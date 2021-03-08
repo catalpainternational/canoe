@@ -26,13 +26,6 @@ registerRoute(
     })
 );
 
-registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/media/images/.+`),
-    new CacheFirst({
-        cacheName: "images-cache",
-    })
-);
-
 const cardImageFallbackUrl = (url) => {
     if (url.match(/cardImageFallback=([^&]*)/)[1]) {
         return matchPrecache(url.match(/cardImageFallback=([^&]*)/)[1]);
@@ -42,9 +35,6 @@ const cardImageFallbackUrl = (url) => {
 
 
 const cardFallbackPlugin = {
-    fetchDidFail: async ({originalRequest, request, error, event, state}) => {
-        return cardImageFallbackUrl(request.url);
-    },
     fetchDidSucceed: async ({request, response, event, state}) => {
         if (response.status === 404) {
             return cardImageFallbackUrl(response.url);
@@ -54,6 +44,16 @@ const cardFallbackPlugin = {
     handlerDidError: async ({request, event, error, state}) => {
         return cardImageFallbackUrl(response.url);
     },
+    cacheKeyWillBeUsed: async ({request, mode, params, event, state}) => {
+        // `request` is the `Request` object that would otherwise be used as the cache key.
+        // `mode` is either 'read' or 'write'.
+        // Return either a string, or a `Request` whose `url` property will be used as the cache key.
+        // Returning the original `request` will make this a no-op.
+
+        // we split the query off the path here to avoid workbox caching the same image twice
+        const path = request.url.split('?')[0];
+        return path;
+    },
 }
 
 registerRoute(
@@ -62,12 +62,21 @@ registerRoute(
     },
     new CacheFirst({
         cacheName: "card-images-cache",
+        matchOptions: { ignoreSearch: true },
         plugins: [
             cardFallbackPlugin,
             new ExpirationPlugin({
+                maxEntries: 10000,
                 purgeOnQuotaError: true,
             }),
         ],
+    })
+);
+
+registerRoute(
+    new RegExp(`${BACKEND_BASE_URL}/media/images/.+`),
+    new CacheFirst({
+        cacheName: "images-cache",
     })
 );
 

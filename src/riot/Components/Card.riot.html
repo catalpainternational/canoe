@@ -15,7 +15,6 @@
         </div>
     </a>
     <script>
-        import { getMediaUrl } from "js/utilities";
         import stockImg1 from "img/stock_image_1.png";
         import stockImg2 from "img/stock_image_2.png";
         import stockImg3 from "img/stock_image_3.png";
@@ -28,7 +27,7 @@
                 const fallbackImg = stockImages[Math.floor(Math.random() * stockImages.length)];
 
                 return this.props.imageUrl
-                    ? `${getMediaUrl(this.props.imageUrl)}?cardImageFallback=${fallbackImg}`
+                    ? `${process.env.API_BASE_URL}${this.props.imageUrl}?cardImageFallback=${fallbackImg}`
                     : fallbackImg;
             },
         };
