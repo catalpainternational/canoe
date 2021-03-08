@@ -1,5 +1,6 @@
+import { TPublication, TSubscriptions } from "../Types/CacheTypes";
 import { TAppelflapResult } from "../Types/CanoeEnums";
-import { TPublication } from "../Types/CacheTypes";
+import { TItemListing } from "../Types/PublishableItemTypes";
 import { IPublishableItem } from "../Interfaces/PublishableItemInterfaces";
 
 import { AppelflapConnect } from "../AppelflapConnect";
@@ -33,9 +34,9 @@ export async function publishItem(
 
     try {
         await cachePublish.publish(CacheTarget(item));
-        return await Promise.resolve("succeeded");
+        return Promise.resolve("succeeded");
     } catch (error) {
-        return await Promise.reject("failed");
+        return Promise.reject("failed");
     }
 }
 
@@ -57,56 +58,76 @@ export async function unpublishItem(
 
     try {
         await cachePublish.unpublish(CacheTarget(item));
-        return await Promise.resolve("succeeded");
+        return Promise.resolve("succeeded");
     } catch (error) {
-        return await Promise.reject("failed");
+        return Promise.reject("failed");
     }
 }
 
-/** Tells Appelflap to subscribe for this item
+/** Tells Appelflap to retrieve all current subscriptions
  * @returns
  * - resolve("succeeded") on success (200),
- * - resolve("not relevant") if isPublishable is true or appelflap connect wasn't provided,
+ * - resolve("not relevant") if appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
-export async function subscribeItem(
-    item: IPublishableItem,
+export async function getSubscriptions(
     appelflapConnect: AppelflapConnect
-): Promise<TAppelflapResult> {
-    if (!item || item.isPublishable || !appelflapConnect) {
+): Promise<TSubscriptions | string> {
+    if (!appelflapConnect) {
         return Promise.resolve("not relevant");
     }
 
     const cacheSubscribe = new CacheSubscribe(appelflapConnect);
 
     try {
-        await cacheSubscribe.subscribe(CacheTarget(item));
-        return await Promise.resolve("succeeded");
+        const subscriptions = await cacheSubscribe.getSubscriptions();
+        return Promise.resolve(subscriptions);
     } catch (error) {
-        return await Promise.reject("failed");
+        return Promise.reject("failed");
     }
 }
 
-/** Tells Appelflap to unsubscribe for this item
+/** Tells Appelflap to set all current subscriptions
  * @returns
  * - resolve("succeeded") on success (200),
- * - resolve("not relevant") if isPublishable is false or appelflap connect wasn't provided,
+ * - resolve("not relevant") if no items, none of the items are publishable, or appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
-export async function unsubscribeItem(
-    item: IPublishableItem,
+export async function setSubscriptions(
+    items: TItemListing[],
     appelflapConnect: AppelflapConnect
-): Promise<TAppelflapResult> {
-    if (!item || !item.isPublishable || !appelflapConnect) {
+): Promise<TSubscriptions | string> {
+    if (
+        !items ||
+        !items.length ||
+        !items.some((item) => !item.isPublishable) ||
+        !appelflapConnect
+    ) {
         return Promise.resolve("not relevant");
     }
 
     const cacheSubscribe = new CacheSubscribe(appelflapConnect);
 
+    const subscriptions: TSubscriptions = {
+        origins: {},
+    };
+
+    subscriptions.origins[self.origin] = { caches: {} };
+
+    items.forEach((item) => {
+        subscriptions.origins[self.origin].caches[item.cacheKey] = {
+            injection_version_min: item.version,
+            injection_version_max: item.version,
+            p2p_version_min: item.version,
+            p2p_version_max: item.version,
+            injected_version: item.isPublishable ? item.version : null,
+        };
+    });
+
     try {
-        await cacheSubscribe.unsubscribe(CacheTarget(item));
-        return await Promise.resolve("succeeded");
+        const result = await cacheSubscribe.setSubscriptions(subscriptions);
+        return Promise.resolve(result);
     } catch (error) {
-        return await Promise.reject("failed");
+        return Promise.reject("failed");
     }
 }
