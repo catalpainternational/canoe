@@ -65,6 +65,7 @@ registerRoute(
         plugins: [
             cardFallbackPlugin,
             new ExpirationPlugin({
+                maxAgeSeconds: 5 * 365 * 24 * 60 * 60,
                 purgeOnQuotaError: true,
             }),
         ],
