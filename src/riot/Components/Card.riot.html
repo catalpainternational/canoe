@@ -23,13 +23,12 @@
 
         export default {
             getCardImageUrl() {
-                const cardType = this.props.cardtype;
-                // we should have a default fallback just in case we don't have a cardType passed through
-                let fallbackImg = contentStockImg;
-                if (cardType === 'course') fallbackImg = courseStockImg;
-                if (cardType === 'lesson') fallbackImg = lessonStockImg;
-                if (cardType === 'objective') fallbackImg = objectiveStockImg;
-                if (cardType === 'test') fallbackImg = testStockImg;
+                const stockImages = [contentStockImg, courseStockImg, lessonStockImg, objectiveStockImg, testStockImg];
+                const cardId = typeof this.props.link === 'number'
+                    ? this.props.link
+                    : this.props.link.split('/')[0];
+
+                const fallbackImg = stockImages[cardId % stockImages.length];
 
                 return this.props.imageUrl
                     ? `${process.env.API_BASE_URL}${this.props.imageUrl}?cardImageFallback=${fallbackImg}`
