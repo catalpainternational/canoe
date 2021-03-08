@@ -6,11 +6,11 @@ import { PublishableItem } from "./PublishableItem";
 import { Page } from "./Page";
 import { UpdateCachedItem } from "./CacheItem";
 
-import AllCoursesPage from "./Specific/AllCoursesPage";
-import CoursePage from "./Specific/CoursePage";
-import LessonPage from "./Specific/LessonPage";
-import ResourcesRootPage from "./Specific/ResourcesRootPage";
-import ResourcePage from "./Specific/ResourcePage";
+import AllCourses from "./Specific/AllCourses";
+import Course from "./Specific/Course";
+import Lesson from "./Specific/Lesson";
+import ResourcesRoot from "./Specific/ResourcesRoot";
+import Resource from "./Specific/Resource";
 import LearningActivityRoot from "./Specific/LearningActivityRoot";
 import LearningActivityTopic from "./Specific/LearningActivityTopic";
 import LearningActivity from "./Specific/LearningActivity";
@@ -224,20 +224,15 @@ export class Manifest extends PublishableItem<TManifestData> {
 
         switch (pageType) {
             case "homepage":
-                return new AllCoursesPage(this, pageId, pageStatusId, parent);
+                return new AllCourses(this, pageId, pageStatusId, parent);
             case "coursepage":
-                return new CoursePage(this, pageId, pageStatusId, parent);
+                return new Course(this, pageId, pageStatusId, parent);
             case "lessonpage":
-                return new LessonPage(this, pageId, pageStatusId, parent);
+                return new Lesson(this, pageId, pageStatusId, parent);
             case "resourcesroot":
-                return new ResourcesRootPage(
-                    this,
-                    pageId,
-                    pageStatusId,
-                    parent
-                );
+                return new ResourcesRoot(this, pageId, pageStatusId, parent);
             case "resourcearticle":
-                return new ResourcePage(this, pageId, pageStatusId, parent);
+                return new Resource(this, pageId, pageStatusId, parent);
             case "learningactivitieshomepage":
                 return new LearningActivityRoot(
                     this,

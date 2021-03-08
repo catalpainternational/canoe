@@ -9,7 +9,7 @@ import {
 } from "js/actions/exam";
 import ExamGrader from "js/ExamGrader";
 
-export default class CoursePage extends Page {
+export default class Course extends Page {
     get lessons(): any {
         return this.childPages;
     }
