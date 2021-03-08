@@ -11,6 +11,9 @@ import CoursePage from "./Specific/CoursePage";
 import LessonPage from "./Specific/LessonPage";
 import ResourcesRootPage from "./Specific/ResourcesRootPage";
 import ResourcePage from "./Specific/ResourcePage";
+import LearningActivityRoot from "./Specific/LearningActivityRoot";
+import LearningActivityTopic from "./Specific/LearningActivityTopic";
+import LearningActivity from "./Specific/LearningActivity";
 
 import { MANIFEST_CACHE_NAME } from "../Constants";
 
@@ -235,6 +238,22 @@ export class Manifest extends PublishableItem<TManifestData> {
                 );
             case "resourcearticle":
                 return new ResourcePage(this, pageId, pageStatusId, parent);
+            case "learningactivitieshomepage":
+                return new LearningActivityRoot(
+                    this,
+                    pageId,
+                    pageStatusId,
+                    parent
+                );
+            case "learningactivitytopicpage":
+                return new LearningActivityTopic(
+                    this,
+                    pageId,
+                    pageStatusId,
+                    parent
+                );
+            case "learningactivitypage":
+                return new LearningActivity(this, pageId, pageStatusId, parent);
             default:
                 return new Page(this, pageId, pageStatusId, parent);
         }
