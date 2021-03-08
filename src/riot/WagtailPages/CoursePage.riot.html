@@ -19,6 +19,7 @@
                     title="{lesson.title}"
                     link="{lesson.id}"
                     imageUrl="{lesson.imageUrl}"
+                    cardType="lesson"
                 ></Card>
             </div>
             <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
@@ -29,6 +30,7 @@
                         description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
                         link="{props.wagtailPage.id}/exam/0"
                         status="{examStatus(props.wagtailPage)}"
+                        cardType="exam"
                     ></Card>
                 </div>
             </template>

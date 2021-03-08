@@ -15,16 +15,21 @@
         </div>
     </a>
     <script>
-        import stockImg1 from "img/stock_image_1.png";
-        import stockImg2 from "img/stock_image_2.png";
-        import stockImg3 from "img/stock_image_3.png";
-        import stockImg4 from "img/stock_image_4.png";
-        import stockImg5 from "img/stock_image_5.png";
+        import contentStockImg from "img/stock_content.png";
+        import courseStockImg from "img/stock_course.png";
+        import lessonStockImg from "img/stock_lesson.png";
+        import objectiveStockImg from "img/stock_objective.png";
+        import testStockImg from "img/stock_test.png";
 
         export default {
             getCardImageUrl() {
-                const stockImages = [stockImg1, stockImg2, stockImg3, stockImg4, stockImg5];
-                const fallbackImg = stockImages[Math.floor(Math.random() * stockImages.length)];
+                const cardType = this.props.cardtype;
+                // we should have a default fallback just in case we don't have a cardType passed through
+                let fallbackImg = contentStockImg;
+                if (cardType === 'course') fallbackImg = courseStockImg;
+                if (cardType === 'lesson') fallbackImg = lessonStockImg;
+                if (cardType === 'objective') fallbackImg = objectiveStockImg;
+                if (cardType === 'test') fallbackImg = testStockImg;
 
                 return this.props.imageUrl
                     ? `${process.env.API_BASE_URL}${this.props.imageUrl}?cardImageFallback=${fallbackImg}`

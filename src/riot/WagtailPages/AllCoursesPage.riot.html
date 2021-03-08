@@ -37,6 +37,7 @@
                             progressValue="{state.currentCourse.numberOfFinishedLessons}"
                             progressMax="{state.currentCourse.numberOfLessons}"
                             imageUrl="{state.currentCourse.imageUrl}"
+                            cardType="course"
                         ></Card>
                     </div>
                 </template>
@@ -51,6 +52,7 @@
                         progressValue="{course.numberOfFinishedLessons}"
                         progressMax="{course.numberOfLessons}"
                         imageUrl="{course.imageUrl}"
+                        cardType="course"
                     ></Card>
                 </div>
                 <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>
