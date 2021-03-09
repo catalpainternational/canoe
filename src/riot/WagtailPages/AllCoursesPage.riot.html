@@ -14,7 +14,7 @@
                 </a>
             </div>
             <TagList
-                if="{showTagFilter() && state.showTagList}"
+                if="{Array.isArray(state.sortedListOfCourses) && state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 && state.showTagList}"
                 tags="{state.listOfTags}"
                 onTagClick="{onTagClick}"
                 selectedTags="{state.selectedTags}"
