@@ -1,8 +1,8 @@
 <AllTopicsPage>
     <TopMenu extrastyleclasses="with-swoop">
-        <h3>{ state.page.title }</h3>
+        <h3>{ page.title }</h3>
+        <p>{ page.data.description }</p>
         <div class="filter-copy-container">
-            <p>{ state.page.description }</p>
             <a
                 if="{showTagFilter()}"
                 class="has-circle {state.showTagList ? 'show-tags' : ''}"
@@ -18,42 +18,57 @@
             selectedTags="{state.selectedTags}"
         ></TagList>
     </TopMenu>
-    <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
+    <div class="content-wrapper">
+        <LoadingDots if="{!page.ready}" extrastyleclasses="dark"></LoadingDots>
+        <template if="{page.ready}">
+            <div class="card-container">
+                <Card
+                    each="{plan in page.childPages}"
+                    title="{plan.title}"
+                    link="{plan.loc_hash}"
+                    imageUrl="{plan.data.card_image_url}"
+                ></Card>
+            </div>
+        </template>
+    </div>
 
     <script>
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import Card from "RiotTags/Components/Card.riot.html";
+
         import { getRoute } from "ReduxImpl/Interface";
 
         function AllTopicsPage() {
             return {
                 state: {
-                    isLoading: false,
                     showTagList: false,
                     listOfTags: [],
                 },
                 onBeforeMount(props, state) {
-                    this.state.page = getRoute().page;
-                    this.state.isLoading = !this.state.page.ready;
-                },
-                onBeforeUpdate(props, state) {
-                    this.state.isLoading = !this.state.page.ready;
+                    this.page = getRoute().page;
                 },
                 showTagFilter() {
                     // we don't know the tags until the page data is available
                     // and we don't show the filter unless we have some tags
                     return (
-                        this.state.page.ready &&
-                        this.state.page.tags &&
+                        this.page.ready &&
+                        this.page.tags &&
                         this.page.tags.length
                     );
                 },
+                toggleTagList() {
+                    this.update({ showTagList: !this.state.showTagList });
+                }
             };
         }
 
         AllTopicsPage.components = {
             topmenu: TopMenu,
             taglist: TagList,
+            loadingdots: LoadingDots,
+            card: Card,
         };
 
         export default AllTopicsPage;
