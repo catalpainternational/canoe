@@ -220,14 +220,6 @@
     width: 25px;
 }
 
-.profile-background-image {
-    @extend %icons-shared;
-    background-image: url("~img/profile_image.svg");
-    background-position: center;
-    height: 185px;
-    width: 280px;
-}
-
 .home-background-image {
     @extend %icons-shared;
     background-image: url("~img/home_header_figure.svg");
@@ -335,29 +327,4 @@
 .film {
     @extend %stat-icon-shared;
     background-image: url("~img/film.svg");
-}
-
-%logos-shared {
-    @extend %icons-shared;
-    display: inline-block;
-    height: 50px;
-    background-position: center;
-}
-
-.logo-a {
-    @extend %logos-shared;
-    background-image: url("~img/logo_a.png");
-    width: 60px;
-}
-
-.logo-b {
-    @extend %logos-shared;
-    background-image: url("~img/logo_b.svg");
-    width: 70px;
-}
-
-.logo-c {
-    @extend %logos-shared;
-    background-image: url("~img/logo_c.svg");
-    width: 50px;
 }

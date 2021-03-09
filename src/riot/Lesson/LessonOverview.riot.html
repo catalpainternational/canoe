@@ -5,7 +5,7 @@
         module="{OBJECTIVES}"
         nextModule="{CONTENT}"
         title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage.data}"
+        lesson="{props.wagtailPage}"
         course="{props.wagtailPage.course}"
     ></LessonObjective>
     <LessonContent
@@ -14,7 +14,7 @@
         module="{CONTENT}"
         nextModule="{TEST}"
         title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage.data}"
+        lesson="{props.wagtailPage}"
         course="{props.wagtailPage.course}"
         isLessonPage="{true}"
     ></LessonContent>
@@ -23,7 +23,7 @@
         test="{props.wagtailPage.test}"
         module="{TEST}"
         title="{props.wagtailPage.title}"
-        lesson="{props.wagtailPage.data}"
+        lesson="{props.wagtailPage}"
         course="{props.wagtailPage.course}"
     >
     </LessonTest>

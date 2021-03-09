@@ -1,8 +1,7 @@
-import { getHomePage } from "js/WagtailPagesAPI";
-import { getLatestCompletion } from "js/CompletionInterface";
 import { dispatchToastEvent } from "js/Events";
-import { getLanguage } from "ReduxImpl/Store";
-import { BACKEND_BASE_URL } from "js/urls";
+import { getLanguage } from "ReduxImpl/Interface";
+import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
+import { getOrFetchManifest } from "js/WagtailPagesAPI";
 
 export const alertAppIsOffline = () => {
     dispatchToastEvent("You are offline.");
@@ -10,24 +9,6 @@ export const alertAppIsOffline = () => {
 
 export const alertAppIsOnline = () => {
     dispatchToastEvent("You are online.");
-};
-
-export const getAllLessons = (courses) => {
-    let lessons = [];
-    for (const course of courses) {
-        lessons = lessons.concat(course.lessons);
-    }
-    return lessons;
-};
-
-export const getLastWorkedOnCourse = async () => {
-    const homePage = await getHomePage();
-    const courses = homePage.courses;
-    const latestCompletion = getLatestCompletion(courses);
-    const lastWorkedOnCourse = courses.find(
-        (course) => course.data.slug === latestCompletion.courseSlug
-    );
-    return lastWorkedOnCourse;
 };
 
 export const isCourseInTheCurrentLanguage = (courseSlug) => {
@@ -43,7 +24,15 @@ export const isCourseInTheCurrentLanguage = (courseSlug) => {
 };
 
 export const getMediaUrl = (mediaPath) => {
-    return `${BACKEND_BASE_URL}${mediaPath}`;
+    return `${BACKEND_BASE_URL}${MEDIA_PATH}/${mediaPath}`;
+};
+
+export const resolveMedia = (mediaID) => {
+    return getOrFetchManifest()
+        // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
+        // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
+        // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
+        .then(mfest => getMediaUrl(Object.values(mfest.media[mediaID]).sort((el1,el2) => el1.size - el2.size)[0].mediapath));
 };
 
 export const doesTheArrayContainTheObject = (theArray, theObject, matchingFunction) => {
@@ -78,4 +67,22 @@ export const debounce = (func, waitInMilliseconds) => {
 
 export const getContactNumber = () => {
     return process.env.CONTACT_NUMBER;
+};
+
+export const getCourseWithLatestCompletion = (courses) => {
+    const coursesWithCompletions = courses.filter((course) => course.getLatestCompletion());
+
+    let lastWorkedOnCourse = null;
+    for (const course of coursesWithCompletions) {
+        if (
+            lastWorkedOnCourse &&
+            !course.isFinished() &&
+            course.getLatestCompletion().completionDate <
+                lastWorkedOnCourse.getLatestCompletion().completionDate
+        ) {
+            continue;
+        }
+        lastWorkedOnCourse = course;
+    }
+    return lastWorkedOnCourse;
 };

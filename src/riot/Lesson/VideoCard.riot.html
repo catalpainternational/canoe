@@ -9,10 +9,6 @@
             onplay="{ (event) => storeAnalytics(event) }"
         >
             <!-- if preload set to none the video will not actually be requested, if set to auto it is requested -->
-            <source
-                src="{getMediaUrl(props.media.sources[0].src)}"
-                type="{props.media.sources[0].type}"
-            />
             <span>{ TRANSLATIONS.browserSupport() }</span>
         </video>
         <h3 class="media-title">{props.media.title}</h3>
@@ -22,7 +18,7 @@
     </div>
 
     <script>
-        import { getMediaUrl } from "js/utilities";
+        import { resolveMedia } from "js/utilities";
         import {
             isItemCached,
             addToCache,
@@ -46,10 +42,7 @@
                 if (!this.state.cached) {
                     this.toggleAvailableOffline();
                 }
-            },
-
-            getMediaUrl(mediaPath) {
-                return getMediaUrl(mediaPath);
+                this.$("video").src = await resolveMedia(props.media.id);
             },
 
             storeAnalytics() {
@@ -58,13 +51,13 @@
             },
 
             async getCacheInfo() {
-                const url = getMediaUrl(this.props.media.sources[0].src);
+                const url = await resolveMedia(this.props.media.id);
                 const cached = await isItemCached(url);
                 this.update({ cached });
             },
 
             async toggleAvailableOffline(e) {
-                const url = getMediaUrl(this.props.media.sources[0].src);
+                const url = await resolveMedia(this.props.media.id);
                 const action = this.state.cached
                     ? deleteItemFromCache(url, "media-cache")
                     : addToCache(url, "media-cache");

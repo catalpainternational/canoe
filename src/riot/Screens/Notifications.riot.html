@@ -12,7 +12,9 @@
         <div class="content-wrapper">
             <p if="{state.notifications.length === 0}">{ TRANSLATIONS.none() }</p>
 
-            <h5 if="{state.notifications.length > 0}" class="section-title">{ TRANSLATIONS.notifications() }</h5>
+            <h5 if="{state.notifications.length > 0}" class="section-title">
+                { TRANSLATIONS.notifications() }
+            </h5>
 
             <ol class="notification-list">
                 <li
@@ -28,10 +30,7 @@
                     </div>
 
                     <div class="notification-footer">
-                        <a
-                            class="action"
-                            href="#{state.currentCourse && state.currentCourse.data.id}"
-                        >
+                        <a class="action">
                             <span class="arrow-blue"></span>
                             <p>{ TRANSLATIONS.start() }</p>
                         </a>
@@ -45,7 +44,6 @@
     </div>
 
     <script>
-        import { getLastWorkedOnCourse } from "js/utilities";
         import { getNotifications } from "js/Notifications";
         import dayjs from "dayjs";
         import relativeTime from "dayjs/plugin/relativeTime";
@@ -55,21 +53,18 @@
         export default {
             state: {
                 notifications: [],
-                currentCourse: null
             },
 
             TRANSLATIONS: {
-                latest: () => gettext('Latest notifications'),
-                none: () => gettext('No notifications.'),
-                notifications: () => gettext('Notifications'),
-                start: () => gettext('Start lesson'),
+                latest: () => gettext("Latest notifications"),
+                none: () => gettext("No notifications."),
+                notifications: () => gettext("Notifications"),
+                start: () => gettext("Start lesson"),
             },
 
             async refreshNotifications() {
-                const currentCourse = await getLastWorkedOnCourse();
                 this.update({
                     notifications: await getNotifications(),
-                    currentCourse
                 });
             },
 
@@ -86,7 +81,7 @@
                     return "old";
                 }
                 return "";
-            }
+            },
         };
     </script>
 </Notifications>

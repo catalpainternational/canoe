@@ -1,9 +1,6 @@
 <CourseExam>
     <LessonFrame if="{isAtHonorCode(state.cardIdx)}">
-        <HonorCode
-            courseId="{props.wagtailPage.data.id}"
-            minimumScore="{MINIMUM_SCORE}"
-        ></HonorCode>
+        <HonorCode courseId="{props.wagtailPage.id}" minimumScore="{MINIMUM_SCORE}"></HonorCode>
     </LessonFrame>
     <LessonFrame
         if="{state.cardIdx >= 0 && state.cardIdx < state.cards.length && state.card}"
@@ -52,7 +49,7 @@
     </LessonFrame>
     <ExamResults
         if="{isAtResults(state.cardIdx)}"
-        course="{props.wagtailPage.data}"
+        course="{props.wagtailPage}"
         title="{props.wagtailPage.title}"
         finalScore="{calculateFinalScore()}"
         minimumScore="{MINIMUM_SCORE}"
@@ -68,7 +65,8 @@
         import { getLessonCardIdx, getPreviousCardsUrl, getNextCardsUrl } from "js/Routing";
         import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
         import { URLDoesntExist, ExamIsMissingAnAnswer } from "js/Errors";
-        import { saveExamAnswer, loadExamAnswer, tallyFinalScore } from "js/ExamInterface";
+
+        import ExamGrader from "js/ExamGrader";
 
         export default {
             state: {
@@ -86,8 +84,8 @@
             },
 
             TRANSLATIONS: {
-                next: () => gettext('Next'),
-                submit: () => gettext('Submit answers'),
+                next: () => gettext("Next"),
+                submit: () => gettext("Submit answers"),
             },
 
             MINIMUM_SCORE: 75,
@@ -134,7 +132,7 @@
                 }
 
                 const card = this.getCard(cardIdx);
-                const previousAnswer = loadExamAnswer(card.id);
+                const previousAnswer = ExamGrader.loadExamAnswer(card.id);
                 const currentAnswer = previousAnswer || {};
 
                 this.state.cardAnswers = card.answers;
@@ -182,7 +180,7 @@
             nextExamCard() {
                 const { wagtailPage } = this.props;
                 const { cardIdx, card, currentAnswer } = this.state;
-                saveExamAnswer(card.id, currentAnswer);
+                ExamGrader.saveExamAnswer(card.id, currentAnswer);
                 location.hash = getNextCardsUrl(wagtailPage.id, this.SECTION, cardIdx);
             },
 
@@ -190,7 +188,7 @@
                 const { cards } = this.props;
                 const listOfExamQuestions = cards.map((card) => card.id);
                 try {
-                    return Math.round(tallyFinalScore(listOfExamQuestions));
+                    return Math.round(ExamGrader.tallyFinalScore(listOfExamQuestions));
                 } catch (err) {
                     if (err instanceof ExamIsMissingAnAnswer) {
                         return 0;

@@ -6,30 +6,30 @@
                     <h3>{ TRANSLATIONS.overall() }</h3>
                     <h6>{ percentLessonsCompleteMessage() }</h6>
                     <ContinueLearningButton
-                        if="{state.currentCourse && isCourseInProgress(state.currentCourse)}"
+                        if="{state.currentCourse && !state.currentCourse.isFinished()}"
+                        currentCourse="{state.currentCourse}"
                     ></ContinueLearningButton>
                 </div>
                 <span class="report-card"></span>
             </div>
         </div>
+
         <div class="content-wrapper">
             <h5 class="section-title">{ TRANSLATIONS.byCourse() }</h5>
             <ul class="course-progress-list">
                 <li each="{course in state.courses}">
-                    <a class="progress card" href="#{course.data.id}">
+                    <a class="progress card" href="#{course.id}">
                         <div class="profile-card">
-                            <h5>{course.data.title}</h5>
+                            <h5>{course.title}</h5>
                             <span class="arrow background-purple"></span>
                         </div>
                         <div class="card-footer">
                             <span class="checkmark"></span>
-                            <p>
-                                { courseLessonsCompletedMessage(course) }
-                            </p>
+                            <p>{ courseLessonsCompletedMessage(course) }</p>
                             <progress
-                                if="{countCompleteLessonsIn(course) > 0}"
-                                value="{countCompleteLessonsIn(course)}"
-                                max="{course.lessons.length}"
+                                if="{course.numberOfFinishedLessons > 0}"
+                                value="{course.numberOfFinishedLessons}"
+                                max="{course.numberOfLessons}"
                             ></progress>
                         </div>
                     </a>
@@ -41,7 +41,7 @@
                 <div class="card card-sm no-shadow stat" href="#4">
                     <div class="profile-card">
                         <span class="checkmark-circle-blue"></span>
-                        <h3>{countCompleteLessonsTotal()}</h3>
+                        <h3>{countFinishedLessonsAndExams()}</h3>
                         <h5>{ TRANSLATIONS.lessonsCompleted() }</h5>
                     </div>
                 </div>
@@ -61,17 +61,12 @@
 
         import { getHomePage } from "js/WagtailPagesAPI";
         import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { getAllLessons } from "js/utilities";
-        import {
-            countCompleteLessonsInCourse,
-            countCompleteLessonsInCourses,
-            getLatestCompletion,
-            isCourseInProgress,
-        } from "js/CompletionInterface";
+        import { getCourseWithLatestCompletion } from "js/utilities";
+
+        import HomePage from "js/HomePage";
 
         export default {
             state: {
-                manifest: null,
                 courses: [],
                 currentCourse: null,
             },
@@ -88,48 +83,20 @@
                 lessonsLeft: () => gettext("lessons remaining to finish your study"),
             },
 
-            isCourseInProgress(aCourse) {
-                return isCourseInProgress(aCourse);
-            },
-
-            getCurrentCourse(courses) {
-                const latestCompletion = getLatestCompletion(courses);
-                if (latestCompletion === null) {
-                    return null;
-                }
-                const lastWorkedOnCourse = courses.find(
-                    (course) => course.data.slug === latestCompletion.courseSlug
-                );
-                return lastWorkedOnCourse;
-            },
-
-            countCompleteLessonsTotal() {
-                return countCompleteLessonsInCourses(this.state.courses);
-            },
-
-            countCompleteLessonsIn(course) {
-                return countCompleteLessonsInCourses([course]);
-            },
-
-            getNumberOfLessonsLeft() {
-                return getAllLessons(this.state.courses).length - this.countCompleteLessonsTotal();
-            },
-
-            getPercentOfLessonsCompleted() {
-                const percentage =
-                    (this.countCompleteLessonsTotal() / getAllLessons(this.state.courses).length) *
-                    100;
-                return Math.round(percentage) || 0;
+            onMounted() {
+                this.renderProfilePage();
             },
 
             async renderProfilePage() {
-                const homePage = await getHomePage();
-                let courses = homePage.courses;
+                const homePageJSON = await getHomePage();
+                const homePage = new HomePage(homePageJSON);
+
+                let courses = await homePage.getFullCourseObjects();
 
                 if (isGuestUser()) {
-                    courses = courses.filter((course) => course.is_visible_to_guests);
+                    courses = courses.filter((course) => course.isVisibleToGuests());
                 }
-                const lastWorkedOnCourse = this.getCurrentCourse(courses);
+                const lastWorkedOnCourse = getCourseWithLatestCompletion(courses);
 
                 this.update({
                     courses,
@@ -137,16 +104,38 @@
                 });
             },
 
-            onMounted() {
-                this.renderProfilePage();
+            countFinishedLessonsAndExams() {
+                const { courses } = this.state;
+                const tallyFinishedLessonsAndExams = (totalFinished, aCourse) =>
+                    totalFinished + aCourse.numberOfFinishedLessons;
+                return courses.reduce(tallyFinishedLessonsAndExams, 0);
+            },
+
+            countLessonsAndExams(courses) {
+                const tallyLessonsAndExams = (totalLessons, currentCourse) =>
+                    totalLessons + currentCourse.numberOfLessons;
+                return courses.reduce(tallyLessonsAndExams, 0);
+            },
+
+            getNumberOfLessonsLeft() {
+                const { courses } = this.state;
+                return this.countLessonsAndExams(courses) - this.countFinishedLessonsAndExams();
+            },
+
+            getPercentOfLessonsCompleted() {
+                const percentage =
+                    (this.countFinishedLessonsAndExams() /
+                        this.countLessonsAndExams(this.state.courses)) *
+                    100;
+                return Math.round(percentage) || 0;
             },
 
             courseLessonsCompletedMessage(course) {
                 // displays how many lessons of the total in a course have been completed
                 return gettext(
                     "%1 out of %2 completed",
-                    this.countCompleteLessonsIn(course),
-                    course.lessons.length
+                    course.numberOfFinishedLessons,
+                    course.numberOfLessons
                 );
             },
 

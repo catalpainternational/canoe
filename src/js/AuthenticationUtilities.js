@@ -1,11 +1,14 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { dispatchLoggedOutEvent, dispatchSiteDownloadEvent } from "js/Events";
 import { unsubscribeFromNotifications } from "js/Notifications";
+import { fetch_and_denote_unauthenticatedness as fetch } from "./Fetch";
 
 const USERNAME_STORAGE_KEY = "username";
 const USER_ID_STORAGE_KEY = "userId";
 const JWT_TOKEN_STORAGE_KEY = "token";
 const USER_GROUPS_STORAGE_KEY = "userGroups";
+const EMPTY_SLATE_BOOT_KEY = "empty_slate_boot";
+const USER_IS_AUTHED_STORAGE_KEY = "fetch_result_indicates_authed";
 
 const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
     // sets name=value cookie
@@ -22,17 +25,12 @@ const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
 };
 
 const getCookie = (name) => {
-    const cookieStrings = document.cookie.split(`; `);
-    const cookieValue = cookieStrings.find((tokenString) => {
+    const found_cookie = document.cookie.split(`; `).find((tokenString) => {
         const [key] = tokenString.split("=");
         return key === name;
     });
 
-    if (!cookieValue) {
-        throw new Error(`Can't find "${cookieValue}" in cookie.`);
-    }
-
-    return cookieValue.split("=")[1];
+    return found_cookie ? found_cookie.substring(found_cookie.indexOf('=') + 1) : null
 };
 
 const deleteCookie = (name) => {
@@ -40,32 +38,22 @@ const deleteCookie = (name) => {
 };
 
 const fetchAuthToken = async (usernameAndPassword) => {
-    const response = await fetch(`${BACKEND_BASE_URL}/token-auth/`, {
+    return fetch(`${BACKEND_BASE_URL}/token-auth/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(usernameAndPassword),
-    });
-
-    if (!response.ok) {
-        throw new Error(response.status);
-    }
-
-    const responseJSON = await response.json();
-    return responseJSON;
+    })
+    .then((response) => {
+        if (!response.ok) throw new Error(`Login failed, HTTP status: ${response.status}`);
+        return response.json();
+    })
 };
 
+
 export const login = async (usernameAndPassword) => {
-    let response = null;
-
-    try {
-        response = await fetchAuthToken(usernameAndPassword);
-    } catch (error) {
-        throw error;
-    }
-
-    const { token, username, userId, groups } = response;
+    const { token, username, userId, groups } = await fetchAuthToken(usernameAndPassword);
 
     // Browsers refuse to set secure cookies from non https locations
     setCookie(
@@ -77,7 +65,8 @@ export const login = async (usernameAndPassword) => {
     localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(USER_ID_STORAGE_KEY, userId);
     localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
-
+    setIsAuthed(true);
+    sessionStorage.removeItem(EMPTY_SLATE_BOOT_KEY);
     dispatchSiteDownloadEvent();
 };
 
@@ -85,6 +74,7 @@ export const logout = async () => {
     deleteCookie(JWT_TOKEN_STORAGE_KEY);
     localStorage.clear();
     unsubscribeFromNotifications();
+    setIsAuthed(false);
     dispatchLoggedOutEvent();
 };
 
@@ -93,15 +83,19 @@ export const getAuthenticationToken = () => {
 };
 
 export const isUserLoggedIn = () => {
-    try {
-        return !!getAuthenticationToken();
-    } catch (e) {
-        return false;
-    }
+    const auth_status_denoted = localStorage.getItem(USER_IS_AUTHED_STORAGE_KEY);
+    return (auth_status_denoted === null || auth_status_denoted === "true");
+};
+
+export const userShouldLogin = () => {
+    const is_deauthed = localStorage.getItem(USER_IS_AUTHED_STORAGE_KEY) === "false";
+    const is_firstboot = sessionStorage.getItem(EMPTY_SLATE_BOOT_KEY) === "true";
+    const is_user_logged_in = isUserLoggedIn();
+    return is_deauthed || is_firstboot || !is_user_logged_in;
 };
 
 export const getUsername = () => {
-    return localStorage.getItem(USERNAME_STORAGE_KEY);
+    return localStorage.getItem(USERNAME_STORAGE_KEY) || process.env.GUEST_USERNAME;
 };
 
 export const getCapitalizedUsername = () => {
@@ -120,3 +114,7 @@ export const getUserId = () => {
 export const getUserGroups = () => {
     return localStorage.getItem(USER_GROUPS_STORAGE_KEY);
 };
+
+export const setIsAuthed = (someBool) => {
+    return localStorage.setItem(USER_IS_AUTHED_STORAGE_KEY, Boolean(someBool));
+}
