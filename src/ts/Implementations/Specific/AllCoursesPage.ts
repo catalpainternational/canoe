@@ -5,8 +5,8 @@ export default class AllCoursesPage extends Page {
     #tags!: string[];
 
     get tags(): string[] {
-        if (this.#tags === undefined) {
-            this.#tags = this.data.courses
+        if (this.#tags === undefined || this.#tags.length === 0) {
+            this.#tags = (this.data.courses || [])
                 .map((c: any) => c.tags)
                 .flat()
                 .map((tag: string) => tag.toLowerCase());
