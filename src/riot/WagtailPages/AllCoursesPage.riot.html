@@ -36,6 +36,7 @@
                             link="{state.currentCourse.id}"
                             progressValue="{state.currentCourse.numberOfFinishedLessons}"
                             progressMax="{state.currentCourse.numberOfLessons}"
+                            imageUrl="{state.currentCourse.imageUrl}"
                         ></Card>
                     </div>
                 </template>
@@ -49,6 +50,7 @@
                         link="{course.id}"
                         progressValue="{course.numberOfFinishedLessons}"
                         progressMax="{course.numberOfLessons}"
+                        imageUrl="{course.imageUrl}"
                     ></Card>
                 </div>
                 <p if="{state.sortedListOfCourses.length === 0}">{ TRANSLATIONS.noCourses() }</p>

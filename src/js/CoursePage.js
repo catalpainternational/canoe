@@ -27,6 +27,10 @@ export default class CoursePage {
         return this.course.data.slug;
     }
 
+    get imageUrl() {
+        return this.course.card_image_url;
+    }
+
     get lessons() {
         return this.course.lessons;
     }

@@ -1,6 +1,7 @@
 <Card>
     <a class="card {props.status}" href="#{props.link}">
         <div class="card-image">
+            <img crossorigin="anonymous" src="{getCardImageUrl()}" class="card-hero-image" />
             <span class="card-status"><span class="icon"></span></span>
         </div>
         <div class="card-title">
@@ -13,4 +14,26 @@
             <progress if="{props.status === 'complete'}" value="1" max="1"></progress>
         </div>
     </a>
+    <script>
+        import contentStockImg from "img/stock_content.png";
+        import courseStockImg from "img/stock_course.png";
+        import lessonStockImg from "img/stock_lesson.png";
+        import objectiveStockImg from "img/stock_objective.png";
+        import testStockImg from "img/stock_test.png";
+
+        export default {
+            getCardImageUrl() {
+                const stockImages = [contentStockImg, courseStockImg, lessonStockImg, objectiveStockImg, testStockImg];
+                const cardId = typeof this.props.link === 'number'
+                    ? this.props.link
+                    : this.props.link.split('/')[0];
+
+                const fallbackImg = stockImages[cardId % stockImages.length];
+
+                return this.props.imageUrl
+                    ? `${process.env.API_BASE_URL}${this.props.imageUrl}?cardImageFallback=${fallbackImg}`
+                    : fallbackImg;
+            },
+        };
+    </script>
 </Card>
