@@ -1,4 +1,4 @@
-<TestMultipleAnswer class="answer">
+<TestMultipleAnswer>
     <div class="answers-block">
         <h4><raw html="{ TRANSLATIONS.checkAllAnswers() }"></raw></h4>
         <ol>
@@ -22,9 +22,7 @@
             </li>
         </ol>
     </div>
-    <h4 if="{state.visibleAnswers.length > 0}">
-        { TRANSLATIONS.checkCorrect() }
-    </h4>
+    <h4 if="{state.visibleAnswers.length > 0}">{ TRANSLATIONS.checkCorrect() }</h4>
     <button
         if="{!props.isCourseExam}"
         class="btn-primary"
@@ -63,7 +61,7 @@
 
             onMounted(props, state) {
                 const { card } = props;
-                const numberTotalCorrectAnswers = card.answers.filter((a) => a.correct).length;
+                const numberTotalCorrectAnswers = card.answers.filter(a => a.correct).length;
                 this.update({ numberTotalCorrectAnswers });
 
                 this.restoreSavedAnswer();
@@ -117,12 +115,10 @@
 
                 if (this.doesArrayIncludeAnswer(visibleAnswers, answer)) {
                     visibleAnswers = visibleAnswers.filter(
-                        (visible) => !doAnswersMatch(visible, answer)
+                        visible => !doAnswersMatch(visible, answer)
                     );
                 } else if (this.doesArrayIncludeAnswer(hiddenAnswers, answer)) {
-                    hiddenAnswers = hiddenAnswers.filter(
-                        (hidden) => !doAnswersMatch(hidden, answer)
-                    );
+                    hiddenAnswers = hiddenAnswers.filter(hidden => !doAnswersMatch(hidden, answer));
                 } else {
                     hiddenAnswers.push(answer);
                 }
@@ -140,10 +136,8 @@
             gradeAnswers(answers) {
                 console.assert(Array.isArray(answers), `"answers" must come in as an Array`);
 
-                const numberIncorrectAnswersChosen = answers.filter((a) => !a.correct).length;
-                const numberCorrectAnswersChosen = answers.filter((a) => a.correct).length;
-                const numberCorrectAnswersMissing =
-                    this.state.numberTotalCorrectAnswers - numberCorrectAnswersChosen;
+                const numberIncorrectAnswersChosen = answers.filter(a => !a.correct).length;
+                const numberCorrectAnswersChosen = answers.filter(a => a.correct).length;
 
                 const isQuestionComplete =
                     numberCorrectAnswersChosen === this.state.numberTotalCorrectAnswers &&

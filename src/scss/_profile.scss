@@ -1,149 +1,44 @@
-.profile {
-    h3:first-child {
-        margin-top: 0;
-        margin-bottom: 10px;
-    }
-
-    h3 {
-        margin-bottom: 20px;
-        margin-top: 30px;
-        color: white;
-    }
-
-    .overall {
-        position: relative;
+Profile {
+    .tab-titles {
         display: flex;
-        width: fit-content;
-        margin: auto;
+        justify-content: center;
+        margin: 1em 0 2em 0;
 
-        h6 {
-            position: absolute;
-            width: 200px;
-            left: 20px;
-            margin: 0;
-            top: 40px;
-        }
-    }
-}
+        a {
+            width: 50%;
+            border-bottom: 2px solid $gray-7;
 
-.profile-header {
-    @include screen-banner-styles;
-    background-color: $profile-banner-green;
-    padding: 0 3em;
+            h5.section-title {
+                font-weight: 300;
+                font-size: 0.8em;
+                color: $gray-4;
+                letter-spacing: 1px;
+                justify-content: center;
+                text-align: center;
+            }
 
-    &:after {
-        background: $profile-banner-green;
-    }
+            &.selected {
+                border-bottom: 2px solid $app-accent-color;
 
-    @media only screen and (max-width: $lg-phone) {
-        padding: 0 2em;
-    }
-
-    @media only screen and (max-width: $sm-phone) {
-        padding: 0 1.5em;
-    }
-}
-
-Profile .background-gray-2 {
-    display: inline-block;
-}
-
-Profile .left-block {
-    display: inline-block;
-    max-width: 200px;
-    overflow: overlay;
-    font-weight: 400;
-
-    h6 {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-}
-
-Profile div.content-wrapper {
-    padding-top: 20px;
-
-    @media only screen and (max-width: $tablet) {
-        margin-left: 0;
-        margin-right: 0;
-        border-radius: 0;
-    }
-}
-
-.report-card {
-    width: 150px;
-    height: 150px;
-}
-
-.course-progress-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-
-    li {
-        margin-bottom: 15px;
-    }
-}
-
-.progress.card {
-    .profile-card {
-        align-items: center;
-        display: flex;
-        padding: 1.25em 1.25em 0.5em 1.25em;
-        background-color: white;
-        border-radius: 8px 8px 0 0;
-
-        span {
-            margin-left: 15px;
-        }
-
-        h5 {
-            margin: 0;
-            width: 100%;
+                h5.section-title {
+                    color: $gray-1;
+                    font-weight: 500;
+                }
+            }
         }
     }
 
-    .card-footer {
-        padding-bottom: 25px;
+    h2.sub-title {
+        font-size: 1em;
+        font-weight: 300;
 
-        p {
-            margin: 0 0 0 8px;
-            color: $gray-1;
-            display: inline-block;
+        &:nth-of-type(2) {
+            margin: 1.4em 0;
         }
-
-        .checkmark {
-            display: inline-block;
-        }
-    }
-
-    progress {
-        width: 100%;
-        height: 5px;
-        -webkit-appearance: none;
-        border: none;
-        border-radius: 5px;
-    }
-
-    progress::-webkit-progress-bar {
-        background-color: $gray-8;
-        border-radius: 5px;
-    }
-
-    progress::-webkit-progress-value {
-        background-color: $green-1;
-        border-radius: 5px;
-    }
-
-    progress::-moz-progress-bar {
-        background-color: $green-1;
-        border-radius: 5px;
     }
 }
 
 .stats {
-    margin-top: 10px;
     display: flex;
 
     h5 {
@@ -152,10 +47,15 @@ Profile div.content-wrapper {
 }
 
 .stat.card {
-    min-height: 170px;
+    height: 170px;
     margin-bottom: 0;
     width: 50%;
     background-color: white;
+    box-shadow: none;
+
+    &:first-of-type {
+        margin-left: 0;
+    }
 
     &:nth-child(odd) {
         margin-right: 5px;
@@ -169,6 +69,7 @@ Profile div.content-wrapper {
         flex-direction: column;
         display: flex;
         padding: 1.25em;
+        margin: auto 0;
 
         h3 {
             color: $gray-1;

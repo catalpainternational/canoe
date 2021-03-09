@@ -91,7 +91,8 @@ export const userShouldLogin = () => {
     const is_deauthed = localStorage.getItem(USER_IS_AUTHED_STORAGE_KEY) === "false";
     const is_firstboot = sessionStorage.getItem(EMPTY_SLATE_BOOT_KEY) === "true";
     const is_user_logged_in = isUserLoggedIn();
-    return is_deauthed || is_firstboot || !is_user_logged_in;
+    const skip_sw = process.env.SKIP_SW;
+    return is_deauthed || is_firstboot && !skip_sw || !is_user_logged_in;
 };
 
 export const getUsername = () => {

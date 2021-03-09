@@ -1,17 +1,6 @@
-.settings {
-    h3 {
-        margin-bottom: 20px;
-        margin-top: 0;
-    }
-
-    .content-wrapper {
-        flex-direction: column;
-        display: flex;
-
-        @media only screen and (max-width: $tablet-plus) {
-            margin-left: 0;	
-            margin-right: 0;
-        }
+Settings {
+    .with-swoop {
+        @extend %center-with-flex;
     }
 
     button {
@@ -21,40 +10,65 @@
             margin-bottom: 0;
         }
     }
-
-    h4 {
-        margin-bottom: 20px;
-    }
 }
 
-LanguageSelector #language {
+LanguageSelector {
+  label {
+    color: $gray-1;
+    font-size: 1em;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .select-wrapper {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      border-right: 2px solid $app-accent-color;
+      border-bottom: 2px solid $app-accent-color;
+      width: 8px;
+      height: 8px;
+      top: 13px;
+      right: 15px;
+      transform: rotate(45deg);
+    }
+  }
+
+  #language {
     width: 100%;
-    height: 2.3em;
-    font-size: 18px;
-    margin-bottom: 20%;
-    border: 0.5px solid $gray-6;
+    height: 40px;
+    font-size: 0.9em;
+    font-weight: 300;
+    color: $gray-1;
+    margin-bottom: 10%;
+    border: 1px solid $gray-7;
+    border-radius: 3px;
     background-color: $white;
     padding-left: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    box-shadow: inset 0 2px 3px 0 rgba(42,57,66,0.1);
 
     &:hover {
         cursor: pointer;
     }
+  }
 }
 
 .notifications-toggle {
-    margin-bottom: 20px;
+    margin: 25px 0;
     align-items: center;
     display: flex;
-
-    p {
-        margin: 0 0 0 10px;
-    }
 
     .switch {
         border-radius: 15px;
         position: relative;
         min-width: 54px;
         height: 30px;
+        margin-right: 10px;
 
         &:hover {
             cursor: pointer;
@@ -63,6 +77,22 @@ LanguageSelector #language {
         &.disabled {
             pointer-events: none;
             opacity: 0.3;
+        }
+
+        &.on {
+            background-color: $app-accent-color;
+
+            .slider {
+                right: 4px;
+            }
+        }
+
+        &.off {
+            background-color: $gray-4;
+
+            .slider {
+                left: 4px;
+            }
         }
 
         /* Hide default HTML checkbox */
@@ -78,24 +108,12 @@ LanguageSelector #language {
             position: absolute;
             height: 22px;
             width: 22px;
-        }
-    }
-
-    .switch.on {
-        background-color: $blue-1;
-
-        .slider {
-            right: 4px;
             top: 4px;
         }
     }
 
-    .switch.off {
-        background-color: $gray-4;
-
-        .slider {
-            left: 4px;
-            top: 4px;
-        }
+    label {
+      color: $gray-1;
+      font-weight: 400;
     }
 }

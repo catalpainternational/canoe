@@ -13,20 +13,15 @@
 
         <LoadingDots
             if="{Object.keys(state.wagtailPage).length === 0 && !userShouldLogin()}"
-            extrastyleclasses="light app"
+            extrastyleclasses="dark app"
         ></LoadingDots>
 
         <template if="{!userShouldLogin() && areCompletionsReady()}">
             <DownloadSite></DownloadSite>
-
-            <TopMenu
-                contentType="{state.contentType}"
-                wagtailPage="{state.contentType === 'LessonPage' ? state.wagtailPage : ''}"
-            ></TopMenu>
-            <HomePage
+            <AllCoursesPage
                 if="{state.contentType === 'HomePage'}"
-                wagtailPage="{createHomePage(state.wagtailPage)}"
-            ></HomePage>
+                wagtailPage="{createAllCoursesPage(state.wagtailPage)}"
+            ></AllCoursesPage>
             <CourseOverview
                 if="{state.contentType === 'CoursePage'}"
                 wagtailPage="{createCoursePage(state.wagtailPage)}"
@@ -56,12 +51,11 @@
         import { isBrowserSupported, areCompletionsReady, getManifestFromStore } from "ReduxImpl/Interface";
         import { logPageView } from "js/GoogleAnalytics";
 
-        import HomePageJS from "js/HomePage";
+        import AllCoursesPageJS from "js/AllCoursesPage";
         import CoursePageJS from "js/CoursePage";
         import LessonPageJS from "js/LessonPage";
         import ResourceArticleJS from "js/ResourceArticle";
 
-        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
         import LoadCompletions from "RiotTags/Components/LoadCompletions.riot.html";
         import DownloadSite from "RiotTags/Components/DownloadSite.riot.html";
@@ -76,7 +70,7 @@
         import Settings from "RiotTags/Screens/Settings.riot.html";
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
 
-        import HomePage from "RiotTags/WagtailPages/HomePage.riot.html";
+        import AllCoursesPage from "RiotTags/WagtailPages/AllCoursesPage.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
@@ -106,9 +100,8 @@
 
             components: {
                 login: Login,
-                topmenu: TopMenu,
                 bottommenu: BottomMenu,
-                homepage: HomePage,
+                allcoursespage: AllCoursesPage,
                 courseoverview: CourseOverview,
                 lessonoverview: LessonOverview,
                 resources: Resources,
@@ -185,8 +178,8 @@
                 return userShouldLogin();
             },
 
-            createHomePage(aWagtailPage) {
-                return new HomePageJS(aWagtailPage);
+            createAllCoursesPage(aWagtailPage) {
+                return new AllCoursesPageJS(aWagtailPage);
             },
 
             createCoursePage(aWagtailPage) {

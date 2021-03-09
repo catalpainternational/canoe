@@ -2,58 +2,96 @@
     <LessonFrame
         if="{!props.isLessonPage || state.cardIdx < props.lessonContent.cards.length}"
         extraStyleClasses="content"
+        linkTo="{props.lesson ? props.lesson.id : props.resourceId}"
+        progressValue="{props.lesson ? state.cardIdx + 1 : ''}"
+        progressMax="{props.lesson ? props.lessonContent.cards.length : ''}"
+        noCardStyle="{props.resourceId === 'resources' ? true : false}"
+        resourceTitle="{props.resourceId === 'resources' ? props.lessonContent.title : ''}"
     >
-        <Raw
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"
-            html="{props.lessonContent.cards[state.cardIdx].content}"
-        />
-        <BasicCard
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'basic'}"
-            card="{props.lessonContent.cards[state.cardIdx]}"
-        />
-        <AudioCard
-            if="{props.lessonContent.cards[state.cardIdx].media_type === 'audio'}"
-            media="{props.lessonContent.cards[state.cardIdx]}"
-        />
-        <VideoCard
-            if="{props.lessonContent.cards[state.cardIdx].media_type === 'video'}"
-            media="{props.lessonContent.cards[state.cardIdx]}"
-        />
-        <QuoteCard
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'quote'}"
-            card="{props.lessonContent.cards[state.cardIdx]}"
-        />
-        <ListCard
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'list'}"
-            card="{props.lessonContent.cards[state.cardIdx]}"
-        />
-        <PdfCard
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'pdf'}"
-            card="{props.lessonContent.cards[state.cardIdx]}"
-        />
-        <div if="{props.isLessonPage}" class="bottom-buttons">
-            <div>
-                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
-            </div>
-            <div>
-                <button
-                    class="btn-primary"
-                    onclick="{nextContentPage}"
-                    if="{state.cardIdx < props.lessonContent.cards.length - 1}"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    class="btn-primary"
-                    onclick="{completeContentModal}"
-                    if="{state.cardIdx === props.lessonContent.cards.length - 1}"
-                >
-                    { TRANSLATIONS.finish() }
-                </button>
-            </div>
-        </div>
-        <p if="{props.isLessonPage}" class="card-number">{ cardNumberMessage() }</p>
+        <template if="{props.description}">
+            <p class="resource-description">{ props.description }</p>
+        </template>
+        <template
+            if="{props.resourceId === 'resources'}"
+            each="{card in props.lessonContent.cards}"
+        >
+            <Raw if="{card.tag === 'raw'}" html="{card.content}" class="content-block"></Raw>
+            <BasicCard if="{card.tag === 'basic'}" card="{card}" class="content-block"></BasicCard>
+            <AudioCard
+                if="{card.media_type === 'audio'}"
+                media="{card}"
+                class="content-block"
+            ></AudioCard>
+            <VideoCard
+                if="{card.media_type === 'video'}"
+                media="{card}"
+                class="content-block"
+            ></VideoCard>
+            <QuoteCard if="{card.tag === 'quote'}" card="{card}" class="content-block"></QuoteCard>
+            <ListCard if="{card.tag === 'list'}" card="{card}" class="content-block"></ListCard>
+            <PdfCard if="{card.tag === 'pdf'}" card="{card}" class="content-block"></PdfCard>
+        </template>
+        <template if="{props.resourceId !== 'resources'}">
+            <Raw
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"
+                html="{props.lessonContent.cards[state.cardIdx].content}"
+            />
+            <BasicCard
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'basic'}"
+                card="{props.lessonContent.cards[state.cardIdx]}"
+            />
+            <AudioCard
+                if="{props.lessonContent.cards[state.cardIdx].media_type === 'audio'}"
+                media="{props.lessonContent.cards[state.cardIdx]}"
+            />
+            <VideoCard
+                if="{props.lessonContent.cards[state.cardIdx].media_type === 'video'}"
+                media="{props.lessonContent.cards[state.cardIdx]}"
+            />
+            <QuoteCard
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'quote'}"
+                card="{props.lessonContent.cards[state.cardIdx]}"
+            />
+            <ListCard
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'list'}"
+                card="{props.lessonContent.cards[state.cardIdx]}"
+            />
+            <PdfCard
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'pdf'}"
+                card="{props.lessonContent.cards[state.cardIdx]}"
+            />
+            <Html5Card
+                if="{props.lessonContent.cards[state.cardIdx].tag === 'html5'}"
+                card="{props.lessonContent.cards[state.cardIdx]}"
+            />
+        </template>
     </LessonFrame>
+    <div
+        if="{props.isLessonPage && state.cardIdx !== props.lessonContent.cards.length}"
+        class="bottom-buttons"
+    >
+        <div>
+            <a if="{state.cardIdx > 0}" class="has-circle" onclick="{goBack}">
+                <span class="arrow"></span>
+            </a>
+        </div>
+        <div>
+            <button
+                class="btn-primary"
+                onclick="{nextContentPage}"
+                if="{state.cardIdx < props.lessonContent.cards.length - 1}"
+            >
+                { TRANSLATIONS.next() }
+            </button>
+            <button
+                class="btn-primary"
+                onclick="{completeContentModal}"
+                if="{state.cardIdx === props.lessonContent.cards.length - 1}"
+            >
+                { TRANSLATIONS.finish() }
+            </button>
+        </div>
+    </div>
     <LessonModuleComplete
         if="{props.isLessonPage && state.cardIdx === props.lessonContent.cards.length}"
         lessonId="{props.lesson.id}"
@@ -72,6 +110,7 @@
         import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
         import ListCard from "RiotTags/Lesson/ListCard.riot.html";
         import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
+        import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
 
         import { getLessonCardIdx, getNextCardsUrl, getPreviousCardsUrl } from "js/Routing";
         import { setComplete } from "Actions/completion";
@@ -92,6 +131,7 @@
                 videocard: VideoCard,
                 audiocard: AudioCard,
                 pdfcard: PdfCard,
+                html5card: Html5Card,
             },
 
             TRANSLATIONS: {
@@ -119,15 +159,6 @@
                     this.props.lesson.id,
                     this.props.module,
                     this.state.cardIdx
-                );
-            },
-
-            cardNumberMessage() {
-                // display the number of the current card out of the total number of cards
-                return gettext(
-                    "%1 of %2",
-                    this.state.cardIdx + 1,
-                    this.props.lessonContent.cards.length
                 );
             },
 

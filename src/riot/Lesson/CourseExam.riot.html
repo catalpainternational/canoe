@@ -1,11 +1,14 @@
 <CourseExam>
-    <LessonFrame if="{isAtHonorCode(state.cardIdx)}">
+    <LessonFrame if="{isAtHonorCode(state.cardIdx)}" linkTo="{props.wagtailPage.id}">
         <HonorCode courseId="{props.wagtailPage.id}" minimumScore="{MINIMUM_SCORE}"></HonorCode>
     </LessonFrame>
     <LessonFrame
         if="{state.cardIdx >= 0 && state.cardIdx < state.cards.length && state.card}"
         id="test"
         extraStyleClasses="test"
+        linkTo="{props.wagtailPage.id}"
+        progressValue="{state.cardIdx + 1}"
+        progressMax="{state.cards.length}"
     >
         <h3>{state.cardIdx + 1}. {state.card.question}</h3>
         <TestSingleAnswer
@@ -22,31 +25,32 @@
             recordAnswer="{recordAnswer}"
             savedAnswer="{state.currentAnswer.answers}"
         ></TestMultipleAnswer>
-        <div class="bottom-buttons">
-            <div>
-                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{previousExamCard}"></a>
-            </div>
-            <div>
-                <button
-                    if="{state.cardIdx < state.cards.length - 1}"
-                    class="btn-primary"
-                    onclick="{nextExamCard}"
-                    disabled="{Object.keys(state.currentAnswer).length === 0}"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    if="{state.cardIdx === state.cards.length - 1}"
-                    class="btn-primary"
-                    onclick="{nextExamCard}"
-                    disabled="{Object.keys(state.currentAnswer).length === 0}"
-                >
-                    { TRANSLATIONS.submit() }
-                </button>
-            </div>
-        </div>
-        <p class="card-number">{ cardNumberMessage() }</p>
     </LessonFrame>
+    <div if="{!isAtHonorCode(state.cardIdx) && !isAtResults(state.cardIdx)}" class="bottom-buttons">
+        <div>
+            <a if="{state.cardIdx > 0}" class="has-circle" onclick="{previousExamCard}">
+                <span class="arrow"></span>
+            </a>
+        </div>
+        <div>
+            <button
+                if="{state.cardIdx < state.cards.length - 1}"
+                class="btn-primary"
+                onclick="{nextExamCard}"
+                disabled="{Object.keys(state.currentAnswer).length === 0}"
+            >
+                { TRANSLATIONS.next() }
+            </button>
+            <button
+                if="{state.cardIdx === state.cards.length - 1}"
+                class="btn-primary"
+                onclick="{nextExamCard}"
+                disabled="{Object.keys(state.currentAnswer).length === 0}"
+            >
+                { TRANSLATIONS.submit() }
+            </button>
+        </div>
+    </div>
     <ExamResults
         if="{isAtResults(state.cardIdx)}"
         course="{props.wagtailPage}"
@@ -117,11 +121,6 @@
             },
 
             onHashChange() {
-                this.renderAnExamScreen();
-                window.scroll(0, 0);
-            },
-
-            renderAnExamScreen() {
                 const cardIdx = getLessonCardIdx();
                 this.update({
                     cardIdx,
@@ -143,6 +142,8 @@
                     card,
                     currentAnswer,
                 });
+
+                window.scroll(0, 0);
             },
 
             isAtHonorCode(cardIdx) {
@@ -186,7 +187,7 @@
 
             calculateFinalScore() {
                 const { cards } = this.props;
-                const listOfExamQuestions = cards.map((card) => card.id);
+                const listOfExamQuestions = cards.map(card => card.id);
                 try {
                     return Math.round(ExamGrader.tallyFinalScore(listOfExamQuestions));
                 } catch (err) {
@@ -195,11 +196,6 @@
                     }
                     throw err;
                 }
-            },
-
-            cardNumberMessage() {
-                // display the number of the current card out of the total number of cards
-                return gettext("%1 of %2", this.state.cardIdx + 1, this.state.cards.length);
             },
         };
     </script>

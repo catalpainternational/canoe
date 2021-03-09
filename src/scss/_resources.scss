@@ -1,113 +1,81 @@
-Resources .content-wrapper {
-    border-radius: 1.875em 1.875em 0 0;
-    background-color: $gray-10;
-    padding-top: 1.875em;
-
-    .resources-icon {
-        width: 1.875em;
-        height: 1.875em;
-        margin-right: 0.75em;
-        margin-bottom: 0;
+Resources {
+    div.content-wrapper {
+        padding-left: 0;
+        padding-right: 0;
     }
 
-    .resources-bar {
-        height: 2em;
+    .with-swoop {
+        @extend %center-with-flex;
+    }
+
+    .list-resources {
         display: flex;
-        flex-direction: row;
-    }
+        flex-direction: column;
 
-    .section-title {
-        margin: 0.3125em 0;
-    }
+        a.resource-card {
+            background-color: $gray-10;
+            margin-bottom: 3px;
+            padding: 12px 18px;
+            height: 110px;
+            display: block;
+            box-sizing: border-box;
 
-    h3 {
-        display: inline-block;
-        margin: 0;
-        flex: 1;
-    }
+            h5 {
+                color: $gray-1;
+                font-size: 1em;
+                margin: 5px auto;
+            }
 
-    taglist {
-        .tag-container::after {
-            right: 10px;
-        }
+            h6 {
+                color: $gray-3;
+                font-size: 14px;
+                @extend %truncate-with-ellipsis;
+            }
 
-        .tag-container::before {
-            left: 10px;
-        }
-    }
-}
+            p,
+            span {
+                color: $gray-4;
+                text-transform: uppercase;
+                font-size: 0.7em;
+                display: inline-block;
+                letter-spacing: 0.6px;
 
-taglist {
-    .tag {
-        border-radius: 1.875em;
-        background-color: $gray-7;
-        padding: 0.5em 0.9em;
-        margin: 0 0.7em 0.7em 0;
-        display: inline-block;
-        box-shadow: 0 0.15em 0.15em 0 $gray-5;
+                span {
+                    margin-right: 3px;
+                }
+            }
 
-        &.selected {
-            background-color: $blue-1;
-
-            p {
-                color: white;
+            span:last-of-type span {
+                display: none;
             }
         }
-
-        &:hover {
-            cursor: pointer;
-        }
-
-        &:last-child {
-            margin-right: 30px;
-        }
-
-        &:first-child {
-            margin-left: 30px;
-        }
     }
 
-    p {
-        font-size: 0.875em;
-        line-height: 0.625em;
-        font-weight: 200;
-        margin: 0;
-    }
-
-    .tag-container {
-        overflow: auto;
-        white-space: nowrap;
-        margin: 0 -30px 0.5em -30px;
-    }
-
-    .tag-container::after {
-        content: "";
-        width: 30px;
-        height: 45px;
-        position: absolute;
-        right: 0px;
-        background: linear-gradient(90deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
-
-        @media only screen and (min-width: $tablet) {
-            background: none;
+    TagList {
+        .tag-container {
+            padding-top: 4px;
         }
-    }
 
-    .tag-container::before {
-        content: "";
-        width: 30px;
-        height: 45px;
-        position: absolute;
-        left: 0px;
-        background: linear-gradient(270deg, rgba(245, 244, 240, 0), rgba(245, 244, 240, 1));
+        .tag {
+            height: 25px;
+            width: 75px;
+            border-radius: 13px;
+            background-color: $gray-8;
+            padding: 0 5px;
 
-        @media only screen and (min-width: $tablet) {
-            background: none;
+            &:first-of-type {
+                margin-left: 15px;
+            }
+
+            p {
+                color: $gray-1;
+                max-width: 12ch;
+            }
         }
     }
 }
 
-searchbar {
+SearchBar {
     input {
         width: 95%;
         font-size: 1.1em;
@@ -129,8 +97,6 @@ searchbar {
     }
 
     .search-icon {
-        width: 1em;
-        height: 1em;
         position: relative;
         flex: none;
         margin-right: 0.5em;
@@ -139,14 +105,13 @@ searchbar {
     div.form-group {
         border: 0.0625em solid $gray-5;
         box-shadow: inset 0 0.125em 0.1875em 0 rgba(42, 57, 66, 0.1);
-        margin-bottom: 1em;
-        margin-top: 1em;
+        margin: 1em;
         border-radius: 0.3125em;
         padding: 0.3125em 0.625em;
         align-items: center;
         display: flex;
-        flex-direction: row-reverse;
         background-color: $gray-9;
+        height: 30px;
     }
 
     label {

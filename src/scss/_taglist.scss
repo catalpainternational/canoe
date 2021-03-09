@@ -1,0 +1,35 @@
+TagList {
+    .tag {
+        position: relative;
+        margin: 0 1em 1em 0;
+        display: inline-block;
+        font-size: 0.6em;
+
+        p {
+            @extend %absolutely-center;
+            @extend %truncate-with-ellipsis;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        &.selected {
+            background-color: $app-accent-color;
+            box-shadow: inset 0 2px 4px 0 rgba(42, 57, 66, 0.5);
+
+            p {
+                color: $white;
+            }
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .tag-container {
+        overflow: auto;
+        white-space: nowrap;
+    }
+}

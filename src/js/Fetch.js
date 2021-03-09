@@ -14,7 +14,6 @@ export const fetch_and_denote_unauthenticatedness = (request_or_url, maybe_fetch
     });
 }
 
-
 export const getImageRequest = (url) => {
     const token = getAuthenticationToken();
     const { browser } = getPlatform();
@@ -40,6 +39,21 @@ export const getPageRequest = (url) => {
 
 export async function token_authed_fetch(url) {
     const response = await fetch_and_denote_unauthenticatedness(getPageRequest(url));
+
+    if (!response.ok) {
+        throw new APIMissingPageError(`fetch("${url}") responded with a ${response.status}`);
+    }
+
+    const pagesResponseJSON = await response.json();
+
+    if (pagesResponseJSON.items) {
+        return pagesResponseJSON.items;
+    }
+    return pagesResponseJSON;
+}
+
+export async function unauthed_fetch(url) {
+    const response = await fetch_and_denote_unauthenticatedness(url);
 
     if (!response.ok) {
         throw new APIMissingPageError(`fetch("${url}") responded with a ${response.status}`);

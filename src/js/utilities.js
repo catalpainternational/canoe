@@ -27,6 +27,10 @@ export const getMediaUrl = (mediaPath) => {
     return `${BACKEND_BASE_URL}${MEDIA_PATH}/${mediaPath}`;
 };
 
+export const getHtmlUrl = (htmlPath) => {
+    return `${BACKEND_BASE_URL}${htmlPath}`;
+};
+
 export const resolveMedia = (mediaID) => {
     return getOrFetchManifest()
         // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 

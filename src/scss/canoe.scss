@@ -21,117 +21,27 @@
 @import "lesson";
 @import "cards";
 @import "login";
-@import "home";
+@import "all-courses";
 @import "toast";
 @import "resources";
 @import "honorcode";
 @import "banner";
 @import "loading";
+@import "taglist";
 @import "scss/_logos";
 
 /* General */
-body {
+* {
     margin: 0;
-    background-color: $blue-1;
+    padding: 0;
 }
 
 div.content-wrapper {
-    min-height: calc(100vh - #{$top-menu-height} - 30px - 40px - #{$bottom-menu-height});
-    padding-bottom: calc(#{$bottom-menu-height} + 140px);
-    padding-right: 30px;
-    padding-left: 30px;
-    background-color: $tan;
+    min-height: calc(100vh - #{$bottom-menu-height} - #{$top-menu-height});
+    padding-bottom: calc(#{$bottom-menu-height} + 20px);
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: $app-background-color;
     max-width: $tablet;
     margin: auto;
-
-    @media only screen and (max-width: $tablet-plus) {
-        margin: auto 10px;
-    }
-}
-
-.profile,
-.settings {
-    background-color: $tan;
-}
-
-.background-blue-1 {
-    background-color: #04788e;
-}
-.background-blue-2 {
-    background-color: #00b8ad;
-}
-.background-brown {
-    background-color: #744d4d;
-}
-.background-gray-1 {
-    background-color: #2a3942;
-}
-.background-gray-2 {
-    background-color: #3f525e;
-}
-.background-gray-3 {
-    background-color: #596973;
-}
-.background-gray-4 {
-    background-color: #82939e;
-}
-.background-gray-5 {
-    background-color: #a0afb8;
-}
-.background-gray-6 {
-    background-color: #c9d6de;
-}
-.background-gray-7 {
-    background-color: #c9d6de;
-}
-.background-gray-8 {
-    background-color: #e8eef1;
-}
-.background-gray-9 {
-    background-color: #f4f8fa;
-}
-.background-gray-10 {
-    background-color: #fafdff;
-}
-.background-green-1 {
-    background-color: #007b56;
-}
-.background-green-2 {
-    background-color: #10b584;
-}
-.background-green-3 {
-    background-color: #f4fffc;
-}
-.background-profile-green {
-    background-color: $profile-banner-green;
-}
-.background-notifications-orange {
-    background-color: $notifications-banner-orange;
-}
-.background-settings-tan {
-    background-color: $settings-background-tan;
-}
-.background-orange-1 {
-    background-color: #f66400;
-}
-.background-orange-2 {
-    background-color: #f67c36;
-}
-.background-pink-1 {
-    background-color: #8a0079;
-}
-.background-pink-2 {
-    background-color: #c300ab;
-}
-.background-purple {
-    background-color: #6f6cac;
-}
-.background-red-1 {
-    background-color: #de3011;
-}
-.background-red-2 {
-    background-color: #ff694d;
-}
-.background-white {
-    background-color: #ffffff;
 }
