@@ -5,13 +5,13 @@
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
         lesson="{ props.lesson }"
-        noCardStyle="{props.resourceId === 'resources' ? true : false}"
-        resourceTitle="{props.resourceId === 'resources' ? props.lessonContent.title : ''}"
+        noCardStyle="{!props.module ? true : false}"
+        resourceTitle="{!props.module ? props.lessonContent.title : ''}"
     >
         <template if="{props.description}">
             <p class="resource-description">{ props.description }</p>
         </template>
-        <template if="{props.resourceId === 'resources'}" each="{card in props.lessonContent.cards}">
+        <template if="{!props.module}" each="{card in state.cards}">
             <Raw if="{card.tag === 'raw'}" html="{card.content}" class="content-block"></Raw>
             <BasicCard if="{card.tag === 'basic'}" card="{card}" class="content-block"></BasicCard>
             <AudioCard if="{card.media_type === 'audio'}" media="{card}" class="content-block"></AudioCard>
@@ -20,7 +20,7 @@
             <ListCard if="{card.tag === 'list'}" card="{card}" class="content-block"></ListCard>
             <PdfCard if="{card.tag === 'pdf'}" card="{card}" class="content-block"></PdfCard>
         </template>
-        <template if="{props.resourceId !== 'resources'}">
+        <template if="{!!props.module}">
             <Raw
                 if="{state.card.tag === 'raw'}"
                 html="{state.card.content}"
@@ -53,21 +53,21 @@
     </LessonFrame>
     <div if="{props.lesson && state.cardNumber <= state.cards.length}" class="bottom-buttons">
         <div>
-            <a if="{state.cardNumber > 1}" class="has-circle" onclick="{goBack}">
+            <a if="{ state.cardNumber > 1 }" class="has-circle" onclick="{ goBack }">
                 <span class="arrow"></span>
             </a>
         </div>
         <div>
             <button
                 class="btn-primary"
-                onclick="{nextContentPage}"
+                onclick="{ nextContentCard }"
                 if="{ state.cardNumber < state.cards.length }"
             >
                 { TRANSLATIONS.next() }
             </button>
             <button
                 class="btn-primary"
-                onclick="{completeContentModal}"
+                onclick="{ completeContentModal }"
                 if="{ state.cardNumber === state.cards.length }"
             >
                 { TRANSLATIONS.finish() }
@@ -117,6 +117,7 @@
             onBeforeMount(props, state) {
                 this.state = readState(props);
             },
+            
             onBeforeUpdate(props, state) {
                 this.state = readState(props);
             },
