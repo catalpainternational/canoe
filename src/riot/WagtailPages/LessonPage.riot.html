@@ -7,20 +7,24 @@
     </TopMenu>
     <div class="content-wrapper">
         <h3 id="lessonPageTitle">{props.wagtailPage.title}</h3>
-        <p>{props.wagtailPage.shortDescription}</p>
-        <p if="{props.wagtailPage.longDescription && state.showLongDescription}">
+        <p class="lesson-description">{props.wagtailPage.shortDescription}</p>
+        <p if="{props.wagtailPage.longDescription && state.showLongDescription}" class="lesson-description">
             {props.wagtailPage.longDescription}
         </p>
         <a
             if="{props.wagtailPage.longDescription && state.showLongDescription}"
+            class="expand-description"
             onclick="{toggleLessonDescription}"
-            >{ TRANSLATIONS.less() }</a
-        >
+            >{ TRANSLATIONS.less() }
+            <span class="chevron down"></span>
+        </a>
         <a
             if="{props.wagtailPage.longDescription && !state.showLongDescription}"
+            class="expand-description"
             onclick="{toggleLessonDescription}"
-            >{ TRANSLATIONS.more() }</a
-        >
+            >{ TRANSLATIONS.more() }
+            <span class="chevron up"></span>
+        </a>
         <div class="module-swoop">
             <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
             <div class="card-container">

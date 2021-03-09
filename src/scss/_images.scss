@@ -249,6 +249,22 @@
     height: 17px;
     width: 10px;
     margin-left: 1px;
+
+    &.down {
+        transform: rotate(-90deg);
+        background-color: $app-accent-color;
+        height: 10px;
+        width: 6px;
+        margin-left: 5px;
+    }
+
+    &.up {
+        transform: rotate(90deg);
+        background-color: $app-accent-color;
+        height: 10px;
+        width: 6px;
+        margin-left: 5px;
+    }
 }
 
 // Icons for card status
