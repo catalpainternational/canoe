@@ -36,10 +36,6 @@ AllCoursesPage {
         text-transform: none;
     }
 
-    .card-image {
-        @extend %stock-course;
-    }
-
     h5.section-title {
         color: $gray-1;
     }

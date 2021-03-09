@@ -13,18 +13,6 @@
 }
 
 LessonPage {
-    .objective-stock-image .card-image {
-        @extend %stock-objective;
-    }
-
-    .content-stock-image .card-image {
-        @extend %stock-content;
-    }
-
-    .test-stock-image .card-image {
-        @extend %stock-test;
-    }
-
     .module-swoop {
         @extend %bottom-swoop;
         margin-top: 20px;

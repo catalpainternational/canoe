@@ -306,24 +306,3 @@
         width: 19px;
     }
 }
-
-// Stock card images
-%stock-course {
-    @include unmaskable-icons-shared("~img/stock_course.svg", cover);
-}
-
-%stock-lesson {
-    @include unmaskable-icons-shared("~img/stock_lesson.svg", cover);
-}
-
-%stock-objective {
-    @include unmaskable-icons-shared("~img/stock_objective.svg", cover);
-}
-
-%stock-content {
-    @include unmaskable-icons-shared("~img/stock_content.svg", cover);
-}
-
-%stock-test {
-    @include unmaskable-icons-shared("~img/stock_test.svg", cover);
-}
