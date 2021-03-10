@@ -14,14 +14,12 @@
             </p>
             <a
                 if="{lesson.longDescription && state.showLongDescription}"
-                class="expand-description"
                 onclick="{toggleLessonDescription}"
                 >{ TRANSLATIONS.less() }
                 <span class="chevron down"></span>
             </a>
             <a
                 if="{lesson.longDescription && !state.showLongDescription}"
-                class="expand-description"
                 onclick="{toggleLessonDescription}"
                 >{ TRANSLATIONS.more() }
                 <span class="chevron up"></span>
