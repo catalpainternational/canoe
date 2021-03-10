@@ -15,6 +15,7 @@
 LessonPage {
     .module-swoop {
         @extend %bottom-swoop;
+        margin-top: 20px;
     }
 }
 
@@ -173,6 +174,10 @@ LessonContent .content {
         flex-direction: column;
         padding-top: 30px;
         display: flex;
+    }
+
+    .lesson-description:last-of-type {
+        margin-bottom: 0.7em;
     }
 
     raw,
