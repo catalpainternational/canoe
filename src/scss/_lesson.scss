@@ -103,48 +103,6 @@ LessonFrame {
     }
 }
 
-ResourceArticle {
-    .no-card {
-        padding: 0 18px 1.5em;
-        width: 100%;
-        margin: 7px auto 70px;
-        max-width: $tablet;
-        background-color: $gray-10;
-
-        ImageWrapper img.richtext-image {
-            width: calc(100% + (2 * 20px));
-            margin-left: -20px;
-            margin-right: -20px;
-        }
-    }
-
-    .content-block + .content-block {
-        margin-top: 20px;
-    }
-
-    .content .resource-description {
-        color: $gray-1;
-        font-size: 1.2em;
-        margin: 1em 0;
-        width: 100%;
-        line-height: 1.6em;
-    }
-
-    BasicCard h3,
-    AudioCard h3,
-    VideoCard h3,
-    QuoteCard h3,
-    ListCard h3,
-    PdfCard h3,
-    Raw h2 {
-        font-family: "TiemposHeadline";
-        font-size: 1.5em;
-        color: $gray-1;
-        font-weight: 300;
-        margin: 0.8em 0;
-    }
-}
-
 LessonObjective .objective {
     h3 {
         text-transform: uppercase;
