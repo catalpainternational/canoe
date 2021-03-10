@@ -25,30 +25,21 @@
             <div class="module-swoop">
                 <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
                 <div class="card-container">
-                    <Card
-                        title="1. {lesson.objective.title}"
-                        link="{lesson.loc_hash}:{OBJECTIVES}:1"
-                        status="{moduleStatus(OBJECTIVES)}"
-                        class="objective-stock-image"
-                    >
-                    </Card>
-
-                    <Card
-                        title="2. {lesson.content.title}"
-                        link="{lesson.loc_hash}:{CONTENT}:1"
-                        status="{moduleStatus(CONTENT)}"
-                        class="content-stock-image"
-                    >
-                    </Card>
-
-                    <Card
-                        title="3. {lesson.test.title}"
-                        link="{lesson.loc_hash}:{TEST}:1"
-                        status="{moduleStatus(TEST)}"
-                        class="test-stock-image"
-                    >
-                    </Card>
-                </div>
+                <Card
+                    title="1. {lesson.objective.title}"
+                    link="{lesson.loc_hash}:{OBJECTIVES}:1"
+                    status="{moduleStatus(OBJECTIVES)}"
+                ></Card>
+                <Card
+                    title="2. {lesson.content.title}"
+                    link="{lesson.loc_hash}:{CONTENT}:1"
+                    status="{moduleStatus(CONTENT)}"
+                ></Card>
+                <Card
+                    title="3. {lesson.test.title}"
+                    link="{lesson.loc_hash}:{TEST}:1"
+                    status="{moduleStatus(TEST)}"
+                ></Card>
             </div>
         </template>
     </div>

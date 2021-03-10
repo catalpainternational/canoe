@@ -48,6 +48,11 @@ export default class LessonPage {
         return this.lesson.test;
     }
 
+    get imageUrl() {
+        return this.lesson.card_image_url;
+    }
+
+
     getDuration() {
         return this.objective.duration + this.content.duration + this.test.duration;
     }

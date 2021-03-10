@@ -13,18 +13,6 @@
 }
 
 LessonPage {
-    .objective-stock-image .card-image {
-        @extend %stock-objective;
-    }
-
-    .content-stock-image .card-image {
-        @extend %stock-content;
-    }
-
-    .test-stock-image .card-image {
-        @extend %stock-test;
-    }
-
     .module-swoop {
         @extend %bottom-swoop;
     }
@@ -124,9 +112,9 @@ ResourceArticle {
         background-color: $gray-10;
 
         ImageWrapper img.richtext-image {
-            width: calc(100% + (2 * 18px));
-            margin-left: -18px;
-            margin-right: -18px;
+            width: calc(100% + (2 * 20px));
+            margin-left: -20px;
+            margin-right: -20px;
         }
     }
 
@@ -139,6 +127,7 @@ ResourceArticle {
         font-size: 1.2em;
         margin: 1em 0;
         width: 100%;
+        line-height: 1.6em;
     }
 
     BasicCard h3,
@@ -192,9 +181,28 @@ LessonContent .content {
     listcard,
     VideoCard,
     AudioCard,
-    PdfCard {
+    PdfCard,
+    Html5Card {
         flex: 1;
         width: 100%;
+    }
+
+    Html5Card {
+        height: inherit;
+
+        .html-card {
+            display: flex;
+            flex-direction: column;
+            height: inherit;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        button {
+            margin-top: 1em;
+        }
     }
 
     basiccard,
@@ -216,7 +224,6 @@ LessonContent .content {
 
     quotecard {
         margin-top: 1em;
-        font-size: 1.125em;
 
         .quote-container {
             margin: 2em;
@@ -229,6 +236,7 @@ LessonContent .content {
         h3 {
             font-weight: 200;
             margin: 0;
+            font-size: 1.2em;
         }
 
         .quotation-mark {
@@ -238,6 +246,7 @@ LessonContent .content {
 
         & p {
             padding-top: 0.7em;
+            font-size: 0.9em;
 
             &.long {
                 padding-top: 0;
@@ -268,17 +277,24 @@ LessonContent .content {
 
     p,
     li {
-        font-size: 18px;
+        font-size: 1em;
         line-height: 1.3em;
         margin: 0.3em 0;
     }
 
     p.media-description {
-        font-size: 18px;
+        font-size: 1em;
     }
 
     p.error-message {
         color: red;
+    }
+
+    iframe {
+        border: 3px solid $app-accent-color;
+        width: 100%;
+        flex: 1;
+        border-radius: 15px;
     }
 }
 
