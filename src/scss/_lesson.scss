@@ -26,7 +26,7 @@ LessonFrame {
             color: $gray-1;
             font-size: 0.7em;
             margin: 0 10px;
-            min-width: 45px;
+            min-width: 50px;
 
             .current-card {
                 font-size: 2em;
@@ -53,15 +53,6 @@ LessonFrame {
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
-    }
-
-    .card-content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-        height: 100%;
     }
 
     .card-frame {
@@ -124,7 +115,8 @@ LessonObjective .objective {
     }
 }
 
-LessonContent .content {
+LessonContent .content,
+ResourceArticle .content {
     padding-bottom: 25px;
 
     div.content-wrapper {
@@ -253,6 +245,15 @@ LessonContent .content {
         width: 100%;
         flex: 1;
         border-radius: 15px;
+    }
+
+    .card-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 100%;
     }
 }
 

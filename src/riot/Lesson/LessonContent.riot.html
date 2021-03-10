@@ -4,7 +4,6 @@
         extraStyleClasses="content"
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
-        lesson="{ props.lesson }"
     >
         <Raw if="{state.card.tag === 'raw'}" html="{state.card.content}" />
         <BasicCard if="{state.card.tag === 'basic'}" card="{state.card}" />
@@ -22,7 +21,7 @@
         <Html5Card if="{state.card.tag === 'html5'}" card="{state.card}" />
     </LessonFrame>
     <div
-        if="{props.lesson && state.cardNumber <= state.cards.length}"
+        if="{props.lesson.ready && state.cardNumber <= state.cards.length}"
         class="bottom-buttons"
     >
         <div>
