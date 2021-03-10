@@ -1,7 +1,7 @@
 <AllTopicsPage>
     <TopMenu extrastyleclasses="with-swoop">
         <h3>{ page.title }</h3>
-        <p>{ page.data.description }</p>
+        <p>{ page.description }</p>
         <div class="filter-copy-container">
             <a
                 if="{showTagFilter()}"
@@ -12,7 +12,7 @@
             </a>
         </div>
         <TagList
-            if="{showTagFilter() && state.showTagList}"
+            if="{state.showTagList}"
             tags="{state.listOfTags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
@@ -23,10 +23,10 @@
         <template if="{page.ready}">
             <div class="card-container">
                 <Card
-                    each="{plan in page.childPages}"
-                    title="{plan.title}"
-                    link="{plan.loc_hash}"
-                    imageUrl="{plan.data.card_image_url}"
+                    each="{topic in page.childPages}"
+                    title="{topic.title}"
+                    link="{topic.loc_hash}"
+                    imageUrl="{topic.cardImage}"
                 ></Card>
             </div>
         </template>
@@ -60,7 +60,7 @@
                 },
                 toggleTagList() {
                     this.update({ showTagList: !this.state.showTagList });
-                }
+                },
             };
         }
 
