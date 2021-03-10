@@ -1,0 +1,41 @@
+<Html5Card>
+    <div class="html-card">
+        <h3>{props.card.title}</h3>
+        <iframe
+            id="iFrame"
+            src="{getHtmlUrl(props.card.url)}"
+            title="{props.card.title}"
+            allowfullscreen
+        ></iframe>
+        <button class="btn-primary" onclick="{openFullScreen}">
+            { TRANSLATIONS.fullScreen() }
+        </button>
+    </div>
+    <script>
+        import { getHtmlUrl } from "js/utilities";
+
+        export default {
+            state: {
+                iFrameElement: undefined,
+            },
+
+            TRANSLATIONS: {
+                fullScreen: () => gettext("View full screen"),
+            },
+
+            onMounted() {
+                this.update({ iFrameElement: document.getElementById("iFrame") });
+            },
+
+            getHtmlUrl(documentPath) {
+                return `${getHtmlUrl(documentPath)}`;
+            },
+
+            openFullScreen() {
+                if (this.state.iFrameElement.requestFullscreen) {
+                    this.state.iFrameElement.requestFullscreen();
+                }
+            },
+        };
+    </script>
+</Html5Card>

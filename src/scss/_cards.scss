@@ -9,6 +9,7 @@
     max-width: 170px;
     margin: 0 auto;
     position: relative;
+    overflow: hidden;
 
     .card-image {
         background-color: $gray-9;
@@ -16,9 +17,14 @@
         height: 100%;
         border-radius: 7px 7px 0 0;
         position: relative;
-        justify-content: center;
-        align-items: center;
-        display: flex;
+        overflow: hidden;
+        height: 100px;
+
+        .card-hero-image {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
     }
 
     .card-title {
@@ -32,7 +38,7 @@
             color: $gray-1;
         }
 
-        .clamp-3-lines {
+        .clamp-lines {
             line-height: 1.2em;
             height: calc(3 * 1.2em);
             overflow: hidden;
@@ -46,9 +52,10 @@
     &.in-progress .card-status,
     &.disabled .card-status,
     &.coming-soon .card-status {
+        @extend %absolutely-center;
         border-radius: 50%;
-        width: 45px;
-        height: 45px;
+        width: 42px;
+        height: 42px;
     }
 
     &.complete .card-status {
@@ -99,6 +106,15 @@
 
         .card {
             max-width: unset;
+        }
+
+        .card-title {
+            min-height: 80px;
+
+            .clamp-lines {
+                height: calc(2 * 1.2em);
+                -webkit-line-clamp: 2;
+            }
         }
     }
 }

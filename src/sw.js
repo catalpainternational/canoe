@@ -1,18 +1,20 @@
 import { registerRoute } from "workbox-routing/registerRoute.mjs";
 
 import { setDefaultHandler } from "workbox-routing/setDefaultHandler.mjs";
+import { setCatchHandler } from "workbox-routing/setCatchHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
 import { StaleWhileRevalidate } from "workbox-strategies/StaleWhileRevalidate.mjs";
 import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
 
 import { RangeRequestsPlugin } from "workbox-range-requests";
+import { ExpirationPlugin } from "workbox-expiration";
 
 import * as googleAnalytics from "workbox-google-analytics";
 
 googleAnalytics.initialize();
 
-import { precacheAndRoute } from "workbox-precaching";
+import { precacheAndRoute, matchPrecache } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
 self.__WB_DISABLE_DEV_LOGS = true;
@@ -28,6 +30,60 @@ registerRoute(
         plugins: [new RangeRequestsPlugin()],
     })
 );
+
+const cardImageFallbackUrl = (url) => {
+    if (url.match(/cardImageFallback=([^&]*)/)[1]) {
+        return matchPrecache(url.match(/cardImageFallback=([^&]*)/)[1]);
+    };
+    return null;
+};
+
+
+const cardFallbackPlugin = {
+    fetchDidSucceed: async ({request, response, event, state}) => {
+        if (response.status === 404) {
+            return cardImageFallbackUrl(response.url);
+        }
+        return response;
+    },
+    handlerDidError: async ({request, event, error, state}) => {
+        return cardImageFallbackUrl(response.url);
+    },
+    cacheKeyWillBeUsed: async ({request, mode, params, event, state}) => {
+        // `request` is the `Request` object that would otherwise be used as the cache key.
+        // `mode` is either 'read' or 'write'.
+        // Return either a string, or a `Request` whose `url` property will be used as the cache key.
+        // Returning the original `request` will make this a no-op.
+
+        // we split the query off the path here to avoid workbox caching the same image twice
+        const path = request.url.split('?')[0];
+        return path;
+    },
+}
+
+registerRoute(
+    function(request) {
+        return request.url.searchParams && request.url.searchParams.has('cardImageFallback')
+    },
+    new CacheFirst({
+        cacheName: "card-images-cache",
+        matchOptions: { ignoreSearch: true },
+        plugins: [
+            cardFallbackPlugin,
+            new ExpirationPlugin({
+                maxAgeSeconds: 5 * 365 * 24 * 60 * 60,
+                purgeOnQuotaError: true,
+            }),
+        ],
+    })
+);
+
+setCatchHandler(({url, event, params}) => {
+    if (url.searchParams.has('cardImageFallback')) {
+        return cardImageFallbackUrl(url.search);
+   }
+   return Response.error();
+});
 
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheAnyOrFetchOnly());
 
