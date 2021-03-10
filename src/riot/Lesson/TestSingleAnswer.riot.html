@@ -17,73 +17,76 @@
     <script>
         import { dispatchTestAnswerEvent } from "js/Events";
 
-        export default {
-            state: {
-                selectedAnswer: {},
-            },
+        function TestSingleAnswer() {
+            return {
+                state: {
+                    selectedAnswer: {},
+                },
 
-            onMounted(props, state) {
-                this.restoreSavedAnswer();
-            },
-
-            onUpdated(props, state) {
-                const isThereASelectedAnswer = (answer) => Object.keys(answer).length > 0;
-                if (!isThereASelectedAnswer(state.selectedAnswer)) {
+                onMounted(props, state) {
                     this.restoreSavedAnswer();
-                }
-            },
+                },
 
-            restoreSavedAnswer() {
-                const { savedAnswer } = this.props;
-                if (!savedAnswer) {
-                    return;
-                }
+                onUpdated(props, state) {
+                    const isThereASelectedAnswer = (answer) => Object.keys(answer).length > 0;
+                    if (!isThereASelectedAnswer(state.selectedAnswer)) {
+                        this.restoreSavedAnswer();
+                    }
+                },
 
-                this.update({
-                    selectedAnswer: savedAnswer[0],
-                });
-            },
+                restoreSavedAnswer() {
+                    const { savedAnswer } = this.props;
+                    if (!savedAnswer) {
+                        return;
+                    }
 
-            doAnswersMatch(left, right) {
-                return left.text === right.text;
-            },
+                    this.update({
+                        selectedAnswer: savedAnswer[0],
+                    });
+                },
 
-            howToStyleThe(answer) {
-                if (this.props.isCourseExam) {
-                    return "selected-pending";
-                } else if (!answer.correct) {
-                    return "selected-wrong";
-                } else {
-                    return "selected";
-                }
-            },
+                doAnswersMatch(left, right) {
+                    return left.text === right.text;
+                },
 
-            selectAnswer(answer) {
-                this.update({ selectedAnswer: answer });
-                const eventData = {
-                    lesson: this.props.lessonName,
-                    question: this.props.card.question,
-                    answer: answer.text,
-                    isAnswerCorrect: answer.correct,
-                };
-                dispatchTestAnswerEvent(eventData);
+                howToStyleThe(answer) {
+                    if (this.props.isCourseExam) {
+                        return "selected-pending";
+                    } else if (!answer.correct) {
+                        return "selected-wrong";
+                    } else {
+                        return "selected";
+                    }
+                },
 
-                const { isCourseExam } = this.props;
-                if (isCourseExam) {
-                    const isCorrect = this.gradeAnswer(answer);
-                    this.props.recordAnswer({ isCorrect, answers: [answer] });
-                } else {
-                    this.props.toggleModal(true, answer, answer.correct);
-                }
+                selectAnswer(answer) {
+                    this.update({ selectedAnswer: answer });
+                    const eventData = {
+                        lesson: this.props.lessonName,
+                        question: this.props.card.question,
+                        answer: answer.text,
+                        isAnswerCorrect: answer.correct,
+                    };
+                    dispatchTestAnswerEvent(eventData);
 
-                // To avoid update bugs, you must reset the answer between
-                // answer selections.
-                this.state.selectedAnswer = {};
-            },
+                    const { isCourseExam } = this.props;
+                    if (isCourseExam) {
+                        const isCorrect = this.gradeAnswer(answer);
+                        this.props.recordAnswer({ isCorrect, answers: [answer] });
+                    } else {
+                        this.props.toggleModal(true, answer, answer.correct);
+                    }
 
-            gradeAnswer(answer) {
-                return answer.correct;
-            },
-        };
+                    // To avoid update bugs, you must reset the answer between
+                    // answer selections.
+                    this.state.selectedAnswer = {};
+                },
+
+                gradeAnswer(answer) {
+                    return answer.correct;
+                },
+            }
+        }
+        export default TestSingleAnswer;
     </script>
 </TestSingleAnswer>
