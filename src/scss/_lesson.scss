@@ -113,9 +113,9 @@ ResourceArticle {
         background-color: $gray-10;
 
         ImageWrapper img.richtext-image {
-            width: calc(100% + (2 * 18px));
-            margin-left: -18px;
-            margin-right: -18px;
+            width: calc(100% + (2 * 20px));
+            margin-left: -20px;
+            margin-right: -20px;
         }
     }
 
@@ -128,6 +128,7 @@ ResourceArticle {
         font-size: 1.2em;
         margin: 1em 0;
         width: 100%;
+        line-height: 1.6em;
     }
 
     BasicCard h3,
@@ -228,7 +229,6 @@ LessonContent .content {
 
     quotecard {
         margin-top: 1em;
-        font-size: 1.125em;
 
         .quote-container {
             margin: 2em;
@@ -241,6 +241,7 @@ LessonContent .content {
         h3 {
             font-weight: 200;
             margin: 0;
+            font-size: 1.2em;
         }
 
         .quotation-mark {
@@ -250,6 +251,7 @@ LessonContent .content {
 
         & p {
             padding-top: 0.7em;
+            font-size: 0.9em;
 
             &.long {
                 padding-top: 0;
@@ -280,13 +282,13 @@ LessonContent .content {
 
     p,
     li {
-        font-size: 18px;
+        font-size: 1em;
         line-height: 1.3em;
         margin: 0.3em 0;
     }
 
     p.media-description {
-        font-size: 18px;
+        font-size: 1em;
     }
 
     p.error-message {

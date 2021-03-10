@@ -1,6 +1,6 @@
 import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
 import { getOrFetchManifest } from "js/WagtailPagesAPI";
-import { getPlatform } from "js/PlatformDetection";
+import { getBrowser } from "ts/PlatformDetection";
 import { MissingImageError } from "js/Errors";
 
 const WEBP_RENDITION = "width-800|format-webp";
@@ -21,8 +21,12 @@ export function getImagePaths(images) {
     return Object.values(images).map(getRenditionPath);
 }
 
-const getRenditionUrl = (renditions) => {
+export const getRenditionUrl = (renditions) => {
     return `${BACKEND_BASE_URL}${getRenditionPath(renditions)}`;
+};
+
+export const getMediaUrl = (mediaPath) => {
+    return `${BACKEND_BASE_URL}${MEDIA_PATH}/${mediaPath}`;
 };
 
 const getRenditionPath = (renditions) => {
@@ -42,7 +46,7 @@ const getRendition = (renditions) => {
 };
 
 const getPlatformSpecificRendition = () => {
-    const { browser } = getPlatform();
+    const browser = getBrowser();
     let renditionType = "";
     if (browser.name === "Safari") {
         renditionType = JPEG_RENDITION;

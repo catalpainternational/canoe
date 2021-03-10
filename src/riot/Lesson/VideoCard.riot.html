@@ -1,6 +1,7 @@
 <VideoCard>
     <div>
         <video
+            src="{ state.src }"
             width="100%"
             crossorigin="anonymous"
             controls="true"
@@ -17,12 +18,13 @@
     </div>
 
     <script>
-        import { resolveMedia } from "js/utilities";
+        import { getRoute } from "ReduxImpl/Interface";
+        import { getMediaUrl } from "js/RenditionSelector";
         import {
             isItemCached,
             addToCache,
             deleteItemFromCache
-        } from "js/cacheManager/cacheManager.js";
+        } from "js/cacheManager/cacheManager";
         import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
         export default {
@@ -36,12 +38,19 @@
                 notCached: () => gettext('This video is not available offline.'),
             },
 
-            async onMounted(props, state) {
-                await this.getCacheInfo();
-                if (!this.state.cached) {
-                    this.toggleAvailableOffline();
-                }
-                this.$("video").src = await resolveMedia(props.media.id);
+            onBeforeMount(props, state) {
+                this.page = getRoute().page;
+                const asset = this.page.PETEgetMediaRenditions(
+                    props.media.id
+                );
+                // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
+                // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
+                // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
+                const src = getMediaUrl(Object.values(asset.renditions).sort((el1,el2) => el1.size - el2.size)[0].mediapath);
+                this.state.src = src;
+                isItemCached(src).then(cached => {
+                    this.update({cached});
+                });
             },
 
             storeAnalytics() {
@@ -49,20 +58,6 @@
                 logClickedPlayOnVideo(mediaTitle);
             },
 
-            async getCacheInfo() {
-                const url = await resolveMedia(this.props.media.id);
-                const cached = await isItemCached(url);
-                this.update({ cached });
-            },
-
-            async toggleAvailableOffline(e) {
-                const url = await resolveMedia(this.props.media.id);
-                const action = this.state.cached
-                    ? deleteItemFromCache(url, "media-cache")
-                    : addToCache(url, "media-cache");
-                await action;
-                this.getCacheInfo();
-            },
         };
     </script>
 </VideoCard>

@@ -1,22 +1,12 @@
-import { getAuthenticationToken, setIsAuthed } from "js/AuthenticationUtilities.js";
+import { getAuthenticationToken, setIsAuthed } from "js/AuthenticationUtilities";
 import { APIMissingPageError } from "js/Errors";
-import { getPlatform } from "js/PlatformDetection";
+import { getBrowser } from "ts/PlatformDetection";
 
 
 const WEBP_BROWSERS = ["Chrome", "Firefox"];
-const DEAUTHED_HTTP_STATUSES = [401, 403];
-
-export const fetch_and_denote_unauthenticatedness = (request_or_url, maybe_fetchopts) => {
-    return fetch(request_or_url, maybe_fetchopts)
-    .then(resp => {
-        if (DEAUTHED_HTTP_STATUSES.indexOf(resp.status) !== -1) setIsAuthed(false);
-        return resp;
-    });
-}
-
 export const getImageRequest = (url) => {
     const token = getAuthenticationToken();
-    const { browser } = getPlatform();
+    const browser = getBrowser();
     return new Request(url, {
         mode: "cors",
         headers: {
@@ -38,7 +28,7 @@ export const getPageRequest = (url) => {
 };
 
 export async function token_authed_fetch(url) {
-    const response = await fetch_and_denote_unauthenticatedness(getPageRequest(url));
+    const response = await fetch(getPageRequest(url));
 
     if (!response.ok) {
         throw new APIMissingPageError(`fetch("${url}") responded with a ${response.status}`);

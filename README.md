@@ -7,10 +7,23 @@ Canoe is the shared progressive web app for Catalpa's e-learning projects.
 Canoe is designed to be a pure javascript codebase that can be hosted simply by NGINX or even on a CDN.
 It is dependent on a backend server application that lives in the project contianing it to provide authentication, content and action storing APIs.
 
-## Node and Yarn
+## Javascript Environment
 
-Node 12.18.3
-Yarn 2
+Key Software for Building and Testing
+
+### Environment
+- Node 14+
+
+### Dependency Management
+- Yarn 2+ (berry)
+
+### Transpiling
+- Typescript 4+ (3.8.3 minimum)
+- Webpack 4.44+
+- Babel 7.8+
+
+### Testing
+- Ava 3.13+
 
 ## Instructions
 
@@ -31,6 +44,8 @@ Check the project documentation. It is usual for a project to implement build sc
 6. Builds can be produced by using `yarn build` with the same parameters as the start command, by default these will be development builds
 
 7. Production builds can be produced by passing `--env.PRODUCTION` to the build and start commands
+
+8. Tests can be run with `yarn test`, add the `--verbose` flag if you want more output.  We're running `ava` for the tests, a LOT more info can be found by visiting their github repo `https://github.com/avajs/ava`, the README includes links to their docs (also in github).
 
 ## Project Integration
 

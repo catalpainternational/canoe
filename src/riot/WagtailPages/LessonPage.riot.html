@@ -3,71 +3,60 @@
         <a class="top-icon left has-circle" onclick="{backToCoursePage}">
             <span class="arrow"></span>
         </a>
-        <h4>{ props.wagtailPage.course.title }</h4>
+        <h4>{ lesson.title }</h4>
     </TopMenu>
     <div class="content-wrapper">
-        <h3 id="lessonPageTitle">{props.wagtailPage.title}</h3>
-        <p class="lesson-description">{props.wagtailPage.shortDescription}</p>
-        <p if="{props.wagtailPage.longDescription && state.showLongDescription}" class="lesson-description">
-            {props.wagtailPage.longDescription}
-        </p>
-        <a
-            if="{props.wagtailPage.longDescription && state.showLongDescription}"
-            class="expand-description"
-            onclick="{toggleLessonDescription}"
-            >{ TRANSLATIONS.less() }
-            <span class="chevron down"></span>
-        </a>
-        <a
-            if="{props.wagtailPage.longDescription && !state.showLongDescription}"
-            class="expand-description"
-            onclick="{toggleLessonDescription}"
-            >{ TRANSLATIONS.more() }
-            <span class="chevron up"></span>
-        </a>
-        <div class="module-swoop">
-            <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
-            <div class="card-container">
+        <h3 id="lessonPageTitle">{lesson.title}</h3>
+        <template if="{ lesson.ready }">
+            <p>{lesson.shortDescription}</p>
+            <p if="{lesson.longDescription && state.showLongDescription}">
+                {lesson.longDescription}
+            </p>
+            <a
+                if="{lesson.longDescription && state.showLongDescription}"
+                class="expand-description"
+                onclick="{toggleLessonDescription}"
+                >{ TRANSLATIONS.less() }
+                <span class="chevron down"></span>
+            </a>
+            <a
+                if="{lesson.longDescription && !state.showLongDescription}"
+                class="expand-description"
+                onclick="{toggleLessonDescription}"
+                >{ TRANSLATIONS.more() }
+                <span class="chevron up"></span>
+            </a>
+            <div class="module-swoop">
+                <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
+                <div class="card-container">
                 <Card
-                    title="1. {props.wagtailPage.objective.title}"
-                    link="{props.wagtailPage.id}/{OBJECTIVES}/1"
+                    title="1. {lesson.objective.title}"
+                    link="{lesson.loc_hash}:{OBJECTIVES}:1"
                     status="{moduleStatus(OBJECTIVES)}"
-                >
-                </Card>
-
+                ></Card>
                 <Card
-                    title="2. {props.wagtailPage.content.title}"
-                    link="{props.wagtailPage.id}/{CONTENT}/1"
+                    title="2. {lesson.content.title}"
+                    link="{lesson.loc_hash}:{CONTENT}:1"
                     status="{moduleStatus(CONTENT)}"
-                >
-                </Card>
-
+                ></Card>
                 <Card
-                    title="3. {props.wagtailPage.test.title}"
-                    link="{props.wagtailPage.id}/{TEST}/1"
+                    title="3. {lesson.test.title}"
+                    link="{lesson.loc_hash}:{TEST}:1"
                     status="{moduleStatus(TEST)}"
-                >
-                </Card>
+                ></Card>
             </div>
-        </div>
+        </template>
     </div>
 
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
-        import { isComplete } from "Actions/completion";
+        import { getRoute } from "ReduxImpl/Interface";
 
-        export default {
+        function LessonPage() { return {
             state: {
                 showLongDescription: false,
-                header: null,
-                lessonPageTitle: null,
-            },
-
-            components: {
-                card: Card,
-                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
@@ -80,6 +69,10 @@
             CONTENT: "content",
             TEST: "test",
 
+            onBeforeMount(props, state) {
+                this.lesson = getRoute().page;
+            },
+
             onMounted(props, state) {
                 this.disableBlockedLessonModules();
             },
@@ -89,7 +82,7 @@
             },
 
             backToCoursePage() {
-                location.hash = "#" + this.props.wagtailPage.course.id;
+                location.hash = "#" + this.lesson.course.loc_hash;
             },
 
             toggleLessonDescription() {
@@ -101,7 +94,7 @@
             disableBlockedLessonModules() {
                 const ongoingCards = [...document.getElementsByClassName("ongoing")];
 
-                const isComingSoon = this.props.wagtailPage.isComingSoon();
+                const isComingSoon = this.lesson.isComingSoon();
                 let sliceFrom = 1;
 
                 if (isComingSoon) {
@@ -116,9 +109,7 @@
 
             moduleStatus(module) {
                 if (
-                    isComplete(
-                        this.props.wagtailPage.course.slug,
-                        this.props.wagtailPage.slug,
+                    this.lesson.isModuleComplete(
                         module
                     )
                 ) {
@@ -127,6 +118,13 @@
                     return "not-started";
                 }
             },
+        }};
+
+        LessonPage.components = {
+            card: Card,
+            topmenu: TopMenu,
         };
+
+        export default LessonPage;
     </script>
 </LessonPage>

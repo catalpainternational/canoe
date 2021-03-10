@@ -1,7 +1,7 @@
-import { BACKEND_BASE_URL, WAGTAIL_MANIFEST_URL } from "js/urls.js";
-import { isGuestUser } from "js/AuthenticationUtilities.js";
+import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
+import { isGuestUser } from "js/AuthenticationUtilities";
 import {
-    storeWagtailPage,
+    // storeWagtailPage,
     getWagtailPageFromStore,
     getManifestFromStore,
     storeManifest,
@@ -13,10 +13,11 @@ import {
 import { token_authed_fetch, unauthed_fetch } from "js/Fetch";
 
 export async function fetchManifest() {
-    const allPagesMetadata = await token_authed_fetch(WAGTAIL_MANIFEST_URL);
+    const allPagesMetadata = await token_authed_fetch(ROUTES_FOR_REGISTRATION.manifest);
     return allPagesMetadata;
 }
 
+/** Intended for use by Wagtail to generate previews */
 export async function fetchPageNoAuth(path) {
     const pageMetadata = await unauthed_fetch(`${BACKEND_BASE_URL}${path}`);
     return pageMetadata;
@@ -60,13 +61,15 @@ export const getOrFetchWagtailPage = async (path) => {
     }
 
     const wagtailPage = await fetchPage(path);
-    storeWagtailPage(wagtailPage);
+    // storeWagtailPage(wagtailPage);
     return wagtailPage;
 };
 
 export const _getOrFetchWagtailPageById = async (pageId) => {
+    // Uses new manifest format
     const manifest = await getOrFetchManifest();
-    const pagePath = manifest.pages[pageId];
+    const page = manifest.pages[pageId];
+    const pagePath = page ? page.api_url : "";
     return getOrFetchWagtailPage(pagePath);
 };
 
@@ -92,48 +95,118 @@ const _getNextAvailablePageImpl = async (pagePathByLangCode, pageTypeString) => 
     return page;
 };
 
-const _getNextAvailableHomePage = async (manifestHomes) => {
-    return _getNextAvailablePageImpl(manifestHomes, "HomePage");
-};
+const getLanguageCodes = (manifest) => {
+    const languageCodes = new Set(
+        Object.values(manifest.pages).map((page) => {
+            return page.languageCode;
+        })
+    );
 
-const _getNextAvailableResourcesRoot = async (resourcesRootInfo) => {
-    return _getNextAvailablePageImpl(resourcesRootInfo, "ResourcesRoot");
+    return [...languageCodes];
+}
+
+const getRootPage = (manifest, rootName = "home", languageCode = "en") => {
+    const matchingPages = Object.values(manifest.pages).filter(
+        (page) => {
+            // Check there is a location hash and languages
+            // - this is a sanity check only
+            if (!page || !page.loc_hash || !page.language) {
+                return false;
+            }
+
+            // Check the location hash is for the nominal 'root' of what we're interested in
+            const hashParts = page.loc_hash.split("/").filter((part) => !!part);
+            if (
+                hashParts.length > 2 ||
+                hashParts[hashParts.length - 1].indexOf(rootName) === -1
+            ) {
+                return false;
+            }
+
+            // Check the language matches
+            if (languageCode === "tet" || languageCode === "tdt") {
+                // Check for both 'tet' and 'tdt' together
+                // We should be using 'tdt', but for historical reasons we usually use 'tet'
+                // so we're treating them the same
+                return page.language === "tet" || page.language === "tdt";
+            }
+            return page.language.indexOf(languageCode) === 0;
+        }
+    );
+
+    return matchingPages.length === 1
+        ? matchingPages[0]
+        : undefined;
 };
 
 export const getHomePage = async () => {
-    const manifest = await getOrFetchManifest();
-    const { home: homes } = manifest;
+    // Uses new manifest format
     const currentLanguage = getLanguage();
-    const homePagePath = homes[currentLanguage];
+    const manifest = await getOrFetchManifest();
 
+    const getHomePageUrl = (languageCode) => {
+        const homePage = getRootPage(manifest, "home", languageCode);
+        return homePage.api_url || "";
+    };
+
+    let homePagePath = getHomePageUrl(currentLanguage);
     if (homePagePath) {
         return await getOrFetchWagtailPage(homePagePath);
-    } else {
-        return await _getNextAvailableHomePage(homes);
     }
+
+    const manifestLanguages = getLanguageCodes(manifest);
+    manifestLanguages.forEach((languageCode) => {
+        homePagePath = getHomePageUrl(languageCode);
+        if (homePagePath) {
+            return;
+        }
+    });
+    if (homePagePath) {
+        return await getOrFetchWagtailPage(homePagePath);
+    }
+    // No page to return
 };
 
 export const getResources = async () => {
-    const manifest = await getOrFetchManifest();
-    const { resourcesRoot: resourcesRootInfo } = manifest;
+    // Uses new manifest format
     const currentLanguage = getLanguage();
-    const resourcesRootPath = resourcesRootInfo[currentLanguage];
+    const manifest = await getOrFetchManifest();
+
+    const getResourcePageUrl = (languageCode) => {
+        const resourcePage = getRootPage(manifest, "resources", languageCode);
+        return resourcePage.api_url || "";
+    };
 
     let resourcesRoot = null;
-    if (resourcesRootPath) {
-        resourcesRoot = await getOrFetchWagtailPage(resourcesRootPath);
-    } else {
-        resourcesRoot = await _getNextAvailableResourcesRoot(resourcesRootInfo);
+    let resourcePagePath = getResourcePageUrl(currentLanguage);
+    if (resourcePagePath) {
+        resourcesRoot = await getOrFetchWagtailPage(resourcePagePath);
+    }
+
+    if (!resourcesRoot) {
+        const manifestLanguages = getLanguageCodes(manifest);
+        manifestLanguages.forEach((languageCode) => {
+            resourcePagePath = getResourcePageUrl(languageCode);
+            if (resourcePagePath) {
+                return;
+            }
+        });
+        if (resourcePagePath) {
+            resourcesRoot = await getOrFetchWagtailPage(resourcePagePath);
+        }
     }
 
     const resources = [];
-    for (const childPageId of resourcesRoot.data.children) {
-        const childPage = await _getOrFetchWagtailPageById(childPageId);
-        if (!childPage.is_visible_to_guests && isGuestUser()) {
-            continue;
+    if (resourcesRoot) {
+        for (const childPageId of resourcesRoot.data.children) {
+            const childPage = await _getOrFetchWagtailPageById(childPageId);
+            if (!childPage.is_visible_to_guests && isGuestUser()) {
+                continue;
+            }
+            resources.push(childPage);
         }
-        resources.push(childPage);
     }
+
     return resources;
 };
 

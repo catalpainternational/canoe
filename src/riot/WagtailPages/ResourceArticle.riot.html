@@ -1,18 +1,26 @@
 <ResourceArticle>
     <LessonContent
-        lessonContent="{props.wagtailPage.cards}"
-        title="{props.wagtailPage.title}"
-        isLessonPage="{false}"
-        resourceId="{'resources'}"
-        description="{props.wagtailPage.description}"
-        tags="{props.wagtailPage.tags}"
+        if="{ state.resource.ready }"
+        lessonContent="{state.resource.cards}"
+        title="{state.resource.title}"
+        description="{state.resource.description}"
+        tags="{state.resource.tags}"
     ></LessonContent>
     <script>
         import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
 
+        import { getRoute } from "ReduxImpl/Interface";
+
         export default {
             components: {
                 lessoncontent: LessonContent,
+            },
+            onBeforeMount() {
+                this.state.resource = getRoute().page;
+                this.state.isLoading = !this.state.resource.ready;
+            },
+            onBeforeUpdate() {
+                this.state.isLoading = !this.state.resource.ready;
             },
         }
     </script>

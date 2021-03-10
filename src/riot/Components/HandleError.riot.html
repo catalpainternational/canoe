@@ -1,0 +1,14 @@
+<HandleError>
+    <span class="logo">
+        { props.error }
+    </span>
+
+    <script>
+
+     export default {
+         onMounted(props, state) {
+             throw props.error;
+         }
+     }   
+    </script>
+</HandleError>

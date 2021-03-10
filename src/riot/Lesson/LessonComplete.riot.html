@@ -1,40 +1,38 @@
 <LessonComplete>
-    <template if="{state.lessonSlugs.length}">
-        <div class="congratulations-container">
-            <span class="superman-success"></span>
-            <template if="{!isCourseComplete()}">
-                <div>
-                    <h2>{ TRANSLATIONS.congrats() }</h2>
-                    <p>{ lessonCompleteMessage() }</p>
-                </div>
-                <button class="btn-primary" onclick="{goToCourseOverview}">
-                    { TRANSLATIONS.next() }
-                    <span class="chevron"></span>
-                </button>
-            </template>
-            <template if="{isCourseComplete()}">
-                <div>
-                    <h2>{ TRANSLATIONS.good() }</h2>
-                    <p>{ lessonCompleteMessage() }</p>
-                    <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
-                </div>
-                <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
-                    { TRANSLATIONS.exam() }
-                    <span class="chevron"></span>
-                </button>
-                <button class="btn-secondary" onclick="{goToCourseOverview}">
-                    { TRANSLATIONS.course() }
-                </button>
-            </template>
-        </div>
-    </template>
+    <div class="congratulations-container">
+        <span class="superman-success"></span>
+        <template if="{!isCourseComplete()}">
+            <div>
+                <h2>{ TRANSLATIONS.congrats() }</h2>
+                <p>{ lessonCompleteMessage() }</p>
+            </div>
+            <button class="btn-primary" onclick="{goToCourseOverview}">
+                { TRANSLATIONS.next() }
+                <span class="chevron"></span>
+            </button>
+        </template>
+        <template if="{isCourseComplete()}">
+            <div>
+                <h2>{ TRANSLATIONS.good() }</h2>
+                <p>{ lessonCompleteMessage() }</p>
+                <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
+            </div>
+            <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
+                { TRANSLATIONS.exam() }
+                <span class="chevron"></span>
+            </button>
+            <button class="btn-secondary" onclick="{goToCourseOverview}">
+                { TRANSLATIONS.course() }
+            </button>
+        </template>
+    </div>
     <script>
-        import { getACoursesLessons } from "js/WagtailPagesAPI";
-        import { countFinishedLessonsAmongSlugs } from "js/CompletionInterface";
+        import { getRoute } from "ReduxImpl/Interface";
 
         export default {
-            state: {
-                lessonSlugs: [],
+
+            onBeforeMount(props, state) {
+                this.state.lesson = getRoute().page;
             },
 
             TRANSLATIONS: {
@@ -45,48 +43,32 @@
                 course: () => gettext("Back to Course"),
             },
 
-            onMounted() {
-                this.loadLessonsForIsCourseComplete();
-            },
-
-            async loadLessonsForIsCourseComplete() {
-                const lessons = await getACoursesLessons(this.props.course.id);
-                const lessonSlugs = lessons.map((lesson) => lesson.slug);
-                this.update({ lessonSlugs });
-            },
-
             courseHasExam() {
-                const { course } = this.props;
-                return course.has_exam;
+                return this.state.lesson.course.has_exam;
             },
 
             isCourseComplete() {
-                const { course } = this.props;
-                const { lessonSlugs } = this.state;
-                return (
-                    countFinishedLessonsAmongSlugs(course.slug, lessonSlugs) ===
-                    course.lessons_count - Number(course.has_exam)
-                );
+                return this.state.lesson.course.allLessonsComplete;
             },
 
             goToCourseOverview() {
-                location.hash = `#${this.props.course.id}`;
+                location.hash = this.state.lesson.course.loc_hash;
             },
 
             goToCourseExam() {
-                location.hash = `#${this.props.course.id}/exam/0`;
+                location.hash = `${this.state.lesson.course.loc_hash}:exam`;
             },
 
             lessonCompleteMessage() {
                 // message on completion of a lesson %1 is replaced by the lesson title
-                return gettext('You just completed the lesson "%1"', this.props.title);
+                return gettext('You just completed the lesson "%1"', this.state.lesson.title);
             },
 
             takeCourseExamMessage() {
                 // message on completion of lesson and prompt to take course exam
                 return gettext(
                     'Take the exam now to complete the course "%1"',
-                    this.props.course.title
+                    this.state.lesson.course.title
                 );
             },
         };

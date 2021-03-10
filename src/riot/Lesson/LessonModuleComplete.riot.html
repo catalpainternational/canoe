@@ -1,5 +1,5 @@
 <LessonModuleComplete>
-    <LessonFrame linkTo="{props.lessonId}" extrastyleclasses="message-container">
+    <LessonFrame linkTo="{props.lesson.loc_hash}" extrastyleclasses="message-container">
         <h3>{ TRANSLATIONS.great() }</h3>
         <h5>{ moduleCompleteMessage() }</h5>
         <span class="high-fivers"></span>
@@ -29,7 +29,7 @@
             },
 
             goToNextModule() {
-                location.hash = `#${this.props.lessonId}/${this.props.nextModule}/1`;
+                location.hash = `#${this.props.lesson.loc_hash}:${this.props.nextmodule}:1`;
             },
 
             moduleCompleteMessage() {
@@ -44,7 +44,7 @@
                 // message to say what module is next ( %1 is content or test )
                 return gettext(
                     "You're ready to start the %1",
-                    this.TRANSLATIONS[this.props.nextModule]().toLowerCase()
+                    this.TRANSLATIONS[this.props.nextmodule]().toLowerCase()
                 );
             },
         };

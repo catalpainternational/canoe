@@ -1,5 +1,5 @@
 <LessonFeedback>
-    <LessonFrame linkTo="{backToLesson()}">
+    <LessonFrame linkTo="{ state.lesson.loc_hash }">
         <template if="{!state.madeFeedbackDecision}">
             <div class="message-container">
                 <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
@@ -48,7 +48,7 @@
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { logLessonFeedback } from "js/GoogleAnalytics";
-        import { parseURLHash } from "js/Routing";
+        import { getRoute } from "ReduxImpl/Interface";
 
         export default {
             TRANSLATIONS: {
@@ -78,6 +78,10 @@
                 activeSelection: null,
             },
 
+            onBeforeMount(props, state) {
+                this.state.lesson = getRoute().page;
+            },
+
             clickedThisLessonIs(rating) {
                 this.update({
                     activeSelection: rating,
@@ -105,14 +109,7 @@
             },
 
             goToSectionEnd() {
-                const [lessonNumber, section, cardNumber] = parseURLHash();
-                const nextCardNumber = new Number(cardNumber) + 1;
-                window.location.hash = `#${lessonNumber}/${section}/${nextCardNumber}`;
-            },
-
-            backToLesson() {
-                const [lessonNumber] = parseURLHash();
-                return lessonNumber;
+                window.location.hash = `#${this.state.lesson.loc_hash}:test:complete`;
             },
 
             sendFeedback(feedbackString) {

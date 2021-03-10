@@ -1,46 +1,57 @@
 <BottomMenu>
-    <footer if="{state.showBottomMenu}">
+    <footer if="{showBottomMenu()}">
         <div class="bottom-menu">
             <a href="#">
-                <span class="all-courses-icon { props.contentType === 'HomePage' ? 'active' : ''}">
+                <span class="all-courses-icon { props.page.type === 'homepage' ? 'active' : ''}">
                 </span>
             </a>
             <a href="#profile">
-                <span class="profile-icon { props.contentType === 'profile' ? 'active' : ''}">
+                <span class="profile-icon { props.page.type === 'profile' ? 'active' : ''}">
                 </span>
             </a>
             <a href="#resources">
-                <span class="resources-icon { props.contentType === 'resources' ? 'active' : ''}">
+                <span class="resources-icon { props.page.type === 'resourcesroot' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#sync" if="{shouldShowSync()}">
+                <span class="resources-icon { props.page.type === 'sync' ? 'active' : ''}">
                 </span>
             </a>
         </div>
     </footer>
 
     <script>
-        import { parseURLHash } from "js/Routing";
+        import { getRoute } from "ReduxImpl/Interface";
+        import { inAppelflap } from "ts/PlatformDetection";
 
+        function getState() {
+            const route = getRoute();
+            return {
+                section: route.riotHash ? route.riotHash[0] : ""
+            }
+        }
         export default {
-            onBeforeMount(props, state) {
-                this.updateState();
+            state: getState(),
+
+            shouldShowSync() {
+                return inAppelflap();
+            },
+            showBottomMenu() {
+                if (this.props.page.type === 'lessonpage' && this.state.section) {
+                    return false;
+                }
+                if (this.props.page.type === 'coursepage' && this.state.section) {
+                    return false;
+                }
+                return true;
             },
 
-            onBeforeUpdate(props, state) {
-                this.updateState();
-            },
-
-            updateState() {
-                const [afterTheHash, lessonModule] = parseURLHash();
-                this.state.lessonModule = lessonModule;
-                this.state.isObjective = this.state.lessonModule === "objectives";
-                this.state.isContent = this.state.lessonModule === "content";
-                this.state.isTest = this.state.lessonModule === "test";
-                this.state.isExam = this.state.lessonModule === "exam";
-                this.state.showBottomMenu =
-                    !this.state.isObjective &&
-                    !this.state.isContent &&
-                    !this.state.isTest &&
-                    !this.state.isExam;
-            },
+            storeListener(previousStoreState, storeState) {
+                const newState = getState();
+                if (this.state.section !== newState.section) {
+                    this.update(newState);
+                }
+            }
         };
     </script>
 </BottomMenu>

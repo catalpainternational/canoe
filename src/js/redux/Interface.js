@@ -1,48 +1,34 @@
 import { store, LANGUAGE_STORAGE_KEY } from "./Store";
 
 import { changeLanguage as changeLanguageAction } from "./ducks/i18n";
-import {
-    addManifest as addManifestAction,
-    addPage as addPageAction,
-    addHome as addHomeAction,
-    addCourse as addCourseAction,
-    addLesson as addLessonAction,
-} from "./ducks/Site";
+import { addManifestAction, addPageAction } from "./ducks/Site";
 import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/ServiceWorker";
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
+import { changeOnlineAction } from "./ducks/Online";
+import {
+    setAuthenticatedState,
+    setUnAuthenticatedState,
+} from "./ducks/Identity";
+import { setCanoePage } from "./ducks/Route";
+import { addItemStorageStatusAction } from "./ducks/ItemStorageStatus";
 
-export const storeWagtailPage = (wagtailPage) => {
-    const { type } = wagtailPage.meta;
-    switch (type) {
-        case "elearning_content.HomePage":
-            store.dispatch(addHomeAction(wagtailPage));
-            break;
-        case "elearning_content.CoursePage":
-            store.dispatch(addCourseAction(wagtailPage));
-            break;
-        case "elearning_content.LessonPage":
-            store.dispatch(addLessonAction(wagtailPage));
-            break;
-        case "elearning_content.ResourcesRoot":
-            // Ignore the ResourcesRoot' root.
-            return;
-        case "elearning_content.ResourceArticle":
-            // Ignore ResourceArticle.
-            return;
-        case "wagtailtrans.TranslatableSiteRootPage":
-            // Ignore the i18nized site's root.
-            return;
-        default:
-            throw new Error(`${type} is an unreckognized page type.`);
-    }
+export const storePageData = (pageId, pageData) => {
+    store.dispatch(addPageAction(pageId, pageData));
+};
 
-    store.dispatch(addPageAction(wagtailPage));
+export const getPageData = (pageId) => {
+    let pages = store.getState().pages;
+    return pages[pageId];
 };
 
 export const storeManifest = (manifest) => {
     store.dispatch(addManifestAction(manifest));
+};
+
+export const getManifestFromStore = () => {
+    return store.getState().manifest;
 };
 
 export const changeLanguage = (language) => {
@@ -79,10 +65,6 @@ export const getWagtailPageFromStore = (pageId) => {
     return store.getState().pages[pageId];
 };
 
-export const getManifestFromStore = () => {
-    return store.getState().manifest;
-};
-
 export const isBrowserSupported = () => {
     return store.getState().isBrowserSupported;
 };
@@ -109,6 +91,71 @@ export const areCompletionsReady = () => {
     return store.getState().areCompletionsReady;
 };
 
+export const isOnline = () => {
+    return store.getState().online;
+};
+
+export const setOnline = () => {
+    store.dispatch(changeOnlineAction(true));
+};
+
+export const setOffline = () => {
+    store.dispatch(changeOnlineAction(false));
+};
+
+export const isAuthenticated = () => {
+    return store.getState().identity.isAuthenticated;
+};
+
+export const getUser = () => {
+    return store.getState().identity.user;
+};
+
+export const setAuthenticated = (user) => {
+    store.dispatch(setAuthenticatedState(user));
+};
+
+export const setUnauthenticated = () => {
+    store.dispatch(setUnAuthenticatedState());
+};
+
+export const setRoute = (route, riotHash) => {
+    store.dispatch(setCanoePage(route, riotHash));
+};
+
+export const getRoute = () => {
+    return store.getState().route;
+};
+
 export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);
+};
+
+export const storeItemStorageStatus = (itemId, itemState) => {
+    store.dispatch(addItemStorageStatusAction(itemId, itemState));
+};
+
+/** Get the publishable item's storage status
+ * @returns the publishable item's storage status or null
+ * @remarks test for null first, before casting the return `as TItemStorageStatus`
+ */
+export const getItemStorageStatus = (itemId) => {
+    const itemStorageStatuses = store.getState().itemStorageStatuses;
+    if (itemStorageStatuses === null) {
+        return itemStorageStatuses;
+    }
+
+    return itemStorageStatuses[itemId] || null;
+};
+
+/** Get the status for all publishable items storage statuses
+ * @returns each publishable item's storage status as an array
+ */
+export const getItemStorageStatuses = () => {
+    const itemStorageStatuses = store.getState().itemStorageStatuses;
+    if (itemStorageStatuses === null) {
+        return [];
+    }
+
+    return itemStorageStatuses;
 };

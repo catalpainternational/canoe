@@ -59,7 +59,7 @@
             },
 
             goToCourseOverview() {
-                location.hash = `#${this.props.course.id}`;
+                location.hash = `#${this.props.course.loc_hash}`;
             },
 
             goToAllCourses() {
@@ -71,7 +71,7 @@
             },
 
             goToCourseExam() {
-                location.hash = `#${this.props.course.id}/exam/0`;
+                location.hash = `#${this.props.course.loc_hash}:exam:1`;
             },
 
             passedExamMessage() {

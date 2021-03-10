@@ -6,12 +6,11 @@
         <p>{ TRANSLATIONS.safari() }</p>
     </div>
     <script>
-        import { storeBrowserSupport } from "ReduxImpl/Interface";
-        const is_iOSChrome = navigator.userAgent.match('CriOS');
+        import { isBrowserSupported } from "ReduxImpl/Interface";
 
-        export default {
+        export default () => { return {
             state: {
-                isBrowserSupported: true,
+                isBrowserSupported: isBrowserSupported(),
             },
 
             TRANSLATIONS: {
@@ -19,11 +18,6 @@
                 safari: () => gettext('In the meantime please use Safari.'),
             },
 
-            onMounted() {
-                const isBrowserSupported = !is_iOSChrome;
-                storeBrowserSupport(isBrowserSupported);
-                this.update({ isBrowserSupported });
-            },
-        };
+        }}
     </script>
 </ChangeBrowser>

@@ -1,6 +1,6 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { getPlatform } from "js/PlatformDetection";
+import { getBrowser } from "ts/PlatformDetection";
 import { urlBase64ToUint8Array } from "js/DjangoPushNotifications";
 import { alertIfRequestWasMadeOffline } from "js/Errors";
 import { logUnsubscribedFromNotifications } from "js/GoogleAnalytics";
@@ -76,7 +76,7 @@ const getApplicationID = () => {
 const formatSubscriptionForServer = (notificationSubscription) => {
     const endpointParts = notificationSubscription.endpoint.split("/");
     const registrationID = endpointParts.pop();
-    const { browser } = getPlatform();
+    const browser = getBrowser();
 
     const subscriptionPostJSON = {
         browser: browser.name.toUpperCase(),
