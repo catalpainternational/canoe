@@ -204,8 +204,8 @@
 
 .quotation-mark {
     @include mask-icons-shared("~img/quotation_mark.svg", contain, $blue);
-    height: 25px;
-    width: 25px;
+    height: 22px;
+    width: 18px;
 }
 
 .incorrect-cross {
@@ -264,7 +264,6 @@
 
 %status-play {
     @include status-icon("~img/chevron_right.svg", $blue);
-    border: 0.1px solid $gray-5;
 
     .icon {
         width: 13px;
@@ -287,25 +286,4 @@
         height: 19px;
         width: 19px;
     }
-}
-
-// Stock card images
-%stock-course {
-    @include unmaskable-icons-shared("~img/stock_course.svg", cover);
-}
-
-%stock-lesson {
-    @include unmaskable-icons-shared("~img/stock_lesson.svg", cover);
-}
-
-%stock-objective {
-    @include unmaskable-icons-shared("~img/stock_objective.svg", cover);
-}
-
-%stock-content {
-    @include unmaskable-icons-shared("~img/stock_content.svg", cover);
-}
-
-%stock-test {
-    @include unmaskable-icons-shared("~img/stock_test.svg", cover);
 }

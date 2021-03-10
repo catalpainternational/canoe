@@ -13,10 +13,6 @@ export default class Course extends Page {
     get lessons(): any {
         return this.childPages;
     }
-    get tags(): string[] {
-        return this.data.tags;
-    }
-
     get hasExam(): boolean {
         return this.data.data?.has_exam;
     }

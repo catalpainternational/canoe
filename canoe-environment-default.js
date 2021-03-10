@@ -10,7 +10,7 @@ module.exports = {
     WEBPACK_CONFIG: {
         devServer: {
             port: 8080,
-        }
+        },
     },
-    GUEST_USERNAME: "Guest"
+    GUEST_USERNAME: "Guest",
 };

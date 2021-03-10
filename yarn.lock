@@ -5403,6 +5403,7 @@ __metadata:
     webpack-merge: ^5.1.1
     webpack-pwa-manifest: ^4.2.0
     workbox-cli: ^6.1.0
+    workbox-expiration: ^6.1.1
     workbox-google-analytics: ^6.1.0
     workbox-precaching: ^6.1.0
     workbox-range-requests: ^6.1.0
@@ -16374,12 +16375,28 @@ typescript@^4.1.2:
   languageName: node
   linkType: hard
 
+"workbox-core@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "workbox-core@npm:6.1.1"
+  checksum: 56afbe1c75e2a43b17bbd26e3bdb5acdbb33ffc55975d38b9e9b2d9156bc2c11090da2d3093b7840e2fe0d318cd602e860e0195f02bafef385fb38a748e3fa22
+  languageName: node
+  linkType: hard
+
 "workbox-expiration@npm:^6.1.0":
   version: 6.1.0
   resolution: "workbox-expiration@npm:6.1.0"
   dependencies:
     workbox-core: ^6.1.0
   checksum: e74bcd1e642fa07368d6ce43772e3703227f595151bb5554ab33090bfc8b0924c950632e07c6aa573843e9b1c26345bdd31229978a41c4bcfeb1079ae5fa3059
+  languageName: node
+  linkType: hard
+
+"workbox-expiration@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "workbox-expiration@npm:6.1.1"
+  dependencies:
+    workbox-core: ^6.1.1
+  checksum: 121ed1a3362a7d0bf8f688d8274b53da8c458aae5ed13e7d52953bd63f109370748d6f9185c0ec8a521b039da00e43fcc2b85d21775756f8eaa5cc24ab7978b2
   languageName: node
   linkType: hard
 
