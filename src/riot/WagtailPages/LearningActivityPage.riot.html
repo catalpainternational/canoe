@@ -1,0 +1,34 @@
+<LearningActivityPage>
+    <TopMenu extrastyleclasses="without-swoop">
+        <a class="top-icon left has-circle" href="{ `#${ activity.parent.loc_hash }` }">
+            <span class="arrow"></span>
+        </a>
+    </TopMenu>
+
+    <div class="content-wrapper">
+        <div>
+            <h2 id="coursePageTitle">{ activity.title }</h2>
+        </div>
+        <div class="lesson-swoop">
+        </div>
+    </div>
+
+    <script>
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function LearningActivityPage() { return {
+            onBeforeMount(props, state) {
+                this.activity = getRoute().page;
+            },
+
+        }};
+
+        LearningActivityPage.components = {
+            topmenu: TopMenu,
+        };
+
+        export default LearningActivityPage;
+    </script>
+</LearningActivityPage>

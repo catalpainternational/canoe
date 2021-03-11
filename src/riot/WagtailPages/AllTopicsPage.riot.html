@@ -1,7 +1,7 @@
 <AllTopicsPage>
     <TopMenu extrastyleclasses="with-swoop">
         <h3>{ page.title }</h3>
-        <p>{ page.description }</p>
+        <p if="{ page.ready }">{ page.description }</p>
         <div class="filter-copy-container">
             <a
                 if="{showTagFilter()}"
@@ -13,23 +13,20 @@
         </div>
         <TagList
             if="{state.showTagList}"
-            tags="{state.listOfTags}"
+            tags="{ page.all_tags }"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
     </TopMenu>
     <div class="content-wrapper">
-        <LoadingDots if="{!page.ready}" extrastyleclasses="dark"></LoadingDots>
-        <template if="{page.ready}">
-            <div class="card-container">
-                <Card
-                    each="{topic in page.childPages}"
-                    title="{topic.title}"
-                    link="{topic.loc_hash}"
-                    imageUrl="{topic.cardImage}"
-                ></Card>
-            </div>
-        </template>
+        <div class="card-container">
+            <Card
+                each="{topic in page.childPages}"
+                title="{topic.title}"
+                link="{topic.loc_hash}"
+                imageUrl="{topic.cardImage}"
+            ></Card>
+        </div>
     </div>
 
     <script>
@@ -44,19 +41,13 @@
             return {
                 state: {
                     showTagList: false,
-                    listOfTags: [],
                 },
                 onBeforeMount(props, state) {
                     this.page = getRoute().page;
                 },
                 showTagFilter() {
-                    // we don't know the tags until the page data is available
-                    // and we don't show the filter unless we have some tags
-                    return (
-                        this.page.ready &&
-                        this.page.tags &&
-                        this.page.tags.length
-                    );
+                    // we don't show the filter unless we have some tags
+                    return this.page.tags.size;
                 },
                 toggleTagList() {
                     this.update({ showTagList: !this.state.showTagList });

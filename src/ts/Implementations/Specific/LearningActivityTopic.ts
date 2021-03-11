@@ -1,7 +1,7 @@
 import { Page } from "../Page";
 
 export default class LearningActivityTopic extends Page {
-    get resources(): Page[] {
+    get activities(): Page[] {
         return this.childPages;
     }
 }
