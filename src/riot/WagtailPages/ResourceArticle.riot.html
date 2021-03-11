@@ -1,11 +1,5 @@
 <ResourceArticle>
-    <TopMenu extrastyleclasses="without-swoop">
-        <a class="has-circle top-icon left" href="#resources">
-            <span class="arrow"></span>
-        </a>
-        <h5 if="{state.resource.title}">{state.resource.title}</h5>
-    </TopMenu>
-    <div class="card-content">
+    <LessonFrame noCardStyle="{true}" resourceTitle="{state.resource.title}">
         <p if="{state.resource.description}" class="resource-description">
             { state.resource.description }
         </p>
@@ -46,8 +40,9 @@
                 class="content-block"
             ></PdfCard>
         </template>
-    </div>
+    </LessonFrame>
     <script>
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import Raw from "RiotTags/Components/Raw.riot.html";
         import BasicCard from "RiotTags/Components/BasicCard.riot.html";
         import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
@@ -55,8 +50,6 @@
         import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
         import ListCard from "RiotTags/Lesson/ListCard.riot.html";
         import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
-        import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
-        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
 
@@ -64,23 +57,13 @@
             return {
                 onBeforeMount() {
                     this.state.resource = getRoute().page;
+                    console.log(this.state.resource.cards);
                     this.state.isLoading = !this.state.resource.ready;
-                    console.log(this.state.resource);
                 },
 
                 onBeforeUpdate() {
                     this.state.isLoading = !this.state.resource.ready;
                 },
-
-                checkForPlayableVideos() {
-                    this.state.iframes = this.$$("iframe");
-                },
-
-                onUpdated() {
-                    this.checkForPlayableVideos();
-                },
-
-                goBack() {},
             };
         }
 
@@ -89,11 +72,10 @@
             quotecard: QuoteCard,
             listcard: ListCard,
             raw: Raw,
+            lessonframe: LessonFrame,
             videocard: VideoCard,
             audiocard: AudioCard,
             pdfcard: PdfCard,
-            html5card: Html5Card,
-            topmenu: TopMenu,
         };
 
         export default ResourceArticle;
