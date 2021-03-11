@@ -15,7 +15,7 @@
             </div>
             <TagList
                 if="{ state.showTagList }"
-                tags="{ page.tags }"
+                tags="{ page.all_tags }"
                 onTagClick="{onTagClick}"
                 selectedTags="{state.selectedTags}"
             ></TagList>
@@ -25,37 +25,35 @@
             <LoadingDots if="{!page.ready}"
                 extrastyleclasses="dark"
             ></LoadingDots>
-            <template if="{page.ready}">
-                <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
-                    <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
-                    <div class="card-container full-width">
-                        <Card
-                            status="{courseStatus(page.currentCourse)}"
-                            title="{page.currentCourse.title}"
-                            link="{page.currentCourse.loc_hash}"
-                            progressValue="{page.currentCourse.numberOfFinishedLessons}"
-                            progressMax="{page.currentCourse.numberOfLessons}"
-                            imageUrl="{ state.currentCourse.cardImage }"
-                        ></Card>
-                    </div>
-                </template>
-                <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
-                <div class="card-container">
+            <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
+                <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
+                <div class="card-container full-width">
                     <Card
-                        each="{course in page.coursesCompleteLast}"
-                        if="{showCourse(course)}"
-                        status="{courseStatus(course)}"
-                        title="{course.title}"
-                        link="{course.loc_hash}"
-                        progress-value="{course.numberOfFinishedLessons}"
-                        progress-max="{course.numberOfLessons}"
-                        progressMax="{course.numberOfLessons}"
-                        imageUrl="{ course.cardImage }"
+                        status="{courseStatus(page.currentCourse)}"
+                        title="{page.currentCourse.title}"
+                        link="{page.currentCourse.loc_hash}"
+                        progressValue="{page.currentCourse.numberOfFinishedLessons}"
+                        progressMax="{page.currentCourse.numberOfLessons}"
+                        imageUrl="{ state.currentCourse.cardImage }"
                     ></Card>
                 </div>
-
-                <p if="{page.coursesCompleteLast.length === 0}">{ TRANSLATIONS.noCourses() }</p>
             </template>
+            <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
+            <div class="card-container">
+                <Card
+                    each="{course in page.coursesCompleteLast}"
+                    if="{showCourse(course)}"
+                    status="{courseStatus(course)}"
+                    title="{course.title}"
+                    link="{course.loc_hash}"
+                    progress-value="{course.numberOfFinishedLessons}"
+                    progress-max="{course.numberOfLessons}"
+                    progressMax="{course.numberOfLessons}"
+                    imageUrl="{ course.cardImage }"
+                ></Card>
+            </div>
+
+            <p if="{page.coursesCompleteLast.length === 0}">{ TRANSLATIONS.noCourses() }</p>
         </div>
     </div>
 
@@ -72,7 +70,6 @@
             state: {
                 currentCourse: null,
                 selectedTags: [],
-                sortedListOfCourses: null,
                 showTagList: false,
             },
 
@@ -91,9 +88,8 @@
             },
 
             showTagFilter() {
-                // we don't know the tags until the page data is available
                 // and we don't show the filter unless we have some tags
-                return this.page.ready && this.page.tags.length;
+                return  this.page.all_tags.size;
             },
 
             toggleTagList() {
