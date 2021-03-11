@@ -22,20 +22,19 @@
     <script>
         import LongCard from "RiotTags/Learning/LongCard.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+
         import { getRoute } from "ReduxImpl/Interface";
         import { getCardImageUrl } from "js/utilities";
 
-        function TopicPage() {
-            return {
-                onBeforeMount(props, state) {
-                    this.page = getRoute().page;
-                },
+        function TopicPage() { return {
+			onBeforeMount(props, state) {
+				this.page = getRoute().page;
+			},
 
-                getCardImage(link, cardImage) {
-                    return getCardImageUrl(link, cardImage);
-                },
-            };
-        }
+			getCardImage(link, cardImage) {
+				return getCardImageUrl(link, cardImage);
+			},
+		}}
 
         TopicPage.components = {
             topmenu: TopMenu,
