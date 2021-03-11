@@ -19,7 +19,7 @@
         <Profile if="{state.page.type === 'profile'}"></Profile>
         <Sync if="{state.page.type === 'sync'}"></Sync>
 
-        <AllCoursesPage if="{ state.page.type === 'homepage' }" ></AllCoursesPage>
+        <AllCoursesList if="{ state.page.type === 'homepage' }" ></AllCoursesList>
         <CourseOverview if="{ state.page.type === 'coursepage' }" ></CourseOverview>
         <LessonOverview
             if="{state.page.type === 'lessonpage'}"
@@ -31,7 +31,7 @@
         <ResourceArticle
             if="{state.page.type === 'resourcearticle'}"
         ></ResourceArticle>
-        <AllTopicsPage if="{ state.page.type === 'learningactivitieshomepage'}"></AllTopicsPage>
+        <AllTopicsList if="{ state.page.type === 'learningactivitieshomepage'}"></AllTopicsList>
 
         <BottomMenu page="{state.page}"></BottomMenu>
         <PushSubscription></PushSubscription>
@@ -56,11 +56,11 @@
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
         import Sync from "RiotTags/Screens/Sync";
 
-        import AllCoursesPage from "RiotTags/WagtailPages/AllCoursesPage.riot.html";
+        import AllCoursesList from "RiotTags/WagtailPages/AllCoursesList.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
-        import AllTopicsPage from "RiotTags/WagtailPages/AllTopicsPage.riot.html";
+        import AllTopicsList from "RiotTags/WagtailPages/AllTopicsList.riot.html";
 
         function App() {
             function readState() {
@@ -70,6 +70,7 @@
                     riotHash: route.riotHash,
                     browserSupported: isBrowserSupported(),
                 };
+                console.log(state.page.type)
                 return state;
             }
             return {
@@ -94,7 +95,7 @@
             handleerror: HandleError,
             login: Login,
             bottommenu: BottomMenu,
-            allcoursespage: AllCoursesPage,
+            allcourseslist: AllCoursesList,
             courseoverview: CourseOverview,
             lessonoverview: LessonOverview,
             resources: Resources,
@@ -105,7 +106,7 @@
             changebrowser: ChangeBrowser,
             toast: Toast,
             resourcearticle: ResourceArticle,
-            alltopicspage: AllTopicsPage,
+            alltopicslist: AllTopicsList,
             loadingdots: LoadingDots,
         }
 

@@ -1,4 +1,4 @@
-<AllCoursesPage>
+<AllCoursesList>
     <div class="background">
         <GuestBanner></GuestBanner>
         <TopMenu extrastyleclasses="with-swoop">
@@ -68,7 +68,7 @@
 
         import { getRoute } from "ReduxImpl/Interface";
 
-        function AllCoursesPage() { return {
+        function AllCoursesList() { return {
             state: {
                 currentCourse: null,
                 selectedTags: [],
@@ -129,7 +129,7 @@
             },
         }};
 
-        AllCoursesPage.components = {
+        AllCoursesList.components = {
             card: Card,
             taglist: TagList,
             guestbanner: GuestBanner,
@@ -137,6 +137,6 @@
             topmenu: TopMenu,
         };
 
-        export default AllCoursesPage;
+        export default AllCoursesList;
     </script>
-</AllCoursesPage>
+</AllCoursesList>

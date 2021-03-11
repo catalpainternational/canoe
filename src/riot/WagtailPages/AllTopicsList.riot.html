@@ -1,4 +1,4 @@
-<AllTopicsPage>
+<AllTopicsList>
     <TopMenu extrastyleclasses="with-swoop">
         <h3>{ page.title }</h3>
         <p>{ page.description }</p>
@@ -40,7 +40,7 @@
 
         import { getRoute } from "ReduxImpl/Interface";
 
-        function AllTopicsPage() {
+        function AllTopicsList() {
             return {
                 state: {
                     showTagList: false,
@@ -64,13 +64,13 @@
             };
         }
 
-        AllTopicsPage.components = {
+        AllTopicsList.components = {
             topmenu: TopMenu,
             taglist: TagList,
             loadingdots: LoadingDots,
             card: Card,
         };
 
-        export default AllTopicsPage;
+        export default AllTopicsList;
     </script>
-</AllTopicsPage>
+</AllTopicsList>
