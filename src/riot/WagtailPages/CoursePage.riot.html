@@ -19,11 +19,11 @@
                     status="{lessonStatus(lesson)}"
                     title="{lesson.title}"
                     link="{lesson.loc_hash}"
-                    imageUrl="{lesson.imageUrl}"
+                    imageUrl="{lesson.cardImage}"
                 ></Card>
             </div>
             <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
-            <template if="{ course.ready &&course.hasExam }">
+            <template if="{ course.ready && course.hasExam }">
                 <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
                 <div class="card-container full-width">
                     <Card
