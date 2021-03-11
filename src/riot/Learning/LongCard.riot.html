@@ -1,0 +1,23 @@
+<LongCard>
+    <a class="long-card" href="#{props.link}">
+        <div class="card-image">
+            <img
+                crossorigin="anonymous"
+                src="{getCardImage()}"
+                class="card-hero-image"
+            />
+        </div>
+        <div class="card-title">
+            <h5>{props.title}</h5>
+        </div>
+    </a>
+    <script>
+        import { getCardImageUrl } from "js/utilities";
+
+        export default {
+            getCardImage() {
+                return getCardImageUrl(this.props.link, this.props.imageUrl);
+            },
+        };
+    </script>
+</LongCard>

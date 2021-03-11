@@ -4,4 +4,13 @@
             <slot />
         </div>
     </header>
+
+    <script>
+        export default {
+            onMounted() {
+                this.props.backgroundImage ? this.$(".top-menu-container").style.backgroundImage = `url(${this.props.backgroundImage})` : '';
+            },
+        };
+
+    </script>
 </TopMenu>
