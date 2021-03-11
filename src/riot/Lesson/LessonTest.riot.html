@@ -5,7 +5,7 @@
         extraStyleClasses="test"
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
-        lesson="{ props.lesson }"
+        linkTo="{props.lesson.loc_hash}"
     >
         <h3>{ state.cardNumber }. { state.card.question }</h3>
         <TestSingleAnswer
@@ -75,7 +75,6 @@
                 this.state = Object.assign(this.state, readState(props));
             },
 
-/*
                 window.addEventListener(ON_ANSWERED_TEST_QUESTION, event => {
                     logATestAnswer(event.detail);
                 const correctAnswers = card.answers.filter(answer => answer.correct);

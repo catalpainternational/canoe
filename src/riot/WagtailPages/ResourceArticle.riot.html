@@ -1,9 +1,16 @@
 <ResourceArticle>
-    <LessonFrame noCardStyle="{true}" resourceTitle="{state.resource.title}">
+    <LessonFrame
+        noCardStyle="{true}"
+        resourceTitle="{state.resource.title}"
+        linkTo="{'resources'}"
+    >
         <p if="{state.resource.description}" class="resource-description">
             { state.resource.description }
         </p>
-        <template each="{card in state.resource.cards}">
+        <template
+            if="{state.resource.ready}"
+            each="{card in state.resource.cards}"
+        >
             <Raw
                 if="{card.tag === 'raw'}"
                 html="{card.content}"
@@ -57,7 +64,6 @@
             return {
                 onBeforeMount() {
                     this.state.resource = getRoute().page;
-                    console.log(this.state.resource.cards);
                     this.state.isLoading = !this.state.resource.ready;
                 },
 

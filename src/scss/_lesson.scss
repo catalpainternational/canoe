@@ -55,6 +55,15 @@ LessonFrame {
         align-items: stretch;
     }
 
+    .card-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 100%;
+    }
+
     .card-frame {
         margin: 0 5px 1.5em;
         padding: 30px 20px;
@@ -116,7 +125,7 @@ LessonObjective .objective {
 }
 
 LessonContent .content,
-ResourceArticle .content {
+ResourceArticle LessonFrame {
     padding-bottom: 25px;
 
     div.content-wrapper {
@@ -245,15 +254,6 @@ ResourceArticle .content {
         width: 100%;
         flex: 1;
         border-radius: 15px;
-    }
-
-    .card-content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-        height: 100%;
     }
 }
 

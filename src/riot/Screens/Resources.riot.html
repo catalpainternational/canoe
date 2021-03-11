@@ -81,7 +81,6 @@
             
             onBeforeMount() {
                 this.state.page = getRoute().page;
-                console.log(this.state.page.resources)
                 this.state.isLoading = !this.state.page.ready;
             },
             onBeforeUpdate() {
