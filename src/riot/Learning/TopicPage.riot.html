@@ -16,6 +16,7 @@
                 title="{activity.title}"
                 link="{activity.loc_hash}"
                 imageUrl="{activity.cardImage}"
+                status="{isComplete(activity)}"
             ></LongCard>
         </template>
     </div>
@@ -34,6 +35,11 @@
 			getCardImage(link, cardImage) {
 				return getCardImageUrl(link, cardImage);
 			},
+
+            isComplete(activity) {
+                // return "complete";
+                return "in-complete";
+            }
 		}}
 
         TopicPage.components = {

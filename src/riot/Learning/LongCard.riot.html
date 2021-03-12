@@ -1,13 +1,15 @@
 <LongCard>
-    <a class="long-card" href="#{props.link}">
+    <a class="long-card {props.status}" href="#{props.link}">
         <div class="card-image">
             <img
                 crossorigin="anonymous"
                 src="{getCardImage()}"
                 class="card-hero-image"
             />
+            <span class="card-status"><span class="icon"></span></span>
         </div>
-        <div class="card-title">
+        <div class="card-text">
+            <p>Test231</p>
             <h5>{props.title}</h5>
         </div>
     </a>
