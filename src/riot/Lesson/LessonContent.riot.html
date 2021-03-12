@@ -1,6 +1,6 @@
 <LessonContent>
     <LessonFrame
-        if="{ props.lesson.ready && state.cardNumber <= state.cards.length }"
+        if="{ props.lesson && props.lesson.ready && state.cardNumber <= state.cards.length }"
         extraStyleClasses="content"
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
@@ -63,7 +63,7 @@
             />
         </template>
     </LessonFrame>
-    <div if="{props.lesson && state.cardNumber <= state.cards.length}" class="bottom-buttons">
+    <div if="{ props.lesson && state.cardNumber <= state.cards.length }" class="bottom-buttons">
         <div>
             <a if="{ state.cardNumber > 1 }" class="has-circle" onclick="{ goBack }">
                 <span class="arrow"></span>
@@ -87,7 +87,7 @@
         </div>
     </div>
     <LessonModuleComplete
-        if="{ props.lesson.ready && state.complete }"
+        if="{ props.lesson && props.lesson.ready && state.complete }"
         lesson="{props.lesson}"
         module="{props.module}"
         nextModule="test"
@@ -112,8 +112,8 @@
             const stage = route.riotHash[1];
             const cardNumber = parseInt(stage);
             const state = {
-                cards: props.lesson.ready ? props.lesson.content.cards : [],
-                card: props.lesson.ready ? props.lesson.content.cards[cardNumber - 1] : undefined,
+                cards: props.lesson && props.lesson.ready ? props.lesson.content.cards : [],
+                card: props.lesson && props.lesson.ready ? props.lesson.content.cards[cardNumber - 1] : undefined,
                 cardNumber: cardNumber,
                 complete: stage === 'complete'
             };
