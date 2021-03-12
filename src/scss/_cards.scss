@@ -14,7 +14,6 @@
     .card-image {
         background-color: $gray-9;
         border-bottom: 0.5px solid $gray-8;
-        height: 100%;
         border-radius: 7px 7px 0 0;
         position: relative;
         overflow: hidden;
@@ -28,10 +27,7 @@
     }
 
     .card-title {
-        box-sizing: border-box;
-        min-height: 100px;
         padding: 15px;
-        overflow: hidden;
 
         h5 {
             margin: 0;
@@ -87,6 +83,16 @@
         .card-status {
             @extend %status-lock;
         }
+    }
+}
+
+AllTopicsPage .card {
+    .card-title .clamp-lines {
+        height: unset;
+    }
+
+    .card-image {
+        height: 150px;
     }
 }
 

@@ -4,68 +4,33 @@
         extraStyleClasses="content"
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
-        lesson="{ props.lesson }"
-        noCardStyle="{!props.module ? true : false}"
-        resourceTitle="{!props.module ? props.lessonContent.title : ''}"
+        linkTo="{props.lesson.loc_hash}"
     >
-        <template if="{props.description}">
-            <p class="resource-description">{ props.description }</p>
-        </template>
-        <template if="{!props.module}" each="{card in state.cards}">
-            <Raw if="{card.tag === 'raw'}" html="{card.content}" class="content-block"></Raw>
-            <BasicCard if="{card.tag === 'basic'}" card="{card}" class="content-block"></BasicCard>
-            <AudioCard
-                if="{card.media_type === 'audio'}"
-                media="{card}"
-                class="content-block"
-            ></AudioCard>
-            <VideoCard
-                if="{card.media_type === 'video'}"
-                media="{card}"
-                class="content-block"
-            ></VideoCard>
-            <QuoteCard if="{card.tag === 'quote'}" card="{card}" class="content-block"></QuoteCard>
-            <ListCard if="{card.tag === 'list'}" card="{card}" class="content-block"></ListCard>
-            <PdfCard if="{card.tag === 'pdf'}" card="{card}" class="content-block"></PdfCard>
-        </template>
-        <template if="{!!props.module}">
-            <Raw
-                if="{state.card.tag === 'raw'}"
-                html="{state.card.content}"
-            />
-            <BasicCard
-                if="{state.card.tag === 'basic'}"
-                card="{state.card}"
-            />
-            <AudioCard
-                if="{state.card.media_type === 'audio'}"
-                media="{state.card}"
-            />
-            <VideoCard
-                if="{state.card.media_type === 'video'}"
-                media="{state.card}"
-            />
-            <QuoteCard
-                if="{state.card.tag === 'quote'}"
-                card="{state.card}"
-            />
-            <ListCard
-                if="{state.card.tag === 'list'}"
-                card="{state.card}"
-            />
-            <PdfCard
-                if="{state.card.tag === 'pdf'}"
-                card="{state.card}"
-            />
-            <Html5Card
-                if="{state.card.tag === 'html5'}"
-                card="{state.card}"
-            />
-        </template>
+        <Raw if="{state.card.tag === 'raw'}" html="{state.card.content}" />
+        <BasicCard if="{state.card.tag === 'basic'}" card="{state.card}" />
+        <AudioCard
+            if="{state.card.media_type === 'audio'}"
+            media="{state.card}"
+        />
+        <VideoCard
+            if="{state.card.media_type === 'video'}"
+            media="{state.card}"
+        />
+        <QuoteCard if="{state.card.tag === 'quote'}" card="{state.card}" />
+        <ListCard if="{state.card.tag === 'list'}" card="{state.card}" />
+        <PdfCard if="{state.card.tag === 'pdf'}" card="{state.card}" />
+        <Html5Card if="{state.card.tag === 'html5'}" card="{state.card}" />
     </LessonFrame>
-    <div if="{ props.lesson && state.cardNumber <= state.cards.length }" class="bottom-buttons">
+    <div
+        if="{ props.lesson && state.cardNumber <= state.cards.length }"
+        class="bottom-buttons"
+    >
         <div>
-            <a if="{ state.cardNumber > 1 }" class="has-circle" onclick="{ goBack }">
+            <a
+                if="{ state.cardNumber > 1 }"
+                class="has-circle"
+                onclick="{ goBack }"
+            >
                 <span class="arrow"></span>
             </a>
         </div>
@@ -113,50 +78,57 @@
             const cardNumber = parseInt(stage);
             const state = {
                 cards: props.lesson && props.lesson.ready ? props.lesson.content.cards : [],
-                card: props.lesson && props.lesson.ready ? props.lesson.content.cards[cardNumber - 1] : undefined,
+                card: props.lesson && props.lesson.ready
+                    ? props.lesson.content.cards[cardNumber - 1]
+                    : undefined,
                 cardNumber: cardNumber,
-                complete: stage === 'complete'
+                complete: stage === "complete",
             };
             return state;
         }
 
-        function LessonContent() { return {
+        function LessonContent() {
+            return {
+                TRANSLATIONS: {
+                    next: () => gettext("Next"),
+                    finish: () => gettext("Finish"),
+                },
 
-            TRANSLATIONS: {
-                next: () => gettext("Next"),
-                finish: () => gettext("Finish"),
-            },
+                onBeforeMount(props, state) {
+                    this.state = readState(props);
+                },
 
-            onBeforeMount(props, state) {
-                this.state = readState(props);
-            },
-            
-            onBeforeUpdate(props, state) {
-                this.state = readState(props);
-            },
+                onBeforeUpdate(props, state) {
+                    this.state = readState(props);
+                },
 
-            goBack() {
-                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber - 1}`;
-            },
+                goBack() {
+                    location.hash = `${this.props.lesson.loc_hash}:content:${
+                        this.state.cardNumber - 1
+                    }`;
+                },
 
-            nextContentCard() {
-                window.scroll(0, 0);
-                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber + 1}`;
-            },
+                nextContentCard() {
+                    window.scroll(0, 0);
+                    location.hash = `${this.props.lesson.loc_hash}:content:${
+                        this.state.cardNumber + 1
+                    }`;
+                },
 
-            completeContentModal() {
-                this.props.lesson.completeSection(this.props.module);
-                location.hash = `${this.props.lesson.loc_hash}:content:complete`;
-            },
+                completeContentModal() {
+                    this.props.lesson.completeSection(this.props.module);
+                    location.hash = `${this.props.lesson.loc_hash}:content:complete`;
+                },
 
-            checkForPlayableVideos() {
-                this.state.iframes = this.$$("iframe");
-            },
+                checkForPlayableVideos() {
+                    this.state.iframes = this.$$("iframe");
+                },
 
-            onUpdated() {
-                this.checkForPlayableVideos();
-            },
-        }}
+                onUpdated() {
+                    this.checkForPlayableVideos();
+                },
+            };
+        }
 
         LessonContent.components = {
             lessonmodulecomplete: LessonModuleComplete,
@@ -172,6 +144,5 @@
         };
 
         export default LessonContent;
-
     </script>
 </LessonContent>

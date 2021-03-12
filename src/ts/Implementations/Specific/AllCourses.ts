@@ -1,7 +1,7 @@
 import { Page } from "../Page";
-import CoursePage from "./CoursePage";
+import Course from "./Course";
 
-export default class AllCoursesPage extends Page {
+export default class AllCourses extends Page {
     #tags!: string[];
 
     get tags(): string[] {
@@ -29,7 +29,7 @@ export default class AllCoursesPage extends Page {
         );
     }
 
-    get coursesCompleteLast(): CoursePage[] {
+    get coursesCompleteLast(): Course[] {
         const inComplete: any[] = [];
         const complete: any[] = [];
         this.courses.forEach((course: any) => {

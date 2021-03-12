@@ -1,9 +1,9 @@
 import { Page } from "../Page";
-import CoursePage from "./CoursePage";
+import Course from "./Course";
 
 import { setComplete, isComplete } from "js/actions/completion";
 
-export default class LessonPage extends Page {
+export default class Lesson extends Page {
     isFinished(): boolean {
         return isComplete(this.course.slug, this.slug, undefined);
     }
@@ -14,8 +14,8 @@ export default class LessonPage extends Page {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         setComplete(this.parent!.slug, this.slug, section);
     }
-    get course(): CoursePage {
-        return this.parent as CoursePage;
+    get course(): Course {
+        return this.parent as Course;
     }
 
     get shortDescription(): string {

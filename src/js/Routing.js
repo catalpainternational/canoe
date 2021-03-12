@@ -8,10 +8,10 @@ import { Manifest } from "ts/Implementations/Manifest";
 const CANOE_PAGES = ['login', 'profile', 'settings', 'sync'];
 // pages that are shortcuts into a CMS page ( e.g. resources goes to the selected language resource root )
 const CANOE_SHORTCUTS = {
-    '': 'homepage',
-    'home': 'homepage',
-    'learningactivities': 'learningactivitieshomepage',
-    'resources': 'resourcesroot',
+    "": "homepage",
+    home: "homepage",
+    resources: "resourcesroot",
+    topics: "learningactivitieshomepage",
 };
 
 // pages from the CMS ( we might not use this )

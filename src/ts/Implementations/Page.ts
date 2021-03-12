@@ -135,6 +135,14 @@ export class Page extends PublishableItem<TWagtailPageData> {
         return this.manifestData?.depth || 0;
     }
 
+    get cardImage(): string {
+        return this.manifestData?.card_image || "";
+    }
+
+    get tags(): string[] {
+        return this.manifestData?.tags || [];
+    }
+
     get contentType(): string {
         return "application/json";
     }
