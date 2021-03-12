@@ -30,10 +30,6 @@ export default class Course extends Page {
     get examHighScore(): number {
         return getHighScore(this.slug);
     }
-    get allLessonsComplete(): boolean {
-        // NOT IMPLEMENTED
-        return true;
-    }
     get isExamFinished(): boolean {
         return ExamGrader.isExamFinished(this.slug);
     }
