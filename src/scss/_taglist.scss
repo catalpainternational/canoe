@@ -34,8 +34,8 @@ TagList {
     }
 }
 
-AllCoursesPage TagList,
-AllTopicsPage TagList {
+AllCoursesList TagList,
+AllTopicsList TagList {
     .tag {
         border-radius: 50%;
         background-color: $gray-10;

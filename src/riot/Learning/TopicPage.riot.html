@@ -1,0 +1,52 @@
+<TopicPage>
+    <TopMenu
+        extrastyleclasses="with-swoop"
+        backgroundImage="{getCardImage(page.loc_hash, page.cardImage)}"
+    >
+        <a class="has-circle top-icon left" href="#topics">
+            <span class="arrow"></span>
+        </a>
+    </TopMenu>
+    <div class="content-wrapper">
+        <h3>{ page.title }</h3>
+        <p>{ page.description }</p>
+        <template if="{page.activities.length}">
+            <LongCard
+                each="{activity in page.activities}"
+                title="{activity.title}"
+                link="{activity.loc_hash}"
+                imageUrl="{activity.cardImage}"
+                status="{isComplete(activity)}"
+            ></LongCard>
+        </template>
+    </div>
+    <script>
+        import LongCard from "RiotTags/Learning/LongCard.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+
+        import { getRoute } from "ReduxImpl/Interface";
+        import { getCardImageUrl } from "js/utilities";
+
+        function TopicPage() { return {
+			onBeforeMount(props, state) {
+				this.page = getRoute().page;
+			},
+
+			getCardImage(link, cardImage) {
+				return getCardImageUrl(link, cardImage);
+			},
+
+            isComplete(activity) {
+                // return "complete";
+                return "in-complete";
+            }
+		}}
+
+        TopicPage.components = {
+            topmenu: TopMenu,
+            longcard: LongCard,
+        };
+
+        export default TopicPage;
+    </script>
+</TopicPage>

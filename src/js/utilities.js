@@ -2,6 +2,12 @@ import { getLanguage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
 import { getOrFetchManifest } from "js/WagtailPagesAPI";
 
+import contentStockImg from "img/stock_content.png";
+import courseStockImg from "img/stock_course.png";
+import lessonStockImg from "img/stock_lesson.png";
+import objectiveStockImg from "img/stock_objective.png";
+import testStockImg from "img/stock_test.png";
+
 export const isCourseInTheCurrentLanguage = (courseSlug) => {
     const currentLanguage = getLanguage();
     switch (currentLanguage) {
@@ -80,4 +86,21 @@ export const getCourseWithLatestCompletion = (courses) => {
         lastWorkedOnCourse = course;
     }
     return lastWorkedOnCourse;
+};
+
+export const getCardImageUrl = (link, imageUrl) => {
+    const stockImages = [
+        contentStockImg,
+        courseStockImg,
+        lessonStockImg,
+        objectiveStockImg,
+        testStockImg,
+    ];
+    const cardId = typeof link === "number" ? link : link.split("/")[0];
+
+    const fallbackImg = stockImages[cardId % stockImages.length];
+
+    return imageUrl
+        ? `${process.env.API_BASE_URL}${imageUrl}?cardImageFallback=${fallbackImg}`
+        : fallbackImg;
 };

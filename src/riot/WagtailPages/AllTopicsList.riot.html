@@ -1,0 +1,63 @@
+<AllTopicsList>
+    <TopMenu extrastyleclasses="with-swoop">
+        <h3>{ page.title }</h3>
+        <p>{ page.description }</p>
+        <div class="filter-copy-container">
+            <a
+                if="{showTagFilter()}"
+                class="has-circle {state.showTagList ? 'show-tags' : ''}"
+                onclick="{toggleTagList}"
+            >
+                <span class="filter-icon"></span>
+            </a>
+        </div>
+        <TagList
+            if="{state.showTagList}"
+            tags="{page.all_tags}"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
+    </TopMenu>
+    <div class="content-wrapper">
+        <div class="card-container">
+            <Card
+                each="{topic in page.childPages}"
+                title="{topic.title}"
+                link="{topic.loc_hash}"
+                imageUrl="{topic.cardImage}"
+            ></Card>
+        </div>
+    </div>
+
+    <script>
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+        import TagList from "RiotTags/Components/TagList.riot.html";
+        import Card from "RiotTags/Components/Card.riot.html";
+
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function AllTopicsList() { return {
+            state: {
+                showTagList: false,
+            },
+            onBeforeMount(props, state) {
+                this.page = getRoute().page;
+            },
+            showTagFilter() {
+                // we don't show the filter unless we have some tags
+                return this.page.tags.size;
+            },
+            toggleTagList() {
+                this.update({ showTagList: !this.state.showTagList });
+            },
+        }}
+
+        AllTopicsList.components = {
+            topmenu: TopMenu,
+            taglist: TagList,
+            card: Card,
+        };
+
+        export default AllTopicsList;
+    </script>
+</AllTopicsList>

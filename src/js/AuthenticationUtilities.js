@@ -108,9 +108,11 @@ export const isGuestUser = () => {
 };
 
 export const getUserId = () => {
-    return getUser().userId;
+    const user = getUser();
+    return user ? user.userId : null;
 };
 
 export const getUserGroups = () => {
-    return getUser().groups;
+    const user = getUser();
+    return user ? user.groups : null;
 };
