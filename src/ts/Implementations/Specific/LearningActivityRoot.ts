@@ -6,7 +6,7 @@ export default class LearningActivityRoot extends Page {
     get topics(): Page[] {
         return this.childPages;
     }
-    
+
     get all_tags(): Set<string> {
         if (this.#all_tags === undefined) {
             this.#all_tags = new Set(
