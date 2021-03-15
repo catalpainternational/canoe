@@ -4,7 +4,6 @@
         extraStyleClasses="content"
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
-        lesson="{ props.lesson }"
         linkTo="{ props.lesson.course.loc_hash }"
     >
         <Raw if="{state.card.tag === 'raw'}" html="{state.card.content}" />
