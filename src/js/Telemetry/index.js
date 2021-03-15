@@ -23,11 +23,15 @@ const createPOSTRequest = (path, body) => {
     if (token) {
         requestContent.headers.Authorization = `JWT ${token}`;
     }
-    return new Request(ACTIONS_ENDPOINT, requestContent);
+    return new Request(path, requestContent);
 };
 
 const postFeedback = async (feedback) => {
-    return await fetch(createPOSTRequest(ACTIONS_ENDPOINT, feedback));
+    try {
+        return await fetch(createPOSTRequest(ACTIONS_ENDPOINT, feedback));
+    } catch (err) {
+        throw err;
+    }
 };
 
 const syncFeedback = async () => {
