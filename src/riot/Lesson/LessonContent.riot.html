@@ -5,8 +5,6 @@
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
         lesson="{ props.lesson }"
-        noCardStyle="{!props.module ? true : false}"
-        resourceTitle="{!props.module ? props.lessonContent.title : ''}"
         linkTo="{ props.lesson.course.loc_hash }"
     >
         <Raw if="{state.card.tag === 'raw'}" html="{state.card.content}" />
