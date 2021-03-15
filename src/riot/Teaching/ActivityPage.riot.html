@@ -1,0 +1,38 @@
+<ActivityPage>
+    <TopMenu
+        extrastyleclasses="with-swoop"
+        backgroundImage="{getCardImage(page.loc_hash, page.cardImage)}"
+    >
+        <a class="has-circle top-icon left" href="#topics">
+            <span class="arrow"></span>
+        </a>
+    </TopMenu>
+    <div class="content-wrapper">
+        <h3>{ page.title }</h3>
+        <p>{ page.description }</p>
+    </div>
+    <script>
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+
+        import { getRoute } from "ReduxImpl/Interface";
+        import { getCardImageUrl } from "js/utilities";
+
+        function ActivityPage() {
+            return {
+                onBeforeMount(props, state) {
+                    this.page = getRoute().page;
+                },
+
+                getCardImage(link, cardImage) {
+                    return getCardImageUrl(link, cardImage);
+                },
+            };
+        }
+
+        ActivityPage.components = {
+            topmenu: TopMenu,
+        };
+
+        export default ActivityPage;
+    </script>
+</ActivityPage>
