@@ -2,6 +2,12 @@ import { getLanguage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
 import { getOrFetchManifest } from "js/WagtailPagesAPI";
 
+import contentStockImg from "img/stock_content.png";
+import courseStockImg from "img/stock_course.png";
+import lessonStockImg from "img/stock_lesson.png";
+import objectiveStockImg from "img/stock_objective.png";
+import testStockImg from "img/stock_test.png";
+
 export const isCourseInTheCurrentLanguage = (courseSlug) => {
     const currentLanguage = getLanguage();
     switch (currentLanguage) {
@@ -24,7 +30,7 @@ export const getHtmlUrl = (htmlPath) => {
 
 export const resolveMedia = (mediaID) => {
     return getOrFetchManifest()
-        // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
+        // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend
         // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
         // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
         .then(mfest => getMediaUrl(Object.values(mfest.media[mediaID]).sort((el1,el2) => el1.size - el2.size)[0].mediapath));
@@ -82,10 +88,27 @@ export const getCourseWithLatestCompletion = (courses) => {
     return lastWorkedOnCourse;
 };
 
+export const getCardImageUrl = (link, imageUrl) => {
+    const stockImages = [
+        contentStockImg,
+        courseStockImg,
+        lessonStockImg,
+        objectiveStockImg,
+        testStockImg,
+    ];
+    const cardId = typeof link === "number" ? link : link.split("/")[0];
+
+    const fallbackImg = stockImages[cardId % stockImages.length];
+
+    return imageUrl
+        ? `${process.env.API_BASE_URL}${imageUrl}?cardImageFallback=${fallbackImg}`
+        : fallbackImg;
+};
+
 export const lessonSectionComplete = (cards, card, lesson, module) => {
     const remainingInSection = cards.filter((it, index) => {
         return it.type === card.type && index > card.index;
     });
     const isLastOfType = remainingInSection.length === 0;
     if (isLastOfType) lesson.completeSection(module);
-};
+}

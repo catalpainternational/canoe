@@ -9,14 +9,10 @@ import {
 } from "js/actions/exam";
 import ExamGrader from "js/ExamGrader";
 
-export default class CoursePage extends Page {
+export default class Course extends Page {
     get lessons(): any {
         return this.childPages;
     }
-    get tags(): string[] {
-        return this.data.tags;
-    }
-
     get hasExam(): boolean {
         return this.data.data?.has_exam;
     }
@@ -33,10 +29,6 @@ export default class CoursePage extends Page {
     }
     get examHighScore(): number {
         return getHighScore(this.slug);
-    }
-    get allLessonsComplete(): boolean {
-        // NOT IMPLEMENTED
-        return true;
     }
     get isExamFinished(): boolean {
         return ExamGrader.isExamFinished(this.slug);

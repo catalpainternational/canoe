@@ -19,14 +19,8 @@
         <Profile if="{state.page.type === 'profile'}"></Profile>
         <Sync if="{state.page.type === 'sync'}"></Sync>
 
-        <AllCoursesPage if="{ state.page.type === 'homepage' }" ></AllCoursesPage>
+        <AllCoursesList if="{ state.page.type === 'homepage' }" ></AllCoursesList>
         <CourseOverview if="{ state.page.type === 'coursepage' }" ></CourseOverview>
-        <!--
-        <HomePage
-            if="{ state.page.type === 'homepage' }"
-            page="{ state.page }"
-        ></HomePage>
-         -->
         <LessonOverview
             if="{state.page.type === 'lessonpage'}"
             lesson="{ state.page }"
@@ -37,7 +31,9 @@
         <ResourceArticle
             if="{state.page.type === 'resourcearticle'}"
         ></ResourceArticle>
-        
+        <AllTopicsList if="{state.page.type === 'learningactivitieshomepage'}"></AllTopicsList>
+        <TopicPage if="{state.page.type === 'learningactivitytopicpage'}"></TopicPage>
+
         <BottomMenu page="{state.page}"></BottomMenu>
         <PushSubscription></PushSubscription>
     </template>
@@ -61,11 +57,12 @@
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
         import Sync from "RiotTags/Screens/Sync";
 
-        import AllCoursesPage from "RiotTags/WagtailPages/AllCoursesPage.riot.html";
+        import AllCoursesList from "RiotTags/WagtailPages/AllCoursesList.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
-
+        import AllTopicsList from "RiotTags/WagtailPages/AllTopicsList.riot.html";
+        import TopicPage from "RiotTags/Learning/TopicPage.riot.html";
 
         function App() {
             function readState() {
@@ -99,7 +96,7 @@
             handleerror: HandleError,
             login: Login,
             bottommenu: BottomMenu,
-            allcoursespage: AllCoursesPage,
+            allcourseslist: AllCoursesList,
             courseoverview: CourseOverview,
             lessonoverview: LessonOverview,
             resources: Resources,
@@ -110,6 +107,8 @@
             changebrowser: ChangeBrowser,
             toast: Toast,
             resourcearticle: ResourceArticle,
+            alltopicslist: AllTopicsList,
+            topicpage: TopicPage,
             loadingdots: LoadingDots,
         }
 

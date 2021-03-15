@@ -1,27 +1,90 @@
 <ResourceArticle>
-    <LessonContent
-        if="{ state.resource.ready }"
-        lessonContent="{state.resource.cards}"
-        title="{state.resource.title}"
-        description="{state.resource.description}"
-        tags="{state.resource.tags}"
-    ></LessonContent>
+    <LessonFrame
+        if="{state.resource.ready}"
+        noCardStyle="{true}"
+        resourceTitle="{state.resource.title}"
+        linkTo="{'resources'}"
+    >
+        <p if="{state.resource.description}" class="resource-description">
+            { state.resource.description }
+        </p>
+        <template
+            if="{state.resource.ready}"
+            each="{card in state.resource.cards}"
+        >
+            <Raw
+                if="{card.tag === 'raw'}"
+                html="{card.content}"
+                class="content-block"
+            ></Raw>
+            <BasicCard
+                if="{card.tag === 'basic'}"
+                card="{card}"
+                class="content-block"
+            ></BasicCard>
+            <AudioCard
+                if="{card.media_type === 'audio'}"
+                media="{card}"
+                class="content-block"
+            ></AudioCard>
+            <VideoCard
+                if="{card.media_type === 'video'}"
+                media="{card}"
+                class="content-block"
+            ></VideoCard>
+            <QuoteCard
+                if="{card.tag === 'quote'}"
+                card="{card}"
+                class="content-block"
+            ></QuoteCard>
+            <ListCard
+                if="{card.tag === 'list'}"
+                card="{card}"
+                class="content-block"
+            ></ListCard>
+            <PdfCard
+                if="{card.tag === 'pdf'}"
+                card="{card}"
+                class="content-block"
+            ></PdfCard>
+        </template>
+    </LessonFrame>
     <script>
-        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+        import Raw from "RiotTags/Components/Raw.riot.html";
+        import BasicCard from "RiotTags/Components/BasicCard.riot.html";
+        import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
+        import AudioCard from "RiotTags/Lesson/AudioCard.riot.html";
+        import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
+        import ListCard from "RiotTags/Lesson/ListCard.riot.html";
+        import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
 
-        export default {
-            components: {
-                lessoncontent: LessonContent,
-            },
-            onBeforeMount() {
-                this.state.resource = getRoute().page;
-                this.state.isLoading = !this.state.resource.ready;
-            },
-            onBeforeUpdate() {
-                this.state.isLoading = !this.state.resource.ready;
-            },
+        function ResourceArticle() {
+            return {
+                onBeforeMount() {
+                    this.state.resource = getRoute().page;
+                    this.state.isLoading = !this.state.resource.ready;
+                },
+
+                onBeforeUpdate() {
+                    this.state.isLoading = !this.state.resource.ready;
+                },
+            };
         }
+
+        ResourceArticle.components = {
+            basiccard: BasicCard,
+            quotecard: QuoteCard,
+            listcard: ListCard,
+            raw: Raw,
+            lessonframe: LessonFrame,
+            videocard: VideoCard,
+            audiocard: AudioCard,
+            pdfcard: PdfCard,
+        };
+
+        export default ResourceArticle;
     </script>
 </ResourceArticle>

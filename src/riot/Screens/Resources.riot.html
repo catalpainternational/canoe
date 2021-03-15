@@ -31,7 +31,10 @@
                 <h6 if="{ resource.ready }">{resource.description}</h6>
             </a>
         </div>
-        <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
+        <LoadingDots
+            if="{state.isLoading}"
+            extrastyleclasses="dark"
+        ></LoadingDots>
         <p if="{!state.isLoading && state.page.resources.length === 0}">
             { TRANSLATIONS.noArticlesYet() }
         </p>
@@ -83,9 +86,8 @@
             onBeforeUpdate() {
                 this.state.isLoading = !this.state.page.ready;
             },
-            /*
+
             async onMounted() {
-                this.toggleLoadingMessage();
                 const articles = (await getResources()).map(
                     (resource) => new ResourceArticle(resource)
                 );
@@ -111,12 +113,6 @@
                         }
                     }
                 }
-                this.toggleLoadingMessage();
-            },
-            */
-
-            toggleLoadingMessage() {
-                this.update({ isLoading: !this.state.isLoading });
             },
 
             generateUrlParams() {
@@ -128,7 +124,9 @@
                 const urlParams = this.generateUrlParams();
 
                 if (this.state.selectedTags.includes(clickedTag)) {
-                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
+                    const tagIndex = this.state.selectedTags.indexOf(
+                        clickedTag
+                    );
                     this.state.selectedTags.splice(tagIndex, 1);
                     urlParams.delete("filter");
 
@@ -165,15 +163,24 @@
                     resource.description
                 );
 
-                const lowercaseTags = resource.tags.map((tag) => tag.toLowerCase());
-                const isTagMatch = doPageTagsMatchSelections(lowercaseTags, selectedTags);
+                const lowercaseTags = resource.tags.map((tag) =>
+                    tag.toLowerCase()
+                );
+                const isTagMatch = doPageTagsMatchSelections(
+                    lowercaseTags,
+                    selectedTags
+                );
 
                 const show = isQueryMatch && isTagMatch;
                 return show;
             },
 
             replaceUrlQuery(urlParams) {
-                window.history.replaceState({}, "", `${location.pathname}#resources?${urlParams}`);
+                window.history.replaceState(
+                    {},
+                    "",
+                    `${location.pathname}#resources?${urlParams}`
+                );
             },
         };
     </script>

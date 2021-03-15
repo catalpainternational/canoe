@@ -51,42 +51,35 @@
     mask-position: center;
     height: 22px;
     width: 22px;
+
+    &.active {
+        background-color: $app-accent-color;
+    }
 }
 
 .all-courses-icon {
     @extend %bottom-nav-shared;
     @include mask-icons-shared("~img/all_courses.svg", contain, $gray-4);
-
-    &.active {
-        background-color: $app-accent-color;
-    }
 }
 
 .profile-icon {
     @extend %bottom-nav-shared;
     @include mask-icons-shared("~img/profile.svg", contain, $gray-4);
-
-    &.active {
-        background-color: $app-accent-color;
-    }
 }
 
 .resources-icon {
     @extend %bottom-nav-shared;
     @include mask-icons-shared("~img/clipboard.svg", contain, $gray-4);
+}
 
-    &.active,
-    &.title {
-        background-color: $app-accent-color;
-    }
+.list-icon {
+    @extend %bottom-nav-shared;
+    @include mask-icons-shared("~img/list.svg", contain, $gray-4);
 }
 
 .settings-icon {
+    @extend %bottom-nav-shared;
     @include mask-icons-shared("~img/cog.svg", contain, $blue);
-    -webkit-mask-position-x: center;
-    mask-position: center;
-    height: 22px;
-    width: 22px;
 }
 
 .search-icon {
@@ -150,7 +143,11 @@
 }
 
 .notifications-image {
-    @include mask-icons-shared("~img/notifications_header.svg", contain, $gray-3);
+    @include mask-icons-shared(
+        "~img/notifications_header.svg",
+        contain,
+        $gray-3
+    );
     -webkit-mask-position: center;
     mask-position: center;
     height: 145px;
@@ -257,6 +254,22 @@
     height: 17px;
     width: 10px;
     margin-left: 1px;
+
+    &.down {
+        transform: rotate(-90deg);
+        background-color: $app-accent-color;
+        height: 10px;
+        width: 6px;
+        margin-left: 8px;
+    }
+
+    &.up {
+        transform: rotate(90deg);
+        background-color: $app-accent-color;
+        height: 10px;
+        width: 6px;
+        margin-left: 8px;
+    }
 }
 
 // Icons for card status

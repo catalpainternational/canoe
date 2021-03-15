@@ -1,17 +1,19 @@
 import { Page } from "../Page";
-import CoursePage from "./CoursePage";
+import Course from "./Course";
 
-export default class AllCoursesPage extends Page {
-    #tags!: string[];
+export default class AllCourses extends Page {
+    #all_tags!: Set<string>;
 
-    get tags(): string[] {
-        if (this.#tags === undefined) {
-            this.#tags = this.data.courses
-                .map((c: any) => c.tags)
-                .flat()
-                .map((tag: string) => tag.toLowerCase());
+    get all_tags(): Set<string> {
+        if (this.#all_tags === undefined) {
+            this.#all_tags = new Set(
+                this.courses
+                    .map((c: any) => c.tags)
+                    .flat()
+                    .map((tag: string) => tag.toLowerCase())
+            );
         }
-        return this.#tags;
+        return this.#all_tags;
     }
 
     get courses(): any {
@@ -29,7 +31,7 @@ export default class AllCoursesPage extends Page {
         );
     }
 
-    get coursesCompleteLast(): CoursePage[] {
+    get coursesCompleteLast(): Course[] {
         const inComplete: any[] = [];
         const complete: any[] = [];
         this.courses.forEach((course: any) => {

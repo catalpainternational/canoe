@@ -1,4 +1,4 @@
-<AllCoursesPage>
+<AllCoursesList>
     <div class="background">
         <GuestBanner></GuestBanner>
         <TopMenu extrastyleclasses="with-swoop">
@@ -14,8 +14,8 @@
                 </a>
             </div>
             <TagList
-                if="{Array.isArray(state.sortedListOfCourses) && state.sortedListOfCourses.length > 0 && state.listOfTags.length > 0 && state.showTagList}"
-                tags="{state.listOfTags}"
+                if="{ state.showTagList }"
+                tags="{ page.all_tags }"
                 onTagClick="{onTagClick}"
                 selectedTags="{state.selectedTags}"
             ></TagList>
@@ -25,37 +25,35 @@
             <LoadingDots if="{!page.ready}"
                 extrastyleclasses="dark"
             ></LoadingDots>
-            <template if="{page.ready}">
-                <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
-                    <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
-                    <div class="card-container full-width">
-                        <Card
-                            status="{courseStatus(page.currentCourse)}"
-                            title="{page.currentCourse.title}"
-                            link="{page.currentCourse.loc_hash}"
-                            progressValue="{page.currentCourse.numberOfFinishedLessons}"
-                            progressMax="{page.currentCourse.numberOfLessons}"
-                            imageUrl="{state.currentCourse.imageUrl}"
-                        ></Card>
-                    </div>
-                </template>
-                <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
-                <div class="card-container">
+            <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
+                <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
+                <div class="card-container full-width">
                     <Card
-                        each="{course in page.coursesCompleteLast}"
-                        if="{showCourse(course)}"
-                        status="{courseStatus(course)}"
-                        title="{course.title}"
-                        link="{course.loc_hash}"
-                        progress-value="{course.numberOfFinishedLessons}"
-                        progress-max="{course.numberOfLessons}"
-                        progressMax="{course.numberOfLessons}"
-                        imageUrl="{course.imageUrl}"
+                        status="{courseStatus(page.currentCourse)}"
+                        title="{page.currentCourse.title}"
+                        link="{page.currentCourse.loc_hash}"
+                        progressValue="{page.currentCourse.numberOfFinishedLessons}"
+                        progressMax="{page.currentCourse.numberOfLessons}"
+                        imageUrl="{ state.currentCourse.cardImage }"
                     ></Card>
                 </div>
-
-                <p if="{page.coursesCompleteLast.length === 0}">{ TRANSLATIONS.noCourses() }</p>
             </template>
+            <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
+            <div class="card-container">
+                <Card
+                    each="{course in page.coursesCompleteLast}"
+                    if="{showCourse(course)}"
+                    status="{courseStatus(course)}"
+                    title="{course.title}"
+                    link="{course.loc_hash}"
+                    progress-value="{course.numberOfFinishedLessons}"
+                    progress-max="{course.numberOfLessons}"
+                    progressMax="{course.numberOfLessons}"
+                    imageUrl="{ course.cardImage }"
+                ></Card>
+            </div>
+
+            <p if="{page.coursesCompleteLast.length === 0}">{ TRANSLATIONS.noCourses() }</p>
         </div>
     </div>
 
@@ -68,11 +66,10 @@
 
         import { getRoute } from "ReduxImpl/Interface";
 
-        function AllCoursesPage() { return {
+        function AllCoursesList() { return {
             state: {
                 currentCourse: null,
                 selectedTags: [],
-                sortedListOfCourses: null,
                 showTagList: false,
             },
 
@@ -91,9 +88,8 @@
             },
 
             showTagFilter() {
-                // we don't know the tags until the page data is available
                 // and we don't show the filter unless we have some tags
-                return this.page.ready && this.page.tags.length;
+                return  this.page.all_tags.size;
             },
 
             toggleTagList() {
@@ -129,7 +125,7 @@
             },
         }};
 
-        AllCoursesPage.components = {
+        AllCoursesList.components = {
             card: Card,
             taglist: TagList,
             guestbanner: GuestBanner,
@@ -137,6 +133,6 @@
             topmenu: TopMenu,
         };
 
-        export default AllCoursesPage;
+        export default AllCoursesList;
     </script>
-</AllCoursesPage>
+</AllCoursesList>
