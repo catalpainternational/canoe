@@ -13,8 +13,19 @@
 }
 
 LessonPage {
-    .module-swoop {
-        @extend %bottom-swoop;
+    .lesson-page-image-wrap {
+        border-radius: 50%;
+        width: 35vw;
+        height: 35vw;
+        max-width: 200px;
+        max-height: 200px;
+        overflow: hidden;
+    }
+
+    .lesson-page-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 }
 
@@ -49,7 +60,7 @@ LessonFrame {
     .frame-background {
         // the 10px adds some room for the stacked cards below, the 50px is
         // for the buttons
-        min-height: calc(100vh - #{$top-menu-height} - 10px - 50px);
+        min-height: calc(100vh - #{$top-menu-height} - #{$bottom-menu-height} - 10px - 50px);
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;

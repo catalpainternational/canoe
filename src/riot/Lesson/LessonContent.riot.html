@@ -7,6 +7,7 @@
         lesson="{ props.lesson }"
         noCardStyle="{!props.module ? true : false}"
         resourceTitle="{!props.module ? props.lessonContent.title : ''}"
+        linkTo="{ props.lesson.course.loc_hash }"
     >
         <template if="{props.description}">
             <p class="resource-description">{ props.description }</p>
@@ -72,29 +73,29 @@
         <div>
             <button
                 class="btn-primary"
-                onclick="{ nextContentCard }"
+                onclick="{ nextCard }"
                 if="{ state.cardNumber < state.cards.length }"
             >
                 { TRANSLATIONS.next() }
             </button>
             <button
                 class="btn-primary"
-                onclick="{ completeContentModal }"
+                onclick="{ completeLesson }"
                 if="{ state.cardNumber === state.cards.length }"
             >
                 { TRANSLATIONS.finish() }
             </button>
         </div>
     </div>
-    <LessonModuleComplete
-        if="{ props.lesson.ready && state.complete }"
-        lesson="{props.lesson}"
-        module="{props.module}"
-        nextModule="test"
-    ></LessonModuleComplete>
+    <LessonFeedback
+        if="{ !state.cardNumber && state.stage == 'feedback' }"
+        lessonName="{props.lesson.title}"
+    ></LessonFeedback>
+    <LessonComplete
+        if="{ !state.cardNumber && state.stage == 'complete' }"
+    ></LessonComplete>
 
     <script>
-        import LessonModuleComplete from "RiotTags/Lesson/LessonModuleComplete.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import Raw from "RiotTags/Components/Raw.riot.html";
         import BasicCard from "RiotTags/Components/BasicCard.riot.html";
@@ -106,14 +107,15 @@
         import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
+        import { lessonSectionComplete } from "js/utilities";
 
         function readState(props) {
             const route = getRoute();
             const stage = route.riotHash[1];
             const cardNumber = parseInt(stage);
             const state = {
-                cards: props.lesson.ready ? props.lesson.content.cards : [],
-                card: props.lesson.ready ? props.lesson.content.cards[cardNumber - 1] : undefined,
+                cards: props.lesson.ready ? props.lesson.data.cards : [],
+                card: props.lesson.ready ? props.lesson.data.cards[cardNumber - 1] : undefined,
                 cardNumber: cardNumber,
                 complete: stage === 'complete'
             };
@@ -130,23 +132,31 @@
             onBeforeMount(props, state) {
                 this.state = readState(props);
             },
-            
+
             onBeforeUpdate(props, state) {
                 this.state = readState(props);
             },
 
             goBack() {
-                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber - 1}`;
+                const prevCard = this.state.cards[this.state.cardNumber - 2];
+                location.hash = `${this.props.lesson.loc_hash}:${prevCard.type}:${this.state.cardNumber - 1}`;
             },
 
-            nextContentCard() {
+            nextCard() {
                 window.scroll(0, 0);
-                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber + 1}`;
+                const nextCard = this.state.cards[this.state.cardNumber];
+                lessonSectionComplete(
+                    this.state.cards,
+                    this.state.cards[this.state.cardNumber - 1],
+                    this.props.lesson,
+                    this.props.module
+                );
+
+                location.hash = `${this.props.lesson.loc_hash}:${nextCard.type}:${this.state.cardNumber + 1}`;
             },
 
-            completeContentModal() {
-                this.props.lesson.completeSection(this.props.module);
-                location.hash = `${this.props.lesson.loc_hash}:content:complete`;
+            completeLesson() {
+                location.hash = `${this.props.lesson.loc_hash}:test:feedback`;
             },
 
             checkForPlayableVideos() {
@@ -159,7 +169,6 @@
         }}
 
         LessonContent.components = {
-            lessonmodulecomplete: LessonModuleComplete,
             basiccard: BasicCard,
             quotecard: QuoteCard,
             listcard: ListCard,

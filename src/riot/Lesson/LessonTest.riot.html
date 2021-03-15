@@ -6,6 +6,7 @@
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
         lesson="{ props.lesson }"
+        linkTo="{ props.lesson.course.loc_hash }"
     >
         <h3>{ state.cardNumber }. { state.card.question }</h3>
         <TestSingleAnswer
@@ -21,6 +22,13 @@
             toggleModal="{toggleModal}"
         ></TestMultipleAnswer>
     </LessonFrame>
+    <div if="{props.lesson && state.cardNumber <= state.cards.length}" class="bottom-buttons">
+        <div>
+            <a if="{ state.cardNumber > 1 }" class="has-circle" onclick="{ goBack }">
+                <span class="arrow"></span>
+            </a>
+        </div>
+    </div>
     <TestPopupModal
         if="{state.showModal}"
         isQuestionComplete="{state.isQuestionComplete}"
@@ -56,9 +64,9 @@
             const route = getRoute();
             const stage = route.riotHash[1];
             const cardNumber = parseInt(stage);
-            const card = props.lesson.ready ? props.lesson.test.cards[cardNumber - 1] : undefined;
+            const card = props.lesson.ready ? props.lesson.data.cards[cardNumber - 1] : undefined;
             const state = {
-                cards: props.lesson.ready ? props.lesson.test.cards : [],
+                cards: props.lesson.ready ? props.lesson.data.cards : [],
                 card: card,
                 isSingleAnswer: card ? card.answers.filter(answer => answer.correct).length < 2 : undefined,
                 cardNumber: cardNumber,
@@ -138,15 +146,17 @@
                 this.toggleModal(true);
             },
 
+            goBack() {
+                const prevCard = this.state.cards[this.state.cardNumber - 2];
+                location.hash = `${this.props.lesson.loc_hash}:${prevCard.type}:${this.state.cardNumber - 1}`;
+            },
+
             nextTestCard() {
                 this.toggleModal(false);
                 window.scroll(0, 0);
                 this.state.selectedAnswer = {};
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
+                const nextCard = this.state.cards[this.state.cardNumber];
+                location.hash = `${this.props.lesson.loc_hash}:${nextCard.type}:${this.state.cardNumber + 1}`;
             },
         }}
         LessonTest.components = {

@@ -15,7 +15,7 @@
             <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
             <template if="{ course.ready }">
                 <div class="card-container">
-                    <p if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
+                    <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
                     <Card
                         each="{lesson in course.lessons}"
                         status="{lessonStatus(lesson)}"

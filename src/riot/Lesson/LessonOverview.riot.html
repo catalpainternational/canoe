@@ -17,7 +17,7 @@
         lesson="{props.lesson}"
     >
     </LessonTest>
-    <LessonPage if="{!state.section}" lesson="{props.lesson}"></LessonPage>
+    <LessonPage if="{!state.section}"></LessonPage>
 
     <script>
         import { getRoute } from "ReduxImpl/Interface";
@@ -31,11 +31,24 @@
 
         function readState() {
             const route = getRoute();
+            // TODO update this when we get the real data from wagtail
+            const cards = mapCards(route.page.objective, 'objectives')
+                .concat(mapCards(route.page.content, 'content'))
+                .concat(mapCards(route.page.test, 'test'))
+                .map((it, index) => ({ index, ...it }));
+
+            route.page.data.cards = cards;
+
             const state = {
                 section: route.riotHash[0],
             };
             return state;
         }
+
+        function mapCards(dataObj, type) {
+            return dataObj.cards.map(it => ({ type, ...it }));
+        }
+
         function LessonOverview() { return {
 
             OBJECTIVES: "objectives",

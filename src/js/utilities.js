@@ -81,3 +81,11 @@ export const getCourseWithLatestCompletion = (courses) => {
     }
     return lastWorkedOnCourse;
 };
+
+export const lessonSectionComplete = (cards, card, lesson, module) => {
+    const remainingInSection = cards.filter((it, index) => {
+        return it.type === card.type && index > card.index;
+    });
+    const isLastOfType = remainingInSection.length === 0;
+    if (isLastOfType) lesson.completeSection(module);
+};

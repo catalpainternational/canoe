@@ -5,6 +5,7 @@
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
         lesson="{ props.lesson }"
+        linkTo="{ props.lesson.course.loc_hash }"
     >
         <span class="plant"></span>
         <h3>{ TRANSLATIONS.title() }</h3>
@@ -19,40 +20,41 @@
         <div>
             <button
                 class="btn-primary"
-                onclick="{nextObjectiveCard}"
+                onclick="{nextCard}"
                 if="{ state.cardNumber < state.cards.length }"
             >
                 { TRANSLATIONS.next() }
             </button>
             <button
                 class="btn-primary"
-                onclick="{completeObjectiveModal}"
+                onclick="{completeLesson}"
                 if="{ state.cardNumber === state.cards.length }"
             >
                 { TRANSLATIONS.finish() }
             </button>
         </div>
     </div>
-    <LessonModuleComplete
-        if="{ props.lesson.ready && state.complete }"
-        lesson="{props.lesson}"
-        module="{props.module}"
-        nextModule="content"
-    ></LessonModuleComplete>
+    <LessonFeedback
+        if="{ !state.cardNumber && state.stage == 'feedback' }"
+        lessonName="{props.lesson.title}"
+    ></LessonFeedback>
+    <LessonComplete
+        if="{ !state.cardNumber && state.stage == 'complete' }"
+    ></LessonComplete>
 
     <script>
-        import LessonModuleComplete from "RiotTags/Lesson/LessonModuleComplete.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
+        import { lessonSectionComplete } from "js/utilities";
 
         function readState(props) {
             const route = getRoute();
             const stage = route.riotHash[1];
             const cardNumber = parseInt(stage);
             const state = {
-                cards: props.lesson.ready ? props.lesson.objective.cards : [],
-                card: props.lesson.ready ? props.lesson.objective.cards[cardNumber - 1] : undefined,
+                cards: props.lesson.ready ? props.lesson.data.cards : [],
+                card: props.lesson.ready ? props.lesson.data.cards[cardNumber - 1] : undefined,
                 cardNumber: cardNumber,
                 complete: stage === 'complete'
             };
@@ -74,25 +76,32 @@
             },
 
             goBack() {
-                location.hash = `${this.props.lesson.loc_hash}:objectives:${this.state.cardNumber - 1}`;
+                const prevCard = this.state.cards[this.state.cardNumber - 2];
+                location.hash = `${this.props.lesson.loc_hash}:${prevCard.type}:${this.state.cardNumber - 1}`;
             },
 
-            nextObjectiveCard() {
+            nextCard() {
                 window.scroll(0, 0);
-                location.hash = `${this.props.lesson.loc_hash}:objectives:${this.state.cardNumber + 1}`;
+                const nextCard = this.state.cards[this.state.cardNumber];
+                lessonSectionComplete(
+                    this.state.cards,
+                    this.state.cards[this.state.cardNumber - 1],
+                    this.props.lesson,
+                    this.props.module
+                );
+
+                location.hash = `${this.props.lesson.loc_hash}:${nextCard.type}:${this.state.cardNumber + 1}`;
             },
 
-            completeObjectiveModal() {
-                this.props.lesson.completeSection(this.props.module);
-                location.hash = `${this.props.lesson.loc_hash}:objectives:complete`;
+            completeLesson() {
+                location.hash = `${this.props.lesson.loc_hash}:test:feedback`;
             },
         }}
 
         LessonObjective.components = {
-            lessonmodulecomplete: LessonModuleComplete,
             lessonframe: LessonFrame,
         };
-        
+
         export default LessonObjective;
     </script>
 </LessonObjective>

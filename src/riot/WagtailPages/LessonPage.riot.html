@@ -1,53 +1,32 @@
 <LessonPage>
-    <TopMenu extrastyleclasses="without-swoop">
-        <a class="top-icon left has-circle" onclick="{backToCoursePage}">
-            <span class="arrow"></span>
-        </a>
-        <h4>{ lesson.title }</h4>
-    </TopMenu>
-    <div class="content-wrapper">
-        <h3 id="lessonPageTitle">{lesson.title}</h3>
-        <template if="{ lesson.ready }">
-            <p>{lesson.shortDescription}</p>
-            <p if="{lesson.longDescription && state.showLongDescription}">
-                {lesson.longDescription}
-            </p>
-            <a
-                if="{lesson.longDescription && state.showLongDescription}"
-                onclick="{toggleLessonDescription}"
-                >{ TRANSLATIONS.less() }</a
-            >
-            <a
-                if="{lesson.longDescription && !state.showLongDescription}"
-                onclick="{toggleLessonDescription}"
-                >{ TRANSLATIONS.more() }</a
-            >
-            <div class="module-swoop">
-                <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
-                <div class="card-container">
-                <Card
-                    title="1. {lesson.objective.title}"
-                    link="{lesson.loc_hash}:{OBJECTIVES}:1"
-                    status="{moduleStatus(OBJECTIVES)}"
-                ></Card>
-                <Card
-                    title="2. {lesson.content.title}"
-                    link="{lesson.loc_hash}:{CONTENT}:1"
-                    status="{moduleStatus(CONTENT)}"
-                ></Card>
-                <Card
-                    title="3. {lesson.test.title}"
-                    link="{lesson.loc_hash}:{TEST}:1"
-                    status="{moduleStatus(TEST)}"
-                ></Card>
-            </div>
-        </template>
+    <LessonFrame
+        if="{lesson.ready}"
+        extrastyleclasses="message-container"
+        linkTo="{lesson.course.loc_hash}"
+    >
+        <h5>Lesson</h5>
+        <h3>{lesson.title}</h3>
+        <div if="{lesson.card_image}" class="lesson-page-image-wrap">
+            <img
+                crossorigin="anonymous"
+                src="{getMediaUrl(lesson.card_image)}"
+                class="lesson-page-image"
+            />
+        </div>
+        <span if="{!lesson.card_image}" class="lesson-presentation"></span>
+        <p>{lesson.shortDescription}</p>
+        <p>{lesson.longDescription}</p>
+    </LessonFrame>
+    <div if="{lesson.ready}" class="bottom-buttons">
+        <button class="btn-primary" onclick="{startLesson}">
+            { TRANSLATIONS.start() }
+        </button>
     </div>
 
     <script>
-        import Card from "RiotTags/Components/Card.riot.html";
-        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
+        import { getMediaUrl } from "js/RenditionSelector";
         import { getRoute } from "ReduxImpl/Interface";
 
         function LessonPage() { return {
@@ -59,6 +38,7 @@
                 lesson_activities: () => gettext("Lesson Activities"),
                 more: () => gettext("See more"),
                 less: () => gettext("See less"),
+                start: () => gettext("Start lesson"),
             },
 
             OBJECTIVES: "objectives",
@@ -75,6 +55,10 @@
 
             onUpdated() {
                 this.disableBlockedLessonModules();
+            },
+
+            startLesson() {
+                location.hash = `#${this.lesson.loc_hash}:${this.lesson.data.cards[0].type}:1`;
             },
 
             backToCoursePage() {
@@ -104,23 +88,22 @@
             },
 
             moduleStatus(module) {
-                if (
-                    this.lesson.isModuleComplete(
-                        module
-                    )
-                ) {
+                if (this.lesson.isModuleComplete(module)) {
                     return "complete";
                 } else {
                     return "not-started";
                 }
             },
+
+            getMediaUrl(documentPath) {
+                return `${getMediaUrl(documentPath)}`;
+            },
         }};
 
         LessonPage.components = {
-            card: Card,
-            topmenu: TopMenu,
+            lessonframe: LessonFrame,
         };
-        
+
         export default LessonPage;
     </script>
 </LessonPage>
