@@ -21,17 +21,46 @@
             </button>
         </div>
         <div class="activity-swoop">
-			
-		</div>
+            <div class="tab-titles">
+                <a
+                    class="{state.selectedTab === 'plan' ? 'selected' : ''}"
+                    onclick="{() => selectTab('plan')}"
+                >
+                    <h5 class="section-title">{ TRANSLATIONS.plan() }</h5>
+                </a>
+                <a
+                    class="{state.selectedTab === 'teach' ? 'selected' : ''}"
+                    onclick="{() => selectTab('teach')}"
+                >
+                    <h5 class="section-title">{ TRANSLATIONS.teach() }</h5>
+                </a>
+                <a
+                    class="{state.selectedTab === 'extend' ? 'selected' : ''}"
+                    onclick="{() => selectTab('extend')}"
+                >
+                    <h5 class="section-title">{ TRANSLATIONS.extend() }</h5>
+                </a>
+            </div>
+            <PlanTab if="{state.selectedTab === 'plan'}"></PlanTab>
+            <TeachTab if="{state.selectedTab === 'teach'}"></TeachTab>
+            <ExtendTab if="{state.selectedTab === 'extend'}"></ExtendTab>
+        </div>
     </div>
     <script>
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+        import PlanTab from "RiotTags/Teaching/PlanTab.riot.html";
+        import TeachTab from "RiotTags/Teaching/TeachTab.riot.html";
+        import ExtendTab from "RiotTags/Teaching/ExtendTab.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
         import { getCardImageUrl } from "js/utilities";
 
         function ActivityPage() {
             return {
+                state: {
+                    selectedTab: "plan",
+                },
+
                 onBeforeMount(props, state) {
                     this.page = getRoute().page;
                     console.log(this.page);
@@ -39,16 +68,26 @@
 
                 TRANSLATIONS: {
                     markComplete: () => gettext("Mark activity complete"),
+                    plan: () => gettext("plan"),
+                    teach: () => gettext("teach"),
+                    extend: () => gettext("extend"),
                 },
 
                 getCardImage(link, cardImage) {
                     return getCardImageUrl(link, cardImage);
+                },
+
+                selectTab(tabName) {
+                    this.update({ selectedTab: tabName });
                 },
             };
         }
 
         ActivityPage.components = {
             topmenu: TopMenu,
+            plantab: PlanTab,
+            teachtab: TeachTab,
+            extendtab: ExtendTab,
         };
 
         export default ActivityPage;
