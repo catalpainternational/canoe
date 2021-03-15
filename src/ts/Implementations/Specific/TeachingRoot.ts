@@ -1,6 +1,6 @@
 import { Page } from "../Page";
 
-export default class LearningActivityRoot extends Page {
+export default class TeachingRoot extends Page {
     #all_tags!: Set<string>;
 
     get topics(): Page[] {
