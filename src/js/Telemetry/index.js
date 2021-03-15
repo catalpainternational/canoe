@@ -27,7 +27,11 @@ const createPOSTRequest = (path, body) => {
 };
 
 const postFeedback = async (feedback) => {
-    return await fetch(createPOSTRequest(ACTIONS_ENDPOINT, feedback));
+    try {
+        return await fetch(createPOSTRequest(ACTIONS_ENDPOINT, feedback));
+    } catch (err) {
+        throw err;
+    }
 };
 
 const syncFeedback = async () => {
@@ -35,8 +39,20 @@ const syncFeedback = async () => {
     for (const feedbackKey of feedbackKeys) {
         const feedback = await getFeedbackFromIdb(feedbackKey);
 
-        const response = await postFeedback(feedback);
-        if (response.ok) {
+        try {
+            const response = await postFeedback(feedback);
+            if (response.ok) {
+                await deleteFeedbackFromIdb(feedbackKey);
+            }
+        } catch (err) {
+            if (err instanceof TypeError && err.message === "Failed to fetch") {
+                console.log("Feedback didn't post, but will not be deleted.");
+                // Thrown when network fails.
+                return;
+            }
+            console.log(
+                "Posting Feedback threw a 500, so we're deleting our local copy."
+            );
             await deleteFeedbackFromIdb(feedbackKey);
         }
     }
