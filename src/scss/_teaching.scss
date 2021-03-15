@@ -1,6 +1,9 @@
-AllTopicsList {
+AllTopicsList,
+TopicPage,
+Activitypage {
     .with-swoop {
         height: unset;
+        min-height: 150px;
     }
 
     div.content-wrapper {

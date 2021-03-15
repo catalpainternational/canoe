@@ -234,12 +234,7 @@ export class Manifest extends PublishableItem<TManifestData> {
             case "resourcearticle":
                 return new Resource(this, pageId, pageStatusId, parent);
             case "learningactivitieshomepage":
-                return new TeachingRoot(
-                    this,
-                    pageId,
-                    pageStatusId,
-                    parent
-                );
+                return new TeachingRoot(this, pageId, pageStatusId, parent);
             case "learningactivitytopicpage":
                 return new TeachingTopic(this, pageId, pageStatusId, parent);
             case "learningactivitypage":
