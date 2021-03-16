@@ -1,3 +1,102 @@
 <PlanTab>
-    <div>This is the plan section</div>
+    <div class="first-subhead">
+        <h4>
+            <span class="has-circle">
+                <span class="brain"></span>
+            </span>
+            { TRANSLATIONS.learningOutcomes() }
+        </h4>
+        <!-- <template each="{card in state.outcomes}"></template> -->
+        <ListCard card="{state.dummyList}"></ListCard>
+    </div>
+    <div class="middle-subhead">
+        <h4>
+            <span class="has-circle">
+                <span class="binocular"></span>
+            </span>
+            { TRANSLATIONS.overview() }
+        </h4>
+        <!-- <template each="{card in state.overview}"></template> -->
+        <ListCard card="{state.dummyList}"></ListCard>
+        <!-- <BasicCard card="{state.dummyImage}"></BasicCard> -->
+        <!-- <VideoCard media="{state.dummyVideo}"></VideoCard> -->
+        <Html5Card card="{state.dummyHtml}"></Html5Card>
+    </div>
+    <div class="last-subhead">
+        <h4>
+            <span class="has-circle">
+                <span class="clipboard-pencil"></span>
+            </span>
+            { TRANSLATIONS.preparation() }
+        </h4>
+        <!-- <template each="{card in state.preparation}"></template> -->
+		<ListCard card="{state.dummyList}"></ListCard>
+        <!-- <BasicCard card="{state.dummyImage}"></BasicCard> -->
+        <!-- <VideoCard media="{state.dummyVideo}"></VideoCard> -->
+        <Html5Card card="{state.dummyHtml}"></Html5Card>
+    </div>
+	<button class="btn-secondary" onclick="{readyToTeach}">
+		{ TRANSLATIONS.ready() }
+	</button>
+    <script>
+        import ListCard from "RiotTags/Lesson/ListCard.riot.html";
+        import BasicCard from "RiotTags/Components/BasicCard.riot.html";
+        import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
+        import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
+
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function PlanTab() { return {
+			state: {
+				dummyList: {
+					isNumbered: true,
+					content: [
+						"this is some content",
+						"this is another list number",
+						"this is a longer list item to understand the general outcome of this activity",
+					],
+				},
+				dummyImage: {
+					header: "the title of the image",
+					image: {
+						alt: "working cat.jpg",
+						id: 58,
+					},
+				},
+				dummyVideo: {
+					title: "the title of the video",
+					description: "this is the information about the video",
+					id: 3,
+				},
+				dummyHtml: {
+					title: "the title of the html",
+					url: "/iframe-document/2/",
+				},
+			},
+
+			onBeforeMount(props, state) {
+				this.page = getRoute().page;
+			},
+
+			TRANSLATIONS: {
+				learningOutcomes: () => gettext("Learning outcomes"),
+				overview: () => gettext("Overview"),
+				preparation: () => gettext("Preparation tasks & materials"),
+				ready: () => gettext("Ready to teach")
+			},
+
+			readyToTeach() {
+				this.props.selectTab("teach");
+			}
+		}}
+
+        PlanTab.components = {
+            listcard: ListCard,
+            basiccard: BasicCard,
+            videocard: VideoCard,
+            html5card: Html5Card,
+        };
+
+        export default PlanTab;
+    </script>
 </PlanTab>

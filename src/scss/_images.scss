@@ -310,3 +310,21 @@
     width: 10px;
     height: 10px;
 }
+
+.clipboard-pencil {
+    @include mask-icons-shared("~img/clipboard_pencil.svg", contain, $app-accent-color);
+    width: 13px;
+    height: 14px;
+}
+
+.brain {
+    @include mask-icons-shared("~img/brain.svg", contain, $app-accent-color);
+    width: 14px;
+    height: 14px;
+}
+
+.binocular {
+    @include mask-icons-shared("~img/binoculars.svg", contain, $app-accent-color);
+    width: 14px;
+    height: 12px;
+}

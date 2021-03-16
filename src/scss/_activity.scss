@@ -7,9 +7,9 @@ ActivityPage {
         h5 {
             flex: 1;
             text-transform: uppercase;
-			font-weight: 300;
-			letter-spacing: 1px;
-			margin-right: 5px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-right: 5px;
         }
 
         p {
@@ -18,7 +18,7 @@ ActivityPage {
             &.reference {
                 margin-right: 12px;
                 background-color: $gray-8;
-                padding: 5px 10px;
+                padding: 5px 13px;
                 border-radius: 12px;
             }
 
@@ -27,19 +27,87 @@ ActivityPage {
 
                 .clock {
                     align-self: center;
-					margin-right: 3px;
+                    margin-right: 3px;
                 }
             }
         }
     }
 
-	.title-description {
-		button {
-			margin: 1em 0 2.5em;
+    .title-description {
+        button {
+            margin: 1em 0 2.5em;
+        }
+    }
+
+    .activity-swoop {
+        @extend %bottom-swoop;
+        background: linear-gradient(134.77deg, $gray-8 0%, $gray-7 100%);
+
+		.tab-titles h5 {
+			color: $gray-3;
 		}
-	}
-	
-	.activity-swoop {
-		@extend %bottom-swoop;
-	}
+    }
+
+    div.content-wrapper {
+        padding-bottom: calc(#{$bottom-menu-height});
+    }
+
+    ListCard {
+        p {
+            color: $gray-1;
+            display: flex;
+
+            .bullet {
+                font-size: 10px;
+                margin: 5px 20px 0 0;
+            }
+
+            .number {
+                font-size: 14px;
+                margin: 2px 15px 0 0;
+
+                &:after {
+                    content: ".";
+                }
+            }
+        }
+    }
+
+    Html5Card {
+		h3 {
+			font-size: 1.2em;
+		}
+
+        iframe {
+            height: 200px;
+        }
+
+        .btn-primary {
+            margin-top: 1em;
+        }
+    }
+}
+
+PlanTab {
+    h4 {
+        align-items: center;
+        display: flex;
+        margin-bottom: 1em;
+    }
+
+    .has-circle {
+        margin-right: 12px;
+        box-shadow: none;
+    }
+
+    .first-subhead,
+    .middle-subhead {
+        padding-bottom: 1.5em;
+        border-bottom: 2px solid $gray-7;
+    }
+
+    .middle-subhead,
+    .last-subhead {
+        padding: 2em 0;
+    }
 }

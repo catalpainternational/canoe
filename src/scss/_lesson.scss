@@ -253,13 +253,13 @@ ResourceArticle LessonFrame {
     p.error-message {
         color: red;
     }
+}
 
-    iframe {
-        border: 3px solid $app-accent-color;
-        width: 100%;
-        flex: 1;
-        border-radius: 15px;
-    }
+iframe {
+    border: 3px solid $app-accent-color;
+    width: 100%;
+    flex: 1;
+    border-radius: 15px;
 }
 
 TestMultipleAnswer,

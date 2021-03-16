@@ -1,7 +1,8 @@
 <ListCard>
-    <h3>{ props.card.title }</h3>
+    <h3 if="{props.card.title}">{ props.card.title }</h3>
     <p each="{item in props.card.content}">
-        <span>{ props.card.isNumbered ? props.card.content.indexOf(item) + 1 : "•" }</span>
+        <span if="{props.card.isNumbered}" class="number">{ props.card.content.indexOf(item) + 1 }</span>
+        <span if="{!props.card.isNumbered}" class="bullet">{ "•" }</span>
         {item}
     </p>
 </ListCard>
