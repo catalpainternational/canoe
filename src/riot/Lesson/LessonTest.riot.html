@@ -63,9 +63,9 @@
             const route = getRoute();
             const stage = route.riotHash[1];
             const cardNumber = parseInt(stage);
-            const card = props.lesson.ready ? props.lesson.data.cards[cardNumber - 1] : undefined;
+            const card = props.lesson.ready ? props.lesson.content.cards[cardNumber - 1] : undefined;
             const state = {
-                cards: props.lesson.ready ? props.lesson.data.cards : [],
+                cards: props.lesson.ready ? props.lesson.content.cards : [],
                 card: card,
                 isSingleAnswer: card ? card.answers.filter(answer => answer.correct).length < 2 : undefined,
                 cardNumber: cardNumber,
@@ -146,7 +146,7 @@
 
             goBack() {
                 const prevCard = this.state.cards[this.state.cardNumber - 2];
-                location.hash = `${this.props.lesson.loc_hash}:${prevCard.type}:${this.state.cardNumber - 1}`;
+                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber - 1}`;
             },
 
             nextTestCard() {
@@ -154,7 +154,7 @@
                 window.scroll(0, 0);
                 this.state.selectedAnswer = {};
                 const nextCard = this.state.cards[this.state.cardNumber];
-                location.hash = `${this.props.lesson.loc_hash}:${nextCard.type}:${this.state.cardNumber + 1}`;
+                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber + 1}`;
             },
         }}
         LessonTest.components = {

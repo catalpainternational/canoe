@@ -52,8 +52,8 @@
             const stage = route.riotHash[1];
             const cardNumber = parseInt(stage);
             const state = {
-                cards: props.lesson.ready ? props.lesson.data.cards : [],
-                card: props.lesson.ready ? props.lesson.data.cards[cardNumber - 1] : undefined,
+                cards: props.lesson.ready ? props.lesson.content.cards : [],
+                card: props.lesson.ready ? props.lesson.content.cards[cardNumber - 1] : undefined,
                 cardNumber: cardNumber,
                 complete: stage === 'complete'
             };
@@ -76,7 +76,7 @@
 
             goBack() {
                 const prevCard = this.state.cards[this.state.cardNumber - 2];
-                location.hash = `${this.props.lesson.loc_hash}:${prevCard.type}:${this.state.cardNumber - 1}`;
+                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber - 1}`;
             },
 
             nextCard() {
@@ -89,7 +89,7 @@
                     this.props.module
                 );
 
-                location.hash = `${this.props.lesson.loc_hash}:${nextCard.type}:${this.state.cardNumber + 1}`;
+                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber + 1}`;
             },
 
             completeLesson() {

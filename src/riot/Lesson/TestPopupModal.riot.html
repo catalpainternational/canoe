@@ -42,15 +42,15 @@
             nextCard() {
                 this.props.toggleModal(false, {});
                 window.scroll(0, 0);
-                const nextCard = this.props.lesson.data.cards[this.props.cardNumber];
-                location.hash = `${this.props.lesson.loc_hash}:${nextCard.type}:${this.props.cardNumber + 1}`;
+                const nextCard = this.props.lesson.content.cards[this.props.cardNumber];
+                location.hash = `${this.props.lesson.loc_hash}:content:${this.props.cardNumber + 1}`;
             },
 
             completePage() {
                 this.props.toggleModal(false, {});
                 lessonSectionComplete(
-                    this.props.lesson.data.cards,
-                    this.props.lesson.data.cards[this.props.cardNumber - 1],
+                    this.props.lesson.content.cards,
+                    this.props.lesson.content.cards[this.props.cardNumber - 1],
                     this.props.lesson,
                     this.props.module
                 );

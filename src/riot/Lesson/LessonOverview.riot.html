@@ -31,22 +31,12 @@
 
         function readState() {
             const route = getRoute();
-            // TODO update this when we get the real data from wagtail
-            const cards = mapCards(route.page.objective, 'objectives')
-                .concat(mapCards(route.page.content, 'content'))
-                .concat(mapCards(route.page.test, 'test'))
-                .map((it, index) => ({ index, ...it }));
-
-            route.page.data.cards = cards;
+            console.log(route);
 
             const state = {
                 section: route.riotHash[0],
             };
             return state;
-        }
-
-        function mapCards(dataObj, type) {
-            return dataObj.cards.map(it => ({ type, ...it }));
         }
 
         function LessonOverview() { return {
