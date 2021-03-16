@@ -6,14 +6,14 @@
     >
         <h5>Lesson</h5>
         <h3>{lesson.title}</h3>
-        <div if="{lesson.card_image}" class="lesson-page-image-wrap">
+        <div if="{lesson.cardImage}" class="lesson-page-image-wrap">
             <img
                 crossorigin="anonymous"
-                src="{getMediaUrl(lesson.card_image)}"
+                src="{getMediaUrl(lesson.cardImage)}"
                 class="lesson-page-image"
             />
         </div>
-        <span if="{!lesson.card_image}" class="lesson-presentation"></span>
+        <span if="{!lesson.cardImage}" class="lesson-presentation"></span>
         <p>{lesson.shortDescription}</p>
         <p>{lesson.longDescription}</p>
     </LessonFrame>
