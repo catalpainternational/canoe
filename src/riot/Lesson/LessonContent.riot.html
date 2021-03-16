@@ -6,6 +6,10 @@
         progressMax="{ state.cards.length }"
         linkTo="{ props.lesson.course.loc_hash }"
     >
+        <TitleDescription
+            if="{state.card.tag === 'titleDescription'}"
+            card="{state.card}"
+        />
         <Raw if="{state.card.tag === 'raw'}" html="{state.card.content}" />
         <BasicCard if="{state.card.tag === 'basic'}" card="{state.card}" />
         <AudioCard
@@ -69,6 +73,7 @@
         import ListCard from "RiotTags/Lesson/ListCard.riot.html";
         import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
         import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
+        import TitleDescription from "RiotTags/Components/TitleDescription.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
         import { lessonSectionComplete } from "js/utilities";
@@ -149,6 +154,7 @@
             audiocard: AudioCard,
             pdfcard: PdfCard,
             html5card: Html5Card,
+            titledescription: TitleDescription,
         };
 
         export default LessonContent;

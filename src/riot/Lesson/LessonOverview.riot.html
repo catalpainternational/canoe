@@ -1,28 +1,21 @@
 <LessonOverview>
-    <LessonObjective
-        if="{state.section === OBJECTIVES}"
-        module="{OBJECTIVES}"
-        nextModule="{CONTENT}"
-        lesson="{props.lesson}"
-    ></LessonObjective>
     <LessonContent
         if="{state.section === CONTENT}"
         module="{CONTENT}"
         nextModule="{TEST}"
         lesson="{props.lesson}"
     ></LessonContent>
-    <LessonTest
+    <!-- <LessonTest
         if="{state.section === TEST}"
         module="{TEST}"
         lesson="{props.lesson}"
     >
-    </LessonTest>
+    </LessonTest> -->
     <LessonPage if="{!state.section}"></LessonPage>
 
     <script>
         import { getRoute } from "ReduxImpl/Interface";
 
-        import LessonObjective from "RiotTags/Lesson/LessonObjective.riot.html";
         import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
         import LessonTest from "RiotTags/Lesson/LessonTest.riot.html";
         import LessonPage from "RiotTags/WagtailPages/LessonPage.riot.html";
@@ -41,7 +34,6 @@
 
         function LessonOverview() { return {
 
-            OBJECTIVES: "objectives",
             CONTENT: "content",
             TEST: "test",
 
@@ -56,7 +48,6 @@
         }}
 
         LessonOverview.components = {
-            lessonobjective: LessonObjective,
             lessoncontent: LessonContent,
             lessontest: LessonTest,
             lessonpage: LessonPage,
