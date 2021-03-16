@@ -21,25 +21,24 @@
                 <h5 class="section-title">{ TRANSLATIONS.completed() }</h5>
             </a>
         </div>
-        <LoadingDots if="{state.loading}" extrastyleclasses="dark"></LoadingDots>
-        <div if="{state.selectedInProgress}" class="card-container">
+        <div if="{ state.selectedInProgress && home.coursesInProgress.length }" class="card-container">
             <Card
-                each="{course in state.inProgressCourses}"
-                title="{course.title}"
-                link="{course.id}"
-                status="{courseStatus(course)}"
-                progressValue="{course.numberOfFinishedLessons}"
-                progressMax="{course.numberOfLessons}"
+                each="{ course in home.coursesInProgress }"
+                title="{ course.title }"
+                link="{ course.loc_hash }"
+                status="{ course.progressStatus }"
+                progressValue="{ course.numberOfFinishedLessons }"
+                progressMax="{ course.numberOfLessons }"
             ></Card>
         </div>
-        <div if="{!state.selectedInProgress}" class="card-container">
+        <div if="{ !state.selectedInProgress && home.coursesCompleted.length  }" class="card-container">
             <Card
-                each="{course in state.completedCourses}"
-                title="{course.title}"
-                link="{course.id}"
-                status="{courseStatus(course)}"
-                progressValue="{course.numberOfFinishedLessons}"
-                progressMax="{course.numberOfLessons}"
+                each="{ course in home.coursesCompleted }"
+                title="{ course.title }"
+                link="{ course.loc_hash }"
+                status="{ course.progressStatus }"
+                progressValue="{ course.numberOfFinishedLessons }"
+                progressMax="{ course.numberOfLessons }"
             ></Card>
         </div>
         <h2 class="sub-title">{ TRANSLATIONS.learning() }</h2>
@@ -47,14 +46,14 @@
             <div class="card stat">
                 <div class="profile-card">
                     <span class="checkmark-circle"></span>
-                    <h3>{ countFinishedLessonsAndExams() }</h3>
+                    <h3>{ home.countFinishedLessonsAndExams }</h3>
                     <h5>{ TRANSLATIONS.lessonsCompleted() }</h5>
                 </div>
             </div>
             <div class="card stat">
                 <div class="profile-card">
                     <span class="road-sign"></span>
-                    <h3>{ getNumberOfLessonsLeft() }</h3>
+                    <h3>{ home.numberOfLessonsLeft }</h3>
                     <h5>{ TRANSLATIONS.lessonsLeft() }</h5>
                 </div>
             </div>
@@ -62,28 +61,17 @@
     </div>
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
-        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
-        import { getHomePage } from "js/WagtailPagesAPI";
-        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { getCourseWithLatestCompletion } from "js/utilities";
-
-        import AllCoursesPage from "js/AllCoursesPage";
+        import { getLanguage, getRoute } from "ReduxImpl/Interface";
 
         export default {
             state: {
-                courses: [],
-                currentCourse: null,
-                loading: false,
-                inProgressCourses: [],
-                completedCourses: [],
                 selectedInProgress: true,
             },
 
             components: {
                 card: Card,
-                loadingdots: LoadingDots,
                 topmenu: TopMenu,
             },
 
@@ -97,66 +85,8 @@
                 completed: () => gettext("completed"),
             },
 
-            async onMounted() {
-                this.update({ loading: true });
-                const allCoursesPageJSON = await getHomePage();
-                const allCoursesPage = new AllCoursesPage(allCoursesPageJSON);
-
-                let courses = await allCoursesPage.getFullCourseObjects();
-
-                if (isGuestUser()) {
-                    courses = courses.filter((course) => course.isVisibleToGuests());
-                }
-                const lastWorkedOnCourse = getCourseWithLatestCompletion(courses);
-
-                let inProgressCourses = [];
-                let completedCourses = [];
-                for (const course of courses) {
-                    const status = this.courseStatus(course);
-                    if (status === "not-started") {
-                        continue;
-                    } else if (status === "in-progress") {
-                        inProgressCourses.push(course);
-                    } else if (status === "complete") {
-                        completedCourses.push(course);
-                    }
-                }
-
-                this.update({
-                    loading: false,
-                    courses,
-                    inProgressCourses,
-                    completedCourses,
-                    currentCourse: lastWorkedOnCourse,
-                });
-            },
-
-            countFinishedLessonsAndExams() {
-                const { courses } = this.state;
-                const tallyFinishedLessonsAndExams = (totalFinished, aCourse) =>
-                    totalFinished + aCourse.numberOfFinishedLessons;
-                return courses.reduce(tallyFinishedLessonsAndExams, 0);
-            },
-
-            countLessonsAndExams(courses) {
-                const tallyLessonsAndExams = (totalLessons, currentCourse) =>
-                    totalLessons + currentCourse.numberOfLessons;
-                return courses.reduce(tallyLessonsAndExams, 0);
-            },
-
-            getNumberOfLessonsLeft() {
-                const { courses } = this.state;
-                return this.countLessonsAndExams(courses) - this.countFinishedLessonsAndExams();
-            },
-
-            courseStatus(course) {
-                if (course.numberOfFinishedLessons === 0) {
-                    return "not-started";
-                } else if (course.numberOfFinishedLessons < course.numberOfLessons) {
-                    return "in-progress";
-                } else {
-                    return "complete";
-                }
+            onBeforeMount() {
+                this.home = getRoute().page.home;
             },
 
             selectTab(tabName) {
