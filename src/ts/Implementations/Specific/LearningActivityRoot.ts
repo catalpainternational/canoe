@@ -6,6 +6,7 @@ export default class LearningActivityRoot extends Page {
     get topics(): Page[] {
         return this.childPages;
     }
+
     get all_tags(): Set<string> {
         if (this.#all_tags === undefined) {
             this.#all_tags = new Set(
@@ -17,6 +18,7 @@ export default class LearningActivityRoot extends Page {
         }
         return this.#all_tags;
     }
+
     get description(): string {
         return this.data.description;
     }
