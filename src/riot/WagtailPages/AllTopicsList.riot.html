@@ -1,7 +1,7 @@
-<AllTopicsPage>
+<AllTopicsList>
     <TopMenu extrastyleclasses="with-swoop">
         <h3>{ page.title }</h3>
-        <p if="{ page.ready }">{ page.description }</p>
+        <p>{ page.description }</p>
         <div class="filter-copy-container">
             <a
                 if="{showTagFilter()}"
@@ -13,7 +13,7 @@
         </div>
         <TagList
             if="{state.showTagList}"
-            tags="{ page.all_tags }"
+            tags="{page.all_tags}"
             onTagClick="{onTagClick}"
             selectedTags="{state.selectedTags}"
         ></TagList>
@@ -32,36 +32,32 @@
     <script>
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
-        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import Card from "RiotTags/Components/Card.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
 
-        function AllTopicsPage() {
-            return {
-                state: {
-                    showTagList: false,
-                },
-                onBeforeMount(props, state) {
-                    this.page = getRoute().page;
-                },
-                showTagFilter() {
-                    // we don't show the filter unless we have some tags
-                    return this.page.tags.size;
-                },
-                toggleTagList() {
-                    this.update({ showTagList: !this.state.showTagList });
-                },
-            };
-        }
+        function AllTopicsList() { return {
+            state: {
+                showTagList: false,
+            },
+            onBeforeMount(props, state) {
+                this.page = getRoute().page;
+            },
+            showTagFilter() {
+                // we don't show the filter unless we have some tags
+                return this.page.tags.size;
+            },
+            toggleTagList() {
+                this.update({ showTagList: !this.state.showTagList });
+            },
+        }}
 
-        AllTopicsPage.components = {
+        AllTopicsList.components = {
             topmenu: TopMenu,
             taglist: TagList,
-            loadingdots: LoadingDots,
             card: Card,
         };
 
-        export default AllTopicsPage;
+        export default AllTopicsList;
     </script>
-</AllTopicsPage>
+</AllTopicsList>

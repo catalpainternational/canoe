@@ -12,7 +12,7 @@ import Lesson from "./Specific/Lesson";
 import ResourcesRoot from "./Specific/ResourcesRoot";
 import Resource from "./Specific/Resource";
 import LearningActivityRoot from "./Specific/LearningActivityRoot";
-import LearningActivityTopic from "./Specific/LearningActivityTopic";
+import LearningTopic from "./Specific/LearningTopic";
 import LearningActivity from "./Specific/LearningActivity";
 
 import { MANIFEST_CACHE_NAME } from "../Constants";
@@ -241,12 +241,7 @@ export class Manifest extends PublishableItem<TManifestData> {
                     parent
                 );
             case "learningactivitytopicpage":
-                return new LearningActivityTopic(
-                    this,
-                    pageId,
-                    pageStatusId,
-                    parent
-                );
+                return new LearningTopic(this, pageId, pageStatusId, parent);
             case "learningactivitypage":
                 return new LearningActivity(this, pageId, pageStatusId, parent);
             default:

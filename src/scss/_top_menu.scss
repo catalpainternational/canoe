@@ -5,6 +5,8 @@ TopMenu {
         position: relative;
         max-width: $tablet;
         background-color: inherit;
+        background-size: cover;
+        background-position: center;
     }
 
     .with-swoop {

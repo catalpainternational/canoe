@@ -1,7 +1,7 @@
 import { _getOrFetchWagtailPageById } from "js/WagtailPagesAPI";
 import CoursePage from "./CoursePage";
 
-export default class AllCoursesPage {
+export default class AllCoursesList {
     constructor(aWagtailPage) {
         this.allCourses = aWagtailPage;
     }
