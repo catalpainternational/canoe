@@ -1,6 +1,6 @@
 import { Page } from "../Page";
 
-export default class LearningTopic extends Page {
+export default class TeachingTopic extends Page {
     get activities(): Page[] {
         return this.childPages;
     }

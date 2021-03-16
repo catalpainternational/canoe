@@ -33,6 +33,7 @@
         ></ResourceArticle>
         <AllTopicsList if="{state.page.type === 'learningactivitieshomepage'}"></AllTopicsList>
         <TopicPage if="{state.page.type === 'learningactivitytopicpage'}"></TopicPage>
+        <ActivityPage if="{state.page.type === 'learningactivitypage'}"></ActivityPage>
 
         <BottomMenu page="{state.page}"></BottomMenu>
         <PushSubscription></PushSubscription>
@@ -61,8 +62,10 @@
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
+
         import AllTopicsList from "RiotTags/WagtailPages/AllTopicsList.riot.html";
-        import TopicPage from "RiotTags/Learning/TopicPage.riot.html";
+        import TopicPage from "RiotTags/Teaching/TopicPage.riot.html";
+        import ActivityPage from "RiotTags/Teaching/ActivityPage.riot.html";
 
         function App() {
             function readState() {
@@ -109,6 +112,7 @@
             resourcearticle: ResourceArticle,
             alltopicslist: AllTopicsList,
             topicpage: TopicPage,
+            activitypage: ActivityPage,
             loadingdots: LoadingDots,
         }
 

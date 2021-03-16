@@ -1,0 +1,45 @@
+ActivityPage {
+    .topic-and-details {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        h5 {
+            flex: 1;
+            text-transform: uppercase;
+			font-weight: 300;
+			letter-spacing: 1px;
+			margin-right: 5px;
+        }
+
+        p {
+            font-size: 10px;
+
+            &.reference {
+                margin-right: 12px;
+                background-color: $gray-8;
+                padding: 5px 10px;
+                border-radius: 12px;
+            }
+
+            &.time {
+                display: flex;
+
+                .clock {
+                    align-self: center;
+					margin-right: 3px;
+                }
+            }
+        }
+    }
+
+	.title-description {
+		button {
+			margin: 1em 0 2.5em;
+		}
+	}
+	
+	.activity-swoop {
+		@extend %bottom-swoop;
+	}
+}

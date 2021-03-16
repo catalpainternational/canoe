@@ -1,60 +1,60 @@
 <AllCoursesList>
-    <div class="background">
-        <GuestBanner></GuestBanner>
-        <TopMenu extrastyleclasses="with-swoop">
-            <h3>{ TRANSLATIONS.allCourses() }</h3>
-            <div class="filter-copy-container">
-                <p>{ TRANSLATIONS.coursesIntro() }</p>
-                <a
-                    if="{showTagFilter()}"
-                    class="has-circle {state.showTagList ? 'show-tags' : ''}"
-                    onclick="{toggleTagList}"
-                >
-                    <span class="filter-icon"></span>
-                </a>
-            </div>
-            <TagList
-                if="{ state.showTagList }"
-                tags="{ page.all_tags }"
-                onTagClick="{onTagClick}"
-                selectedTags="{state.selectedTags}"
-            ></TagList>
-        </TopMenu>
+    <GuestBanner></GuestBanner>
+    <TopMenu extrastyleclasses="with-swoop">
+        <h3>{ TRANSLATIONS.allCourses() }</h3>
+        <div class="filter-copy-container">
+            <p>{ TRANSLATIONS.coursesIntro() }</p>
+            <a
+                if="{showTagFilter()}"
+                class="has-circle {state.showTagList ? 'show-tags' : ''}"
+                onclick="{toggleTagList}"
+            >
+                <span class="filter-icon"></span>
+            </a>
+        </div>
+        <TagList
+            if="{ state.showTagList }"
+            tags="{ page.all_tags }"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
+    </TopMenu>
 
-        <div class="content-wrapper">
-            <LoadingDots if="{!page.ready}"
-                extrastyleclasses="dark"
-            ></LoadingDots>
-            <template if="{state.currentCourse && !state.currentCourse.isFinished()}">
-                <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
-                <div class="card-container full-width">
-                    <Card
-                        status="{courseStatus(page.currentCourse)}"
-                        title="{page.currentCourse.title}"
-                        link="{page.currentCourse.loc_hash}"
-                        progressValue="{page.currentCourse.numberOfFinishedLessons}"
-                        progressMax="{page.currentCourse.numberOfLessons}"
-                        imageUrl="{ state.currentCourse.cardImage }"
-                    ></Card>
-                </div>
-            </template>
-            <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
-            <div class="card-container">
+    <div class="content-wrapper">
+        <LoadingDots if="{!page.ready}" extrastyleclasses="dark"></LoadingDots>
+        <template
+            if="{state.currentCourse && !state.currentCourse.isFinished()}"
+        >
+            <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
+            <div class="card-container full-width">
                 <Card
-                    each="{course in page.coursesCompleteLast}"
-                    if="{showCourse(course)}"
-                    status="{courseStatus(course)}"
-                    title="{course.title}"
-                    link="{course.loc_hash}"
-                    progress-value="{course.numberOfFinishedLessons}"
-                    progress-max="{course.numberOfLessons}"
-                    progressMax="{course.numberOfLessons}"
-                    imageUrl="{ course.cardImage }"
+                    status="{courseStatus(page.currentCourse)}"
+                    title="{page.currentCourse.title}"
+                    link="{page.currentCourse.loc_hash}"
+                    progressValue="{page.currentCourse.numberOfFinishedLessons}"
+                    progressMax="{page.currentCourse.numberOfLessons}"
+                    imageUrl="{state.currentCourse.cardImage}"
                 ></Card>
             </div>
-
-            <p if="{page.coursesCompleteLast.length === 0}">{ TRANSLATIONS.noCourses() }</p>
+        </template>
+        <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
+        <div class="card-container">
+            <Card
+                each="{course in page.coursesCompleteLast}"
+                if="{showCourse(course)}"
+                status="{courseStatus(course)}"
+                title="{course.title}"
+                link="{course.loc_hash}"
+                progress-value="{course.numberOfFinishedLessons}"
+                progress-max="{course.numberOfLessons}"
+                progressMax="{course.numberOfLessons}"
+                imageUrl="{course.cardImage}"
+            ></Card>
         </div>
+
+        <p if="{page.coursesCompleteLast.length === 0}">
+            { TRANSLATIONS.noCourses() }
+        </p>
     </div>
 
     <script>
@@ -66,64 +66,74 @@
 
         import { getRoute } from "ReduxImpl/Interface";
 
-        function AllCoursesList() { return {
-            state: {
-                currentCourse: null,
-                selectedTags: [],
-                showTagList: false,
-            },
+        function AllCoursesList() {
+            return {
+                state: {
+                    currentCourse: null,
+                    selectedTags: [],
+                    showTagList: false,
+                },
 
-            TRANSLATIONS: {
-                noCourses: () => gettext("There are no courses yet. Check back soon!"),
-                allCourses: () => gettext("All courses"),
-                continueLearning: () => gettext("Continue Learning"),
-                coursesIntro: () =>
-                    gettext(
-                        "Explore a range of courses to suit your needs, expertise, and interests."
-                    ),
-            },
+                TRANSLATIONS: {
+                    noCourses: () =>
+                        gettext("There are no courses yet. Check back soon!"),
+                    allCourses: () => gettext("All courses"),
+                    continueLearning: () => gettext("Continue Learning"),
+                    coursesIntro: () =>
+                        gettext(
+                            "Explore a range of courses to suit your needs, expertise, and interests."
+                        ),
+                },
 
-            onBeforeMount(props, state) {
-                this.page = getRoute().page;
-            },
+                onBeforeMount(props, state) {
+                    this.page = getRoute().page;
+                },
 
-            showTagFilter() {
-                // and we don't show the filter unless we have some tags
-                return  this.page.all_tags.size;
-            },
+                showTagFilter() {
+                    // and we don't show the filter unless we have some tags
+                    return this.page.all_tags.size;
+                },
 
-            toggleTagList() {
-                this.update({ showTagList: !this.state.showTagList });
-            },
+                toggleTagList() {
+                    this.update({ showTagList: !this.state.showTagList });
+                },
 
-            onTagClick(clickedTag) {
-                if (this.state.selectedTags.includes(clickedTag)) {
-                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
-                    this.state.selectedTags.splice(tagIndex, 1);
-                } else {
-                    this.state.selectedTags.push(clickedTag);
-                }
-                this.update();
-            },
+                onTagClick(clickedTag) {
+                    if (this.state.selectedTags.includes(clickedTag)) {
+                        const tagIndex = this.state.selectedTags.indexOf(
+                            clickedTag
+                        );
+                        this.state.selectedTags.splice(tagIndex, 1);
+                    } else {
+                        this.state.selectedTags.push(clickedTag);
+                    }
+                    this.update();
+                },
 
-            showCourse(course) {
-                return (
-                    !this.state.showTagList
-                    || !this.state.selectedTags.length
-                    || this.page.courseIdHasATagIn(course.id, this.state.selectedTags)
-                )
-            },
+                showCourse(course) {
+                    return (
+                        !this.state.showTagList ||
+                        !this.state.selectedTags.length ||
+                        this.page.courseIdHasATagIn(
+                            course.id,
+                            this.state.selectedTags
+                        )
+                    );
+                },
 
-            courseStatus(course) {
-                if (course.numberOfFinishedLessons === 0) {
-                    return "not-started";
-                } else if (course.numberOfFinishedLessons < course.numberOfLessons) {
-                    return "in-progress";
-                } else {
-                    return "complete";
-                }
-            },
-        }};
+                courseStatus(course) {
+                    if (course.numberOfFinishedLessons === 0) {
+                        return "not-started";
+                    } else if (
+                        course.numberOfFinishedLessons < course.numberOfLessons
+                    ) {
+                        return "in-progress";
+                    } else {
+                        return "complete";
+                    }
+                },
+            };
+        }
 
         AllCoursesList.components = {
             card: Card,

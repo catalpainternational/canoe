@@ -1,14 +1,6 @@
 AllCoursesList {
-    .background {
-        background-color: $app-background-color;
-    }
-
     .with-swoop {
         height: unset;
-    }
-
-    .tag-container > .tag p {
-        text-transform: none;
     }
 
     h5.section-title {
@@ -17,27 +9,5 @@ AllCoursesList {
 
     .card-container + .section-title {
         margin-top: 3em;
-    }
-
-    TagList {
-        .tag {
-            border-radius: 50%;
-            background-color: $gray-10;
-            height: 80px;
-            width: 80px;
-            box-shadow: 0 5px 10px 0 rgba(24, 33, 39, 0.2);
-
-            p {
-                color: $gray-3;
-                letter-spacing: 0.6px;
-                font-weight: 300;
-                white-space: pre-wrap;
-            }
-        }
-
-        .tag-container {
-            margin: 0 -20px 10px -20px;
-            padding-left: 20px;
-        }
     }
 }
