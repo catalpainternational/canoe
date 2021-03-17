@@ -7,19 +7,21 @@ ActivityPage {
         h5 {
             flex: 1;
             text-transform: uppercase;
-			font-weight: 300;
-			letter-spacing: 1px;
-			margin-right: 5px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-right: 5px;
         }
 
         p {
             font-size: 10px;
 
             &.reference {
-                margin-right: 12px;
+                // margin-right: 12px;
                 background-color: $gray-8;
-                padding: 5px 10px;
+                padding: 5px 13px;
                 border-radius: 12px;
+                letter-spacing: 0.6px;
+                text-transform: uppercase;
             }
 
             &.time {
@@ -27,19 +29,124 @@ ActivityPage {
 
                 .clock {
                     align-self: center;
-					margin-right: 3px;
+                    margin-right: 3px;
                 }
             }
         }
     }
 
-	.title-description {
-		button {
-			margin: 1em 0 2.5em;
-		}
-	}
-	
-	.activity-swoop {
-		@extend %bottom-swoop;
-	}
+    .title-description {
+        button {
+            margin: 1em 0 2.5em;
+        }
+    }
+
+    .activity-swoop {
+        @extend %bottom-swoop;
+        background: linear-gradient(134.77deg, $gray-8 0%, $gray-7 100%);
+
+        .tab-titles h5 {
+            color: $gray-3;
+        }
+    }
+
+    div.content-wrapper {
+        padding-bottom: calc(#{$bottom-menu-height});
+    }
+
+    ListCard {
+        p {
+            color: $gray-1;
+            display: flex;
+
+            .bullet {
+                font-size: 10px;
+                margin: 5px 20px 0 0;
+            }
+
+            .number {
+                font-size: 14px;
+                margin: 2px 15px 0 0;
+
+                &:after {
+                    content: ".";
+                }
+            }
+        }
+    }
+
+    Html5Card {
+        h3 {
+            font-size: 1.2em;
+        }
+
+        iframe {
+            height: 200px;
+        }
+
+        .btn-primary {
+            margin-top: 1em;
+        }
+    }
+
+    FlashCards .flash-cards {
+        height: 210px;
+        width: 100%;
+        box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.2);
+        border-radius: 8px;
+        background-color: white;
+        padding: 25px;
+        box-sizing: border-box;
+        margin: 1.5em 0;
+
+        h4 {
+            font-size: 1em;
+        }
+
+        p {
+            font-size: 0.9em;
+        }
+
+        button {
+            margin-top: 1em;
+        }
+    }
+}
+
+PlanTab {
+    h4 {
+        align-items: center;
+        display: flex;
+        margin-bottom: 1em;
+    }
+
+    button {
+        margin-bottom: 1.25em;
+    }
+
+    .has-circle {
+        margin-right: 12px;
+        box-shadow: none;
+    }
+
+    .first-section {
+        padding-bottom: 1.5em;
+        border-bottom: 2px solid $gray-6;
+    }
+
+    .middle-section {
+        padding: 2em 0;
+        border-bottom: 2px solid $gray-6;
+    }
+
+    .last-section {
+        padding: 2em 0 1em 0;
+    }
+}
+
+TeachTab,
+ExtendTab {
+    div {
+        height: 140vh;
+    }
 }

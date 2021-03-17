@@ -11,7 +11,7 @@
         <div class="topic-and-details">
             <h5>{ page.topic.title }</h5>
             <p class="reference">Test231</p>
-            <p class="time"><span class="clock"></span>1.5 HRS</p>
+            <!-- <p class="time"><span class="clock"></span>1.5 HRS</p> -->
         </div>
         <div class="title-description">
             <h3>{ page.title }</h3>
@@ -41,7 +41,10 @@
                     <h5 class="section-title">{ TRANSLATIONS.extend() }</h5>
                 </a>
             </div>
-            <PlanTab if="{state.selectedTab === 'plan'}"></PlanTab>
+            <PlanTab 
+                if="{state.selectedTab === 'plan'}" 
+                selectTab="{selectTab}">
+            </PlanTab>
             <TeachTab if="{state.selectedTab === 'teach'}"></TeachTab>
             <ExtendTab if="{state.selectedTab === 'extend'}"></ExtendTab>
         </div>
@@ -55,32 +58,30 @@
         import { getRoute } from "ReduxImpl/Interface";
         import { getCardImageUrl } from "js/utilities";
 
-        function ActivityPage() {
-            return {
-                state: {
-                    selectedTab: "plan",
-                },
+        function ActivityPage() { return {
+			state: {
+				selectedTab: "plan",
+			},
 
-                onBeforeMount(props, state) {
-                    this.page = getRoute().page;
-                },
+			onBeforeMount(props, state) {
+				this.page = getRoute().page;
+			},
 
-                TRANSLATIONS: {
-                    markComplete: () => gettext("Mark activity complete"),
-                    plan: () => gettext("plan"),
-                    teach: () => gettext("teach"),
-                    extend: () => gettext("extend"),
-                },
+			TRANSLATIONS: {
+				markComplete: () => gettext("Mark activity complete"),
+				plan: () => gettext("plan"),
+				teach: () => gettext("teach"),
+				extend: () => gettext("extend"),
+			},
 
-                getCardImage(link, cardImage) {
-                    return getCardImageUrl(link, cardImage);
-                },
+			getCardImage(link, cardImage) {
+				return getCardImageUrl(link, cardImage);
+			},
 
-                selectTab(tabName) {
-                    this.update({ selectedTab: tabName });
-                },
-            };
-        }
+			selectTab(tabName) {
+				this.update({ selectedTab: tabName });
+			},
+		}}
 
         ActivityPage.components = {
             topmenu: TopMenu,
