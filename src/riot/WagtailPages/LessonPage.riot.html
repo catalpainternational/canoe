@@ -4,7 +4,7 @@
         extrastyleclasses="message-container"
         linkTo="{lesson.course.loc_hash}"
     >
-        <h5>Lesson</h5>
+        <h5>{TRANSLATIONS.lesson()}</h5>
         <h3>{lesson.title}</h3>
         <div if="{lesson.cardImage}" class="lesson-page-image-wrap">
             <img
@@ -35,6 +35,7 @@
             },
 
             TRANSLATIONS: {
+                lesson: () => gettext("Lesson"),
                 lesson_activities: () => gettext("Lesson Activities"),
                 more: () => gettext("See more"),
                 less: () => gettext("See less"),
