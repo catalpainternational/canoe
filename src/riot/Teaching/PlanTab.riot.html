@@ -7,7 +7,8 @@
             { TRANSLATIONS.learningOutcomes() }
         </h4>
         <!-- <template each="{card in state.outcomes}"></template> -->
-        <ListCard card="{state.dummyList}"></ListCard>
+        <!-- <ListCard card="{state.dummyList}"></ListCard> -->
+		<FlashCards viewAllTips="{viewAllTips}"></FlashCards>
     </div>
     <div class="middle-subhead">
         <h4>
@@ -43,6 +44,7 @@
         import BasicCard from "RiotTags/Components/BasicCard.riot.html";
         import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
         import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
+		import FlashCards from "RiotTags/Teaching/FlashCards.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
 
@@ -87,6 +89,10 @@
 
 			readyToTeach() {
 				this.props.selectTab("teach");
+			},
+
+			viewAllTips() {
+				console.log("view all tips");
 			}
 		}}
 
@@ -95,6 +101,7 @@
             basiccard: BasicCard,
             videocard: VideoCard,
             html5card: Html5Card,
+			flashcards: FlashCards,
         };
 
         export default PlanTab;

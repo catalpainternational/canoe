@@ -1,0 +1,23 @@
+<FlashCards>
+	<div class="flash-cards">
+		<h4>Tip #1. Title</h4>
+		<p>This is the two-lined text of the flash card. What do we do if it's longer than two lines?</p>
+		<button class="btn-primary" onclick="{viewAllTips}">
+			{ TRANSLATIONS.viewAll() }
+		</button>
+	</div>
+	<div class="card-shadow"></div>
+	<div class="card-shadow"></div>
+
+    <script>
+        export default {
+            TRANSLATIONS: {
+                viewAll: () => gettext("View all tips"),
+            },
+
+            viewAllTips() {
+                this.props.viewAllTips();
+            },
+        };
+    </script>
+</FlashCards>
