@@ -41,7 +41,10 @@ TopMenu {
     }
 
     .without-swoop {
-        @extend %center-with-flex;
+        display: grid;
+        grid-template-columns: 60px 1fr 60px;
+        justify-content: center;
+        align-items: center;
         height: $top-menu-height;
         margin: auto;
 

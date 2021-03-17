@@ -26,8 +26,7 @@ LessonFrame {
         .card-number {
             color: $gray-1;
             font-size: 0.7em;
-            margin: 0 10px;
-            min-width: 50px;
+            text-align: center;
 
             .current-card {
                 font-size: 2em;
