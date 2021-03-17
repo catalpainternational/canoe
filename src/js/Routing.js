@@ -5,7 +5,9 @@ import { InitialiseByRequest } from "ts/Implementations/CacheItem";
 import { Manifest } from "ts/Implementations/Manifest";
 
 // pages that are rendered by the application, and do not require a manifest
-const CANOE_PAGES = ['login', 'profile', 'settings', 'sync'];
+const CANOE_PAGES = ['login', 'settings'];
+// pages that are rendered by the application, and do require a manifest
+const CANOE_MANIFEST_PAGES = ['profile', 'sync'];
 // pages that are shortcuts into a CMS page ( e.g. resources goes to the selected language resource root )
 const CANOE_SHORTCUTS = {
     "": "homepage",
@@ -48,6 +50,12 @@ async function route(hashWith) {
     } catch (err) {
         // Note that this may leak information that we don't want leaked
         setRoute({type: "error", error: `No manifest found. Error: ${err}`});
+        return;
+    }
+
+    if(CANOE_MANIFEST_PAGES.includes(pageHash)) {
+        page = manifest.getLanguagePageType(getLanguage(), 'homepage');
+        setRoute({type: pageHash, home:page}, riotHash);
         return;
     }
 

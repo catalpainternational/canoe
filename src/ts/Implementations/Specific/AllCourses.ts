@@ -31,6 +31,18 @@ export default class AllCourses extends Page {
         );
     }
 
+    get coursesInProgress(): Course[] {
+        return this.courses.filter(
+            (course: Course) => course.progressStatus == "not-started"
+        );
+    }
+
+    get coursesCompleted(): Course[] {
+        return this.courses.filter(
+            (course: Course) => course.progressStatus == "complete"
+        );
+    }
+
     get coursesCompleteLast(): Course[] {
         const inComplete: any[] = [];
         const complete: any[] = [];
@@ -62,5 +74,26 @@ export default class AllCourses extends Page {
             lastWorkedOnCourse = course;
         }
         return lastWorkedOnCourse;
+    }
+
+    get countFinishedLessonsAndExams(): number {
+        const tallyFinishedLessonsAndExams = (
+            totalFinished: any,
+            aCourse: any
+        ) => totalFinished + aCourse.numberOfFinishedLessons;
+        return this.courses.reduce(tallyFinishedLessonsAndExams, 0);
+    }
+
+    get countLessonsAndExams(): number {
+        const tallyLessonsAndExams = (totalLessons: any, currentCourse: any) =>
+            totalLessons + currentCourse.numberOfLessons;
+        return this.courses.reduce(tallyLessonsAndExams, 0);
+    }
+
+    get numberOfLessonsLeft(): number {
+        return (
+            this.countFinishedLessonsAndExams -
+            this.countFinishedLessonsAndExams
+        );
     }
 }
