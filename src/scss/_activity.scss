@@ -16,7 +16,7 @@ ActivityPage {
             font-size: 10px;
 
             &.reference {
-                margin-right: 12px;
+                // margin-right: 12px;
                 background-color: $gray-8;
                 padding: 5px 13px;
                 border-radius: 12px;
@@ -89,31 +89,26 @@ ActivityPage {
         }
     }
 
-    FlashCards {
-        position: relative;
+    FlashCards .flash-cards {
+        height: 210px;
+        width: 100%;
+        box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.2);
+        border-radius: 8px;
+        background-color: white;
+        padding: 25px;
+        box-sizing: border-box;
+        margin: 1.5em 0;
 
-        .flash-cards {
-            height: 210px;
-            width: 100%;
-            box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.2);
-            border-radius: 8px;
-            background-color: white;
-            padding: 25px;
-            box-sizing: border-box;
-            position: relative;
-            z-index: 1;
+        h4 {
+            font-size: 1em;
+        }
 
-            h4 {
-                font-size: 1em;
-            }
+        p {
+            font-size: 0.9em;
+        }
 
-            p {
-                font-size: 0.9em;
-            }
-
-            button {
-                margin-top: 1em;
-            }
+        button {
+            margin-top: 1em;
         }
     }
 }
@@ -125,19 +120,33 @@ PlanTab {
         margin-bottom: 1em;
     }
 
+    button {
+        margin-bottom: 1.25em;
+    }
+
     .has-circle {
         margin-right: 12px;
         box-shadow: none;
     }
 
-    .first-subhead,
-    .middle-subhead {
+    .first-section {
         padding-bottom: 1.5em;
         border-bottom: 2px solid $gray-6;
     }
 
-    .middle-subhead,
-    .last-subhead {
+    .middle-section {
         padding: 2em 0;
+        border-bottom: 2px solid $gray-6;
+    }
+
+    .last-section {
+        padding: 2em 0 1em 0;
+    }
+}
+
+TeachTab,
+ExtendTab {
+    div {
+        height: 140vh;
     }
 }

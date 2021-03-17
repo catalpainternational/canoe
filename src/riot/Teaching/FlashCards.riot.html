@@ -1,14 +1,11 @@
 <FlashCards>
 	<div class="flash-cards">
-		<h4>Tip #1. Title</h4>
-		<p>This is the two-lined text of the flash card. What do we do if it's longer than two lines?</p>
+		<h4>1. { props.card.title }</h4>
+		<p>{ props.card.description }</p>
 		<button class="btn-primary" onclick="{viewAllTips}">
 			{ TRANSLATIONS.viewAll() }
 		</button>
 	</div>
-	<div class="card-shadow"></div>
-	<div class="card-shadow"></div>
-
     <script>
         export default {
             TRANSLATIONS: {
