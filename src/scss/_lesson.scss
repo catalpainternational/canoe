@@ -60,7 +60,7 @@ LessonFrame {
     .frame-background {
         // the 10px adds some room for the stacked cards below, the 50px is
         // for the buttons
-        min-height: calc(100vh - #{$top-menu-height} - #{$bottom-menu-height} - 10px - 50px);
+        min-height: calc(100vh - #{$top-menu-height} - 10px - 50px);
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;

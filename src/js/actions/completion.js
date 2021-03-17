@@ -54,15 +54,9 @@ const isLaterThanCutoff = (completion) => {
 };
 
 function isLessonComplete(lessonMap) {
-    const objectiveCompletion = lessonMap.get("objectives");
     const contentCompletion = lessonMap.get("content");
-    const testCompletion = lessonMap.get("test");
 
-    return (
-        isLaterThanCutoff(objectiveCompletion) &&
-        isLaterThanCutoff(contentCompletion) &&
-        isLaterThanCutoff(testCompletion)
-    );
+    return isLaterThanCutoff(contentCompletion);
 }
 
 function getCourseMap(course) {

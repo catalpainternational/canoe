@@ -25,7 +25,6 @@
     <script>
         import { getNextCardsUrl } from "js/Routing";
         import { setComplete } from "Actions/completion";
-        import { lessonSectionComplete } from "js/utilities";
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
 
         export default {
@@ -48,12 +47,7 @@
 
             completePage() {
                 this.props.toggleModal(false, {});
-                lessonSectionComplete(
-                    this.props.lesson.content.cards,
-                    this.props.lesson.content.cards[this.props.cardNumber - 1],
-                    this.props.lesson,
-                    this.props.module
-                );
+                this.props.lesson.completeSection('content')
 
                 location.hash = this.props.lesson.loc_hash + ":test:feedback";
             },

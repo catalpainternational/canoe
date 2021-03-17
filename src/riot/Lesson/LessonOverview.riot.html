@@ -1,14 +1,5 @@
 <LessonOverview>
-    <!--
-        check if you can remove these attribute references from LessonContent component
-        if="{state.section === CONTENT}"
-        module="{CONTENT}"
-        nextModule="{TEST}"
-    -->
-    <LessonContent
-        lesson="{props.lesson}"
-    ></LessonContent>
-
+    <LessonContent lesson="{props.lesson}"></LessonContent>
     <LessonPage if="{!state.section}"></LessonPage>
 
     <script>
@@ -28,10 +19,6 @@
         }
 
         function LessonOverview() { return {
-
-            CONTENT: "content",
-            TEST: "test",
-
             onBeforeMount(props, state) {
             },
             onBeforeUpdate(props, state) {
@@ -39,7 +26,6 @@
                     ...readState(),
                 }
             },
-
         }}
 
         LessonOverview.components = {

@@ -86,7 +86,6 @@
         isLastQuestion="{state.cardNumber === state.cards.length}"
         toggleModal="{toggleTestModal}"
         lesson="{props.lesson}"
-        module="{props.module}"
         cardNumber="{state.cardNumber}"
     />
     <LessonFeedback
@@ -115,7 +114,6 @@
         import TestPopupModal from "RiotTags/Lesson/TestPopupModal.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
-        import { lessonSectionComplete } from "js/utilities";
 
         function LessonContent() {
             return {
@@ -163,19 +161,13 @@
 
                 nextCard() {
                     window.scroll(0, 0);
-                    // TODO you can probably remove this + the util - the entire lesson is complete when it's all done.
-                    lessonSectionComplete(
-                        this.state.cards,
-                        this.state.cards[this.state.cardNumber - 1],
-                        this.props.lesson,
-                        this.props.module
-                    );
 
                     location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber + 1}`;
                 },
 
                 completeLesson() {
-                    // TODO need to add in the logic for lesson completion here
+                    this.props.lesson.completeSection('content');
+
                     location.hash = `${this.props.lesson.loc_hash}:test:feedback`;
                 },
 
