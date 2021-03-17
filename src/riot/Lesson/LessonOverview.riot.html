@@ -1,31 +1,26 @@
 <LessonOverview>
-    <LessonContent
+    <!--
+        check if you can remove these attribute references from LessonContent component
         if="{state.section === CONTENT}"
         module="{CONTENT}"
         nextModule="{TEST}"
+    -->
+    <LessonContent
         lesson="{props.lesson}"
     ></LessonContent>
-    <!-- <LessonTest
-        if="{state.section === TEST}"
-        module="{TEST}"
-        lesson="{props.lesson}"
-    >
-    </LessonTest> -->
+
     <LessonPage if="{!state.section}"></LessonPage>
 
     <script>
         import { getRoute } from "ReduxImpl/Interface";
 
         import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
-        import LessonTest from "RiotTags/Lesson/LessonTest.riot.html";
         import LessonPage from "RiotTags/WagtailPages/LessonPage.riot.html";
 
         import { getHashPieces } from "js/Routing";
 
         function readState() {
             const route = getRoute();
-            console.log(route);
-
             const state = {
                 section: route.riotHash[0],
             };
@@ -49,7 +44,6 @@
 
         LessonOverview.components = {
             lessoncontent: LessonContent,
-            lessontest: LessonTest,
             lessonpage: LessonPage,
         };
 

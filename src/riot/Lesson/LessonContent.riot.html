@@ -1,7 +1,7 @@
 <LessonContent>
     <LessonFrame
         if="{ props.lesson.ready && state.cardNumber <= state.cards.length }"
-        extraStyleClasses="content"
+        extraStyleClasses="{state.card.tag.includes('Choice') ? 'test' : 'content'}"
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
         linkTo="{ props.lesson.course.loc_hash }"
@@ -24,6 +24,24 @@
         <ListCard if="{state.card.tag === 'list'}" card="{state.card}" />
         <PdfCard if="{state.card.tag === 'pdf'}" card="{state.card}" />
         <Html5Card if="{state.card.tag === 'html5'}" card="{state.card}" />
+        <template
+            if="{state.card.tag === 'singleChoice' || state.card.tag === 'multipleChoice'}">
+            <h3>{state.card.question}</h3>
+            <TestSingleAnswer
+                if="{state.card.tag === 'singleChoice'}"
+                card="{state.card}"
+                lessonName="{props.lesson.title}"
+                toggleModal="{toggleTestModal}"
+                class="test"
+            />
+            <TestMultipleAnswer
+                if="{state.card.tag === 'multipleChoice'}"
+                card="{state.card}"
+                lessonName="{props.lesson.title}"
+                toggleModal="{toggleTestModal}"
+                class="test"
+            />
+        </template>
     </LessonFrame>
     <div
         if="{props.lesson.ready && state.cardNumber <= state.cards.length}"
@@ -42,19 +60,35 @@
             <button
                 class="btn-primary"
                 onclick="{ nextCard }"
-                if="{ state.cardNumber < state.cards.length }"
+                if="{
+                    state.cardNumber < state.cards.length
+                    && !state.card.tag.includes('Choice')
+                }"
             >
                 { TRANSLATIONS.next() }
             </button>
             <button
                 class="btn-primary"
                 onclick="{ completeLesson }"
-                if="{ state.cardNumber === state.cards.length }"
+                if="{
+                    state.cardNumber === state.cards.length
+                    && !state.card.tag.includes('Choice')
+                }"
             >
                 { TRANSLATIONS.finish() }
             </button>
         </div>
     </div>
+    <TestPopupModal
+        if="{state.showModal}"
+        isQuestionComplete="{state.isQuestionComplete}"
+        selectedAnswer="{state.selectedAnswer}"
+        isLastQuestion="{state.cardNumber === state.cards.length}"
+        toggleModal="{toggleTestModal}"
+        lesson="{props.lesson}"
+        module="{props.module}"
+        cardNumber="{state.cardNumber}"
+    />
     <LessonFeedback
         if="{ !state.cardNumber && state.stage == 'feedback' }"
         lessonName="{props.lesson.title}"
@@ -74,65 +108,76 @@
         import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
         import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
         import TitleDescription from "RiotTags/Components/TitleDescription.riot.html";
+        import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
+        import LessonFeedback from "RiotTags/Lesson/LessonFeedback.riot.html";
+        import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
+        import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
+        import TestPopupModal from "RiotTags/Lesson/TestPopupModal.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
         import { lessonSectionComplete } from "js/utilities";
 
-        function readState(props) {
-            const route = getRoute();
-            const stage = route.riotHash[1];
-            const cardNumber = parseInt(stage);
-            const state = {
-                cards: props.lesson.ready ? props.lesson.content.cards : [],
-                card: props.lesson.ready
-                    ? props.lesson.content.cards[cardNumber - 1]
-                    : undefined,
-                cardNumber: cardNumber,
-                complete: stage === "complete",
-            };
-            return state;
-        }
-
         function LessonContent() {
             return {
+                state: {
+                    showModal: false,
+                    selectedAnswer: {},
+                    isQuestionComplete: false,
+                    cards: [],
+                    card: undefined,
+                },
+
                 TRANSLATIONS: {
                     next: () => gettext("Next"),
                     finish: () => gettext("Finish"),
                 },
 
-                onBeforeMount(props, state) {
-                    this.state = readState(props);
+                readState() {
+                    const route = getRoute();
+                    const stage = route.riotHash[1];
+                    const cardNumber = parseInt(stage);
+
+                    this.state.stage = stage;
+                    this.state.complete = stage === "complete";
+                    this.state.cardNumber = cardNumber;
+
+                    if (this.lesson.ready) {
+                        this.state.cards = this.lesson.content.cards;
+                        this.state.card = this.lesson.content.cards[cardNumber - 1];
+                    }
                 },
 
-            onBeforeMount(props, state) {
-                this.state = readState(props);
-            },
+                onBeforeMount(props, state) {
+                    this.lesson = getRoute().page;
+                    this.readState();
+                },
 
-            onBeforeUpdate(props, state) {
-                this.state = readState(props);
-            },
+                onBeforeUpdate(props, state) {
+                    this.readState();
+                },
 
-            goBack() {
-                const prevCard = this.state.cards[this.state.cardNumber - 2];
-                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber - 1}`;
-            },
+                goBack() {
+                    const prevCard = this.state.cards[this.state.cardNumber - 2];
+                    location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber - 1}`;
+                },
 
-            nextCard() {
-                window.scroll(0, 0);
-                const nextCard = this.state.cards[this.state.cardNumber];
-                lessonSectionComplete(
-                    this.state.cards,
-                    this.state.cards[this.state.cardNumber - 1],
-                    this.props.lesson,
-                    this.props.module
-                );
+                nextCard() {
+                    window.scroll(0, 0);
+                    // TODO you can probably remove this + the util - the entire lesson is complete when it's all done.
+                    lessonSectionComplete(
+                        this.state.cards,
+                        this.state.cards[this.state.cardNumber - 1],
+                        this.props.lesson,
+                        this.props.module
+                    );
 
-                location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber + 1}`;
-            },
+                    location.hash = `${this.props.lesson.loc_hash}:content:${this.state.cardNumber + 1}`;
+                },
 
-            completeLesson() {
-                location.hash = `${this.props.lesson.loc_hash}:test:feedback`;
-            },
+                completeLesson() {
+                    // TODO need to add in the logic for lesson completion here
+                    location.hash = `${this.props.lesson.loc_hash}:test:feedback`;
+                },
 
                 checkForPlayableVideos() {
                     this.state.iframes = this.$$("iframe");
@@ -140,6 +185,20 @@
 
                 onUpdated() {
                     this.checkForPlayableVideos();
+                },
+
+                toggleTestModal(showModal, selectedAnswer, isQuestionComplete) {
+                    this.update({
+                        showModal,
+                        selectedAnswer,
+                        isQuestionComplete,
+                    });
+                    const testElement = this.$(".test");
+                    if (showModal) {
+                        testElement.classList.add("fade");
+                    } else {
+                        testElement.classList.remove("fade");
+                    }
                 },
             };
         }
@@ -155,6 +214,11 @@
             pdfcard: PdfCard,
             html5card: Html5Card,
             titledescription: TitleDescription,
+            lessoncomplete: LessonComplete,
+            lessonfeedback: LessonFeedback,
+            testsingleanswer: TestSingleAnswer,
+            testmultipleanswer: TestMultipleAnswer,
+            testpopupmodal: TestPopupModal,
         };
 
         export default LessonContent;

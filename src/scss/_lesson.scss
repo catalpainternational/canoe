@@ -418,6 +418,20 @@ TestSingleAnswer {
             }
         }
     }
+
+    // TODO: this code is in the modal.scss too, DRY
+    &.fade:after {
+        content: "";
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba($gray-8, 0.7);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+    }
+
 }
 
 LessonFeedback {
