@@ -30,7 +30,7 @@ export const getHtmlUrl = (htmlPath) => {
 
 export const resolveMedia = (mediaID) => {
     return getOrFetchManifest()
-        // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend
+        // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
         // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
         // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
         .then(mfest => getMediaUrl(Object.values(mfest.media[mediaID]).sort((el1,el2) => el1.size - el2.size)[0].mediapath));
