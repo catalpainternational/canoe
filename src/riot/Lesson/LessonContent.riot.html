@@ -25,7 +25,7 @@
         <PdfCard if="{state.card.tag === 'pdf'}" card="{state.card}" />
         <Html5Card if="{state.card.tag === 'html5'}" card="{state.card}" />
         <template
-            if="{state.card.tag === 'singleChoice' || state.card.tag === 'multipleChoice'}">
+            if="{state.card.tag.includes('Choice')}">
             <h3>{state.card.question}</h3>
             <TestSingleAnswer
                 if="{state.card.tag === 'singleChoice'}"
@@ -168,7 +168,7 @@
                 completeLesson() {
                     this.props.lesson.completeSection('content');
 
-                    location.hash = `${this.props.lesson.loc_hash}:test:feedback`;
+                    location.hash = `${this.props.lesson.loc_hash}:content:feedback`;
                 },
 
                 checkForPlayableVideos() {
