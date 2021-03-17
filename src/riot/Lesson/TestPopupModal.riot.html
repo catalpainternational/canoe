@@ -5,15 +5,15 @@
         <div>
             <p>{ props.isQuestionComplete ? correctTextMessage(props.selectedAnswer) : incorrectTextMessage(props.selectedAnswer) }</p>
         </div>
-        <button 
-            if="{props.isQuestionComplete && !props.isLastQuestion}" 
-            class="btn-primary" 
-            onclick="{ nextTestCard }" 
+        <button
+            if="{props.isQuestionComplete && !props.isLastQuestion}"
+            class="btn-primary"
+            onclick="{ nextCard }"
         >{ TRANSLATIONS.next() }</button>
-        <button 
-            if="{props.isQuestionComplete && props.isLastQuestion}" 
-            class="btn-primary" 
-            onclick="{ completePage }" 
+        <button
+            if="{props.isQuestionComplete && props.isLastQuestion}"
+            class="btn-primary"
+            onclick="{ completePage }"
         >{ TRANSLATIONS.finish() }</button>
         <button
             if="{!props.isQuestionComplete}"
@@ -38,16 +38,18 @@
                 try: () => gettext('Try again'),
             },
 
-            nextTestCard() {
+            nextCard() {
                 this.props.toggleModal(false, {});
                 window.scroll(0, 0);
-                location.hash = this.props.lesson.loc_hash + ":test:" + parseInt(this.props.cardNumber + 1);
+                const nextCard = this.props.lesson.content.cards[this.props.cardNumber];
+                location.hash = `${this.props.lesson.loc_hash}:content:${this.props.cardNumber + 1}`;
             },
 
             completePage() {
                 this.props.toggleModal(false, {});
-                this.props.lesson.completeSection(this.props.module);
-                location.hash = this.props.lesson.loc_hash + ":test:feedback";
+                this.props.lesson.completeSection('content')
+
+                location.hash = this.props.lesson.loc_hash + ":content:feedback";
             },
 
             correctTitleMessage(selectedAnswer) {

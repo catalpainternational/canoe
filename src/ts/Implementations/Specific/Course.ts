@@ -57,4 +57,16 @@ export default class Course extends Page {
             this.childPages.map((c) => c.slug)
         );
     }
+
+    get progressStatus(): CourseProgressStatus {
+        if (this.numberOfFinishedLessons === 0) {
+            return "not-started";
+        } else if (this.numberOfFinishedLessons < this.numberOfLessons) {
+            return "in-progress";
+        } else {
+            return "complete";
+        }
+    }
 }
+
+type CourseProgressStatus = "not-started" | "in-progress" | "complete";

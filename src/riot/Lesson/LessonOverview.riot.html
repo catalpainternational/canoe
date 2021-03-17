@@ -1,30 +1,11 @@
 <LessonOverview>
-    <LessonObjective
-        if="{state.section === OBJECTIVES}"
-        module="{OBJECTIVES}"
-        nextModule="{CONTENT}"
-        lesson="{props.lesson}"
-    ></LessonObjective>
-    <LessonContent
-        if="{state.section === CONTENT}"
-        module="{CONTENT}"
-        nextModule="{TEST}"
-        lesson="{props.lesson}"
-    ></LessonContent>
-    <LessonTest
-        if="{state.section === TEST}"
-        module="{TEST}"
-        lesson="{props.lesson}"
-    >
-    </LessonTest>
-    <LessonPage if="{!state.section}" lesson="{props.lesson}"></LessonPage>
+    <LessonContent lesson="{props.lesson}"></LessonContent>
+    <LessonPage if="{!state.section}"></LessonPage>
 
     <script>
         import { getRoute } from "ReduxImpl/Interface";
 
-        import LessonObjective from "RiotTags/Lesson/LessonObjective.riot.html";
         import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
-        import LessonTest from "RiotTags/Lesson/LessonTest.riot.html";
         import LessonPage from "RiotTags/WagtailPages/LessonPage.riot.html";
 
         import { getHashPieces } from "js/Routing";
@@ -36,12 +17,8 @@
             };
             return state;
         }
+
         function LessonOverview() { return {
-
-            OBJECTIVES: "objectives",
-            CONTENT: "content",
-            TEST: "test",
-
             onBeforeMount(props, state) {
             },
             onBeforeUpdate(props, state) {
@@ -49,13 +26,10 @@
                     ...readState(),
                 }
             },
-
         }}
 
         LessonOverview.components = {
-            lessonobjective: LessonObjective,
             lessoncontent: LessonContent,
-            lessontest: LessonTest,
             lessonpage: LessonPage,
         };
 

@@ -5,10 +5,6 @@ export default class Resource extends Page {
         return this.data.description;
     }
 
-    get tags(): string[] {
-        return [];
-    }
-
     get cards(): any {
         return this.data.cards.cards;
     }
