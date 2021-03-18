@@ -1,1 +1,19 @@
-<ExtendTab><div>This is the extend section</div></ExtendTab>
+<ExtendTab>
+	<p>This is the extend tab</p>
+    <script>
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function ExtendTab() { return {
+			onBeforeMount(props, state) {
+				this.page = getRoute().page;
+			},
+
+			TRANSLATIONS: {},
+		}}
+
+        ExtendTab.components = {
+        };
+
+        export default ExtendTab;
+    </script>
+</ExtendTab>

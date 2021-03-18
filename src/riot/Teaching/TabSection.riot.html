@@ -1,0 +1,66 @@
+<TabSection>
+    <div class="{props.class}">
+        <h4>
+            <span class="has-circle"><span class="{props.icon}"></span></span>
+            { props.title }
+        </h4>
+        <!-- <template>
+            <ListCard
+                if="{card.tag === 'list'}"
+                card="{card}"
+            ></ListCard>
+            <Raw
+                if="{card.tag === 'raw'}"
+                html="{card}"
+            ></Raw>
+            <BasicCard
+                if="{card.tag === 'basic'}"
+                card="{card}"
+            ></BasicCard>
+            <AudioCard
+                if="{card.tag === 'audio'}"
+                media="{card}"
+            ></AudioCard>
+            <VideoCard
+                if="{card.tag === 'video'}"
+                media="{card}"
+            ></VideoCard>
+            <Html5Card
+                if="{card.tag === 'html5'}"
+                card="{card}"
+            ></Html5Card>
+            <PdfCard
+                if="{card.tag === 'pdf'}"
+                card="{card}"
+            />
+            <FlashCards
+                if="{card.tag === 'flashcards'}"
+                card="{card}"
+            ></FlashCards>
+        </template> -->
+    </div>
+    <script>
+        import Raw from "RiotTags/Components/Raw.riot.html";
+        import BasicCard from "RiotTags/Components/BasicCard.riot.html";
+        import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
+        import AudioCard from "RiotTags/Lesson/AudioCard.riot.html";
+        import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
+        import ListCard from "RiotTags/Lesson/ListCard.riot.html";
+        import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
+        import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
+		import FlashCards from "RiotTags/Teaching/FlashCards.riot.html";
+
+        export default {
+            components: {
+                basiccard: BasicCard,
+                quotecard: QuoteCard,
+                listcard: ListCard,
+                raw: Raw,
+                videocard: VideoCard,
+                audiocard: AudioCard,
+                pdfcard: PdfCard,
+                html5card: Html5Card,
+            },
+        };
+    </script>
+</TabSection>

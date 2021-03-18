@@ -1,1 +1,48 @@
-<TeachTab><div>This is the Teach section</div></TeachTab>
+<TeachTab>
+    <TabSection
+        class="{'first-section'}"
+        icon="{'group-circle'}" 
+        title="{ TRANSLATIONS.setup() }"
+    ></TabSection>
+    <TabSection
+        class="{'middle-section'}"
+        icon="{'crossed-pencil'}" 
+        title="{ TRANSLATIONS.activity() }"
+    ></TabSection>
+    <TabSection
+        class="{'last-section'}"
+        icon="{'chat-bubbles'}" 
+        title="{ TRANSLATIONS.wrap() }"
+    ></TabSection>
+    <button class="btn-secondary" onclick="{goToExtend}">
+        { TRANSLATIONS.extendKnowledge() }
+    </button>
+    <script>
+        import TabSection from "RiotTags/Teaching/TabSection.riot.html";
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function TeachTab() { return {
+			onBeforeMount(props, state) {
+				this.page = getRoute().page;
+			},
+
+			TRANSLATIONS: {
+				setup: () => gettext("Setup"),
+				activity: () => gettext("Activity"),
+				wrap: () => gettext("Wrap up"),
+				extendKnowledge: () => gettext("Extend your knowledge"),
+			},
+
+			goToExtend() {
+				this.props.selectTab("extend");
+				window.scroll(0, 0);
+			},
+		}}
+
+        TeachTab.components = {
+            tabsection: TabSection,
+        };
+
+        export default TeachTab;
+    </script>
+</TeachTab>
