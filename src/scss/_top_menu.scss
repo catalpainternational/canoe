@@ -55,14 +55,14 @@ TopMenu {
     }
 
     h4 {
-        text-align: center;
         color: $gray-3;
         font-weight: 200;
     }
 
     h4,
     h5 {
-        max-width: 70%;
+        grid-column: 2 / 2;
+        text-align: center;
     }
 
     span {
@@ -76,10 +76,12 @@ TopMenu {
         mask-position: center;
 
         &.right {
+            grid-column: 3 / 3;
             right: 15px;
         }
 
         &.left {
+            grid-column: 1 / 1;
             left: 15px;
         }
     }
