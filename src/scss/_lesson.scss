@@ -20,6 +20,7 @@ LessonPage {
         max-width: 200px;
         max-height: 200px;
         overflow: hidden;
+        margin: 1.5em auto;
     }
 
     .lesson-page-image {
@@ -514,6 +515,11 @@ LessonFeedback {
 
 .message-container {
     text-align: center;
+    padding-top: 3em;
+
+    @media screen and (max-width: $sm-phone) {
+        padding-top: 1em;
+    }
 
     h3 {
         margin: 0.5em;
@@ -526,12 +532,6 @@ LessonFeedback {
 
     p {
         color: $gray-1;
-    }
-
-    .correct-checkmark {
-        height: 6em;
-        width: 6em;
-        margin: 2em auto;
     }
 }
 

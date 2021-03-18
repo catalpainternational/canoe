@@ -1,21 +1,22 @@
 <LessonPage>
     <LessonFrame
         if="{lesson.ready}"
-        extrastyleclasses="message-container"
         linkTo="{lesson.course.loc_hash}"
     >
-        <h5>{TRANSLATIONS.lesson()}</h5>
-        <h3>{lesson.title}</h3>
-        <div if="{lesson.cardImage}" class="lesson-page-image-wrap">
-            <img
-                crossorigin="anonymous"
-                src="{getMediaUrl(lesson.cardImage)}"
-                class="lesson-page-image"
-            />
+        <div class="message-container">
+            <h5>{TRANSLATIONS.lesson()}</h5>
+            <h3>{lesson.title}</h3>
+            <div if="{lesson.cardImage}" class="lesson-page-image-wrap">
+                <img
+                    crossorigin="anonymous"
+                    src="{getMediaUrl(lesson.cardImage)}"
+                    class="lesson-page-image"
+                />
+            </div>
+            <span if="{!lesson.cardImage}" class="lesson-presentation"></span>
+            <p>{lesson.shortDescription}</p>
+            <p>{lesson.longDescription}</p>
         </div>
-        <span if="{!lesson.cardImage}" class="lesson-presentation"></span>
-        <p>{lesson.shortDescription}</p>
-        <p>{lesson.longDescription}</p>
     </LessonFrame>
     <div if="{lesson.ready}" class="bottom-buttons">
         <button class="btn-primary" onclick="{startLesson}">
