@@ -548,7 +548,7 @@ ExamResults {
         h2,
         h3 {
             margin-top: 0;
-            margin-bottom: 0.4em;
+            margin-bottom: 1em;
         }
 
         h3 {
@@ -561,7 +561,7 @@ ExamResults {
         }
 
         .btn-primary {
-            margin-top: 1em;
+            margin-top: 1.5em;
             width: 220px;
             position: relative;
 
@@ -572,9 +572,8 @@ ExamResults {
             }
         }
 
-        .btn-secondary {
+        a {
             margin-top: 1.5em;
-            width: 220px;
         }
     }
 
