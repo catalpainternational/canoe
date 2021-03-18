@@ -58,28 +58,19 @@ LessonFrame {
     }
 
     .frame-background {
-        // the 10px adds some room for the stacked cards below, the 50px is
+        // the 25px adds some room for the stacked cards below, the 50px is
         // for the buttons
-        min-height: calc(100vh - #{$top-menu-height} - 10px - 50px);
+        height: calc(100vh - #{$top-menu-height} - 25px - 50px);
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
     }
 
-    .card-content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-        height: 100%;
-    }
-
     .card-frame {
         margin: 0 5px 1.5em;
-        padding: 30px 20px;
         width: 100%;
         max-width: $tablet;
+        height: calc(100% - 1.5em);
         background-color: $gray-10;
         border-radius: 8px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
@@ -89,6 +80,18 @@ LessonFrame {
         @media only screen and (min-width: 610px) {
             margin: 0 auto 1.5em;
         }
+    }
+
+    .card-content {
+        position: relative;
+        padding: 30px 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100%;
+        overflow: scroll;
     }
 }
 

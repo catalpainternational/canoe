@@ -1,15 +1,14 @@
 ResourceArticle {
     .no-card {
-        padding: 0 18px 1.5em;
         width: 100%;
         margin-top: 7px;
         max-width: $tablet;
         background-color: $gray-10;
 
         ImageWrapper img.richtext-image {
-            width: calc(100% + (2 * 20px));
-            margin-left: -20px;
-            margin-right: -20px;
+            width: calc(100% + (2 * 22px));
+            margin-left: -22px;
+            margin-right: -22px;
         }
     }
 
