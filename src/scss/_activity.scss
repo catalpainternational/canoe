@@ -68,6 +68,35 @@ ActivityPage {
         padding-bottom: calc(#{$bottom-menu-height});
     }
 
+    PlanTab,
+    TeachTab {
+        h4 {
+            align-items: center;
+            display: flex;
+            margin-bottom: 1em;
+        }
+
+        > button {
+            margin-bottom: 1.25em;
+        }
+
+        .has-circle {
+            margin-right: 12px;
+            box-shadow: none;
+        }
+    }
+
+    TabSection {
+        h3 {
+            font-size: 1.1em;
+        }
+
+        .cards-list > * {
+            margin: 1.5em 0;
+            display: block;
+        }
+    }
+
     ListCard {
         p {
             color: $gray-1;
@@ -90,16 +119,12 @@ ActivityPage {
     }
 
     Html5Card {
-        h3 {
-            font-size: 1.2em;
-        }
-
         iframe {
             height: 200px;
         }
 
         .btn-primary {
-            margin-top: 1em;
+            margin-top: 0.7em;
         }
     }
 
@@ -111,7 +136,7 @@ ActivityPage {
         background-color: white;
         padding: 25px;
         box-sizing: border-box;
-        margin: 1.5em 0;
+        margin: 1em 0;
 
         h4 {
             font-size: 1em;
@@ -126,31 +151,3 @@ ActivityPage {
         }
     }
 }
-
-PlanTab,
-TeachTab {
-    h4 {
-        align-items: center;
-        display: flex;
-        margin-bottom: 1em;
-    }
-
-    button {
-        margin-bottom: 1.25em;
-    }
-
-    .has-circle {
-        margin-right: 12px;
-        box-shadow: none;
-    }
-}
-
-TeachTab {
-}
-
-// TeachTab,
-// ExtendTab {
-//     div {
-//         height: 140vh;
-//     }
-// }
