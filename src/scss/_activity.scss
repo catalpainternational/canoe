@@ -43,6 +43,8 @@ ActivityPage {
 
     .activity-swoop {
         @extend %bottom-swoop;
+        border-top-left-radius: 500% 7%;
+        border-top-right-radius: 500% 7%;
         background: linear-gradient(134.77deg, $gray-8 0%, $gray-7 100%);
 
         .tab-titles h5 {
