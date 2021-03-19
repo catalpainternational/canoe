@@ -4,7 +4,7 @@ import { setDefaultHandler } from "workbox-routing/setDefaultHandler.mjs";
 import { setCatchHandler } from "workbox-routing/setCatchHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
-import { StaleWhileRevalidate } from "workbox-strategies/StaleWhileRevalidate.mjs";
+import { NetworkFirst } from "workbox-strategies/NetworkFirst.mjs";
 import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
 
 import { RangeRequestsPlugin } from "workbox-range-requests";
@@ -89,9 +89,12 @@ registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheAnyOrFetchOnl
 
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagesv2), new NetworkOnly());
 
+// The manifest is effectively 'stored' in the redux cache and we always look there first
+// which is equivalent to StaleWhileRevalidate.
+// As such, at this level it is more appropriate for us to try the network first for the manifest.
 registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.manifest),
-    new StaleWhileRevalidate({
+    new NetworkFirst({
         cacheName: MANIFEST_CACHE_NAME,
     })
 );
