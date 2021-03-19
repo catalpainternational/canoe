@@ -5,7 +5,19 @@ CoursePage {
 
     .content-wrapper {
         h2 {
-            margin-bottom: 35px;
+            margin-bottom: 1em;
+        }
+
+        .course-subtitle {
+            color: $gray-3;
+            font-size: 1.2em;
+            margin: 1em 0;
+            width: 100%;
+            line-height: 1.6em;
+        }
+
+        .course-details {
+            margin-bottom: 2em;
         }
     }
 }
