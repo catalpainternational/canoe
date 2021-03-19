@@ -49,6 +49,10 @@
                 return this.state.lesson.course.allLessonsComplete;
             },
 
+            goToCourseOverview() {
+                location.hash = this.state.lesson.course.loc_hash;
+            },
+
             goToCourseExam() {
                 location.hash = `${this.state.lesson.course.loc_hash}:exam`;
             },
