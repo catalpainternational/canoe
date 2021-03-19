@@ -1,21 +1,9 @@
 import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
-import { getOrFetchManifest } from "js/WagtailPagesAPI";
 import { getBrowser } from "ts/PlatformDetection";
 import { MissingImageError } from "js/Errors";
 
 const WEBP_RENDITION = "width-800|format-webp";
 const JPEG_RENDITION = "width-600|format-jpeg";
-
-export const getImageUrl = async (imageId) => {
-    const manifest = await getOrFetchManifest();
-    const images = manifest.images;
-    const image = images[imageId];
-
-    if (!image) {
-        throw new MissingImageError(`Image with ID, ${imageId}, doesn't exist.`);
-    }
-    return getRenditionUrl(image);
-};
 
 export function getImagePaths(images) {
     return Object.values(images).map(getRenditionPath);
