@@ -12,8 +12,8 @@
         <div class="lesson-swoop">
 
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
+            <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
             <div class="card-container">
-                <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
                 <Card
                     each="{lesson in course.lessons}"
                     status="{lessonStatus(lesson)}"
