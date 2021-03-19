@@ -75,10 +75,13 @@ async function getValidManifest() {
     const manifest = new Manifest();
     if (!manifest.isValid) {
         await InitialiseByRequest(manifest);
-        return manifest;
     } else {
-        return Promise.resolve(manifest);
+        // Don't await this delierately,
+        // in effect we'll try refreshing the manifest in the background
+        InitialiseByRequest(manifest);
     }
+
+    return manifest;
 }
 
 //  below here deprecated - but still can be found in certain riot tags
