@@ -1,27 +1,22 @@
 <TabSection>
     <div class="{props.class}">
-        <h4>
-            <span class="has-circle"><span class="{props.icon}"></span></span>
-            { props.title }
+        <h4 if="{ props.icon || props.title }">
+            <span if="{ props.icon }" class="has-circle"><span class="{props.icon}"></span></span>
+            <template if="{ props.title }">{ props.title }</template>
         </h4>
-        <!-- <template>
-            <BasicCard if="{card.tag === 'basic'}" card="{card}"></BasicCard>
-            <ListCard if="{card.tag === 'list'}" card="{card}"></ListCard>
-            <AudioCard if="{card.tag === 'audio'}" media="{card}"></AudioCard>
-            <VideoCard if="{card.tag === 'video'}" media="{card}"></VideoCard>
-            <Html5Card if="{card.tag === 'html5'}" card="{card}"></Html5Card>
-            <PdfCard if="{card.tag === 'pdf'}" card="{card}"></PdfCard>
-            <FlashCards
-                if="{card.tag === 'flashcards'}"
-                card="{card}"
-            ></FlashCards>
-        </template> -->
         <div class="cards-list">
-            <Html5Card card="{dummyHtml}"></Html5Card>
-            <ListCard card="{dummyList}"></ListCard>
-            <FlashCards card="{dummyTip}"></FlashCards>
-            <!-- <VideoCard media="{dummyVideo}"></VideoCard> -->
-            <!-- <BasicCard card="{dummyImage}"></BasicCard> -->
+            <template each="{ card in props.section }">
+                <BasicCard if="{card.tag === 'basic'}" card="{card}"></BasicCard>
+                <ListCard if="{card.tag === 'list'}" card="{card}"></ListCard>
+                <AudioCard if="{card.tag === 'audio'}" media="{card}"></AudioCard>
+                <VideoCard if="{card.tag === 'video'}" media="{card}"></VideoCard>
+                <Html5Card if="{card.tag === 'html5'}" card="{card}"></Html5Card>
+                <PdfCard if="{card.tag === 'pdf'}" card="{card}"></PdfCard>
+                <FlashCards
+                    if="{card.tag === 'flashcards'}"
+                    card="{card}"
+                ></FlashCards>
+            </template>
         </div>
     </div>
     <script>
@@ -42,42 +37,6 @@
                 pdfcard: PdfCard,
                 html5card: Html5Card,
                 flashcards: FlashCards,
-            },
-
-            dummyList: {
-                tag: "list",
-                title: "The list title",
-                isNumbered: true,
-                content: [
-                    "first item",
-                    "a second item on the list for activity to understand density and why boats float and other interesting things to teach students",
-                    "understand what makes a good shape for a boat and to make it float",
-                ],
-            },
-
-            dummyTip: {
-                title: "Make sure to tip your barista",
-                description:
-                    "This is the two-lined text of the flash card. What do we do if it's longer than two lines?",
-            },
-
-            dummyHtml: {
-                title: "the title of the html",
-                url: "/iframe-document/2/",
-            },
-
-            dummyImage: {
-                header: "the title of the image",
-                image: {
-                    alt: "working cat.jpg",
-                    id: 58,
-                },
-            },
-
-            dummyVideo: {
-                title: "the title of the video",
-                description: "this is the information about the video",
-                id: 3,
             },
         };
     </script>

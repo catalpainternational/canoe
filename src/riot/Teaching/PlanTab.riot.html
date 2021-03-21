@@ -3,16 +3,19 @@
         class="{'first-section'}"
         icon="{'brain'}" 
         title="{TRANSLATIONS.learningOutcomes()}"
+        section={ page.plan.outcomes }
     ></TabSection>
     <TabSection
         class="{'middle-section'}"
         icon="{'binocular'}" 
         title="{TRANSLATIONS.overview()}"
+        section={ page.plan.overview }
     ></TabSection>
     <TabSection
         class="{'last-section'}"
         icon="{'clipboard-pencil'}" 
         title="{TRANSLATIONS.preparation()}"
+        section={ page.plan.preparation }
     ></TabSection>
     <button class="btn-secondary" onclick="{goToTeach}">
         { TRANSLATIONS.ready() }
