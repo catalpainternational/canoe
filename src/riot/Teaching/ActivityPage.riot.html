@@ -15,7 +15,7 @@
         </div>
         <div class="title-description">
             <h3>{ page.title }</h3>
-            <p>{ page.description }</p>
+            <p if="{ page.ready }">{ page.description }</p>
             <button class="btn-secondary">
                 { TRANSLATIONS.markComplete() }
             </button>
@@ -41,17 +41,19 @@
                     <h5 class="section-title">{ TRANSLATIONS.extend() }</h5>
                 </a>
             </div>
-            <PlanTab
-                if="{state.selectedTab === 'plan'}"
-                selectTab="{selectTab}"
-            >
-            </PlanTab>
-            <TeachTab
-                if="{state.selectedTab === 'teach'}"
-                selectTab="{selectTab}"
-            >
-            </TeachTab>
-            <ExtendTab if="{state.selectedTab === 'extend'}"></ExtendTab>
+            <template if="{ page.ready }">
+                <PlanTab
+                    if="{state.selectedTab === 'plan'}"
+                    selectTab="{selectTab}"
+                >
+                </PlanTab>
+                <TeachTab
+                    if="{state.selectedTab === 'teach'}"
+                    selectTab="{selectTab}"
+                >
+                </TeachTab>
+                <ExtendTab if="{state.selectedTab === 'extend'}"></ExtendTab>
+            </template>
         </div>
     </div>
     <script>
