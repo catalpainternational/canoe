@@ -15,7 +15,7 @@
         </div>
         <div class="title-description">
             <h3>{ page.title }</h3>
-            <p>{ page.description }</p>
+            <p if="{ page.ready }">{ page.description }</p>
             <button class="btn-secondary">
                 { TRANSLATIONS.markComplete() }
             </button>
@@ -41,12 +41,19 @@
                     <h5 class="section-title">{ TRANSLATIONS.extend() }</h5>
                 </a>
             </div>
-            <PlanTab 
-                if="{state.selectedTab === 'plan'}" 
-                selectTab="{selectTab}">
-            </PlanTab>
-            <TeachTab if="{state.selectedTab === 'teach'}"></TeachTab>
-            <ExtendTab if="{state.selectedTab === 'extend'}"></ExtendTab>
+            <template if="{ page.ready }">
+                <PlanTab
+                    if="{state.selectedTab === 'plan'}"
+                    selectTab="{selectTab}"
+                >
+                </PlanTab>
+                <TeachTab
+                    if="{state.selectedTab === 'teach'}"
+                    selectTab="{selectTab}"
+                >
+                </TeachTab>
+                <ExtendTab if="{state.selectedTab === 'extend'}"></ExtendTab>
+            </template>
         </div>
     </div>
     <script>
@@ -59,29 +66,29 @@
         import { getCardImageUrl } from "js/utilities";
 
         function ActivityPage() { return {
-			state: {
-				selectedTab: "plan",
-			},
+            state: {
+                selectedTab: "plan",
+            },
+            
+            onBeforeMount(props, state) {
+                this.page = getRoute().page;
+            },
 
-			onBeforeMount(props, state) {
-				this.page = getRoute().page;
-			},
+            TRANSLATIONS: {
+                markComplete: () => gettext("Mark activity complete"),
+                plan: () => gettext("plan"),
+                teach: () => gettext("teach"),
+                extend: () => gettext("extend"),
+            },
 
-			TRANSLATIONS: {
-				markComplete: () => gettext("Mark activity complete"),
-				plan: () => gettext("plan"),
-				teach: () => gettext("teach"),
-				extend: () => gettext("extend"),
-			},
+            getCardImage(link, cardImage) {
+                return getCardImageUrl(link, cardImage);
+            },
 
-			getCardImage(link, cardImage) {
-				return getCardImageUrl(link, cardImage);
-			},
-
-			selectTab(tabName) {
-				this.update({ selectedTab: tabName });
-			},
-		}}
+            selectTab(tabName) {
+                this.update({ selectedTab: tabName });
+            },
+        }}
 
         ActivityPage.components = {
             topmenu: TopMenu,

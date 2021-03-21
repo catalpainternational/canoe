@@ -337,3 +337,21 @@
     width: 14px;
     height: 12px;
 }
+
+.group-circle {
+    @include mask-icons-shared("~img/group.svg", contain, $app-accent-color);
+    width: 13px;
+    height: 12px;
+}
+
+.crossed-pencil {
+    @include mask-icons-shared("~img/crossed_pencil.svg", contain, $app-accent-color);
+    width: 12px;
+    height: 12px;
+}
+
+.chat-bubbles {
+    @include mask-icons-shared("~img/chat.svg", contain, $app-accent-color);
+    width: 14px;
+    height: 12px;
+}

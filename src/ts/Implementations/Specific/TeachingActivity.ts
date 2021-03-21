@@ -9,4 +9,16 @@ export default class TeachingActivity extends Page {
     get description(): string {
         return this.data.description;
     }
+
+    get plan(): any {
+        return this.data.plan;
+    }
+
+    get teach(): any {
+        return this.data.teach;
+    }
+
+    get extend(): any {
+        return this.data.extend;
+    }
 }

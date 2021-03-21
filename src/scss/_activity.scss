@@ -43,6 +43,8 @@ ActivityPage {
 
     .activity-swoop {
         @extend %bottom-swoop;
+        border-top-left-radius: 500% 7%;
+        border-top-right-radius: 500% 7%;
         background: linear-gradient(134.77deg, $gray-8 0%, $gray-7 100%);
 
         .tab-titles h5 {
@@ -50,8 +52,51 @@ ActivityPage {
         }
     }
 
+    .first-section {
+        padding-bottom: 1.5em;
+        border-bottom: 2px solid $gray-6;
+    }
+
+    .middle-section {
+        padding: 2em 0;
+        border-bottom: 2px solid $gray-6;
+    }
+
+    .last-section {
+        padding: 2em 0 1em 0;
+    }
+
     div.content-wrapper {
         padding-bottom: calc(#{$bottom-menu-height});
+    }
+
+    PlanTab,
+    TeachTab {
+        h4 {
+            align-items: center;
+            display: flex;
+            margin-bottom: 1em;
+        }
+
+        > button {
+            margin-bottom: 1.25em;
+        }
+
+        .has-circle {
+            margin-right: 12px;
+            box-shadow: none;
+        }
+    }
+
+    TabSection {
+        h3 {
+            font-size: 1.1em;
+        }
+
+        .cards-list > * {
+            margin: 1.5em 0;
+            display: block;
+        }
     }
 
     ListCard {
@@ -76,16 +121,12 @@ ActivityPage {
     }
 
     Html5Card {
-        h3 {
-            font-size: 1.2em;
-        }
-
         iframe {
             height: 200px;
         }
 
         .btn-primary {
-            margin-top: 1em;
+            margin-top: 0.7em;
         }
     }
 
@@ -97,7 +138,7 @@ ActivityPage {
         background-color: white;
         padding: 25px;
         box-sizing: border-box;
-        margin: 1.5em 0;
+        margin: 1em 0;
 
         h4 {
             font-size: 1em;
@@ -110,43 +151,5 @@ ActivityPage {
         button {
             margin-top: 1em;
         }
-    }
-}
-
-PlanTab {
-    h4 {
-        align-items: center;
-        display: flex;
-        margin-bottom: 1em;
-    }
-
-    button {
-        margin-bottom: 1.25em;
-    }
-
-    .has-circle {
-        margin-right: 12px;
-        box-shadow: none;
-    }
-
-    .first-section {
-        padding-bottom: 1.5em;
-        border-bottom: 2px solid $gray-6;
-    }
-
-    .middle-section {
-        padding: 2em 0;
-        border-bottom: 2px solid $gray-6;
-    }
-
-    .last-section {
-        padding: 2em 0 1em 0;
-    }
-}
-
-TeachTab,
-ExtendTab {
-    div {
-        height: 140vh;
     }
 }
