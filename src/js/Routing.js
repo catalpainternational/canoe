@@ -48,8 +48,11 @@ async function route(hashWith) {
     try {
         manifest = await getValidManifest();
     } catch (err) {
+        // This can be caused by there being 'no manifest found'
+        // However, it's normally caused by bugs in riot tags,
+        // when a change was made elsewhere but not followed through into the tag
         // Note that this may leak information that we don't want leaked
-        setRoute({type: "error", error: `No manifest found. Error: ${err}`});
+        setRoute({type: "error", error: `There was a problem preparing the page to show to you. Error: ${err}`});
         return;
     }
 
