@@ -41,7 +41,10 @@ TopMenu {
     }
 
     .without-swoop {
-        @extend %center-with-flex;
+        display: grid;
+        grid-template-columns: 60px 1fr 60px;
+        justify-content: center;
+        align-items: center;
         height: $top-menu-height;
         margin: auto;
 
@@ -52,14 +55,14 @@ TopMenu {
     }
 
     h4 {
-        text-align: center;
         color: $gray-3;
         font-weight: 200;
     }
 
     h4,
     h5 {
-        max-width: 70%;
+        grid-column: 2 / 2;
+        text-align: center;
     }
 
     span {
@@ -73,10 +76,12 @@ TopMenu {
         mask-position: center;
 
         &.right {
+            grid-column: 3 / 3;
             right: 15px;
         }
 
         &.left {
+            grid-column: 1 / 1;
             left: 15px;
         }
     }

@@ -20,6 +20,7 @@ LessonPage {
         max-width: 200px;
         max-height: 200px;
         overflow: hidden;
+        margin: 1.5em auto;
     }
 
     .lesson-page-image {
@@ -36,8 +37,7 @@ LessonFrame {
         .card-number {
             color: $gray-1;
             font-size: 0.7em;
-            margin: 0 10px;
-            min-width: 50px;
+            text-align: center;
 
             .current-card {
                 font-size: 2em;
@@ -58,28 +58,19 @@ LessonFrame {
     }
 
     .frame-background {
-        // the 10px adds some room for the stacked cards below, the 50px is
+        // the 25px adds some room for the stacked cards below, the 50px is
         // for the buttons
-        min-height: calc(100vh - #{$top-menu-height} - 10px - 50px);
+        height: calc(100vh - #{$top-menu-height} - 25px - 50px);
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
     }
 
-    .card-content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-        height: 100%;
-    }
-
     .card-frame {
         margin: 0 5px 1.5em;
-        padding: 30px 20px;
         width: 100%;
         max-width: $tablet;
+        height: calc(100% - 1.5em);
         background-color: $gray-10;
         border-radius: 8px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
@@ -89,6 +80,18 @@ LessonFrame {
         @media only screen and (min-width: 610px) {
             margin: 0 auto 1.5em;
         }
+    }
+
+    .card-content {
+        position: relative;
+        padding: 30px 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100%;
+        overflow: scroll;
     }
 }
 
@@ -116,6 +119,7 @@ LessonFrame {
 
 TitleDescription {
     height: 100%;
+    width: 100%;
 }
 
 LessonContent .content,
@@ -515,6 +519,11 @@ LessonFeedback {
 
 .message-container {
     text-align: center;
+    padding-top: 2em;
+
+    @media screen and (max-width: $sm-phone) {
+        padding-top: 1em;
+    }
 
     h3 {
         margin: 0.5em;
@@ -527,12 +536,6 @@ LessonFeedback {
 
     p {
         color: $gray-1;
-    }
-
-    .correct-checkmark {
-        height: 6em;
-        width: 6em;
-        margin: 2em auto;
     }
 }
 
@@ -549,7 +552,7 @@ ExamResults {
         h2,
         h3 {
             margin-top: 0;
-            margin-bottom: 0.4em;
+            margin-bottom: 1em;
         }
 
         h3 {
@@ -562,7 +565,7 @@ ExamResults {
         }
 
         .btn-primary {
-            margin-top: 1em;
+            margin-top: 1.5em;
             width: 220px;
             position: relative;
 
@@ -573,9 +576,8 @@ ExamResults {
             }
         }
 
-        .btn-secondary {
+        a {
             margin-top: 1.5em;
-            width: 220px;
         }
     }
 
@@ -593,7 +595,7 @@ ExamResults {
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
-    column-gap: 10px;
+    column-gap: 25px;
     width: 100%;
     max-width: $tablet;
     padding: 7px 20px 12px;
@@ -603,4 +605,9 @@ ExamResults {
     button {
         min-width: 120px;
     }
+}
+
+LessonPage .btn-primary,
+.thank-you-container.btn-primary {
+    margin: 0 30px;
 }

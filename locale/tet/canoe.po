@@ -39,9 +39,6 @@ msgstr "Fila fali ba kursu"
 msgid "Back to Courses"
 msgstr "Fila fali ba kursu"
 
-msgid "Back to lesson overview"
-msgstr "Fila fali ba sumáriu husi lisaun "
-
 msgid "Check <strong>all</strong> answers that apply"
 msgstr "Cek resposta <strong>hotu</strong> ne’ebeé lo’os"
 
@@ -59,9 +56,6 @@ msgstr "Kompleta ona"
 
 msgid "Congratulations!"
 msgstr "Parabéns! "
-
-msgid "Content"
-msgstr "Konteúdu"
 
 msgid "Continue"
 msgstr "Kontinua"
@@ -81,6 +75,9 @@ msgstr "Download PDF ne’e ba ita nian telemovel"
 msgid "Explore a range of courses to suit your needs, expertise, and interests."
 msgstr "Esplora kursu sira ne'ebé tuir ita-nia presiza, espesialidadi no interese"
 
+msgid "extend"
+msgstr ""
+
 msgid "Find and check all correct answers and uncheck incorrect answers"
 msgstr "Buka no hili resposta hotu ne’ebé lo’os"
 
@@ -98,9 +95,6 @@ msgstr "Serbisu di'ak tebes!"
 
 msgid "Great"
 msgstr "Di'ak tebes!"
-
-msgid "Great job!"
-msgstr "Serbisu di'ak tebes!"
 
 msgid "hide"
 msgstr "subar"
@@ -120,9 +114,6 @@ msgstr "Ita nia progresu ba kursu"
 msgid "In the meantime please use Safari."
 msgstr "Iha tempu leet, favór uza Safari"
 
-msgid "Keep going"
-msgstr "Favór kontinua nafatin"
-
 msgid "Latest notifications"
 msgstr "Notifikasaun ikus liu"
 
@@ -130,8 +121,15 @@ msgstr "Notifikasaun ikus liu"
 msgid "Latest syncs"
 msgstr "Notifikasaun ikus liu"
 
+#, fuzzy
+msgid "Learning outcomes"
+msgstr "Estatístika aprendizajen "
+
 msgid "Learning statistics"
 msgstr "Estatístika aprendizajen "
+
+msgid "Lesson"
+msgstr "Lisaun"
 
 msgid "Lesson Activities"
 msgstr "Atividade sira husi lisaun"
@@ -151,6 +149,9 @@ msgstr "Sai"
 msgid "Login"
 msgstr "Tama"
 
+msgid "Mark activity complete"
+msgstr ""
+
 msgid "Maybe later"
 msgstr "Karik orasida"
 
@@ -169,9 +170,6 @@ msgstr "Progresu aprendizajen sira ne'ebé mak ita halo ona iha ne'e sei la sura
 msgid "No notifications."
 msgstr "La iha notifikasaun. "
 
-msgid "No syncs."
-msgstr ""
-
 msgid "No WhatsApp?"
 msgstr "Laiha WhatsApp?"
 
@@ -184,17 +182,26 @@ msgstr "Resposta ne'e ladun lo'os ida!"
 msgid "Notifications"
 msgstr "Notifikasaun"
 
-msgid "Objectives"
-msgstr "Objetivu"
-
 msgid "Oops"
 msgstr "Oppss"
+
+msgid "Overview"
+msgstr ""
 
 msgid "Password"
 msgstr "Seña "
 
+msgid "plan"
+msgstr ""
+
+msgid "Preparation tasks & materials"
+msgstr ""
+
 msgid "Read the question more carefully!"
 msgstr "Koko lee didi'ak ninia pergunta"
+
+msgid "Ready to teach"
+msgstr ""
 
 msgid "Really great!"
 msgstr "Di'ak loos!"
@@ -250,9 +257,6 @@ msgstr "Submete"
 msgid "Submit answers"
 msgstr "Submete"
 
-msgid "Syncs"
-msgstr ""
-
 msgid "Take Exam"
 msgstr "Foti Ezame"
 
@@ -260,8 +264,8 @@ msgstr "Foti Ezame"
 msgid "Take the exam now to complete the course \"%1\""
 msgstr "Foti ezame agora atu kompleta kursu \"%1\""
 
-msgid "Test"
-msgstr "Teste"
+msgid "teach"
+msgstr ""
 
 msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
 msgstr "Obrigado ba ita nia komentáriu. Ita nia opiniaun importante ba ami no ami servisu atu hadiak ita-nia esperiensia."
@@ -300,6 +304,12 @@ msgstr "Koko fila fali"
 
 msgid "Username"
 msgstr "Uzuáriu"
+
+msgid "View all tips"
+msgstr ""
+
+msgid "View full screen"
+msgstr ""
 
 msgid "View Resources"
 msgstr "Haree Rekursu"
@@ -343,14 +353,6 @@ msgstr "Ita pasa ezame ho %1%. Se ita hakarak hadiak liutan ita nia klasifikasau
 msgid "You're a guest"
 msgstr "Ita asesu hela app ne'e nu’udar bainaka"
 
-#. message to say what module is next ( %1 is content or test )
-msgid "You're ready to start the %1"
-msgstr "Ita prontu atu hahú %1"
-
-#. message on completing objectives, content or test ( %1 )
-msgid "You've completed the %1"
-msgstr "Ita kompleta ona %1"
-
 msgid "You've completed the course"
 msgstr "Ita kompleta ona kursu"
 
@@ -374,6 +376,30 @@ msgstr "Ita-nia konfigurasaun"
 
 msgid "Your username or password is incorrect"
 msgstr "Haluha uzuáriu ka seña?"
+
+#~ msgid "Back to lesson overview"
+#~ msgstr "Fila fali ba sumáriu husi lisaun "
+
+#~ msgid "Content"
+#~ msgstr "Konteúdu"
+
+#~ msgid "Great job!"
+#~ msgstr "Serbisu di'ak tebes!"
+
+#~ msgid "Keep going"
+#~ msgstr "Favór kontinua nafatin"
+
+#~ msgid "Objectives"
+#~ msgstr "Objetivu"
+
+#~ msgid "Test"
+#~ msgstr "Teste"
+
+#~ msgid "You're ready to start the %1"
+#~ msgstr "Ita prontu atu hahú %1"
+
+#~ msgid "You've completed the %1"
+#~ msgstr "Ita kompleta ona %1"
 
 #~ msgid "Login as a guest"
 #~ msgstr "Tama nu’udar bainaka deit"
