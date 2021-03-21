@@ -31,15 +31,9 @@
         import { getRoute } from "ReduxImpl/Interface";
 
         function LessonPage() { return {
-            state: {
-                showLongDescription: false,
-            },
-
             TRANSLATIONS: {
                 lesson: () => gettext("Lesson"),
                 lesson_activities: () => gettext("Lesson Activities"),
-                more: () => gettext("See more"),
-                less: () => gettext("See less"),
                 start: () => gettext("Start lesson"),
             },
 
@@ -65,12 +59,6 @@
 
             backToCoursePage() {
                 location.hash = "#" + this.lesson.course.loc_hash;
-            },
-
-            toggleLessonDescription() {
-                this.update({
-                    showLongDescription: !this.state.showLongDescription,
-                });
             },
 
             disableBlockedLessonModules() {
