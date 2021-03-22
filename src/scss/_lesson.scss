@@ -279,6 +279,7 @@ TestSingleAnswer {
     .answers-block {
         align-self: start;
         flex: 1;
+        width: 100%;
     }
 }
 
@@ -387,35 +388,75 @@ TestSingleAnswer {
                 }
             }
 
-            .pendingAnswer,
-            .success,
-            .warning {
-                height: 15px;
-                width: 18px;
-                display: inline-block;
-                position: absolute;
-                margin-left: 5px;
-            }
+            .checkbox-container {
+                position: relative;
+                border-radius: 20px;
+                overflow: hidden;
+                min-height: 40px;
+                display: grid;
+                grid-template-columns: 33px 1fr;
+                color: $gray-3;
 
-            .pendingAnswer {
-                background-color: $app-accent-color;
-                border-radius: 50%;
-                width: 15px;
-            }
+                > .checkbox {
+                    box-sizing: border-box;
+                    height: 100%;
+                    width: 100%;
+                    border: 2px solid $gray-6;
+                    border-radius: 20px 0 0 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
 
-            .warning {
-                margin-left: 4px;
-            }
+                > .label {
+                    box-sizing: border-box;
+                    border: 2px solid $gray-6;
+                    border-left: none;
+                    border-radius: 0 20px 20px 0;
+                    height: 100%;
+                    padding: 5px 12px;
+                    display: flex;
+                    align-items: center;
+                }
 
-            .checkbox {
-                content: "";
-                box-sizing: border-box;
-                height: 25px;
-                width: 25px;
-                border: 1px solid $gray-5;
-                border-radius: 3px;
-                margin-right: 15px;
-                flex: none;
+                &.answer-pending {
+                    > .checkbox {
+                        background-color: $app-accent-color;
+                        border-color: $app-accent-color;
+                        color: $white;
+                    }
+
+                    > .label {
+                        border-color: $app-accent-color;
+                        color: $gray-1;
+                    }
+                }
+
+                &.answer-success {
+                    > .checkbox {
+                        background-color: $teal;
+                        border-color: $teal;
+                        color: $white;
+                    }
+
+                    > .label {
+                        border-color: $teal;
+                        color: $gray-1;
+                    }
+                }
+
+                &.answer-warning {
+                    > .checkbox {
+                        background-color: $red;
+                        border-color: $red;
+                        color: $white;
+                    }
+
+                    > .label {
+                        border-color: $red;
+                        color: $gray-1;
+                    }
+                }
             }
         }
     }
