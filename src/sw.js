@@ -19,7 +19,6 @@ import { precacheAndRoute, matchPrecache } from "workbox-precaching";
 precacheAndRoute(self.__WB_MANIFEST);
 self.__WB_DISABLE_DEV_LOGS = true;
 
-import { MANIFEST_CACHE_NAME } from "ts/Constants";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { buildAppelflapRoutes } from "js/RoutingAppelflap";
 
@@ -95,7 +94,7 @@ registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagesv2), new NetworkOnly());
 registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.manifest),
     new NetworkFirst({
-        cacheName: MANIFEST_CACHE_NAME,
+        cacheName: ROUTES_FOR_REGISTRATION.manifest,
     })
 );
 
