@@ -160,7 +160,9 @@ export class Manifest extends PublishableItem<TManifestData> {
     }
 
     get updatedResp(): Response {
-        return new Response(JSON.stringify(this.data), { headers: this.respHeaders });
+        return new Response(JSON.stringify(this.data), {
+            headers: this.respHeaders,
+        });
     }
 
     get cacheKey(): string {

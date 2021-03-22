@@ -134,7 +134,7 @@ const GetFromCache = async (
     if (!item.requestObject || !itemCache) {
         return undefined;
     }
-    
+
     return item.requestObject && !!itemCache
         ? await itemCache.match(item.requestObject)
         : undefined;
