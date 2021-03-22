@@ -562,8 +562,13 @@ ExamResults {
             }
         }
 
-        a {
+        a,
+        .btn-secondary {
             margin-top: 1.5em;
+        }
+
+        .btn-secondary {
+            width: 220px;
         }
     }
 
