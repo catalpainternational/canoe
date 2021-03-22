@@ -298,9 +298,8 @@ TestSingleAnswer {
         width: 100%;
 
         li {
-            flex-direction: column;
             margin-bottom: 15px;
-            display: flex;
+            list-style-type: none;
 
             &:hover {
                 cursor: pointer;
@@ -310,82 +309,31 @@ TestSingleAnswer {
                 margin-bottom: 0;
             }
 
-            & > div {
-                align-items: center;
+            p {
+                font-size: 1.2em;
+                margin: 0;
+            }
+
+            &.radio {
+                border: 2px solid $gray-6;
+                border-radius: 25px;
+                min-height: 40px;
                 display: flex;
-
-                p {
-                    font-size: 1.2em;
-                    flex-shrink: 1;
-                    margin: 0;
-                }
+                align-items: center;
+                justify-content: center;
             }
 
-            & > div:nth-child(2) {
-                padding-left: 35px;
-
-                p {
-                    margin-left: 5px;
-                }
+            &.selected-pending {
+                border-color: $app-accent-color;
             }
 
-            &.selected .radio {
-                & > div {
-                    background-color: $green;
-                }
+            &.selected-wrong {
+                border-color: $red;
+                color: $red;
             }
 
-            &.selected-wrong .radio {
-                border: 2px solid $orange;
-                height: 21px;
-                width: 21px;
-
-                & > div {
-                    background-color: $orange;
-                }
-            }
-
-            &.selected-pending .radio {
-                border: 2px solid $app-accent-color;
-                height: 21px;
-                width: 21px;
-
-                & > div {
-                    background-color: $app-accent-color;
-                }
-            }
-
-            &.selected-pending .radio {
-                border: 2px solid $app-accent-color;
-                height: 21px;
-                width: 21px;
-
-                & > div {
-                    background-color: $app-accent-color;
-                }
-            }
-
-            .radio {
-                background-color: $white;
-                border-radius: 50%;
-                margin-right: 10px;
-                position: relative;
-                border: $border;
-                flex-shrink: 0;
-                height: 23px;
-                width: 23px;
-
-                & > div {
-                    border-radius: 50%;
-                    position: absolute;
-                    margin: auto;
-                    height: 11px;
-                    width: 11px;
-                    bottom: 0;
-                    right: 0;
-                    left: 0;
-                    top: 0;
-                }
+            &.selected {
+                border-color: $teal;
             }
 
             .checkbox-container {
