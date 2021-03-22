@@ -28,6 +28,14 @@ const BuildRequestObject = (item: IPublishableItem): Request => {
     if (token) {
         headers["Authorization"] = `JWT ${token}`;
     }
+    // Migrate any headers we want from the previous response
+    item.respHeaders.forEach((value: string, key: string) => {
+        switch (key) {
+            case "Last-Modified":
+                headers["If-Modified-Since"] = value;
+                break;
+        }
+    });
 
     const reqInit: any = {
         cache: "no-cache",
@@ -123,6 +131,10 @@ const GetFromCache = async (
 ): Promise<Response | undefined> => {
     const itemCache = await AccessCache(item.cacheKey);
 
+    if (!item.requestObject || !itemCache) {
+        return undefined;
+    }
+    
     return item.requestObject && !!itemCache
         ? await itemCache.match(item.requestObject)
         : undefined;
