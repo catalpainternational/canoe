@@ -257,4 +257,12 @@ export class Manifest extends PublishableItem<TManifestData> {
 
         return pageId ? this.getSpecificPage(pageId) : undefined;
     }
+
+    hasPageType(pageType: string): boolean {
+        return Object.values(this.data.pages)
+            .map((p: TWagtailPage) => {
+                return p.type;
+            })
+            .includes(pageType);
+    }
 }
