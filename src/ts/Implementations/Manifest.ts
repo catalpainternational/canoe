@@ -15,8 +15,6 @@ import TeachingRoot from "./Specific/TeachingRoot";
 import TeachingTopic from "./Specific/TeachingTopic";
 import TeachingActivity from "./Specific/TeachingActivity";
 
-import { MANIFEST_CACHE_NAME } from "../Constants";
-
 // See ts/Typings for the type definitions for these imports
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
@@ -33,7 +31,7 @@ export const ManifestAPIURL = "/manifest/v1";
 export class Manifest extends PublishableItem<TManifestData> {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
-        super(opts, "", MANIFEST_CACHE_NAME);
+        super(opts, "", ROUTES_FOR_REGISTRATION.manifest);
     }
 
     get pages(): Record<string, TWagtailPage> {
