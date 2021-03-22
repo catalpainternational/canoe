@@ -2,15 +2,10 @@
     <ol>
         <li
             each="{answer in props.card.answers}"
-            class="{doAnswersMatch(answer, state.selectedAnswer) && howToStyleThe(answer)}"
+            class="radio {doAnswersMatch(answer, state.selectedAnswer) && howToStyleThe(answer)}"
             onclick="{() => selectAnswer(answer)}"
         >
-            <div>
-                <div class="radio">
-                    <div></div>
-                </div>
-                <p>{answer.text}</p>
-            </div>
+            <p>{answer.text}</p>
         </li>
     </ol>
 
