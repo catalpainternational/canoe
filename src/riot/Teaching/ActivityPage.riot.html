@@ -69,38 +69,36 @@
         import { getRoute } from "ReduxImpl/Interface";
         import { getCardImageUrl } from "js/utilities";
 
-        function ActivityPage() {
-            return {
-                state: {
-                    selectedTab: "plan",
-                    isComplete: false,
-                },
+        function ActivityPage() { return {
+            state: {
+                selectedTab: "plan",
+                isComplete: false,
+            },
 
-                onBeforeMount(props, state) {
-                    this.page = getRoute().page;
-                },
+            onBeforeMount(props, state) {
+                this.page = getRoute().page;
+            },
 
-                TRANSLATIONS: {
-                    markComplete: () => gettext("Mark complete"),
-                    markIncomplete: () => gettext("Mark incomplete"),
-                    plan: () => gettext("plan"),
-                    teach: () => gettext("teach"),
-                    extend: () => gettext("extend"),
-                },
+            TRANSLATIONS: {
+                markComplete: () => gettext("Mark complete"),
+                markIncomplete: () => gettext("Mark incomplete"),
+                plan: () => gettext("plan"),
+                teach: () => gettext("teach"),
+                extend: () => gettext("extend"),
+            },
 
-                getCardImage(link, cardImage) {
-                    return getCardImageUrl(link, cardImage);
-                },
+            getCardImage(link, cardImage) {
+                return getCardImageUrl(link, cardImage);
+            },
 
-                selectTab(tabName) {
-                    this.update({ selectedTab: tabName });
-                },
+            selectTab(tabName) {
+                this.update({ selectedTab: tabName });
+            },
 
-                toggleComplete() {
-                    this.update({ isComplete: !this.state.isComplete });
-                },
-            };
-        }
+            toggleComplete() {
+                this.update({ isComplete: !this.state.isComplete });
+            },
+        }}
 
         ActivityPage.components = {
             topmenu: TopMenu,
