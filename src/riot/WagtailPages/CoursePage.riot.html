@@ -112,7 +112,8 @@
             isExamEnabled() {
                 // Exams are enabled if you complete all lessons or if you are a
                 // guest user.
-                return this.course.allLessonsComplete || !isAuthenticated();
+                return this.course.numberOfLessons === this.course.numberOfFinishedLessons
+                    || !isAuthenticated();
             },
 
             examTitle() {
