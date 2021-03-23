@@ -83,8 +83,8 @@ const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
     } as RequestInit);
 };
 
-/** Get the Request Object (and try getting the response headers) from the currently cached item */
-const GetCachedObject = async (
+/** Get the Request Object from the currently cached item */
+const GetRequestObject = async (
     item: IPublishableItem
 ): Promise<Request | undefined> => {
     if (!item.fullUrl) {
@@ -94,9 +94,10 @@ const GetCachedObject = async (
 
     const itemCache = await AccessCache(item.cacheKey);
 
-    let itemCacheState:Record<string, boolean> = {
+    const itemCacheState: Record<string, boolean> = {
         cacheExists: !!itemCache,
-        reqObjectLoaded: item.requestObject && item.requestObject.url === item.fullUrl,
+        reqObjectLoaded:
+            item.requestObject && item.requestObject.url === item.fullUrl,
     };
 
     if (!itemCacheState.cacheExists) {
@@ -124,17 +125,20 @@ const GetCachedObject = async (
         }
     }
 
-    if (requests.length > 1) {
+    const orderedRequests: Request[] = ([] as Request[]).concat(requests);
+    if (orderedRequests.length > 1) {
         // We should really clean the cache in this case
-        // But we still don't know how to do that properly
-        // requests.slice(1).forEach((request) => {
-        //     itemCache.delete(request);
-        // });
+        orderedRequests.sort((a: Request, b: Request) => {
+            return a.url < b.url ? 1 : -1;
+        });
+        orderedRequests.slice(1).forEach((request) => {
+            itemCache.delete(request);
+        });
     }
 
     // Note: this is a side-effect behaviour, we try and load the previous
     // response headers from the cache so that we can (potentially) re-use them later
-    const response = await itemCache.match(requests[0]);
+    const response = await itemCache.match(orderedRequests[0]);
     item.respHeaders = response!.headers;
 
     CleanRequestObject(item, requests[0]);
@@ -166,7 +170,7 @@ export const InitialiseFromCache = async (
         return false;
     }
 
-    const reqObj = await GetCachedObject(item);
+    const reqObj = await GetRequestObject(item);
     if (!reqObj) {
         item.status.cacheStatus = "prepared";
         return false;
@@ -242,7 +246,7 @@ export const UpdateCachedItem = async (
         return false;
     }
 
-    let reqObj = await GetCachedObject(item);
+    let reqObj = await GetRequestObject(item);
     if (!reqObj) {
         item.status.cacheStatus = "prepared";
         if (item.fullUrl) {

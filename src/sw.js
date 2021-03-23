@@ -60,6 +60,16 @@ const cardFallbackPlugin = {
     },
 }
 
+/** Inject a datetime stamp into the response if it doesn't have one */
+const responseHeaderLastModifiedPlugin = {
+    cacheWillUpdate: async ({request, response, event, state}) => {
+      if (!response.Headers.has("Last-Modified")) {
+        response.Headers.append("Last-Modified", new Date().toUTCString());
+      }
+      return response;
+    },
+}
+
 registerRoute(
     function(request) {
         return request.url.searchParams && request.url.searchParams.has('cardImageFallback')
@@ -92,6 +102,7 @@ registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.manifest),
     new NetworkFirst({
         cacheName: ROUTES_FOR_REGISTRATION.manifest,
+        plugins: [responseHeaderLastModifiedPlugin]
     })
 );
 
