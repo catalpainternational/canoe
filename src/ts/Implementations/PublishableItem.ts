@@ -152,16 +152,15 @@ export abstract class PublishableItem<T extends TItemCommon>
      */
     set respHeaders(value: Record<string, string>) {
         this.#respHeaders = value;
-        if (!this.#respHeaders["Last-Modified"]) {
-            this.#respHeaders["Last-Modified"] = new Date().toUTCString();
+        if (!this.#respHeaders["last-modified"]) {
+            this.#respHeaders["last-modified"] = new Date().toUTCString();
         }
     }
 
     SetResponseHeaders(headers: Headers): void {
         const simpleHeaders: Record<string, string> = {};
-        headers.forEach((value, key) =>
-         {
-            simpleHeaders[key] = value;
+        headers.forEach((value, key) => {
+            simpleHeaders[key.toLowerCase()] = value;
         });
         this.respHeaders = simpleHeaders;
     }

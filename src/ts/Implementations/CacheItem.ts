@@ -30,8 +30,8 @@ const BuildRequestObject = (item: IPublishableItem): Request => {
     }
     // Migrate any headers we want from the previous response
     for (const [key, value] of Object.entries(item.respHeaders)) {
-        switch (key) {
-            case "Last-Modified":
+        switch (key.toLowerCase()) {
+            case "last-modified":
                 headers["If-Modified-Since"] = value;
                 break;
         }
@@ -50,7 +50,10 @@ const BuildRequestObject = (item: IPublishableItem): Request => {
 
 /** Cleans the supplied request object and uses it to set the item's requestObject and requestObjectCleaned values */
 const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
-    if (!srcReq.headers.has("authorization")) {
+    if (
+        !srcReq.headers.has("authorization") &&
+        !srcReq.headers.has("Authorization")
+    ) {
         item.requestObjectCleaned = false;
         item.requestObjectClean = true;
         item.requestObject = srcReq;
@@ -62,7 +65,7 @@ const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
 
     const headers = new Headers();
     for (const key of srcReq.headers.keys()) {
-        if (key !== "authorization") {
+        if (key.toLowerCase() !== "authorization") {
             headers.append(key, srcReq.headers.get(key) || "");
         }
     }
@@ -139,6 +142,7 @@ const GetRequestObject = async (
     // Note: this is a side-effect behaviour, we try and load the previous
     // response headers from the cache so that we can (potentially) re-use them later
     const response = await itemCache.match(orderedRequests[0]);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     item.SetResponseHeaders(response!.headers);
 
     CleanRequestObject(item, requests[0]);
