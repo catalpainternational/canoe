@@ -314,12 +314,6 @@
 }
 
 // Teaching icons
-.clock {
-    @include mask-icons-shared("~img/clock.svg", contain, $gray-5);
-    width: 10px;
-    height: 10px;
-}
-
 .clipboard-pencil {
     @include mask-icons-shared("~img/clipboard_pencil.svg", contain, $app-accent-color);
     width: 13px;
