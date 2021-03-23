@@ -9,6 +9,8 @@ ResourceArticle {
             width: calc(100% + (2 * 22px));
             margin-left: -22px;
             margin-right: -22px;
+            border-radius: 0;
+            margin-top: unset;
         }
     }
 

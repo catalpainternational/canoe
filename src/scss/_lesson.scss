@@ -223,8 +223,14 @@ ResourceArticle LessonFrame {
     }
 
     img.richtext-image {
-        margin: 1em 0;
-        width: 100%;
+        width: calc(100% + (2 * 20px));
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    basiccard img.richtext-image {
+        margin-top: -30px;
+        border-radius: 8px 8px 0 0;
     }
 
     h3.media-title {
