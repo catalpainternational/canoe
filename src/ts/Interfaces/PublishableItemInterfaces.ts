@@ -13,8 +13,8 @@ export interface IPublishableItem extends TPublishableItem {
     /** Indicates whether the above requestObject has had the authorization header stripped */
     requestObjectClean: boolean;
 
-    /** The headers as returned with any previous response from the server */
-    respHeaders: Headers;
+    /** The headers as returned with any previous response from the server, converted to a simple object */
+    respHeaders: Record<string, string>;
     /** Get the new response to use when updating this item in the cache */
     updatedResp: Response;
 }

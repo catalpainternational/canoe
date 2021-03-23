@@ -151,7 +151,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
-        this.respHeaders = resp.headers;
+        this.SetResponseHeaders(resp.headers);
         this.#blob = await resp.blob();
         this.status.cacheStatus = "loading";
 

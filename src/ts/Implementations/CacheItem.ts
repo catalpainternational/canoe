@@ -29,13 +29,13 @@ const BuildRequestObject = (item: IPublishableItem): Request => {
         headers["Authorization"] = `JWT ${token}`;
     }
     // Migrate any headers we want from the previous response
-    item.respHeaders.forEach((value: string, key: string) => {
+    for (const [key, value] of Object.entries(item.respHeaders)) {
         switch (key) {
             case "Last-Modified":
                 headers["If-Modified-Since"] = value;
                 break;
         }
-    });
+    }
 
     const reqInit: any = {
         cache: "no-cache",
@@ -139,7 +139,7 @@ const GetRequestObject = async (
     // Note: this is a side-effect behaviour, we try and load the previous
     // response headers from the cache so that we can (potentially) re-use them later
     const response = await itemCache.match(orderedRequests[0]);
-    item.respHeaders = response!.headers;
+    item.SetResponseHeaders(response!.headers);
 
     CleanRequestObject(item, requests[0]);
     return item.requestObject;

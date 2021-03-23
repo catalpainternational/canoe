@@ -259,7 +259,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.status.cacheStatus = "loading";
         try {
-            this.respHeaders = resp.headers;
+            this.SetResponseHeaders(resp.headers);
             this.data = await resp.json();
         } catch {
             // We assume a bad cached entry, i.e. bad json

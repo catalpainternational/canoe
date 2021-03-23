@@ -181,7 +181,7 @@ export class Manifest extends PublishableItem<TManifestData> {
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         try {
-            this.respHeaders = resp.headers;
+            this.SetResponseHeaders(resp.headers);
             this.BuildManifestData(await resp.json());
         } catch {
             // Discard errors with getting json from response
