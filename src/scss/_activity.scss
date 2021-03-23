@@ -16,21 +16,11 @@ ActivityPage {
             font-size: 10px;
 
             &.reference {
-                // margin-right: 12px;
                 background-color: $gray-8;
                 padding: 5px 13px;
                 border-radius: 12px;
                 letter-spacing: 0.6px;
                 text-transform: uppercase;
-            }
-
-            &.time {
-                display: flex;
-
-                .clock {
-                    align-self: center;
-                    margin-right: 3px;
-                }
             }
         }
     }
@@ -38,6 +28,20 @@ ActivityPage {
     .title-description {
         button {
             margin: 1em 0 2.5em;
+            box-shadow: none;
+
+            &.btn-primary {
+                background-color: $teal;
+                position: relative;
+            }
+        }
+
+        .checkmark {
+            background-color: white;
+            height: 12px;
+            position: absolute;
+            left: 13%;
+            top: 36%;
         }
     }
 
@@ -68,6 +72,10 @@ ActivityPage {
 
     div.content-wrapper {
         padding-bottom: calc(#{$bottom-menu-height});
+    }
+
+    img {
+        width: 100%;
     }
 
     PlanTab,

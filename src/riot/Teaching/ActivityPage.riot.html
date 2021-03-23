@@ -11,13 +11,17 @@
         <div class="topic-and-details">
             <h5>{ page.topic.title }</h5>
             <p class="reference">Test231</p>
-            <!-- <p class="time"><span class="clock"></span>1.5 HRS</p> -->
         </div>
         <div class="title-description">
             <h3>{ page.title }</h3>
             <p if="{ page.ready }">{ page.description }</p>
-            <button class="btn-secondary">
-                { TRANSLATIONS.markComplete() }
+            <button
+                class="{state.isComplete ? 'btn-primary' : 'btn-secondary'}"
+                onclick="{toggleComplete}"
+            >
+                <span if="{state.isComplete}" class="checkmark"></span>
+                { state.isComplete ? TRANSLATIONS.markIncomplete() :
+                TRANSLATIONS.markComplete() }
             </button>
         </div>
         <div class="activity-swoop">
@@ -68,14 +72,16 @@
         function ActivityPage() { return {
             state: {
                 selectedTab: "plan",
+                isComplete: false,
             },
-            
+
             onBeforeMount(props, state) {
                 this.page = getRoute().page;
             },
 
             TRANSLATIONS: {
-                markComplete: () => gettext("Mark activity complete"),
+                markComplete: () => gettext("Mark complete"),
+                markIncomplete: () => gettext("Mark incomplete"),
                 plan: () => gettext("plan"),
                 teach: () => gettext("teach"),
                 extend: () => gettext("extend"),
@@ -87,6 +93,10 @@
 
             selectTab(tabName) {
                 this.update({ selectedTab: tabName });
+            },
+
+            toggleComplete() {
+                this.update({ isComplete: !this.state.isComplete });
             },
         }}
 
