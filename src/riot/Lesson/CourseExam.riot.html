@@ -109,22 +109,38 @@
                 this.state.stage = stage;
                 this.state.examType = examType;
 
-                // TODO actually I believe we want to remove the randomisation & trancation all together, for exams && pre-learning surveys
-                if (examType === 'prelearning' && this.course.ready) {
-                    this.state.cards = this.course.examCards;
-                } else if (this.state.cards === undefined && this.course.ready) {
-                    this.state.cards = this.shuffleCards(this.course.examCards).slice(0, 5);
-                }
-                if (this.state.cards && !isNaN(this.state.cardNumber)) {
-                    this.state.card = this.state.cards[this.state.cardNumber - 1];
-                    if (examType === 'prelearning') {
-                        this.state.cardAnswers = this.state.card.answers;
-                    } else {
-                        this.state.cardAnswers = this.shuffleCards(this.state.card.answers);
+                // TODO this may become a project config attribute, pending further discussion
+                let randomize_and_limit = true;
+                if (examType === 'prelearning') randomize_and_limit = false;
+
+
+                if (randomize_and_limit && this.course.ready) {
+                    // randomise & limit the cards
+                    if (this.state.cards === undefined && this.course.ready) {
+                        this.state.cards = this.shuffleCards(this.course.examCards).slice(0, 5);
                     }
 
-                    if (!this.state.currentAnswer) {
-                        this.state.currentAnswer = ExamGrader.loadExamAnswer(this.state.card.id) || {};
+                    if (this.state.cards && !isNaN(this.state.cardNumber)) {
+                        this.state.card = this.state.cards[this.state.cardNumber - 1];
+                        this.state.cardAnswers = this.shuffleCards(this.state.card.answers);
+
+
+                        if (!this.state.currentAnswer) {
+                            this.state.currentAnswer = ExamGrader.loadExamAnswer(this.state.card.id) || {};
+                        }
+                    }
+
+                } else if (this.course.ready) {
+                    // do not randomise & limit the cards
+                    this.state.cards = this.course.examCards;
+
+                    if (this.state.cards && !isNaN(this.state.cardNumber)) {
+                        this.state.card = this.state.cards[this.state.cardNumber - 1];
+                        this.state.cardAnswers = this.state.card.answers;
+
+                        if (!this.state.currentAnswer) {
+                            this.state.currentAnswer = ExamGrader.loadExamAnswer(this.state.card.id) || {};
+                        }
                     }
                 }
             },
