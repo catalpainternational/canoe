@@ -83,24 +83,28 @@ const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
     } as RequestInit);
 };
 
-/** Get the Request Object from the currently cached item */
-const GetRequestObject = async (
+/** Get the Request Object (and try getting the response headers) from the currently cached item */
+const GetCachedObject = async (
     item: IPublishableItem
 ): Promise<Request | undefined> => {
-    const itemCache = await AccessCache(item.cacheKey);
-
     if (!item.fullUrl) {
         // "The full url could not be determined for this item, it is not retrievable";
         return Promise.resolve(undefined);
     }
-    if (item.requestObject && item.requestObject.url === item.fullUrl) {
-        CleanRequestObject(item, item.requestObject);
-        return item.requestObject;
-    }
 
-    if (!itemCache) {
+    const itemCache = await AccessCache(item.cacheKey);
+
+    let itemCacheState:Record<string, boolean> = {
+        cacheExists: !!itemCache,
+        reqObjectLoaded: item.requestObject && item.requestObject.url === item.fullUrl,
+    };
+
+    if (!itemCacheState.cacheExists) {
         // Couldn't get the cache open (this is a very unusual circumstance)
-        return Promise.resolve(undefined);
+        if (!itemCacheState.reqObjectLoaded) {
+            // And we don't have a pre-existing requestObject we can use
+            return Promise.resolve(undefined);
+        }
     }
 
     const requests = await itemCache.keys(item.fullUrl, {
@@ -108,9 +112,16 @@ const GetRequestObject = async (
         ignoreSearch: true,
         ignoreVary: true,
     });
-    if (requests.length === 0) {
-        // `Could not find ${item.fullUrl} in the cache`;
-        return Promise.resolve(undefined);
+    itemCacheState["reqObjectInCache"] = requests.length > 0;
+
+    if (!itemCacheState.reqObjectLoaded) {
+        if (!itemCacheState.reqObjectInCache) {
+            // `Could not find ${item.fullUrl} within the cache`;
+            return Promise.resolve(undefined);
+        } else {
+            CleanRequestObject(item, item.requestObject);
+            return item.requestObject;
+        }
     }
 
     if (requests.length > 1) {
@@ -120,6 +131,11 @@ const GetRequestObject = async (
         //     itemCache.delete(request);
         // });
     }
+
+    // Note: this is a side-effect behaviour, we try and load the previous
+    // response headers from the cache so that we can (potentially) re-use them later
+    const response = await itemCache.match(requests[0]);
+    item.respHeaders = response!.headers;
 
     CleanRequestObject(item, requests[0]);
     return item.requestObject;
@@ -150,7 +166,7 @@ export const InitialiseFromCache = async (
         return false;
     }
 
-    const reqObj = await GetRequestObject(item);
+    const reqObj = await GetCachedObject(item);
     if (!reqObj) {
         item.status.cacheStatus = "prepared";
         return false;
@@ -226,7 +242,7 @@ export const UpdateCachedItem = async (
         return false;
     }
 
-    let reqObj = await GetRequestObject(item);
+    let reqObj = await GetCachedObject(item);
     if (!reqObj) {
         item.status.cacheStatus = "prepared";
         if (item.fullUrl) {
