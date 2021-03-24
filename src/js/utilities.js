@@ -1,6 +1,5 @@
 import { getLanguage } from "ReduxImpl/Interface";
 import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
-import { getOrFetchManifest } from "js/WagtailPagesAPI";
 
 import contentStockImg from "img/stock_content.png";
 import courseStockImg from "img/stock_course.png";
@@ -26,14 +25,6 @@ export const getMediaUrl = (mediaPath) => {
 
 export const getHtmlUrl = (htmlPath) => {
     return `${BACKEND_BASE_URL}${htmlPath}`;
-};
-
-export const resolveMedia = (mediaID) => {
-    return getOrFetchManifest()
-        // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
-        // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
-        // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
-        .then(mfest => getMediaUrl(Object.values(mfest.media[mediaID]).sort((el1,el2) => el1.size - el2.size)[0].mediapath));
 };
 
 export const doesTheArrayContainTheObject = (theArray, theObject, matchingFunction) => {
