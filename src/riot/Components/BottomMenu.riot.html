@@ -38,15 +38,19 @@
                 this.page = getRoute().page;
                 this.riotHash = getRoute().riotHash;
             },
+
             shouldShowSync() {
                 return inAppelflap();
             },
+
             shouldShowLearningHome() {
                 return this.page.manifest.hasPageType('homepage');
             },
+
             shouldShowTeachingHome() {
-                return this.page.manifest.hasPageType('learnignactivityhomepage');
+                return this.page.manifest.hasPageType('learningactivitieshomepage');
             },
+
             shouldShowResources() {
                 return this.page.manifest.hasPageType('resourcesroot');
             },
