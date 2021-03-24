@@ -1,30 +1,44 @@
 <ImageWrapper>
     <img
         if="{state.imagePath}"
-        alt="{props.image.alt}"
+        alt="{state.image.alt}"
         class="richtext-image"
         crossorigin="anonymous"
         src="{state.imagePath}"
     />
     <p class="error-message" if="{!state.imagePath}">
-        Error: image "{props.image.alt}", is missing.
+        Sorry: image "{state.image.alt}", is missing.
     </p>
 
     <script>
         import { getRoute } from "ReduxImpl/Interface";
         import { getRenditionUrl } from "js/RenditionSelector";
+        import { MissingImageError } from "js/Errors";
 
         export default {
             state: {
                 imagePath: "",
+                image: {
+                    id: "unknown",
+                    alt: "Unknown Image",
+                }
             },
 
             onBeforeMount(props, state) {
                 this.page = getRoute().page;
+                this.state.image = props.image;
                 const asset = this.page.getImageRenditions(
                     props.image.id
                 );
-                this.state.imagePath = getRenditionUrl(asset.renditions);
+                if (asset) {
+                    try {
+                        this.state.imagePath = getRenditionUrl(asset.renditions);
+                    } catch (error) {
+                        if (error instanceof MissingImageError) {
+                            this.state.imagePath = "";
+                        }
+                    }
+                }
             },
         };
     </script>

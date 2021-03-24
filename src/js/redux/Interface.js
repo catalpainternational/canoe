@@ -119,8 +119,8 @@ export const setUnauthenticated = () => {
     store.dispatch(setUnAuthenticatedState());
 };
 
-export const setRoute = (route, riotHash) => {
-    store.dispatch(setCanoePage(route, riotHash));
+export const setRoute = (route) => {
+    store.dispatch(setCanoePage(route.page, route.riotHash));
 };
 
 export const getRoute = () => {
