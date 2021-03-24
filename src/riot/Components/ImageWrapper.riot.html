@@ -21,7 +21,7 @@
 
             onBeforeMount(props, state) {
                 this.page = getRoute().page;
-                const asset = this.page.PETEgetImageRenditions(
+                const asset = this.page.getImageRenditions(
                     props.image.id
                 );
                 this.state.imagePath = getRenditionUrl(asset.renditions);

@@ -22,14 +22,6 @@ self.__WB_DISABLE_DEV_LOGS = true;
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { buildAppelflapRoutes } from "js/RoutingAppelflap";
 
-registerRoute(
-    new RegExp(ROUTES_FOR_REGISTRATION.media),
-    new CacheFirst({
-        cacheName: "media-cache",
-        plugins: [new RangeRequestsPlugin()],
-    })
-);
-
 const cardImageFallbackUrl = (url) => {
     if (url.match(/cardImageFallback=([^&]*)/)[1]) {
         return matchPrecache(url.match(/cardImageFallback=([^&]*)/)[1]);
@@ -84,9 +76,14 @@ setCatchHandler(({url, event, params}) => {
    return Response.error();
 });
 
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheAnyOrFetchOnly());
-
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagesv2), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheAnyOrFetchOnly());
+registerRoute(
+    new RegExp(ROUTES_FOR_REGISTRATION.media),
+    new CacheAnyOrFetchOnly({
+        plugins: [new RangeRequestsPlugin()],
+    })
+);
 
 registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.manifest),

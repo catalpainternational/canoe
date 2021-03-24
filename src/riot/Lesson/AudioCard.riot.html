@@ -36,7 +36,7 @@
 
             onBeforeMount(props, state) {
                 this.page = getRoute().page;
-                const asset = this.page.PETEgetMediaRenditions(
+                const asset = this.page.getAudioRenditions(
                     props.media.id
                 );
                 // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 

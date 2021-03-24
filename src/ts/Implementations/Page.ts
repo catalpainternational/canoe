@@ -331,9 +331,15 @@ export class Page extends PublishableItem<TWagtailPageData> {
         });
     }
 
-    PETEgetImageRenditions = (id: number | string): TAssetEntry | undefined =>
+    getImageRenditions = (id: number | string): TAssetEntry | undefined =>
         this.getAssetsByIdAndType(id, "image");
 
-    PETEgetMediaRenditions = (id: number | string): TAssetEntry | undefined =>
+    getMediaRenditions = (id: number | string): TAssetEntry | undefined =>
         this.getAssetsByIdAndType(id, "media");
+
+    getVideoRenditions = (id: number | string): TAssetEntry | undefined =>
+        this.getAssetsByIdAndType(id, "video");
+    
+    getAudioRenditions = (id: number | string): TAssetEntry | undefined =>
+        this.getAssetsByIdAndType(id, "audio");
 }

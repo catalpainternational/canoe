@@ -1,11 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { TManifest } from "../Types/ManifestTypes";
-import { TAssetEntry } from "../Types/AssetTypes";
+import { TAssetEntry, TRendition } from "../Types/AssetTypes";
 import { PublishableItem } from "./PublishableItem";
 import { UpdateCachedItem } from "./CacheItem";
 
 import { AppelflapConnect } from "../AppelflapConnect";
-import { JPEG_RENDITION, WEBP_BROWSERS, WEBP_RENDITION } from "../Constants";
+import {
+    JPEG_RENDITION,
+    MP4A_RENDITION,
+    MP4V_RENDITION,
+    OPUS_RENDITION,
+    WEBM_RENDITION,
+    WEBP_RENDITION,
+} from "../Constants";
 import { getBrowser } from "../PlatformDetection";
 
 // See ts/Typings for the type definitions for these imports
@@ -54,12 +61,24 @@ export class Asset extends PublishableItem<TAssetEntry> {
         return this.manifestData?.type || "";
     }
 
-    get renditions(): Record<string, string> {
+    get renditions(): Record<string, TRendition> {
         return this.manifestData?.renditions || {};
     }
 
     get platformSpecificRendition(): string {
-        return getBrowser().name === "Safari" ? JPEG_RENDITION : WEBP_RENDITION;
+        const browser = getBrowser().name;
+        switch (this.type) {
+            case "image":
+                return browser === "Safari" ? JPEG_RENDITION : WEBP_RENDITION;
+            case "video":
+                // Safari does support webm to a limited degree 
+                return browser === "Safari" ? MP4V_RENDITION : WEBM_RENDITION;
+            case "audio":
+                return browser === "Safari" ? OPUS_RENDITION : MP4A_RENDITION;
+            default:
+                // Default is for an 'image' and not on Safari
+                return "WEBP_RENDITION";
+        }
     }
 
     get manifestData(): TAssetEntry {
@@ -86,7 +105,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
             return "";
         }
 
-        return rendition;
+        return rendition.path;
     }
 
     /** Alias for rendition, always prefixed with a '/' */
@@ -99,20 +118,26 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     get fullUrl(): string {
-        return `${BACKEND_BASE_URL}/media${this.api_url}`;
+        const renditionUrl = this.api_url;
+        return renditionUrl
+            ? `${BACKEND_BASE_URL}/media${this.api_url}`
+            : "";
     }
 
     get contentType(): string {
-        let contentType = "application/json";
-        if (this.type === "image") {
-            const browser = getBrowser().name;
-            contentType =
-                WEBP_BROWSERS.indexOf(browser) >= 0
-                    ? "image/webp"
-                    : "image/jpeg";
+        const browser = getBrowser().name;
+        switch (this.type) {
+            case "image":
+                return browser === "Safari" ? "image/jpeg" : "image/webp";
+            case "video":
+                // Safari does support webm to a limited degree 
+                return browser === "Safari" ? "video/mp4" : "video/webm";
+            case "audio":
+                return browser === "Safari" ? "audio/ogg" : "audio/mp4";
+            default:
+                // Default is for JSON, and we don't care about the browser
+                return "application/json";
         }
-
-        return contentType;
     }
 
     /** An Asset is not publishable on its own.
