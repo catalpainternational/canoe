@@ -1,13 +1,16 @@
-import { getLanguage, setRoute } from "ReduxImpl/Interface";
+import { getLanguage, setRoute, isAuthenticated } from "ReduxImpl/Interface";
 import { logPageView } from "js/GoogleAnalytics";
 
 import { InitialiseByRequest } from "ts/Implementations/CacheItem";
 import { Manifest } from "ts/Implementations/Manifest";
 
-// pages that are rendered by the application, and do not require a manifest
-const CANOE_PAGES = ['login', 'settings'];
-// pages that are rendered by the application, and do require a manifest
-const CANOE_MANIFEST_PAGES = ['profile', 'sync'];
+// If true REQUIRE_LOGIN will always redirect any user who does not have a login to the login page
+// unless they have a manifest cache in place already
+const REQUIRE_LOGIN = process.env.REQUIRE_LOGIN;
+
+const LOGIN_ROUTE = 'login';
+// pages that are rendered by the application
+const CANOE_PAGES = ['settings', 'profile', 'sync'];
 // pages that are shortcuts into a CMS page ( e.g. resources goes to the selected language resource root )
 const CANOE_SHORTCUTS = {
     "": "homepage",
@@ -15,9 +18,6 @@ const CANOE_SHORTCUTS = {
     resources: "resourcesroot",
     topics: "learningactivitieshomepage",
 };
-
-// pages from the CMS ( we might not use this )
-const IS_WAGTAIL_PAGE = /([\d]+)/; // should match '#3' and '#3/objectives'
 
 const IS_PAGE_PREVIEW = /^\?(.+)/;
 
@@ -35,40 +35,49 @@ async function route(hashWith) {
     const riotHash = hashParts.slice(1);
     let page = undefined;
     let manifest = undefined;
+    let route = undefined;
 
     logPageView(hash);
 
-    // If we are a simple canoe page all should be good
-    if(CANOE_PAGES.includes(pageHash)) {
-        setRoute({type: pageHash}, riotHash);
-        return;
-    }
-
-    // otherwise we need a manifest to understand what to render
-    try {
-        manifest = await getValidManifest();
-    } catch (err) {
-        // Note that this may leak information that we don't want leaked
-        setRoute({type: "error", error: `No manifest found. Error: ${err}`});
-        return;
-    }
-
-    if(CANOE_MANIFEST_PAGES.includes(pageHash)) {
-        page = manifest.getLanguagePageType(getLanguage(), 'homepage');
-        setRoute({type: pageHash, home:page}, riotHash);
-        return;
-    }
-
-    // If we are a shortcut get the page from the manifest
-    if(Object.keys(CANOE_SHORTCUTS).includes(pageHash)) {
-        page = manifest.getLanguagePageType(getLanguage(), CANOE_SHORTCUTS[pageHash]);
+    if(pageHash === LOGIN_ROUTE) {
+        // If we are a simple canoe page all should be good
+        route = {page: {type: LOGIN_ROUTE}, riotHash};
     } else {
-        page = manifest.getPageManifestData(pageHash);
+        // otherwise we need a manifest ( bottom nav always needs to know )
+        try {
+            manifest = await getValidManifest();
+        } catch (err) {
+            route = {page: {type: "manifest_error", error: `Manifest retrieval failure. Error: ${err}`}};
+        }
+        
+        if( !isAuthenticated() && REQUIRE_LOGIN )
+        { 
+            // if the site is configured to require login and we are not logged in, show the login page 
+            window.location.hash = `#${LOGIN_ROUTE}`;
+            return;
+        }
+
+        if(CANOE_PAGES.includes(pageHash)) {
+            // If we are a canoe page that needs page data, get it
+            page = manifest.getLanguagePageType(getLanguage(), 'homepage');
+            route = {page: {type: pageHash, home:page, manifest: manifest}, riotHash};
+        } else {
+            if(Object.keys(CANOE_SHORTCUTS).includes(pageHash)) {
+                // If we are a shortcut get the first page of that type from the manifest
+                page = manifest.getLanguagePageType(getLanguage(), CANOE_SHORTCUTS[pageHash]);
+            } else {
+                // If we are a shortcut get the first page of that type from the manifest
+                page = manifest.getPageManifestData(pageHash);
+            }
+            route = {page, riotHash};
+            // refresh the page
+            if (!page.ready) {
+                InitialiseByRequest(page);
+            }
+        }
     }
-    if (!page.ready) {
-        InitialiseByRequest(page);
-    }
-    setRoute(page, riotHash);
+
+    setRoute(route);
 }
 
 async function getValidManifest() {

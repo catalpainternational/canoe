@@ -2,22 +2,12 @@
     <div class="answers-block">
         <h4><raw html="{ TRANSLATIONS.checkAllAnswers() }"></raw></h4>
         <ol>
-            <li each="{answer in props.card.answers}" onclick="{() => selectAnswer(answer)}">
-                <div>
-                    <span class="checkbox"></span>
-                    <span
-                        if="{doesArrayIncludeAnswer(state.visibleAnswers, answer) && answer.correct}"
-                        class="success"
-                    ></span>
-                    <span
-                        if="{doesArrayIncludeAnswer(state.visibleAnswers, answer) && !answer.correct}"
-                        class="warning"
-                    ></span>
-                    <span
-                        if="{doesArrayIncludeAnswer(state.hiddenAnswers, answer) && !doesArrayIncludeAnswer(state.visibleAnswers, answer)}"
-                        class="pendingAnswer"
-                    ></span>
-                    <p>{answer.text}</p>
+            <li each="{(answer, index) in props.card.answers}" onclick="{() => selectAnswer(answer)}">
+                <div class="checkbox-container {answerClass(answer)}">
+                    <div class="checkbox">
+                        <span>{state.alphabet[index]}</span>
+                    </div>
+                    <p class="label">{answer.text}</p>
                 </div>
             </li>
         </ol>
@@ -46,6 +36,8 @@
                 hiddenAnswers: [],
                 visibleAnswers: [],
                 numberTotalCorrectAnswers: 0,
+                alphabet: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N',
+                    'O','P','Q','R','S','T','U','V','W','X','Y','Z'],
             },
 
             TRANSLATIONS: {
@@ -99,6 +91,15 @@
                         visibleAnswers: [],
                     });
                 }
+            },
+
+            answerClass(answer) {
+                if (this.doesArrayIncludeAnswer(this.state.visibleAnswers, answer)
+                    && answer.correct) return "answer-success";
+                if (this.doesArrayIncludeAnswer(this.state.visibleAnswers, answer)
+                    && !answer.correct) return "answer-warning";
+                if (this.doesArrayIncludeAnswer(this.state.hiddenAnswers, answer)
+                    && !this.doesArrayIncludeAnswer(this.state.visibleAnswers, answer)) return "answer-pending";
             },
 
             selectAnswer(answer) {

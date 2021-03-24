@@ -1,7 +1,7 @@
 <ExamResults>
     <template if="{state.passedExam !== null}">
         <div class="congratulations-container">
-            <template if="{state.passedExam}">
+            <template if="{state.passedExam || props.examType === 'prelearning'}">
                 <span class="superman-success"></span>
                 <h2>{ TRANSLATIONS.success() }</h2>
                 <h3>{ TRANSLATIONS.completed() }</h3>
@@ -13,7 +13,7 @@
                     { TRANSLATIONS.resources() }
                 </button>
             </template>
-            <template if="{!state.passedExam}">
+            <template if="{!state.passedExam && props.examType !== 'prelearning'}">
                 <div>
                     <span class="incorrect-cross"></span>
                     <h2>{ TRANSLATIONS.notQuite() }</h2>
@@ -76,6 +76,12 @@
 
             passedExamMessage() {
                 // message when user passed the exam
+                if (this.props.examType === 'prelearning') {
+                    return gettext(
+                        "You have completed the pre-learning survey and you can now keep progressing your learning."
+                    )
+                }
+
                 return gettext(
                     "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam.",
                     this.props.finalScore
