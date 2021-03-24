@@ -1,21 +1,22 @@
 <LessonPage>
     <LessonFrame
         if="{lesson.ready}"
-        extrastyleclasses="message-container"
         linkTo="{lesson.course.loc_hash}"
     >
-        <h5>Lesson</h5>
-        <h3>{lesson.title}</h3>
-        <div if="{lesson.cardImage}" class="lesson-page-image-wrap">
-            <img
-                crossorigin="anonymous"
-                src="{getMediaUrl(lesson.cardImage)}"
-                class="lesson-page-image"
-            />
+        <div class="message-container">
+            <h5>{TRANSLATIONS.lesson()}</h5>
+            <h3>{lesson.title}</h3>
+            <div if="{state.cardImageUrl}" class="lesson-page-image-wrap">
+                <img
+                    crossorigin="anonymous"
+                    src="{state.cardImageUrl}"
+                    class="lesson-page-image"
+                />
+            </div>
+            <span if="{!lesson.cardImage}" class="lesson-presentation"></span>
+            <p>{lesson.shortDescription}</p>
+            <p>{lesson.longDescription}</p>
         </div>
-        <span if="{!lesson.cardImage}" class="lesson-presentation"></span>
-        <p>{lesson.shortDescription}</p>
-        <p>{lesson.longDescription}</p>
     </LessonFrame>
     <div if="{lesson.ready}" class="bottom-buttons">
         <button class="btn-primary" onclick="{startLesson}">
@@ -30,19 +31,18 @@
         import { getRoute } from "ReduxImpl/Interface";
 
         function LessonPage() { return {
-            state: {
-                showLongDescription: false,
-            },
-
             TRANSLATIONS: {
+                lesson: () => gettext("Lesson"),
                 lesson_activities: () => gettext("Lesson Activities"),
-                more: () => gettext("See more"),
-                less: () => gettext("See less"),
                 start: () => gettext("Start lesson"),
             },
 
             onBeforeMount(props, state) {
                 this.lesson = getRoute().page;
+                this.state.cardImageUrl = this.lesson.cardImage
+                    ? `${process.env.API_BASE_URL}${this.lesson.cardImage}`
+                    : undefined;
+
             },
 
             onMounted(props, state) {
@@ -59,12 +59,6 @@
 
             backToCoursePage() {
                 location.hash = "#" + this.lesson.course.loc_hash;
-            },
-
-            toggleLessonDescription() {
-                this.update({
-                    showLongDescription: !this.state.showLongDescription,
-                });
             },
 
             disableBlockedLessonModules() {

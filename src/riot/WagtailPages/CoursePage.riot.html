@@ -1,19 +1,41 @@
 <CoursePage>
-    <TopMenu extrastyleclasses="without-swoop">
+    <TopMenu
+        extrastyleclasses="with-swoop"
+        backgroundImage="{getCardImage(course.loc_hash, course.cardImage)}"
+    >
         <a class="top-icon left has-circle" onclick="{backToAllCourses}">
             <span class="arrow"></span>
         </a>
     </TopMenu>
 
     <div class="content-wrapper">
-        <div>
+        <div class="course-details">
             <h2 id="coursePageTitle">{course.title}</h2>
+            <p if="{course.data.subtitle}" class="course-subtitle">
+                {course.data.subtitle}
+            </p>
+            <p>{course.data.short_description}</p>
+            <p if="{course.data.long_description && state.showLongDescription}">
+                {course.data.long_description}
+            </p>
+            <a
+                if="{course.data.long_description && state.showLongDescription}"
+                onclick="{toggleCourseDescription}"
+                >{ TRANSLATIONS.less() }
+                <span class="chevron down"></span>
+            </a>
+            <a
+                if="{course.data.long_description && !state.showLongDescription}"
+                onclick="{toggleCourseDescription}"
+                >{ TRANSLATIONS.more() }
+                <span class="chevron up"></span>
+            </a>
         </div>
         <div class="lesson-swoop">
 
             <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
+            <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
             <div class="card-container">
-                <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
                 <Card
                     each="{lesson in course.lessons}"
                     status="{lessonStatus(lesson)}"
@@ -44,13 +66,20 @@
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { isAuthenticated, getRoute } from "ReduxImpl/Interface";
+        import { getCardImageUrl } from "js/utilities";
 
         function CoursePage() { return {
+            state: {
+                showLongDescription: false,
+            },
+
             TRANSLATIONS: {
                 no_lessons: () => gettext("There are no lessons yet in this course"),
                 your_lessons: () => gettext("Your lessons"),
                 course_exam: () => gettext("Course exam"),
                 highestScore: () => gettext("Highest score"),
+                more: () => gettext("See more"),
+                less: () => gettext("See less"),
             },
 
             onBeforeMount(props, state) {
@@ -70,10 +99,21 @@
                 );
             },
 
+            toggleCourseDescription() {
+                this.update({
+                    showLongDescription: !this.state.showLongDescription,
+                });
+            },
+
+            getCardImage(link, cardImage) {
+                return getCardImageUrl(link, cardImage);
+            },
+
             isExamEnabled() {
                 // Exams are enabled if you complete all lessons or if you are a
                 // guest user.
-                return this.course.allLessonsComplete || !isAuthenticated();
+                return this.course.numberOfLessons === this.course.numberOfFinishedLessons
+                    || !isAuthenticated();
             },
 
             examTitle() {
