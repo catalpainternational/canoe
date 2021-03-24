@@ -71,7 +71,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
             case "image":
                 return browser === "Safari" ? JPEG_RENDITION : WEBP_RENDITION;
             case "video":
-                // Safari does support webm to a limited degree 
+                // Safari does support webm to a limited degree
                 return browser === "Safari" ? MP4V_RENDITION : WEBM_RENDITION;
             case "audio":
                 return browser === "Safari" ? OPUS_RENDITION : MP4A_RENDITION;
@@ -119,9 +119,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
 
     get fullUrl(): string {
         const renditionUrl = this.api_url;
-        return renditionUrl
-            ? `${BACKEND_BASE_URL}/media${this.api_url}`
-            : "";
+        return renditionUrl ? `${BACKEND_BASE_URL}/media${this.api_url}` : "";
     }
 
     get contentType(): string {
@@ -130,7 +128,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
             case "image":
                 return browser === "Safari" ? "image/jpeg" : "image/webp";
             case "video":
-                // Safari does support webm to a limited degree 
+                // Safari does support webm to a limited degree
                 return browser === "Safari" ? "video/mp4" : "video/webm";
             case "audio":
                 return browser === "Safari" ? "audio/ogg" : "audio/mp4";

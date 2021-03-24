@@ -339,7 +339,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
 
     getVideoRenditions = (id: number | string): TAssetEntry | undefined =>
         this.getAssetsByIdAndType(id, "video");
-    
+
     getAudioRenditions = (id: number | string): TAssetEntry | undefined =>
         this.getAssetsByIdAndType(id, "audio");
 }

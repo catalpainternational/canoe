@@ -19,9 +19,9 @@ const AccessCache = async (cacheKey: string): Promise<Cache> => {
     return await caches.open(cacheKey);
 };
 
-/** Build a request object we can use to fetch the item 
- * The item must have a valid `fullUrl` 
-*/
+/** Build a request object we can use to fetch the item
+ * The item must have a valid `fullUrl`
+ */
 const BuildRequestObject = (item: IPublishableItem): Request => {
     const headers: any = {
         "Content-Type": item.contentType,
