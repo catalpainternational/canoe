@@ -59,15 +59,19 @@
                 if (this.page.type === 'initial') {
                     return false;
                 }
+
                 if (this.page.type === 'login') {
                     return false;
                 }
+
                 if (this.page.type === 'lessonpage') {
                     return false;
                 }
+
                 if (this.page.type === 'coursepage' && !this.riotHash) {
                     return false;
                 }
+
                 return true;
             },
         };

@@ -33,13 +33,6 @@ LongCard .long-card {
         justify-content: center;
         flex-direction: column;
 
-        p {
-            color: $gray-4;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
         h5 {
             margin: 0;
             color: $gray-1;

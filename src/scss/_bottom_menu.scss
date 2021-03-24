@@ -7,6 +7,10 @@ footer {
     bottom: 0;
     display: flex;
 
+    &.hide {
+        display: none;
+    }
+
     .bottom-menu {
         justify-content: space-around;
         align-items: center;
