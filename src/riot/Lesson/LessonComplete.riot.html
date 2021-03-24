@@ -17,13 +17,15 @@
                 <p>{ lessonCompleteMessage() }</p>
                 <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
             </div>
-            <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
+            <button if="{courseHasExam() && isPrelearningExam()}" class="btn-primary" onclick="{goToCourseExam}">
+                { TRANSLATIONS.survey() }
+                <span class="chevron"></span>
+            </button>
+            <button if="{courseHasExam() && !isPrelearningExam()}" class="btn-primary" onclick="{goToCourseExam}">
                 { TRANSLATIONS.exam() }
                 <span class="chevron"></span>
             </button>
-            <button class="btn-secondary" onclick="{goToCourseOverview}">
-                { TRANSLATIONS.course() }
-            </button>
+            <a href="#{state.lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
         </template>
     </div>
     <script>
@@ -40,15 +42,21 @@
                 next: () => gettext("Next Lesson"),
                 good: () => gettext("Good job!"),
                 exam: () => gettext("Take Exam"),
+                survey: () => gettext("Take Survey"),
                 course: () => gettext("Back to Course"),
             },
 
             courseHasExam() {
-                return this.state.lesson.course.has_exam;
+                return this.state.lesson.course.hasExam;
+            },
+
+            isPrelearningExam() {
+                return this.state.lesson.course.data.exam_type === 'prelearning';
             },
 
             isCourseComplete() {
-                return this.state.lesson.course.allLessonsComplete;
+                return this.state.lesson.course.numberOfLessons
+                    === this.state.lesson.course.numberOfFinishedLessons;
             },
 
             goToCourseOverview() {
@@ -66,6 +74,13 @@
 
             takeCourseExamMessage() {
                 // message on completion of lesson and prompt to take course exam
+                if (this.isPrelearningExam()) {
+                    return gettext(
+                        'Take the pre-learning survey to complete the course "%1"',
+                        this.state.lesson.course.title
+                    )
+                }
+
                 return gettext(
                     'Take the exam now to complete the course "%1"',
                     this.state.lesson.course.title

@@ -41,7 +41,6 @@
             nextCard() {
                 this.props.toggleModal(false, {});
                 window.scroll(0, 0);
-                const nextCard = this.props.lesson.content.cards[this.props.cardNumber];
                 location.hash = `${this.props.lesson.loc_hash}:content:${this.props.cardNumber + 1}`;
             },
 

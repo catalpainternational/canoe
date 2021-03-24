@@ -1,1 +1,24 @@
-<ExtendTab><div>This is the extend section</div></ExtendTab>
+<ExtendTab>
+    <TabSection
+        class="{'last-section'}"
+        section={ page.extend }
+    ></TabSection>
+    <script>
+        import TabSection from "RiotTags/Teaching/TabSection.riot.html";
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function ExtendTab() { return {
+			onBeforeMount(props, state) {
+				this.page = getRoute().page;
+			},
+
+			TRANSLATIONS: {},
+		}}
+
+        ExtendTab.components = {
+            tabsection: TabSection,
+        };
+
+        export default ExtendTab;
+    </script>
+</ExtendTab>

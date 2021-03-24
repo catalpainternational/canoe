@@ -3,7 +3,7 @@
         <HonorCode minimumScore="{ MINIMUM_SCORE }"></HonorCode>
     </LessonFrame>
     <LessonFrame
-        if="{ !isNaN(state.cardNumber) }"
+        if="{ !isNaN(state.cardNumber) && course.ready }"
         id="test"
         extraStyleClasses="test"
         linkTo="{ course.loc_hash }"
@@ -28,7 +28,7 @@
             savedAnswer="{state.currentAnswer.answers}"
         ></TestMultipleAnswer>
     </LessonFrame>
-    <div if="{ !isNaN(state.cardNumber) }" class="bottom-buttons">
+    <div if="{ !isNaN(state.cardNumber) && course.ready }" class="bottom-buttons">
         <div>
             <a if="{state.cardNumber > 1}" class="has-circle" onclick="{previousExamCard}">
                 <span class="arrow"></span>
@@ -59,6 +59,7 @@
         title="{ course.title }"
         finalScore="{calculateFinalScore()}"
         minimumScore="{MINIMUM_SCORE}"
+        examType="{state.examType}"
     ></ExamResults>
 
     <script>
@@ -98,19 +99,48 @@
             SECTION: "exam",
 
             readState() {
-                const route = getRoute()
-                const stage = route.riotHash[1] || 'code';
+                const route = getRoute();
+                const examType = this.course.data.exam_type;
+                // Don't show the honor code if it's a pre-learning exam
+                const fallbackStage = examType === 'prelearning' ? 1 : 'code';
+                const stage = route.riotHash[1] || fallbackStage;
                 const cardNumber = parseInt(stage);
                 this.state.cardNumber = cardNumber;
                 this.state.stage = stage;
-                if (this.state.cards === undefined && this.course.ready) {
-                    this.state.cards = this.shuffleCards(this.course.examCards).slice(0, 5);
-                }
-                if (this.state.cards && !isNaN(this.state.cardNumber)) {
-                    this.state.card = this.state.cards[this.state.cardNumber - 1];
-                    this.state.cardAnswers = this.shuffleCards(this.state.card.answers);
-                    if (!this.state.currentAnswer) {
-                        this.state.currentAnswer = ExamGrader.loadExamAnswer(this.state.card.id) || {};
+                this.state.examType = examType;
+
+                // TODO this may become a project config attribute, pending further discussion
+                let randomize_and_limit = true;
+                if (examType === 'prelearning') randomize_and_limit = false;
+
+
+                if (randomize_and_limit && this.course.ready) {
+                    // randomise & limit the cards
+                    if (this.state.cards === undefined && this.course.ready) {
+                        this.state.cards = this.shuffleCards(this.course.examCards).slice(0, 5);
+                    }
+
+                    if (this.state.cards && !isNaN(this.state.cardNumber)) {
+                        this.state.card = this.state.cards[this.state.cardNumber - 1];
+                        this.state.cardAnswers = this.shuffleCards(this.state.card.answers);
+
+
+                        if (!this.state.currentAnswer) {
+                            this.state.currentAnswer = ExamGrader.loadExamAnswer(this.state.card.id) || {};
+                        }
+                    }
+
+                } else if (this.course.ready) {
+                    // do not randomise & limit the cards
+                    this.state.cards = this.course.examCards;
+
+                    if (this.state.cards && !isNaN(this.state.cardNumber)) {
+                        this.state.card = this.state.cards[this.state.cardNumber - 1];
+                        this.state.cardAnswers = this.state.card.answers;
+
+                        if (!this.state.currentAnswer) {
+                            this.state.currentAnswer = ExamGrader.loadExamAnswer(this.state.card.id) || {};
+                        }
                     }
                 }
             },

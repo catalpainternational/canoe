@@ -1,24 +1,24 @@
 <BottomMenu>
     <footer if="{showBottomMenu()}">
         <div class="bottom-menu">
-            <a href="#">
-                <span class="all-courses-icon { props.page.type === 'homepage' ? 'active' : ''}">
+            <a href="#" if="{shouldShowLearningHome()}">
+                <span class="all-courses-icon { page.type === 'homepage' ? 'active' : ''}">
                 </span>
             </a>
             <a href="#profile">
-                <span class="profile-icon { props.page.type === 'profile' ? 'active' : ''}">
+                <span class="profile-icon { page.type === 'profile' ? 'active' : ''}">
                 </span>
             </a>
-            <a href="#resources">
-                <span class="resources-icon { props.page.type === 'resourcesroot' ? 'active' : ''}">
+            <a href="#resources" if="{shouldShowResources()}">
+                <span class="resources-icon { page.type === 'resourcesroot' ? 'active' : ''}">
                 </span>
             </a>
             <a href="#sync" if="{shouldShowSync()}">
-                <span class="resources-icon { props.page.type === 'sync' ? 'active' : ''}">
+                <span class="resources-icon { page.type === 'sync' ? 'active' : ''}">
                 </span>
             </a>
-            <a href="#topics" if="{true}">
-                <span class="list-icon { props.page.type === 'learningactivitieshomepage' ? 'active' : ''}">
+            <a href="#topics" if="{shouldShowTeachingHome()}">
+                <span class="list-icon { page.type === 'learningactivitieshomepage' ? 'active' : ''}">
                 </span>
             </a>
         </div>
@@ -28,34 +28,44 @@
         import { getRoute } from "ReduxImpl/Interface";
         import { inAppelflap } from "ts/PlatformDetection";
 
-        function getState() {
-            const route = getRoute();
-            return {
-                section: route.riotHash ? route.riotHash[0] : ""
-            }
-        }
         export default {
-            state: getState(),
+            onBeforeMount() {
+                this.page = getRoute().page;
+                this.riotHash = getRoute().riotHash;
+            },
 
+            onBeforeUpdate() {
+                this.page = getRoute().page;
+                this.riotHash = getRoute().riotHash;
+            },
             shouldShowSync() {
                 return inAppelflap();
             },
+            shouldShowLearningHome() {
+                return this.page.manifest.hasPageType('homepage');
+            },
+            shouldShowTeachingHome() {
+                return this.page.manifest.hasPageType('learnignactivityhomepage');
+            },
+            shouldShowResources() {
+                return this.page.manifest.hasPageType('resourcesroot');
+            },
+
             showBottomMenu() {
-                if (this.props.page.type === 'lessonpage') {
+                if (this.page.type === 'initial') {
                     return false;
                 }
-                if (this.props.page.type === 'coursepage' && this.state.section) {
+                if (this.page.type === 'login') {
+                    return false;
+                }
+                if (this.page.type === 'lessonpage') {
+                    return false;
+                }
+                if (this.page.type === 'coursepage' && !this.riotHash) {
                     return false;
                 }
                 return true;
             },
-
-            storeListener(previousStoreState, storeState) {
-                const newState = getState();
-                if (this.state.section !== newState.section) {
-                    this.update(newState);
-                }
-            }
         };
     </script>
 </BottomMenu>
