@@ -1,7 +1,5 @@
 <ActivityFeedback>
-    <LessonFrame
-        close="{ props.sentFeedback }"
-    >
+    <LessonFrame close="{ props.sentFeedback }">
         <template if="{!state.madeFeedbackDecision}">
             <div class="message-container">
                 <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
@@ -38,9 +36,11 @@
                     </div>
                 </div>
                 <div id="feedback-input" class="form-group">
-                    <label for="feedback">{ TRANSLATIONS.feedbackLabel() }</label>
-                    <textarea 
-                        id="feedback" 
+                    <label for="feedback"
+                        >{ TRANSLATIONS.feedbackLabel() }</label
+                    >
+                    <textarea
+                        id="feedback"
                         onfocus="{setInputFocus}"
                         onblur="{removeInputFocus}"
                     ></textarea>
@@ -84,7 +84,8 @@
 
         export default {
             TRANSLATIONS: {
-                enjoying_lesson: () => gettext("Are you enjoying this teaching plan?"),
+                enjoying_lesson: () =>
+                    gettext("Are you enjoying this teaching plan?"),
                 give_feedback: () =>
                     gettext(
                         "We value your feedback and all feedback is confidential"
@@ -153,10 +154,12 @@
             sendFeedback(feedbackString) {
                 const lesson = this.props.lessonName;
                 const feedback = feedbackString;
+                const feedbackComment = document.getElementById("feedback").value;
 
                 logLessonFeedback({
                     lesson,
                     feedback,
+					feedbackComment
                 });
             },
 

@@ -125,10 +125,12 @@
             sendFeedback(feedbackString) {
                 const lesson = this.props.lessonName;
                 const feedback = feedbackString;
+                const feedbackComment = document.getElementById("feedback").value;
 
                 logLessonFeedback({
                     lesson,
                     feedback,
+                    feedbackComment
                 });
             },
 
