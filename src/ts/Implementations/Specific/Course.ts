@@ -17,10 +17,11 @@ export default class Course extends Page {
         return this.data.data?.has_exam;
     }
     get examCards(): any[] {
-        const examCards = this.data.exam.map((card: any) => {
-            const { id, type, value } = card;
-            const { question, answers } = value;
-            return { id, type, question, answers };
+        const examCards = this.data.exam_cards.map((card: any) => {
+            // TODO still need to get an id attr, but everthing else should return the same format please
+            const type = card.tag;
+            const { id, question, answers, tag, image } = card;
+            return { id, type, question, answers, tag, image };
         });
         return examCards;
     }
