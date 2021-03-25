@@ -54,7 +54,7 @@ module.exports = env => {
     const baseConfig = {
         context: __dirname,
         mode: "development",
-        devtool: "inline-source-map",
+        devtool: "eval-source-map",
         optimization: {
             minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})],
         },
