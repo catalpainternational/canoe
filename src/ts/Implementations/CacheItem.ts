@@ -202,6 +202,10 @@ export const InitialiseByRequest = async (
         // * request is a cross-origin no-cors request
         //   (in which case the reported status is always 0.)
         // eslint-disable-next-line no-console
+        console.error(
+            `Error trying to add ${item.cacheKey} for ${item.fullUrl}.`
+        );
+        // eslint-disable-next-line no-console
         console.error(tex);
 
         item.status.cacheStatus = "prepared";
