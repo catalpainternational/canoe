@@ -73,17 +73,16 @@
             </div>
         </div>
     </template>
-    <LessonFeedback
+    <ActivityFeedback
         if="{state.status === 'feedback'}"
         sentFeedback="{() => updateActivity('complete')}"
-        linkTo="{page.loc_hash}"
-    ></LessonFeedback>
+    ></ActivityFeedback>
     <script>
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import PlanTab from "RiotTags/Teaching/PlanTab.riot.html";
         import TeachTab from "RiotTags/Teaching/TeachTab.riot.html";
         import ExtendTab from "RiotTags/Teaching/ExtendTab.riot.html";
-        import LessonFeedback from "RiotTags/Lesson/LessonFeedback.riot.html";
+        import ActivityFeedback from "RiotTags/Teaching/ActivityFeedback.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
         import { getCardImageUrl } from "js/utilities";
@@ -130,7 +129,7 @@
             plantab: PlanTab,
             teachtab: TeachTab,
             extendtab: ExtendTab,
-            lessonfeedback: LessonFeedback,
+            activityfeedback: ActivityFeedback,
         };
 
         export default ActivityPage;

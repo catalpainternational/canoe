@@ -1,6 +1,5 @@
 <ExtendTab>
     <TabSection
-        class="{'last-section'}"
         section={ page.extend }
     ></TabSection>
     <script>
@@ -11,8 +10,6 @@
 			onBeforeMount(props, state) {
 				this.page = getRoute().page;
 			},
-
-			TRANSLATIONS: {},
 		}}
 
         ExtendTab.components = {

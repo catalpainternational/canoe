@@ -5,16 +5,23 @@
                 <span class="current-card">{ props.progressValue }</span
                 ><span class="slash">/</span>{ props.progressMax }
             </p>
-            <progress value="{props.progressValue}" max="{props.progressMax}"></progress>
+            <progress
+                value="{props.progressValue}"
+                max="{props.progressMax}"
+            ></progress>
         </template>
-        <a if="{props.noCardStyle}" class="has-circle top-icon left" href="#{props.linkTo}">
+        <a
+            if="{props.noCardStyle}"
+            class="has-circle top-icon left"
+            href="#{props.linkTo}"
+        >
             <span class="arrow"></span>
         </a>
         <h5 if="{props.resourceTitle}">{props.resourceTitle}</h5>
         <a
             if="{!props.noCardStyle}"
             class="top-icon right extra-clickable-space"
-            href="#{props.linkTo}"
+            onclick="{closeFrame}"
         >
             <span class="cross gray"></span>
         </a>
@@ -37,6 +44,12 @@
         export default {
             components: {
                 topmenu: TopMenu,
+            },
+
+            closeFrame() {
+                this.props.close
+                    ? this.props.close()
+                    : (window.location.hash = `#${this.props.linkTo}`);
             },
         };
     </script>
