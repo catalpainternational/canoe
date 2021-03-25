@@ -57,16 +57,6 @@ async function route(hashWith) {
             return;
         }
 
-        if (!manifest) {
-            route = {
-                page: {
-                    type: "manifest_error",
-                    error: `Manifest retrieval failure. Error: resetting the manifest in the cache failed, probably due to CORB issues`
-                }
-            };
-            return;
-        }
-
         if(CANOE_PAGES.includes(pageHash)) {
             // If we are a canoe page that needs page data, get it
             page = manifest.getLanguagePageType(getLanguage(), 'homepage');
