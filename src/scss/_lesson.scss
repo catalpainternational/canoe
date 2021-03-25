@@ -331,15 +331,21 @@ TestSingleAnswer {
 
             &.selected-pending {
                 border-color: $app-accent-color;
+                background-color: rgba($app-accent-color, 0.05);
             }
 
             &.selected-wrong {
                 border-color: $red;
-                color: $red;
+                background-color: rgba($red, 0.05);
+
+                > p {
+                    color: $red;
+                }
             }
 
             &.selected {
                 border-color: $teal;
+                background-color: rgba($teal, 0.05);
             }
 
             .checkbox-container {
@@ -360,6 +366,7 @@ TestSingleAnswer {
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    padding-left: 4px;
                 }
 
                 > .label {
@@ -381,6 +388,7 @@ TestSingleAnswer {
                     }
 
                     > .label {
+                        background-color: rgba($app-accent-color, 0.05);
                         border-color: $app-accent-color;
                         color: $gray-1;
                     }
@@ -394,6 +402,7 @@ TestSingleAnswer {
                     }
 
                     > .label {
+                        background-color: rgba($teal, 0.05);
                         border-color: $teal;
                         color: $gray-1;
                     }
@@ -407,6 +416,7 @@ TestSingleAnswer {
                     }
 
                     > .label {
+                        background-color: rgba($red, 0.05);
                         border-color: $red;
                         color: $gray-1;
                     }
