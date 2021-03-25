@@ -195,21 +195,32 @@ export const InitialiseByRequest = async (
     try {
         await itemCache.add(reqObj);
     } catch (tex: any) {
-        // TypeError if it wasn't `http` or `https`
-        // Also:
-        // Underlying Response status wasn't 200
-        // * request didn't return successfully
-        // * request is a cross-origin no-cors request
-        //   (in which case the reported status is always 0.)
-        // eslint-disable-next-line no-console
-        console.error(
-            `Error trying to add ${item.cacheKey} for ${item.fullUrl}.`
-        );
-        // eslint-disable-next-line no-console
-        console.error(tex);
+        if (
+            tex instanceof TypeError &&
+            (tex as TypeError).message ===
+                "Failed to execute 'Cache' on 'add': Request failed"
+        ) {
+            // Delete and re-add the item
+            // - this occurs when we're dealing with a change of format
+            await itemCache.delete(reqObj);
+            await itemCache.add(reqObj);
+        } else {
+            // TypeError if it wasn't `http` or `https`
+            // Also:
+            // Underlying Response status wasn't 200
+            // * request didn't return successfully
+            // * request is a cross-origin no-cors request
+            //   (in which case the reported status is always 0.)
+            // eslint-disable-next-line no-console
+            console.error(
+                `Error trying to add ${item.cacheKey} for ${item.fullUrl}.`
+            );
+            // eslint-disable-next-line no-console
+            console.error(tex);
 
-        item.status.cacheStatus = "prepared";
-        return false;
+            item.status.cacheStatus = "prepared";
+            return false;
+        }
     }
 
     const isInitialised = await InitialiseFromCache(item);
