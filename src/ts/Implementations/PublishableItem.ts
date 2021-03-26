@@ -29,6 +29,9 @@ export abstract class PublishableItem<T extends TItemCommon>
     /** Indicates whether the above #requestObject has had the authorization header stripped */
     #requestObjectClean = false;
 
+    /** The headers as returned with any previous response from the server, converted to a simple object */
+    #respHeaders: Record<string, string>;
+
     constructor(manifest: TManifest, id: string, statusId: string) {
         this.manifest = manifest;
         this.#id = id;
@@ -39,6 +42,8 @@ export abstract class PublishableItem<T extends TItemCommon>
         this.#version = -1;
         this.status = new StorageStatus(this.#statusId);
         this.#requestObject = new Request("");
+
+        this.#respHeaders = {};
 
         this.GetDataFromStore();
 
@@ -137,6 +142,28 @@ export abstract class PublishableItem<T extends TItemCommon>
     abstract GetDataFromStore(): void;
 
     abstract StoreDataToStore(): void;
+
+    get respHeaders(): Record<string, string> {
+        return this.#respHeaders;
+    }
+
+    /** Keep a copy of the response headers as previously received.
+     * Any 'clean up' of response headers for security or other reasons is performed here
+     */
+    set respHeaders(value: Record<string, string>) {
+        this.#respHeaders = value;
+        if (!this.#respHeaders["last-modified"]) {
+            this.#respHeaders["last-modified"] = new Date().toUTCString();
+        }
+    }
+
+    SetResponseHeaders(headers: Headers): void {
+        const simpleHeaders: Record<string, string> = {};
+        headers.forEach((value, key) => {
+            simpleHeaders[key.toLowerCase()] = value;
+        });
+        this.respHeaders = simpleHeaders;
+    }
 
     /** Get the new response to use when updating this item in the cache */
     abstract get updatedResp(): Response;

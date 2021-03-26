@@ -3,8 +3,8 @@ import { registerRoute } from "workbox-routing/registerRoute.mjs";
 import { setDefaultHandler } from "workbox-routing/setDefaultHandler.mjs";
 import { setCatchHandler } from "workbox-routing/setCatchHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
+import { NetworkFirst } from "workbox-strategies/NetworkFirst.mjs";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
-import { StaleWhileRevalidate } from "workbox-strategies/StaleWhileRevalidate.mjs";
 import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
 
 import { RangeRequestsPlugin } from "workbox-range-requests";
@@ -87,7 +87,7 @@ registerRoute(
 
 registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.manifest),
-    new StaleWhileRevalidate({
+    new NetworkFirst({
         cacheName: ROUTES_FOR_REGISTRATION.manifest,
     })
 );

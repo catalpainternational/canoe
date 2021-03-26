@@ -158,7 +158,9 @@ export class Manifest extends PublishableItem<TManifestData> {
     }
 
     get updatedResp(): Response {
-        return new Response(JSON.stringify(this.data));
+        return new Response(JSON.stringify(this.data), {
+            headers: this.respHeaders,
+        } as ResponseInit);
     }
 
     get cacheKey(): string {
@@ -179,6 +181,7 @@ export class Manifest extends PublishableItem<TManifestData> {
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         try {
+            this.SetResponseHeaders(resp.headers);
             this.BuildManifestData(await resp.json());
         } catch {
             // Discard errors with getting json from response
