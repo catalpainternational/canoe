@@ -247,7 +247,9 @@ export class Page extends PublishableItem<TWagtailPageData> {
     }
 
     get updatedResp(): Response {
-        return new Response(JSON.stringify(this.data));
+        return new Response(JSON.stringify(this.data), {
+            headers: this.respHeaders,
+        });
     }
 
     get cacheKey(): string {
@@ -257,6 +259,7 @@ export class Page extends PublishableItem<TWagtailPageData> {
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         this.status.cacheStatus = "loading";
         try {
+            this.SetResponseHeaders(resp.headers);
             this.data = await resp.json();
         } catch {
             // We assume a bad cached entry, i.e. bad json

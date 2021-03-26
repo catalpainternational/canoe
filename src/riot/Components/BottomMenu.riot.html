@@ -68,10 +68,10 @@
                     return false;
                 }
 
-                if (this.page.type === 'coursepage' && !this.riotHash) {
+                if (this.page.type === 'coursepage' && this.riotHash[0] === 'exam') {
                     return false;
                 }
-
+              
                 return true;
             },
         };
