@@ -24,20 +24,24 @@
                 }
             },
 
-            onBeforeMount(props, state) {
-                this.page = getRoute().page;
-                this.state.image = props.image;
-                const asset = this.page.PETEgetImageRenditions(
-                    props.image.id
-                );
+            loadImage(image) {
+                this.state.image = image;
+                const asset = this.page.getImageRenditions(image.id);
                 if (asset) {
                     try {
-                        this.state.imagePath = getRenditionUrl(asset.renditions);
+                        this.state.imagePath = getRenditionUrl("image", asset.renditions);
                     } catch (error) {
                         if (error instanceof MissingImageError) {
                             this.state.imagePath = "";
                         }
                     }
+                }
+            },
+
+            onBeforeMount(props, state) {
+                this.page = getRoute().page;
+                if (props.image) {
+                    this.loadImage(props.image);
                 }
             },
         };

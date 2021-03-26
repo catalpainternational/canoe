@@ -1,7 +1,7 @@
 import { Manifest } from "ts/Implementations/Manifest";
 import { TManifest } from "ts/Types/ManifestTypes";
 import { TWagtailPage } from "ts/Types/PageTypes";
-import { TAssetEntry } from "ts/Types/AssetTypes";
+import { TAssetEntry, TRendition } from "ts/Types/AssetTypes";
 
 function buildFakeManifestEntry(
     page_no: number,
@@ -40,7 +40,7 @@ function buildFakeManifestEntry(
 }
 
 function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
-    const renditions: Record<string, string> = {};
+    const renditions: Record<string, TRendition> = {};
 
     [
         ["width-800|format-webp", "webp"],
@@ -51,7 +51,7 @@ function buildFakeAssetEntry(type: string, asset_name: string): TAssetEntry {
         const value = `${asset_name}.${rendition_name
             .join(".")
             .replace("|", ".")}`;
-        renditions[key] = value;
+        renditions[key] = { path: value, size: 100000 };
     });
 
     return {

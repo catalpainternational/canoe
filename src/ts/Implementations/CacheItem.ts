@@ -19,7 +19,9 @@ const AccessCache = async (cacheKey: string): Promise<Cache> => {
     return await caches.open(cacheKey);
 };
 
-/** Build a request object we can use to fetch the item */
+/** Build a request object we can use to fetch the item
+ * The item must have a valid `fullUrl`
+ */
 const BuildRequestObject = (item: IPublishableItem): Request => {
     const headers: any = {
         "Content-Type": item.contentType,
@@ -212,8 +214,18 @@ export const InitialiseByRequest = async (
         return false;
     }
 
-    const reqObj = BuildRequestObject(item);
-    CleanRequestObject(item, reqObj);
+    let reqObj = await GetRequestObject(item);
+    if (!reqObj) {
+        item.status.cacheStatus = "prepared";
+        if (item.fullUrl) {
+            reqObj = BuildRequestObject(item);
+            CleanRequestObject(item, reqObj);
+        } else {
+            // Without a fullUrl we cannot retrieve this item
+            // from either the cache or the network
+            return false;
+        }
+    }
 
     // Fetch the asset from the network, direct into the cache
     try {
@@ -225,6 +237,10 @@ export const InitialiseByRequest = async (
         // * request didn't return successfully
         // * request is a cross-origin no-cors request
         //   (in which case the reported status is always 0.)
+        // eslint-disable-next-line no-console
+        console.error(
+            `Error trying to add ${item.cacheKey} for ${item.fullUrl}.`
+        );
         // eslint-disable-next-line no-console
         console.error(tex);
 
