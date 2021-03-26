@@ -1,33 +1,46 @@
-<LessonFeedback>
-    <LessonFrame linkTo="{ state.lesson.course.loc_hash }">
+<ActivityFeedback>
+    <LessonFrame close="{ props.sentFeedback }">
         <template if="{!state.madeFeedbackDecision}">
             <div class="message-container">
                 <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
                 <h5>{ TRANSLATIONS.let_us_know() }</h5>
                 <div class="feedback-buttons">
                     <div>
-                        <button onclick="{() => clickedThisLessonIs('fine')}" class="neutral {state.activeSelection === 'fine' ? 'active' : ''}">
+                        <button
+                            onclick="{() => clickedThisLessonIs('fine')}"
+                            class="neutral {state.activeSelection === 'fine' ? 'active' : ''}"
+                        >
                             <span class="neutral-smiley"></span>
                         </button>
                         <p class="button-label">{ TRANSLATIONS.not_great() }</p>
                     </div>
                     <div>
-                        <button onclick="{() => clickedThisLessonIs('good')}" class="smiling {state.activeSelection === 'good' ? 'active' : ''}">
+                        <button
+                            onclick="{() => clickedThisLessonIs('good')}"
+                            class="smiling {state.activeSelection === 'good' ? 'active' : ''}"
+                        >
                             <span class="smiling-smiley"></span>
                         </button>
                         <p class="button-label">{ TRANSLATIONS.good() }</p>
                     </div>
                     <div>
-                        <button onclick="{() => clickedThisLessonIs('great')}" class="thrilled {state.activeSelection === 'great' ? 'active' : ''}">
+                        <button
+                            onclick="{() => clickedThisLessonIs('great')}"
+                            class="thrilled {state.activeSelection === 'great' ? 'active' : ''}"
+                        >
                             <span class="thrilled-smiley"></span>
                         </button>
-                        <p class="button-label">{ TRANSLATIONS.really_great() }</p>
+                        <p class="button-label">
+                            { TRANSLATIONS.really_great() }
+                        </p>
                     </div>
                 </div>
                 <div id="feedback-input" class="form-group">
-                    <label for="feedback">{ TRANSLATIONS.feedbackLabel() }</label>
-                    <textarea 
-                        id="feedback" 
+                    <label for="feedback"
+                        >{ TRANSLATIONS.feedbackLabel() }</label
+                    >
+                    <textarea
+                        id="feedback"
                         onfocus="{setInputFocus}"
                         onblur="{removeInputFocus}"
                     ></textarea>
@@ -45,11 +58,22 @@
         </template>
     </LessonFrame>
     <div if="{!state.madeFeedbackDecision}" class="bottom-buttons">
-        <button class="btn-secondary" onclick="{clickedNoThanks}">{ TRANSLATIONS.no() }</button>
-        <button class="btn-primary" onclick="{clickedSubmit}" disabled="{!state.activeSelection}">{ TRANSLATIONS.submit() }</button>
+        <button class="btn-secondary" onclick="{clickedNoThanks}">
+            { TRANSLATIONS.no() }
+        </button>
+        <button
+            class="btn-primary"
+            onclick="{clickedSubmit}"
+            disabled="{!state.activeSelection}"
+        >
+            { TRANSLATIONS.submit() }
+        </button>
     </div>
     <div if="{state.madeFeedbackDecision}" class="bottom-buttons">
-        <button class="btn-primary thank-you-container" onclick="{clickedContinue}">
+        <button
+            class="btn-primary thank-you-container"
+            onclick="{clickedContinue}"
+        >
             { TRANSLATIONS.continue() }
         </button>
     </div>
@@ -60,9 +84,12 @@
 
         export default {
             TRANSLATIONS: {
-                enjoying_lesson: () => gettext("Are you enjoying this lesson?"),
+                enjoying_lesson: () =>
+                    gettext("Are you enjoying this teaching plan?"),
                 give_feedback: () =>
-                    gettext("We value your feedback and all feedback is confidential"),
+                    gettext(
+                        "We value your feedback and all feedback is confidential"
+                    ),
                 feedback_sent: () =>
                     gettext(
                         "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
@@ -76,7 +103,7 @@
                 really_great: () => gettext("Really great!"),
                 value_feedback: () => gettext("We value your feedback"),
                 submit: () => gettext("Submit"),
-                feedbackLabel: () => gettext("Add your comments (optional)")
+                feedbackLabel: () => gettext("Add your comments (optional)"),
             },
 
             components: {
@@ -95,7 +122,7 @@
             clickedThisLessonIs(rating) {
                 this.update({
                     activeSelection: rating,
-                })
+                });
             },
 
             clickedSubmit() {
@@ -106,7 +133,9 @@
                         madeFeedbackDecision: true,
                     });
                 } else {
-                    throw Error('You must give a rating of "fine", "good", or "great"');
+                    throw Error(
+                        'You must give a rating of "fine", "good", or "great"'
+                    );
                 }
             },
 
@@ -119,7 +148,7 @@
             },
 
             goToSectionEnd() {
-                window.location.hash = `#${this.state.lesson.loc_hash}:content:complete`;
+                this.props.sentFeedback();
             },
 
             sendFeedback(feedbackString) {
@@ -130,7 +159,7 @@
                 logLessonFeedback({
                     lesson,
                     feedback,
-                    feedbackComment
+					feedbackComment
                 });
             },
 
@@ -156,4 +185,4 @@
             },
         };
     </script>
-</LessonFeedback>
+</ActivityFeedback>

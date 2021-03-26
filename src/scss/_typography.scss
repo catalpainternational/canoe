@@ -88,7 +88,8 @@ label {
     font-weight: 300;
 }
 
-input {
+input,
+textarea {
     font-family: $app-typography;
     font-size: 1.2em;
     color: $gray-1;

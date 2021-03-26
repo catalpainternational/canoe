@@ -21,4 +21,8 @@ export default class TeachingActivity extends Page {
     get extend(): any {
         return this.data.extend;
     }
+
+    get curriculum(): string {
+        return this.data.curriculum_id;
+    }
 }

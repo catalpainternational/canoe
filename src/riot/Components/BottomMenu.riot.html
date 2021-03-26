@@ -38,15 +38,19 @@
                 this.page = getRoute().page;
                 this.riotHash = getRoute().riotHash;
             },
+
             shouldShowSync() {
                 return inAppelflap();
             },
+
             shouldShowLearningHome() {
                 return this.page.manifest.hasPageType('homepage');
             },
+
             shouldShowTeachingHome() {
-                return this.page.manifest.hasPageType('learnignactivityhomepage');
+                return this.page.manifest.hasPageType('learningactivitieshomepage');
             },
+
             shouldShowResources() {
                 return this.page.manifest.hasPageType('resourcesroot');
             },
@@ -55,18 +59,19 @@
                 if (this.page.type === 'initial') {
                     return false;
                 }
+
                 if (this.page.type === 'login') {
                     return false;
                 }
+
                 if (this.page.type === 'lessonpage') {
                     return false;
                 }
-                if (this.page.type === 'coursepage' && !this.riotHash) {
-                    return false;
-                }
+
                 if (this.page.type === 'coursepage' && this.riotHash[0] === 'exam') {
                     return false;
                 }
+              
                 return true;
             },
         };
