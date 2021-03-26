@@ -166,7 +166,7 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     get updatedResp(): Response {
-        return new Response(this.#blob, { headers: this.respHeaders });
+        return new Response(this.#blob);
     }
 
     get cacheKey(): string {
@@ -174,7 +174,6 @@ export class Asset extends PublishableItem<TAssetEntry> {
     }
 
     async initialiseFromResponse(resp: Response): Promise<boolean> {
-        this.SetResponseHeaders(resp.headers);
         this.#blob = await resp.blob();
         this.status.cacheStatus = "loading";
 

@@ -30,14 +30,6 @@ const BuildRequestObject = (item: IPublishableItem): Request => {
     if (token) {
         headers["Authorization"] = `JWT ${token}`;
     }
-    // Migrate any headers we want from the previous response
-    for (const [key, value] of Object.entries(item.respHeaders)) {
-        switch (key.toLowerCase()) {
-            case "last-modified":
-                headers["If-Modified-Since"] = value;
-                break;
-        }
-    }
 
     const reqInit: any = {
         cache: "no-cache",
@@ -52,10 +44,7 @@ const BuildRequestObject = (item: IPublishableItem): Request => {
 
 /** Cleans the supplied request object and uses it to set the item's requestObject and requestObjectCleaned values */
 const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
-    if (
-        !srcReq.headers.has("authorization") &&
-        !srcReq.headers.has("Authorization")
-    ) {
+    if (!srcReq.headers.has("authorization")) {
         item.requestObjectCleaned = false;
         item.requestObjectClean = true;
         item.requestObject = srcReq;
@@ -67,7 +56,7 @@ const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
 
     const headers = new Headers();
     for (const key of srcReq.headers.keys()) {
-        if (key.toLowerCase() !== "authorization") {
+        if (key !== "authorization") {
             headers.append(key, srcReq.headers.get(key) || "");
         }
     }
@@ -92,25 +81,20 @@ const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
 const GetRequestObject = async (
     item: IPublishableItem
 ): Promise<Request | undefined> => {
+    const itemCache = await AccessCache(item.cacheKey);
+
     if (!item.fullUrl) {
         // "The full url could not be determined for this item, it is not retrievable";
         return Promise.resolve(undefined);
     }
+    if (item.requestObject && item.requestObject.url === item.fullUrl) {
+        CleanRequestObject(item, item.requestObject);
+        return item.requestObject;
+    }
 
-    const itemCache = await AccessCache(item.cacheKey);
-
-    const itemCacheState: Record<string, boolean> = {
-        cacheExists: !!itemCache,
-        reqObjectLoaded:
-            item.requestObject && item.requestObject.url === item.fullUrl,
-    };
-
-    if (!itemCacheState.cacheExists) {
+    if (!itemCache) {
         // Couldn't get the cache open (this is a very unusual circumstance)
-        if (!itemCacheState.reqObjectLoaded) {
-            // And we don't have a pre-existing requestObject we can use
-            return Promise.resolve(undefined);
-        }
+        return Promise.resolve(undefined);
     }
 
     const requests = await itemCache.keys(item.fullUrl, {
@@ -118,34 +102,18 @@ const GetRequestObject = async (
         ignoreSearch: true,
         ignoreVary: true,
     });
-    itemCacheState["reqObjectInCache"] = requests.length > 0;
-
-    if (!itemCacheState.reqObjectLoaded) {
-        if (!itemCacheState.reqObjectInCache) {
-            // `Could not find ${item.fullUrl} within the cache`;
-            return Promise.resolve(undefined);
-        } else {
-            CleanRequestObject(item, item.requestObject);
-            return item.requestObject;
-        }
+    if (requests.length === 0) {
+        // `Could not find ${item.fullUrl} in the cache`;
+        return Promise.resolve(undefined);
     }
 
-    const orderedRequests: Request[] = ([] as Request[]).concat(requests);
-    if (orderedRequests.length > 1) {
+    if (requests.length > 1) {
         // We should really clean the cache in this case
-        orderedRequests.sort((a: Request, b: Request) => {
-            return a.url < b.url ? 1 : -1;
-        });
-        orderedRequests.slice(1).forEach((request) => {
-            itemCache.delete(request);
-        });
+        // But we still don't know how to do that properly
+        // requests.slice(1).forEach((request) => {
+        //     itemCache.delete(request);
+        // });
     }
-
-    // Note: this is a side-effect behaviour, we try and load the previous
-    // response headers from the cache so that we can (potentially) re-use them later
-    const response = await itemCache.match(orderedRequests[0]);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    item.SetResponseHeaders(response!.headers);
 
     CleanRequestObject(item, requests[0]);
     return item.requestObject;
@@ -156,10 +124,6 @@ const GetFromCache = async (
     item: IPublishableItem
 ): Promise<Response | undefined> => {
     const itemCache = await AccessCache(item.cacheKey);
-
-    if (!item.requestObject || !itemCache) {
-        return undefined;
-    }
 
     return item.requestObject && !!itemCache
         ? await itemCache.match(item.requestObject)
