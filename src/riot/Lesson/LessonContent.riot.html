@@ -26,6 +26,11 @@
         <Html5Card if="{state.card.tag === 'html5'}" card="{state.card}" />
         <template
             if="{isAQuestion()}">
+            <ImageWrapper
+                if="{ state.card.image }"
+                image="{ state.card.image }"
+            >
+            </ImageWrapper>
             <h3>{state.card.question}</h3>
             <TestSingleAnswer
                 if="{state.card.tag === 'singleChoice'}"
@@ -106,6 +111,7 @@
         import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
         import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
         import TestPopupModal from "RiotTags/Lesson/TestPopupModal.riot.html";
+        import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
 
@@ -209,6 +215,7 @@
             testsingleanswer: TestSingleAnswer,
             testmultipleanswer: TestMultipleAnswer,
             testpopupmodal: TestPopupModal,
+            imagewrapper: ImageWrapper,
         };
 
         export default LessonContent;

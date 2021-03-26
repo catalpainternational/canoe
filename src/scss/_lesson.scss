@@ -222,17 +222,6 @@ ResourceArticle LessonFrame {
         }
     }
 
-    img.richtext-image {
-        width: calc(100% + (2 * 20px));
-        margin-left: -20px;
-        margin-right: -20px;
-    }
-
-    basiccard img.richtext-image {
-        margin-top: -30px;
-        border-radius: 8px 8px 0 0;
-    }
-
     h3.media-title {
         font-size: 24px;
         margin-top: 10%;
@@ -251,6 +240,16 @@ ResourceArticle LessonFrame {
 
     p.error-message {
         color: red;
+    }
+}
+
+LessonFrame {
+    img.richtext-image {
+        width: calc(100% + (2 * 20px));
+        margin-left: -20px;
+        margin-right: -20px;
+        margin-top: -30px;
+        border-radius: 8px 8px 0 0;
     }
 }
 

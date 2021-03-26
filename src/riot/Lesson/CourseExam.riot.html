@@ -10,6 +10,10 @@
         progressValue="{ state.cardNumber }"
         progressMax="{ state.cards.length }"
     >
+        <ImageWrapper
+            if="{ state.card.image }"
+            image="{ state.card.image }"
+        ></ImageWrapper>
         <h3>{state.cardNumber }. {state.card.question}</h3>
         <TestSingleAnswer
             if="{state.card.type === SINGLE_CHOICE}"
@@ -68,6 +72,7 @@
         import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import HonorCode from "RiotTags/Lesson/HonorCode.riot.html";
+        import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
 
@@ -87,6 +92,7 @@
                 testmultipleanswer: TestMultipleAnswer,
                 lessonframe: LessonFrame,
                 honorcode: HonorCode,
+                imagewrapper: ImageWrapper,
             },
 
             TRANSLATIONS: {
@@ -95,7 +101,7 @@
             },
 
             MINIMUM_SCORE: 75,
-            SINGLE_CHOICE: "single_choice",
+            SINGLE_CHOICE: "singleChoiceExam",
             SECTION: "exam",
 
             readState() {
