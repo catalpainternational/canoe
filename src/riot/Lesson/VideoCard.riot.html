@@ -1,6 +1,7 @@
 <VideoCard>
     <div>
         <video
+            if="{ !state.src }"
             src="{ state.src }"
             width="100%"
             crossorigin="anonymous"
@@ -11,6 +12,9 @@
             <!-- if preload set to none the video will not actually be requested, if set to auto it is requested -->
             <span>{ TRANSLATIONS.browserSupport() }</span>
         </video>
+        <p class="error-message" if="{ !state.src }">
+            { TRANSLATIONS.missing() }
+        </p>        
         <h3 class="media-title">{props.media.title}</h3>
         <p class="media-description">{props.media.description}</p>
         <p if={state.cached}>{ TRANSLATIONS.cached() }</p>
@@ -33,9 +37,10 @@
             },
 
             TRANSLATIONS: {
-                browserSupport: () => gettext('Your browser does not support the video element.'),
-                cached: () => gettext('This video will play offline.'),
-                notCached: () => gettext('This video is not available offline.'),
+                browserSupport: () => gettext("Your browser does not support the video element."),
+                cached: () => gettext("This video will play offline."),
+                notCached: () => gettext("This video is not available offline."),
+                missing: () => gettext("Sorry: This video is missing.")
             },
 
             onBeforeMount(props, state) {
@@ -43,14 +48,20 @@
                 const asset = this.page.PETEgetMediaRenditions(
                     props.media.id
                 );
-                // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
-                // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
-                // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
-                const src = getMediaUrl(Object.values(asset.renditions).sort((el1,el2) => el1.size - el2.size)[0].mediapath);
+                const renditions = Object.values(!!asset ? asset.renditions || {} : {});
+                let src = "";
+                if (renditions.length) {
+                    // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
+                    // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
+                    // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
+                    src = getMediaUrl(renditions.sort((el1,el2) => el1.size - el2.size)[0].path);
+                }
                 this.state.src = src;
-                isItemCached(src).then(cached => {
-                    this.update({cached});
-                });
+                if (src) {
+                    isItemCached(src).then(cached => {
+                        this.update({cached});
+                    });
+                }
             },
 
             storeAnalytics() {
