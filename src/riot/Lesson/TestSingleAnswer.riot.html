@@ -9,12 +9,26 @@
         </li>
     </ol>
 
+    <button
+        if="{!props.isCourseExam}"
+        class="btn-primary"
+        onclick="{showResults}"
+        disabled="{state.selectedAnswer === {}}"
+    >
+        { TRANSLATIONS.checkAnswer() }
+    </button>
+
     <script>
         import { dispatchTestAnswerEvent } from "js/Events";
 
         export default {
             state: {
                 selectedAnswer: {},
+                haveCheckedAnswers: false,
+            },
+
+            TRANSLATIONS: {
+                checkAnswer: () => gettext("Check answer"),
             },
 
             onMounted(props, state) {
@@ -46,15 +60,23 @@
             howToStyleThe(answer) {
                 if (this.props.isCourseExam) {
                     return "selected-pending";
-                } else if (!answer.correct) {
-                    return "selected-wrong";
-                } else {
-                    return "selected";
                 }
+
+                if (this.state.haveCheckedAnswers) {
+                    if (!answer.correct) {
+                        return "selected-wrong";
+                    } else {
+                        return "selected";
+                    }
+                } else {
+                    return "selected-pending";
+                }
+
             },
 
             selectAnswer(answer) {
-                this.update({ selectedAnswer: answer });
+                this.update({ selectedAnswer: answer, haveCheckedAnswers: false });
+
                 const eventData = {
                     lesson: this.props.lessonName,
                     question: this.props.card.question,
@@ -67,13 +89,20 @@
                 if (isCourseExam) {
                     const isCorrect = this.gradeAnswer(answer);
                     this.props.recordAnswer({ isCorrect, answers: [answer] });
-                } else {
-                    this.props.toggleModal(true, answer, answer.correct);
-                }
 
-                // To avoid update bugs, you must reset the answer between
-                // answer selections.
-                this.state.selectedAnswer = {};
+                    // To avoid update bugs, you must reset the answer between
+                    // answer selections.
+                    this.state.selectedAnswer = {};
+                }
+            },
+
+            showResults() {
+                this.props.toggleModal(true, this.state.selectedAnswer, this.state.selectedAnswer.correct)
+                this.state.haveCheckedAnswers = true;
+
+                if (this.state.selectedAnswer.correct) {
+                    this.state.selectedAnswer = {};
+                }
             },
 
             gradeAnswer(answer) {

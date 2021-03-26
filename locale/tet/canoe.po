@@ -21,6 +21,10 @@ msgstr "%1 uza sistema notifikasaun hodi haruka atualizasuan no notifikasaun kon
 msgid "%1's Course Exam"
 msgstr "%1's Ezame ba Kursu"
 
+#, fuzzy
+msgid "Activity"
+msgstr "Hahu Atividade"
+
 msgid "Add to Home Screen"
 msgstr "Aumenta ba pájina prinsipál"
 
@@ -41,6 +45,10 @@ msgstr "Fila fali ba kursu"
 
 msgid "Check <strong>all</strong> answers that apply"
 msgstr "Cek resposta <strong>hotu</strong> ne’ebeé lo’os"
+
+#, fuzzy
+msgid "Check answer"
+msgstr "Cek resposta"
 
 msgid "Check answers"
 msgstr "Cek resposta"
@@ -76,6 +84,9 @@ msgid "Explore a range of courses to suit your needs, expertise, and interests."
 msgstr "Esplora kursu sira ne'ebé tuir ita-nia presiza, espesialidadi no interese"
 
 msgid "extend"
+msgstr ""
+
+msgid "Extend your knowledge"
 msgstr ""
 
 msgid "Find and check all correct answers and uncheck incorrect answers"
@@ -149,8 +160,13 @@ msgstr "Sai"
 msgid "Login"
 msgstr "Tama"
 
-msgid "Mark activity complete"
-msgstr ""
+#, fuzzy
+msgid "Mark complete"
+msgstr "Kompleta ona"
+
+#, fuzzy
+msgid "Mark incomplete"
+msgstr "Kompleta ona"
 
 msgid "Maybe later"
 msgstr "Karik orasida"
@@ -236,6 +252,9 @@ msgstr "Manda mensajen mai no ami sei ajuda ita atu tama"
 msgid "Send WhatsApp"
 msgstr "Manda WhatsApp"
 
+msgid "Setup"
+msgstr ""
+
 msgid "show"
 msgstr "hatudu"
 
@@ -260,9 +279,14 @@ msgstr "Submete"
 msgid "Take Exam"
 msgstr "Foti Ezame"
 
-#. message on completion of lesson and prompt to take course exam
+msgid "Take Survey"
+msgstr "Foti Survey"
+
 msgid "Take the exam now to complete the course \"%1\""
 msgstr "Foti ezame agora atu kompleta kursu \"%1\""
+
+msgid "Take the pre-learning survey to complete the course \"%1\""
+msgstr "Foti survey antes komesa aprendizajen agora atu kompleta kursu \"%1\""
 
 msgid "teach"
 msgstr ""
@@ -329,6 +353,9 @@ msgstr "Ami husu deskulpa! Ami sei aumenta suporta balun ba Asteroid uza ho Chro
 msgid "Well done, keep it up!"
 msgstr "Kapás, kontinua nafatin!"
 
+msgid "Wrap up"
+msgstr ""
+
 msgid "Yes, I agree"
 msgstr "Sim, ha'u konkorda"
 
@@ -342,11 +369,13 @@ msgstr ""
 msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later."
 msgstr "Ita hetan valór %1%. Ida ne'e la to'o atu pasa ezame ne'e. Atu bele pasa ita presiza atu hetan valór %2% ka liu. Ita bele koko foti fila ezame ne'e orsida ka tempu seluk atu bele hetan valór ne'ebé diak liu."
 
+msgid "You have completed the pre-learning survey and you can now keep progressing your learning."
+msgstr "Ita kompleta ona survey antes komesa ita-nia aprendizajen no agora ita bele kontinua avansa ho ita-nia aprendizajen tuir-mai"
+
 #. message on completion of a lesson %1 is replaced by the lesson title
 msgid "You just completed the lesson \"%1\""
 msgstr "Ita foin halo remata lisaun \"%1\""
 
-#. message when user passed the exam
 msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
 msgstr "Ita pasa ezame ho %1%. Se ita hakarak hadiak liutan ita nia klasifikasaun, ita bele tuir fali tan ezame nee."
 
@@ -467,9 +496,6 @@ msgstr "Haluha uzuáriu ka seña?"
 
 #~ msgid "Show Password"
 #~ msgstr "Hatudu Seña"
-
-#~ msgid "Start Activity"
-#~ msgstr "Hahu Atividade"
 
 #~ msgid "Start Course"
 #~ msgstr "Komesa kursu"
