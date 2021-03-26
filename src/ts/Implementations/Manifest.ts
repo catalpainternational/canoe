@@ -32,7 +32,7 @@ export class Manifest extends PublishableItem<TManifestData> {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     constructor(opts?: any) {
         super(opts, ManifestAPIURL, ROUTES_FOR_REGISTRATION.manifest);
-        this.requestObject = new Request(ManifestAPIURL);
+        this.requestObject = new Request(ROUTES_FOR_REGISTRATION.manifest);
     }
 
     get pages(): Record<string, TWagtailPage> {
@@ -102,6 +102,10 @@ export class Manifest extends PublishableItem<TManifestData> {
         }
 
         if (!this.isInitialised) {
+            return false;
+        }
+
+        if (this.version === -1) {
             return false;
         }
 
