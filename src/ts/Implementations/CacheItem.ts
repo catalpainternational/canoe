@@ -102,7 +102,9 @@ const GetRequestObject = async (
     const itemCacheState: Record<string, boolean> = {
         cacheExists: !!itemCache,
         reqObjectLoaded:
-            item.requestObject && item.requestObject.url === item.fullUrl,
+            item.isValid &&
+            item.requestObject &&
+            item.requestObject.url === item.fullUrl,
     };
 
     if (!itemCacheState.cacheExists) {
