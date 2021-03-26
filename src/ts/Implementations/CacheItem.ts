@@ -92,7 +92,7 @@ const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
 const GetRequestObject = async (
     item: IPublishableItem
 ): Promise<Request | undefined> => {
-    if (!item.fullUrl) {
+    if (!item.fullUrl || item.fullUrl === "/") {
         // "The full url could not be determined for this item, it is not retrievable";
         return Promise.resolve(undefined);
     }
@@ -217,7 +217,7 @@ export const InitialiseByRequest = async (
     let reqObj = await GetRequestObject(item);
     if (!reqObj) {
         item.status.cacheStatus = "prepared";
-        if (item.fullUrl) {
+        if (item.fullUrl && item.fullUrl !== "/") {
             reqObj = BuildRequestObject(item);
             CleanRequestObject(item, reqObj);
         } else {
@@ -269,7 +269,7 @@ export const UpdateCachedItem = async (
     let reqObj = await GetRequestObject(item);
     if (!reqObj) {
         item.status.cacheStatus = "prepared";
-        if (item.fullUrl) {
+        if (item.fullUrl && item.fullUrl !== "/") {
             reqObj = BuildRequestObject(item);
             CleanRequestObject(item, reqObj);
         } else {
