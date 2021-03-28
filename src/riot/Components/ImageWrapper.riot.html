@@ -1,11 +1,25 @@
 <ImageWrapper>
+    <div if="{state.imageFullScreen}"
+        class="modal-background fade"
+        onclick="{toggleImageFullScreen}">
+    </div>
     <img
         if="{state.imagePath}"
         alt="{state.image.alt}"
-        class="richtext-image"
+        class="richtext-image {state.imageFullScreen ? 'full-screen' : ''}"
         crossorigin="anonymous"
         src="{state.imagePath}"
     />
+    <div if="{state.imagePath && !state.imageFullScreen}"
+        class="expand-button"
+        onclick="{toggleImageFullScreen}">
+        <span class="expand-arrows"></span>
+    </div>
+    <div if="{state.imageFullScreen}"
+        class="contract-button"
+        onclick="{toggleImageFullScreen}">
+        <span class="cross gray"></span>
+    </div>
     <p class="error-message" if="{!state.imagePath}">
         Sorry: image "{state.image.alt}", is missing.
     </p>
@@ -21,7 +35,8 @@
                 image: {
                     id: "unknown",
                     alt: "Unknown Image",
-                }
+                },
+                imageFullScreen: false,
             },
 
             loadImage(image) {
@@ -43,6 +58,10 @@
                 if (props.image) {
                     this.loadImage(props.image);
                 }
+            },
+
+            toggleImageFullScreen() {
+                this.update({ imageFullScreen: !this.state.imageFullScreen });
             },
         };
     </script>

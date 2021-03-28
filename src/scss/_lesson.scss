@@ -244,12 +244,52 @@ ResourceArticle LessonFrame {
 }
 
 LessonFrame {
+    ImageWrapper {
+        position: relative;
+
+        .modal-background.fade:after {
+            z-index: 1;
+        }
+    }
+
     img.richtext-image {
         width: calc(100% + (2 * 20px));
         margin-left: -20px;
         margin-right: -20px;
         margin-top: -30px;
         border-radius: 8px 8px 0 0;
+    }
+
+    img.richtext-image.full-screen {
+        width: 100vw;
+        margin: unset;
+        border-radius: unset;
+        position: fixed;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+    }
+
+    ImageWrapper .expand-button,
+    ImageWrapper .contract-button {
+        position: absolute;
+        right: 1em;
+        bottom: 1em;
+        background-color: rgba(28,26,55,0.2);
+        border-radius: 5px;
+        height: 32px;
+        width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    ImageWrapper .contract-button {
+        background-color: unset;
+        z-index: 2;
+        position: fixed;
+        top: 1em;
     }
 }
 
