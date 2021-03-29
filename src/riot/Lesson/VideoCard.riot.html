@@ -1,7 +1,7 @@
 <VideoCard>
     <div>
         <video
-            if="{ !state.src }"
+            if="{ state.src }"
             src="{ state.src }"
             width="100%"
             crossorigin="anonymous"
@@ -24,8 +24,9 @@
     </div>
 
     <script>
+        import { Asset } from "ts/Implementations/Asset";
         import { getRoute } from "ReduxImpl/Interface";
-        import { getMediaUrl } from "js/RenditionSelector";
+        import { isItemCached } from "js/cacheManager/cacheManager";
         import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
         export default {
@@ -34,18 +35,22 @@
                 missing: () => gettext("Sorry: This video is missing.")
             },
 
+            state: {
+                src: "",
+                cached: false
+            },
+
             onBeforeMount(props, state) {
                 this.page = getRoute().page;
-                const asset = this.page.getVideoRenditions(
+                const assetEntry = this.page.getVideoRenditions(
                     props.media.id
                 );
-                const renditions = Object.values(!!asset ? asset.renditions || {} : {});
                 let src = "";
-                if (renditions.length) {
-                    // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
-                    // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
-                    // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
-                    src = getMediaUrl(renditions.sort((el1,el2) => el1.size - el2.size)[0].path);
+                try {
+                    src = Asset.Url(assetEntry);
+                } catch {
+                    // No compatible rendition found, therefore no url
+                    src = "";
                 }
                 this.state.src = src;
                 if (src) {

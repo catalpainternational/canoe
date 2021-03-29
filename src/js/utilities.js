@@ -1,5 +1,5 @@
 import { getLanguage } from "ReduxImpl/Interface";
-import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
+import { BACKEND_BASE_URL } from "js/urls";
 
 import contentStockImg from "img/stock_content.png";
 import courseStockImg from "img/stock_course.png";
@@ -17,10 +17,6 @@ export const isCourseInTheCurrentLanguage = (courseSlug) => {
         default:
             throw new Error(`Courses in ${currentLanguage} don't exist.`);
     }
-};
-
-export const getMediaUrl = (mediaPath) => {
-    return `${BACKEND_BASE_URL}${MEDIA_PATH}/${mediaPath}`;
 };
 
 export const getHtmlUrl = (htmlPath) => {

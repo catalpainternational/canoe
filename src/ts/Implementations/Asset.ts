@@ -34,11 +34,23 @@ export class Asset extends PublishableItem {
     }
 
     /**
-     * The media url of this asset item
+     * The platform specific media url of this asset item
      */
     get url(): string {
-        return `${process.env.API_BASE_URL}/media/${this.platformSpecificRendition.path}`;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return Asset.Url(this!.entry as TAssetEntry);
     }
+
+    /**
+     * The platform specific media url of this asset item
+     */
+    static Url(asset: TAssetEntry): string {
+        const assetPath = Asset.PlatformSpecificRendition(asset)?.path || "";
+        return assetPath
+            ? `${process.env.API_BASE_URL}/media/${assetPath}`
+            : "";
+    }
+
     /**
      * The cache in which the asset is stored
      * Currently uses the page cache
@@ -46,6 +58,7 @@ export class Asset extends PublishableItem {
     get cacheKey(): string {
         return this.#page.cacheKey;
     }
+
     /**
      * The options to make an asset request
      */
@@ -85,19 +98,28 @@ export class Asset extends PublishableItem {
      * Array of renditions for this asset
      */
     get renditions(): Record<string, TRendition> {
-        if (this.entry === undefined) {
+        if (Object.keys(this?.entry?.renditions || {}).length === 0) {
             throw new Error("Renditions cannot be accessed");
         }
-        return this.entry.renditions;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return this!.entry!.renditions;
     }
 
     /**
      * The appropriate rendition for the platform we are running on
      */
     get platformSpecificRendition(): TRendition {
+        if (Object.keys(this?.entry?.renditions || {}).length === 0) {
+            throw new Error("Renditions cannot be accessed");
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return Asset.PlatformSpecificRendition(this!.entry as TAssetEntry);
+    }
+
+    static PlatformSpecificRendition(asset: TAssetEntry): TRendition {
         const browser = getBrowser().name;
         let renditionSpec: string;
-        switch (this.type) {
+        switch (asset.type) {
             case "image":
                 renditionSpec =
                     browser === "Safari" ? JPEG_RENDITION : WEBP_RENDITION;
@@ -110,14 +132,18 @@ export class Asset extends PublishableItem {
                 renditionSpec =
                     browser === "Safari" ? OPUS_RENDITION : MP4A_RENDITION;
                 break;
+            case "pdf":
+                renditionSpec = "original";
+                break;
             default:
                 renditionSpec = "original";
         }
-        if (Object.keys(this.renditions).includes(renditionSpec)) {
-            return this.renditions[renditionSpec];
-        } else {
-            return this.renditions["original"];
+        if (!asset.renditions[renditionSpec]) {
+            // Force it back to original if we don't have that rendition
+            renditionSpec = "original";
         }
+
+        return asset.renditions[renditionSpec];
     }
 
     /**
