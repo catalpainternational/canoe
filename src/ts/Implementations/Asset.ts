@@ -110,14 +110,17 @@ export class Asset extends PublishableItem {
                 renditionSpec =
                     browser === "Safari" ? OPUS_RENDITION : MP4A_RENDITION;
                 break;
+            case "pdf":
+                renditionSpec = "original";
+                break;
             default:
                 renditionSpec = "original";
         }
-        if (Object.keys(this.renditions).includes(renditionSpec)) {
-            return this.renditions[renditionSpec];
-        } else {
-            return this.renditions["original"];
+        if (!this.renditions[renditionSpec]) {
+            // Force it back to original if we don't have that rendition
+            renditionSpec = "original";
         }
+        return this.renditions[renditionSpec];
     }
 
     /**
