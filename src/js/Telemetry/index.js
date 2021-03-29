@@ -34,6 +34,10 @@ const postFeedback = async (feedback) => {
     }
 };
 
+const isNetworkFailure = (errorObj) => {
+    return errorObj instanceof TypeError && errorObj.message === "Failed to fetch";
+};
+
 const syncFeedback = async () => {
     const feedbackKeys = await getFeedbackKeysFromIdb();
     for (const feedbackKey of feedbackKeys) {
@@ -45,15 +49,12 @@ const syncFeedback = async () => {
                 await deleteFeedbackFromIdb(feedbackKey);
             }
         } catch (err) {
-            if (err instanceof TypeError && err.message === "Failed to fetch") {
-                console.log("Feedback didn't post, but will not be deleted.");
-                // Thrown when network fails.
+            if (isNetworkFailure(err)) {
+                console.log("Network Failure. Feedback didn't post, but will not be deleted.");
                 return;
             }
-            console.log(
-                "Posting Feedback threw a 500, so we're deleting our local copy."
-            );
-            await deleteFeedbackFromIdb(feedbackKey);
+            // Is a 400 or 500. Throw and let the dev know.
+            throw err;
         }
     }
 };
