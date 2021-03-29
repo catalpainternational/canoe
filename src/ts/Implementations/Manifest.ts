@@ -32,6 +32,39 @@ class ManifestError extends Error {
 export const ManifestAPIURL = `${process.env.API_BASE_URL}/manifest/v1`;
 
 export class Manifest extends PublishableItem implements StorableItem {
+    /**
+     * The api url of the manifest
+     */
+    get url(): string {
+        return ManifestAPIURL;
+    }
+    /**
+     * The cache in which the manifest is stored
+     */
+    get cacheKey(): string {
+        return "canoe-manifest";
+    }
+
+    /**
+     * The options to make a manifest request
+     */
+    get requestOptions(): any {
+        return {
+            cache: "default", // manifest can be returned from cache ( has conditional handling )
+        };
+    }
+
+    /** StorableItem implementations */
+    /** set the manifest data in the manifest store */
+    saveToStore(data: TManifestData): void {
+        storeManifest(data);
+    }
+    /** get the manifest data from the manifest store */
+    get storedData(): TManifestData | undefined {
+        return getManifestFromStore();
+    }
+    /** end StorableItem implementations */
+
     async prepare(): Promise<void> {
         const response = await this.getResponse();
         return response
@@ -49,20 +82,7 @@ export class Manifest extends PublishableItem implements StorableItem {
                 throw new ManifestError("Mainfest failed to deserialize");
             });
     }
-    /** StorableItem implementations */
-    saveToStore(data: TManifestData): void {
-        storeManifest(data);
-    }
-    get storedData(): TManifestData | undefined {
-        return getManifestFromStore();
-    }
     /** end StorableItem implementations */
-
-    get requestOptions(): any {
-        return {
-            cache: "default", // manifest can be returned from cache ( has conditional handling )
-        };
-    }
 
     get data(): TManifestData | undefined {
         return this.storedData;
@@ -78,10 +98,6 @@ export class Manifest extends PublishableItem implements StorableItem {
 
     get version(): number {
         return this.storedData?.version || -1;
-    }
-
-    get url(): string {
-        return ManifestAPIURL;
     }
 
     get fullUrl(): string {
@@ -161,9 +177,6 @@ export class Manifest extends PublishableItem implements StorableItem {
     get updatedResp(): Response {
         //deprecated
         return new Response();
-    }
-    get cacheKey(): string {
-        return this.fullUrl;
     }
     async initialiseFromResponse(resp: Response): Promise<boolean> {
         //deprecated

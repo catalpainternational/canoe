@@ -61,16 +61,16 @@ export class Page extends PublishableItem implements StorableItem {
         };
     }
 
-    /** The data for this page as defined in the manifest */
-    get manifestData(): TWagtailPageData {
-        return this.#manifest.pages[this.#id] || {};
+    /** StorableItem implementations */
+    /** set the page data in the page store */
+    saveToStore(data: TWagtailPageData): void {
+        storePageData(this.#id, data);
     }
-    /** The data for this page as defined in the manifest
-     * legacy alias for manifestData
-     */
-    get data(): TWagtailPageData {
-        return this.manifestData;
+    /** get the page data from the page store */
+    get storedData(): TWagtailPageData | undefined {
+        return getPageDataFromStore(this.#id);
     }
+    /** end StorableItem implementations */
 
     /**
      * Get and store this page, used in routing
@@ -95,13 +95,15 @@ export class Page extends PublishableItem implements StorableItem {
         return this.storedData !== undefined;
     }
 
-    /** set the page data in the page store */
-    saveToStore(data: Record<string, any>): void {
-        storePageData(this.#id, data);
+    /** The data for this page as defined in the manifest */
+    get manifestData(): TWagtailPageData {
+        return this.#manifest.pages[this.#id] || {};
     }
-    /** get the page data from the page store */
-    get storedData(): TWagtailPageData | undefined {
-        return getPageDataFromStore(this.#id);
+    /** The data for this page as defined in the manifest
+     * legacy alias for manifestData
+     */
+    get data(): TWagtailPageData {
+        return this.manifestData;
     }
 
     get manifest(): Manifest {
