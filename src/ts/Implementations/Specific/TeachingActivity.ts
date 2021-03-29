@@ -7,22 +7,22 @@ export default class TeachingActivity extends Page {
     }
 
     get description(): string {
-        return this.data.description;
+        return this.storedData?.description || "";
     }
 
     get plan(): any {
-        return this.data.plan;
+        return this.storedData?.plan || {};
     }
 
     get teach(): any {
-        return this.data.teach;
+        return this.storedData?.teach || {};
     }
 
     get extend(): any {
-        return this.data.extend;
+        return this.storedData?.extend || {};
     }
 
     get curriculum(): string {
-        return this.data.curriculum_id;
+        return this.storedData?.curriculum_id || "";
     }
 }
