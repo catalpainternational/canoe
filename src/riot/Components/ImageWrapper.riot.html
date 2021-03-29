@@ -6,7 +6,7 @@
     <img
         if="{state.imagePath}"
         alt="{state.image.alt}"
-        class="richtext-image {state.imageFullScreen ? 'full-screen' : ''}"
+        class="richtext-image {imageClass()}"
         crossorigin="anonymous"
         src="{state.imagePath}"
     />
@@ -51,6 +51,23 @@
                         }
                     }
                 }
+            },
+
+            imageClass() {
+                const fullScreen = this.state.imageFullScreen;
+                const devicePortrait = this.state.devicePortrait;
+                const img = this.$("img");
+                const imgHeight = img.naturalHeight;
+                const imgWidth = img.naturalWidth;
+
+                let imgOrientation;
+
+                if (imgHeight > imgWidth) imgOrientation = 'portrait';
+                if (imgHeight < imgWidth) imgOrientation = 'landscape';
+                if (imgHeight === imgWidth) imgOrientation = 'square';
+
+
+                return fullScreen ? `full-screen ${imgOrientation}` : '';
             },
 
             onBeforeMount(props, state) {
