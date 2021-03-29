@@ -26,16 +26,25 @@ const createPOSTRequest = (path, body) => {
     return new Request(ACTIONS_ENDPOINT, requestContent);
 };
 
+const isNetworkFailure = (errorObj) => {
+    return (
+        errorObj instanceof TypeError && errorObj.message === "Failed to fetch"
+    );
+};
+
 const postFeedback = async (feedback) => {
     try {
         return await fetch(createPOSTRequest(ACTIONS_ENDPOINT, feedback));
     } catch (err) {
+        if (isNetworkFailure(err)) {
+            console.log(
+                "Network Failure. Feedback didn't post, but will try again when the network returns."
+            );
+            return;
+        }
+        // Is a 400 or 500. Throw and let the dev know.
         throw err;
     }
-};
-
-const isNetworkFailure = (errorObj) => {
-    return errorObj instanceof TypeError && errorObj.message === "Failed to fetch";
 };
 
 const syncFeedback = async () => {
@@ -43,18 +52,9 @@ const syncFeedback = async () => {
     for (const feedbackKey of feedbackKeys) {
         const feedback = await getFeedbackFromIdb(feedbackKey);
 
-        try {
-            const response = await postFeedback(feedback);
-            if (response.ok) {
-                await deleteFeedbackFromIdb(feedbackKey);
-            }
-        } catch (err) {
-            if (isNetworkFailure(err)) {
-                console.log("Network Failure. Feedback didn't post, but will not be deleted.");
-                return;
-            }
-            // Is a 400 or 500. Throw and let the dev know.
-            throw err;
+        const response = await postFeedback(feedback);
+        if (response.ok) {
+            await deleteFeedbackFromIdb(feedbackKey);
         }
     }
 };
