@@ -34,22 +34,38 @@
                     progressValue="{page.currentCourse.numberOfFinishedLessons}"
                     progressMax="{page.currentCourse.numberOfLessons}"
                     imageUrl="{state.currentCourse.cardImage}"
+                    getCachedPromise="{ course.isAvailableOffline() }"
                 ></Card>
             </div>
         </template>
         <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
         <div class="card-container">
-            <Card
-                each="{course in page.coursesCompleteLast}"
-                if="{showCourse(course)}"
-                status="{courseStatus(course)}"
-                title="{course.title}"
-                link="{course.loc_hash}"
-                progress-value="{course.numberOfFinishedLessons}"
-                progress-max="{course.numberOfLessons}"
-                progressMax="{course.numberOfLessons}"
-                imageUrl="{course.cardImage}"
-            ></Card>
+            <template each="{ course in page.courses }">
+                <Card
+                    if="{ !course.isComplete && showCourse(course) }"
+                    status="{courseStatus(course)}"
+                    title="{course.title}"
+                    link="{course.loc_hash}"
+                    progress-value="{course.numberOfFinishedLessons}"
+                    progress-max="{course.numberOfLessons}"
+                    progressMax="{course.numberOfLessons}"
+                    imageUrl="{course.cardImage}"
+                    contentItem="{ course }"
+                ></Card>
+            </template>
+            <template each="{ course in page.courses }">
+                <Card
+                    if="{ course.isComplete && showCourse(course) }"
+                    status="{courseStatus(course)}"
+                    title="{course.title}"
+                    link="{course.loc_hash}"
+                    progress-value="{course.numberOfFinishedLessons}"
+                    progress-max="{course.numberOfLessons}"
+                    progressMax="{course.numberOfLessons}"
+                    imageUrl="{course.cardImage}"
+                    contentItem="{ course }"
+                ></Card>
+            </template>
         </div>
 
         <p if="{page.coursesCompleteLast.length === 0}">

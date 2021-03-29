@@ -7,7 +7,7 @@ export const addManifestAction = (manifest) => ({ type: ADDED_MANIFEST, manifest
 export const addPageAction = (pageId, pageData) => ({ type: ADD_WAGTAIL_PAGE, pageId, pageData });
 
 // REDUCERS
-const manifest = (state = {}, action) => {
+const manifest = (state = null, action) => {
     switch (action.type) {
         case ADDED_MANIFEST:
             return action.manifest;

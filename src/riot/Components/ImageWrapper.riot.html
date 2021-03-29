@@ -25,8 +25,8 @@
     </p>
 
     <script>
+        import { Asset } from "ts/Implementations/Asset";
         import { getRoute } from "ReduxImpl/Interface";
-        import { getRenditionUrl } from "js/RenditionSelector";
         import { MissingImageError } from "js/Errors";
 
         export default {
@@ -41,10 +41,10 @@
 
             loadImage(image) {
                 this.state.image = image;
-                const asset = this.page.getImageRenditions(image.id);
-                if (asset) {
+                const assetEntry = this.page.getImageRenditions(image.id);
+                if (assetEntry) {
                     try {
-                        this.state.imagePath = getRenditionUrl("image", asset.renditions);
+                        this.state.imagePath = Asset.Url(assetEntry);
                     } catch (error) {
                         if (error instanceof MissingImageError) {
                             this.state.imagePath = "";

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import Logger from "../Logger";
 import { TManifestData } from "../Types/ManifestTypes";
 import { TWagtailPage } from "../Types/PageTypes";
+import { StorableItem } from "../Interfaces/StorableItem";
 
 import { PublishableItem } from "./PublishableItem";
 import { Page } from "./Page";
-import { UpdateCachedItem } from "./CacheItem";
 
 import AllCourses from "./Specific/AllCourses";
 import Course from "./Specific/Course";
@@ -19,6 +20,8 @@ import TeachingActivity from "./Specific/TeachingActivity";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 
+const logger = new Logger("Manifest");
+
 class ManifestError extends Error {
     constructor(message: string) {
         super(message);
@@ -26,45 +29,79 @@ class ManifestError extends Error {
     }
 }
 
-export const ManifestAPIURL = "/manifest/v1";
+export const ManifestAPIURL = `${process.env.API_BASE_URL}/manifest/v1`;
 
-export class Manifest extends PublishableItem<TManifestData> {
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    constructor(opts?: any) {
-        super(opts, ManifestAPIURL, ROUTES_FOR_REGISTRATION.manifest);
-        this.requestObject = new Request(ROUTES_FOR_REGISTRATION.manifest);
+export class Manifest extends PublishableItem implements StorableItem {
+    /**
+     * The api url of the manifest
+     */
+    get url(): string {
+        return ManifestAPIURL;
+    }
+    /**
+     * The cache in which the manifest is stored
+     */
+    get cacheKey(): string {
+        return "canoe-manifest";
+    }
+
+    /**
+     * The options to make a manifest request
+     */
+    get requestOptions(): any {
+        return {
+            cache: "default", // manifest can be returned from cache ( has conditional handling )
+        };
+    }
+
+    /** StorableItem implementations */
+    /** set the manifest data in the manifest store */
+    saveToStore(data: TManifestData): void {
+        storeManifest(data);
+    }
+    /** get the manifest data from the manifest store */
+    get storedData(): TManifestData | undefined {
+        return getManifestFromStore();
+    }
+    /** end StorableItem implementations */
+
+    async prepare(): Promise<void> {
+        const response = await this.getResponse();
+        return response
+            .json()
+            .then((manifestData: any) => {
+                this.saveToStore(manifestData);
+            })
+            .catch((err) => {
+                logger.warn(
+                    err,
+                    "...while deserializing json in cache response %s from the cache for %o",
+                    response,
+                    this
+                );
+                throw new ManifestError("Mainfest failed to deserialize");
+            });
+    }
+    /** end StorableItem implementations */
+
+    get data(): TManifestData | undefined {
+        return this.storedData;
     }
 
     get pages(): Record<string, TWagtailPage> {
-        return this.data?.pages || {};
+        return this.storedData?.pages || {};
     }
 
     get isInitialised(): boolean {
-        return !!this.data?.pages;
+        return !!this.storedData;
     }
 
     get version(): number {
-        return this.data?.version || -1;
-    }
-
-    set version(value: number) {
-        if (this.data) {
-            this.data.version = value;
-        }
-
-        super.version = value;
-    }
-
-    get api_url(): string {
-        return ManifestAPIURL;
+        return this.storedData?.version || -1;
     }
 
     get fullUrl(): string {
         return ROUTES_FOR_REGISTRATION.manifest;
-    }
-
-    get manifestData(): TManifestData {
-        return this;
     }
 
     get contentType(): string {
@@ -91,16 +128,10 @@ export class Manifest extends PublishableItem<TManifestData> {
     }
 
     /** This is a basic integrity check.  It ensures that:
-     * - This item has a valid statusId (api_url)
-     * - The store and cache status values are acceptable
      * - It has been initialised (it has a `data` value)
      * - All child pages have matching page entries
      */
     get isValid(): boolean {
-        if (!super.isValid) {
-            return false;
-        }
-
         if (!this.isInitialised) {
             return false;
         }
@@ -112,7 +143,7 @@ export class Manifest extends PublishableItem<TManifestData> {
         return this.childPagesValid;
     }
 
-    get isAvailableOffline(): boolean {
+    async isAvailableOffline(): Promise<boolean> {
         return this.isValid;
     }
 
@@ -134,90 +165,32 @@ export class Manifest extends PublishableItem<TManifestData> {
         return [...languageCodes];
     }
 
-    get emptyItem(): TManifestData {
-        const empty = super.emptyItem;
-
-        empty.id = "";
-        empty.api_url = ManifestAPIURL;
-        empty.version = -1;
-        empty.pages = {};
-
-        return empty;
-    }
-
     GetDataFromStore(): void {
-        const manifest = getManifestFromStore();
-        if (manifest && JSON.stringify(manifest) !== "{}") {
-            this.data = manifest;
-            this.status.storeStatus = "ready";
-        } else {
-            this.status.storeStatus = "unset";
-        }
+        // depecated
+        return;
     }
 
     StoreDataToStore(): void {
-        // And store the manifest data in Redux
-        this.status.storeStatus = "unset";
-        storeManifest(this.data);
-        this.status.storeStatus = "ready";
+        // depecated
+        return;
     }
-
     get updatedResp(): Response {
-        return new Response(JSON.stringify(this.data), {
-            headers: this.respHeaders,
-        } as ResponseInit);
+        //deprecated
+        return new Response();
     }
-
-    get cacheKey(): string {
-        return this.fullUrl;
-    }
-
-    BuildManifestData(response: Record<string, any>): void {
-        const respData: Partial<TManifestData> = response;
-        if (respData) {
-            this.data = this.emptyItem;
-            this.data.id = "";
-            this.data.api_url = ManifestAPIURL;
-            Object.keys(respData).forEach((key) => {
-                this.data[key] = respData[key];
-            });
-        }
-    }
-
     async initialiseFromResponse(resp: Response): Promise<boolean> {
-        try {
-            this.SetResponseHeaders(resp.headers);
-            this.BuildManifestData(await resp.json());
-        } catch {
-            // Discard errors with getting json from response
-            // eslint-disable-next-line no-console
-            console.info(
-                "Manifest in the Response (cache or network) could not be parsed."
-            );
-        }
-
-        const isAcceptable =
-            this.statusIdValid &&
-            this.cacheStatusAcceptable &&
-            this.isInitialised &&
-            this.childPagesValid;
-
-        let cacheUpdated = false;
-        if (this.data && isAcceptable) {
-            this.StoreDataToStore();
-            cacheUpdated = await UpdateCachedItem(this);
-        }
-
-        return cacheUpdated && this.isValid;
+        //deprecated
+        return Promise.resolve(false);
     }
 
     getPageManifestData(locationHash: string): Page | undefined {
-        const pageId: string | undefined = Object.keys(this.data.pages).find(
-            (pageId: string) => {
-                const page = this.data.pages[pageId];
-                return page.loc_hash === locationHash;
-            }
-        );
+        if (!this.storedData) return undefined;
+        const pageId: string | undefined = Object.keys(
+            this.storedData.pages
+        ).find((pageId: string) => {
+            const page = this.storedData?.pages[pageId];
+            return page && page.loc_hash === locationHash;
+        });
         if (pageId === undefined) {
             throw new ManifestError(
                 `Location ${locationHash} not found in manifest`
@@ -227,28 +200,27 @@ export class Manifest extends PublishableItem<TManifestData> {
     }
 
     getSpecificPage(pageId: string, parent?: Page): Page {
-        const pageType = this.data.pages[pageId].type;
-        const pageStatusId = this.data.pages[pageId].storage_container;
+        const pageType = this.storedData?.pages[pageId].type;
 
         switch (pageType) {
             case "homepage":
-                return new AllCourses(this, pageId, pageStatusId, parent);
+                return new AllCourses(this, pageId, parent);
             case "coursepage":
-                return new Course(this, pageId, pageStatusId, parent);
+                return new Course(this, pageId, parent);
             case "lessonpage":
-                return new Lesson(this, pageId, pageStatusId, parent);
+                return new Lesson(this, pageId, parent);
             case "resourcesroot":
-                return new ResourcesRoot(this, pageId, pageStatusId, parent);
+                return new ResourcesRoot(this, pageId, parent);
             case "resourcearticle":
-                return new Resource(this, pageId, pageStatusId, parent);
+                return new Resource(this, pageId, parent);
             case "learningactivitieshomepage":
-                return new TeachingRoot(this, pageId, pageStatusId, parent);
+                return new TeachingRoot(this, pageId, parent);
             case "learningactivitytopicpage":
-                return new TeachingTopic(this, pageId, pageStatusId, parent);
+                return new TeachingTopic(this, pageId, parent);
             case "learningactivitypage":
-                return new TeachingActivity(this, pageId, pageStatusId, parent);
+                return new TeachingActivity(this, pageId, parent);
             default:
-                return new Page(this, pageId, pageStatusId, parent);
+                return new Page(this, pageId, parent);
         }
     }
 
@@ -256,21 +228,27 @@ export class Manifest extends PublishableItem<TManifestData> {
         languageCode: string,
         pageType: string
     ): Page | undefined {
-        const pageId: string | undefined = Object.keys(this.data.pages).find(
-            (pageId: string) => {
-                const page = this.data.pages[pageId];
-                return page.type === pageType && page.language === languageCode;
-            }
-        );
+        if (!this.storedData) return undefined;
+        const pageId: string | undefined = Object.keys(
+            this.storedData?.pages
+        ).find((pageId: string) => {
+            const page = this.storedData?.pages[pageId];
+            if (!page) return false;
+            return page.type === pageType && page.language === languageCode;
+        });
 
         return pageId ? this.getSpecificPage(pageId) : undefined;
     }
 
     hasPageType(pageType: string): boolean {
-        return Object.values(this.data.pages)
+        if (!this.storedData) return false;
+        return Object.values(this.storedData?.pages)
             .map((p: TWagtailPage) => {
                 return p.type;
             })
             .includes(pageType);
+    }
+    get str(): string {
+        return "Site Manifest";
     }
 }

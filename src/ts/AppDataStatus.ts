@@ -1,36 +1,37 @@
-import { TSubscriptions } from "./Types/CacheTypes";
-import { TAppelflapResult } from "./Types/CanoeEnums";
-import { TWagtailPage } from "./Types/PageTypes";
-import { TItemListing, TItemStorageStatus } from "./Types/PublishableItemTypes";
+// import { TSubscriptions } from "./Types/CacheTypes";
+// import { TAppelflapResult } from "./Types/CanoeEnums";
+// import { TWagtailPage } from "./Types/PageTypes";
+// import { TItemListing, TItemStorageStatus } from "./Types/PublishableItemTypes";
+import { TItemListing } from "./Types/PublishableItemTypes";
 
-import { IPublishableItem } from "./Interfaces/PublishableItemInterfaces";
+// import { TPublishableItem } from "./Types/PublishableItemTypes";
 
-import {
-    CacheKeys,
-    InitialiseByRequest,
-    InitialiseFromCache,
-} from "./Implementations/CacheItem";
+/*
+import { CacheKeys, InitialiseFromCache } from "./Implementations/CacheItem";
 import {
     getSubscriptions,
     publishItem,
     setSubscriptions,
     unpublishItem,
 } from "./Implementations/ItemActions";
+*/
 import { Manifest } from "./Implementations/Manifest";
-import { Page } from "./Implementations/Page";
+// import { Page } from "./Implementations/Page";
 
-import { AppelflapConnect } from "./AppelflapConnect";
+// import { AppelflapConnect } from "./AppelflapConnect";
 
+/*
 import {
     getPageData as getPageDataFromStore,
     getItemStorageStatus,
 } from "ReduxImpl/Interface";
-
+*/
+/*
 type AfcFunction = (
-    item: IPublishableItem,
+    item: TPublishableItem,
     appelflapConnect: AppelflapConnect
 ) => Promise<TAppelflapResult>;
-
+*/
 /** An overview of the status for all data used by the app */
 export class AppDataStatus {
     manifest: Manifest;
@@ -43,16 +44,6 @@ export class AppDataStatus {
 
     async Initialise(): Promise<string> {
         if (!this.manifest.isValid) {
-            try {
-                await InitialiseByRequest(this.manifest);
-            } catch {
-                return Promise.reject(
-                    "Manifest is not valid, and could not be initialised from the network"
-                );
-            }
-        }
-
-        if (!this.manifest.isValid) {
             return Promise.reject(
                 "Manifest is not valid, and initialisation from the network failed"
             );
@@ -60,6 +51,7 @@ export class AppDataStatus {
 
         return Promise.resolve("Manifest valid");
     }
+    /*
 
     ManifestListing(): TItemListing {
         return {
@@ -76,6 +68,8 @@ export class AppDataStatus {
             isPublishable: this.manifest.isPublishable,
         };
     }
+    */
+    /*
 
     async PageListing(
         pageId: string,
@@ -122,6 +116,8 @@ export class AppDataStatus {
             isPublishable: isPublishable,
         };
     }
+    */
+    /*
 
     async BuildList(): Promise<void> {
         this.itemListings = [];
@@ -142,6 +138,8 @@ export class AppDataStatus {
             this.itemListings.push(pageListing);
         }
     }
+    */
+    /*
 
     private async PerformAll(
         filter: (item: TItemListing) => boolean,
@@ -182,19 +180,25 @@ export class AppDataStatus {
     }
 
     /** Publish everything currently flagged as isPublishable */
+    /*
     async PublishAll(): Promise<Record<string, TAppelflapResult>> {
         return this.PerformAll((listing) => listing.isPublishable, publishItem);
     }
+    */
+    /*
 
     /** Unpublish everything currently not flagged as isPublishable */
+    /*
     async UnpublishAll(): Promise<Record<string, TAppelflapResult>> {
         return this.PerformAll(
             (listing) => !listing.isPublishable,
             unpublishItem
         );
     }
+    */
 
     /** Get all current subscriptions */
+    /*
     async GetSubscriptions(): Promise<TSubscriptions> {
         const appelflapConnect = new AppelflapConnect();
         const subscriptions = await getSubscriptions(appelflapConnect);
@@ -205,6 +209,7 @@ export class AppDataStatus {
     }
 
     /** Set all current subscriptions */
+    /*
     async SetSubscriptions(): Promise<TSubscriptions> {
         const appelflapConnect = new AppelflapConnect();
         const subscriptions = await setSubscriptions(
@@ -280,4 +285,5 @@ export class AppDataStatus {
 
         return syncAllStatus;
     }
+    */
 }

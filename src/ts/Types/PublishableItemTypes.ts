@@ -6,10 +6,6 @@ import {
 
 /** The id fields for a manifest, page or asset item */
 export type TItemId = {
-    /** The id of this item within the manifest, and within the redux store */
-    id: string;
-    version: number;
-    /** The routable part of the URL (ignoring the host) */
     api_url: string;
 };
 
@@ -51,21 +47,13 @@ export type TItemListing = {
     title: string;
     type: TItemType;
     cacheKey: string;
+    version: number;
 } & TItemId &
     TItemStorageStatus &
     TItemStatus;
 
 /** Describe the state of a manifest, page or asset item */
 export type TPublishableItem = {
-    /** The storage status of this item */
-    status: TItemStorageStatus;
-
-    /** The fullUrl of this item that can be used to build a fetch Request object for it */
-    fullUrl: string;
-
-    /** The content type of this item that can be used to build a fetch Request object for it */
-    contentType: string;
-
     /** The key to the cache where this publishable item is stored */
     cacheKey: string;
 } & TItemStatus &

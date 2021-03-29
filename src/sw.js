@@ -1,9 +1,7 @@
 import { registerRoute } from "workbox-routing/registerRoute.mjs";
 
-import { setDefaultHandler } from "workbox-routing/setDefaultHandler.mjs";
 import { setCatchHandler } from "workbox-routing/setCatchHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
-import { NetworkFirst } from "workbox-strategies/NetworkFirst.mjs";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
 import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
 
@@ -85,13 +83,6 @@ registerRoute(
     })
 );
 
-registerRoute(
-    new RegExp(ROUTES_FOR_REGISTRATION.manifest),
-    new NetworkFirst({
-        cacheName: ROUTES_FOR_REGISTRATION.manifest,
-    })
-);
-
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly());
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly(), "POST");
 
@@ -113,8 +104,6 @@ registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.appelflapPKIsign), new NetworkO
 // webpack-dev-server communicates over this endpoint. Without this clause, the
 // service worker caches these requests and breaks webpack-dev-server.
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.socketInfo), new NetworkOnly());
-
-setDefaultHandler(new CacheFirst());
 
 const getNotificationTitleMessageAndTag = (eventData) => {
     let title = null;
