@@ -44,10 +44,11 @@ export class Asset extends PublishableItem {
     /**
      * The platform specific media url of this asset item
      */
-     static Url(asset: TAssetEntry): string {
-        return `${process.env.API_BASE_URL}/media/${
-            Asset.PlatformSpecificRendition(asset).path
-        }`;
+    static Url(asset: TAssetEntry): string {
+        const assetPath = Asset.PlatformSpecificRendition(asset)?.path || "";
+        return assetPath
+            ? `${process.env.API_BASE_URL}/media/${assetPath}`
+            : "";
     }
 
     /**

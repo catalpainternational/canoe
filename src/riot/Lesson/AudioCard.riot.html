@@ -18,12 +18,9 @@
     </div>
 
     <script>
+        import { Asset } from "ts/Implementations/Asset";
         import { getRoute } from "ReduxImpl/Interface";
-        import {
-            isItemCached,
-            addToCache,
-            deleteItemFromCache
-        } from "js/cacheManager/cacheManager";
+        import { isItemCached } from "js/cacheManager/cacheManager";
         import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
         export default {
@@ -40,12 +37,12 @@
 
             onBeforeMount(props, state) {
                 this.page = getRoute().page;
-                const asset = this.page.getAudioRenditions(
+                const assetEntry = this.page.getAudioRenditions(
                     props.media.id
                 );
                 let src = "";
                 try {
-                    let src = asset.url;
+                    src = Asset.Url(assetEntry);
                 } catch {
                     // No compatible rendition found, therefore no url
                     src = "";
