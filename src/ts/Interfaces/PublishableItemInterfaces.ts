@@ -1,5 +1,4 @@
 import { TPublishableItem } from "ts/Types/PublishableItemTypes";
-import { TManifest } from "ts/Types/ManifestTypes";
 import { TPage, TWagtailPage } from "ts/Types/PageTypes";
 import { TAssetEntry } from "ts/Types/AssetTypes";
 
@@ -18,8 +17,6 @@ export interface IPublishableItem extends TPublishableItem {
     /** Get the new response to use when updating this item in the cache */
     updatedResp: Response;
 }
-
-export interface IManifest extends TManifest, TPublishableItem {}
 
 export interface IPage extends TPage, TPublishableItem {}
 

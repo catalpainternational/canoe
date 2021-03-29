@@ -27,7 +27,6 @@
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
-        import { getMediaUrl } from "js/RenditionSelector";
         import { getRoute } from "ReduxImpl/Interface";
 
         function LessonPage() { return {
@@ -64,12 +63,7 @@
             disableBlockedLessonModules() {
                 const ongoingCards = [...document.getElementsByClassName("ongoing")];
 
-                const isComingSoon = this.lesson.isComingSoon();
                 let sliceFrom = 1;
-
-                if (isComingSoon) {
-                    sliceFrom = 0;
-                }
 
                 const cardsToDisable = ongoingCards.slice(sliceFrom);
                 for (const card of cardsToDisable) {
@@ -83,10 +77,6 @@
                 } else {
                     return "not-started";
                 }
-            },
-
-            getMediaUrl(documentPath) {
-                return `${getMediaUrl(documentPath)}`;
             },
         }};
 

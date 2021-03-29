@@ -35,7 +35,9 @@
         <TopicPage if="{state.page.type === 'learningactivitytopicpage'}"></TopicPage>
         <ActivityPage if="{state.page.type === 'learningactivitypage'}"></ActivityPage>
 
-        <BottomMenu></BottomMenu>
+        <BottomMenu
+            if="{ state.page.type !== 'initial' }"
+        ></BottomMenu>
         <PushSubscription></PushSubscription>
     </template>
 

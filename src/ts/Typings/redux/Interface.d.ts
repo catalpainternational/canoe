@@ -6,12 +6,12 @@ declare module "ReduxImpl/Interface" {
     import { TWagtailPageData } from "ts/Types/PageTypes";
     import { TItemStorageStatus } from "ts/Types/PublishableItemTypes";
 
-    export function storeManifest(manifest: TManifestData): void;
+    export function storeManifest(manifest: Record<string, any>): void;
     export function getManifestFromStore(): TManifestData;
 
     export function storePageData(
         pageId: any,
-        pageData: TWagtailPageData
+        pageData: Record<string, any>
     ): void;
     export function getPageData(pageId: any): TWagtailPageData;
 

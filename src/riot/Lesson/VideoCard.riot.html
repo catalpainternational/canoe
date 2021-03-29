@@ -1,7 +1,7 @@
 <VideoCard>
     <div>
         <video
-            if="{ !state.src }"
+            if="{ state.src }"
             src="{ state.src }"
             width="100%"
             crossorigin="anonymous"
@@ -17,44 +17,40 @@
         </p>
         <h3 class="media-title">{props.media.title}</h3>
         <p class="media-description">{props.media.description}</p>
-        <p if={state.cached}>{ TRANSLATIONS.cached() }</p>
-        <p if={!state.cached}>{ TRANSLATIONS.notCached() }</p>
+
+        <p if="{ state.error === 'no_asset' }">
+            { TRANSLATIONS.noAssetError() }
+        </p>
     </div>
 
     <script>
+        import { Asset } from "ts/Implementations/Asset";
         import { getRoute } from "ReduxImpl/Interface";
-        import { getMediaUrl } from "js/RenditionSelector";
-        import {
-            isItemCached,
-            addToCache,
-            deleteItemFromCache
-        } from "js/cacheManager/cacheManager";
+        import { isItemCached } from "js/cacheManager/cacheManager";
         import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
         export default {
-            state: {
-                cached: false
+            TRANSLATIONS: {
+                browserSupport: () => gettext('Your browser does not support the video element.'),
+                missing: () => gettext("Sorry: This video is missing.")
             },
 
-            TRANSLATIONS: {
-                browserSupport: () => gettext("Your browser does not support the video element."),
-                cached: () => gettext("This video will play offline."),
-                notCached: () => gettext("This video is not available offline."),
-                missing: () => gettext("Sorry: This video is missing.")
+            state: {
+                src: "",
+                cached: false
             },
 
             onBeforeMount(props, state) {
                 this.page = getRoute().page;
-                const asset = this.page.getVideoRenditions(
+                const assetEntry = this.page.getVideoRenditions(
                     props.media.id
                 );
-                const renditions = Object.values(!!asset ? asset.renditions || {} : {});
                 let src = "";
-                if (renditions.length) {
-                    // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
-                    // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
-                    // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
-                    src = getMediaUrl(renditions.sort((el1,el2) => el1.size - el2.size)[0].path);
+                try {
+                    src = Asset.Url(assetEntry);
+                } catch {
+                    // No compatible rendition found, therefore no url
+                    src = "";
                 }
                 this.state.src = src;
                 if (src) {
@@ -68,7 +64,6 @@
                 const mediaTitle = this.props.media.title;
                 logClickedPlayOnVideo(mediaTitle);
             },
-
         };
     </script>
 </VideoCard>
