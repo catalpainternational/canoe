@@ -1,7 +1,7 @@
 %header-swoop {
     background: $top-gradient;
-    -webkit-clip-path: ellipse(150% 100% at 50% 0%);
-    clip-path: ellipse(150% 100% at 50% 0%);
+    -webkit-clip-path: ellipse(145% 100% at 50% 0%);
+    clip-path: ellipse(145% 100% at 50% 0%);
     padding: 20px;
     box-sizing: border-box;
 }
@@ -14,8 +14,8 @@
 
 %bottom-swoop {
     background: $bottom-gradient;
-    -webkit-clip-path: ellipse(340% 100% at 50% 100%);
-    clip-path: ellipse(340% 100% at 50% 100%);
+    -webkit-clip-path: ellipse(290% 100% at 50% 100%);
+    clip-path: ellipse(290% 100% at 50% 100%);
     padding: 20px;
     margin: 0 -20px;
     width: 100%;
