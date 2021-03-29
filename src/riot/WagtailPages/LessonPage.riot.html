@@ -64,12 +64,7 @@
             disableBlockedLessonModules() {
                 const ongoingCards = [...document.getElementsByClassName("ongoing")];
 
-                const isComingSoon = this.lesson.isComingSoon();
                 let sliceFrom = 1;
-
-                if (isComingSoon) {
-                    sliceFrom = 0;
-                }
 
                 const cardsToDisable = ongoingCards.slice(sliceFrom);
                 for (const card of cardsToDisable) {

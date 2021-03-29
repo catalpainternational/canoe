@@ -39,9 +39,8 @@
                 <Card
                     each="{lesson in course.lessons}"
                     status="{lessonStatus(lesson)}"
-                    title="{lesson.title}"
-                    link="{lesson.loc_hash}"
                     imageUrl="{lesson.cardImage}"
+                    contentItem="{ lesson }"
                 ></Card>
             </div>
             <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
@@ -122,9 +121,7 @@
             },
 
             lessonStatus(lesson) {
-                if (lesson.isComingSoon()) {
-                    return "coming-soon";
-                } else if (lesson.isFinished()) {
+                if (lesson.isFinished()) {
                     return "complete";
                 } else {
                     return "not-started";

@@ -1,197 +1,125 @@
-import { TItemCommon } from "../Types/PublishableItemTypes";
-import { TManifest } from "../Types/ManifestTypes";
+import Logger from "../Logger";
 
-import { IPublishableItem } from "../Interfaces/PublishableItemInterfaces";
+export enum UpdatePolicy {
+    Default = "default",
+    ForceUpdate = "forceUpdate",
+    UpdateButStage = "updateButStage",
+}
 
-import { StorageStatus } from "../Implementations/StorageStatus";
+const logger = new Logger("ContentItem");
 
-/** A 'Publishable' item is one that is stored in the cache as well as the redux store
- * and which Appelflap can be requested to publish or subscribe to,
- * either directly in the case of the Manifest or Pages,
- * or indirectly in the case of Assets (as part of a Page).
+/** A network backed content item that can be stored and retrieved from a named cache
+ * The item can be queeried for cache status and added and remove from the cache
  */
-export abstract class PublishableItem<T extends TItemCommon>
-    implements IPublishableItem {
-    #version: number;
-    #id: string;
-    #statusId: string;
-    data!: T;
-
-    status!: StorageStatus;
-
-    /** A reference to the original manifest itself */
-    manifest: TManifest;
-
-    /** The original request object (stripped of any authentication values) that works as the key into the cache */
-    #requestObject: Request;
-    /** Indicates whether the above #requestObject had to have the authorization header stripped */
-    #requestObjectCleaned = false;
-    /** Indicates whether the above #requestObject has had the authorization header stripped */
-    #requestObjectClean = false;
-
-    /** The headers as returned with any previous response from the server, converted to a simple object */
-    #respHeaders: Record<string, string>;
-
-    constructor(manifest: TManifest, id: string, statusId: string) {
-        this.manifest = manifest;
-        this.#id = id;
-        // Normally statusId will be the same as data.storage_container (the cache name)
-        // Except for assets
-        this.#statusId = statusId;
-
-        this.#version = -1;
-        this.status = new StorageStatus(this.#statusId);
-        this.#requestObject = new Request("");
-
-        this.#respHeaders = {};
-
-        this.GetDataFromStore();
-
-        if (!this.data) {
-            this.data = this.emptyItem;
-            this.status.storeStatus = "unset";
-        }
-    }
-
-    /** Override this in the implementing class to return the correct value */
-    get version(): number {
-        return this.#version || -1;
-    }
-
-    set version(value: number) {
-        this.#version = value;
-    }
-
-    get api_url(): string {
-        return this.data?.api_url || "";
-    }
-
-    abstract get fullUrl(): string;
-
-    get emptyItem(): T {
-        return ({
-            version: -1,
-            api_url: "",
-            fullUrl: "",
-            status: this.status.emptyStatus,
-            isValid: false,
-            isAvailableOffline: false,
-            isPublishable: false,
-            contentType: "",
-        } as unknown) as T;
-    }
-
-    /** The id for this item's data (but not its status) within the redux store (and the manifest) */
-    get id(): string {
-        return this.#id;
-    }
-
-    /** The id for this item's status (but not its data) within the redux store (and normally the cache) */
-    get statusId(): string {
-        return this.#statusId;
-    }
-
-    abstract get contentType(): string;
-
-    /** The data in the manifest that relates specifically to this item */
-    abstract get manifestData(): T;
-
-    /** Is this item `ready` to be used now!? */
-    get ready(): boolean {
-        return this.status.ready;
-    }
-
-    get statusIdValid(): boolean {
-        return !!this.statusId;
-    }
-
-    /** Is the item's cache status acceptable */
-    get cacheStatusAcceptable(): boolean {
-        return !["unset", "empty", "prepped"].includes(this.status.cacheStatus);
-    }
-
-    get storeStatusAcceptable(): boolean {
-        return this.status.storeStatus !== "unset";
-    }
-
-    /** This will do a basic integrity check. */
-    get isValid(): boolean {
-        return this.statusIdValid && this.storeStatusAcceptable;
-    }
-
-    /** This is only a very basic check.
-     * @remarks Implementing classes must call this via super, and extend to meet their requirements. */
-    get isAvailableOffline(): boolean {
-        return this.isValid && this.cacheStatusAcceptable && this.version >= 0;
-    }
-
-    /** This is only a very basic check.
-     * @remarks Implementing classes must call this via super, and extend to meet their requirements. */
-    get isPublishable(): boolean {
-        return (
-            this.isValid &&
-            this.cacheStatusAcceptable &&
-            this.version >= 0 &&
-            this.#requestObjectClean
-        );
-    }
-
+export abstract class PublishableItem {
+    /** the url to retrieve this item from */
+    abstract get url(): string;
+    /** the name of the cahche used to store this */
     abstract get cacheKey(): string;
+    /** Request options dict used to retrieve this item */
+    abstract get requestOptions(): any;
+    /** Brief descriptive string for logs */
+    abstract get str(): string;
 
-    /** Get the data from the store and use it to fill the `data` member */
-    abstract GetDataFromStore(): void;
-
-    abstract StoreDataToStore(): void;
-
-    get respHeaders(): Record<string, string> {
-        return this.#respHeaders;
-    }
-
-    /** Keep a copy of the response headers as previously received.
-     * Any 'clean up' of response headers for security or other reasons is performed here
+    /**
+     * Get a network response for this item, caching it appropriately
+     * @returns a request response for this item
+     * @throws Error if network failure or response not OK
      */
-    set respHeaders(value: Record<string, string>) {
-        this.#respHeaders = value;
-        if (!this.#respHeaders["last-modified"]) {
-            this.#respHeaders["last-modified"] = new Date().toUTCString();
+    async getResponseFromNetwork(): Promise<Response> {
+        logger.log("using network for %s:%s", this.str, this.url);
+        let response;
+        try {
+            response = await fetch(this.url, this.requestOptions);
+        } catch {
+            logger.warn("request failed for %s:%s", this.str, this.url);
+            throw Error("Network error");
         }
+        if (!response.ok) {
+            logger.warn("request not ok for %s:%s", this.str, this.url);
+            throw Error("Network response not ok");
+        }
+        logger.log("caching response for %s:%s", this.str, this.url);
+        const responseClone = response.clone();
+        await caches
+            .open(this.cacheKey)
+            .then((c) => c.put(this.url, responseClone));
+        return response;
     }
 
-    SetResponseHeaders(headers: Headers): void {
-        const simpleHeaders: Record<string, string> = {};
-        headers.forEach((value, key) => {
-            simpleHeaders[key.toLowerCase()] = value;
-        });
-        this.respHeaders = simpleHeaders;
+    /**
+     * Get a response from the cache for this item
+     * @returns a response for this item or undefined if not found
+     * @throws Error if network used and failure or response not OK
+     */
+    async getResponseFromCache(): Promise<Response | undefined> {
+        logger.log("checking cache for %s:%s", this.str, this.url);
+        return caches
+            .match(this.url, this.requestOptions)
+            .then((cacheResponse) => {
+                if (cacheResponse === undefined) {
+                    logger.log("Cache miss for %s:%s", this.str, this.url);
+                } else {
+                    logger.log("Use cache for %s:%s", this.str, this.url);
+                }
+                return cacheResponse;
+            });
     }
 
-    /** Get the new response to use when updating this item in the cache */
-    abstract get updatedResp(): Response;
-
-    get requestObject(): Request {
-        return this.#requestObject;
+    /**
+     * Gets a response from this item either from the cache or network
+     * @param updatePolicy Default to check cache the network
+     *  Force to use network only
+     * @returns a response for this item
+     * @throws Error if network used and failure or response not OK, or strategy not handled
+     */
+    async getResponse(
+        updatePolicy: UpdatePolicy = UpdatePolicy.Default
+    ): Promise<Response> {
+        logger.info("Get response for %s:%s using %s", this.str, updatePolicy);
+        let response: Response;
+        switch (updatePolicy) {
+            case UpdatePolicy.ForceUpdate:
+                response = await this.getResponseFromNetwork();
+                break;
+            case UpdatePolicy.Default:
+                response = await this.getResponseFromCache().then(
+                    (cacheResponse) => {
+                        return cacheResponse || this.getResponseFromNetwork();
+                    }
+                );
+                break;
+            default:
+                throw Error("Unhandled prepare strategy");
+        }
+        return response;
     }
 
-    set requestObject(value: Request) {
-        this.#requestObject = value;
+    /**
+     * Check if the item is in the correct cache
+     * @returns true if this item is cached in the correct cache , false if not
+     */
+    isAvailableOffline(): Promise<boolean> {
+        return caches
+            .match(this.url, { cacheName: this.cacheKey })
+            .then((match) => {
+                return match !== undefined;
+            });
     }
-
-    get requestObjectCleaned(): boolean {
-        return this.#requestObjectCleaned;
+    /**
+     * Add this item to the correct cache
+     * @returns true if succeeds
+     */
+    makeAvailableOffline(): Promise<boolean> {
+        return this.getResponseFromNetwork().then(() => true);
     }
-
-    set requestObjectCleaned(value: boolean) {
-        this.#requestObjectCleaned = value;
+    /**
+     * Remove this content from the cache
+     * @returns true if succeds
+     */
+    removeAvailableOffline(): Promise<boolean> {
+        return caches
+            .open(this.cacheKey)
+            .then((cache) => cache.delete(this.url));
     }
-
-    get requestObjectClean(): boolean {
-        return this.#requestObjectClean;
-    }
-
-    set requestObjectClean(value: boolean) {
-        this.#requestObjectClean = value;
-    }
-
-    /** Initialise this item from a response, either cached or from the network */
-    abstract initialiseFromResponse(resp: Response): Promise<boolean>;
 }

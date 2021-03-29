@@ -94,8 +94,8 @@
                 this.update(({ publications: JSON.stringify(publications) }));
 
                 // Get the Item Status Listing
-                await this.state.appDataStatus.Initialise();
-                await this.state.appDataStatus.BuildList();
+                // await this.state.appDataStatus.Initialise();
+                // await this.state.appDataStatus.BuildList();
                 this.update({statusListings: this.state.appDataStatus.itemListings});
             },
 
@@ -105,11 +105,11 @@
 
                 // Identify what needs to be subscribed to, and what needs to be published
                 const appDataStatus = this.state.appDataStatus;
-                const syncStatus = await appDataStatus.SyncAll();
+                // const syncStatus = await appDataStatus.SyncAll();
 
                 await cacheUtilities.lock();
 
-                window.alert(`Published: ${JSON.stringify(syncStatus)}`);
+                //window.alert(`Published: ${JSON.stringify(syncStatus)}`);
             },
         };
     </script>

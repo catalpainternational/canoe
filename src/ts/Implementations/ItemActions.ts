@@ -1,14 +1,14 @@
 import { TPublication, TSubscriptions } from "../Types/CacheTypes";
 import { TAppelflapResult } from "../Types/CanoeEnums";
 import { TItemListing } from "../Types/PublishableItemTypes";
-import { IPublishableItem } from "../Interfaces/PublishableItemInterfaces";
+import { TPublishableItem } from "../Types/PublishableItemTypes";
 
 import { AppelflapConnect } from "../AppelflapConnect";
 import { CachePublish } from "../CachePublish";
 import { CacheSubscribe } from "../CacheSubscribe";
 
 /** Define the 'target' within the cache for Appelflap */
-const CacheTarget = (item: IPublishableItem): TPublication => {
+const CacheTarget = (item: TPublishableItem): TPublication => {
     return {
         webOrigin: btoa(self.origin),
         cacheName: btoa(item.cacheKey),
@@ -23,7 +23,7 @@ const CacheTarget = (item: IPublishableItem): TPublication => {
  * - reject("failed") on error (404 or 500)
  */
 export async function publishItem(
-    item: IPublishableItem,
+    item: TPublishableItem,
     appelflapConnect: AppelflapConnect
 ): Promise<TAppelflapResult> {
     if (!item || !item.isPublishable || !appelflapConnect) {
@@ -47,7 +47,7 @@ export async function publishItem(
  * - reject("failed") on error (404 or 500)
  */
 export async function unpublishItem(
-    item: IPublishableItem,
+    item: TPublishableItem,
     appelflapConnect: AppelflapConnect
 ): Promise<TAppelflapResult> {
     if (!item || item.isPublishable || !appelflapConnect) {

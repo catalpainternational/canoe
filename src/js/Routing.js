@@ -49,7 +49,6 @@ async function route(hashWith) {
         } catch (err) {
             route = {page: {type: "manifest_error", error: `Manifest retrieval failure. Error: ${err}`}};
         }
-        
         if( !isAuthenticated() && REQUIRE_LOGIN )
         { 
             // if the site is configured to require login and we are not logged in, show the login page 
@@ -72,7 +71,7 @@ async function route(hashWith) {
             route = {page, riotHash};
             // refresh the page
             if (!page.ready) {
-                InitialiseByRequest(page);
+                page.prepare();
             }
         }
     }
@@ -83,7 +82,7 @@ async function route(hashWith) {
 async function getValidManifest() {
     const manifest = new Manifest();
     if (!manifest.isValid) {
-        await InitialiseByRequest(manifest);
+        await manifest.prepare();
     }
     return Promise.resolve(manifest);
 }
