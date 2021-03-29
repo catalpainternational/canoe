@@ -63,6 +63,9 @@
                 const { savedAnswer } = this.props;
 
                 if (!savedAnswer) {
+                    this.update({
+                        hiddenAnswers: [],
+                    })
                     return;
                 }
 
@@ -89,6 +92,7 @@
                 if (isQuestionComplete) {
                     this.update({
                         visibleAnswers: [],
+                        hiddenAnswers: [],
                     });
                 }
             },

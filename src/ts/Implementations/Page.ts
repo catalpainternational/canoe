@@ -329,9 +329,16 @@ export class Page extends PublishableItem<TWagtailPageData> {
         assetType: string
     ): TAssetEntry | undefined {
         const assets = this.manifestData.assets;
-        return assets.find((a: TAssetEntry) => {
+        const filteredAssets = assets.find((a: TAssetEntry) => {
             return a.id === id.toString() && a.type === assetType;
         });
+        // Handy code if you want to check what assets are being retrieved
+        // console.log(
+        //     `Getting ${assetType} asset:${id}, and found ${JSON.stringify(
+        //         filteredAssets
+        //     )}`
+        // );
+        return filteredAssets;
     }
 
     getImageRenditions = (id: number | string): TAssetEntry | undefined =>
