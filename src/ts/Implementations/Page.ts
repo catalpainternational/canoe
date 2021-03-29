@@ -166,10 +166,12 @@ export class Page extends PublishableItem implements StorableItem {
 
     /** The asset data as defined in the manifest for this page */
     get manifestAssets(): Asset[] {
-        return this.manifestData["assets"].map(
-            (assetEntry: TAssetEntry) => new Asset(this, assetEntry.id),
-            this
-        );
+        return this.manifestData["assets"]
+            .filter((assetEntry: TAssetEntry) => assetEntry.id)
+            .map(
+                (assetEntry: TAssetEntry) => new Asset(this, assetEntry.id),
+                this
+            );
     }
 
     /** The assets associated with this page */
