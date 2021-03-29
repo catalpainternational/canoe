@@ -1,7 +1,7 @@
 <VideoCard>
     <div>
         <video
-            if="{ !state.src }"
+            if="{ state.src }"
             src="{ state.src }"
             width="100%"
             crossorigin="anonymous"
@@ -33,6 +33,11 @@
             TRANSLATIONS: {
                 browserSupport: () => gettext('Your browser does not support the video element.'),
                 missing: () => gettext("Sorry: This video is missing.")
+            },
+
+            state: {
+                src: "",
+                cached: false
             },
 
             onBeforeMount(props, state) {
