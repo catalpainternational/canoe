@@ -79,15 +79,19 @@ export abstract class PublishableItem {
         logger.info("Get response for %s:%s using %s", this.str, updatePolicy);
         let response: Response;
         switch (updatePolicy) {
-            case UpdatePolicy.ForceUpdate:
-                response = await this.getResponseFromNetwork();
-                break;
             case UpdatePolicy.Default:
                 response = await this.getResponseFromCache().then(
                     (cacheResponse) => {
-                        return cacheResponse || this.getResponseFromNetwork();
+                        // always hit the network
+                        const networkResponse = this.getResponseFromNetwork();
+                        // but return from cache first
+                        // network will update cache in the background
+                        return cacheResponse || networkResponse;
                     }
                 );
+                break;
+            case UpdatePolicy.ForceUpdate:
+                response = await this.getResponseFromNetwork();
                 break;
             default:
                 throw Error("Unhandled prepare strategy");

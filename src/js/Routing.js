@@ -82,7 +82,11 @@ async function route(hashWith) {
 async function getValidManifest() {
     const manifest = new Manifest();
     if (!manifest.isValid) {
+        // we need to wait
         await manifest.prepare();
+    } else {
+        // let's not wait, but still refresh
+        manifest.prepare();
     }
     return Promise.resolve(manifest);
 }
