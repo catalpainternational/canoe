@@ -46,12 +46,14 @@ export class Page extends PublishableItem implements StorableItem {
     get url(): string {
         return `${process.env.API_BASE_URL}${this.manifestData?.api_url}`;
     }
+
     /**
      * The cache in which the page is stored
      */
     get cacheKey(): string {
         return this.manifestData?.storage_container;
     }
+
     /**
      * The options to make an page api request
      */
@@ -61,16 +63,17 @@ export class Page extends PublishableItem implements StorableItem {
         };
     }
 
-    /** StorableItem implementations */
-    /** set the page data in the page store */
+    // StorableItem implementations
+    /** Set the page data in the page store */
     saveToStore(data: TWagtailPageData): void {
         storePageData(this.#id, data);
     }
-    /** get the page data from the page store */
-    get storedData(): TWagtailPageData | undefined {
+
+    /** Get the page data from the page store */
+    get storedData(): TWagtailPageData {
         return getPageDataFromStore(this.#id);
     }
-    /** end StorableItem implementations */
+    // end StorableItem implementations
 
     /**
      * Get and store this page, used in routing
@@ -99,11 +102,12 @@ export class Page extends PublishableItem implements StorableItem {
     get manifestData(): TWagtailPageData {
         return this.#manifest.pages[this.#id] || {};
     }
+
     /** The data for this page as defined in the manifest
      * legacy alias for manifestData
      */
     get data(): TWagtailPageData {
-        return this.manifestData;
+        return this.storedData || {};
     }
 
     get manifest(): Manifest {
@@ -222,6 +226,7 @@ export class Page extends PublishableItem implements StorableItem {
             results.every((result) => result)
         );
     }
+
     /**
      * Add this page, assets, and children to the correct cache
      * @returns true if succeeds
@@ -240,6 +245,7 @@ export class Page extends PublishableItem implements StorableItem {
             results.every((result) => result)
         );
     }
+
     /**
      * Remove this page, assets, and children from the cache
      * @returns true if succeds
