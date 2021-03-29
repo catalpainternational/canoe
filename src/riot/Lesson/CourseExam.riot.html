@@ -1,5 +1,5 @@
 <CourseExam>
-    <LessonFrame if="{ state.stage === 'code' }" linkTo="{ course.loc_hash }">
+    <LessonFrame if="{ state.stage === 'code' && state.examType !== 'prelearning'}" linkTo="{ course.loc_hash }">
         <HonorCode minimumScore="{ MINIMUM_SCORE }"></HonorCode>
     </LessonFrame>
     <LessonFrame

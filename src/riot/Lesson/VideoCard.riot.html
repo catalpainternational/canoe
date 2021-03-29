@@ -1,7 +1,7 @@
 <VideoCard>
     <div>
         <video
-            if="{ !state.error }"
+            if="{ !state.src }"
             src="{ state.src }"
             width="100%"
             crossorigin="anonymous"
@@ -12,6 +12,9 @@
             <!-- if preload set to none the video will not actually be requested, if set to auto it is requested -->
             <span>{ TRANSLATIONS.browserSupport() }</span>
         </video>
+        <p class="error-message" if="{ !state.src }">
+            { TRANSLATIONS.missing() }
+        </p>
         <h3 class="media-title">{props.media.title}</h3>
         <p class="media-description">{props.media.description}</p>
 
@@ -28,7 +31,7 @@
         export default {
             TRANSLATIONS: {
                 browserSupport: () => gettext('Your browser does not support the video element.'),
-                noAssetError: () => gettext('We are sorry we cannot find this asset'),
+                missing: () => gettext("Sorry: This video is missing.")
             },
 
             onBeforeMount(props, state) {
@@ -36,15 +39,19 @@
                 const asset = this.page.getVideoRenditions(
                     props.media.id
                 );
-
-                if (asset) {
+                const renditions = Object.values(!!asset ? asset.renditions || {} : {});
+                let src = "";
+                if (renditions.length) {
                     // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
                     // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
                     // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
-                    const src = getMediaUrl(Object.values(asset.renditions).sort((el1,el2) => el1.size - el2.size)[0].path);
-                    this.state.src = src;
-                } else {
-                    this.state.error = 'no_asset';
+                    src = getMediaUrl(renditions.sort((el1,el2) => el1.size - el2.size)[0].path);
+                }
+                this.state.src = src;
+                if (src) {
+                    isItemCached(src).then(cached => {
+                        this.update({cached});
+                    });
                 }
             },
 
@@ -52,7 +59,6 @@
                 const mediaTitle = this.props.media.title;
                 logClickedPlayOnVideo(mediaTitle);
             },
-
         };
     </script>
 </VideoCard>

@@ -120,6 +120,10 @@ export class Manifest extends PublishableItem implements StorableItem {
             return false;
         }
 
+        if (this.version === -1) {
+            return false;
+        }
+
         return this.childPagesValid;
     }
 
@@ -175,7 +179,9 @@ export class Manifest extends PublishableItem implements StorableItem {
             return page && page.loc_hash === locationHash;
         });
         if (pageId === undefined) {
-            throw new ManifestError("location not found in manifest");
+            throw new ManifestError(
+                `Location ${locationHash} not found in manifest`
+            );
         }
         return this.getSpecificPage(pageId);
     }
