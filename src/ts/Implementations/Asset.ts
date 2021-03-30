@@ -12,6 +12,9 @@ import {
 } from "../Constants";
 import { getBrowser } from "../PlatformDetection";
 
+// See ts/Typings for the type definitions for these imports
+import { BACKEND_BASE_URL } from "js/urls";
+
 /** A asset ( binary resource ) than can be cached
  */
 export class Asset extends PublishableItem {
@@ -62,10 +65,18 @@ export class Asset extends PublishableItem {
     /**
      * The options to make an asset request
      */
-    get requestOptions(): any {
+    get requestOptions(): RequestInit {
+        const headers: any = {
+            "Content-Type": this.contentType,
+        };
+
         return {
             cache: "force-cache", // assets are (almost always) invariant on filename
-        };
+            headers: headers,
+            method: "GET",
+            mode: "cors",
+            referrer: BACKEND_BASE_URL,
+        } as RequestInit;
     }
 
     /**
@@ -92,6 +103,23 @@ export class Asset extends PublishableItem {
      */
     get type(): string | undefined {
         return this.entry?.type;
+    }
+
+    /** The mime type of this asset */
+    get contentType(): string {
+        const browser = getBrowser().name;
+        switch (this.type) {
+            case "image":
+                return browser === "Safari" ? "image/jpeg" : "image/webp";
+            case "video":
+                // Safari does support webm to a limited degree
+                return browser === "Safari" ? "video/mp4" : "video/webm";
+            case "audio":
+                return browser === "Safari" ? "audio/ogg" : "audio/mp4";
+            default:
+                // Default is for JSON, and we don't care about the browser
+                return "application/json";
+        }
     }
 
     /**
