@@ -1,9 +1,10 @@
 <GuestBanner>
     <div if="{state.isBannerVisible}" class="{state.isBannerClosing ? 'close' : ''}">
         <a if="{!state.isBannerClosing}" class="cross" onclick="{closingBanner}"></a>
-        <p>{ TRANSLATIONS.guest() }</p>
-        <p>{ TRANSLATIONS.data() }</p>
-        <p><a class="btn btn-primary" href="#login">login</a></p>
+        <span>
+            <p>{ TRANSLATIONS.data() }</p>
+            <a class="btn btn-primary" href="#login">Login</a>
+        </span>
     </div>
 
     <script>
@@ -16,8 +17,7 @@
             },
 
             TRANSLATIONS: {
-                guest: () => gettext("You're a guest"),
-                data: () => gettext("No data or progress will be saved"),
+                data: () => gettext("To save your progress"),
             },
 
             closeBanner() {
