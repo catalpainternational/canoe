@@ -59,9 +59,9 @@ export class Manifest extends PublishableItem implements StorableItem {
         };
         const token = getAuthenticationToken();
         if (token) {
-            reqInit["headers"] = {Authorization: `JWT ${token}`};
+            reqInit["headers"] = { Authorization: `JWT ${token}` };
         }
-       
+
         return reqInit as RequestInit;
     }
 
