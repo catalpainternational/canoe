@@ -51,21 +51,18 @@ export class Manifest extends PublishableItem implements StorableItem {
      * The options to make a manifest request
      */
     get requestOptions(): RequestInit {
-        const headers: any = {
-            "Content-Type": "application/json",
-        };
-        const token = getAuthenticationToken();
-        if (token) {
-            headers["Authorization"] = `JWT ${token}`;
-        }
-
-        return {
+        const reqInit: any = {
             cache: "default", // manifest can be returned from cache ( has conditional handling )
-            headers: headers,
             method: "GET",
             mode: "cors",
             referrer: BACKEND_BASE_URL,
-        } as RequestInit;
+        };
+        const token = getAuthenticationToken();
+        if (token) {
+            reqInit["headers"] = {Authorization: `JWT ${token}`};
+        }
+       
+        return reqInit as RequestInit;
     }
 
     /** StorableItem implementations */
