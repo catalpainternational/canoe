@@ -41,14 +41,14 @@ export class Asset extends PublishableItem {
      */
     get url(): string {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return Asset.Url(this!.entry as TAssetEntry);
+        return Asset.url(this!.entry as TAssetEntry);
     }
 
     /**
      * The platform specific media url of this asset item
      */
-    static Url(asset: TAssetEntry): string {
-        const assetPath = Asset.PlatformSpecificRendition(asset)?.path || "";
+    static url(asset: TAssetEntry): string {
+        const assetPath = Asset.platformSpecificRendition(asset)?.path || "";
         return assetPath
             ? `${process.env.API_BASE_URL}/media/${assetPath}`
             : "";
@@ -134,6 +134,13 @@ export class Asset extends PublishableItem {
     }
 
     /**
+     * Description for log lines
+     */
+    get str(): string {
+        return `Asset ${this.id} in ${this.#page.str}`;
+    }
+
+    /**
      * The appropriate rendition for the platform we are running on
      */
     get platformSpecificRendition(): TRendition {
@@ -141,10 +148,10 @@ export class Asset extends PublishableItem {
             throw new Error("Renditions cannot be accessed");
         }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return Asset.PlatformSpecificRendition(this!.entry as TAssetEntry);
+        return Asset.platformSpecificRendition(this!.entry as TAssetEntry);
     }
 
-    static PlatformSpecificRendition(asset: TAssetEntry): TRendition {
+    static platformSpecificRendition(asset: TAssetEntry): TRendition {
         const browser = getBrowser().name;
         let renditionSpec: string;
         switch (asset.type) {
@@ -161,23 +168,32 @@ export class Asset extends PublishableItem {
                     browser === "Safari" ? OPUS_RENDITION : MP4A_RENDITION;
                 break;
             case "pdf":
+                // We currently do not need this case (although it is technically accurate)
+                // however it would be nice to have it available in the near future
                 renditionSpec = "original";
                 break;
             default:
                 renditionSpec = "original";
         }
-        if (!asset.renditions[renditionSpec]) {
-            // Force it back to original if we don't have that rendition
-            renditionSpec = "original";
+        while (!(renditionSpec in asset.renditions)) {
+            if (!renditionSpec.startsWith("original")) {
+                // Force it back to original if we don't have that rendition
+                renditionSpec = "original";
+                continue;
+            } else if (
+                renditionSpec === "original" &&
+                ["audio", "video"].includes(asset.type)
+            ) {
+                // Force it to original + asset.type
+                renditionSpec = `original-${asset.type}`;
+                continue;
+            }
+            // Not found - throw
+            throw new Error(
+                "Renditions (optimised or original) cannot be accessed"
+            );
         }
 
         return asset.renditions[renditionSpec];
-    }
-
-    /**
-     * Description for log lines
-     */
-    get str(): string {
-        return `Asset ${this.id} in ${this.#page.str}`;
     }
 }
