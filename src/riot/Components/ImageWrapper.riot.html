@@ -1,11 +1,25 @@
 <ImageWrapper>
+    <div if="{state.imageFullScreen}"
+        class="modal-background fade"
+        onclick="{toggleImageFullScreen}">
+    </div>
     <img
         if="{state.imagePath}"
         alt="{state.image.alt}"
-        class="richtext-image"
+        class="richtext-image {imageClass()}"
         crossorigin="anonymous"
         src="{state.imagePath}"
     />
+    <div if="{state.imagePath && !state.imageFullScreen}"
+        class="expand-button"
+        onclick="{toggleImageFullScreen}">
+        <span class="expand-arrows"></span>
+    </div>
+    <div if="{state.imageFullScreen}"
+        class="contract-button"
+        onclick="{toggleImageFullScreen}">
+        <span class="cross gray"></span>
+    </div>
     <p class="error-message" if="{!state.imagePath}">
         Sorry: image "{state.image.alt}", is missing.
     </p>
@@ -21,7 +35,8 @@
                 image: {
                     id: "unknown",
                     alt: "Unknown Image",
-                }
+                },
+                imageFullScreen: false,
             },
 
             loadImage(image) {
@@ -29,7 +44,7 @@
                 const assetEntry = this.page.getImageRenditions(image.id);
                 if (assetEntry) {
                     try {
-                        this.state.imagePath = Asset.Url(assetEntry);
+                        this.state.imagePath = Asset.url(assetEntry);
                     } catch (error) {
                         if (error instanceof MissingImageError) {
                             this.state.imagePath = "";
@@ -38,11 +53,38 @@
                 }
             },
 
+            imageClass() {
+                const fullScreen = this.state.imageFullScreen;
+                const devicePortrait = this.state.devicePortrait;
+                const img = this.$("img");
+                const imgHeight = img.naturalHeight;
+                const imgWidth = img.naturalWidth;
+
+                let imgOrientation;
+
+                if (imgHeight > imgWidth) imgOrientation = 'portrait';
+                if (imgHeight < imgWidth) imgOrientation = 'landscape';
+                if (imgHeight === imgWidth) imgOrientation = 'square';
+
+
+                return fullScreen ? `full-screen ${imgOrientation}` : '';
+            },
+
+            onBeforeUpdate(props, state) {
+                if (props.image) {
+                    this.loadImage(props.image);
+                }
+            },
+
             onBeforeMount(props, state) {
                 this.page = getRoute().page;
                 if (props.image) {
                     this.loadImage(props.image);
                 }
+            },
+
+            toggleImageFullScreen() {
+                this.update({ imageFullScreen: !this.state.imageFullScreen });
             },
         };
     </script>

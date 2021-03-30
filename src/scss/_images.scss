@@ -226,6 +226,13 @@
     margin-top: -2px;
 }
 
+.expand-arrows {
+    @include mask-icons-shared("~img/expand_arrows.svg", contain, $white);
+    height: 100%;
+    width: 100%;
+    margin-bottom: -8px;
+}
+
 .quotation-mark {
     @include mask-icons-shared("~img/quotation_mark.svg", contain, $blue);
     height: 22px;

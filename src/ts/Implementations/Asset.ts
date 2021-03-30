@@ -4,13 +4,48 @@ import { PublishableItem } from "./PublishableItem";
 
 import {
     JPEG_RENDITION,
-    MP4A_RENDITION,
-    MP4V_RENDITION,
-    OPUS_RENDITION,
-    WEBM_RENDITION,
     WEBP_RENDITION,
+    ORIG_V_RENDITION,
+    H264_360P_RENDITION,
+    H264_480P_RENDITION,
+    H265_360P_RENDITION,
+    H265_480P_RENDITION,
+    VP9_360P_RENDITION,
+    VP9_480P_RENDITION,
+    WEBM_RENDITION,
+    ORIG_A_RENDITION,
+    OPUS_RENDITION,
+    ORIG_RENDITION,
 } from "../Constants";
 import { getBrowser } from "../PlatformDetection";
+
+// See ts/Typings for the type definitions for these imports
+import { BACKEND_BASE_URL } from "js/urls";
+
+/** This is a subjective in-order list of the above rendition IDs
+ * Its intended use is to be intersected with an array of available renditions
+ * for a given asset, to then get that asset's list of available renditions in
+ * order according to subjective quality / size
+ */
+const RENDITION_PREFERENCE = [
+    VP9_480P_RENDITION,
+    VP9_360P_RENDITION,
+    H264_480P_RENDITION,
+    H264_360P_RENDITION,
+    H265_480P_RENDITION,
+    H265_360P_RENDITION,
+    WEBM_RENDITION,
+    ORIG_V_RENDITION,
+    OPUS_RENDITION,
+    ORIG_A_RENDITION,
+    WEBP_RENDITION,
+    JPEG_RENDITION,
+    ORIG_RENDITION,
+];
+
+/** A subjective size difference value,
+ * whereby we will take the preferred rendition over the smallest rendition */
+const SIZE_DIFF_PERCENT = 0.02;
 
 /** A asset ( binary resource ) than can be cached
  */
@@ -38,14 +73,14 @@ export class Asset extends PublishableItem {
      */
     get url(): string {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return Asset.Url(this!.entry as TAssetEntry);
+        return Asset.url(this!.entry as TAssetEntry);
     }
 
     /**
      * The platform specific media url of this asset item
      */
-    static Url(asset: TAssetEntry): string {
-        const assetPath = Asset.PlatformSpecificRendition(asset)?.path || "";
+    static url(asset: TAssetEntry): string {
+        const assetPath = Asset.platformSpecificRendition(asset)?.path || "";
         return assetPath
             ? `${process.env.API_BASE_URL}/media/${assetPath}`
             : "";
@@ -62,10 +97,13 @@ export class Asset extends PublishableItem {
     /**
      * The options to make an asset request
      */
-    get requestOptions(): any {
+    get requestOptions(): RequestInit {
         return {
             cache: "force-cache", // assets are (almost always) invariant on filename
-        };
+            method: "GET",
+            mode: "cors",
+            referrer: BACKEND_BASE_URL,
+        } as RequestInit;
     }
 
     /**
@@ -106,6 +144,13 @@ export class Asset extends PublishableItem {
     }
 
     /**
+     * Description for log lines
+     */
+    get str(): string {
+        return `Asset ${this.id} in ${this.#page.str}`;
+    }
+
+    /**
      * The appropriate rendition for the platform we are running on
      */
     get platformSpecificRendition(): TRendition {
@@ -113,43 +158,113 @@ export class Asset extends PublishableItem {
             throw new Error("Renditions cannot be accessed");
         }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return Asset.PlatformSpecificRendition(this!.entry as TAssetEntry);
+        return Asset.platformSpecificRendition(this!.entry as TAssetEntry);
     }
 
-    static PlatformSpecificRendition(asset: TAssetEntry): TRendition {
+    static platformSpecificRendition(asset: TAssetEntry): TRendition {
         const browser = getBrowser().name;
-        let renditionSpec: string;
+        let rendDefs: string[];
+        let rendCount = 0;
         switch (asset.type) {
             case "image":
-                renditionSpec =
-                    browser === "Safari" ? JPEG_RENDITION : WEBP_RENDITION;
+                rendDefs =
+                    browser === "Safari" ? [JPEG_RENDITION] : [WEBP_RENDITION];
                 break;
             case "video":
-                renditionSpec =
-                    browser === "Safari" ? MP4V_RENDITION : WEBM_RENDITION;
+                rendDefs = [
+                    ORIG_V_RENDITION,
+                    H264_360P_RENDITION,
+                    H264_480P_RENDITION,
+                ];
+                rendCount = rendDefs.length;
+                switch (browser) {
+                    case "Chrome": // and 'Edge'
+                        rendDefs.splice(
+                            rendCount,
+                            0,
+                            VP9_360P_RENDITION,
+                            VP9_480P_RENDITION,
+                            WEBM_RENDITION
+                        );
+                        break;
+                    case "Firefox":
+                        rendDefs.splice(rendCount, 0, WEBM_RENDITION);
+                        break;
+                    case "Safari":
+                        rendDefs.splice(
+                            rendCount,
+                            0,
+                            H265_360P_RENDITION,
+                            H265_480P_RENDITION
+                        );
+                        break;
+                }
                 break;
             case "audio":
-                renditionSpec =
-                    browser === "Safari" ? OPUS_RENDITION : MP4A_RENDITION;
+                rendDefs = [ORIG_A_RENDITION];
+                if (browser !== "Safari") {
+                    rendDefs.splice(rendCount, 0, OPUS_RENDITION);
+                }
                 break;
             case "pdf":
-                renditionSpec = "original";
+                // We currently do not need this case (although it is technically accurate)
+                // however it would be nice to have it available in the near future
+                rendDefs = [ORIG_RENDITION];
                 break;
             default:
-                renditionSpec = "original";
-        }
-        if (!asset.renditions[renditionSpec]) {
-            // Force it back to original if we don't have that rendition
-            renditionSpec = "original";
+                rendDefs = [ORIG_RENDITION];
+                break;
         }
 
-        return asset.renditions[renditionSpec];
-    }
+        const renditionSpecs = rendDefs.filter(
+            (def) => def in asset.renditions
+        );
+        if (renditionSpecs.length === 0) {
+            // Not found - throw
+            throw new Error(
+                "Renditions (optimised or original) cannot be accessed"
+            );
+        }
+        if (renditionSpecs.length === 1) {
+            // Only one rendition available, so no need for any further work, just return it
+            return asset.renditions[renditionSpecs[0]];
+        }
 
-    /**
-     * Description for log lines
-     */
-    get str(): string {
-        return `Asset ${this.id} in ${this.#page.str}`;
+        // Get the available renditions in a 'preferred' order
+        const prefRenditionSpecs = RENDITION_PREFERENCE.filter((pref) =>
+            renditionSpecs.includes(pref)
+        );
+
+        const hasSize = prefRenditionSpecs.every((pref) =>
+            Object.prototype.hasOwnProperty.call(asset.renditions[pref], "size")
+        );
+        if (!hasSize) {
+            // We can't compare size, so just return the first 'preferred' rendition
+            return asset.renditions[prefRenditionSpecs[0]];
+        }
+
+        // Get the available renditions in order of size (smallest to largest)
+        const sizedRenditionSpecs = renditionSpecs.sort(
+            (a, b) =>
+                (asset.renditions[a].size as number) -
+                (asset.renditions[b].size as number)
+        );
+
+        // Compare 'preferred' to size
+        if (prefRenditionSpecs[0] === sizedRenditionSpecs[0]) {
+            // They agree
+            return asset.renditions[prefRenditionSpecs[0]];
+        }
+        // Size difference as a percent
+        const sizeDiff =
+            (asset.renditions[sizedRenditionSpecs[0]].size as number) /
+            (asset.renditions[prefRenditionSpecs[0]].size as number);
+        if (1 - sizeDiff < SIZE_DIFF_PERCENT) {
+            // Within 2% (subjective), close enough
+            return asset.renditions[prefRenditionSpecs[0]];
+        }
+
+        // Return the smallest then
+        return asset.renditions[prefRenditionSpecs[0]];
     }
 }
