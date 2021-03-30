@@ -97,10 +97,6 @@ export default class AllCourses extends Page {
         );
     }
 
-    get title(): string {
-        return this.data.title;
-    }
-
     get description(): string {
         return this.data.body;
     }
