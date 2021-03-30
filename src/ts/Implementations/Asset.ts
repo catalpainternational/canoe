@@ -12,6 +12,9 @@ import {
 } from "../Constants";
 import { getBrowser } from "../PlatformDetection";
 
+// See ts/Typings for the type definitions for these imports
+import { BACKEND_BASE_URL } from "js/urls";
+
 /** A asset ( binary resource ) than can be cached
  */
 export class Asset extends PublishableItem {
@@ -62,10 +65,13 @@ export class Asset extends PublishableItem {
     /**
      * The options to make an asset request
      */
-    get requestOptions(): any {
+    get requestOptions(): RequestInit {
         return {
             cache: "force-cache", // assets are (almost always) invariant on filename
-        };
+            method: "GET",
+            mode: "cors",
+            referrer: BACKEND_BASE_URL,
+        } as RequestInit;
     }
 
     /**

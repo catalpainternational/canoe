@@ -6,12 +6,15 @@ import { StorableItem } from "../Interfaces/StorableItem";
 import { PublishableItem } from "../Implementations/PublishableItem";
 import { Asset } from "../Implementations/Asset";
 
+import Logger from "../Logger";
+
 // See ts/Typings for the type definitions for these imports
+import { getAuthenticationToken } from "js/AuthenticationUtilities";
+import { BACKEND_BASE_URL } from "js/urls";
 import {
     getPageData as getPageDataFromStore,
     storePageData,
 } from "ReduxImpl/Interface";
-import Logger from "../Logger";
 
 const logger = new Logger("Page");
 
@@ -57,10 +60,19 @@ export class Page extends PublishableItem implements StorableItem {
     /**
      * The options to make an page api request
      */
-    get requestOptions(): any {
-        return {
+    get requestOptions(): RequestInit {
+        const reqInit: any = {
             cache: "force-cache", // pages have version query params we can rely on the cache
+            method: "GET",
+            mode: "cors",
+            referrer: BACKEND_BASE_URL,
         };
+        const token = getAuthenticationToken();
+        if (token) {
+            reqInit["headers"] = { Authorization: `JWT ${token}` };
+        }
+
+        return reqInit as RequestInit;
     }
 
     // StorableItem implementations
@@ -210,6 +222,10 @@ export class Page extends PublishableItem implements StorableItem {
         return this.#id;
     }
 
+    get str(): string {
+        return `Page ${this.title}`;
+    }
+
     /**
      * Check if the page is in the correct cache
      * @returns true if this page, assets, and children is cached in the correct cache , false if not
@@ -309,8 +325,4 @@ export class Page extends PublishableItem implements StorableItem {
 
     getAudioRenditions = (id: number | string): TAssetEntry | undefined =>
         this.getAssetsByIdAndType(id, "audio");
-
-    get str(): string {
-        return `Page ${this.title}`;
-    }
 }
