@@ -38,6 +38,12 @@
                 }
             },
 
+            onBeforeUpdate(props, state) {
+                if (props.image) {
+                    this.loadImage(props.image);
+                }
+            },
+
             onBeforeMount(props, state) {
                 this.page = getRoute().page;
                 if (props.image) {
