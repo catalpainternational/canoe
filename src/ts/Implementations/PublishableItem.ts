@@ -12,14 +12,22 @@ const logger = new Logger("ContentItem");
  * The item can be queeried for cache status and added and remove from the cache
  */
 export abstract class PublishableItem {
-    /** the url to retrieve this item from */
+    /** The url to retrieve this item from */
     abstract get url(): string;
-    /** the name of the cahche used to store this */
+    /** The name of the cache used to store this item */
     abstract get cacheKey(): string;
     /** Request options dict used to retrieve this item */
-    abstract get requestOptions(): any;
+    abstract get requestOptions(): RequestInit;
     /** Brief descriptive string for logs */
     abstract get str(): string;
+
+    /** The options used to query the caches for this item */
+    get cacheOptions(): MultiCacheQueryOptions {
+        return {
+            cacheName: this.cacheKey,
+            ignoreVary: true,
+        };
+    }
 
     /**
      * Get a network response for this item, caching it appropriately
@@ -55,7 +63,7 @@ export abstract class PublishableItem {
     async getResponseFromCache(): Promise<Response | undefined> {
         logger.log("checking cache for %s:%s", this.str, this.url);
         return caches
-            .match(this.url, this.requestOptions)
+            .match(this.url, this.cacheOptions)
             .then((cacheResponse) => {
                 if (cacheResponse === undefined) {
                     logger.log("Cache miss for %s:%s", this.str, this.url);
@@ -103,27 +111,26 @@ export abstract class PublishableItem {
      * Check if the item is in the correct cache
      * @returns true if this item is cached in the correct cache , false if not
      */
-    isAvailableOffline(): Promise<boolean> {
-        return caches
-            .match(this.url, { cacheName: this.cacheKey })
-            .then((match) => {
-                return match !== undefined;
-            });
+    async isAvailableOffline(): Promise<boolean> {
+        const match = await caches.match(this.url, this.cacheOptions);
+        return match !== undefined;
     }
+
     /**
      * Add this item to the correct cache
      * @returns true if succeeds
      */
-    makeAvailableOffline(): Promise<boolean> {
-        return this.getResponseFromNetwork().then(() => true);
+    async makeAvailableOffline(): Promise<boolean> {
+        await this.getResponseFromNetwork();
+        return true;
     }
+
     /**
      * Remove this content from the cache
      * @returns true if succeds
      */
-    removeAvailableOffline(): Promise<boolean> {
-        return caches
-            .open(this.cacheKey)
-            .then((cache) => cache.delete(this.url));
+    async removeAvailableOffline(): Promise<boolean> {
+        const cache = await caches.open(this.cacheKey);
+        return await cache.delete(this.url);
     }
 }
