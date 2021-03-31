@@ -155,7 +155,7 @@
             isExamEnabled() {
                 // Exams are enabled if you complete all lessons or if you are a
                 // guest user.
-                return this.course.numberOfLessons === this.course.numberOfFinishedLessons
+                return this.course.numberOfLessons <= this.course.numberOfFinishedLessons
                     || !isAuthenticated();
             },
 
@@ -173,7 +173,7 @@
             },
 
             examStatus() {
-                if (this.course.isExamFinished) {
+                if (this.course.examHighScore > 75) {
                     return "complete";
                 } else if (!this.isExamEnabled()) {
                     return "disabled";
