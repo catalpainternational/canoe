@@ -55,7 +55,11 @@
             margin: 0;
         }
 
-        #service-worker-notsupported, 
+        body.modal-open {
+            position: fixed;
+        }
+
+        #service-worker-notsupported,
         #service-worker-failed {
             height: 100%;
             margin: -8px;
@@ -64,11 +68,11 @@
             font-family: Verdana;
             font-size: xx-large;
             text-align: center;
-            color: {{ htmlWebpackPlugin.options.theme_color }};           
+            color: {{ htmlWebpackPlugin.options.theme_color }};
         }
 
         #preapp-messages {
-            background-color: #E8EEF1; 
+            background-color: #E8EEF1;
         }
 
         #preapp-messages img.favicon {

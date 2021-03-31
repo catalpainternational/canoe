@@ -17,40 +17,10 @@
             <progress if="{props.status === 'complete'}" value="1" max="1"></progress>
         </div>
     </a>
-    <button if="{ props.contentItem }" onclick="{ toggleCached }">
-        { state.cached ? TRANSLATIONS.cached() : TRANSLATIONS.notCached() }
-    </button>
     <script>
         import {getCardImageUrl} from "js/utilities";
 
         export default {
-            state: {
-                cached: undefined,
-                cachedStatus: 'undetermined',
-            },
-            TRANSLATIONS: {
-                cached: () => gettext("Available offline"),
-                notCached: () => gettext("Not yet available offline"),
-            },
-            onMounted(props, state) {
-                if(props.contentItem) {
-                    props.contentItem.isAvailableOffline().then(cached => {
-                        this.update({cached});
-                    });
-                }
-            },
-            toggleCached() {
-                const item = this.props.contentItem;
-                const action = this.state.cached 
-                    ? item.removeAvailableOffline()
-                    : item.makeAvailableOffline();
-                action
-                    .then(() => item.isAvailableOffline())
-                    .then(cached => {
-                        this.update({cached});
-                    });
-            },
-
             getCardImage() {
                 return getCardImageUrl(this.props.link || this.props.contentItem.id, this.props.imageUrl);
             }

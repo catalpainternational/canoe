@@ -186,6 +186,13 @@
     display: inline-block;
 }
 
+.download-course {
+    @include unmaskable-icons-shared("~img/hand_cloud_phone.png", contain);
+    min-height: 100px;
+    width: 100px;
+    display: inline-block;
+}
+
 .lesson-presentation {
     @include unmaskable-icons-shared("~img/lesson_presentation.png", contain);
     height: 100%;
@@ -209,6 +216,14 @@
     @include mask-icons-shared("~img/arrow.svg", contain, $blue);
     height: 12px;
     width: 17px;
+}
+
+.download {
+    @include mask-icons-shared("~img/download.svg", contain, $blue);
+    height: 22px;
+    width: 22px;
+    margin-left: -2px;
+    margin-top: -2px;
 }
 
 .expand-arrows {

@@ -1,4 +1,16 @@
 CoursePage {
+    .modal-background.fade:after {
+        z-index: 1;
+    }
+
+    .course-download-complete {
+        background-color: $teal;
+
+        & > .download {
+            background-color: $white;
+        }
+    }
+
     .lesson-swoop {
         @extend %bottom-swoop;
     }
@@ -18,6 +30,90 @@ CoursePage {
 
         .course-details {
             margin-bottom: 2em;
+        }
+    }
+
+    .modal .btn-primary {
+        max-width: 220px;
+    }
+
+    .modal .close-btn {
+        position: absolute;
+        right: 0.5em;
+        top: 0.5em;
+    }
+
+    .download-block {
+        padding: 1em 0;
+        border-top: 2px solid $gray-7;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 40px 1fr 40px;
+        grid-column-gap: 14px;
+        align-items: center;
+        text-align: left;
+
+        &:first-of-type {
+            margin-top: 1em;
+        }
+
+        &:last-of-type {
+            border-bottom: 2px solid $gray-7;
+        }
+
+        p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .lesson-number {
+            border: 2px solid $gray-7;
+            border-radius: 50%;
+        }
+
+        .lesson-number,
+        .download-state {
+            height: 32px;
+            width: 32px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            font-size: 0.8em;
+            position: relative;
+        }
+
+        .download-complete {
+            @extend %status-complete;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            position: relative;
+
+            .icon {
+                height: 12px;
+                width: 15px;
+            }
+        }
+
+        .loading::after {
+            content: '';
+            border: 2px solid $gray-8;
+            border-top: 2px solid $app-accent-color;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
     }
 }
