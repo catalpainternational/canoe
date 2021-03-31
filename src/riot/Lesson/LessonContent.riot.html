@@ -90,6 +90,7 @@
     <LessonFeedback
         if="{ !state.cardNumber && state.stage == 'feedback' }"
         lessonName="{props.lesson.title}"
+        courseName="{props.lesson.course.title}"
     ></LessonFeedback>
     <LessonComplete
         if="{ !state.cardNumber && state.stage == 'complete' }"
