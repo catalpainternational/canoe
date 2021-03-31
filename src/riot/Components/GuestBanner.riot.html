@@ -3,7 +3,7 @@
         <a if="{!state.isBannerClosing}" class="cross" onclick="{closingBanner}"></a>
         <span>
             <p>{ TRANSLATIONS.data() }</p>
-            <a class="btn btn-primary" href="#login">Login</a>
+            <a class="btn btn-primary" href="#login">{ TRANSLATIONS.login() }</a>
         </span>
     </div>
 
@@ -18,6 +18,7 @@
 
             TRANSLATIONS: {
                 data: () => gettext("To save your progress"),
+                login: () => gettext("Login")
             },
 
             closeBanner() {

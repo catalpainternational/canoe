@@ -206,6 +206,7 @@ msgstr ""
 msgid "Let us know how you feel"
 msgstr ""
 
+#: src/riot/Components/GuestBanner.riot.html:21
 #: src/riot/Components/LoginForm.riot.html:59
 #: src/riot/Screens/Login.riot.html:47
 #: src/riot/Screens/Settings.riot.html:74
