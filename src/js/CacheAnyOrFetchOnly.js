@@ -29,7 +29,7 @@ class CacheAnyOrFetchOnly extends Strategy {
         }
 
         // caches.match will return the first match it finds, or undefined
-        let response = await caches.match(request, this._matchOptions);
+        let response = await caches.match(request.url, this._matchOptions);
         let error;
         if (process.env.NODE_ENV !== "production") {
             this._ownLog(request.url, response, true);
