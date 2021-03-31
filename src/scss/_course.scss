@@ -37,6 +37,12 @@ CoursePage {
         max-width: 220px;
     }
 
+    .modal .close-btn {
+        position: absolute;
+        right: 0.5em;
+        top: 0.5em;
+    }
+
     .download-block {
         padding: 1em 0;
         border-top: 2px solid $gray-7;
