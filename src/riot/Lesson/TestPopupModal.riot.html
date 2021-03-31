@@ -53,22 +53,22 @@
 
             correctTitleMessage(selectedAnswer) {
                 // title for correct answer feedback
-                return selectedAnswer.feedback_title || gettext("Great");
+                return selectedAnswer.feedback.title || gettext("Great");
             },
 
             correctTextMessage(selectedAnswer) {
                 // text for correct answer feedback
-                return selectedAnswer.feedback_text || gettext("Well done, keep it up!");
+                return selectedAnswer.feedback.text || gettext("Well done, keep it up!");
             },
 
             incorrectTitleMessage(selectedAnswer) {
                 // title for incorrect answer feedback
-                return selectedAnswer.feedback_title || gettext("Oops");
+                return selectedAnswer.feedback.title || gettext("Oops");
             },
 
             incorrectTextMessage(selectedAnswer) {
                 // text for incorrect answer feedback
-                return selectedAnswer.feedback_text || gettext("Read the question more carefully!");
+                return selectedAnswer.feedback.text || gettext("Read the question more carefully!");
             },
         }
     </script>
