@@ -27,10 +27,9 @@
             </button>
 
             <button class="btn-secondary" 
-                if="{ showLogout() }"
-                onclick="{logout}"
+                onclick="{ state.isAuthenticated ? logout : login }"
             >
-                { TRANSLATIONS.logout() }
+                { state.isAuthenticated ? TRANSLATIONS.logout() : TRANSLATIONS.login() }
             </button>
 
             <Logos></Logos>
@@ -58,7 +57,9 @@
                 isSubscribedToNotifications: false,
                 disableNotificationsButton: false,
                 canAddToHomeScreen: false,
+                isAuthenticated: undefined,
             },
+
             components: {
                 languageselector: LanguageSelector,
                 logos: Logos,
@@ -69,7 +70,8 @@
                 settings: () => gettext("Your settings"),
                 notifications: () => gettext("I would like to receive notifications"),
                 add: () => gettext("Add to Home Screen"),
-                logout: () => gettext("Log out"),
+                logout: () => gettext("Logout"),
+                login: () => gettext("Login")
             },
 
             logout() {
@@ -77,9 +79,14 @@
                 window.location.hash = "";
             },
 
+            login() {
+                window.location.hash = "#login";
+            },
+
             async refreshSettings() {
                 this.update({
                     canAddToHomeScreen: this.shouldShowAddToHomeScreen(),
+                    isAuthenticated: isAuthenticated(),
                 });
 
                 const browserSupportsNotifications = await supportsPushManager();
@@ -141,10 +148,6 @@
             onMounted() {
                 this.refreshSettings();
             },
-
-            showLogout() {
-                return isAuthenticated()
-            }
         };
     </script>
 </Settings>
