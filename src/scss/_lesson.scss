@@ -345,6 +345,10 @@ TestSingleAnswer {
         align-self: start;
         flex: 1;
         width: 100%;
+
+        & + h4 {
+            margin: 1.5em 0 0;
+        }
     }
 }
 
