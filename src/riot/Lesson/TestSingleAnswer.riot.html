@@ -47,10 +47,10 @@
                 if (!savedAnswer) {
                     return;
                 }
-
-                this.update({
-                    selectedAnswer: savedAnswer[0],
-                });
+                // this is causing state bugs in JID, where when two questions side by side have the same possible answers (for instance true/false or agree/disagree), when you click through to the second question, your answer from the previous question will be selected (without you selecting anything). This is obviously not ideal behaviour. This restoreSavedAnswer logic doesn't work as expected for paging back through questions anyway, so perhaps it's best to simply comment out this code for now (due to time constraints) and mark it as a big TODO to look at without the added pressure of a deadline.
+                // this.update({
+                //     selectedAnswer: savedAnswer[0],
+                // });
             },
 
             doAnswersMatch(left, right) {
