@@ -174,12 +174,14 @@
             },
 
             previousExamCard() {
+                this.update({ currentAnswer: {} });
                 location.hash = `${this.course.loc_hash}:exam:${this.state.cardNumber - 1}`;
             },
 
             nextExamCard() {
                 const { cardNumber, cards, card, currentAnswer } = this.state;
                 ExamGrader.saveExamAnswer(card.id, currentAnswer);
+                this.update({ currentAnswer: {} });
                 if( cardNumber === cards.length ) {
                     location.hash = `${this.course.loc_hash}:exam:results`;
                 } else {
