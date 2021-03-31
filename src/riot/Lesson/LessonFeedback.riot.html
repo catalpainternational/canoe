@@ -41,8 +41,8 @@
                     >
                     <textarea
                         id="feedback"
-                        onfocus="{setInputFocus}"
-                        onblur="{removeInputFocus}"
+                        onfocus="{setTextAreaFocus}"
+                        onblur="{removeTextAreaFocus}"
                     ></textarea>
                 </div>
                 <p>{ TRANSLATIONS.give_feedback() }</p>
@@ -158,13 +158,13 @@
             sendFeedback(feedbackString) {
                 const { lessonName, courseName } = this.props;
                 const feedback = feedbackString;
-                const feedbackComment = document.getElementById("feedback")
-                    .value;
+                const comment = document.getElementById("feedback").value;
 
                 saveFeedbackToIdb({
                     lesson: lessonName,
                     course: courseName,
                     feedback,
+                    comment,
                     date: new Date(),
                 });
 
@@ -172,18 +172,18 @@
                     lessonName,
                     courseName,
                     feedback,
-                    feedbackComment,
+                    comment,
                 });
             },
 
-            setInputFocus(event) {
+            setTextAreaFocus(event) {
                 const fieldElement = `#${event.target.id}-input`;
                 this.$(fieldElement).classList.add("has-focus");
             },
 
-            removeInputFocus(event) {
+            removeTextAreaFocus(event) {
                 const fieldElement = `#${event.target.id}-input`;
-                const fieldHasValue = event.target.value != "";
+                const fieldHasValue = event.target.value !== "";
 
                 this.$(fieldElement).classList.remove("has-focus");
 
