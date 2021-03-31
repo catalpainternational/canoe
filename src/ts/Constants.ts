@@ -9,8 +9,8 @@ export const WEBP_RENDITION = "width-800|format-webp"; // .webp
 export const JPEG_RENDITION = "width-600|format-jpeg"; // .jpeg
 // Video Renditions
 export const ORIG_V_RENDITION = "original-video"; // Any extension
-export const H264_360P_RENDITION = "H264-360p-28"; // .mp4
-export const H264_480P_RENDITION = "H264-480p-28"; // .mp4
+export const H264_360P_RENDITION = "H264-360p-28q"; // .mp4
+export const H264_480P_RENDITION = "H264-480p-20q"; // .mp4
 export const H265_360P_RENDITION = "H265-360p-28q"; // .mp4
 export const H265_480P_RENDITION = "H265-480p-20q"; // .mp4
 export const VP9_360P_RENDITION = "VP9-360p-35q"; // .webm
