@@ -121,6 +121,7 @@
 
             toggleDownloadModal() {
                 this.update({showDownloadModal: !this.state.showDownloadModal});
+                document.body.classList.toggle('modal-open');
                 this.course.isAvailableOffline()
                     .then(cached => {
                         this.update({cached});
