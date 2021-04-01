@@ -168,21 +168,21 @@
             },
 
             sendFeedback(feedbackString) {
-                const { lessonName, courseName } = this.props;
+                const { lessonId, courseId } = this.props;
                 const { comment } = this.state;
                 const feedback = feedbackString;
 
                 saveFeedbackToIdb({
-                    lesson: lessonName,
-                    course: courseName,
+                    lesson: lessonId,
+                    course: courseId,
                     feedback,
                     comment,
                     date: new Date(),
                 });
 
                 logLessonFeedback({
-                    lessonName,
-                    courseName,
+                    lessonId,
+                    courseId,
                     feedback,
                     comment,
                 });
