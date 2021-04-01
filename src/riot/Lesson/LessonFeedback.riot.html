@@ -43,6 +43,7 @@
                         id="feedback"
                         onfocus="{setTextAreaFocus}"
                         onblur="{removeTextAreaFocus}"
+                        oninput="{debounce(bindCommentToState)}"
                     ></textarea>
                 </div>
                 <p>{ TRANSLATIONS.give_feedback() }</p>
@@ -82,6 +83,7 @@
         import { logLessonFeedback } from "js/GoogleAnalytics";
         import { getRoute } from "ReduxImpl/Interface";
         import saveFeedbackToIdb from "js/Telemetry/idb";
+        import { debounce } from "js/utilities";
 
         export default {
             TRANSLATIONS: {
@@ -117,6 +119,7 @@
             state: {
                 activeSelection: null,
                 submittedFeedback: false,
+                comment: "",
             },
 
             onBeforeMount(props, state) {
@@ -155,10 +158,19 @@
                 window.location.hash = `#${this.state.lesson.loc_hash}:content:complete`;
             },
 
+            debounce(func) {
+                const delay = 250;
+                return debounce(func, delay);
+            },
+
+            bindCommentToState(event) {
+                this.state.comment = event.target.value;
+            },
+
             sendFeedback(feedbackString) {
                 const { lessonName, courseName } = this.props;
+                const { comment } = this.state;
                 const feedback = feedbackString;
-                const comment = document.getElementById("feedback").value;
 
                 saveFeedbackToIdb({
                     lesson: lessonName,
