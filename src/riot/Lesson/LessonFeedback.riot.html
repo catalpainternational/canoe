@@ -6,22 +6,33 @@
                 <h5>{ TRANSLATIONS.let_us_know() }</h5>
                 <div class="feedback-buttons">
                     <div>
-                        <button onclick="{() => clickedThisLessonIs('fine')}" class="neutral {state.activeSelection === 'fine' ? 'active' : ''}">
+                        <button
+                            onclick="{() => clickedThisLessonIs('fine')}"
+                            class="neutral {state.activeSelection === 'fine' ? 'active' : ''}"
+                        >
                             <span class="neutral-smiley"></span>
                         </button>
                         <p class="button-label">{ TRANSLATIONS.not_great() }</p>
                     </div>
                     <div>
-                        <button onclick="{() => clickedThisLessonIs('good')}" class="smiling {state.activeSelection === 'good' ? 'active' : ''}">
+                        <button
+                            onclick="{() => clickedThisLessonIs('good')}"
+                            class="smiling {state.activeSelection === 'good' ? 'active' : ''}"
+                        >
                             <span class="smiling-smiley"></span>
                         </button>
                         <p class="button-label">{ TRANSLATIONS.good() }</p>
                     </div>
                     <div>
-                        <button onclick="{() => clickedThisLessonIs('great')}" class="thrilled {state.activeSelection === 'great' ? 'active' : ''}">
+                        <button
+                            onclick="{() => clickedThisLessonIs('great')}"
+                            class="thrilled {state.activeSelection === 'great' ? 'active' : ''}"
+                        >
                             <span class="thrilled-smiley"></span>
                         </button>
-                        <p class="button-label">{ TRANSLATIONS.really_great() }</p>
+                        <p class="button-label">
+                            { TRANSLATIONS.really_great() }
+                        </p>
                     </div>
                 </div>
                 <div id="feedback-input" class="form-group">
@@ -45,11 +56,22 @@
         </template>
     </LessonFrame>
     <div if="{!state.madeFeedbackDecision}" class="bottom-buttons">
-        <button class="btn-secondary" onclick="{clickedNoThanks}">{ TRANSLATIONS.no() }</button>
-        <button class="btn-primary" onclick="{clickedSubmit}" disabled="{!state.activeSelection}">{ TRANSLATIONS.submit() }</button>
+        <button class="btn-secondary" onclick="{clickedNoThanks}">
+            { TRANSLATIONS.no() }
+        </button>
+        <button
+            class="btn-primary"
+            onclick="{clickedSubmit}"
+            disabled="{!state.activeSelection}"
+        >
+            { TRANSLATIONS.submit() }
+        </button>
     </div>
     <div if="{state.madeFeedbackDecision}" class="bottom-buttons">
-        <button class="btn-primary thank-you-container" onclick="{clickedContinue}">
+        <button
+            class="btn-primary thank-you-container"
+            onclick="{clickedContinue}"
+        >
             { TRANSLATIONS.continue() }
         </button>
     </div>
@@ -57,12 +79,15 @@
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { logLessonFeedback } from "js/GoogleAnalytics";
         import { getRoute } from "ReduxImpl/Interface";
+        import saveFeedbackToIdb from "js/Telemetry/idb";
 
         export default {
             TRANSLATIONS: {
                 enjoying_lesson: () => gettext("Are you enjoying this lesson?"),
                 give_feedback: () =>
-                    gettext("We value your feedback and all feedback is confidential"),
+                    gettext(
+                        "We value your feedback and all feedback is confidential."
+                    ),
                 feedback_sent: () =>
                     gettext(
                         "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
@@ -95,7 +120,7 @@
             clickedThisLessonIs(rating) {
                 this.update({
                     activeSelection: rating,
-                })
+                });
             },
 
             clickedSubmit() {
@@ -106,7 +131,9 @@
                         madeFeedbackDecision: true,
                     });
                 } else {
-                    throw Error('You must give a rating of "fine", "good", or "great"');
+                    throw Error(
+                        'You must give a rating of "fine", "good", or "great"'
+                    );
                 }
             },
 
@@ -126,6 +153,8 @@
                 const lesson = this.props.lessonName;
                 const feedback = feedbackString;
                 const feedbackComment = document.getElementById("feedback").value;
+
+                saveFeedbackToIdb({ lesson, feedback, date: new Date() });
 
                 logLessonFeedback({
                     lesson,

@@ -17,8 +17,9 @@ import TeachingTopic from "./Specific/TeachingTopic";
 import TeachingActivity from "./Specific/TeachingActivity";
 
 // See ts/Typings for the type definitions for these imports
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
 import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
+import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
 const logger = new Logger("Manifest");
 
@@ -30,6 +31,7 @@ class ManifestError extends Error {
 }
 
 export const ManifestAPIURL = `${process.env.API_BASE_URL}/manifest/v1`;
+export const ManifestCacheKey = "canoe-manifest";
 
 export class Manifest extends PublishableItem implements StorableItem {
     /**
@@ -42,16 +44,25 @@ export class Manifest extends PublishableItem implements StorableItem {
      * The cache in which the manifest is stored
      */
     get cacheKey(): string {
-        return "canoe-manifest";
+        return ManifestCacheKey;
     }
 
     /**
      * The options to make a manifest request
      */
-    get requestOptions(): any {
-        return {
+    get requestOptions(): RequestInit {
+        const reqInit: any = {
             cache: "default", // manifest can be returned from cache ( has conditional handling )
+            method: "GET",
+            mode: "cors",
+            referrer: BACKEND_BASE_URL,
         };
+        const token = getAuthenticationToken();
+        if (token) {
+            reqInit["headers"] = { Authorization: `JWT ${token}` };
+        }
+
+        return reqInit as RequestInit;
     }
 
     /** StorableItem implementations */
