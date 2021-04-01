@@ -1,4 +1,4 @@
-// import Logger from "../Logger";
+import Logger from "../Logger";
 
 export enum UpdatePolicy {
     Default = "default",
@@ -6,7 +6,7 @@ export enum UpdatePolicy {
     UpdateButStage = "updateButStage",
 }
 
-// const logger = new Logger("ContentItem");
+const logger = new Logger("ContentItem");
 
 /** A network backed content item that can be stored and retrieved from a named cache
  * The item can be queeried for cache status and added and remove from the cache
@@ -35,19 +35,19 @@ export abstract class PublishableItem {
      * @throws Error if network failure or response not OK
      */
     async getResponseFromNetwork(): Promise<Response> {
-        // logger.log("using network for %s:%s", this.str, this.url);
+        logger.log("using network for %s:%s", this.str, this.url);
         let response;
         try {
             response = await fetch(this.url, this.requestOptions);
         } catch {
-            // logger.warn("request failed for %s:%s", this.str, this.url);
+            logger.warn("request failed for %s:%s", this.str, this.url);
             throw Error("Network error");
         }
         if (!response.ok) {
-            // logger.warn("request not ok for %s:%s", this.str, this.url);
+            logger.warn("request not ok for %s:%s", this.str, this.url);
             throw Error("Network response not ok");
         }
-        // logger.log("caching response for %s:%s", this.str, this.url);
+        logger.log("caching response for %s:%s", this.str, this.url);
         const responseClone = response.clone();
         await caches
             .open(this.cacheKey)
@@ -61,14 +61,14 @@ export abstract class PublishableItem {
      * @throws Error if network used and failure or response not OK
      */
     async getResponseFromCache(): Promise<Response | undefined> {
-        // logger.log("checking cache for %s:%s", this.str, this.url);
+        logger.log("checking cache for %s:%s", this.str, this.url);
         return caches
             .match(this.url, this.cacheOptions)
             .then((cacheResponse) => {
                 if (cacheResponse === undefined) {
-                    // logger.log("Cache miss for %s:%s", this.str, this.url);
+                    logger.log("Cache miss for %s:%s", this.str, this.url);
                 } else {
-                    // logger.log("Use cache for %s:%s", this.str, this.url);
+                    logger.log("Use cache for %s:%s", this.str, this.url);
                 }
                 return cacheResponse;
             });
@@ -84,7 +84,7 @@ export abstract class PublishableItem {
     async getResponse(
         updatePolicy: UpdatePolicy = UpdatePolicy.Default
     ): Promise<Response> {
-        // logger.info("Get response for %s:%s using %s", this.str, updatePolicy);
+        logger.info("Get response for %s:%s using %s", this.str, updatePolicy);
         let response: Response;
         switch (updatePolicy) {
             case UpdatePolicy.Default:
