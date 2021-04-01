@@ -382,6 +382,8 @@ TestSingleAnswer {
             p {
                 font-size: 1.2em;
                 margin: 0;
+                padding: 0.5em 1em;
+                line-height: 1.3em;
             }
 
             &.radio {
@@ -391,6 +393,7 @@ TestSingleAnswer {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                text-align: center;
             }
 
             &.selected-pending {
