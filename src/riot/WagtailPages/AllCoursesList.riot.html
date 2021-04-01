@@ -3,7 +3,7 @@
     <TopMenu extrastyleclasses="with-swoop">
         <h3>{ page.title }</h3>
         <div class="filter-copy-container">
-            <p id="all-course-description"></p>
+            <p>{ page.description || TRANSLATIONS.coursesIntro() }</p>
             <a
                 if="{showTagFilter()}"
                 class="has-circle {state.showTagList ? 'show-tags' : ''}"
@@ -103,11 +103,6 @@
 
                 onBeforeMount(props, state) {
                     this.page = getRoute().page;
-                },
-
-                onMounted() {
-                    this.$("#all-course-description").innerHTML =
-                        this.page.description || this.TRANSLATIONS.coursesIntro();
                 },
 
                 showTagFilter() {
