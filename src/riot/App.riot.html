@@ -2,6 +2,7 @@
     <ChangeBrowser></ChangeBrowser>
 
     <template if="{ state.browserSupported }">
+        
         <Toast></Toast>
 
         <LoadingDots
@@ -13,27 +14,29 @@
             if="{ state.page.type === 'error' }"
             error="{ state.page.error }"
         ></HandleError>
+        
+        <div class="smartphone">
+            <Login if="{state.page.type === 'login'}"></Login>
+            <Settings if="{state.page.type === 'settings'}"></Settings>
+            <Profile if="{state.page.type === 'profile'}"></Profile>
+            <Sync if="{state.page.type === 'sync'}"></Sync>
 
-        <Login if="{state.page.type === 'login'}"></Login>
-        <Settings if="{state.page.type === 'settings'}"></Settings>
-        <Profile if="{state.page.type === 'profile'}"></Profile>
-        <Sync if="{state.page.type === 'sync'}"></Sync>
-
-        <AllCoursesList if="{ state.page.type === 'homepage' }" ></AllCoursesList>
-        <CourseOverview if="{ state.page.type === 'coursepage' }" ></CourseOverview>
-        <LessonOverview
-            if="{state.page.type === 'lessonpage'}"
-            lesson="{ state.page }"
-        ></LessonOverview>
-        <Resources
-            if="{state.page.type === 'resourcesroot'}"
-        ></Resources>
-        <ResourceArticle
-            if="{state.page.type === 'resourcearticle'}"
-        ></ResourceArticle>
-        <AllTopicsList if="{state.page.type === 'learningactivitieshomepage'}"></AllTopicsList>
-        <TopicPage if="{state.page.type === 'learningactivitytopicpage'}"></TopicPage>
-        <ActivityPage if="{state.page.type === 'learningactivitypage'}"></ActivityPage>
+            <AllCoursesList if="{ state.page.type === 'homepage' }"></AllCoursesList>
+            <CourseOverview if="{ state.page.type === 'coursepage' }" ></CourseOverview>
+            <LessonOverview
+                if="{state.page.type === 'lessonpage'}"
+                lesson="{ state.page }"
+            ></LessonOverview>
+            <Resources
+                if="{state.page.type === 'resourcesroot'}"
+            ></Resources>
+            <ResourceArticle
+                if="{state.page.type === 'resourcearticle'}"
+            ></ResourceArticle>
+            <AllTopicsList if="{state.page.type === 'learningactivitieshomepage'}"></AllTopicsList>
+            <TopicPage if="{state.page.type === 'learningactivitytopicpage'}"></TopicPage>
+            <ActivityPage if="{state.page.type === 'learningactivitypage'}"></ActivityPage>
+        </div>
 
         <BottomMenu
             if="{ state.page.type !== 'initial' }"
