@@ -96,4 +96,8 @@ export default class AllCourses extends Page {
             this.countFinishedLessonsAndExams
         );
     }
+
+    get description(): string {
+        return this.data.body;
+    }
 }
