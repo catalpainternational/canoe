@@ -38,6 +38,8 @@
                 numberTotalCorrectAnswers: 0,
                 alphabet: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N',
                     'O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+                oldProps: undefined,
+                newProps: undefined,
             },
 
             TRANSLATIONS: {
@@ -59,20 +61,31 @@
                 this.restoreSavedAnswer();
             },
 
-            restoreSavedAnswer() {
-                const { savedAnswer } = this.props;
+            onUpdated(props, state) {
+                // there's no easy/obvious way to observe specific prop changes
+                // in riot, so this is a hacky (but working!) way to check if
+                // the card id has been changed in order to restore saved answers
+                this.state.oldProps = this.state.newProps;
+                this.state.newProps = props;
+                if (this.state.oldProps && this.state.oldProps.card.id !== this.state.newProps.card.id) {
+                    this.restoreSavedAnswer();
+                }
+            },
 
-                if (!savedAnswer) {
-                    this.update({
-                        hiddenAnswers: [],
-                    })
+            restoreSavedAnswer() {
+                const { savedAnswers, card } = this.props;
+
+                if (!savedAnswers.length) {
                     return;
                 }
 
-                const hiddenAnswers = savedAnswer;
-                this.update({
-                    hiddenAnswers,
-                });
+                const answerIndex = savedAnswers.findIndex(it => it.questionId === card.id);
+                if (answerIndex > -1) {
+                    this.state.hiddenAnswers = savedAnswers[answerIndex].answers;
+
+                    const isCorrect = this.gradeAnswers(this.state.hiddenAnswers);
+                    this.props.updateAnswerHandler(savedAnswers[answerIndex].answers, isCorrect);
+                }
             },
 
             doesArrayIncludeAnswer(answersArray, answerToCheck) {
@@ -112,6 +125,11 @@
                 const { isCourseExam } = this.props;
                 if (isCourseExam) {
                     this.reportAnswersToExam();
+                    this.props.saveAnswerHandler(
+                        this.props.card.id,
+                        this.props.card.type,
+                        this.state.hiddenAnswers
+                    );
                 }
             },
 

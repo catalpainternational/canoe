@@ -25,6 +25,8 @@
             state: {
                 selectedAnswer: {},
                 haveCheckedAnswers: false,
+                oldProps: undefined,
+                newProps: undefined,
             },
 
             TRANSLATIONS: {
@@ -32,33 +34,32 @@
             },
 
             onMounted(props, state) {
+                this.state.newProps = props;
                 this.restoreSavedAnswer();
             },
 
             onUpdated(props, state) {
-                const isThereASelectedAnswer = (answer) => Object.keys(answer).length > 0;
-                if (!isThereASelectedAnswer(state.selectedAnswer)) {
+                // there's no easy/obvious way to observe specific prop changes
+                // in riot, so this is a hacky (but working!) way to check if
+                // the card id has been changed in order to restore saved answers
+                this.state.oldProps = this.state.newProps;
+                this.state.newProps = props;
+                if (this.state.oldProps && this.state.oldProps.card.id !== this.state.newProps.card.id) {
                     this.restoreSavedAnswer();
                 }
             },
 
             restoreSavedAnswer() {
-                const { savedAnswer } = this.props;
-                if (!savedAnswer) {
+                const { savedAnswers, card } = this.props;
+                if (!savedAnswers.length) {
                     return;
                 }
-                // this is causing state bugs in JID, where when two questions
-                // side by side have the same possible answers (for instance
-                // true/false or agree/disagree), when you click through to the second
-                // question, your answer from the previous question will be selected
-                // (without you selecting anything). This is obviously not ideal
-                // behaviour. This restoreSavedAnswer logic doesn't work as expected for
-                // paging back through questions anyway, so perhaps it's best to simply
-                // comment out this code for now (due to time constraints) and mark it as
-                // a big TODO to look at without the added pressure of a deadline.
-                // this.update({
-                //     selectedAnswer: savedAnswer[0],
-                // });
+
+                const answerIndex = savedAnswers.findIndex(it => it.questionId === card.id);
+                if (answerIndex > -1) {
+                    this.state.selectedAnswer = savedAnswers[answerIndex].answer;
+                    this.props.updateAnswerHandler(savedAnswers[answerIndex].answer);
+                }
             },
 
             doAnswersMatch(left, right) {
@@ -97,6 +98,8 @@
                 if (isCourseExam) {
                     const isCorrect = this.gradeAnswer(answer);
                     this.props.recordAnswer({ isCorrect, answers: [answer] });
+
+                    this.props.saveAnswerHandler(this.props.card.id, this.props.card.type, answer);
 
                     // To avoid update bugs, you must reset the answer between
                     // answer selections.

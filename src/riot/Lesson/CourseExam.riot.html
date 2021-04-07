@@ -21,7 +21,9 @@
             card="{state.card}"
             answers="{state.cardAnswers}"
             recordAnswer="{recordAnswer}"
-            savedAnswer="{state.currentAnswer.answers}"
+            savedAnswers="{state.selectedAnswers}"
+            saveAnswerHandler="{updateSavedAnswers}"
+            updateAnswerHandler="{updateCurrentAnswer}"
         ></TestSingleAnswer>
         <TestMultipleAnswer
             if="{state.card.type !== SINGLE_CHOICE}"
@@ -29,7 +31,9 @@
             card="{state.card}"
             answers="{state.cardAnswers}"
             recordAnswer="{recordAnswer}"
-            savedAnswer="{state.currentAnswer.answers}"
+            savedAnswers="{state.selectedAnswers}"
+            saveAnswerHandler="{updateSavedAnswers}"
+            updateAnswerHandler="{updateCurrentAnswer}"
         ></TestMultipleAnswer>
     </LessonFrame>
     <div if="{ !isNaN(state.cardNumber) && course.ready }" class="bottom-buttons">
@@ -84,6 +88,7 @@
         export default {
             state: {
                 currentAnswer: {},
+                selectedAnswers: [],
             },
 
             components: {
@@ -171,6 +176,31 @@
                 );
 
                 this.update({ currentAnswer: response });
+            },
+
+            updateSavedAnswers(questionId, questionType, answer) {
+                const answersArray = this.state.selectedAnswers;
+                const arrayIndex = answersArray.findIndex(it => it.questionId === questionId);
+                if (arrayIndex > -1) {
+                    // delete the entry so it can be replaced
+                    answersArray.splice(arrayIndex, 1);
+                }
+                let newEntry;
+                if (questionType === this.SINGLE_CHOICE) {
+                    newEntry = { questionId, answer }
+                } else {
+                    newEntry = { questionId, answers: answer }
+                }
+                answersArray.push(newEntry);
+                this.state.selectedAnswers = answersArray;
+            },
+
+            updateCurrentAnswer(answer, isCorrect = undefined) {
+                const answers = Array.isArray(answer) ? [...answer] : [answer];
+                this.state.currentAnswer = {
+                    answers,
+                    isCorrect: isCorrect === undefined ? answer.correct : isCorrect,
+                }
             },
 
             previousExamCard() {
