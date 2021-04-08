@@ -65,7 +65,7 @@
                 resources: () => gettext("Resources"),
                 noArticlesYet: () => gettext("There are no resources yet. Check back soon!"),
             },
-            
+
             onBeforeMount() {
                 this.page = getRoute().page;
                 this.state.isLoading = !this.page.ready;
@@ -96,7 +96,7 @@
                 const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,
                     resource.title,
-                    resource.description
+                    resource.description ? resource.description : ''
                 );
 
                 const lowercaseTags = resource.tags.map((tag) =>
