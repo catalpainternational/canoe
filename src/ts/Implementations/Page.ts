@@ -14,7 +14,9 @@ import { BACKEND_BASE_URL } from "js/urls";
 import {
     getPageData as getPageDataFromStore,
     storePageData,
+    getStoredPageCompletionDate,
 } from "ReduxImpl/Interface";
+import { persistCompletion } from "js/actions/Completion";
 
 const logger = new Logger("Page");
 
@@ -92,7 +94,7 @@ export class Page extends PublishableItem implements StorableItem {
      */
     async prepare(): Promise<void> {
         const response = await this.getResponse();
-        response
+        return response
             .json()
             .then((manifestData: any) => {
                 this.saveToStore(manifestData);
@@ -297,6 +299,45 @@ export class Page extends PublishableItem implements StorableItem {
         );
     }
 
+    /** returns data to be stored with thi page completion */
+    get completionData(): Record<string, any> {
+        return {
+            title: this.title,
+        };
+    }
+    /** sets a page as complete - TODO: set incomplete */
+    set complete(complete: boolean) {
+        persistCompletion(this.id, this.completionData);
+    }
+    /** if a page has been marked as complete */
+    get complete(): boolean {
+        return this.completeDate !== undefined;
+    }
+    /** when a page was last marked as complete */
+    get completeDate(): Date | undefined {
+        return getStoredPageCompletionDate(this.id);
+    }
+
+    /** whether this page is notstarted, in progress or complete */
+    get progressStatus(): ProgressStatus {
+        if (this.complete) {
+            return "complete";
+        } else if (this.childPages.find((c) => c.complete) === undefined) {
+            return "not-started";
+        } else {
+            return "in-progress";
+        }
+    }
+    /** the data to show in a progress bar for this page
+     * if false show no progress bar
+     */
+    get progressValues(): Record<string, number> | false {
+        return {
+            min: this.childPages.filter((c) => c.complete).length,
+            max: this.childPages.length,
+        };
+    }
+
     getAssetsByIdAndType(
         id: number | string,
         assetType: string
@@ -326,3 +367,5 @@ export class Page extends PublishableItem implements StorableItem {
     getAudioRenditions = (id: number | string): TAssetEntry | undefined =>
         this.getAssetsByIdAndType(id, "audio");
 }
+
+type ProgressStatus = "not-started" | "in-progress" | "complete";

@@ -1,14 +1,10 @@
 import {
-    signalCompletionsAreReady,
-    signalCompletionsAreNotReady,
+    completionsReady,
 } from "ReduxImpl/Interface";
-import { pullExamDataIntoMemory, clearInMemoryExamData } from "js/ExamInterface";
-import {
-    pullCompletionsIntoMemory,
-    clearInMemoryCompletions,
-} from "js/CompletionInterface";
-import { updateApi, updateIdb } from "Actions/actions_store";
-import { closeAndDeleteDB } from "Actions/actions_idb";
+import { readCompletionsIntoState, clearStateCompletions } from "js/actions/Completion";
+import { readExamDataIntoState, clearStateExamData } from "js/actions/exam";
+import { updateApi, updateIdb } from "js/actions/actions_store";
+import { closeAndDeleteDB } from "js/actions/actions_idb";
 import { isAuthenticated, subscribeToStore } from "ReduxImpl/Interface";
 
 const EVERY_FIVE_MINUTES = 1000 * 60 * 5;
@@ -18,27 +14,28 @@ let currentAuthenticatedState = false;
 
 export function initialiseCompletions() {
     currentAuthenticatedState = isAuthenticated();
-
-    updateIdb()
-        .then(pullCompletionsIntoMemory)
-        .then(pullExamDataIntoMemory)
+    readFromStoreAndStartPolling()
         .then(() => {
-            signalCompletionsAreReady();
-
-            if (isAuthenticated()) {
-                startUpdateApiPolling();
-            }
-
             subscribeToStore(storeListener);
         });
-};
+}
+
+function readFromStoreAndStartPolling() {
+    return updateIdb()
+        .then(readCompletionsIntoState)
+        .then(readExamDataIntoState)
+        .then(() => {
+            completionsReady();
+            startUpdateApiPolling();
+        });
+}
 
 function storeListener() {
     const newAuthenticationState = isAuthenticated();
     if (newAuthenticationState !== currentAuthenticatedState) {
         currentAuthenticatedState = newAuthenticationState;
         if (newAuthenticationState) {
-            startUpdateApiPolling();
+            readFromStoreAndStartPolling();
         } else {
             clearAppData();
         }
@@ -46,13 +43,14 @@ function storeListener() {
 }
 
 async function startUpdateApiPolling() {
-    completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
+    if (isAuthenticated()) {
+        completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
+    }
 }
 
 async function clearAppData() {
     window.clearInterval(completionPoller);
-    signalCompletionsAreNotReady();
-    clearInMemoryCompletions();
-    clearInMemoryExamData();
+    clearStateCompletions();
+    clearStateExamData();
     await closeAndDeleteDB();
 }

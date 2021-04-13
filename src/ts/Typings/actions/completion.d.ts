@@ -1,23 +1,9 @@
-// js/actions/completion
+// js/actions/Completion
 
 /** Note that the module name here MUST match how it's used in the .ts files */
-declare module "js/actions/completion" {
-    export function getFinishedLessonSlugs(
-        courseSlug: string,
-        lessonSlugs: string[]
-    ): string[];
-    export function getLatestCompletionInCourse(
-        courseSlug: string,
-        lessonSlugs: string[]
-    ): any;
-    export function setComplete(
-        courseSlug: string,
-        lessonSlug: string,
-        section: string
+declare module "js/actions/Completion" {
+    export function persistCompletion(
+        pageId: string | number,
+        extraDataObject: Record<string, any>
     ): void;
-    export function isComplete(
-        courseSlug: string,
-        lessonSlug: string,
-        module: string | undefined
-    ): boolean;
 }

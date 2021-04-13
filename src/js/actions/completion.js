@@ -1,141 +1,45 @@
 /* Completion module
  * The access point for interface components to set and query completion
- * of content items.
  * All interface methods should be synchronous.
  * Depends on the action_store module to persist information
  */
 
-import { storeCompletion, getCompletions } from "./actions_store";
-import { ON_ACTION_CHANGE, ON_COMPLETION_CHANGE } from "js/Events";
-import { intersection } from "js/SetMethods";
+import { storePageComplete, bumpCompletionsStoreVersion } from "js/redux/Interface";
+import { saveAndPostAction, readActions, COMPLETION_ACTION_TYPE } from "./actions_store";
+import Logger from "../../ts/Logger";
 
-const courses = new Map();
+const logger = new Logger("Completions");
 
-// read completion actions from idb to update in memory values
-window.addEventListener(ON_ACTION_CHANGE, pullCompletionsIntoMemory);
-
-export const clearInMemoryCompletions = () => {
-    courses.clear();
+/** Clear the in memory store of completions - for use on logout */
+export const clearStateCompletions = () => {
+    clearCompletions();
 };
 
-// read completions from store and initialise
-export async function pullCompletionsIntoMemory() {
+/** read completions from store and update redux state */
+export async function readCompletionsIntoState() {
+    let actions;
     try {
-        const actions = await getCompletions();
-        actions.forEach((action) => {
-            setCompleteInternal(action.course, action.lesson, action.section, action.date);
-        });
-        window.dispatchEvent(new CustomEvent(ON_COMPLETION_CHANGE));
+        actions = await readActions(COMPLETION_ACTION_TYPE);
     } catch (e) {
-        console.error(err);
+        logger.warn("Error in reading completions from idb %o", e);
+    }
+    const actionsToStore = actions.filter((a) => a.pageId );
+    actionsToStore.forEach((action) => {
+        // update completions without causing a riot update
+        storePageComplete(action.pageId, action.date, false);
+    });
+    if (actionsToStore.length) {
+        // cause riot to update
+        bumpCompletionsStoreVersion();
     }
 }
 
-export function setComplete(course, lesson, section, extraDataObject = {}) {
-    setCompleteInternal(course, lesson, section, new Date());
+/** store a page completion, persist locally, and send to api */
+export function persistCompletion(pageId, extraDataObject = {}) {
+    const extraData = Object.assign(extraDataObject, {date: new Date()});
+    logger.info("setting page %s to complete", pageId);
+    storePageComplete(pageId, extraData.date);
 
     // store the action ( via idb and api )
-    storeCompletion({ course, lesson, section, ...extraDataObject });
+    saveAndPostAction(COMPLETION_ACTION_TYPE, { pageId, ...extraData });
 }
-
-function setCompleteInternal(course, lesson, section, date) {
-    const courseMap = getCourseMap(course);
-    const lessonMap = getLessonMap(courseMap, lesson);
-    lessonMap.set(section, date);
-}
-
-const isLaterThanCutoff = (completion) => {
-    if (!completion) {
-        return false;
-    }
-    const dateString = `${process.env.DONT_SHOW_COMPLETIONS_AFTER}`;
-    const dontShowActionsFromBeforeThisDate = new Date(dateString);
-    return completion >= dontShowActionsFromBeforeThisDate;
-};
-
-function isLessonComplete(lessonMap) {
-    const contentCompletion = lessonMap.get("content");
-
-    return isLaterThanCutoff(contentCompletion);
-}
-
-function getCourseMap(course) {
-    if (!courses.has(course)) {
-        courses.set(course, new Map());
-    }
-    return courses.get(course);
-}
-
-function getLessonMap(courseMap, lesson) {
-    if (!courseMap.has(lesson)) {
-        courseMap.set(lesson, new Map());
-    }
-    return courseMap.get(lesson);
-}
-
-export function isComplete(course, lesson, section) {
-    const courseMap = getCourseMap(course);
-    const lessonMap = getLessonMap(courseMap, lesson);
-    if (section) {
-        const sectionCompletion = lessonMap.get(section);
-        return isLaterThanCutoff(sectionCompletion);
-    } else {
-        return isLessonComplete(lessonMap);
-    }
-}
-
-export const isTheCourseComplete = (courseSlug, lessonSlugs) => {
-    const numberOfCompleteLessons = getFinishedLessonSlugs(courseSlug, lessonSlugs).length;
-    const numberOfLessonsInCourse = lessonSlugs.length;
-    return numberOfCompleteLessons === numberOfLessonsInCourse;
-};
-
-export const getFinishedLessonSlugs = (courseSlug, liveLessonSlugs) => {
-    const courseMap = getCourseMap(courseSlug);
-    const lessonsInCourseMap = new Set(courseMap.keys());
-    const liveLessons = new Set(liveLessonSlugs);
-    const liveLessonsInCourseMap = intersection(lessonsInCourseMap, liveLessons);
-
-    const finishedLessons = [];
-    for (const lessonSlug of liveLessonsInCourseMap) {
-        const lessonMap = courseMap.get(lessonSlug);
-        const isExamComplete = () => isComplete(courseSlug, lessonSlug, lessonSlug);
-        if (isLessonComplete(lessonMap) || isExamComplete()) {
-            finishedLessons.push(lessonSlug);
-        }
-    }
-    return finishedLessons;
-};
-
-export const getLatestCompletionInCourse = (courseSlug, lessonSlugs) => {
-    let latest = null;
-    if (!courses.has(courseSlug)) {
-        return latest;
-    }
-
-    const liveSlugsSet = new Set(lessonSlugs);
-
-    const courseMap = courses.get(courseSlug);
-    for (const [lessonSlug, lessonMap] of courseMap.entries()) {
-        if (!liveSlugsSet.has(lessonSlug)) {
-            continue;
-        }
-
-        for (const [sectionSlug, completionDate] of lessonMap.entries()) {
-            if (latest === null || latest.completionDate < completionDate) {
-                latest = { courseSlug, lessonSlug, sectionSlug, completionDate };
-            }
-        }
-    }
-    return latest;
-};
-
-export const getLatestInCompletionArray = (completionArray) => {
-    let latest = null;
-    for (const completion of completionArray) {
-        if (!latest || completion.completionDate > latest) {
-            latest = completion;
-        }
-    }
-    return latest;
-};

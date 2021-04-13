@@ -59,8 +59,9 @@
                     <Card
                         title="{examTitle()}"
                         description="{examDescription()}"
-                        link="{ `${course.loc_hash}:exam` }"
+                        link="{ course.examLink }"
                         status="{examStatus(course)}"
+                        progress-values="{ false }"
                     ></Card>
                 </div>
             </template>
@@ -165,7 +166,7 @@
             },
 
             lessonStatus(lesson) {
-                if (lesson.isFinished()) {
+                if (lesson.complete) {
                     return "complete";
                 } else {
                     return "not-started";

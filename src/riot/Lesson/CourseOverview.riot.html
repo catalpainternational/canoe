@@ -1,6 +1,6 @@
 <CourseOverview>
-    <CoursePage if="{!state.showExam}"></CoursePage>
-    <CourseExam if="{state.showExam}"></CourseExam>
+    <CoursePage if="{ course.ready && !state.showExam }"></CoursePage>
+    <CourseExam if="{ course.ready && state.showExam }"></CourseExam>
 
     <script>
         import CoursePage from "RiotTags/WagtailPages/CoursePage.riot.html";
@@ -19,6 +19,7 @@
                 this.readHash();
             },
             readHash() {
+                this.course = getRoute().page;
                 this.state.showExam = getRoute().riotHash[0] === EXAM_MODULE;
             }
         }};

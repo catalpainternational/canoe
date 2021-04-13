@@ -2,42 +2,39 @@
     <div class="answers-block">
         <h4><raw html="{ TRANSLATIONS.checkAllAnswers() }"></raw></h4>
         <ol>
-            <li each="{(answer, index) in props.card.answers}" onclick="{() => selectAnswer(answer)}">
+            <li each="{(answer, index) in card.answers}" onclick="{() => selectAnswer(answer)}">
                 <div class="checkbox-container {answerClass(answer)}">
                     <div class="checkbox">
-                        <span>{state.alphabet[index]}</span>
+                        <span>{ alphabet[index] }</span>
                     </div>
-                    <p class="label">{answer.text}</p>
+                    <p class="label">{ answer.text }</p>
                 </div>
             </li>
         </ol>
     </div>
-    <h4 if="{state.visibleAnswers.length > 0}">{ TRANSLATIONS.checkCorrect() }</h4>
+    <h4 if="{ getAnswer() }">{ TRANSLATIONS.checkCorrect() }</h4>
     <button
         if="{!props.isCourseExam}"
         class="btn-primary"
-        onclick="{showResults}"
-        disabled="{state.hiddenAnswers.size === 0 && state.visibleAnswers.size === 0}"
+        onclick="{ showResults }"
+        disabled="{ !getAnswer() }"
     >
         { TRANSLATIONS.checkAnswers() }
     </button>
 
     <script>
-        import { dispatchTestAnswerEvent } from "js/Events";
-        import { doesTheArrayContainTheObject } from "js/utilities";
         import Raw from "RiotTags/Components/Raw.riot.html";
 
-        const doAnswersMatch = (left, right) => {
-            return left.text === right.text;
-        };
+        import { getRoute, getExamAnswer, storeExamAnswer } from "ReduxImpl/Interface";
+
+        const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N',
+            'O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
         export default {
+            components: {
+                raw: Raw,
+            },
             state: {
-                hiddenAnswers: [],
-                visibleAnswers: [],
-                numberTotalCorrectAnswers: 0,
-                alphabet: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N',
-                    'O','P','Q','R','S','T','U','V','W','X','Y','Z'],
             },
 
             TRANSLATIONS: {
@@ -47,99 +44,97 @@
                 checkAnswers: () => gettext("Check answers"),
             },
 
-            components: {
-                raw: Raw,
+            get alphabet() {
+                return alphabet;
+            },
+            get route() {
+                return getRoute();
+            },
+            get cardIndex() {
+                return parseInt(this.route.riotHash[1]) - 1;
+            },
+            get page() {
+                return this.route.page;
+            },
+            get card() {
+                return this.page.examCards 
+                    ? this.page.examCards[this.cardIndex]
+                    : this.page.cards[this.cardIndex];
             },
 
-            onMounted(props, state) {
-                const { card } = props;
-                const numberTotalCorrectAnswers = card.answers.filter(a => a.correct).length;
-                this.update({ numberTotalCorrectAnswers });
-
-                this.restoreSavedAnswer();
+            getAnswer() {
+                return getExamAnswer(
+                    this.page.id,
+                    this.card.id
+                );
             },
-
-            restoreSavedAnswer() {
-                const { savedAnswer } = this.props;
-
-                if (!savedAnswer) {
-                    this.update({
-                        hiddenAnswers: [],
-                    })
-                    return;
-                }
-
-                const hiddenAnswers = savedAnswer;
-                this.update({
-                    hiddenAnswers,
-                });
-            },
-
-            doesArrayIncludeAnswer(answersArray, answerToCheck) {
-                return doesTheArrayContainTheObject(answersArray, answerToCheck, doAnswersMatch);
+            setAnswer(answer) {
+                storeExamAnswer(
+                    this.page.id,
+                    this.card.id,
+                    answer,
+                )
             },
 
             showResults() {
-                let { visibleAnswers, hiddenAnswers } = this.state;
-
-                visibleAnswers = [...visibleAnswers, ...hiddenAnswers];
-                hiddenAnswers = [];
-                this.update({ visibleAnswers, hiddenAnswers });
-
-                const isQuestionComplete = this.gradeAnswers(visibleAnswers);
-                this.props.toggleModal(true, {}, isQuestionComplete);
-
-                if (isQuestionComplete) {
-                    this.update({
-                        visibleAnswers: [],
-                        hiddenAnswers: [],
-                    });
+                if ( this.props.toggleModal ) {
+                    this.props.toggleModal(true);
                 }
             },
 
             answerClass(answer) {
-                if (this.doesArrayIncludeAnswer(this.state.visibleAnswers, answer)
-                    && answer.correct) return "answer-success";
-                if (this.doesArrayIncludeAnswer(this.state.visibleAnswers, answer)
-                    && !answer.correct) return "answer-warning";
-                if (this.doesArrayIncludeAnswer(this.state.hiddenAnswers, answer)
-                    && !this.doesArrayIncludeAnswer(this.state.visibleAnswers, answer)) return "answer-pending";
+                const selected = this.getAnswer();
+                if (selected !== undefined 
+                    && selected.answers.find(a=> a.text === answer.text)) {
+                    // this answer has been selected
+                    if (this.page.hasExam || !this.state.haveCheckedAnswers) {
+                        // we are in an exam or we have not checked answers yet
+                        return "answer-pending";
+                    } else {
+                        // show selection feedback
+                        if (!answer.correct) {
+                            return "answer-warning";
+                        } else {
+                            return "answer-success";
+                        }
+                    }
+                } else {
+                    return "";
+                }
             },
 
             selectAnswer(answer) {
-                this.addSelectionToAnswers(answer);
+                const storedAnswerData = this.getAnswer();
 
-                const { isCourseExam } = this.props;
-                if (isCourseExam) {
-                    this.reportAnswersToExam();
-                }
-            },
-
-            addSelectionToAnswers(answer) {
-                let { visibleAnswers, hiddenAnswers } = this.state;
-
-                if (this.doesArrayIncludeAnswer(visibleAnswers, answer)) {
-                    visibleAnswers = visibleAnswers.filter(
-                        visible => !doAnswersMatch(visible, answer)
-                    );
-                } else if (this.doesArrayIncludeAnswer(hiddenAnswers, answer)) {
-                    hiddenAnswers = hiddenAnswers.filter(hidden => !doAnswersMatch(hidden, answer));
+                const nextAnswers = storedAnswerData || {
+                    question: {
+                        id: this.card.id,
+                        text: this.card.question,
+                    },
+                    answers: [], 
+                };
+                const selectedAlready = nextAnswers.answers.findIndex(a => a.text === answer.text);
+                if (selectedAlready !== -1) {
+                    nextAnswers.answers.splice(selectedAlready, 1);
                 } else {
-                    hiddenAnswers.push(answer);
+                    nextAnswers.answers.push(answer);
                 }
-
-                this.update({ visibleAnswers, hiddenAnswers });
+                nextAnswers.correct = (
+                    nextAnswers.answers.every(a => a.correct)
+                    && this.card.answers.filter(a => a.correct).length == nextAnswers.answers.length
+                );
+                this.state.haveCheckedAnswers = false;
+                this.setAnswer(nextAnswers);
             },
 
-            reportAnswersToExam() {
-                const { visibleAnswers, hiddenAnswers } = this.state;
-                const answers = [...visibleAnswers, ...hiddenAnswers];
-                const isCorrect = this.gradeAnswers(answers);
-                this.props.recordAnswer({ isCorrect, answers });
-            },
-
-            gradeAnswers(answers) {
-                console.assert(Array.isArray(answers), `"answers" must come in as an Array`);
+            showResults() {
+                this.update({
+                    haveCheckedAnswers: true
+                });
+                if ( this.props.toggleModal ) {
+                    this.props.toggleModal(true);
+                }
+                /*console.assert(Array.isArray(answers), `"answers" must come in as an Array`);
 
                 const numberIncorrectAnswersChosen = answers.filter(a => !a.correct).length;
                 const numberCorrectAnswersChosen = answers.filter(a => a.correct).length;
@@ -147,7 +142,8 @@
                 const isQuestionComplete =
                     numberCorrectAnswersChosen === this.state.numberTotalCorrectAnswers &&
                     numberIncorrectAnswersChosen === 0;
-                return isQuestionComplete;
+                    */
+                return false;
             },
         };
     </script>

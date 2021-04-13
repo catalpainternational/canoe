@@ -5,14 +5,14 @@ import { addManifestAction, addPageAction } from "./ducks/Site";
 import { changeServiceWorkerState as serviceWorkerStateAction } from "./ducks/ServiceWorker";
 import { toggleGuestBanner as toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupport as signalBrowserSupportAction } from "./ducks/BrowserSupport";
-import { signalCompletionsAreReady as signalCompletionsReadyAction } from "./ducks/Actions";
+import { clearCompletionsAction, completionsReadyAction, completionAction, bumpCompletionsVersionAction } from "./ducks/Completion";
+import { clearExamScoresAction, storeExamScoreAction, storeExamAnswerAction, bumpExamVersionAction, clearPageAnswersAction } from "./ducks/Exam";
 import { changeOnlineAction } from "./ducks/Online";
 import {
     setAuthenticatedState,
     setUnAuthenticatedState,
 } from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
-import { addItemStorageStatusAction } from "./ducks/ItemStorageStatus";
 
 export const storePageData = (pageId, pageData) => {
     store.dispatch(addPageAction(pageId, pageData));
@@ -79,17 +79,58 @@ export const getLesson = (lessonId) => {
     return lesson;
 };
 
-export const signalCompletionsAreReady = () => {
-    store.dispatch(signalCompletionsReadyAction(true));
+export const completionsReady = () => {
+    store.dispatch(completionsReadyAction(true));
 };
+export const clearStoredCompletions = () => {
+    store.dispatch(clearCompletionsAction());
+};
+export const storePageComplete = (pageId, time, bump=true) => {
+    store.dispatch(completionAction(pageId, time, bump));
+}
+export const getStoredPageCompletionDate = (pageId) => {
+    const pageIdInt = parseInt(pageId);
+    const s = store.getState();
+    return s.completion.pageIdCompletions[pageIdInt];
+}
+export const bumpCompletionsStoreVersion = () => {
+    store.dispatch(bumpCompletionsVersionAction());
+}
+export const getCompletionsStoreVersion = () => {
+    return store.getState().completion.version;
+}
 
-export const signalCompletionsAreNotReady = () => {
-    store.dispatch(signalCompletionsReadyAction(false));
-};
+export const clearExamStore = () => {
+    store.dispatch(clearExamScoresAction());
+}
+export const storeExamScore = (pageId, score, bump=true) => {
+    store.dispatch(storeExamScoreAction(pageId, score, bump));
+}
+export const storeExamAnswer = (examPageId, questionId, answer) => {
+    store.dispatch(storeExamAnswerAction(examPageId, questionId, answer));
+}
+export const bumpExamStoreVersion = () => {
+    store.dispatch(bumpExamVersionAction());
+}
+export const clearPageAnswers = (pageId) => {
+    store.dispatch(clearPageAnswersAction(pageId));
+} 
+export const getExamScoresVersion = () => {
+    return store.getState().exams.version;
+}
+export const getExamScores = (pageId) => {
+    return store.getState().exams.scores[pageId] || [];
+}
+export const getExamAnswer = (examPageId, questionId) => {
+    const s = store.getState();
+    const answers = s.exams.answers[examPageId] || {};
+    return answers[questionId] || undefined;
+}
+export const getExamAnswers = (examPageId) => {
+    const s = store.getState();
+    return s.exams.answers[examPageId] || {};
+}
 
-export const areCompletionsReady = () => {
-    return store.getState().areCompletionsReady;
-};
 
 export const isOnline = () => {
     return store.getState().online;
@@ -129,33 +170,4 @@ export const getRoute = () => {
 
 export const subscribeToStore = (subscriptionFunction) => {
     return store.subscribe(subscriptionFunction);
-};
-
-export const storeItemStorageStatus = (itemId, itemState) => {
-    store.dispatch(addItemStorageStatusAction(itemId, itemState));
-};
-
-/** Get the publishable item's storage status
- * @returns the publishable item's storage status or null
- * @remarks test for null first, before casting the return `as TItemStorageStatus`
- */
-export const getItemStorageStatus = (itemId) => {
-    const itemStorageStatuses = store.getState().itemStorageStatuses;
-    if (itemStorageStatuses === null) {
-        return itemStorageStatuses;
-    }
-
-    return itemStorageStatuses[itemId] || null;
-};
-
-/** Get the status for all publishable items storage statuses
- * @returns each publishable item's storage status as an array
- */
-export const getItemStorageStatuses = () => {
-    const itemStorageStatuses = store.getState().itemStorageStatuses;
-    if (itemStorageStatuses === null) {
-        return [];
-    }
-
-    return itemStorageStatuses;
 };

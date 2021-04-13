@@ -25,7 +25,7 @@
                 { TRANSLATIONS.exam() }
                 <span class="chevron"></span>
             </button>
-            <a href="#{state.lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
+            <a href="#{lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
         </template>
     </div>
     <script>
@@ -34,7 +34,14 @@
         export default {
 
             onBeforeMount(props, state) {
-                this.state.lesson = getRoute().page;
+                this.lesson = getRoute().page;
+            },
+
+            onMounted() {
+                // this page needs the course details available
+                if (!this.lesson.course.ready) {
+                    this.lesson.course.prepare().then(this.update());
+                }
             },
 
             TRANSLATIONS: {
@@ -47,29 +54,29 @@
             },
 
             courseHasExam() {
-                return this.state.lesson.course.hasExam;
+                return this.lesson.course.hasExam;
             },
 
             isPrelearningExam() {
-                return this.state.lesson.course.data.exam_type === 'prelearning';
+                return this.lesson.course.data.exam_type === 'prelearning';
             },
 
             isCourseComplete() {
-                return this.state.lesson.course.numberOfLessons
-                    === this.state.lesson.course.numberOfFinishedLessons;
+                return this.lesson.course.numberOfLessons
+                    === this.lesson.course.numberOfFinishedLessons;
             },
 
             goToCourseOverview() {
-                location.hash = this.state.lesson.course.loc_hash;
+                location.hash = this.lesson.course.loc_hash;
             },
 
             goToCourseExam() {
-                location.hash = `${this.state.lesson.course.loc_hash}:exam`;
+                location.hash = this.lesson.course.examLink;
             },
 
             lessonCompleteMessage() {
                 // message on completion of a lesson %1 is replaced by the lesson title
-                return gettext('You just completed the lesson "%1"', this.state.lesson.title);
+                return gettext('You just completed the lesson "%1"', this.lesson.title);
             },
 
             takeCourseExamMessage() {
@@ -77,13 +84,13 @@
                 if (this.isPrelearningExam()) {
                     return gettext(
                         'Take the pre-learning survey to complete the course "%1"',
-                        this.state.lesson.course.title
+                        this.lesson.course.title
                     )
                 }
 
                 return gettext(
                     'Take the exam now to complete the course "%1"',
-                    this.state.lesson.course.title
+                    this.lesson.course.title
                 );
             },
         };

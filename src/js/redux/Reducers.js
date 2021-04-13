@@ -5,11 +5,11 @@ import languageReducer from "./ducks/i18n";
 import serviceWorkerReducer from "./ducks/ServiceWorker";
 import guestBannerReducer from "./ducks/GuestBanner";
 import browserSupportReducer from "./ducks/BrowserSupport";
-import areCompletionsReady from "./ducks/Actions";
 import online from "./ducks/Online";
 import identity from "./ducks/Identity";
 import route from "./ducks/Route";
-import itemStorageStatuses from "./ducks/ItemStorageStatus";
+import completion from "./ducks/Completion";
+import exams from "./ducks/Exam";
 
 export const reducers = combineReducers({
     ...siteReducer,
@@ -17,9 +17,9 @@ export const reducers = combineReducers({
     ...serviceWorkerReducer,
     ...guestBannerReducer,
     ...browserSupportReducer,
-    ...areCompletionsReady,
     ...online,
     ...identity,
     ...route,
-    ...itemStorageStatuses,
+    ...completion,
+    ...exams,
 });

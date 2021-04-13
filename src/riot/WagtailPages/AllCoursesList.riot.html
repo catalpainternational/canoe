@@ -28,12 +28,7 @@
             <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
             <div class="card-container full-width">
                 <Card
-                    status="{courseStatus(page.currentCourse)}"
-                    title="{page.currentCourse.title}"
-                    link="{page.currentCourse.loc_hash}"
-                    progressValue="{page.currentCourse.numberOfFinishedLessons}"
-                    progressMax="{page.currentCourse.numberOfLessons}"
-                    imageUrl="{state.currentCourse.cardImage}"
+                    contentItem="{ page.currentCourse }"
                     getCachedPromise="{ course.isAvailableOffline() }"
                 ></Card>
             </div>
@@ -42,27 +37,13 @@
         <div class="card-container">
             <template each="{ course in page.courses }">
                 <Card
-                    if="{ !course.isComplete && showCourse(course) }"
-                    status="{courseStatus(course)}"
-                    title="{course.title}"
-                    link="{course.loc_hash}"
-                    progress-value="{course.numberOfFinishedLessons}"
-                    progress-max="{course.numberOfLessons}"
-                    progressMax="{course.numberOfLessons}"
-                    imageUrl="{course.cardImage}"
+                    if="{ !course.complete && showCourse(course) }"
                     contentItem="{ course }"
                 ></Card>
             </template>
             <template each="{ course in page.courses }">
                 <Card
-                    if="{ course.isComplete && showCourse(course) }"
-                    status="{courseStatus(course)}"
-                    title="{course.title}"
-                    link="{course.loc_hash}"
-                    progress-value="{course.numberOfFinishedLessons}"
-                    progress-max="{course.numberOfLessons}"
-                    progressMax="{course.numberOfLessons}"
-                    imageUrl="{course.cardImage}"
+                    if="{ course.complete && showCourse(course) }"
                     contentItem="{ course }"
                 ></Card>
             </template>

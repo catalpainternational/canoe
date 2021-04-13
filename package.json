@@ -103,7 +103,6 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.8.4",
-        "Actions": "link:src/js/actions",
         "ReduxImpl": "link:src/js/redux",
         "RiotTags": "link:src/riot/",
         "babel-polyfill": "^6.26.0",

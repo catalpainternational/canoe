@@ -1,8 +1,8 @@
 <TestSingleAnswer>
     <ol>
         <li
-            each="{answer in props.card.answers}"
-            class="radio {doAnswersMatch(answer, state.selectedAnswer) && howToStyleThe(answer)}"
+            each="{answer in card.answers}"
+            class="radio { answerItemClass(answer) }"
             onclick="{() => selectAnswer(answer)}"
         >
             <p>{answer.text}</p>
@@ -10,112 +10,90 @@
     </ol>
 
     <button
-        if="{!props.isCourseExam}"
+        if="{ !page.hasExam }"
         class="btn-primary"
-        onclick="{showResults}"
-        disabled="{state.selectedAnswer === {}}"
+        onclick="{ showResults }"
+        disabled="{ getAnswer() === undefined }"
     >
         { TRANSLATIONS.checkAnswer() }
     </button>
 
     <script>
-        import { dispatchTestAnswerEvent } from "js/Events";
+        import { getRoute, getExamAnswer, storeExamAnswer } from "ReduxImpl/Interface";
+        function TestSingleAnswer() {
+            return {
+                state: {
+                    haveCheckedAnswers: false,
+                },
+                TRANSLATIONS: {
+                    checkAnswer: () => gettext("Check answer"),
+                },
+                get route() {
+                    return getRoute();
+                },
+                get cardIndex() {
+                    return parseInt(this.route.riotHash[1]) - 1;
+                },
+                get page() {
+                    return this.route.page;
+                },
+                get card() {
+                    return this.page.examCards 
+                        ? this.page.examCards[this.cardIndex]
+                        : this.page.cards[this.cardIndex];
+                },
 
-        export default {
-            state: {
-                selectedAnswer: {},
-                haveCheckedAnswers: false,
-            },
+                getAnswer() {
+                    return getExamAnswer(
+                        this.page.id,
+                        this.card.id
+                    );
+                },
+                setAnswer(answer) {
+                    storeExamAnswer(
+                        this.page.id,
+                        this.card.id,
+                        answer
+                    )
+                },
 
-            TRANSLATIONS: {
-                checkAnswer: () => gettext("Check answer"),
-            },
-
-            onMounted(props, state) {
-                this.restoreSavedAnswer();
-            },
-
-            onUpdated(props, state) {
-                const isThereASelectedAnswer = (answer) => Object.keys(answer).length > 0;
-                if (!isThereASelectedAnswer(state.selectedAnswer)) {
-                    this.restoreSavedAnswer();
-                }
-            },
-
-            restoreSavedAnswer() {
-                const { savedAnswer } = this.props;
-                if (!savedAnswer) {
-                    return;
-                }
-                // this is causing state bugs in JID, where when two questions
-                // side by side have the same possible answers (for instance
-                // true/false or agree/disagree), when you click through to the second
-                // question, your answer from the previous question will be selected
-                // (without you selecting anything). This is obviously not ideal
-                // behaviour. This restoreSavedAnswer logic doesn't work as expected for
-                // paging back through questions anyway, so perhaps it's best to simply
-                // comment out this code for now (due to time constraints) and mark it as
-                // a big TODO to look at without the added pressure of a deadline.
-                // this.update({
-                //     selectedAnswer: savedAnswer[0],
-                // });
-            },
-
-            doAnswersMatch(left, right) {
-                return left.text === right.text;
-            },
-
-            howToStyleThe(answer) {
-                if (this.props.isCourseExam) {
-                    return "selected-pending";
-                }
-
-                if (this.state.haveCheckedAnswers) {
-                    if (!answer.correct) {
-                        return "selected-wrong";
+                answerItemClass(answer) {
+                    const selected = this.getAnswer();
+                    if (selected !== undefined && selected.text === answer.text) {
+                        // this answer has been selected
+                        if (this.page.hasExam || !this.state.haveCheckedAnswers) {
+                            // we are in an exam or we have not checked answers yet
+                            return "selected-pending";
+                        } else {
+                            // show selection feedback
+                            if (!answer.correct) {
+                                return "selected-wrong";
+                            } else {
+                                return "selected";
+                            }
+                        }
                     } else {
-                        return "selected";
+                        return "";
                     }
-                } else {
-                    return "selected-pending";
-                }
+                },
 
-            },
+                selectAnswer(answer) {
+                    this.state.haveCheckedAnswers = false;
+                    this.setAnswer(answer);
+                },
 
-            selectAnswer(answer) {
-                this.update({ selectedAnswer: answer, haveCheckedAnswers: false });
+                showResults() {
+                    this.update({
+                        haveCheckedAnswers: true
+                    });
+                    if (this.props.toggleModal) {
+                        this.props.toggleModal(true);
+                    }
+                },
+            }
+        }
 
-                const eventData = {
-                    lesson: this.props.lessonName,
-                    question: this.props.card.question,
-                    answer: answer.text,
-                    isAnswerCorrect: answer.correct,
-                };
-                dispatchTestAnswerEvent(eventData);
+        export default TestSingleAnswer;
 
-                const { isCourseExam } = this.props;
-                if (isCourseExam) {
-                    const isCorrect = this.gradeAnswer(answer);
-                    this.props.recordAnswer({ isCorrect, answers: [answer] });
-
-                    // To avoid update bugs, you must reset the answer between
-                    // answer selections.
-                    this.state.selectedAnswer = {};
-                }
-            },
-
-            showResults() {
-                this.props.toggleModal(true, this.state.selectedAnswer, this.state.selectedAnswer.correct)
-                this.state.haveCheckedAnswers = true;
-
-                if (this.state.selectedAnswer.correct) {
-                    this.state.selectedAnswer = {};
-                }
-            },
-
-            gradeAnswer(answer) {
-                return answer.correct;
-            },
-        };
     </script>
 </TestSingleAnswer>

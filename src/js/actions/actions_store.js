@@ -5,22 +5,28 @@
 
 import {
     writeAction,
-    readActions,
+    readActions as readIDBActions,
     markActionAsSynced,
     ensureAction,
     unsyncedActions,
 } from "./actions_idb";
 import { postAction, getActions } from "./actions_api";
 import { make_uuid32 } from "./make_uuid32";
-import { ON_ACTION_CHANGE } from "js/Events";
 import { isAuthenticated } from "ReduxImpl/Interface";
+import Logger from "../../ts/Logger"
 
-const COMPLETION_ACTION_TYPE = "completion";
+const logger = new Logger("Actions Store");
+
 const EXAM_ACTION_TYPE = "exam";
-const EXAM_ANSWER_TYPE = `${EXAM_ACTION_TYPE}.answer`;
-const EXAM_FINAL_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
 
-const storeAction = async (actionType, data) => {
+export const COMPLETION_ACTION_TYPE = "completion";
+export const EXAM_ANSWER_TYPE = `${EXAM_ACTION_TYPE}.answer`;
+export const EXAM_FINAL_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
+
+/* saves an action in the persistent local store
+* If authenticated, posts to the API to persist on the server
+*/
+export const saveAndPostAction = async (actionType, data) => {
     const action = {
         type: actionType,
         date: new Date(),
@@ -31,7 +37,7 @@ const storeAction = async (actionType, data) => {
     try {
         await writeAction(action);
     } catch (err) {
-        console.error(err);
+        logger.error(err);
     }
 
     if (!isAuthenticated()) {
@@ -46,35 +52,35 @@ const storeAction = async (actionType, data) => {
             markActionAsSynced(action);
         }
     } catch (err) {
-        console.error(err);
+        logger.error(err);
     }
 };
+/* returns all actions of a specific type from IDB */
+export const readActions = (type) => {
+    return readIDBActions(type);
+}
 
-export const storeExamAnswerInIDB = (data) => {
+export const storeIDBExamAnswer = (data) => {
     storeAction(EXAM_ANSWER_TYPE, data);
 };
 
-export const getExamAnswersFromIdb = () => {
+export const getIDBExamAnswers = () => {
     return readActions(EXAM_ANSWER_TYPE);
 };
 
-export const storeExamScoreInIDB = (courseSlug, finalScore) => {
-    storeAction(EXAM_FINAL_SCORE_TYPE, { course: courseSlug, finalScore });
+export const storeIDBExamScore = (pageId, finalScore) => {
+    storeAction(EXAM_FINAL_SCORE_TYPE, { pageId, finalScore });
 };
 
-export const getExamScoresFromIDB = () => {
+export const getIDBExamScores = () => {
     return readActions(EXAM_FINAL_SCORE_TYPE);
 };
 
-export function storeCompletion(data) {
+export function storeIDBCompletion(data) {
     storeAction(COMPLETION_ACTION_TYPE, data);
 }
 
-export function getCompletions() {
-    // deliver from idb
-    return readActions(COMPLETION_ACTION_TYPE);
-}
-
+/* if authenticated sends all local actions to server API */
 export function updateApi() {
     if (!isAuthenticated()) {
         // don't continue to post the action if we are not logged in!
@@ -98,13 +104,14 @@ export function updateApi() {
         .then((results) => {
             if (results.length) {
                 const succesful = results.filter((r) => r);
-                console.info(
+                logger.info(
                     `${results.length} unsynced items found - ${succesful.length} successfuly synced`
                 );
             }
         });
 }
 
+/* if authenticated gets all server actions and applies them to IDB */
 export async function updateIdb() {
     if (!isAuthenticated()) {
         // don't continue to post the action if we are not logged in!
@@ -115,7 +122,8 @@ export async function updateIdb() {
     const actions = await getActions();
     for (const action of actions) {
         await ensureAction(action);
-        window.dispatchEvent(new CustomEvent(ON_ACTION_CHANGE));
-        console.info("Retrieved and applied some server actions");
+    }
+    if (actions.length) {
+        logger.info("Retrieved and applied some server actions");
     }
 }

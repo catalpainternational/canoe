@@ -9,7 +9,7 @@
             <div if="{state.cardImageUrl}" class="lesson-page-image-wrap">
                 <img
                     crossorigin="anonymous"
-                    src="{state.cardImageUrl}"
+                    src="{ cardImageUrl }"
                     class="lesson-page-image"
                 />
             </div>
@@ -36,20 +36,14 @@
                 start: () => gettext("Start lesson"),
             },
 
-            onBeforeMount(props, state) {
-                this.lesson = getRoute().page;
-                this.state.cardImageUrl = this.lesson.cardImage
+            get lesson() {
+                return getRoute().page;
+            },
+
+            get cardImageUrl() {
+                this.lesson.cardImage
                     ? `${process.env.API_BASE_URL}${this.lesson.cardImage}`
                     : undefined;
-
-            },
-
-            onMounted(props, state) {
-                this.disableBlockedLessonModules();
-            },
-
-            onUpdated() {
-                this.disableBlockedLessonModules();
             },
 
             startLesson() {
@@ -60,24 +54,6 @@
                 location.hash = "#" + this.lesson.course.loc_hash;
             },
 
-            disableBlockedLessonModules() {
-                const ongoingCards = [...document.getElementsByClassName("ongoing")];
-
-                let sliceFrom = 1;
-
-                const cardsToDisable = ongoingCards.slice(sliceFrom);
-                for (const card of cardsToDisable) {
-                    card.classList.add("disabled");
-                }
-            },
-
-            moduleStatus(module) {
-                if (this.lesson.isModuleComplete(module)) {
-                    return "complete";
-                } else {
-                    return "not-started";
-                }
-            },
         }};
 
         LessonPage.components = {
