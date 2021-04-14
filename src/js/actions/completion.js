@@ -5,7 +5,7 @@
  */
 
 import { storePageComplete, bumpCompletionsStoreVersion } from "js/redux/Interface";
-import { saveAndPostAction, readActions, COMPLETION_ACTION_TYPE } from "./actions_store";
+import { saveAndPostAction, readActions, COMPLETION_ACTION_TYPE } from "./ActionsStore";
 import Logger from "../../ts/Logger";
 
 const logger = new Logger("Completions");

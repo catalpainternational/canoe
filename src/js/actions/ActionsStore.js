@@ -4,7 +4,7 @@
  */
 
 import {
-    writeAction,
+    writeAction as writeIdbAction,
     readActions as readIDBActions,
     markActionAsSynced,
     ensureAction,
@@ -23,7 +23,8 @@ export const COMPLETION_ACTION_TYPE = "completion";
 export const EXAM_ANSWER_TYPE = `${EXAM_ACTION_TYPE}.answer`;
 export const EXAM_FINAL_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
 
-/* saves an action in the persistent local store
+/**
+* Saves an action in the persistent local store
 * If authenticated, posts to the API to persist on the server
 */
 export const saveAndPostAction = async (actionType, data) => {
@@ -35,7 +36,7 @@ export const saveAndPostAction = async (actionType, data) => {
     };
 
     try {
-        await writeAction(action);
+        await writeIdbAction(action);
     } catch (err) {
         logger.error(err);
     }
@@ -48,6 +49,7 @@ export const saveAndPostAction = async (actionType, data) => {
     try {
         const isActionSynched = await postAction(action);
         // if response is ok set the record to known in idb
+        // if not ok, we'll try again later
         if (isActionSynched) {
             markActionAsSynced(action);
         }
@@ -55,32 +57,17 @@ export const saveAndPostAction = async (actionType, data) => {
         logger.error(err);
     }
 };
-/* returns all actions of a specific type from IDB */
+
+/**
+* Returns all actions of a specific type
+*/
 export const readActions = (type) => {
     return readIDBActions(type);
 }
 
-export const storeIDBExamAnswer = (data) => {
-    storeAction(EXAM_ANSWER_TYPE, data);
-};
-
-export const getIDBExamAnswers = () => {
-    return readActions(EXAM_ANSWER_TYPE);
-};
-
-export const storeIDBExamScore = (pageId, finalScore) => {
-    storeAction(EXAM_FINAL_SCORE_TYPE, { pageId, finalScore });
-};
-
-export const getIDBExamScores = () => {
-    return readActions(EXAM_FINAL_SCORE_TYPE);
-};
-
-export function storeIDBCompletion(data) {
-    storeAction(COMPLETION_ACTION_TYPE, data);
-}
-
-/* if authenticated sends all local actions to server API */
+/**
+* If authenticated sends all local actions to server API
+*/
 export function updateApi() {
     if (!isAuthenticated()) {
         // don't continue to post the action if we are not logged in!
@@ -111,7 +98,9 @@ export function updateApi() {
         });
 }
 
-/* if authenticated gets all server actions and applies them to IDB */
+/**
+* If authenticated gets all server actions and applies them to IDB
+*/
 export async function updateIdb() {
     if (!isAuthenticated()) {
         // don't continue to post the action if we are not logged in!

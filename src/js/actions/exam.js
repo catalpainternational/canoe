@@ -11,7 +11,7 @@ import {
 import { 
     saveAndPostAction, readActions,
     EXAM_ANSWER_TYPE, EXAM_FINAL_SCORE_TYPE,
-} from "./actions_store";
+} from "./ActionsStore";
 import Logger from "../../ts/Logger";
 
 const logger = new Logger("Exam Scores");
