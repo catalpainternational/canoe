@@ -1,9 +1,9 @@
 <AllCoursesList>
     <GuestBanner></GuestBanner>
     <TopMenu extrastyleclasses="with-swoop">
-        <h3>{ TRANSLATIONS.allCourses() }</h3>
+        <h3>{ page.title }</h3>
         <div class="filter-copy-container">
-            <p>{ TRANSLATIONS.coursesIntro() }</p>
+            <p>{ page.description || TRANSLATIONS.coursesIntro() }</p>
             <a
                 if="{showTagFilter()}"
                 class="has-circle {state.showTagList ? 'show-tags' : ''}"
@@ -78,7 +78,7 @@
                     continueLearning: () => gettext("Continue Learning"),
                     coursesIntro: () =>
                         gettext(
-                            "Explore a range of courses to suit your needs, expertise, and interests."
+                            "Explore a range of courses to suit your needs, expertise, and interests"
                         ),
                 },
 
