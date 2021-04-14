@@ -42,27 +42,64 @@
         </div>
         <div class="lesson-swoop">
 
-            <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
-            <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
-            <div class="card-container">
-                <Card
-                    each="{lesson in course.lessons}"
-                    status="{lessonStatus(lesson)}"
-                    imageUrl="{lesson.cardImage}"
-                    contentItem="{ lesson }"
-                ></Card>
+            <div class="tab-titles">
+                <a
+                    class="{state.selectedTab === 'lessons' ? 'selected' : ''}"
+                    onclick="{() => selectTab('lessons')}"
+                >
+                    <h5 class="section-title">{ TRANSLATIONS.lessons() }</h5>
+                </a>
+                <!-- TODO check with Andy if we should include the tab or not if there are no lessons -->
+                <a
+                    if="{course.lessons.length}"
+                    class="{state.selectedTab === 'discussion' ? 'selected' : ''}"
+                    onclick="{() => selectTab('discussion')}"
+                >
+                    <h5 class="section-title">{ TRANSLATIONS.discussion() }</h5>
+                </a>
             </div>
-            <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
-            <template if="{ course.ready && course.hasExam }">
-                <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
-                <div class="card-container full-width">
+
+            <template if="{state.selectedTab === 'lessons'}">
+                <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
+                <div class="card-container">
                     <Card
-                        title="{examTitle()}"
-                        description="{examDescription()}"
-                        link="{ `${course.loc_hash}:exam` }"
-                        status="{examStatus(course)}"
+                        each="{lesson in course.lessons}"
+                        status="{lessonStatus(lesson)}"
+                        imageUrl="{lesson.cardImage}"
+                        contentItem="{ lesson }"
                     ></Card>
                 </div>
+                <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
+                <template if="{ course.ready && course.hasExam }">
+                    <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
+                    <div class="card-container full-width">
+                        <Card
+                            title="{examTitle()}"
+                            description="{examDescription()}"
+                            link="{ `${course.loc_hash}:exam` }"
+                            status="{examStatus(course)}"
+                        ></Card>
+                    </div>
+                </template>
+            </template>
+
+            <template if="{state.selectedTab === 'discussion'}">
+                <template if="{state.selectedDiscussionId === null}">
+                    <DiscussionCard
+                        each="{(lesson, index) in course.lessons}"
+                        contentItem="{lesson}"
+                        contentIndex="{index}"
+                        selectDiscussionHandler="{selectDiscussion}"
+                        question="{state.sampleQuestions[index % state.sampleQuestions.length]}"
+                    ></DiscussionCard>
+                </template>
+                <template if="{state.selectedDiscussionId !== null}">
+                    <DiscussionThread
+                        lesson="{course.lessons[state.selectedDiscussionId]}"
+                        lessonNumber="{state.selectedDiscussionId + 1}"
+                        question="{state.sampleQuestions[state.selectedDiscussionId % state.sampleQuestions.length]}"
+                    ></DiscussionThread>
+                </template>
             </template>
         </div>
     </div>
@@ -81,6 +118,8 @@
 
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
+        import DiscussionCard from "RiotTags/Components/DiscussionCard.riot.html";
+        import DiscussionThread from "RiotTags/Components/DiscussionThread.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
@@ -95,11 +134,23 @@
                 showLongDescription: false,
                 showDownloadModal: false,
                 cached: false,
+                selectedTab: "lessons",
+                selectedDiscussionId: null,
+                // TODO possibly add a boolean here for disabling discussions for now & adding a 'coming soon' flag
+                // this'll come from backend
+                sampleQuestions: [
+                    'What is the purpose of porpoises?',
+                    'How much wood would a woodchuck chuck if a woodchuck would chuck wood?',
+                    'How does this lesson make you feel?',
+                    'Why is the sky blue?',
+                    'When will the singularity arrive?',
+                ],
             },
 
             TRANSLATIONS: {
                 no_lessons: () => gettext("There are no lessons yet in this course"),
-                your_lessons: () => gettext("Your lessons"),
+                lessons: () => gettext("Lessons"),
+                discussion: () => gettext("Discussion"),
                 course_exam: () => gettext("Course exam"),
                 highestScore: () => gettext("Highest score"),
                 more: () => gettext("See more"),
@@ -131,6 +182,16 @@
 
             downloadAllLessons() {
                 document.querySelectorAll('.download-state .download').forEach((it) => it.click());
+            },
+
+            selectTab(tabName) {
+                // TODO this should probably update the url, if we want notifications they will likely need to link somewhere, and having a specific url is helpful for that
+                this.update({ selectedTab: tabName });
+                this.update({ selectedDiscussionId: null });
+            },
+
+            selectDiscussion(index) {
+                this.update({ selectedDiscussionId: index });
             },
 
             examDescription() {
@@ -185,6 +246,8 @@
 
         CoursePage.components = {
             card: Card,
+            discussioncard: DiscussionCard,
+            discussionthread: DiscussionThread,
             courseexam: CourseExam,
             loadingdots: LoadingDots,
             topmenu: TopMenu,

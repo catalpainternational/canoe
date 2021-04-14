@@ -1,0 +1,34 @@
+<DiscussionCard>
+    <a onclick="{() => props.selectDiscussionHandler(props.contentIndex)}" class="card">
+        <div class="top-row">
+            <span class="number">{props.contentIndex + 1}</span>
+            <span class="title">{props.contentItem.title}</span>
+        </div>
+        <div class="bottom-row">
+            <div class="image-container">
+                <div class="image-wrap">
+                    <img crossorigin="anonymous" src="{getCardImage()}" alt="lesson image">
+                </div>
+                <span if="{Date.now() % 2}" class="update-flag">
+                    {Math.floor(Math.random() * 10) + 1}
+                </span>
+            </div>
+            <div class="question">
+                <h2>{props.question}</h2>
+            </div>
+        </div>
+        <div class="join-discussion">
+            Join the discussion <span class="arrow"></span>
+        </div>
+    </a>
+
+    <script>
+        import {getCardImageUrl} from "js/utilities";
+
+        export default {
+            getCardImage() {
+                return getCardImageUrl(this.props.link || this.props.contentItem.id, this.props.contentItem.cardImage);
+            }
+        };
+    </script>
+</DiscussionCard>

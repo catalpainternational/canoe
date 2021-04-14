@@ -1,0 +1,140 @@
+<DiscussionComment>
+    <!-- TODO this avatar could potentially become its own component -->
+    <div class="avatar {avatarClass()}">
+        <p>{props.comment.initials}</p>
+    </div>
+    <div class="comment-block">
+        <a class="name">{props.comment.username}</a>
+        <p class="time"> &middot; {getDate()}</p>
+        <p class="comment">
+            {props.comment.text}
+        </p>
+        <p class="reply" onclick="{openReplyTextbox}">Reply <span class="reply-arrow">&#8617;</span></p>
+        <div if="{props.comment.replies.length}" class="toggle-replies" onclick="{toggleReplies}">
+            <template if="{state.showReplies}">&minus;</template>
+            <template if="{!state.showReplies}">&plus;</template>
+        </div>
+    </div>
+    <div class="reply-container">
+        <div if="{state.showReplyTextbox}" id="reply-input" class="form-group">
+            <label for="reply">{TRANSLATIONS.addReply()}</label>
+            <textarea
+                name="reply"
+                id="reply"
+                oninput="{props.updateCommentValue}"
+                onfocus="{props.setInputFocus}"
+                onblur="{props.removeInputFocus}"
+            ></textarea>
+        </div>
+        <button if="{state.showReplyTextbox}" class="btn-primary" onclick="{addReply}">
+            {TRANSLATIONS.postComment()}
+        </button>
+    </div>
+    <div if="{props.comment.replies.length && state.showReplies}" class="reply-thread">
+        <!-- TODO if there is a way to make this recursive, please do it. play around a bit more! -->
+        <!-- i.e. <DiscussionComment> -->
+        <DiscussionReply
+            if="{props.comment.replies.length}"
+            each="{reply in props.comment.replies}"
+            comment="{reply}"
+        ></DiscussionReply>
+    </div>
+
+    <script>
+        import DiscussionReply from "RiotTags/Components/DiscussionReply.riot.html";
+
+        export default {
+            components: {
+                discussionreply: DiscussionReply,
+            },
+
+            state: {
+                showReplyTextbox: false,
+                showReplies: true,
+            },
+
+            TRANSLATIONS: {
+                addReply: () => gettext("Add a reply"),
+                postComment: () => gettext("Post a comment"),
+            },
+
+            toggleReplies() {
+                this.update({showReplies: !this.state.showReplies});
+            },
+
+            // TODO do we want to run this function every minute or so? so that it will update the value after a minute etc. or is that too expensive?
+            getDate() {
+                const minuteInMs = 1 * 60 * 1000;
+                const hourInMs = minuteInMs * 60;
+                const dayInMs = hourInMs * 24;
+                const weekInMs = dayInMs * 7;
+                const monthInMs = dayInMs * 30;
+                const yearInMs = dayInMs * 365;
+
+                const date = this.props.comment.timestamp;
+                const today = new Date();
+                const elapsedTime = today - date;
+
+                if (elapsedTime < minuteInMs) {
+                    return 'Seconds ago';
+                }
+                if (elapsedTime < hourInMs) {
+                    return `${Math.round(elapsedTime / minuteInMs)} minutes ago`;
+                }
+                if (elapsedTime < dayInMs) {
+                    return `${Math.round(elapsedTime / hourInMs)} hours ago`;
+                }
+                if (elapsedTime < weekInMs) {
+                    return `${Math.round(elapsedTime / dayInMs)} days ago`;
+                }
+                if (elapsedTime < monthInMs) {
+                    return `${Math.round(elapsedTime / weekInMs)} weeks ago`;
+                }
+                if (elapsedTime < yearInMs) {
+                    return `${Math.round(elapsedTime / monthInMs)} months ago`;
+                }
+                if (elapsedTime >= yearInMs) {
+                    return `${Math.round(elapsedTime / yearInMs)} years ago`;
+                }
+            },
+
+            avatarClass() {
+                const id = Number(this.props.comment.userId);
+
+                if (id % 6 === 1) return 'first';
+                if (id % 6 === 2) return 'second';
+                if (id % 6 === 3) return 'third';
+                if (id % 6 === 4) return 'fourth';
+                if (id % 6 === 5) return 'fifth';
+                return 'sixth';
+            },
+
+            addReply() {
+                const commentInput = this.$("#reply");
+
+                const newComment = {
+                    id: new Date() - 1,
+                    parentId: this.props.comment.id,
+                    userId: this.props.user.userId,
+                    username: this.props.user.username,
+                    timestamp: new Date(),
+                    text: commentInput.value,
+                }
+
+                this.props.addReply(newComment);
+                commentInput.value = '';
+                this.closeReplyTextbox();
+            },
+
+            openReplyTextbox() {
+                this.update({showReplyTextbox: true});
+            },
+
+            closeReplyTextbox() {
+                // TODO if someone clicks 'reply' on another comment, this needs to close though... should this come from the upper component?
+                this.update({showReplyTextbox: false});
+            },
+        };
+
+    </script>
+</DiscussionComment>

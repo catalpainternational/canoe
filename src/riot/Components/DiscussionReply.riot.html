@@ -1,0 +1,65 @@
+<DiscussionReply>
+    <!-- TODO this avatar could become its own component -->
+    <div class="avatar {avatarClass()}">
+        <p>{props.comment.initials}</p>
+    </div>
+    <div class="comment-block">
+        <a class="name">{props.comment.username}</a>
+        <p class="time"> &middot; {getDate()}</p>
+        <p class="comment">
+            {props.comment.text}
+        </p>
+    </div>
+
+    <script>
+        export default {
+            // TODO if you can't make this a recursive component, export these functions for DRY
+            getDate() {
+                const minuteInMs = 1 * 60 * 1000;
+                const hourInMs = minuteInMs * 60;
+                const dayInMs = hourInMs * 24;
+                const weekInMs = dayInMs * 7;
+                const monthInMs = dayInMs * 30;
+                const yearInMs = dayInMs * 365;
+
+                const date = this.props.comment.timestamp;
+                const today = new Date();
+                const elapsedTime = today - date;
+
+                if (elapsedTime < minuteInMs) {
+                    return 'Seconds ago';
+                }
+                if (elapsedTime < hourInMs) {
+                    return `${Math.round(elapsedTime / minuteInMs)} minutes ago`;
+                }
+                if (elapsedTime < dayInMs) {
+                    return `${Math.round(elapsedTime / hourInMs)} hours ago`;
+                }
+                if (elapsedTime < weekInMs) {
+                    return `${Math.round(elapsedTime / dayInMs)} days ago`;
+                }
+                if (elapsedTime < monthInMs) {
+                    return `${Math.round(elapsedTime / weekInMs)} weeks ago`;
+                }
+                if (elapsedTime < yearInMs) {
+                    return `${Math.round(elapsedTime / monthInMs)} months ago`;
+                }
+                if (elapsedTime >= yearInMs) {
+                    return `${Math.round(elapsedTime / yearInMs)} years ago`;
+                }
+            },
+
+            avatarClass() {
+                const id = Number(this.props.comment.userId);
+
+                if (id % 6 === 1) return 'first';
+                if (id % 6 === 2) return 'second';
+                if (id % 6 === 3) return 'third';
+                if (id % 6 === 4) return 'fourth';
+                if (id % 6 === 5) return 'fifth';
+                return 'sixth';
+            },
+        };
+
+    </script>
+</DiscussionReply>

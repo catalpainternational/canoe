@@ -1,0 +1,324 @@
+DiscussionCard,
+DiscussionThread {
+    display: block;
+
+    + DiscussionCard {
+        margin-top: 20px;
+    }
+
+    .card {
+        max-width: $tablet;
+        height: auto;
+    }
+
+    .top-row {
+        display: grid;
+        grid-template-columns: 26px 1fr;
+        align-items: center;
+        gap: 10px;
+        padding: 0 20px;
+        height: 50px;
+        box-sizing: border-box;
+        border-bottom: 2px solid $gray-7;
+
+        .number {
+            height: 26px;
+            width: 26px;
+            border: 2px solid $gray-7;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            font-size: 0.8em;
+            color: $gray-3;
+            margin: 0 auto;
+        }
+
+        .title {
+            color: $gray-1;
+            font-size: 0.9em;
+            line-height: 1.1em;
+            max-height: calc(2 * 1.1em);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+    }
+
+    .bottom-row {
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        align-items: center;
+        gap: 10px;
+        padding: 0 10px;
+        height: 120px;
+    }
+
+    .image-container {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        margin: 0 auto;
+    }
+
+    .image-wrap {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 50%;
+    }
+
+    .image-wrap > img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+
+    .update-flag {
+        color: white;
+        background-color: $orange;
+        width: 1.1em;
+        height: 1.1em;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: -2px;
+        top: -2px;
+        font-size: 0.7em;
+        padding: 2px;
+    }
+
+    .question > h2 {
+        font-size: 1.1em;
+        line-height: 1.4em;
+        max-height: calc(3 * 1.4em);
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    .join-discussion {
+        padding-bottom: 15px;
+        margin-left: 70px;
+        margin-top: -10px;
+        font-size: 0.9em;
+    }
+
+    .arrow {
+        transform: rotate(180deg);
+    }
+}
+
+DiscussionThread {
+    .card {
+        width: 100vw;
+        margin-left: -20px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .bottom-row {
+        align-items: baseline;
+        height: auto;
+    }
+
+    .arrow {
+        transform: unset;
+        margin: 0 auto;
+    }
+
+    .question > h2 {
+        margin: 1.5em auto;
+    }
+
+    .form-group {
+        flex-direction: column;
+        margin-bottom: 15px;
+        border-radius: 3px;
+        display: flex;
+        background-color: #ffffff;
+        box-shadow: inset 0 2px 3px 0 rgb(42 57 66 / 10%);
+        border: 1px solid $gray-7;
+        position: relative;
+        margin: 0 20px 1em;
+
+        &.has-focus {
+            border: 1px solid $gray-4;
+        }
+
+        &.has-focus,
+        &.is-filled {
+            label {
+                font-size: 0.7em;
+                top: 6%;
+            }
+        }
+    }
+
+    .btn-primary {
+        width: 80%;
+        margin: 0 auto 1em;
+        display: block;
+    }
+
+    label {
+        left: 0;
+        top: 28%;
+        margin: 0;
+        padding-left: 15px;
+        position: absolute;
+        transition: all 0.3s;
+    }
+
+    textarea {
+        box-sizing: border-box;
+        padding: 23px 15px 3px;
+        min-width: 100%;
+        max-width: 100%;
+        height: 100%;
+        border: none;
+        padding-top: 16px;
+        background-color: unset;
+    }
+
+    .sort-options {
+        margin: 0 18px 5px;
+        font-size: 0.9em;
+
+        .active {
+            margin-bottom: 0;
+        }
+
+        .option {
+            margin: 0;
+        }
+    }
+}
+
+
+DiscussionComment,
+DiscussionReply {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    margin: 0 18px;
+    column-gap: 12px;
+    padding: 16px 10px 2px;
+    border-radius: 8px;
+
+    &.recent {
+        background-color: rgba(0,112,240,0.07);
+    }
+
+    .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6em;
+
+        &.first {
+            background-color: $avatar-pink;
+        }
+
+        &.second {
+            background-color: $avatar-yellow;
+        }
+
+        &.third {
+            background-color: $avatar-teal;
+        }
+
+        &.fourth {
+            background-color: $avatar-darkblue;
+        }
+
+        &.fifth {
+            background-color: $avatar-lightblue;
+        }
+
+        &.sixth {
+            background-color: $avatar-purple;
+        }
+
+        & p {
+            color: white;
+        }
+    }
+
+    .time {
+        display: inline;
+        padding-left: 4px;
+        font-size: 0.9em;
+    }
+
+    .comment {
+        color: $gray-1;
+        // TODO need to implement 'see more' button for longer comments
+        // font-size: 0.9em;
+        // line-height: 1.1em;
+        // max-height: calc(4 * 1.1em);
+        // overflow: hidden;
+        // display: -webkit-box;
+        // -webkit-line-clamp: 4;
+        // -webkit-box-orient: vertical;
+    }
+
+    .comment-block {
+        position: relative;
+    }
+
+    .toggle-replies {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 10px;
+        height: 10px;
+        border: 1px solid $gray-5;
+        color: $gray-5;
+        border-radius: 50%;
+        padding: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reply {
+        font-size: 0.9em;
+    }
+
+    .reply-arrow {
+        // todo get the actual icon from andy
+        display: inline-block;
+        transform: scale(1, -1);
+        margin-left: 5px;
+    }
+
+    .reply-thread {
+        grid-column: 2;
+    }
+
+    // todo rename this class
+    .reply-container {
+        grid-column: 1 / span 2;
+
+        .form-group {
+            margin: 0 0 20px;
+        }
+    }
+}
+
+DiscussionReply {
+    margin-left: 0;
+    padding: 5px 0;
+
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+}
