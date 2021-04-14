@@ -6,7 +6,7 @@ import {
     completionsReady,
 } from "ReduxImpl/Interface";
 import { readCompletionsIntoState, clearStateCompletions } from "js/actions/Completion";
-import { readExamDataIntoState, clearStateExamData } from "js/actions/exam";
+import { readExamDataIntoState, clearStateExamData } from "js/actions/Exam";
 import { updateApi, updateIdb } from "js/actions/ActionsStore";
 import { closeAndDeleteDB } from "js/actions/actions_idb";
 import { isAuthenticated, subscribeToStore } from "ReduxImpl/Interface";

@@ -5,7 +5,7 @@ import {
     getExamAnswers,
     storeExamAnswer,
 } from "ReduxImpl/Interface";
-import { persistExamScore } from "js/actions/exam";
+import { persistExamScore } from "js/actions/Exam";
 
 const EXAM_PASS_SCORE = 75;
 
