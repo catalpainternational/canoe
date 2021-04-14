@@ -1,3 +1,7 @@
+/**
+ * User Actions is the place for initialiing the things the user does that we want to persist offline
+ * and send and retireve from the server when available
+ */
 import {
     completionsReady,
 } from "ReduxImpl/Interface";
@@ -8,11 +12,15 @@ import { closeAndDeleteDB } from "js/actions/actions_idb";
 import { isAuthenticated, subscribeToStore } from "ReduxImpl/Interface";
 
 const EVERY_FIVE_MINUTES = 1000 * 60 * 5;
-
-let completionPoller = null;
+let userActionPoller = null;
 let currentAuthenticatedState = false;
 
-export function initialiseCompletions() {
+/**
+ * Main initialisation entry point, performs actions on a fresh reload of the app
+ * starts 5 minute poll to submit any unsynched user actions
+ * sets up subscription to restart that polling if the user logs in
+ */
+export function initialiseUserActions() {
     currentAuthenticatedState = isAuthenticated();
     readFromStoreAndStartPolling()
         .then(() => {
@@ -20,6 +28,11 @@ export function initialiseCompletions() {
         });
 }
 
+/**
+ * pulls any data from the api into idb
+ * reads that data to pupoulate in memory redxu app state
+ * starts polling to submit new actions that might not have synced immediately
+ */
 function readFromStoreAndStartPolling() {
     return updateIdb()
         .then(readCompletionsIntoState)
@@ -30,6 +43,9 @@ function readFromStoreAndStartPolling() {
         });
 }
 
+/**
+ * React to login and out state changes
+ */
 function storeListener() {
     const newAuthenticationState = isAuthenticated();
     if (newAuthenticationState !== currentAuthenticatedState) {
@@ -42,14 +58,20 @@ function storeListener() {
     }
 }
 
+/**
+ * Start the app preiodically sending unsynced data to the api
+ */
 async function startUpdateApiPolling() {
     if (isAuthenticated()) {
-        completionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
+        userActionPoller = window.setInterval(updateApi, EVERY_FIVE_MINUTES);
     }
 }
 
+/**
+ * Stops the user action periodic poll, clears in memory and idb state
+ */
 async function clearAppData() {
-    window.clearInterval(completionPoller);
+    if (userActionPoller) window.clearInterval(userActionPoller);
     clearStateCompletions();
     clearStateExamData();
     await closeAndDeleteDB();

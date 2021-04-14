@@ -7,7 +7,7 @@ import App from "RiotTags/App.riot.html";
 
 import { initialiseOnlineStatus } from "js/OnlineStatus";
 import { initialiseIdentity } from "js/AuthenticationUtilities";
-import { initialiseCompletions } from "js/UserActions";
+import { initialiseUserActions } from "js/UserActions";
 import { initialiseRouting } from "js/Routing"
 import { initialiseBrowserSupport } from "js/BrowserSupport"
 import initialiseFeedback from "js/Telemetry";
@@ -16,7 +16,7 @@ initialiseIdentity();
 initialiseOnlineStatus(window);
 initialiseBrowserSupport();
 initialiseRouting();
-initialiseCompletions();
+initialiseUserActions();
 initialiseFeedback();
 // InitialiseCertChain is done after login or valid initialiseIdentity with a token
 
