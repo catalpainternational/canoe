@@ -41,9 +41,9 @@
             </a>
         </div>
         <div class="lesson-swoop">
-
             <div class="tab-titles">
                 <a
+                    href="#{course.loc_hash}"
                     class="{state.selectedTab === 'lessons' ? 'selected' : ''}"
                     onclick="{() => selectTab('lessons')}"
                 >
@@ -51,6 +51,7 @@
                 </a>
                 <!-- TODO check with Andy if we should include the tab or not if there are no lessons -->
                 <a
+                    href="#{course.loc_hash}:discussion"
                     if="{course.lessons.length}"
                     class="{state.selectedTab === 'discussion' ? 'selected' : ''}"
                     onclick="{() => selectTab('discussion')}"
@@ -95,8 +96,9 @@
                 </template>
                 <template if="{state.selectedDiscussionId !== null}">
                     <DiscussionThread
-                        lesson="{course.lessons[state.selectedDiscussionId]}"
+                        lesson="{state.selectedDiscussionLesson}"
                         lessonNumber="{state.selectedDiscussionId + 1}"
+                        selectDiscussionHandler="{selectDiscussion}"
                         question="{state.sampleQuestions[state.selectedDiscussionId % state.sampleQuestions.length]}"
                     ></DiscussionThread>
                 </template>
@@ -134,10 +136,11 @@
                 showLongDescription: false,
                 showDownloadModal: false,
                 cached: false,
-                selectedTab: "lessons",
-                selectedDiscussionId: null,
                 // TODO possibly add a boolean here for disabling discussions for now & adding a 'coming soon' flag
                 // this'll come from backend
+                selectedTab: getRoute().riotHash[0] === 'discussion' ? 'discussion' : 'lessons',
+                selectedDiscussionId: getRoute().riotHash[2] ? getRoute().riotHash[2] : null,
+                // TODO backend linkup
                 sampleQuestions: [
                     'What is the purpose of porpoises?',
                     'How much wood would a woodchuck chuck if a woodchuck would chuck wood?',
@@ -145,6 +148,7 @@
                     'Why is the sky blue?',
                     'When will the singularity arrive?',
                 ],
+                selectedDiscussionLesson: {},
             },
 
             TRANSLATIONS: {
@@ -185,13 +189,22 @@
             },
 
             selectTab(tabName) {
-                // TODO this should probably update the url, if we want notifications they will likely need to link somewhere, and having a specific url is helpful for that
                 this.update({ selectedTab: tabName });
                 this.update({ selectedDiscussionId: null });
             },
 
-            selectDiscussion(index) {
-                this.update({ selectedDiscussionId: index });
+            selectDiscussion(index, lesson = null) {
+                if (index === null) {
+                    location.hash = `#${this.course.loc_hash}:discussion`;
+                }
+                else {
+                    location.hash = `#${this.course.loc_hash}:discussion:${lesson.id}:${index}`;
+                }
+
+                this.update({
+                    selectedDiscussionId: index,
+                    selectedDiscussionLesson: lesson,
+                });
             },
 
             examDescription() {

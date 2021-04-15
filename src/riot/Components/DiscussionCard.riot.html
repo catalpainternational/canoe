@@ -1,31 +1,81 @@
 <DiscussionCard>
-    <a onclick="{() => props.selectDiscussionHandler(props.contentIndex)}" class="card">
+    <div class="card">
         <div class="top-row">
             <span class="number">{props.contentIndex + 1}</span>
             <span class="title">{props.contentItem.title}</span>
         </div>
-        <div class="bottom-row">
-            <div class="image-container">
-                <div class="image-wrap">
-                    <img crossorigin="anonymous" src="{getCardImage()}" alt="lesson image">
+        <a onclick="{() => props.selectDiscussionHandler(state.primaryThread.id, props.contentItem)}">
+            <div class="bottom-row">
+                <div class="image-container">
+                    <div class="image-wrap">
+                        <img crossorigin="anonymous" src="{getCardImage()}" alt="lesson image">
+                    </div>
+                    <!-- <span if="{TODO thread has new comments}" class="update-flag">
+                        {number of comments}
+                    </span> -->
                 </div>
-                <span if="{Date.now() % 2}" class="update-flag">
-                    {Math.floor(Math.random() * 10) + 1}
-                </span>
+                <div class="question">
+                    <h2>{state.primaryThread.text}</h2>
+                </div>
             </div>
-            <div class="question">
-                <h2>{props.question}</h2>
+            <div class="join-discussion">
+                Join the discussion <span class="arrow"></span>
             </div>
-        </div>
-        <div class="join-discussion">
-            Join the discussion <span class="arrow"></span>
-        </div>
-    </a>
+        </a>
+        <template if="{state.secondaryThreads.length}">
+            <a each="{thread in state.secondaryThreads}"
+                onclick="{() => props.selectDiscussionHandler(thread.id, props.contentItem)}"
+                class="secondary-thread">
+                <h2>{thread.text}</h2> <span class="arrow"></span>
+            </a>
+        </template>
+        <template>
+            <!-- if there are more than x additional secondaryThreads, load more -->
+        </template>
+
+    </div>
+
 
     <script>
         import {getCardImageUrl} from "js/utilities";
 
         export default {
+            state: {
+                discussions: [],
+                primaryThread: {},
+                secondaryThreads: [],
+            },
+
+            onBeforeMount(props, state) {
+                // creates a random list of questions for each lesson
+                const questions = [
+                    { id: '1', text: 'What is the purpose of porpoises?' },
+                    { id: '2', text: 'How much wood would a woodchuck chuck if a woodchuck would chuck wood?' },
+                    { id: '3', text: 'How does this lesson make you feel?' },
+                    { id: '4', text: 'Why is the sky blue?' },
+                    { id: '5', text: 'When will the singularity arrive?' },
+                    { id: '6', text: 'How old is the queen?' },
+                    { id: '7', text: 'Why were chainsaws invented?' },
+                    { id: '8', text: 'When does daylight savings end?' },
+                    { id: '9', text: 'Who is the richest person in the world?' },
+                    { id: '10', text: 'Where am I?' },
+                ]
+                const index = Math.floor(Math.random() * questions.length);
+                const index2 = Math.floor(Math.random() * questions.length);
+
+                let discussions = [];
+                if (index === index2) {
+                    discussions = [questions[index]];
+                }
+                else {
+                    discussions =
+                    questions.slice(Math.min(index, index2), Math.max(index, index2));
+                }
+                this.state.discussions = discussions;
+                this.state.primaryThread = discussions[0];
+                this.state.secondaryThreads = discussions.slice(1, discussions.length);
+            },
+
             getCardImage() {
                 return getCardImageUrl(this.props.link || this.props.contentItem.id, this.props.contentItem.cardImage);
             }
