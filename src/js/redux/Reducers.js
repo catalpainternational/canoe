@@ -9,7 +9,8 @@ import online from "./ducks/Online";
 import identity from "./ducks/Identity";
 import route from "./ducks/Route";
 import completion from "./ducks/Completion";
-import exams from "./ducks/Exam";
+import examScores from "./ducks/ExamScores";
+import testAnswers from "./ducks/TestAnswers";
 
 export const reducers = combineReducers({
     ...siteReducer,
@@ -21,5 +22,6 @@ export const reducers = combineReducers({
     ...identity,
     ...route,
     ...completion,
-    ...exams,
+    ...examScores,
+    ...testAnswers,
 });

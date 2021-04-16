@@ -1,4 +1,4 @@
-import { getExamAnswers } from "ReduxImpl/Interface";
+import { getTestAnswers } from "ReduxImpl/Interface";
 import { Page } from "../Page";
 import Course from "./Course";
 
@@ -30,29 +30,12 @@ export default class Lesson extends Page {
         return this.course.prepare();
     }
 
-    /**  We store the responses to any test cards with its compeltion */
+    /**  We store the responses to any test cards with its completion */
     get completionData(): Record<string, any> {
-        const answers = getExamAnswers(this.id);
-        return Object.assign(super.completionData, { answers });
-    }
-
-    get complete(): boolean {
-        return super.complete;
-    }
-    set complete(complete: boolean) {
-        super.complete = complete;
-        // if this is the only course in the lesson, and the course has no exam
-        // also set the course to complete
-        if (
-            complete &&
-            !this.course.hasExam &&
-            this.course.childPages.length == 1
-        ) {
-            this.course.complete = true;
-        }
-        // if setting the lesson incomplete, also set the course as incomplete
-        if (!complete) {
-            this.course.complete = false;
-        }
+        const answers = getTestAnswers(this.id);
+        return Object.assign(super.completionData, {
+            answers,
+            pageType: "lesson",
+        });
     }
 }

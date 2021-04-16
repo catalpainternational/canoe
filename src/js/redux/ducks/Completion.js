@@ -1,44 +1,49 @@
 // ACTIONS
 const COMPLETIONS_SET_COMPLETION = "completion/setComplete";
+const COMPLETIONS_SET_MANY_COMPLETIONS = "completion/setCompletions";
 const COMPLETIONS_CLEAR = "completion/clear";
-const COMPLETIONS_READY = "completion/ready";
-const COMPLETIONS_BUMP = "completion/bump";
 
 // ACTION CREATORS
-export const completionsReadyAction = () => ({
-    type: COMPLETIONS_READY,
-});
-export const completionAction = (pageId, time, bump) => ({
+export const setCompletionAction = (pageId, time, complete) => ({
     type: COMPLETIONS_SET_COMPLETION,
     pageId,
     time,
-    bump
+    complete
+});
+export const setManyCompletionsAction = (completions) => ({
+    type: COMPLETIONS_SET_MANY_COMPLETIONS,
+    completions: completions.sort((a, b) => a.time > b.time),
 });
 export const clearCompletionsAction = () => ({
     type: COMPLETIONS_CLEAR,
 });
-export const bumpCompletionsVersionAction = () => ({
-    type: COMPLETIONS_BUMP,
-})
 
-const INITIAL_STATE = {ready: false, pageIdCompletions: {}, version: 0};
+const INITIAL_STATE = null;
 
 // REDUCER
 const completionsReducer = (state = INITIAL_STATE, action) => {
+    const newState = {};
     switch (action.type) {
-        case COMPLETIONS_READY:
-            return Object.assign({}, state, {ready: true});
         case COMPLETIONS_CLEAR:
-            return Object.assign({}, state, {pageIdCompletions: {}});
-        case COMPLETIONS_BUMP:
-            return Object.assign({}, state, {version: state.version + 1});
+            return newState;
         case COMPLETIONS_SET_COMPLETION:
-            const newCompletions = Object.assign(state.pageIdCompletions);
-            newCompletions[action.pageId] = action.time;
-            return Object.assign({}, state, {
-                pageIdCompletions: newCompletions,
-                version: action.bump ? state.version +1 : state.version
+            Object.assign(newState, state);
+            if (action.complete) {
+                newState[action.pageId] = action.time;
+            } else if( newState[action.pageId]) {
+                delete newState[action.pageId];
+            }
+            return newState;
+        case COMPLETIONS_SET_MANY_COMPLETIONS:
+            Object.assign(newState, state);
+            action.completions.forEach(completion => {
+                if (completion.complete) {
+                    newState[completion.pageId] = completion.time;
+                } else if( newState[completion.pageId]) {
+                    delete newState[completion.pageId];
+                }
             });
+            return newState;
         default:
             return state;
     }
@@ -46,5 +51,5 @@ const completionsReducer = (state = INITIAL_STATE, action) => {
 
 // EXPORTED REDUCER
 export default {
-    completion: completionsReducer
+    completions: completionsReducer
 };

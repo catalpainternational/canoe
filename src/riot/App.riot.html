@@ -44,7 +44,6 @@
     <script>
         import {
             isBrowserSupported,
-            getCompletionsStoreVersion,
             getRoute
         } from "ReduxImpl/Interface";
 
@@ -78,7 +77,6 @@
                     pageReady: route.page.ready,
                     riotHash: route.riotHash || [],
                     browserSupported: isBrowserSupported(),
-                    completionsVersion: getCompletionsStoreVersion(),
                 };
                 return state;
             }
@@ -90,21 +88,7 @@
                 },
 
                 storeListener(previousStoreState, storeState) {
-                    if (
-                        true
-                        // language has been changed
-                        || previousStoreState.language !== storeState.language
-                        // page type has been changed
-                        || previousStoreState.route.page.type !== storeState.route.page.type
-                        // page was not ready and is now ready
-                        || !this.state.pageReady && storeState.route.page.ready
-                        // completions version has changed
-                        || this.state.completionsVersion != storeState.completion.version
-                        // riothash has changed
-                        || !arrayEquals(this.state.riotHash, storeState.route.riotHash)
-                    ) {
-                        this.update(readState());
-                    }
+                    this.update(readState());
                 }
             }
         }

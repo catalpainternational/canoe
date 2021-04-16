@@ -117,18 +117,6 @@
                         )
                     );
                 },
-
-                courseStatus(course) {
-                    if (course.numberOfFinishedLessons === 0) {
-                        return "not-started";
-                    } else if (
-                        course.numberOfFinishedLessons < course.numberOfLessons
-                    ) {
-                        return "in-progress";
-                    } else {
-                        return "complete";
-                    }
-                },
             };
         }
 

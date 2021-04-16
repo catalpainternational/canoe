@@ -12,20 +12,22 @@
             </li>
         </ol>
     </div>
-    <h4 if="{ getAnswer() }">{ TRANSLATIONS.checkCorrect() }</h4>
-    <button
-        if="{!props.isCourseExam}"
-        class="btn-primary"
-        onclick="{ showResults }"
-        disabled="{ !getAnswer() }"
-    >
-        { TRANSLATIONS.checkAnswers() }
-    </button>
+    <template if="{ !isExam }">
+        <h4 if="{ getAnswer() }">{ TRANSLATIONS.checkCorrect() }</h4>
+        <button
+            if="{!props.isCourseExam}"
+            class="btn-primary"
+            onclick="{ showResults }"
+            disabled="{ !getAnswer() }"
+        >
+            { TRANSLATIONS.checkAnswers() }
+        </button>
+    </template>
 
     <script>
         import Raw from "RiotTags/Components/Raw.riot.html";
 
-        import { getRoute, getExamAnswer, storeExamAnswer } from "ReduxImpl/Interface";
+        import { getRoute, getTestAnswer, storeTestAnswer } from "ReduxImpl/Interface";
 
         const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N',
             'O','P','Q','R','S','T','U','V','W','X','Y','Z'];
@@ -35,6 +37,8 @@
                 raw: Raw,
             },
             state: {
+                haveCheckedAnswers: false,
+                checkCount: 0,
             },
 
             TRANSLATIONS: {
@@ -61,15 +65,17 @@
                     ? this.page.examCards[this.cardIndex]
                     : this.page.cards[this.cardIndex];
             },
-
+            get isExam() {
+                return !!this.page.hasExam;
+            },
             getAnswer() {
-                return getExamAnswer(
+                return getTestAnswer(
                     this.page.id,
                     this.card.id
                 );
             },
             setAnswer(answer) {
-                storeExamAnswer(
+                storeTestAnswer(
                     this.page.id,
                     this.card.id,
                     answer,
@@ -77,6 +83,10 @@
             },
 
             showResults() {
+                this.state.checkCount = this.state.checkCount + 1;
+                this.update({
+                    haveCheckedAnswers: true
+                });
                 if ( this.props.toggleModal ) {
                     this.props.toggleModal(true);
                 }
@@ -124,26 +134,8 @@
                     && this.card.answers.filter(a => a.correct).length == nextAnswers.answers.length
                 );
                 this.state.haveCheckedAnswers = false;
+                nextAnswers["attempts"] = this.state.checkCount;
                 this.setAnswer(nextAnswers);
-            },
-
-            showResults() {
-                this.update({
-                    haveCheckedAnswers: true
-                });
-                if ( this.props.toggleModal ) {
-                    this.props.toggleModal(true);
-                }
-                /*console.assert(Array.isArray(answers), `"answers" must come in as an Array`);
-
-                const numberIncorrectAnswersChosen = answers.filter(a => !a.correct).length;
-                const numberCorrectAnswersChosen = answers.filter(a => a.correct).length;
-
-                const isQuestionComplete =
-                    numberCorrectAnswersChosen === this.state.numberTotalCorrectAnswers &&
-                    numberIncorrectAnswersChosen === 0;
-                    */
-                return false;
             },
         };
     </script>

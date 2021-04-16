@@ -70,7 +70,7 @@
 
                 return gettext(
                     "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam.",
-                    this.props.result.score
+                    Math.ceil(100 * this.props.result.score)
                 );
             },
 
@@ -78,7 +78,7 @@
                 // message when user did not pass exam
                 return gettext(
                     "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later.",
-                    this.props.result.score,
+                    Math.ceil(100 * this.props.result.score),
                     this.course.minimumExamScore
                 );
             },

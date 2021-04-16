@@ -52,7 +52,7 @@
         import HonorCode from "RiotTags/Lesson/HonorCode.riot.html";
         import Test from "RiotTags/Lesson/Test.riot.html";
 
-        import { getRoute, getExamAnswer, clearPageAnswers } from "ReduxImpl/Interface";
+        import { getRoute, getTestAnswer } from "ReduxImpl/Interface";
 
         function CourseExam() {
             return {
@@ -105,25 +105,15 @@
                     }
                 },
                 submit() {
-                    const result = this.course.examResult;
-                    if (result.error == 'incomplete') {
+                    const result = this.course.saveExamScore();
+                    if (result.error) {
                         alert('check you have answered all questions');
-                    } else {
-                        // set this course as complete in the store
-                        // this will persist in local storage and the server
-                        if (result.passed || this.course.examType === 'prelearning') {
-                            this.course.complete = true;
-                        }
-
-                        // clear the answers from memory so they do not show up next time
-                        clearPageAnswers(this.course.id);
-
-                        this.update({results: result});
                     }
+                    this.update({results: result});
                 },
 
                 hasAnswer() {
-                    const a = getExamAnswer(this.course.id, this.course.examCards[this.cardNumber - 1].id);
+                    const a = getTestAnswer(this.course.id, this.course.examCards[this.cardNumber - 1].id);
                     return a;
                 },
             }

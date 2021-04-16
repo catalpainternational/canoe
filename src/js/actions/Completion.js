@@ -4,7 +4,7 @@
  * Depends on the action_store module to persist information
  */
 
-import { storePageComplete, bumpCompletionsStoreVersion } from "js/redux/Interface";
+import { storePageCompletions, bumpCompletionsStoreVersion } from "js/redux/Interface";
 import { saveAndPostAction, readActions, COMPLETION_ACTION_TYPE } from "./ActionsStore";
 import Logger from "../../ts/Logger";
 
@@ -28,13 +28,14 @@ export async function readCompletionsIntoState() {
         logger.warn("Error in reading completions from store %o", e);
     }
     const actionsToStore = actions.filter((a) => a.pageId);
-    actionsToStore.forEach((action) => {
-        // update completions without causing a riot update
-        storePageComplete(action.pageId, action.date, false);
-    });
     if (actionsToStore.length) {
-        // cause riot to update
-        bumpCompletionsStoreVersion();
+        storePageCompletions(actionsToStore.map(a => {
+            return {
+                pageId: a.pageId,
+                time: a.date,
+                complete: a.complete,
+            };
+        }));
     }
 }
 
@@ -42,14 +43,13 @@ export async function readCompletionsIntoState() {
  * Store a page completion, persist locally, and send to api
  * @param {*} pageId - the id of the page being marked as complete
  * @param {*} extraDataObject - any extra data to persist with the completion
+ * @returns the action stored
  */
 export function persistCompletion(pageId, extraDataObject = {}) {
-    const extraData = Object.assign(extraDataObject, {date: new Date()});
-    logger.info("setting page %s to complete", pageId);
-
-    // save in redux in memory state
-    storePageComplete(pageId, extraData.date);
+    const extraData = Object.assign(extraDataObject, {
+        date: new Date(),
+    });
 
     // store the action ( via idb and api )
-    saveAndPostAction(COMPLETION_ACTION_TYPE, { pageId, ...extraData });
+    return saveAndPostAction(COMPLETION_ACTION_TYPE, { pageId, ...extraData });
 }

@@ -90,7 +90,7 @@
         import TestPopupModal from "RiotTags/Lesson/TestPopupModal.riot.html";
         import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
 
-        import { getRoute, clearPageAnswers } from "ReduxImpl/Interface";
+        import { getRoute, clearPageTestAnswers } from "ReduxImpl/Interface";
 
         function LessonContent() {
             return {
@@ -117,12 +117,8 @@
                 get card() {
                     return this.lesson.cards[this.cardNumber - 1];
                 },
-                onUpdated() {
-                    console.log("HEY: lesson content updated");
-                },
                 isAQuestion() {
                     const r =  this.card.tag.includes('Choice');
-                    if (!r) console.log("HEY: isAQuestion returned false for card %o", this.card);
                     return r;
                 },
 
@@ -142,7 +138,7 @@
                     this.lesson.complete = true;
 
                     // clear the answers from memory so they do not show up next time
-                    clearPageAnswers(this.lesson.id);
+                    clearPageTestAnswers(this.lesson.id);
 
                     location.hash = `${this.lesson.loc_hash}:content:feedback`;
                 },

@@ -47,20 +47,18 @@
             <div class="card-container">
                 <Card
                     each="{lesson in course.lessons}"
-                    status="{lessonStatus(lesson)}"
-                    imageUrl="{lesson.cardImage}"
                     contentItem="{ lesson }"
                 ></Card>
             </div>
             <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
             <template if="{ course.ready && course.hasExam }">
-                <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
+                <h5 class="section-title">{ examTitle() }</h5>
                 <div class="card-container full-width">
                     <Card
-                        title="{examTitle()}"
+                        title="{examCardTitle()}"
                         description="{examDescription()}"
                         link="{ course.examLink }"
-                        status="{examStatus(course)}"
+                        status="{ examStatus() }"
                         progress-values="{ false }"
                     ></Card>
                 </div>
@@ -102,6 +100,7 @@
                 no_lessons: () => gettext("There are no lessons yet in this course"),
                 your_lessons: () => gettext("Your lessons"),
                 course_exam: () => gettext("Course exam"),
+                prelearning_survey: () => gettext("Prelearning Survey"),
                 highestScore: () => gettext("Highest score"),
                 more: () => gettext("See more"),
                 less: () => gettext("See less"),
@@ -109,8 +108,11 @@
                 download_all: () => gettext("Download all lessons"),
             },
 
+            get course() {
+                return getRoute().page;
+            },
+
             onBeforeMount(props, state) {
-                this.course = getRoute().page;
                 this.course.isAvailableOffline()
                     .then(cached => {
                         this.update({cached});
@@ -118,7 +120,7 @@
             },
 
             backToAllCourses() {
-                location.hash = "";
+                location.hash = this.course.parent.loc_hash;
             },
 
             toggleDownloadModal() {
@@ -156,25 +158,24 @@
             isExamEnabled() {
                 // Exams are enabled if you complete all lessons or if you are a
                 // guest user.
-                return this.course.numberOfLessons <= this.course.numberOfFinishedLessons
-                    || !isAuthenticated();
+                return this.course.lessonsComplete || !isAuthenticated();
             },
 
+            examCardTitle() {
+                return this.course.examIsPrelearning
+                    ? gettext("%1's Prelearning Survey", this.course.title)
+                    : gettext("%1's Course Exam", this.course.title);
+            },
+            
             examTitle() {
-                let p = gettext("%1's Course Exam", this.course.title);
-                return p;
-            },
-
-            lessonStatus(lesson) {
-                if (lesson.complete) {
-                    return "complete";
-                } else {
-                    return "not-started";
-                }
+                return this.course.examIsPrelearning
+                    ? this.TRANSLATIONS.prelearning_survey()
+                    : this.TRANSLATIONS.course_exam();
             },
 
             examStatus() {
-                if (this.course.examHighScore > 75) {
+                if ((this.course.examIsPrelearning && this.course.examHighScore !== undefined)
+                    || this.course.isExamFinished) {
                     return "complete";
                 } else if (!this.isExamEnabled()) {
                     return "disabled";

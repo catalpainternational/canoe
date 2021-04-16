@@ -24,21 +24,13 @@
         <div if="{ state.selectedInProgress && home.coursesInProgress.length }" class="card-container">
             <Card
                 each="{ course in home.coursesInProgress }"
-                title="{ course.title }"
-                link="{ course.loc_hash }"
-                status="{ course.progressStatus }"
-                progressValue="{ course.numberOfFinishedLessons }"
-                progressMax="{ course.numberOfLessons }"
+                contentItem="{ course }"
             ></Card>
         </div>
         <div if="{ !state.selectedInProgress && home.coursesCompleted.length  }" class="card-container">
             <Card
                 each="{ course in home.coursesCompleted }"
-                title="{ course.title }"
-                link="{ course.loc_hash }"
-                status="{ course.progressStatus }"
-                progressValue="{ course.numberOfFinishedLessons }"
-                progressMax="{ course.numberOfLessons }"
+                contentItem="{ course }"
             ></Card>
         </div>
         <h2 class="sub-title">{ TRANSLATIONS.learning() }</h2>
@@ -46,7 +38,7 @@
             <div class="card stat">
                 <div class="profile-card">
                     <span class="checkmark-circle"></span>
-                    <h3>{ home.countFinishedLessonsAndExams }</h3>
+                    <h3>{ home.countFinishedLessons }</h3>
                     <h5>{ TRANSLATIONS.lessonsCompleted() }</h5>
                 </div>
             </div>
@@ -85,8 +77,8 @@
                 completed: () => gettext("completed"),
             },
 
-            onBeforeMount() {
-                this.home = getRoute().page.home;
+            get home() {
+                return getRoute().page.home;
             },
 
             selectTab(tabName) {

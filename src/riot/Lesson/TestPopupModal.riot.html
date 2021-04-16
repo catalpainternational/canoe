@@ -25,7 +25,7 @@
     <script>
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
 
-        import { getRoute, getExamAnswer } from "ReduxImpl/Interface";
+        import { getRoute, getTestAnswer } from "ReduxImpl/Interface";
 
         export default {
             components: {
@@ -48,7 +48,7 @@
                 return this.page.cards[this.cardNumber - 1];
             },
             get answer() {
-                return getExamAnswer(this.page.id, this.card.id);
+                return getTestAnswer(this.page.id, this.card.id);
             },
             get isQuestionComplete() {
                 return this.answer.correct;

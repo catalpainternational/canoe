@@ -1,7 +1,7 @@
 <LessonComplete>
     <div class="congratulations-container">
         <span class="superman-success"></span>
-        <template if="{!isCourseComplete()}">
+        <template if="{ !course.lessonsComplete }">
             <div>
                 <h2>{ TRANSLATIONS.congrats() }</h2>
                 <p>{ lessonCompleteMessage() }</p>
@@ -11,7 +11,7 @@
                 <span class="chevron"></span>
             </button>
         </template>
-        <template if="{isCourseComplete()}">
+        <template if="{ course.lessonsComplete }">
             <div>
                 <h2>{ TRANSLATIONS.good() }</h2>
                 <p>{ lessonCompleteMessage() }</p>
@@ -33,17 +33,6 @@
 
         export default {
 
-            onBeforeMount(props, state) {
-                this.lesson = getRoute().page;
-            },
-
-            onMounted() {
-                // this page needs the course details available
-                if (!this.lesson.course.ready) {
-                    this.lesson.course.prepare().then(this.update());
-                }
-            },
-
             TRANSLATIONS: {
                 congrats: () => gettext("Congratulations!"),
                 next: () => gettext("Next Lesson"),
@@ -53,17 +42,19 @@
                 course: () => gettext("Back to Course"),
             },
 
+            get lesson() {
+                return getRoute().page;
+            },
+            get course() {
+                return this.lesson.course;
+            },
+
             courseHasExam() {
-                return this.lesson.course.hasExam;
+                return this.course.hasExam;
             },
 
             isPrelearningExam() {
-                return this.lesson.course.data.exam_type === 'prelearning';
-            },
-
-            isCourseComplete() {
-                return this.lesson.course.numberOfLessons
-                    === this.lesson.course.numberOfFinishedLessons;
+                return this.course.examType === 'prelearning';
             },
 
             goToCourseOverview() {

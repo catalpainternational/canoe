@@ -29,6 +29,14 @@
         import { getRoute } from "ReduxImpl/Interface";
 
         export default {
+            components: {
+                raw: Raw,
+            },
+
+            state: {
+                hasAgreed: false,
+            },
+
             TRANSLATIONS: {
                 exam: () => gettext("Course exam"),
                 code: () => gettext("Code of conduct"),
@@ -41,16 +49,11 @@
                 backCourse: () => gettext("Back to Course"),
             },
 
-            components: {
-                raw: Raw,
+            get route() {
+                return getRoute();
             },
-
-            state: {
-                hasAgreed: false,
-            },
-
-            onBeforeMount() {
-                this.course = getRoute().page;
+            get course() {
+                return this.route.page;
             },
 
             agreeToCode() {
@@ -70,7 +73,7 @@
                 // message for what percent a user must score to pass the exam
                 return gettext(
                     "To pass this exam you need to score <strong>%1% or higher</strong>",
-                    minimumScore
+                    this.course.minimumExamScore
                 );
             },
         };

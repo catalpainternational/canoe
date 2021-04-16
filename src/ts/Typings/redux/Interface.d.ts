@@ -14,19 +14,29 @@ declare module "ReduxImpl/Interface" {
     ): void;
     export function getPageData(pageId: any): TWagtailPageData;
 
+    export function storePageComplete(
+        pageId: string | number,
+        date: Date,
+        complete: boolean
+    ): void;
     export function getStoredPageCompletionDate(
         pageId: string
     ): Date | undefined;
-    export function getExamScores(pageId: string | number): Array<any>;
+    export function storeExamScore(
+        pageId: string | number,
+        score: number
+    ): void;
+    export function getExamScore(pageId: string | number): number | undefined;
 
-    export function getExamAnswer(
+    export function getTestAnswer(
         examPageId: string | number,
         questionId: string | number
     ): any;
-    export function getExamAnswers(examPageId: string | number): Array<any>;
-    export function storeExamAnswer(
+    export function getTestAnswers(examPageId: string | number): Array<any>;
+    export function storeTestAnswer(
         examPageId: string | number,
         questionId: string | number,
         answer: any
     ): void;
+    export function clearPageTestAnswers(pageId: string | number): void;
 }

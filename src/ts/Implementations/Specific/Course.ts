@@ -1,13 +1,14 @@
 import { Page } from "../Page";
 import {
-    getExamScores,
-    getExamAnswer,
-    getExamAnswers,
-    storeExamAnswer,
+    getExamScore,
+    storeExamScore,
+    getTestAnswers,
+    clearPageTestAnswers,
 } from "ReduxImpl/Interface";
-import { persistExamScore } from "js/actions/Exam";
+import { persistExamScore } from "js/actions/ExamScores";
+import Lesson from "./Lesson";
 
-const EXAM_PASS_SCORE = 75;
+const EXAM_PASS_SCORE = 0.75;
 
 export default class Course extends Page {
     get lessons(): any {
@@ -19,9 +20,11 @@ export default class Course extends Page {
     get examType(): string {
         return this.storedData.exam_type;
     }
+    get examIsPrelearning(): boolean {
+        return this.examCards && this.examType === "prelearning";
+    }
     get examLink(): string {
-        const startOrCode =
-            this.examCards && this.examType === "prelearning" ? 1 : "code";
+        const startOrCode = this.examIsPrelearning ? 1 : "code";
         return `${this.loc_hash}:exam:${startOrCode}`;
     }
     get examCards(): any[] {
@@ -33,43 +36,14 @@ export default class Course extends Page {
         return examCards;
     }
     get hasUserTriedExam(): boolean {
-        return !!getExamScores(this.id).length;
+        return getExamScore(this.id) !== undefined;
     }
     get examHighScore(): number | undefined {
-        let highScore: number | undefined;
-        getExamScores(this.id).forEach((score) => {
-            if (!highScore || (score.score && score.score > highScore)) {
-                highScore = score.score;
-            }
-        });
-        return highScore;
-    }
-    /** read from state to check if exam passed */
-    get examResult(): Record<string, any> {
-        const numberOfQuestions = this.examCards.length;
-        const answers = getExamAnswers(this.id);
-        if (numberOfQuestions != Object.keys(answers).length) {
-            return {
-                error: "incomplete",
-            };
-        }
-        const correctAnswers = Object.values(answers).filter((a) => a.correct)
-            .length;
-        const score = correctAnswers / numberOfQuestions;
-        return {
-            passed: score > EXAM_PASS_SCORE,
-            score,
-            answers,
-        };
+        return getExamScore(this.id);
     }
     get isExamFinished(): boolean {
-        let finished = false;
-        getExamScores(this.id).forEach((score) => {
-            if (score.score > EXAM_PASS_SCORE) {
-                finished = true;
-            }
-        });
-        return finished;
+        const score = getExamScore(this.id);
+        return score ? score >= EXAM_PASS_SCORE : false;
     }
 
     /**  If the course has ans exam we store
@@ -84,18 +58,10 @@ export default class Course extends Page {
                 };
             }),
         };
-        if (this.hasExam) {
-            courseData.exam = this.examResult;
-        }
         return Object.assign(super.completionData, courseData);
     }
-
-    get numberOfFinishedLessons(): number {
-        let numComplete = this.childPages.filter((l) => l.complete).length;
-        if (this.hasExam && this.isExamFinished) {
-            numComplete += 1;
-        }
-        return numComplete;
+    get lessonsComplete(): boolean {
+        return this.lessons.every((l: Lesson) => l.complete);
     }
     get numberOfLessons(): number {
         return this.lessons.length;
@@ -105,37 +71,63 @@ export default class Course extends Page {
         let latest: Date | undefined = undefined;
         this.childPages.forEach((c) => {
             const complete = c.completeDate;
-            if (complete && latest && complete > latest) {
+            if (!latest || (complete && complete > latest)) {
                 latest = complete;
             }
         });
         return latest;
     }
 
-    saveExamAnswer(
-        questionId: string | number,
-        answer: Record<string, any>
-    ): void {
-        storeExamAnswer(this.id, questionId, answer);
+    saveExamScore(): Record<string, any> {
+        const result = this.examResult;
+        if (!result.error) {
+            // persist in idb and api (this is asyncronous, but synchronously returns the uuid )
+            const examScoreAction = persistExamScore(this.id, result);
+
+            // save in redux in memory state
+            storeExamScore(this.id, examScoreAction.score);
+
+            if (result.passed || this.examType === "prelearning") {
+                // set this course as complete in the store
+                // this will persist in local storage and the server
+                this.addCompletionData({
+                    examScoreUuid: examScoreAction.uuid,
+                });
+                this.complete = true;
+            }
+
+            // clear the answers from memory so they do not show up next time
+            clearPageTestAnswers(this.id);
+        }
+        return result;
+    }
+    /** read from state to check if exam passed */
+    get examResult(): Record<string, any> {
+        const numberOfQuestions = this.examCards.length;
+        const answers = getTestAnswers(this.id);
+        if (numberOfQuestions != Object.keys(answers).length) {
+            return {
+                error: "incomplete",
+            };
+        }
+        const correctAnswers = Object.values(answers).filter((a) => a.correct)
+            .length;
+        const score = correctAnswers / numberOfQuestions;
+        const answersAnnotated = this.examCards.map((card) => {
+            const answer = answers[card.id];
+            return {
+                question: card.question,
+                answer: answer,
+            };
+        });
+        return {
+            passed: score >= EXAM_PASS_SCORE,
+            score,
+            answers: answersAnnotated,
+        };
     }
 
-    saveExamScore(score: number): void {
-        persistExamScore(this.id, score, {});
-    }
-
-    examQuestionAnswer(questionId: string | number): any {
-        return getExamAnswer(this.id, questionId);
-    }
-
-    finalExamScore(): number {
-        const answers = getExamAnswers(this.id);
-        const correctAnswers = answers.filter((answer) => answer.isCorrect);
-        const numberCorrect = correctAnswers.length;
-        const numberOfQuestions = answers.length;
-        return (numberCorrect / numberOfQuestions) * 100;
-    }
-
-    get minumumExamScore(): number {
-        return EXAM_PASS_SCORE;
+    get minimumExamScore(): number {
+        return Math.ceil(EXAM_PASS_SCORE * 100);
     }
 }

@@ -2,11 +2,8 @@
  * User Actions is the place for initialiing the things the user does that we want to persist offline
  * and send and retireve from the server when available
  */
-import {
-    completionsReady,
-} from "ReduxImpl/Interface";
 import { readCompletionsIntoState, clearStateCompletions } from "js/actions/Completion";
-import { readExamDataIntoState, clearStateExamData } from "js/actions/Exam";
+import { readExamDataIntoState, clearStateExamData } from "js/actions/ExamScores";
 import { updateApi, updateIdb } from "js/actions/ActionsStore";
 import { closeAndDeleteDB } from "js/actions/actions_idb";
 import { isAuthenticated, subscribeToStore } from "ReduxImpl/Interface";
@@ -38,7 +35,6 @@ function readFromStoreAndStartPolling() {
         .then(readCompletionsIntoState)
         .then(readExamDataIntoState)
         .then(() => {
-            completionsReady();
             startUpdateApiPolling();
         });
 }

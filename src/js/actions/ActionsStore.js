@@ -21,13 +21,16 @@ const EXAM_ACTION_TYPE = "exam";
 
 export const COMPLETION_ACTION_TYPE = "completion";
 export const EXAM_ANSWER_TYPE = `${EXAM_ACTION_TYPE}.answer`;
-export const EXAM_FINAL_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
+export const EXAM_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
 
 /**
-* Saves an action in the persistent local store
-* If authenticated, posts to the API to persist on the server
-*/
-export const saveAndPostAction = async (actionType, data) => {
+ * Saves an action in the persistent local store
+ * If authenticated, posts to the API to persist on the server
+ * @param {*} actionType 
+ * @param {*} data 
+ * @returnsa the data stored in idb 
+ */
+export const saveAndPostAction = (actionType, data) => {
     const action = {
         type: actionType,
         date: new Date(),
@@ -35,27 +38,20 @@ export const saveAndPostAction = async (actionType, data) => {
         ...data,
     };
 
-    try {
-        await writeIdbAction(action);
-    } catch (err) {
-        logger.error(err);
+    // asnchronous persist
+    writeIdbAction(action).catch(err => logger.error);
+
+    // asynchronous post
+    if (isAuthenticated()) {
+        postAction(action).then(isActionSynched => {
+            if (isActionSynched) {
+                markActionAsSynced(action);
+            }
+        }).catch(err => logger.error);
     }
 
-    if (!isAuthenticated()) {
-        // don't continue to post the action if we are not logged in!
-        return;
-    }
-
-    try {
-        const isActionSynched = await postAction(action);
-        // if response is ok set the record to known in idb
-        // if not ok, we'll try again later
-        if (isActionSynched) {
-            markActionAsSynced(action);
-        }
-    } catch (err) {
-        logger.error(err);
-    }
+    // synchronous return of stored action
+    return action;
 };
 
 /**

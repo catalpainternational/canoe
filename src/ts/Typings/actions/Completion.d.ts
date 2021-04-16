@@ -5,5 +5,5 @@ declare module "js/actions/Completion" {
     export function persistCompletion(
         pageId: string | number,
         extraDataObject: Record<string, any>
-    ): void;
+    ): Record<string, any>;
 }

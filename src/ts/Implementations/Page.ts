@@ -15,6 +15,7 @@ import {
     getPageData as getPageDataFromStore,
     storePageData,
     getStoredPageCompletionDate,
+    storePageComplete,
 } from "ReduxImpl/Interface";
 import { persistCompletion } from "js/actions/Completion";
 
@@ -31,12 +32,14 @@ export class Page extends PublishableItem implements StorableItem {
     #childPages: Page[] | undefined;
     /** the lsit of assets( references stored for efficiency ) */
     #assets: Asset[] = [];
+    /** aany data that might wish to be added to a completion persisted entry */
+    #completionData: Record<string, any> = {};
 
     /**
      * Instantiate a new page from its manifest and id
      * @param manifest the manifest this page comes from
      * @param id the id of this page in the manifest
-     * @param parent the parent of this page ( we could infer this but don't yet )
+     * @param parent the parent of this page ( if not provided is inferred from manifest on need )
      */
     constructor(manifest: Manifest, id: string, parent?: Page) {
         super();
@@ -146,10 +149,6 @@ export class Page extends PublishableItem implements StorableItem {
 
     get loc_hash(): string {
         return this.manifestData?.loc_hash || "";
-    }
-
-    get slug(): string {
-        return this.manifestData.slug;
     }
 
     get parent(): Page | undefined {
@@ -299,15 +298,28 @@ export class Page extends PublishableItem implements StorableItem {
         );
     }
 
+    /** add some data to be stored with the next completion */
+    addCompletionData(data: Record<string, any>): void {
+        Object.assign(this.#completionData, data);
+    }
     /** returns data to be stored with thi page completion */
     get completionData(): Record<string, any> {
-        return {
+        const data = {
             title: this.title,
+            ...this.#completionData,
         };
+        this.#completionData = {};
+        return data;
     }
-    /** sets a page as complete - TODO: set incomplete */
+    /** sets a page as complete */
     set complete(complete: boolean) {
-        persistCompletion(this.id, this.completionData);
+        const data = this.completionData;
+        data["complete"] = !!complete;
+        // store in dbs and the server
+        const action = persistCompletion(this.id, data);
+
+        // set in redux store
+        storePageComplete(this.id, action.date, complete);
     }
     /** if a page has been marked as complete */
     get complete(): boolean {
