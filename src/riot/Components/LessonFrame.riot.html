@@ -26,7 +26,7 @@
             <span class="cross gray"></span>
         </a>
     </TopMenu>
-    <div class="frame-background">
+    <div class="frame-background {userAgent()}">
         <div class="{!props.noCardStyle ? 'card-frame' : 'no-card'}">
             <div class="card-content {props.extrastyleclasses}">
                 <slot />
@@ -51,6 +51,33 @@
                     ? this.props.close()
                     : (window.location.hash = `#${this.props.linkTo}`);
             },
+
+            userAgent() {
+                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent#browser_name
+                const userAgentString = navigator.userAgent;
+                let browser = '';
+                let operatingSystem = '';
+
+                if (userAgentString.includes('Safari/')
+                    && !userAgentString.includes('Chrome/')
+                    && !userAgentString.includes('Chromium/')) {
+                    browser = 'safari';
+                } else if (userAgentString.includes('Firefox/')
+                    && !userAgentString.includes('Seamonkey/')) {
+                    browser = 'firefox';
+                } else if (userAgentString.includes('Chrome/')
+                    && !userAgentString.includes('Chromium/')) {
+                    browser = 'chrome';
+                }
+
+                if (userAgentString.includes('iPhone')) {
+                    operatingSystem = 'ios';
+                } else if (userAgentString.includes('Android')) {
+                    operatingSystem = 'android';
+                }
+
+                return `${browser} ${operatingSystem}`;
+            }
         };
     </script>
 </LessonFrame>
