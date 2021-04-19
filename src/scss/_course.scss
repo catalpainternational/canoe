@@ -1,16 +1,4 @@
 CoursePage {
-    .modal-background.fade:after {
-        z-index: 1;
-    }
-
-    .course-download-complete {
-        background-color: $teal;
-
-        & > .download {
-            background-color: $white;
-        }
-    }
-
     .lesson-swoop {
         @extend %bottom-swoop;
     }
@@ -32,15 +20,35 @@ CoursePage {
             margin-bottom: 2em;
         }
     }
+}
+
+CoursePage,
+Resources {
+    .modal-background.fade:after {
+        z-index: 1;
+    }
+
+    .course-download-complete {
+        background-color: $teal;
+
+        & > .download {
+            background-color: $white;
+        }
+    }
+
+    .modal {
+        height: 90vh;
+    }
 
     .modal .btn-primary {
         max-width: 220px;
     }
 
-    .modal .close-btn {
-        position: absolute;
-        right: 0.5em;
-        top: 0.5em;
+    .modal-close-btn {
+        position: fixed;
+        right: 1.2em;
+        top: 1.2em;
+        z-index: 1;
     }
 
     .download-block {

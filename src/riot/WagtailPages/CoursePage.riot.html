@@ -1,8 +1,13 @@
 <CoursePage>
-    <div if="{state.showDownloadModal}"
-        class="modal-background fade"
-        onclick="{toggleDownloadModal}">
-    </div>
+    <template if="{state.showDownloadModal}">
+        <div class="modal-background fade"
+            onclick="{toggleDownloadModal}">
+        </div>
+        <div class="cross gray modal-close-btn"
+            onclick="{toggleDownloadModal}">
+        </div>
+    </template>
+
     <TopMenu
         extrastyleclasses="with-swoop has-image"
         backgroundImage="{getCardImage(course.loc_hash, course.cardImage)}"
@@ -68,10 +73,9 @@
     </div>
 
     <PopupModal if="{state.showDownloadModal}" togalModal="{toggleDownloadModal}">
-        <div class="cross gray close-btn" onclick="{toggleDownloadModal}" tabindex="0"></div>
         <span class="download-course"></span>
         <h3>{ TRANSLATIONS.download_course() }</h3>
-        <button class="btn-primary" onclick="{downloadAllLessons}">{ TRANSLATIONS.download_all() }</button>
+        <!-- <button class="btn-primary" onclick="{downloadAllLessons}">{ TRANSLATIONS.download_all() }</button> -->
         <LessonDownload
             each="{(lesson, index) in course.lessons}"
             contentItem="{lesson}"
