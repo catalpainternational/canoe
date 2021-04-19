@@ -67,12 +67,12 @@ LessonFrame {
         flex-flow: row nowrap;
         align-items: stretch;
 
-        &.safari.ios {
+        &.safari {
             height: calc(#{$base-card-height} - 100px);
         }
 
-        &.chrome.android,
-        &.firefox.android {
+        &.chrome,
+        &.firefox {
             height: calc(#{$base-card-height} - 60px);
         }
     }
