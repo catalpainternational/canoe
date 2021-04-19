@@ -57,11 +57,11 @@ LessonFrame {
         }
     }
 
+    // the 25px adds some room for the stacked cards below, the 50px is
+    // for the buttons
     $base-card-height: calc(100vh - #{$top-menu-height} - 25px - 50px);
 
     .frame-background {
-        // the 25px adds some room for the stacked cards below, the 50px is
-        // for the buttons
         height: $base-card-height;
         display: flex;
         flex-flow: row nowrap;
