@@ -1,4 +1,4 @@
-import { Page } from "../Page";
+import { Page, ProgressValues } from "../Page";
 import {
     getExamScore,
     storeExamScore,
@@ -43,7 +43,11 @@ export default class Course extends Page {
     }
     get isExamFinished(): boolean {
         const score = getExamScore(this.id);
-        return score ? score >= EXAM_PASS_SCORE : false;
+        if (this.examIsPrelearning && score !== undefined) {
+            return true;
+        } else {
+            return score !== undefined && score > EXAM_PASS_SCORE;
+        }
     }
 
     /**  If the course has ans exam we store
@@ -57,6 +61,7 @@ export default class Course extends Page {
                     title: l.title,
                 };
             }),
+            pageType: "course",
         };
         return Object.assign(super.completionData, courseData);
     }
@@ -129,5 +134,22 @@ export default class Course extends Page {
 
     get minimumExamScore(): number {
         return Math.ceil(EXAM_PASS_SCORE * 100);
+    }
+
+    /** the data to show in a progress bar for a course includes
+     * the exam, we need wait for the page to be ready to know if it has an exam
+     */
+    get progressValues(): ProgressValues {
+        const values = super.progressValues;
+        if (!this.ready) {
+            // kick of an async prepare to get the exam data
+            this.prepare();
+            // return the progress without exam data
+            return values;
+        } else {
+            values.min += this.isExamFinished ? 1 : 0;
+            values.max += this.hasExam ? 1 : 0;
+            return values;
+        }
     }
 }

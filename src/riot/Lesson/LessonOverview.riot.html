@@ -1,5 +1,5 @@
 <LessonOverview>
-    <LessonContent if="{ lesson.ready }"></LessonContent>
+    <LessonContent if="{ section && lesson.ready }"></LessonContent>
     <LessonPage if="{ !section }"></LessonPage>
 
     <script>

@@ -10,7 +10,7 @@
         <div class="card-title">
             <h5 class="clamp-lines">{ title() }</h5>
             <progress
-                if="{ progressValues() }"
+                if="{ progressValues().min > 0 &&}"
                 value="{ progressValues().min}"
                 max="{ progressValues().max }"
             ></progress>

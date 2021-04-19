@@ -25,7 +25,7 @@
     <script>
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
 
-        import { getRoute, getTestAnswer } from "ReduxImpl/Interface";
+        import { getRoute, getTestAnswer, clearPageTestAnswers } from "ReduxImpl/Interface";
 
         export default {
             components: {
@@ -67,6 +67,9 @@
             completePage() {
                 this.props.toggleModal(false);
                 this.props.lesson.complete = true;
+
+                // clear the answers from memory so they do not show up next time
+                clearPageTestAnswers(this.lesson.id);
 
                 location.hash = this.props.lesson.loc_hash + ":content:feedback";
             },

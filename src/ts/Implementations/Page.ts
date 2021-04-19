@@ -315,7 +315,7 @@ export class Page extends PublishableItem implements StorableItem {
     set complete(complete: boolean) {
         const data = this.completionData;
         data["complete"] = !!complete;
-        // store in dbs and the server
+        // store in idb and the server
         const action = persistCompletion(this.id, data);
 
         // set in redux store
@@ -340,10 +340,8 @@ export class Page extends PublishableItem implements StorableItem {
             return "in-progress";
         }
     }
-    /** the data to show in a progress bar for this page
-     * if false show no progress bar
-     */
-    get progressValues(): Record<string, number> | false {
+    /** the data to show in a progress bar for this page */
+    get progressValues(): ProgressValues {
         return {
             min: this.childPages.filter((c) => c.complete).length,
             max: this.childPages.length,
@@ -381,3 +379,7 @@ export class Page extends PublishableItem implements StorableItem {
 }
 
 type ProgressStatus = "not-started" | "in-progress" | "complete";
+export type ProgressValues = {
+    min: number;
+    max: number;
+};
