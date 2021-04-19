@@ -3,6 +3,7 @@ export const MEDIA_PATH = "/media";
 export const APPELFLAP_PKI = `${BACKEND_BASE_URL}/appelflap_PKI`;
 
 export const ROUTES_FOR_REGISTRATION = {
+    logout: `${BACKEND_BASE_URL}/api_logout/`,
     media: `${BACKEND_BASE_URL}/media/media(_transcodes)?/.+`,
     images: `${BACKEND_BASE_URL}/media/images/.+`,
     pagesv2: `${BACKEND_BASE_URL}/api/v2/pages/.*`,

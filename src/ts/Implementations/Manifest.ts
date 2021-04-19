@@ -19,7 +19,6 @@ import TeachingActivity from "./Specific/TeachingActivity";
 // See ts/Typings for the type definitions for these imports
 import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
 import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
 
 const logger = new Logger("Manifest");
 
@@ -57,10 +56,6 @@ export class Manifest extends PublishableItem implements StorableItem {
             mode: "cors",
             referrer: BACKEND_BASE_URL,
         };
-        const token = getAuthenticationToken();
-        if (token) {
-            reqInit["headers"] = { Authorization: `JWT ${token}` };
-        }
 
         return reqInit as RequestInit;
     }

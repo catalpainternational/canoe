@@ -2,7 +2,6 @@ import { TCertificate } from "./Types/CacheTypes";
 
 import { AppelflapConnect } from "./AppelflapConnect";
 
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 
 export class CertChain {
@@ -62,8 +61,8 @@ export class CertChain {
                 method: "POST",
                 headers: {
                     "content-type": "application/x-pem-file",
-                    Authorization: `JWT ${getAuthenticationToken()}`,
                 },
+                credentials: "include",
                 body: this.#packageCert?.cert,
             } as RequestInit;
             const resp = await fetch(

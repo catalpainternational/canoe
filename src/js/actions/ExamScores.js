@@ -4,7 +4,7 @@
  * Depends on the action_store module to persist information
  */
 
-import { storeExamScores } from "js/redux/Interface";
+import { storeExamScores, clearExamScores } from "js/redux/Interface";
 import { 
     saveAndPostAction, readActions,
     EXAM_SCORE_TYPE,
@@ -17,7 +17,7 @@ const logger = new Logger("Exam Scores");
  * Clear the in memory store of exam scores - for use on logout
  */
 export const clearStateExamData = () => {
-    clearExamStore();
+    clearExamScores();
 };
 
 /**

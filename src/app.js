@@ -12,6 +12,15 @@ import { initialiseRouting } from "js/Routing"
 import { initialiseBrowserSupport } from "js/BrowserSupport"
 import initialiseFeedback from "js/Telemetry";
 
+riot.install(function (component) {
+    // all components will pass through here
+    installTranslationPlugin(component);
+    installReduxPlugin(component);
+});
+
+riot.register("app", App);
+const mounted = riot.mount("app");
+
 initialiseIdentity();
 initialiseOnlineStatus(window);
 initialiseBrowserSupport();
@@ -20,11 +29,3 @@ initialiseUserActions();
 initialiseFeedback();
 // InitialiseCertChain is done after login or valid initialiseIdentity with a token
 
-riot.install(function (component) {
-    // all components will pass through here
-    installTranslationPlugin(component);
-    installReduxPlugin(component);
-});
-
-riot.register("app", App);
-riot.mount("app");

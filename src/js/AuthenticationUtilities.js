@@ -2,96 +2,68 @@ import { BACKEND_BASE_URL } from "js/urls";
 import { unsubscribeFromNotifications } from "js/Notifications";
 import { setAuthenticated, setUnauthenticated, getUser } from "ReduxImpl/Interface";
 
-import { initialiseCertChain } from "ts/StartUp";
-
-const USERNAME_STORAGE_KEY = "username";
-const USER_ID_STORAGE_KEY = "userId";
-const JWT_TOKEN_STORAGE_KEY = "token";
-const USER_GROUPS_STORAGE_KEY = "userGroups";
-
-const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
-    // sets name=value cookie
-    // sets keyOnlyAttributes provided eg ['secure', 'samesite']
-    // sets value attributes provided eg {max-age: 3e8} to set expiry to 10 years in the future.
-    // and potentially does vastly different things, because it does not escape inputs.
-    document.cookie = Object.entries(attributes).reduce(
-        (cookieString, keyValue) => `${cookieString};${keyValue[0]}=${keyValue[1]}`,
-        keyOnlyAttributes.reduce(
-            (cookieString, attribute) => `${cookieString};${attribute}`,
-            `${name}=${value}`
-        )
-    );
-};
-
-const getCookie = (name) => {
-    const found_cookie = document.cookie.split(`; `).find((tokenString) => {
-        const [key] = tokenString.split("=");
-        return key === name;
-    });
-
-    return found_cookie ? found_cookie.substring(found_cookie.indexOf('=') + 1) : null
-};
-
-const deleteCookie = (name) => {
-    document.cookie = `${name}=; expired=${new Date(0)}`;
-};
-
-const fetchAuthToken = async (usernameAndPassword) => {
-    return fetch(`${BACKEND_BASE_URL}/token-auth/`, {
+/** Post a login request to the server */
+export const login = async (usernameAndPassword) => {
+    const formData = new FormData();
+    formData.append('username', usernameAndPassword.username);
+    formData.append('password', usernameAndPassword.password);
+    fetch(`${BACKEND_BASE_URL}/post_login`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(usernameAndPassword),
+        credentials: 'include',
+        body: formData,
     })
     .then((response) => {
         if (!response.ok) throw new Error(`Login failed, HTTP status: ${response.status}`);
         return response.json();
+    }).then(setAuthenticated);
+};
+
+/** Post a logout request to the server */
+export const logout = () => {
+    fetch(`${BACKEND_BASE_URL}/api_logout/`, {
+        method: "POST",
+        credentials: 'include',
+    }).catch((err) => {
+        // delete the Canoe=Offline-Session cookie
+        // Django is configured to log users out if no Canoe-Offline-Session is received
+        deleteCookie('Canoe-Offline-Session');
     })
-};
-
-export const login = async (usernameAndPassword) => {
-    const { token, username, userId, groups } = await fetchAuthToken(usernameAndPassword);
-
-    // Browsers refuse to set secure cookies from non https locations
-    setCookie(
-        JWT_TOKEN_STORAGE_KEY,
-        token,
-        window.location.protocol === "https:" ? ["secure"] : [],
-        { "max-age": 3e8, samesite: "lax" }
-    );
-    localStorage.setItem(USERNAME_STORAGE_KEY, username);
-    localStorage.setItem(USER_ID_STORAGE_KEY, userId);
-    localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
-    setAuthenticated({username, userId, groups});
-
-    initialiseCertChain(window);
-};
-
-export const logout = async () => {
-    deleteCookie(JWT_TOKEN_STORAGE_KEY);
-    localStorage.clear();
     unsubscribeFromNotifications();
     setUnauthenticated();
-
-    // Add something here to revoke the certChain
+    window.location.hash = "";
 };
 
+/** detect the login status */
 export const initialiseIdentity = () => {
-    const token = getAuthenticationToken();
-    if (token) {
-        setAuthenticated({
-            username: localStorage.getItem(USERNAME_STORAGE_KEY),
-            userId: localStorage.getItem(USER_ID_STORAGE_KEY),
-            groups: localStorage.getItem(USER_GROUPS_STORAGE_KEY),
-        });
-        initialiseCertChain(window);
-    }
+    const checkUrl = `${BACKEND_BASE_URL}/api_login/check`;
+    fetch(checkUrl, {
+        method: "GET",
+        credentials: "include",
+    }).then((response) => {
+        if(response.status === 401) {
+            // The server has firectly told us we are unauthenticated
+            setUnauthenticated();
+        } else if (response.ok) {
+            // The server says we are authenticated, set the identity
+            const responseClone = response.clone();
+            response.json().then((userDetails) => {
+                setAuthenticated(userDetails);
+                caches.open('user-details').then((cache) => {
+                    cache.put(checkUrl, responseClone);
+                });
+            });
+        }
+    }).catch((err) => {
+        // we may be offline, check the cache for auth details
+        caches.open('user-details').then((cache) => {
+            cache.match(checkUrl).then((match) => {
+                if (match !== undefined) {
+                    match.json().then(setAuthenticated);
+                }
+            })
+        })
+    });
 }
-
-export const getAuthenticationToken = () => {
-    return getCookie(JWT_TOKEN_STORAGE_KEY) || "";
-};
 
 export const getUsername = () => {
     const user = getUser();
@@ -115,4 +87,8 @@ export const getUserId = () => {
 export const getUserGroups = () => {
     const user = getUser();
     return user ? user.groups : null;
+};
+
+const deleteCookie = (name) => {
+    document.cookie = `${name}=; expires=0`;
 };

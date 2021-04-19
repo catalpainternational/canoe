@@ -29,6 +29,14 @@ export abstract class PublishableItem {
         };
     }
 
+    getRequestOptions(): RequestInit {
+        return Object.assign(
+            {
+                credentials: "include",
+            },
+            this.requestOptions
+        );
+    }
     /**
      * Get a network response for this item, caching it appropriately
      * @returns a request response for this item
@@ -38,7 +46,7 @@ export abstract class PublishableItem {
         logger.log("using network for %s:%s", this.str, this.url);
         let response;
         try {
-            response = await fetch(this.url, this.requestOptions);
+            response = await fetch(this.url, this.getRequestOptions());
         } catch {
             logger.warn("request failed for %s:%s", this.str, this.url);
             throw Error("Network error");

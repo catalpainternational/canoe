@@ -1,5 +1,4 @@
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import {
     getFeedbackKeysFromIdb,
     getFeedbackFromIdb,
@@ -14,15 +13,12 @@ const createPOSTRequest = (path, body) => {
         method: "POST",
         body: JSON.stringify(body),
         mode: "cors",
+        credentials: "include",
         headers: {
             "Content-Type": "application/json",
         },
     };
 
-    const token = getAuthenticationToken();
-    if (token) {
-        requestContent.headers.Authorization = `JWT ${token}`;
-    }
     return new Request(ACTIONS_ENDPOINT, requestContent);
 };
 

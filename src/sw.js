@@ -2,7 +2,6 @@ import { registerRoute } from "workbox-routing/registerRoute.mjs";
 
 import { setCatchHandler } from "workbox-routing/setCatchHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
-import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
 import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
 
 import { RangeRequestsPlugin } from "workbox-range-requests";
@@ -18,7 +17,6 @@ precacheAndRoute(self.__WB_MANIFEST);
 self.__WB_DISABLE_DEV_LOGS = true;
 
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
-import { buildAppelflapRoutes } from "js/RoutingAppelflap";
 
 const cardImageFallbackUrl = (url) => {
     if (url.match(/cardImageFallback=([^&]*)/)[1]) {
@@ -26,7 +24,6 @@ const cardImageFallbackUrl = (url) => {
     };
     return null;
 };
-
 
 const cardFallbackPlugin = {
     fetchDidSucceed: async ({request, response, event, state}) => {
@@ -74,7 +71,6 @@ setCatchHandler(({url, event, params}) => {
    return Response.error();
 });
 
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagesv2), new NetworkOnly());
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheAnyOrFetchOnly());
 registerRoute(
     new RegExp(ROUTES_FOR_REGISTRATION.media),
@@ -82,28 +78,6 @@ registerRoute(
         plugins: [new RangeRequestsPlugin()],
     })
 );
-
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly());
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly(), "POST");
-
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagePreviewv2), new NetworkOnly());
-
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly());
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly(), "POST");
-
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly());
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly(), "POST");
-
-// Set up routes to Appelflap, if Canoe is not hosted by Appelflap this does nothing
-buildAppelflapRoutes().forEach((routeDef) => {
-    registerRoute(new RegExp(routeDef[0]), new NetworkOnly(), routeDef[1]);
-});
-
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.appelflapPKIsign), new NetworkOnly(), "POST");
-
-// webpack-dev-server communicates over this endpoint. Without this clause, the
-// service worker caches these requests and breaks webpack-dev-server.
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.socketInfo), new NetworkOnly());
 
 const getNotificationTitleMessageAndTag = (eventData) => {
     let title = null;
