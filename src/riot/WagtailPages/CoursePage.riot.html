@@ -85,19 +85,22 @@
             </template>
 
             <template if="{state.selectedTab === 'discussion'}">
-                <template if="{state.selectedDiscussionId === null}">
+                <template if="{state.lessonsWithDiscussions.length === 0}">
+                    No discussions on this course yet.
+                </template>
+                <template if="{state.selectedDiscussionId === null && state.lessonsWithDiscussions.length}">
                     <DiscussionCard
-                        each="{(lesson, index) in course.lessons}"
+                        each="{(lesson, index) in state.lessonsWithDiscussions}"
                         contentItem="{lesson}"
                         contentIndex="{index}"
                         selectDiscussionHandler="{selectDiscussion}"
-                        question="{state.sampleQuestions[index % state.sampleQuestions.length]}"
                     ></DiscussionCard>
                 </template>
                 <template if="{state.selectedDiscussionId !== null}">
+                    <!-- TODO fix the lesson number here -->
                     <DiscussionThread
                         lesson="{state.selectedDiscussionLesson}"
-                        lessonNumber="{state.selectedDiscussionId + 1}"
+                        lessonNumber="{1}"
                         selectDiscussionHandler="{selectDiscussion}"
                         question="{state.sampleQuestions[state.selectedDiscussionId % state.sampleQuestions.length]}"
                     ></DiscussionThread>
@@ -141,6 +144,7 @@
                 selectedTab: getRoute().riotHash[0] === 'discussion' ? 'discussion' : 'lessons',
                 selectedDiscussionId: getRoute().riotHash[2] ? getRoute().riotHash[2] : null,
                 // TODO backend linkup
+                lessonsWithDiscussions: [],
                 sampleQuestions: [
                     'What is the purpose of porpoises?',
                     'How much wood would a woodchuck chuck if a woodchuck would chuck wood?',
@@ -165,11 +169,13 @@
 
             onBeforeMount(props, state) {
                 this.course = getRoute().page;
+                state.lessonsWithDiscussions = this.course.data.lessons.filter(it => it.discussion.length);
                 this.course.isAvailableOffline()
                     .then(cached => {
                         this.update({cached});
                     })
             },
+
 
             backToAllCourses() {
                 location.hash = "";
