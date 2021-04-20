@@ -1,14 +1,15 @@
 <DiscussionThread>
-    <div class="card">
-        <div class="lesson-title">
-            <p class="number">{props.lessonNumber}</p>
-            <p class="title">{props.lesson.title}</p>
-        </div>
-        <div class="bottom-row">
-            <span class="arrow" onclick="{() => props.selectDiscussionHandler(null)}"></span>
-            <div class="question">
-                <h2>{props.question}</h2>
+    <div class="lesson-title">
+        <span class="arrow" onclick="{() => props.selectDiscussionHandler(null)}"></span>
+        <p class="number">{props.lessonNumber}</p>
+        <p class="title">{props.lesson.title}</p>
+    </div>
+    <div class="card full-width">
+        <div class="discussion-header">
+            <div class="asker">
+                <div class="circle"></div>
             </div>
+            <h2>{props.question.question}</h2>
         </div>
         <div id="comment-input" class="form-group">
             <label for="comment">{TRANSLATIONS.addComment()}</label>
@@ -18,6 +19,7 @@
                 oninput="{updateCommentValue}"
                 onfocus="{setInputFocus}"
                 onblur="{removeInputFocus}"
+                maxlength="280"                
             ></textarea>
         </div>
         <button
@@ -62,43 +64,42 @@
                         userId: '6',
                         username: 'Kevin Bacon',
                         timestamp: new Date('27 march 2021'),
-                        text: 'Porpoises are purposeful',
-                        // ask backend about flat array vs. nested array for replies
+                        text: 'Lorem ipsum dolor sit amet',
                     }, {
                         id: 1618267586676,
                         parentId: null,
                         userId: '1',
                         username: 'Stacey Reed',
                         timestamp: new Date('17 january 2021'),
-                        text: 'I think porpoises are quite cute',
+                        text: 'Consectetur adipisicing elit!',
                     }, {
                         id: 1618267585505,
                         parentId: null,
                         userId: '14',
                         username: 'Alan Tate',
                         timestamp: new Date('3 october 2020'),
-                        text: 'Porpoises make very good friends for dolphins & whales',
+                        text: 'Itaque, mollitia, asperiores?',
                     }, {
                         id: 1618267582777,
                         parentId: null,
                         userId: '29',
                         username: 'Katie Johnson',
                         timestamp: new Date('15 april 2015'),
-                        text: 'Porpoises are sometimes mistaken for mermaids',
+                        text: 'Totam corrupti reprehenderit necessitatibus, soluta magni alias commodi, nisi praesentium iusto odio quidem similique quasi fuga itaque aliquam culpa.',
                     }, {
                         id: 1618360446287,
                         parentId: 1618267587850,
                         userId: '75',
                         username: 'Camila García',
                         timestamp: new Date('12 april 2021'),
-                        text: 'I don\'t think that\'s entirely true.'
+                        text: 'Iusto sapiente consectetur ratione nemo suscipit ut nobis et illum impedit cupiditate, repellat minus harum tempore sed, mollitia similique sit pariatur!'
                     }, {
                         id: 1618267587249,
                         parentId: 1618267587850,
                         userId: '14',
                         username: 'Alan Tate',
                         timestamp: new Date('28 march 2021'),
-                        text: 'I agree!',
+                        text: 'Sequi sit quas enim ducimus ipsam a incidunt, est.',
                     }],
                     user: getUser(),
                     // TODO will sorting be done on the API, or in the FE?

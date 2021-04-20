@@ -102,7 +102,7 @@
                         lesson="{state.selectedDiscussionLesson}"
                         lessonNumber="{1}"
                         selectDiscussionHandler="{selectDiscussion}"
-                        question="{state.sampleQuestions[state.selectedDiscussionId % state.sampleQuestions.length]}"
+                        question="{state.selectedDiscussion}"
                     ></DiscussionThread>
                 </template>
             </template>
@@ -139,19 +139,10 @@
                 showLongDescription: false,
                 showDownloadModal: false,
                 cached: false,
-                // TODO possibly add a boolean here for disabling discussions for now & adding a 'coming soon' flag
-                // this'll come from backend
-                selectedTab: getRoute().riotHash[0] === 'discussion' ? 'discussion' : 'lessons',
-                selectedDiscussionId: getRoute().riotHash[2] ? getRoute().riotHash[2] : null,
-                // TODO backend linkup
                 lessonsWithDiscussions: [],
-                sampleQuestions: [
-                    'What is the purpose of porpoises?',
-                    'How much wood would a woodchuck chuck if a woodchuck would chuck wood?',
-                    'How does this lesson make you feel?',
-                    'Why is the sky blue?',
-                    'When will the singularity arrive?',
-                ],
+                selectedTab: 'lessons',
+                selectedDiscussionId: null,
+                selectedDiscussion: {},
                 selectedDiscussionLesson: {},
             },
 
@@ -168,8 +159,22 @@
             },
 
             onBeforeMount(props, state) {
-                this.course = getRoute().page;
+                const route = getRoute()
+                this.course = route.page;
                 state.lessonsWithDiscussions = this.course.data.lessons.filter(it => it.discussion.length);
+
+                if (route.riotHash[0]) {
+                    state.selectedTab = 'discussion';
+                }
+
+                if (route.riotHash[2]) {
+                    state.selectedDiscussionId = route.riotHash[2];
+                    state.selectedDiscussionLesson = this.course.data.lessons
+                        .find(it => it.id == route.riotHash[1]);
+                    state.selectedDiscussion = state.selectedDiscussionLesson.discussion
+                        .find(it => it.id == state.selectedDiscussionId);
+                }
+
                 this.course.isAvailableOffline()
                     .then(cached => {
                         this.update({cached});
@@ -200,16 +205,19 @@
             },
 
             selectDiscussion(index, lesson = null) {
+                let discussion = {};
                 if (index === null) {
                     location.hash = `#${this.course.loc_hash}:discussion`;
                 }
                 else {
                     location.hash = `#${this.course.loc_hash}:discussion:${lesson.id}:${index}`;
+                    discussion = lesson.discussion.find((it) => it.id === index);
                 }
 
                 this.update({
                     selectedDiscussionId: index,
                     selectedDiscussionLesson: lesson,
+                    selectedDiscussion: discussion,
                 });
             },
 

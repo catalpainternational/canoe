@@ -29,9 +29,6 @@ Profile {
 
         &.selected {
             border-bottom: 2px solid $app-accent-color;
-            // TODO: is this style just for a course page, or global?
-            background-color: $gray-10;
-            border-radius: 5px 5px 0 0;
 
             h5.section-title {
                 color: $gray-1;

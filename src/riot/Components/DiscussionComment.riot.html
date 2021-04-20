@@ -9,7 +9,7 @@
         <p class="comment">
             {props.comment.text}
         </p>
-        <p class="reply" onclick="{openReplyTextbox}">Reply <span class="reply-arrow">&#8617;</span></p>
+        <p class="reply" onclick="{openReplyTextbox}">Reply <span class="reply-arrow"></span></p>
         <div if="{props.comment.replies.length}" class="toggle-replies" onclick="{toggleReplies}">
             <template if="{state.showReplies}">&minus;</template>
             <template if="{!state.showReplies}">&plus;</template>
@@ -24,6 +24,7 @@
                 oninput="{props.updateCommentValue}"
                 onfocus="{props.setInputFocus}"
                 onblur="{props.removeInputFocus}"
+                maxlength="280"
             ></textarea>
         </div>
         <button if="{state.showReplyTextbox}" class="btn-primary" onclick="{addReply}">
@@ -31,8 +32,6 @@
         </button>
     </div>
     <div if="{props.comment.replies.length && state.showReplies}" class="reply-thread">
-        <!-- TODO if there is a way to make this recursive, please do it. play around a bit more! -->
-        <!-- i.e. <DiscussionComment> -->
         <DiscussionReply
             if="{props.comment.replies.length}"
             each="{reply in props.comment.replies}"
