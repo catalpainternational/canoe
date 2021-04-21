@@ -4,7 +4,7 @@
  * Depends on the action_store module to persist information
  */
 
-import { storePageCompletions, bumpCompletionsStoreVersion } from "js/redux/Interface";
+import { storePageCompletions, clearStoredCompletions } from "js/redux/Interface";
 import { saveAndPostAction, readActions, COMPLETION_ACTION_TYPE } from "./ActionsStore";
 import Logger from "../../ts/Logger";
 
@@ -14,7 +14,7 @@ const logger = new Logger("Completions");
  * Clear the in memory store of completions - for use on logout
  */
 export const clearStateCompletions = () => {
-    clearCompletions();
+    clearStoredCompletions();
 };
 
 /**
