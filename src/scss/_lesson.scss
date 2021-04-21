@@ -92,6 +92,10 @@ LessonFrame {
         justify-content: flex-start;
         height: 100%;
         overflow: scroll;
+
+        &.fade:after {
+            @extend %faded-modal-background;
+        }
     }
 }
 
@@ -321,6 +325,10 @@ iframe {
     box-sizing: border-box;
 }
 
+Test {
+    width: 100%;
+}
+
 TestMultipleAnswer,
 TestSingleAnswer {
     width: 100%;
@@ -352,7 +360,8 @@ TestSingleAnswer {
     }
 }
 
-test {
+test,
+.answers-block {
     h3 {
         align-self: start;
     }
@@ -491,11 +500,6 @@ test {
             }
         }
     }
-
-    &.fade:after {
-        @extend %faded-modal-background;
-    }
-
 }
 
 LessonFeedback {
