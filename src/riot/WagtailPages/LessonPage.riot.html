@@ -6,7 +6,7 @@
         <div class="message-container">
             <h5>{TRANSLATIONS.lesson()}</h5>
             <h3>{lesson.title}</h3>
-            <div if="{state.cardImageUrl}" class="lesson-page-image-wrap">
+            <div if="{ cardImageUrl }" class="lesson-page-image-wrap">
                 <img
                     crossorigin="anonymous"
                     src="{ cardImageUrl }"
@@ -41,7 +41,7 @@
             },
 
             get cardImageUrl() {
-                this.lesson.cardImage
+                return this.lesson.cardImage
                     ? `${process.env.API_BASE_URL}${this.lesson.cardImage}`
                     : undefined;
             },
