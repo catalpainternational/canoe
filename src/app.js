@@ -11,6 +11,11 @@ import { initialiseUserActions } from "js/UserActions";
 import { initialiseRouting } from "js/Routing"
 import { initialiseBrowserSupport } from "js/BrowserSupport"
 import initialiseFeedback from "js/Telemetry";
+import { initialiseCertChain } from "ts/StartUp";
+
+// Syncronous initialization
+initialiseOnlineStatus(window);
+initialiseBrowserSupport();
 
 riot.install(function (component) {
     // all components will pass through here
@@ -21,11 +26,15 @@ riot.install(function (component) {
 riot.register("app", App);
 const mounted = riot.mount("app");
 
-initialiseIdentity();
-initialiseOnlineStatus(window);
-initialiseBrowserSupport();
-initialiseRouting();
-initialiseUserActions();
-initialiseFeedback();
-// InitialiseCertChain is done after login or valid initialiseIdentity with a token
+// Asynchronous initialization
+initialiseIdentity()
+    .then(() => {
+        return Promise.all([
+            initialiseUserActions(),
+            initialiseFeedback(),
+            initialiseCertChain(),
+        ]);
+    }).then(() => {
+        initialiseRouting();
+    });
 

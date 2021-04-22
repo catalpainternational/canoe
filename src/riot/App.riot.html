@@ -1,7 +1,13 @@
 <App>
     <LoadingDots
+        if="{ !isAuthenticationDetected }"
         extrastyleclasses="dark app"
-        message="HElloooooo"
+        message="Checking who you are..."
+    ></LoadingDots>
+    <LoadingDots
+        if="{ isAuthenticationDetected && !userActionsReady }"
+        extrastyleclasses="dark app"
+        message="Loading your history..."
     ></LoadingDots>
     <ChangeBrowser></ChangeBrowser>
 
@@ -43,6 +49,8 @@
     <script>
         import {
             isBrowserSupported,
+            isAuthenticationDetected,
+            userActionsReady,
             getRoute
         } from "ReduxImpl/Interface";
 
@@ -82,6 +90,9 @@
             }
             return {
                 state: readState(),
+
+                get isAuthenticationDetected() { return isAuthenticationDetected(); },
+                get userActionsReady() { return userActionsReady(); },
 
                 onUpdated(props, state) {
                     scrollToFirstUnfinishedContent();

@@ -1,7 +1,6 @@
 import { getLanguage, setRoute, isAuthenticated } from "ReduxImpl/Interface";
 import { logPageView } from "js/GoogleAnalytics";
 
-import { InitialiseByRequest } from "ts/Implementations/CacheItem";
 import { Manifest } from "ts/Implementations/Manifest";
 
 // If true REQUIRE_LOGIN will always redirect any user who does not have a login to the login page

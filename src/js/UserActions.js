@@ -19,7 +19,7 @@ let currentAuthenticatedState = false;
  */
 export function initialiseUserActions() {
     currentAuthenticatedState = isAuthenticated();
-    readFromStoreAndStartPolling()
+    return readFromStoreAndStartPolling()
         .then(() => {
             subscribeToStore(storeListener);
         });

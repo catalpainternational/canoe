@@ -2,12 +2,13 @@ import { BACKEND_BASE_URL } from "js/urls";
 import { unsubscribeFromNotifications } from "js/Notifications";
 import { setAuthenticated, setUnauthenticated, getUser } from "ReduxImpl/Interface";
 
+const authUrl = `${BACKEND_BASE_URL}/auth`;
 /** Post a login request to the server */
 export const login = async (usernameAndPassword) => {
     const formData = new FormData();
     formData.append('username', usernameAndPassword.username);
     formData.append('password', usernameAndPassword.password);
-    fetch(`${BACKEND_BASE_URL}/post_login`, {
+    fetch(authUrl, {
         method: "POST",
         credentials: 'include',
         body: formData,
@@ -20,7 +21,7 @@ export const login = async (usernameAndPassword) => {
 
 /** Post a logout request to the server */
 export const logout = () => {
-    fetch(`${BACKEND_BASE_URL}/api_logout/`, {
+    fetch(authUrl, {
         method: "POST",
         credentials: 'include',
     }).catch((err) => {
@@ -34,34 +35,38 @@ export const logout = () => {
 };
 
 /** detect the login status */
-export const initialiseIdentity = () => {
-    const checkUrl = `${BACKEND_BASE_URL}/api_login/check`;
-    fetch(checkUrl, {
+export const initialiseIdentity = async () => {
+    return fetch(authUrl, {
         method: "GET",
         credentials: "include",
-    }).then((response) => {
+    }).then(async (response) => {
         if(response.status === 401) {
-            // The server has firectly told us we are unauthenticated
-            setUnauthenticated();
+            // The server has told us we are unauthenticated
+            return setUnauthenticated();
         } else if (response.ok) {
             // The server says we are authenticated, set the identity
             const responseClone = response.clone();
-            response.json().then((userDetails) => {
-                setAuthenticated(userDetails);
-                caches.open('user-details').then((cache) => {
-                    cache.put(checkUrl, responseClone);
-                });
+            const userDetails = await response.json();
+            caches.open('user-details').then((cache) => {
+                cache.put(authUrl, responseClone);
             });
+            return setAuthenticated(userDetails);
+        } else {
+            throw new Error('unexpected auth response');
         }
-    }).catch((err) => {
+    }).catch(async (err) => {
         // we may be offline, check the cache for auth details
-        caches.open('user-details').then((cache) => {
-            cache.match(checkUrl).then((match) => {
-                if (match !== undefined) {
-                    match.json().then(setAuthenticated);
-                }
-            })
-        })
+        const cache = await caches.open('user-details');
+        const match = await cache.match(checkUrl);
+        if (match !== undefined) {
+            const userDetails = await match.json();
+            // The cache says we are authenticated, set the identity
+            return setAuthenticated(userDetails);
+        }
+        else {
+            // The cache has told us we are unauthenticated
+            return setUnauthenticated();
+        }
     });
 }
 

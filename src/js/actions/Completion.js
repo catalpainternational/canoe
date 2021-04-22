@@ -28,15 +28,13 @@ export async function readCompletionsIntoState() {
         logger.warn("Error in reading completions from store %o", e);
     }
     const actionsToStore = actions.filter((a) => a.pageId);
-    if (actionsToStore.length) {
-        storePageCompletions(actionsToStore.map(a => {
-            return {
-                pageId: a.pageId,
-                time: a.date,
-                complete: a.complete,
-            };
-        }));
-    }
+    storePageCompletions(actionsToStore.map(a => {
+        return {
+            pageId: a.pageId,
+            time: a.date,
+            complete: a.complete,
+        };
+    }));
 }
 
 /**
