@@ -49,10 +49,9 @@
                 >
                     <h5 class="section-title">{ TRANSLATIONS.lessons() }</h5>
                 </a>
-                <!-- TODO check with Andy if we should include the tab or not if there are no lessons -->
                 <a
                     href="#{course.loc_hash}:discussion"
-                    if="{course.lessons.length}"
+                    if="{state.courseHasDiscussions}"
                     class="{state.selectedTab === 'discussion' ? 'selected' : ''}"
                     onclick="{() => selectTab('discussion')}"
                 >
@@ -86,7 +85,6 @@
 
             <template if="{state.selectedTab === 'discussion'}">
                 <div if="{!state.courseHasDiscussions}" class="empty-state">
-                    <span class="warning"></span> <p>{TRANSLATIONS.no_discussions()}</p>
                 </div>
                 <template if="{state.selectedDiscussionId === null && state.courseHasDiscussions}">
                     <DiscussionCard
@@ -150,7 +148,6 @@
                 no_lessons: () => gettext("There are no lessons yet in this course"),
                 lessons: () => gettext("Lessons"),
                 discussion: () => gettext("Discussion"),
-                no_discussions: () => gettext("No discussions have been started. Please check back again later"),
                 course_exam: () => gettext("Course exam"),
                 highestScore: () => gettext("Highest score"),
                 more: () => gettext("See more"),
