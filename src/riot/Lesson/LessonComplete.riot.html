@@ -1,7 +1,7 @@
 <LessonComplete>
     <div class="congratulations-container">
         <span class="superman-success"></span>
-        <template if="{!isCourseComplete()}">
+        <template if="{ !course.lessonsComplete }">
             <div>
                 <h2>{ TRANSLATIONS.congrats() }</h2>
                 <p>{ lessonCompleteMessage() }</p>
@@ -11,7 +11,7 @@
                 <span class="chevron"></span>
             </button>
         </template>
-        <template if="{isCourseComplete()}">
+        <template if="{ course.lessonsComplete }">
             <div>
                 <h2>{ TRANSLATIONS.good() }</h2>
                 <p>{ lessonCompleteMessage() }</p>
@@ -25,17 +25,13 @@
                 { TRANSLATIONS.exam() }
                 <span class="chevron"></span>
             </button>
-            <a href="#{state.lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
+            <a href="#{lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
         </template>
     </div>
     <script>
         import { getRoute } from "ReduxImpl/Interface";
 
         export default {
-
-            onBeforeMount(props, state) {
-                this.state.lesson = getRoute().page;
-            },
 
             TRANSLATIONS: {
                 congrats: () => gettext("Congratulations!"),
@@ -46,30 +42,32 @@
                 course: () => gettext("Back to Course"),
             },
 
+            get lesson() {
+                return getRoute().page;
+            },
+            get course() {
+                return this.lesson.course;
+            },
+
             courseHasExam() {
-                return this.state.lesson.course.hasExam;
+                return this.course.hasExam;
             },
 
             isPrelearningExam() {
-                return this.state.lesson.course.data.exam_type === 'prelearning';
-            },
-
-            isCourseComplete() {
-                return this.state.lesson.course.numberOfLessons
-                    === this.state.lesson.course.numberOfFinishedLessons;
+                return this.course.examType === 'prelearning';
             },
 
             goToCourseOverview() {
-                location.hash = this.state.lesson.course.loc_hash;
+                location.hash = this.lesson.course.loc_hash;
             },
 
             goToCourseExam() {
-                location.hash = `${this.state.lesson.course.loc_hash}:exam`;
+                location.hash = this.lesson.course.examLink;
             },
 
             lessonCompleteMessage() {
                 // message on completion of a lesson %1 is replaced by the lesson title
-                return gettext('You just completed the lesson "%1"', this.state.lesson.title);
+                return gettext('You just completed the lesson "%1"', this.lesson.title);
             },
 
             takeCourseExamMessage() {
@@ -77,13 +75,13 @@
                 if (this.isPrelearningExam()) {
                     return gettext(
                         'Take the pre-learning survey to complete the course "%1"',
-                        this.state.lesson.course.title
+                        this.lesson.course.title
                     )
                 }
 
                 return gettext(
                     'Take the exam now to complete the course "%1"',
-                    this.state.lesson.course.title
+                    this.lesson.course.title
                 );
             },
         };
