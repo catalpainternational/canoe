@@ -21,7 +21,10 @@
 
         export default {
             getCardImage() {
-                return getCardImageUrl(this.props.link || this.props.contentItem.id, this.props.imageUrl);
+                const cardImage = this.props.contentItem
+                    ? this.props.contentItem.cardImage
+                    : '';
+                return getCardImageUrl(this.props.link || this.props.contentItem.id, cardImage);
             },
 
             title() {
