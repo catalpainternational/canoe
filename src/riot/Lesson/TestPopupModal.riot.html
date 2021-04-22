@@ -61,17 +61,17 @@
             nextCard() {
                 this.props.toggleModal(false);
                 window.scroll(0, 0);
-                location.hash = `${this.props.lesson.loc_hash}:content:${this.props.cardNumber + 1}`;
+                location.hash = `${this.page.loc_hash}:content:${this.cardNumber + 1}`;
             },
 
             completePage() {
                 this.props.toggleModal(false);
-                this.props.lesson.complete = true;
+                this.page.complete = true;
 
                 // clear the answers from memory so they do not show up next time
-                clearPageTestAnswers(this.lesson.id);
+                clearPageTestAnswers(this.page.id);
 
-                location.hash = this.props.lesson.loc_hash + ":content:feedback";
+                location.hash = this.page.loc_hash + ":content:feedback";
             },
 
             get correctTitleMessage() {
