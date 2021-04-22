@@ -85,12 +85,12 @@
             </template>
 
             <template if="{state.selectedTab === 'discussion'}">
-                <template if="{state.lessonsWithDiscussions.length === 0}">
-                    No discussions on this course yet.
-                </template>
-                <template if="{state.selectedDiscussionId === null && state.lessonsWithDiscussions.length}">
+                <div if="{!state.courseHasDiscussions}" class="empty-state">
+                    <span class="warning"></span> <p>{TRANSLATIONS.no_discussions()}</p>
+                </div>
+                <template if="{state.selectedDiscussionId === null && state.courseHasDiscussions}">
                     <DiscussionCard
-                        each="{(lesson, index) in state.lessonsWithDiscussions}"
+                        each="{(lesson, index) in course.discussions}"
                         contentItem="{lesson}"
                         contentIndex="{index}"
                         selectDiscussionHandler="{selectDiscussion}"
@@ -139,7 +139,7 @@
                 showLongDescription: false,
                 showDownloadModal: false,
                 cached: false,
-                lessonsWithDiscussions: [],
+                courseHasDiscussions: undefined,
                 selectedTab: 'lessons',
                 selectedDiscussionId: null,
                 selectedDiscussion: {},
@@ -150,6 +150,7 @@
                 no_lessons: () => gettext("There are no lessons yet in this course"),
                 lessons: () => gettext("Lessons"),
                 discussion: () => gettext("Discussion"),
+                no_discussions: () => gettext("No discussions have been started. Please check back again later"),
                 course_exam: () => gettext("Course exam"),
                 highestScore: () => gettext("Highest score"),
                 more: () => gettext("See more"),
@@ -161,7 +162,7 @@
             onBeforeMount(props, state) {
                 const route = getRoute()
                 this.course = route.page;
-                state.lessonsWithDiscussions = this.course.data.lessons.filter(it => it.discussion.length);
+                state.courseHasDiscussions = !!this.course.discussions.filter(it => it.discussion && it.discussion.length).length;
 
                 if (route.riotHash[0]) {
                     state.selectedTab = 'discussion';

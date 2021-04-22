@@ -3,7 +3,11 @@
         <p class="number">{props.contentIndex + 1}</p>
         <p class="title">{props.contentItem.title}</p>
     </div>
-    <a each="{thread in props.contentItem.discussion}"
+    <div if="{!props.contentItem.discussion.length}" class="empty-state">
+        <span class="warning"></span> <p>{TRANSLATIONS.no_discussions()}</p>
+    </div>
+    <a if="{props.contentItem.discussion.length}"
+        each="{thread in props.contentItem.discussion}"
         onclick="{() => props.selectDiscussionHandler(thread.id, props.contentItem)}"
         class="card">
         <div class="asker">
@@ -11,4 +15,11 @@
         </div>
         <h2>{thread.question}</h2>
     </a>
+    <script>
+        export default {
+            TRANSLATIONS: {
+                no_discussions: () => gettext("No discussions have been started. Please check back again later"),
+            }
+        }
+    </script>
 </DiscussionCard>
