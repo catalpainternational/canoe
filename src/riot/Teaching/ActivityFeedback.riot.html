@@ -79,7 +79,6 @@
     </div>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
-        import { logLessonFeedback } from "js/GoogleAnalytics";
         import { getRoute } from "ReduxImpl/Interface";
 
         export default {
@@ -155,12 +154,6 @@
                 const lesson = this.props.lessonName;
                 const feedback = feedbackString;
                 const feedbackComment = document.getElementById("feedback").value;
-
-                logLessonFeedback({
-                    lesson,
-                    feedback,
-					feedbackComment
-                });
             },
 
             setInputFocus(event) {

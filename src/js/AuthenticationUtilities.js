@@ -21,17 +21,17 @@ export const login = async (usernameAndPassword) => {
 
 /** Post a logout request to the server */
 export const logout = () => {
-    fetch(authUrl, {
-        method: "POST",
+    return fetch(authUrl, {
+        method: "DELETE",
         credentials: 'include',
     }).catch((err) => {
         // delete the Canoe=Offline-Session cookie
         // Django is configured to log users out if no Canoe-Offline-Session is received
         deleteCookie('Canoe-Offline-Session');
-    })
-    unsubscribeFromNotifications();
-    setUnauthenticated();
-    window.location.hash = "";
+    }).finally(() => {
+        unsubscribeFromNotifications();
+        setUnauthenticated();
+    });
 };
 
 /** detect the login status */
@@ -57,7 +57,7 @@ export const initialiseIdentity = async () => {
     }).catch(async (err) => {
         // we may be offline, check the cache for auth details
         const cache = await caches.open('user-details');
-        const match = await cache.match(checkUrl);
+        const match = await cache.match(authUrl);
         if (match !== undefined) {
             const userDetails = await match.json();
             // The cache says we are authenticated, set the identity
@@ -72,7 +72,7 @@ export const initialiseIdentity = async () => {
 
 export const getUsername = () => {
     const user = getUser();
-    return user ? user.username : "Guest";
+    return user ? user.name : "Guest";
 };
 
 export const getCapitalizedUsername = () => {
@@ -80,20 +80,11 @@ export const getCapitalizedUsername = () => {
     return username[0].toUpperCase() + username.slice(1);
 };
 
-export const isGuestUser = () => {
-    return process.env.GUEST_USERNAME === getUsername();
-};
-
 export const getUserId = () => {
     const user = getUser();
     return user ? user.userId : null;
 };
 
-export const getUserGroups = () => {
-    const user = getUser();
-    return user ? user.groups : null;
-};
-
 const deleteCookie = (name) => {
-    document.cookie = `${name}=; expires=0`;
+    document.cookie = `${name}=; expires=${new Date(0)}`;
 };

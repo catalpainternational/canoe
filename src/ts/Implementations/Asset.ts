@@ -20,7 +20,6 @@ import {
 import { getBrowser } from "../PlatformDetection";
 
 // See ts/Typings for the type definitions for these imports
-import { BACKEND_BASE_URL } from "js/urls";
 
 /** This is a subjective in-order list of the above rendition IDs
  * Its intended use is to be intersected with an array of available renditions
@@ -100,9 +99,6 @@ export class Asset extends PublishableItem {
     get requestOptions(): RequestInit {
         return {
             cache: "force-cache", // assets are (almost always) invariant on filename
-            method: "GET",
-            mode: "cors",
-            referrer: BACKEND_BASE_URL,
         } as RequestInit;
     }
 

@@ -75,8 +75,9 @@
             },
 
             logout() {
-                logout();
-                window.location.hash = "";
+                logout().then(() =>{
+                    window.location.hash = "";
+                });
             },
 
             login() {

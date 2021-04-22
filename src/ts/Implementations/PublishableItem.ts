@@ -1,3 +1,4 @@
+import { BACKEND_BASE_URL } from "js/urls";
 import Logger from "../Logger";
 
 export enum UpdatePolicy {
@@ -33,6 +34,9 @@ export abstract class PublishableItem {
         return Object.assign(
             {
                 credentials: "include",
+                mode: "cors",
+                method: "GET",
+                referrer: BACKEND_BASE_URL,
             },
             this.requestOptions
         );

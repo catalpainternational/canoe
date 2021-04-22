@@ -77,7 +77,6 @@
     </div>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
-        import { logLessonFeedback } from "js/GoogleAnalytics";
         import { getRoute } from "ReduxImpl/Interface";
         import saveFeedbackToIdb from "js/Telemetry/idb";
 
@@ -155,12 +154,6 @@
                 const feedbackComment = document.getElementById("feedback").value;
 
                 saveFeedbackToIdb({ lesson, feedback, date: new Date() });
-
-                logLessonFeedback({
-                    lesson,
-                    feedback,
-                    feedbackComment
-                });
             },
 
             setInputFocus(event) {

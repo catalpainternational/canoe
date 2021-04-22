@@ -9,7 +9,6 @@ import { Asset } from "../Implementations/Asset";
 import Logger from "../Logger";
 
 // See ts/Typings for the type definitions for these imports
-import { BACKEND_BASE_URL } from "js/urls";
 import {
     getPageData as getPageDataFromStore,
     storePageData,
@@ -67,8 +66,6 @@ export class Page extends PublishableItem implements StorableItem {
     get requestOptions(): RequestInit {
         const reqInit: any = {
             cache: "force-cache", // pages have version query params we can rely on the cache
-            method: "GET",
-            referrer: BACKEND_BASE_URL,
         };
         return reqInit as RequestInit;
     }

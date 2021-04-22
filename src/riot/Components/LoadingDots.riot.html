@@ -1,6 +1,6 @@
 <LoadingDots>
     <div class="loader {props.extrastyleclasses}"></div>
-    <p>{ props.message }</p>
+    <p if="{ props.message }">{ props.message }</p>
     <style>
         p {
             width: fit-content;
