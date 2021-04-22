@@ -211,7 +211,7 @@
                     // TODO post the comment when backend ready
                     this.update({
                         comments: [newComment].concat(...this.state.comments),
-                    })
+                    });
                     commentInput.value = '';
                     // on success
                     const toast = document.getElementById('toast-message');
@@ -224,7 +224,13 @@
                 addReply(reply) {
                     this.update({
                         comments: [reply].concat(...this.state.comments),
-                    })
+                    });
+                    // on success
+                    const toast = document.getElementById('toast-message');
+                    toast.className = 'show';
+                    setTimeout(function() {
+                        toast.className = toast.className.replace('show', '');
+                    }, 3000);
                 }
             };
         };
