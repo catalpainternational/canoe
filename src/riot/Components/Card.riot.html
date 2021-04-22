@@ -2,19 +2,18 @@
     <span if="{ props.debugState }">
         { JSON.stringify(props, null, 2) }
     </span>
-    <a class="card {props.status}" href="#{props.link || props.contentItem.loc_hash}">
+    <a class="card {statusClass()}" href="#{link()}">
         <div class="card-image">
             <img crossorigin="anonymous" src="{getCardImage()}" class="card-hero-image" />
             <span class="card-status"><span class="icon"></span></span>
         </div>
         <div class="card-title">
-            <h5 class="clamp-lines">{ props.title || props.contentItem.title }</h5>
+            <h5 class="clamp-lines">{ title() }</h5>
             <progress
-                if="{props.status === 'in-progress'}"
-                value="{props.progressValue}"
-                max="{props.progressMax}"
+                if="{ progressValues().min > 0 }"
+                value="{ progressValues().min}"
+                max="{ progressValues().max }"
             ></progress>
-            <progress if="{props.status === 'complete'}" value="1" max="1"></progress>
         </div>
     </a>
     <script>
@@ -22,8 +21,28 @@
 
         export default {
             getCardImage() {
-                return getCardImageUrl(this.props.link || this.props.contentItem.id, this.props.imageUrl);
-            }
+                const cardImage = this.props.contentItem
+                    ? this.props.contentItem.cardImage
+                    : '';
+                return getCardImageUrl(this.props.link || this.props.contentItem.id, cardImage);
+            },
+
+            title() {
+                return this.props.title || this.props.contentItem.title;
+            },
+            statusClass() {
+                return this.props.status || this.props.contentItem.progressStatus;
+            },
+            link() {
+                return this.props.link || this.props.contentItem.loc_hash;
+            },
+            progressValues() {
+                if (this.props.hasOwnProperty('progressValues')) {
+                    return this.props.progressValues;
+                } else {
+                    return this.props.contentItem.progressValues;
+                };
+            },
         };
     </script>
 </Card>

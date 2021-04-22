@@ -4,7 +4,6 @@
 declare module "ReduxImpl/Interface" {
     import { TManifestData } from "ts/Types/ManifestTypes";
     import { TWagtailPageData } from "ts/Types/PageTypes";
-    import { TItemStorageStatus } from "ts/Types/PublishableItemTypes";
 
     export function storeManifest(manifest: Record<string, any>): void;
     export function getManifestFromStore(): TManifestData;
@@ -15,21 +14,29 @@ declare module "ReduxImpl/Interface" {
     ): void;
     export function getPageData(pageId: any): TWagtailPageData;
 
-    export function storeItemStorageStatus(
-        itemId: string,
-        itemState: TItemStorageStatus
+    export function storePageComplete(
+        pageId: string | number,
+        date: Date,
+        complete: boolean
     ): void;
+    export function getStoredPageCompletionDate(
+        pageId: string
+    ): Date | undefined;
+    export function storeExamScore(
+        pageId: string | number,
+        score: number
+    ): void;
+    export function getExamScore(pageId: string | number): number | undefined;
 
-    /** Get the publishable item's status
-     * @returns the publishable item's status or null
-     * @remarks test for null first, before casting the return `as TItemStorageStatus`
-     */
-    export function getItemStorageStatus(
-        itemId: string
-    ): TItemStorageStatus | unknown;
-
-    /** Get the status for all publishable items
-     * @returns each publishable item's status as an array
-     */
-    export function getItemStorageStatuses(): TItemStorageStatus[];
+    export function getTestAnswer(
+        examPageId: string | number,
+        questionId: string | number
+    ): any;
+    export function getTestAnswers(examPageId: string | number): Array<any>;
+    export function storeTestAnswer(
+        examPageId: string | number,
+        questionId: string | number,
+        answer: any
+    ): void;
+    export function clearPageTestAnswers(pageId: string | number): void;
 }

@@ -33,21 +33,19 @@ export default class AllCourses extends Page {
 
     get coursesInProgress(): Course[] {
         return this.courses.filter(
-            (course: Course) => course.progressStatus == "not-started"
+            (course: Course) => !course.complete && course.latestCompletion
         );
     }
 
     get coursesCompleted(): Course[] {
-        return this.courses.filter(
-            (course: Course) => course.progressStatus == "complete"
-        );
+        return this.courses.filter((course: Course) => course.complete);
     }
 
     get coursesCompleteLast(): Course[] {
         const inComplete: any[] = [];
         const complete: any[] = [];
         this.courses.forEach((course: any) => {
-            if (course.isComplete) {
+            if (course.complete) {
                 complete.push(course);
             } else {
                 inComplete.push(course);
@@ -65,7 +63,7 @@ export default class AllCourses extends Page {
         for (const course of coursesWithCompletions) {
             if (
                 lastWorkedOnCourse &&
-                !course.isComplete &&
+                !course.complete &&
                 course.latestCompletion.completionDate <
                     lastWorkedOnCourse.latestCompletion.completionDate
             ) {
@@ -76,28 +74,24 @@ export default class AllCourses extends Page {
         return lastWorkedOnCourse;
     }
 
-    get countFinishedLessonsAndExams(): number {
-        const tallyFinishedLessonsAndExams = (
-            totalFinished: any,
-            aCourse: any
-        ) => totalFinished + aCourse.numberOfFinishedLessons;
-        return this.courses.reduce(tallyFinishedLessonsAndExams, 0);
-    }
-
-    get countLessonsAndExams(): number {
-        const tallyLessonsAndExams = (totalLessons: any, currentCourse: any) =>
-            totalLessons + currentCourse.numberOfLessons;
-        return this.courses.reduce(tallyLessonsAndExams, 0);
-    }
-
-    get numberOfLessonsLeft(): number {
-        return (
-            this.countFinishedLessonsAndExams -
-            this.countFinishedLessonsAndExams
-        );
-    }
-
     get description(): string {
         return this.data.body;
+    }
+
+    get countFinishedLessons(): number {
+        const tallyFinishedLessons = (totalFinished: any, course: any) => {
+            return totalFinished + course.lessonsComplete;
+        };
+        return this.courses.reduce(tallyFinishedLessons, 0);
+    }
+
+    get countLessons(): number {
+        const tallyLessonsAndExams = (totalLessons: any, course: any) => {
+            return totalLessons + course.lessons.length;
+        };
+        return this.courses.reduce(tallyLessonsAndExams, 0);
+    }
+    get numberOfLessonsLeft(): number {
+        return this.countLessons - this.countFinishedLessons;
     }
 }

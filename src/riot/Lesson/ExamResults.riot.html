@@ -1,42 +1,35 @@
 <ExamResults>
-    <template if="{state.passedExam !== null}">
-        <div class="congratulations-container">
-            <template if="{state.passedExam || props.examType === 'prelearning'}">
-                <span class="superman-success"></span>
-                <h2>{ TRANSLATIONS.success() }</h2>
-                <h3>{ TRANSLATIONS.completed() }</h3>
-                <p>{ passedExamMessage() }</p>
-                <button class="btn-primary" onclick="{goToAllCourses}">
-                    { TRANSLATIONS.back() }
-                </button>
-                <button class="btn-secondary" onclick="{goToResources}">
-                    { TRANSLATIONS.resources() }
-                </button>
-            </template>
-            <template if="{!state.passedExam && props.examType !== 'prelearning'}">
-                <div>
-                    <span class="incorrect-cross"></span>
-                    <h2>{ TRANSLATIONS.notQuite() }</h2>
-                    <p>{ failedExamMessage() }</p>
-                </div>
-                <button class="btn-primary" onclick="{goToCourseExam}">
-                    { TRANSLATIONS.retake() }
-                </button>
-                <button class="btn-secondary" onclick="{goToCourseOverview}">
-                    { TRANSLATIONS.backCourse() }
-                </button>
-            </template>
-        </div>
-    </template>
+    <div class="congratulations-container">
+        <template if="{ course.examType === 'prelearning' || props.result.passed }">
+            <span class="superman-success"></span>
+            <h2>{ TRANSLATIONS.success() }</h2>
+            <h3>{ TRANSLATIONS.completed() }</h3>
+            <p>{ passedExamMessage() }</p>
+            <button class="btn-primary" onclick="{goToAllCourses}">
+                { TRANSLATIONS.back() }
+            </button>
+            <button class="btn-secondary" onclick="{goToResources}">
+                { TRANSLATIONS.resources() }
+            </button>
+        </template>
+        <template if="{ course.examType !== 'prelearning' && !props.result.passed}">
+            <div>
+                <span class="incorrect-cross"></span>
+                <h2>{ TRANSLATIONS.notQuite() }</h2>
+                <p>{ failedExamMessage() }</p>
+            </div>
+            <button class="btn-primary" onclick="{goToCourseExam}">
+                { TRANSLATIONS.retake() }
+            </button>
+            <button class="btn-secondary" onclick="{goToCourseOverview}">
+                { TRANSLATIONS.backCourse() }
+            </button>
+        </template>
+    </div>
     <script>
-        import { markExamAsComplete } from "js/CompletionInterface";
-        import ExamGrader from "js/ExamGrader";
+        import { getRoute } from "ReduxImpl/Interface";
 
         export default {
-            state: {
-                passedExam: null,
-            },
-
             TRANSLATIONS: {
                 success: () => gettext("Amazing work!"),
                 completed: () => gettext("You've completed the course"),
@@ -47,19 +40,12 @@
                 backCourse: () => gettext("Back to Course"),
             },
 
-            onMounted(props, state) {
-                this.calculatePassOrFail();
-            },
-
-            calculatePassOrFail() {
-                const { course, finalScore, minimumScore } = this.props;
-
-                const passedExam = ExamGrader.saveExamScore(course.slug, finalScore, minimumScore);
-                this.update({ passedExam });
+            get course() {
+                return getRoute().page;
             },
 
             goToCourseOverview() {
-                location.hash = `#${this.props.course.loc_hash}`;
+                location.hash = `#${this.course.loc_hash}`;
             },
 
             goToAllCourses() {
@@ -71,12 +57,12 @@
             },
 
             goToCourseExam() {
-                location.hash = `#${this.props.course.loc_hash}:exam:1`;
+                location.hash = `#${this.course.loc_hash}:exam:1`;
             },
 
             passedExamMessage() {
                 // message when user passed the exam
-                if (this.props.examType === 'prelearning') {
+                if (this.course.examType === 'prelearning') {
                     return gettext(
                         "You have completed the pre-learning survey and you can now keep progressing your learning."
                     )
@@ -84,7 +70,7 @@
 
                 return gettext(
                     "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam.",
-                    this.props.finalScore
+                    Math.ceil(100 * this.props.result.score)
                 );
             },
 
@@ -92,8 +78,8 @@
                 // message when user did not pass exam
                 return gettext(
                     "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later.",
-                    this.props.finalScore,
-                    this.props.minimumScore
+                    Math.ceil(100 * this.props.result.score),
+                    this.course.minimumExamScore
                 );
             },
         };

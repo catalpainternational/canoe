@@ -2,7 +2,7 @@
 const UPDATED_BROWSER_SUPPORT = "browser/supportDecided";
 
 // ACTION CREATOR
-export const signalBrowserSupport = (trueOrFalse) => ({
+export const signalBrowserSupportAction = (trueOrFalse) => ({
     type: UPDATED_BROWSER_SUPPORT,
     isBrowserSupported: trueOrFalse,
 });
