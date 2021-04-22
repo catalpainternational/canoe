@@ -11,12 +11,15 @@ const REQUIRE_LOGIN = process.env.REQUIRE_LOGIN;
 const LOGIN_ROUTE = 'login';
 // pages that are rendered by the application
 const CANOE_PAGES = ['settings', 'profile', 'sync'];
-// pages that are shortcuts into a CMS page ( e.g. resources goes to the selected language resource root )
+/** Pages that are shortcuts into a CMS page,
+ * e.g. resources goes to the selected language resource root
+ * 
+ * These are defined as arrays, the first page found in the manifest will be the one returned */
 const CANOE_SHORTCUTS = {
-    "": "homepage",
-    home: "homepage",
-    resources: "resourcesroot",
-    topics: "learningactivitieshomepage",
+    "": ["homepage", "learningactivitieshomepage"],
+    home: ["homepage"],
+    resources: ["resourcesroot"],
+    topics: ["learningactivitieshomepage"],
 };
 
 const IS_PAGE_PREVIEW = /^\?(.+)/;
@@ -63,12 +66,20 @@ async function route(hashWith) {
         } else {
             if(Object.keys(CANOE_SHORTCUTS).includes(pageHash)) {
                 // If we are a shortcut get the first page of that type from the manifest
-                page = manifest.getLanguagePageType(getLanguage(), CANOE_SHORTCUTS[pageHash]);
+                CANOE_SHORTCUTS[pageHash].forEach((shortcutRoute) => {
+                    page = manifest.getLanguagePageType(getLanguage(), shortcutRoute);
+                    if (page) {
+                        return;
+                    }
+                });
             } else {
                 // If we are a shortcut get the first page of that type from the manifest
                 page = manifest.getPageManifestData(pageHash);
             }
-            route = {page, riotHash};
+            route = !!page 
+                ? {page, riotHash}
+                : {page: {type: "pageHash_error", error: `The page shortcut "~{pageHash}" had no match in the Manifest`}};
+
             // refresh the page
             if (!page.ready) {
                 page.prepare();
