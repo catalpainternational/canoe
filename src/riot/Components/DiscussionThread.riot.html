@@ -19,7 +19,7 @@
                 oninput="{updateCommentValue}"
                 onfocus="{setInputFocus}"
                 onblur="{removeInputFocus}"
-                maxlength="280"                
+                maxlength="280"
             ></textarea>
         </div>
         <button
@@ -46,6 +46,11 @@
             removeInputFocus="{removeInputFocus}"
         ></DiscussionComment>
     </div>
+
+    <div id="toast-message">
+        <span class="checkmark"></span>
+        <p>{TRANSLATIONS.commentConfirmed()}</p>
+    <div>
 
     <script>
         import DiscussionComment from "RiotTags/Components/DiscussionComment.riot.html";
@@ -115,6 +120,7 @@
                     addComment: () => gettext("Add a comment"),
                     postComment: () => gettext("Post comment"),
                     sort: () => gettext("Sort by"),
+                    commentConfirmed: () => gettext("Comment posted"),
                 },
 
                 showSort() {
@@ -207,6 +213,12 @@
                         comments: [newComment].concat(...this.state.comments),
                     })
                     commentInput.value = '';
+                    // on success
+                    const toast = document.getElementById('toast-message');
+                    toast.className = 'show';
+                    setTimeout(function() {
+                        toast.className = toast.className.replace('show', '');
+                    }, 3000);
                 },
 
                 addReply(reply) {

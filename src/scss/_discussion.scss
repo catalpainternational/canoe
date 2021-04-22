@@ -325,3 +325,36 @@ DiscussionReply {
     border-radius: 8px 8px 0 0;
     max-width: unset;
 }
+
+#toast-message {
+    visibility: hidden;
+    box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+    background-color: $gray-8;
+    color: $gray-3;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    position: fixed;
+    z-index: 999;
+    bottom: calc(#{$bottom-menu-height} + 15px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    align-items: center;
+    column-gap: 20px;
+    width: 80%;
+    height: auto;
+    max-height: 100px;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2s;
+    animation: fadein 0.5s, fadeout 0.5s 2s;
+
+    &.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2s;
+        animation: fadein 0.5s, fadeout 0.5s 2s;
+    }
+
+    & > .checkmark {
+        background-color: $green;
+    }
+}
