@@ -83,7 +83,7 @@
                 </template>
             </template>
 
-            <template if="{state.selectedTab === 'discussion'}">
+            <template if="{state.selectedTab === 'discussion' && navigator.onLine}">
                 <div if="{!state.courseHasDiscussions}" class="empty-state">
                 </div>
                 <template if="{state.selectedDiscussionId === null && state.courseHasDiscussions}">
@@ -103,6 +103,16 @@
                         question="{state.selectedDiscussion}"
                     ></DiscussionThread>
                 </template>
+            </template>
+
+            <template if="{state.selectedTab === 'discussion' && !navigator.onLine}">
+                <div class="card full-width">
+                    <div class="message-container">
+                        <!-- TODO the image goes here -->
+                        <h3>{TRANSLATIONS.offline()}</h3>
+                        <p>{TRANSLATIONS.try_again()}</p>
+                    </div>
+                </div>
             </template>
         </div>
     </div>
@@ -154,6 +164,8 @@
                 less: () => gettext("See less"),
                 download_course: () => gettext("Make course available offline"),
                 download_all: () => gettext("Download all lessons"),
+                offline: () => gettext("You need to be online to use the discussion tool"),
+                try_again: () => gettext("Try again later or reconnect to your network to start interacting with your colleagues"),
             },
 
             onBeforeMount(props, state) {
