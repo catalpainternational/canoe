@@ -25,6 +25,10 @@
                 { TRANSLATIONS.exam() }
                 <span class="chevron"></span>
             </button>
+            <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
+                { TRANSLATIONS.discuss() }
+                <span class="chevron"></span>
+            </button>
             <a href="#{state.lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
         </template>
     </div>
@@ -44,6 +48,7 @@
                 exam: () => gettext("Take Exam"),
                 survey: () => gettext("Take Survey"),
                 course: () => gettext("Back to Course"),
+                discuss: () => gettext("Join the discussion"),
             },
 
             courseHasExam() {
@@ -65,6 +70,14 @@
 
             goToCourseExam() {
                 location.hash = `${this.state.lesson.course.loc_hash}:exam`;
+            },
+
+            lessonHasDiscussion() {
+                return this.state.lesson.threads.length;
+            },
+
+            goToDiscussion() {
+                location.hash = `${this.state.lesson.course.loc_hash}:discussion`;
             },
 
             lessonCompleteMessage() {

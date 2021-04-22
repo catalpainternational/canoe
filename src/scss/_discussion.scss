@@ -59,12 +59,6 @@ DiscussionReply {
             margin-top: 5px;
         }
 
-        &.full-width {
-            width: 100vw;
-            margin-left: -20px;
-            border-radius: 8px 8px 0 0;
-        }
-
         & + .card {
             margin-top: 1em;
         }
@@ -84,8 +78,16 @@ DiscussionReply {
         .asker > .circle {
             width: 34px;
             height: 34px;
-            background-color: turquoise;
+            background-color: $gray-8;
             border-radius: 50%;
+            position: relative;
+
+            & > .bubble {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
         }
     }
 
@@ -315,4 +317,11 @@ DiscussionReply {
     &:last-of-type {
         margin-bottom: 0;
     }
+}
+
+.card.full-width {
+    width: 100vw;
+    margin-left: -20px;
+    border-radius: 8px 8px 0 0;
+    max-width: unset;
 }
