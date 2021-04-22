@@ -8,7 +8,7 @@ export const login = async (usernameAndPassword) => {
     const formData = new FormData();
     formData.append('username', usernameAndPassword.username);
     formData.append('password', usernameAndPassword.password);
-    fetch(authUrl, {
+    return fetch(authUrl, {
         method: "POST",
         credentials: 'include',
         body: formData,
