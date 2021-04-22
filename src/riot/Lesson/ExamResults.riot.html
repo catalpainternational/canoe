@@ -12,7 +12,7 @@
                 { TRANSLATIONS.resources() }
             </button>
         </template>
-        <template if="{ course.examType !== 'prelearning' }">
+        <template if="{ course.examType !== 'prelearning' && !props.result.passed}">
             <div>
                 <span class="incorrect-cross"></span>
                 <h2>{ TRANSLATIONS.notQuite() }</h2>
