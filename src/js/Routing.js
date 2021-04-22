@@ -67,10 +67,10 @@ async function route(hashWith) {
             if(Object.keys(CANOE_SHORTCUTS).includes(pageHash)) {
                 // If we are a shortcut get the first page of that type from the manifest
                 CANOE_SHORTCUTS[pageHash].forEach((shortcutRoute) => {
-                    page = manifest.getLanguagePageType(getLanguage(), shortcutRoute);
                     if (page) {
                         return;
                     }
+                    page = manifest.getLanguagePageType(getLanguage(), shortcutRoute);
                 });
             } else {
                 // If we are a shortcut get the first page of that type from the manifest
