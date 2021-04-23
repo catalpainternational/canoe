@@ -5,7 +5,7 @@
                 <span class="all-courses-icon { page.type === 'homepage' ? 'active' : ''}">
                 </span>
             </a>
-            <a href="#profile">
+            <a href="#{ profileLink }">
                 <span class="profile-icon { page.type === 'profile' ? 'active' : ''}">
                 </span>
             </a>
@@ -29,14 +29,15 @@
         import { inAppelflap } from "ts/PlatformDetection";
 
         export default {
-            onBeforeMount() {
-                this.page = getRoute().page;
-                this.riotHash = getRoute().riotHash;
-            },
 
-            onBeforeUpdate() {
-                this.page = getRoute().page;
-                this.riotHash = getRoute().riotHash;
+            get page() {
+                return getRoute().page;
+            },
+            get riotHash() {
+                return getRoute().riotHash;
+            },
+            get profileLink() {
+                return process.env.PROFILE_LINK || 'profile';
             },
 
             shouldShowSync() {

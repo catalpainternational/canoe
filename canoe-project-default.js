@@ -18,5 +18,6 @@ module.exports = {
     FAVICON_PATH: "./src/favicon.svg",
     // If true REQUIRE_LOGIN will always redirect any user who does not have a login to the login page
     // unless they have a manifest cache in place already
-    REQUIRE_LOGIN: false
+    REQUIRE_LOGIN: false,
+    PROFILE_LINK: "profile",
 };

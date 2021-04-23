@@ -47,6 +47,7 @@ module.exports = env => {
         {}
     );
     processEnvironment["process.env.REQUIRE_LOGIN"] = projectConfiguration.REQUIRE_LOGIN;
+    processEnvironment["process.env.PROFILE_LINK"] = JSON.stringify(projectConfiguration.PROFILE_LINK);
     processEnvironment["process.env.SITE_NAME"] = JSON.stringify(
         projectConfiguration.SITE_NAME
     );
