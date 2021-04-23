@@ -31,4 +31,15 @@ export default class TeachingActivity extends Page {
             pageType: "activity",
         };
     }
+
+    get complete(): boolean {
+        return super.complete;
+    }
+    set complete(complete: boolean) {
+        super.complete = complete;
+        const topicCompelte = this.topic.childPages.every((c) => c.complete);
+        if (this.topic.complete !== topicCompelte) {
+            this.topic.complete = topicCompelte;
+        }
+    }
 }
