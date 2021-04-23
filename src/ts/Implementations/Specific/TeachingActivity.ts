@@ -25,4 +25,10 @@ export default class TeachingActivity extends Page {
     get curriculum(): string {
         return this.data.curriculum_id;
     }
+
+    get completionData(): Record<string, any> {
+        return {
+            pageType: "activity",
+        };
+    }
 }
