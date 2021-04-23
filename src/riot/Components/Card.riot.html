@@ -1,10 +1,7 @@
 <Card>
-    <span if="{ props.debugState }">
-        { JSON.stringify(props, null, 2) }
-    </span>
-    <a class="card {statusClass()}" href="#{link()}">
+    <a class="card {statusClass()}" href="#{ link() }">
         <div class="card-image">
-            <img crossorigin="anonymous" src="{getCardImage()}" class="card-hero-image" />
+            <img crossorigin="anonymous" src="{ getCardImage() }" class="card-hero-image" />
             <span class="card-status"><span class="icon"></span></span>
         </div>
         <div class="card-title">
@@ -17,7 +14,7 @@
         </div>
     </a>
     <script>
-        import {getCardImageUrl} from "js/utilities";
+        import { getCardImageUrl } from "js/utilities";
 
         export default {
             getCardImage() {
