@@ -7,10 +7,7 @@ export default class AllCourses extends Page {
     get all_tags(): Set<string> {
         if (this.#all_tags === undefined) {
             this.#all_tags = new Set(
-                this.courses
-                    .map((c: any) => c.tags)
-                    .flat()
-                    .map((tag: string) => tag.toLowerCase())
+                this.courses.map((c: any) => c.tags).flat()
             );
         }
         return this.#all_tags;
@@ -18,17 +15,6 @@ export default class AllCourses extends Page {
 
     get courses(): any {
         return this.childPages;
-    }
-
-    courseIdHasATagIn(courseId: number, tags: string[]): boolean {
-        const course = this.data.courses.find(
-            (c: any) => c.data.id == courseId
-        );
-        const courseTags = new Set(course.tags);
-        const tagsSet = new Set(tags);
-        return (
-            [...tagsSet].filter((tag: string) => courseTags.has(tag)).length > 0
-        );
     }
 
     get coursesInProgress(): Course[] {
