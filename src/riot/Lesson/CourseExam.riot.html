@@ -1,205 +1,131 @@
 <CourseExam>
-    <LessonFrame if="{ state.stage === 'code' && state.examType !== 'prelearning'}" linkTo="{ course.loc_hash }">
-        <HonorCode minimumScore="{ MINIMUM_SCORE }"></HonorCode>
-    </LessonFrame>
-    <LessonFrame
-        if="{ !isNaN(state.cardNumber) && course.ready }"
-        id="test"
-        extraStyleClasses="test"
-        linkTo="{ course.loc_hash }"
-        progressValue="{ state.cardNumber }"
-        progressMax="{ state.cards.length }"
-    >
-        <ImageWrapper
-            if="{ state.card.image }"
-            image="{ state.card.image }"
-        ></ImageWrapper>
-        <h3>{state.cardNumber }. {state.card.question}</h3>
-        <TestSingleAnswer
-            if="{state.card.type === SINGLE_CHOICE}"
-            isCourseExam="{true}"
-            card="{state.card}"
-            answers="{state.cardAnswers}"
-            recordAnswer="{recordAnswer}"
-            savedAnswer="{state.currentAnswer.answers}"
-        ></TestSingleAnswer>
-        <TestMultipleAnswer
-            if="{state.card.type !== SINGLE_CHOICE}"
-            isCourseExam="{true}"
-            card="{state.card}"
-            answers="{state.cardAnswers}"
-            recordAnswer="{recordAnswer}"
-            savedAnswer="{state.currentAnswer.answers}"
-        ></TestMultipleAnswer>
-    </LessonFrame>
-    <div if="{ !isNaN(state.cardNumber) && course.ready }" class="bottom-buttons">
-        <div>
-            <a if="{state.cardNumber > 1}" class="has-circle" onclick="{previousExamCard}">
-                <span class="arrow"></span>
-            </a>
+    <template if="{ !state.results }">
+        <LessonFrame if="{ stage === 'code' && course.examType !== 'prelearning'}" linkTo="{ course.loc_hash }">
+            <HonorCode minimumScore="{ course.minimumExamScore }"></HonorCode>
+        </LessonFrame>
+        <LessonFrame
+            if="{ !isNaN(cardNumber) }"
+            id="test"
+            extraStyleClasses="test"
+            linkTo="{ course.loc_hash }"
+            progressValue="{ cardNumber }"
+            progressMax="{ examCards.length }"
+        >
+            <Test
+                card-number="{ cardNumber }" 
+            ></Test>
+        </LessonFrame>
+        <div if="{ !isNaN(cardNumber) }" class="bottom-buttons">
+            <div>
+                <a if="{ cardNumber > 1 }" class="has-circle" onclick="{previousExamCard}">
+                    <span class="arrow"></span>
+                </a>
+            </div>
+            <div>
+                <button
+                    if="{ cardNumber < examCards.length }"
+                    class="btn-primary"
+                    onclick="{nextExamCard}"
+                    disabled="{ !hasAnswer() }"
+                >
+                    { TRANSLATIONS.next() }
+                </button>
+                <button
+                    if="{ cardNumber === examCards.length }"
+                    class="btn-primary"
+                    onclick="{nextExamCard}"
+                    disabled="{ !hasAnswer() }"
+                >
+                    { TRANSLATIONS.submit() }
+                </button>
+            </div>
         </div>
-        <div>
-            <button
-                if="{ state.cardNumber < state.cards.length }"
-                class="btn-primary"
-                onclick="{nextExamCard}"
-                disabled="{Object.keys(state.currentAnswer).length === 0}"
-            >
-                { TRANSLATIONS.next() }
-            </button>
-            <button
-                if="{ state.cardNumber === state.cards.length }"
-                class="btn-primary"
-                onclick="{nextExamCard}"
-                disabled="{Object.keys(state.currentAnswer).length === 0}"
-            >
-                { TRANSLATIONS.submit() }
-            </button>
-        </div>
-    </div>
+    </template>
     <ExamResults
-        if="{ course.ready && state.stage === 'results' }"
-        course="{ course }"
-        title="{ course.title }"
-        finalScore="{calculateFinalScore()}"
-        minimumScore="{MINIMUM_SCORE}"
-        examType="{state.examType}"
+        if="{ state.results }"
+        result="{ state.results }"
     ></ExamResults>
 
     <script>
         import ExamResults from "RiotTags/Lesson/ExamResults.riot.html";
-        import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
-        import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import HonorCode from "RiotTags/Lesson/HonorCode.riot.html";
-        import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
+        import Test from "RiotTags/Lesson/Test.riot.html";
 
-        import { getRoute } from "ReduxImpl/Interface";
+        import { getRoute, getTestAnswer } from "ReduxImpl/Interface";
 
-        import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
-        import { ExamIsMissingAnAnswer } from "js/Errors";
+        function CourseExam() {
+            return {
+                state: {
+                    results: false,
+                },
 
-        import ExamGrader from "js/ExamGrader";
+                TRANSLATIONS: {
+                    next: () => gettext("Next"),
+                    submit: () => gettext("Submit answers"),
+                },
 
-        export default {
-            state: {
-                currentAnswer: {},
-            },
+                onBeforeUpdate() {
+                    window.scroll(0, 0);
+                },
 
-            components: {
-                examresults: ExamResults,
-                testsingleanswer: TestSingleAnswer,
-                testmultipleanswer: TestMultipleAnswer,
-                lessonframe: LessonFrame,
-                honorcode: HonorCode,
-                imagewrapper: ImageWrapper,
-            },
-
-            TRANSLATIONS: {
-                next: () => gettext("Next"),
-                submit: () => gettext("Submit answers"),
-            },
-
-            MINIMUM_SCORE: 75,
-            SINGLE_CHOICE: "singleChoiceExam",
-            SECTION: "exam",
-
-            readState() {
-                const route = getRoute();
-                const examType = this.course.data.exam_type;
-                // Don't show the honor code if it's a pre-learning exam
-                const fallbackStage = examType === 'prelearning' ? 1 : 'code';
-                const stage = route.riotHash[1] || fallbackStage;
-                const cardNumber = parseInt(stage);
-                this.state.cardNumber = cardNumber;
-                this.state.stage = stage;
-                this.state.examType = examType;
-
-                // TODO this may become a project config attribute, pending further discussion
-                let randomize_and_limit = true;
-                if (examType === 'prelearning') randomize_and_limit = false;
-
-
-                if (randomize_and_limit && this.course.ready) {
-                    // randomise & limit the cards
-                    if (this.state.cards === undefined && this.course.ready) {
-                        this.state.cards = this.shuffleCards(this.course.examCards).slice(0, 5);
+                get route() {
+                    return getRoute();
+                },
+                get course() {
+                    return this.route.page;
+                },
+                get stage() {
+                    const s =  this.route.riotHash[1];
+                    if (s) {
+                        return s;
+                    } else {
+                        return this.course.examType === 'prelearning' ? 1 : 'code';
                     }
+                },
+                get cardNumber() {
+                    const p =  parseInt(this.stage);
+                    return p;
+                },
+                get examCards() {
+                    return this.course.examCards;
+                },
 
-                    if (this.state.cards && !isNaN(this.state.cardNumber)) {
-                        this.state.card = this.state.cards[this.state.cardNumber - 1];
-                        this.state.cardAnswers = this.shuffleCards(this.state.card.answers);
+                previousExamCard() {
+                    const newCardNumber = this.cardNumber - 1;
+                    location.hash = `${this.course.loc_hash}:exam:${newCardNumber}`;
+                },
 
-
-                        if (!this.state.currentAnswer) {
-                            this.state.currentAnswer = ExamGrader.loadExamAnswer(this.state.card.id) || {};
-                        }
+                nextExamCard() {
+                    if( this.cardNumber === this.examCards.length ) {
+                        this.submit();
+                    } else {
+                        const newCardNumber = this.cardNumber + 1;
+                        location.hash = `${this.course.loc_hash}:exam:${newCardNumber}`;
                     }
-
-                } else if (this.course.ready) {
-                    // do not randomise & limit the cards
-                    this.state.cards = this.course.examCards;
-
-                    if (this.state.cards && !isNaN(this.state.cardNumber)) {
-                        this.state.card = this.state.cards[this.state.cardNumber - 1];
-                        this.state.cardAnswers = this.state.card.answers;
-
-                        if (!this.state.currentAnswer) {
-                            this.state.currentAnswer = ExamGrader.loadExamAnswer(this.state.card.id) || {};
-                        }
+                },
+                submit() {
+                    const result = this.course.saveExamScore();
+                    if (result.error) {
+                        alert('check you have answered all questions');
                     }
-                }
-            },
+                    this.update({results: result});
+                },
 
-            onBeforeMount(props, state) {
-                this.course = getRoute().page;
-                this.readState();
-            },
-
-            onBeforeUpdate() {
-                this.readState();
-                window.scroll(0, 0);
-            },
-
-            shuffleCards(cards) {
-                return cards.slice().sort(() => Math.random() - 0.5);
-            },
-
-            recordAnswer(response) {
-                console.assert(
-                    response.hasOwnProperty("answers") && response.hasOwnProperty("isCorrect")
-                );
-
-                this.update({ currentAnswer: response });
-            },
-
-            previousExamCard() {
-                this.update({ currentAnswer: {} });
-                location.hash = `${this.course.loc_hash}:exam:${this.state.cardNumber - 1}`;
-            },
-
-            nextExamCard() {
-                const { cardNumber, cards, card, currentAnswer } = this.state;
-                ExamGrader.saveExamAnswer(card.id, currentAnswer);
-                this.update({ currentAnswer: {} });
-                if( cardNumber === cards.length ) {
-                    location.hash = `${this.course.loc_hash}:exam:results`;
-                } else {
-                    location.hash = `${this.course.loc_hash}:exam:${this.state.cardNumber + 1}`;
-                }
-            },
-
-            calculateFinalScore() {
-                const listOfExamQuestions = this.state.cards.map(card => card.id);
-                try {
-                    return Math.round(ExamGrader.tallyFinalScore(listOfExamQuestions));
-                } catch (err) {
-                    if (err instanceof ExamIsMissingAnAnswer) {
-                        return 0;
-                    }
-                    throw err;
-                }
-            },
+                hasAnswer() {
+                    const a = getTestAnswer(this.course.id, this.course.examCards[this.cardNumber - 1].id);
+                    return a;
+                },
+            }
         };
+
+        CourseExam.components =  {
+            examresults: ExamResults,
+            lessonframe: LessonFrame,
+            honorcode: HonorCode,
+            test: Test,
+        };
+
+        export default CourseExam;
     </script>
 </CourseExam>

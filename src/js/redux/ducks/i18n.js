@@ -2,7 +2,7 @@
 const CHANGED_LANGUAGE = "i18n/changedLanguage";
 
 // ACTION CREATORS
-export const changeLanguage = (language) => ({ type: CHANGED_LANGUAGE, language });
+export const changeLanguageAction = (language) => ({ type: CHANGED_LANGUAGE, language });
 
 // REDUCER
 const language = (state = "", action) => {

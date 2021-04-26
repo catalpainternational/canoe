@@ -2,7 +2,7 @@
 const CHANGED_SERVICE_WORKER_STATE = "serviceWorker/changedState";
 
 // ACTION CREATOR
-export const changeServiceWorkerState = (eventType) => {
+export const serviceWorkerStateAction = (eventType) => {
     return {
         type: CHANGED_SERVICE_WORKER_STATE,
         eventType,

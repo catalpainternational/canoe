@@ -44,7 +44,7 @@ subscribeToStore(() => {
         case "update-waiting":
             // TODO should we reload? it might interrupt something
             // should we prompt the user?
-            window.location.reload(true);
+            window.location.reload();
             break;
         default:
             break;

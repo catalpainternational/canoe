@@ -26,7 +26,7 @@
             <span class="cross gray"></span>
         </a>
     </TopMenu>
-    <div class="frame-background">
+    <div class="frame-background {userAgent()}">
         <div class="{!props.noCardStyle ? 'card-frame' : 'no-card'}">
             <div class="card-content {props.extrastyleclasses}">
                 <slot />
@@ -40,6 +40,7 @@
 
     <script>
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+        import { getPlatform } from "ts/PlatformDetection";
 
         export default {
             components: {
@@ -51,6 +52,11 @@
                     ? this.props.close()
                     : (window.location.hash = `#${this.props.linkTo}`);
             },
+
+            userAgent() {
+                const { browser } = getPlatform();
+                return browser.name.toLowerCase();
+            }
         };
     </script>
 </LessonFrame>

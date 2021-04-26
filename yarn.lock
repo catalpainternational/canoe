@@ -3901,12 +3901,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"Actions@link:src/js/actions::locator=canoe%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "Actions@link:src/js/actions::locator=canoe%40workspace%3A."
-  languageName: node
-  linkType: soft
-
 "ReduxImpl@link:src/js/redux::locator=canoe%40workspace%3A.":
   version: 0.0.0-use.local
   resolution: "ReduxImpl@link:src/js/redux::locator=canoe%40workspace%3A."
@@ -5321,7 +5315,6 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^4.8.2
     "@typescript-eslint/parser": ^4.8.2
     "@yarnpkg/pnpify": ^2.3.3
-    Actions: "link:src/js/actions"
     ReduxImpl: "link:src/js/redux"
     RiotTags: "link:src/riot/"
     atob: ^2.1.2
