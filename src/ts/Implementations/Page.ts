@@ -209,7 +209,9 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     get tags(): string[] {
-        return this.manifestData?.tags || [];
+        return (
+            this.manifestData?.tags.map((s: string) => s.toLowerCase()) || []
+        );
     }
 
     /** This will do a basic integrity check.
