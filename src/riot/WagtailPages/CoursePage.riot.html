@@ -46,7 +46,7 @@
             </a>
         </div>
         <div class="lesson-swoop">
-            <div class="tab-titles">
+            <div class="tab-titles" if="{state.courseHasDiscussions}">
                 <a
                     href="#{course.loc_hash}"
                     class="{state.selectedTab === 'lessons' ? 'selected' : ''}"
@@ -56,13 +56,14 @@
                 </a>
                 <a
                     href="#{course.loc_hash}:discussion"
-                    if="{state.courseHasDiscussions}"
                     class="{state.selectedTab === 'discussion' ? 'selected' : ''}"
                     onclick="{() => selectTab('discussion')}"
                 >
                     <h5 class="section-title">{ TRANSLATIONS.discussion() }</h5>
                 </a>
             </div>
+
+            <h5 if="{!state.courseHasDiscussions}" class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
 
             <template if="{state.selectedTab === 'lessons'}">
                 <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
@@ -160,6 +161,7 @@
             TRANSLATIONS: {
                 no_lessons: () => gettext("There are no lessons yet in this course"),
                 lessons: () => gettext("Lessons"),
+                your_lessons: () => gettext("Your lessons"),
                 discussion: () => gettext("Discussion"),
                 course_exam: () => gettext("Course exam"),
                 prelearning_survey: () => gettext("Prelearning Survey"),
