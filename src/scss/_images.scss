@@ -199,6 +199,13 @@
     display: inline-block;
 }
 
+.offline-hand {
+    @include unmaskable-icons-shared("~img/offline_hand.png", contain);
+    min-height: 100px;
+    width: 100px;
+    display: inline-block;
+}
+
 .lesson-presentation {
     @include unmaskable-icons-shared("~img/lesson_presentation.png", contain);
     height: 100%;

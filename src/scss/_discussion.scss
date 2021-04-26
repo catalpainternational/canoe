@@ -144,6 +144,10 @@ DiscussionReply {
         padding-top: 16px;
         background-color: unset;
     }
+
+    .message-container {
+        padding-bottom: 2em;
+    }
 }
 
 DiscussionThread {
@@ -327,6 +331,7 @@ DiscussionReply {
     margin-left: -20px;
     border-radius: 8px 8px 0 0;
     max-width: $tablet;
+    height: auto;
 
     @media screen and (min-width: $tablet) {
         margin: 0 auto;
