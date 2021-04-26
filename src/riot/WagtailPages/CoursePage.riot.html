@@ -63,9 +63,9 @@
                 </a>
             </div>
 
-            <h5 if="{!state.courseHasDiscussions}" class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
 
             <template if="{state.selectedTab === 'lessons'}">
+                <h5 if="{!state.courseHasDiscussions && course.lessons.length}" class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
                 <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
                 <div class="card-container">
                     <Card
