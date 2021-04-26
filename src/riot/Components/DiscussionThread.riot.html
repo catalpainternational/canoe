@@ -9,7 +9,7 @@
             <div class="asker">
                 <div class="circle"></div>
             </div>
-            <h2>{props.question.question}</h2>
+            <h2 class="no-clamp">{props.question.question}</h2>
         </div>
         <div id="comment-input" class="form-group">
             <label for="comment">{TRANSLATIONS.addComment()}</label>
@@ -219,6 +219,7 @@
                     setTimeout(function() {
                         toast.className = toast.className.replace('show', '');
                     }, 3000);
+                    // also add class to component on a setTimeout for transparent blue background
                 },
 
                 addReply(reply) {

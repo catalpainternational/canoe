@@ -67,11 +67,14 @@ DiscussionReply {
             margin: 0;
             font-size: 1.1em;
             line-height: 1.4em;
-            max-height: calc(3 * 1.4em);
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
+
+            &:not(.no-clamp) {
+                max-height: calc(3 * 1.4em);
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+            }
         }
 
         // TODO this isn't signed off yet
@@ -323,7 +326,11 @@ DiscussionReply {
     width: 100vw;
     margin-left: -20px;
     border-radius: 8px 8px 0 0;
-    max-width: unset;
+    max-width: $tablet;
+
+    @media screen and (min-width: $tablet) {
+        margin: 0 auto;
+    }
 }
 
 #toast-message {

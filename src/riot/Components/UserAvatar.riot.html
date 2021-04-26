@@ -1,0 +1,20 @@
+<UserAvatar>
+    <div class="avatar {avatarClass()}">
+        <slot />
+    </div>
+
+    <script>
+        export default {
+            avatarClass() {
+                const id = Number(this.props.userId);
+
+                if (id % 6 === 1) return 'first';
+                if (id % 6 === 2) return 'second';
+                if (id % 6 === 3) return 'third';
+                if (id % 6 === 4) return 'fourth';
+                if (id % 6 === 5) return 'fifth';
+                return 'sixth';
+            },            
+        }
+    </script>
+</UserAvatar>

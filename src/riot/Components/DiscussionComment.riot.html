@@ -1,11 +1,10 @@
 <DiscussionComment>
-    <!-- TODO this avatar could potentially become its own component -->
-    <div class="avatar {avatarClass()}">
+    <UserAvatar userId="{props.comment.userId}">
         <p>{props.comment.initials}</p>
-    </div>
+    </UserAvatar>
     <div class="comment-block">
         <a class="name">{props.comment.username}</a>
-        <p class="time"> &middot; {getDate()}</p>
+        <p class="time"> &middot; {state.elapsedTime}</p>
         <p class="comment">
             {props.comment.text}
         </p>
@@ -41,15 +40,20 @@
 
     <script>
         import DiscussionReply from "RiotTags/Components/DiscussionReply.riot.html";
+        import UserAvatar from "RiotTags/Components/UserAvatar.riot.html";
+
+        import {getElapsedTime} from "js/utilities";
 
         export default {
             components: {
                 discussionreply: DiscussionReply,
+                useravatar: UserAvatar,
             },
 
             state: {
                 showReplyTextbox: false,
                 showReplies: true,
+                elapsedTime: '',
             },
 
             TRANSLATIONS: {
@@ -57,55 +61,18 @@
                 postComment: () => gettext("Post a comment"),
             },
 
+            onMounted(props, state) {
+                // TODO there is a bug here with the way the components get mounted, but check back on it when we have real data coming through. This could just be caused by pushing to the array
+                this.getDate();
+            },
+
             toggleReplies() {
                 this.update({showReplies: !this.state.showReplies});
             },
 
-            // TODO do we want to run this function every minute or so? so that it will update the value after a minute etc. or is that too expensive?
             getDate() {
-                const minuteInMs = 1 * 60 * 1000;
-                const hourInMs = minuteInMs * 60;
-                const dayInMs = hourInMs * 24;
-                const weekInMs = dayInMs * 7;
-                const monthInMs = dayInMs * 30;
-                const yearInMs = dayInMs * 365;
-
-                const date = this.props.comment.timestamp;
-                const today = new Date();
-                const elapsedTime = today - date;
-
-                if (elapsedTime < minuteInMs) {
-                    return 'Seconds ago';
-                }
-                if (elapsedTime < hourInMs) {
-                    return `${Math.round(elapsedTime / minuteInMs)} minutes ago`;
-                }
-                if (elapsedTime < dayInMs) {
-                    return `${Math.round(elapsedTime / hourInMs)} hours ago`;
-                }
-                if (elapsedTime < weekInMs) {
-                    return `${Math.round(elapsedTime / dayInMs)} days ago`;
-                }
-                if (elapsedTime < monthInMs) {
-                    return `${Math.round(elapsedTime / weekInMs)} weeks ago`;
-                }
-                if (elapsedTime < yearInMs) {
-                    return `${Math.round(elapsedTime / monthInMs)} months ago`;
-                }
-                if (elapsedTime >= yearInMs) {
-                    return `${Math.round(elapsedTime / yearInMs)} years ago`;
-                }
-            },
-
-            avatarClass() {
-                const id = Number(this.props.comment.userId);
-
-                if (id % 6 === 1) return 'first';
-                if (id % 6 === 2) return 'second';
-                if (id % 6 === 3) return 'third';
-                if (id % 6 === 4) return 'fourth';
-                if (id % 6 === 5) return 'fifth';
-                return 'sixth';
+                this.update({ elapsedTime: getElapsedTime(this.props.comment.timestamp) });
+                setTimeout(this.getDate, 60000);
             },
 
             addReply() {
@@ -130,7 +97,6 @@
             },
 
             closeReplyTextbox() {
-                // TODO if someone clicks 'reply' on another comment, this needs to close though... should this come from the upper component?
                 this.update({showReplyTextbox: false});
             },
         };
