@@ -4,12 +4,17 @@
     </UserAvatar>
 
     <div class="comment-block">
-        <a class="name">{props.comment.username}</a>
-        <p class="time"> &middot; {state.elapsedTime}</p>
+        <div class="meta">
+            <a>{props.comment.username}</a>
+            <p>&middot;</p>
+            <p>{state.elapsedTime}</p>
+        </div>
         <p class="comment">
             {props.comment.text}
         </p>
-        <p class="flag">Flag as inappropriate <span class="flag"></span></p>
+        <div class="controls">
+            <p>Flag as inappropriate <span class="flag"></span></p>
+        </div>
     </div>
 
     <script>

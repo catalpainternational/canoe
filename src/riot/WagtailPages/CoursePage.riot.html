@@ -219,8 +219,7 @@
             },
 
             selectTab(tabName) {
-                this.update({ selectedTab: tabName });
-                this.update({ selectedDiscussionId: null });
+                this.update({ selectedTab: tabName, selectedDiscussionId: null });
             },
 
             selectDiscussion(index, lesson = null) {

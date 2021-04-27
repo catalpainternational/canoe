@@ -239,12 +239,6 @@ DiscussionReply {
         }
     }
 
-    .time {
-        display: inline;
-        padding-left: 4px;
-        font-size: 0.9em;
-    }
-
     .comment {
         color: $gray-1;
         // TODO need to implement 'see more' button for longer comments
@@ -275,17 +269,31 @@ DiscussionReply {
         justify-content: center;
     }
 
+    .meta {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+
+        p {
+            font-size: 0.9em;
+            margin: 0;
+        }
+    }
+
     .controls {
         display: flex;
-        gap: 10px;
+        gap: 8px;
         align-items: center;
-    }
-
-    .reply {
         font-size: 0.9em;
+        margin-bottom: 8px;
+
+        p {
+            margin: 0;
+        }
     }
 
-    .reply-arrow {
+    .reply-arrow,
+    .flag {
         margin-left: 5px;
         margin-bottom: -2px;
     }
