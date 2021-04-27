@@ -50,6 +50,10 @@ export default class Course extends Page {
         }
     }
 
+    hasATagIn(tags: string[]): boolean {
+        return this.tags.filter((tag: string) => tags.includes(tag)).length > 0;
+    }
+
     /**  If the course has ans exam we store
      *     the child lessons in this course at the time
      *     any exam responses with its completion */

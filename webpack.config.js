@@ -47,6 +47,7 @@ module.exports = env => {
         {}
     );
     processEnvironment["process.env.REQUIRE_LOGIN"] = projectConfiguration.REQUIRE_LOGIN;
+    processEnvironment["process.env.PROFILE_LINK"] = JSON.stringify(projectConfiguration.PROFILE_LINK);
     processEnvironment["process.env.SITE_NAME"] = JSON.stringify(
         projectConfiguration.SITE_NAME
     );
@@ -195,25 +196,23 @@ module.exports = env => {
                 name: projectConfiguration.SITE_NAME,
                 short_name: projectConfiguration.SITE_SHORT_NAME,
                 description: projectConfiguration.SITE_DESCRIPTION,
+                background_color: "black",
+                theme_color: "blue",
                 start_url: "/",
                 icons: [
                     {
-                        src: projectConfiguration.FAVICON_PATH,
+                        src: projectConfiguration.ICON_PATH,
                         sizes: [120],
-                        destination: path.join("icons", "ios"),
-                        ios: true,
-                        manifest: false,
-                    },
-                    {
-                        src: projectConfiguration.FAVICON_PATH,
-                        size: [120],
-                        destination: path.join("icons", "ios"),
+                        destination: path.join("icons"),
                         ios: "startup",
+                        purpose: "any maskable",
                     },
                     {
-                        src: projectConfiguration.FAVICON_PATH,
-                        sizes: [512],
-                        destination: path.join("icons", "android"),
+                        src: projectConfiguration.ICON_PATH,
+                        sizes: [1024],
+                        destination: path.join("icons"),
+                        ios: true,
+                        purpose: "any maskable",
                     },
                 ],
             }),

@@ -23,7 +23,7 @@
     <div class="content-wrapper">
         <LoadingDots if="{!page.ready}" extrastyleclasses="dark"></LoadingDots>
         <template
-            if="{state.currentCourse && !state.currentCourse.isFinished()}"
+            if="{page.currentCourse && !page.currentCourse.isFinished()}"
         >
             <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
             <div class="card-container full-width">
@@ -66,7 +66,6 @@
         function AllCoursesList() {
             return {
                 state: {
-                    currentCourse: null,
                     selectedTags: [],
                     showTagList: false,
                 },
@@ -82,8 +81,8 @@
                         ),
                 },
 
-                onBeforeMount(props, state) {
-                    this.page = getRoute().page;
+                get page() {
+                    return getRoute().page;
                 },
 
                 showTagFilter() {
@@ -111,10 +110,7 @@
                     return (
                         !this.state.showTagList ||
                         !this.state.selectedTags.length ||
-                        this.page.courseIdHasATagIn(
-                            course.id,
-                            this.state.selectedTags
-                        )
+                        course.hasATagIn(this.state.selectedTags)
                     );
                 },
             };
