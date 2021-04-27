@@ -12,6 +12,10 @@ Resources {
         color: $gray-1;
     }
 
+    .no-resources {
+        margin: 0.5em;
+    }
+
     .list-resources {
         display: flex;
         flex-direction: column;
