@@ -14,7 +14,7 @@ DiscussionReply {
         align-items: center;
         gap: 15px;
         padding: 0 20px;
-        height: 50px;
+        height: 40px;
 
         .number {
             height: 26px;
@@ -49,10 +49,6 @@ DiscussionReply {
         height: auto;
         margin: 0 auto;
         padding: 23px 18px;
-        display: grid;
-        grid-template-columns: 34px 1fr;
-        gap: 22px;
-        align-items: center;
         box-sizing: border-box;
 
         &:first-of-type {
@@ -67,6 +63,7 @@ DiscussionReply {
             margin: 0;
             font-size: 1.1em;
             line-height: 1.4em;
+            font-weight: 300;
 
             &:not(.no-clamp) {
                 max-height: calc(3 * 1.4em);
@@ -74,22 +71,6 @@ DiscussionReply {
                 display: -webkit-box;
                 -webkit-line-clamp: 3;
                 -webkit-box-orient: vertical;
-            }
-        }
-
-        // TODO this isn't signed off yet
-        .asker > .circle {
-            width: 34px;
-            height: 34px;
-            background-color: $gray-8;
-            border-radius: 50%;
-            position: relative;
-
-            & > .bubble {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
             }
         }
     }
@@ -139,7 +120,8 @@ DiscussionReply {
         padding: 23px 15px 3px;
         min-width: 100%;
         max-width: 100%;
-        height: 100%;
+        min-height: 44px;
+        height: 44px;
         border: none;
         padding-top: 16px;
         background-color: unset;
@@ -154,18 +136,17 @@ DiscussionThread {
     .lesson-title {
         grid-template-columns: 20px 25px 1fr;
         padding: 0;
+        width: 100%;
     }
 
     .card {
         display: flex;
+        align-items: center;
     }
 
     .discussion-header {
-        display: grid;
-        grid-template-columns: 34px 1fr;
-        gap: 22px;
-        align-items: center;
         width: 100%;
+        padding: 1.2em 0;
     }
 
     .sort-options {
@@ -307,7 +288,6 @@ DiscussionReply {
         grid-column: 2;
     }
 
-    // todo rename this class
     .reply-container {
         grid-column: 1 / span 2;
 

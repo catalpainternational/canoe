@@ -1,14 +1,11 @@
 <DiscussionThread>
-    <div class="lesson-title">
-        <span class="arrow" onclick="{() => props.selectDiscussionHandler(null)}"></span>
-        <p class="number">{props.lessonNumber}</p>
-        <p class="title">{props.lesson.title}</p>
-    </div>
     <div class="card full-width">
+        <div class="lesson-title">
+            <span class="arrow" onclick="{() => props.selectDiscussionHandler(null)}"></span>
+            <p class="number">{props.lessonNumber}</p>
+            <p class="title">{props.lesson.title}</p>
+        </div>
         <div class="discussion-header">
-            <div class="asker">
-                <div class="circle"></div>
-            </div>
             <h2 class="no-clamp">{props.question.question}</h2>
         </div>
         <div id="comment-input" class="form-group">
