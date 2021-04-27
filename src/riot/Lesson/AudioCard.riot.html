@@ -3,10 +3,11 @@
         <h3 class="media-title">{props.media.title}</h3>
         <p class="media-description">{props.media.description}</p>
         <audio 
-            if="{ state.src }"
-            src="{ state.src }"
-            controls
+            if="{ asset() }"
+            src="{ asset().url }"
+            controls="true"
             crossorigin="anonymous"
+            duration="{ asset().duration }"
             onplay="{ (event) => storeAnalytics(event) }"
             >
             <span>{ TRANSLATIONS.browserSupport() }</span>
@@ -14,54 +15,32 @@
         <p class="error-message" if="{ !state.src }">
             { TRANSLATIONS.missing() }
         </p>
-        <p if={state.cached}>{ TRANSLATIONS.cached() }</p>
-        <p if={!state.cached}>{ TRANSLATIONS.notCached() }</p>
     </div>
 
     <script>
-        import { Asset } from "ts/Implementations/Asset";
         import { getRoute } from "ReduxImpl/Interface";
-        import { isItemCached } from "js/cacheManager/cacheManager";
         import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
-        export default {
-            state: {
-                src: "",
-                cached: false
-            },
+        export default function AudioCard() {
+            return {
+                TRANSLATIONS: {
+                    browserSupport: () => gettext("Your browser does not support the audio element."),
+                    missing: () => gettext("Sorry: This audio is missing.")
+                },
 
-            TRANSLATIONS: {
-                browserSupport: () => gettext("Your browser does not support the audio element."),
-                cached: () => gettext("This audio will play offline."),
-                notCached: () => gettext("This audio is not available offline."),
-                missing: () => gettext("Sorry: This audio is missing.")
-            },
+                get page() {
+                    return getRoute().page;
+                },
 
-            onBeforeMount(props, state) {
-                this.page = getRoute().page;
-                const assetEntry = this.page.getAudioRenditions(
-                    props.media.id
-                );
-                let src = "";
-                try {
-                    src = Asset.url(assetEntry);
-                } catch {
-                    // No compatible rendition found, therefore no url
-                    src = "";
-                }
-                this.state.src = src;
-                if (src) {
-                    isItemCached(src).then(cached => {
-                        this.update({cached});
-                    });
-                }
-            },
+                asset() {
+                    return this.page.audioAsset(this.props.media.media_id);
+                },
 
-            storeAnalytics() {
-                const mediaTitle = this.props.media.title;
-                logClickedPlayOnVideo(mediaTitle);
-            },
-
+                storeAnalytics() {
+                    const mediaTitle = this.props.media.title;
+                    logClickedPlayOnVideo(mediaTitle);
+                },
+            }
         };
     </script>
 </AudioCard>
