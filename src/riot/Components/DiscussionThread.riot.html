@@ -211,12 +211,7 @@
                     });
                     commentInput.value = '';
                     // on success
-                    const toast = document.getElementById('toast-message');
-                    toast.className = 'show';
-                    setTimeout(function() {
-                        toast.className = toast.className.replace('show', '');
-                    }, 3000);
-                    // also add class to component on a setTimeout for transparent blue background
+                    this.commentSuccess(newComment.id);
                 },
 
                 addReply(reply) {
@@ -224,12 +219,22 @@
                         comments: [reply].concat(...this.state.comments),
                     });
                     // on success
+                    this.commentSuccess(reply.id)
+                },
+
+                commentSuccess(id) {
                     const toast = document.getElementById('toast-message');
                     toast.className = 'show';
                     setTimeout(function() {
                         toast.className = toast.className.replace('show', '');
                     }, 3000);
-                }
+
+                    const newCommentEl = document.getElementById(id);
+                    newCommentEl.className = 'recent';
+                    setTimeout(function () {
+                        newCommentEl.className = '';
+                    }, 6000)
+                },
             };
         };
 
