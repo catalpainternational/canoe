@@ -8,7 +8,11 @@
         <p class="comment">
             {props.comment.text}
         </p>
-        <p class="reply" onclick="{openReplyTextbox}">Reply <span class="reply-arrow"></span></p>
+        <div class="controls">
+            <p class="reply" onclick="{openReplyTextbox}">Reply <span class="reply-arrow"></span></p>
+            <p>&middot;</p>
+            <p class="flag">Flag as inappropriate <span class="flag"></span></p>
+        </div>
         <div if="{props.comment.replies.length}" class="toggle-replies" onclick="{toggleReplies}">
             <template if="{state.showReplies}">&minus;</template>
             <template if="{!state.showReplies}">&plus;</template>

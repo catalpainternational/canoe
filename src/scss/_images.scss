@@ -252,12 +252,6 @@
     width: 18px;
 }
 
-.bubble {
-    @include mask-icons-shared("~img/bubble.svg", contain, $blue);
-    height: 22px;
-    width: 22px;
-}
-
 .incorrect-cross {
     @include unmaskable-icons-shared("~img/incorrect_cross.svg", contain);
 }

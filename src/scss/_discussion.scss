@@ -275,6 +275,12 @@ DiscussionReply {
         justify-content: center;
     }
 
+    .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
     .reply {
         font-size: 0.9em;
     }
