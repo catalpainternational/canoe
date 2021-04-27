@@ -213,13 +213,13 @@
 }
 
 .arrow {
-    @include mask-icons-shared("~img/arrow.svg", contain, $blue);
+    @include mask-icons-shared("~img/arrow.svg", contain, $app-accent-color);
     height: 12px;
     width: 17px;
 }
 
 .download {
-    @include mask-icons-shared("~img/download.svg", contain, $blue);
+    @include mask-icons-shared("~img/download.svg", contain, $app-accent-color);
     height: 22px;
     width: 22px;
     margin-left: -2px;
@@ -234,7 +234,7 @@
 }
 
 .quotation-mark {
-    @include mask-icons-shared("~img/quotation_mark.svg", contain, $blue);
+    @include mask-icons-shared("~img/quotation_mark.svg", contain, $app-accent-color);
     height: 22px;
     width: 18px;
 }
