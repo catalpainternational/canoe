@@ -27,9 +27,16 @@
         </button>
 
         <div class="sort-options">
-            <p class="active" onclick="{showSort}">{TRANSLATIONS.sort()} {state.activeSortOption.label}</p>
-            <div if="{state.showSortOptions}" class="options">
-                <p class="option" each="{option in state.sortOptions}" onclick="{() => sortComments(option)}">{option.label}</p>
+            <p class="label">{TRANSLATIONS.sort()}</p>
+            <div class="dropdown">
+                <p class="active" onclick="{toggleSort}">
+                    {state.activeSortOption.label}
+                    <span class="caret" if="{state.showSortOptions}">&#9650;</span>
+                    <span class="caret" if="{!state.showSortOptions}">&#9660;</span>
+                </p>
+                <div if="{state.showSortOptions}" class="option">
+                    <p class="option" each="{option in state.sortOptions}" if="{option.label !== state.activeSortOption.label}" onclick="{() => sortComments(option)}">{option.label}</p>
+                </div>
             </div>
         </div>
 
@@ -106,8 +113,8 @@
                     user: getUser(),
                     // TODO will sorting be done on the API, or in the FE?
                     sortOptions: [
-                        { sort: 'timestamp', order: 'desc', label: 'Newest First' },
-                        { sort: 'timestamp', order: 'asc', label: 'Oldest First' }
+                        { sort: 'timestamp', order: 'desc', label: gettext('Newest First') },
+                        { sort: 'timestamp', order: 'asc', label: gettext('Oldest First') }
                     ],
                     activeSortOption: { sort: 'timestamp', order: 'desc', label: 'Newest First' },
                     showSortOptions: false,
@@ -120,8 +127,8 @@
                     commentConfirmed: () => gettext("Comment posted"),
                 },
 
-                showSort() {
-                    this.update({showSortOptions: true})
+                toggleSort() {
+                    this.update({showSortOptions: !this.state.showSortOptions})
                 },
 
                 sortComments(sortOption) {
