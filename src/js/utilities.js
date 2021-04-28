@@ -136,6 +136,16 @@ export const getElapsedTime = (givenDate) => {
         const timeInYears = Math.round(elapsedTime / yearInMs);
         return `${simplePluralize(timeInYears, 'year')} ago`;
     }
+}
 
-
+export const hashString = (string) => {
+    // Generate an unsigned 32 bit integer hash from any string
+    let hash = 0;
+    for (let ix = 0; ix < string.length; ix++) {
+        const char = string.charCodeAt(ix);
+        hash = char + (hash << 6) + (hash << 16) - hash; // magic constant is (effectively) 65599
+    }
+    const bit32 = Math.pow(2, 32);
+    hash = hash < 0 ? Math.ceil(hash) : Math.floor(hash);
+    return hash - Math.floor(hash / bit32) * bit32;
 }
