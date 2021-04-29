@@ -1,16 +1,16 @@
 <DiscussionReply id="{props.comment.id}">
-    <UserAvatar username="{props.comment.username}">
+    <UserAvatar username="{props.comment.user_username}">
         <p>{props.comment.initials}</p>
     </UserAvatar>
 
     <div class="comment-block">
         <div class="meta">
-            <a>{props.comment.username}</a>
+            <a>{props.comment.user_username}</a>
             <p>&middot;</p>
             <p>{state.elapsedTime}</p>
         </div>
         <p class="comment">
-            {props.comment.text}
+            {props.comment.comment}
         </p>
         <div class="controls">
             <p>Flag as inappropriate <span class="flag"></span></p>
@@ -35,7 +35,7 @@
             },
 
             getDate() {
-                this.update({ elapsedTime: getElapsedTime(this.props.comment.timestamp) });
+                this.update({ elapsedTime: getElapsedTime(this.props.comment.date_created) });
                 setTimeout(this.getDate, 60000);
             },
         };

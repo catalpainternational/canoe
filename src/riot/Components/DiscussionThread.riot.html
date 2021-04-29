@@ -26,29 +26,39 @@
             {TRANSLATIONS.postComment()}
         </button>
 
-        <div class="sort-options">
-            <p class="label">{TRANSLATIONS.sort()}</p>
-            <div class="dropdown">
-                <p class="active" onclick="{toggleSort}">
-                    {state.activeSortOption.label}
-                    <span class="caret" if="{state.showSortOptions}">&#9650;</span>
-                    <span class="caret" if="{!state.showSortOptions}">&#9660;</span>
-                </p>
-                <div if="{state.showSortOptions}" class="option">
-                    <p class="option" each="{option in state.sortOptions}" if="{option.label !== state.activeSortOption.label}" onclick="{() => sortComments(option)}">{option.label}</p>
-                </div>
-            </div>
+        <div if="{!state.comments.length}">
+            <LoadingDots if="{state.loading}"></LoadingDots>
+            <p>TODO (need design): Be the first to contribute to the conversation! Add a comment above.</p>
         </div>
 
-        <DiscussionComment
-            each="{comment in mapComments()}"
-            comment="{comment}"
-            user="{state.user}"
-            addReply="{addReply}"
-            updateCommentValue="{updateCommentValue}"
-            setInputFocus="{setInputFocus}"
-            removeInputFocus="{removeInputFocus}"
-        ></DiscussionComment>
+        <template if="{state.comments.length}">
+            <div class="sort-options">
+                <p class="label">{TRANSLATIONS.sort()}</p>
+                <div class="dropdown">
+                    <p class="active" onclick="{toggleSort}">
+                        {state.activeSortOption.label}
+                        <span class="caret" if="{state.showSortOptions}">&#9650;</span>
+                        <span class="caret" if="{!state.showSortOptions}">&#9660;</span>
+                    </p>
+                    <div if="{state.showSortOptions}" class="option">
+                        <p class="option" each="{option in state.sortOptions}" if="{option.label !== state.activeSortOption.label}" onclick="{() => sortComments(option)}">{option.label}</p>
+                    </div>
+                </div>
+            </div>
+
+            <DiscussionComment
+                if="{!state.loading}"
+                each="{comment in mapComments()}"
+                comment="{comment}"
+                lesson="{props.lesson}"
+                addReply="{addReply}"
+                updateCommentValue="{updateCommentValue}"
+                setInputFocus="{setInputFocus}"
+                removeInputFocus="{removeInputFocus}"
+            ></DiscussionComment>
+        </template>
+
+
     </div>
 
     <div id="toast-message">
@@ -59,64 +69,20 @@
     <script>
         import DiscussionComment from "RiotTags/Components/DiscussionComment.riot.html";
 
-        import { getUser } from "ReduxImpl/Interface";
+        import { postComment, getDiscussionComments } from "js/DiscussionUtilities";
+        import { v4 as uuidv4 } from "uuid";
 
         function DiscussionThread() {
             return {
                 state: {
                     commentButtonVisible: false,
-                    // TODO: this will come from the backend
-                    comments: [
-                    {
-                        id: 1618267587850,
-                        parentId: null,
-                        userId: '6',
-                        username: 'Kevin Bacon',
-                        timestamp: new Date('27 march 2021'),
-                        text: 'Lorem ipsum dolor sit amet',
-                    }, {
-                        id: 1618267586676,
-                        parentId: null,
-                        userId: '1',
-                        username: 'Stacey Reed',
-                        timestamp: new Date('17 january 2021'),
-                        text: 'Consectetur adipisicing elit!',
-                    }, {
-                        id: 1618267585505,
-                        parentId: null,
-                        userId: '14',
-                        username: 'Alan Tate',
-                        timestamp: new Date('3 october 2020'),
-                        text: 'Itaque, mollitia, asperiores?',
-                    }, {
-                        id: 1618267582777,
-                        parentId: null,
-                        userId: '29',
-                        username: 'Katie Johnson',
-                        timestamp: new Date('15 april 2015'),
-                        text: 'Totam corrupti reprehenderit necessitatibus, soluta magni alias commodi, nisi praesentium iusto odio quidem similique quasi fuga itaque aliquam culpa.',
-                    }, {
-                        id: 1618360446287,
-                        parentId: 1618267587850,
-                        userId: '75',
-                        username: 'Camila García',
-                        timestamp: new Date('12 april 2021'),
-                        text: 'Iusto sapiente consectetur ratione nemo suscipit ut nobis et illum impedit cupiditate, repellat minus harum tempore sed, mollitia similique sit pariatur!'
-                    }, {
-                        id: 1618267587249,
-                        parentId: 1618267587850,
-                        userId: '14',
-                        username: 'Alan Tate',
-                        timestamp: new Date('28 march 2021'),
-                        text: 'Sequi sit quas enim ducimus ipsam a incidunt, est.',
-                    }],
-                    user: getUser(),
-                    // TODO will sorting be done on the API, or in the FE?
+                    loading: false,
+                    comments: [],
                     sortOptions: [
-                        { sort: 'timestamp', order: 'desc', label: gettext('Newest First') },
-                        { sort: 'timestamp', order: 'asc', label: gettext('Oldest First') }
+                        { sort: 'date_created', order: 'desc', label: gettext('Newest First') },
+                        { sort: 'date_created', order: 'asc', label: gettext('Oldest First') }
                     ],
-                    activeSortOption: { sort: 'timestamp', order: 'desc', label: 'Newest First' },
+                    activeSortOption: { sort: 'date_created', order: 'desc', label: 'Newest First' },
                     showSortOptions: false,
                 },
 
@@ -125,6 +91,10 @@
                     postComment: () => gettext("Post comment"),
                     sort: () => gettext("Sort by"),
                     commentConfirmed: () => gettext("Comment posted"),
+                },
+
+                onBeforeMount(props, state) {
+                    this.updateComments();
                 },
 
                 toggleSort() {
@@ -150,19 +120,18 @@
                 },
 
                 mapComments() {
-                    // TODO: default sorting
                     const comments = this.state.comments;
 
                     return comments.map((comment, index, array) => ({
                         ...comment,
-                        initials: this.getInitials(comment.username),
-                        replies: array.filter((it) => it.parentId === comment.id)
+                        initials: this.getInitials(comment.user_username),
+                        replies: array.filter((it) => it.parent_id === comment.id)
                             .map(it => ({
                                 ...it,
-                                initials: this.getInitials(it.username)
+                                initials: this.getInitials(it.user_username)
                             })),
                     }))
-                    .filter((comment) => comment.parentId === null);
+                    .filter((comment) => comment.parent_id === null);
                 },
 
                 updateCommentValue() {
@@ -201,32 +170,50 @@
                     return `${firstInitial.toUpperCase()}${secondInitial.toUpperCase()}`
                 },
 
+                updateComments() {
+                    this.state.loading = true;
+
+                    getDiscussionComments(this.props.question.id).then((response) => {
+                        this.update({ comments: response, loading: false });
+                    });
+                },
+
                 addComment() {
                     const commentInput = this.$('#comment');
 
                     const newComment = {
-                        id: new Date() - 1,
-                        parentId: null,
-                        userId: this.state.user.userId,
-                        username: this.state.user.username,
-                        timestamp: new Date(),
-                        text: commentInput.value,
+                        external_id: this.props.lesson.id,
+                        discussion_id: this.props.question.id,
+                        date_created: new Date().toISOString().replace('Z', '+00:00'),
+                        comment: commentInput.value,
+                        id: uuidv4(),
+                        posting_type: 'C',
                     }
-                    // TODO post the comment when backend ready
-                    this.update({
-                        comments: [newComment].concat(...this.state.comments),
+
+                    postComment(newComment).then((response) =>{
+                        if (!response.ok) throw new Error(`Comment failed, HTTP status: ${response.status}`);
+
+                        this.updateComments();
+                        this.commentSuccess(newComment.id)
                     });
+
+
                     commentInput.value = '';
-                    // on success
-                    this.commentSuccess(newComment.id);
                 },
 
                 addReply(reply) {
-                    this.update({
-                        comments: [reply].concat(...this.state.comments),
+                    const newReply = {
+                        ...reply,
+                        external_id: this.props.lesson.id,
+                        discussion_id: this.props.question.id,
+                    }
+
+                    postComment(newReply).then((response) =>{
+                        if (!response.ok) throw new Error(`Comment failed, HTTP status: ${response.status}`);
+
+                        this.updateComments();
+                        this.commentSuccess(newReply.id)
                     });
-                    // on success
-                    this.commentSuccess(reply.id)
                 },
 
                 commentSuccess(id) {

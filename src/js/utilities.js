@@ -106,7 +106,7 @@ export const getElapsedTime = (givenDate) => {
     const yearInMs = dayInMs * 365;
 
     const today = new Date();
-    const elapsedTime = today - givenDate;
+    const elapsedTime = today - new Date(givenDate);
 
     // TODO this needs translatin!
     if (elapsedTime < minuteInMs) {

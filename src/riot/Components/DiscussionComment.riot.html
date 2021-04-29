@@ -1,15 +1,15 @@
 <DiscussionComment id="{props.comment.id}">
-    <UserAvatar username="{props.comment.username}">
+    <UserAvatar username="{props.comment.user_username}">
         <p>{props.comment.initials}</p>
     </UserAvatar>
     <div class="comment-block">
         <div class="meta">
-            <a>{props.comment.username}</a>
+            <a>{props.comment.user_username}</a>
             <p>&middot;</p>
             <p>{state.elapsedTime}</p>
         </div>
         <p class="comment">
-            {props.comment.text}
+            {props.comment.comment}
         </p>
         <div class="controls">
             <p class="reply" onclick="{openReplyTextbox}">Reply <span class="reply-arrow"></span></p>
@@ -50,6 +50,7 @@
         import UserAvatar from "RiotTags/Components/UserAvatar.riot.html";
 
         import {getElapsedTime} from "js/utilities";
+        import { v4 as uuidv4 } from "uuid";
 
         export default {
             components: {
@@ -78,7 +79,7 @@
             },
 
             getDate() {
-                this.update({ elapsedTime: getElapsedTime(this.props.comment.timestamp) });
+                this.update({ elapsedTime: getElapsedTime(this.props.comment.date_created) });
                 setTimeout(this.getDate, 60000);
             },
 
@@ -86,12 +87,11 @@
                 const commentInput = this.$("#reply");
 
                 const newComment = {
-                    id: new Date() - 1,
-                    parentId: this.props.comment.id,
-                    userId: this.props.user.userId,
-                    username: this.props.user.username,
-                    timestamp: new Date(),
-                    text: commentInput.value,
+                    date_created: new Date().toISOString().replace('Z', '+00:00'),
+                    comment: commentInput.value,
+                    id: uuidv4(),
+                    parent_id: this.props.comment.id,
+                    posting_type: 'R',
                 }
 
                 this.props.addReply(newComment);
