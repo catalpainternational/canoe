@@ -382,6 +382,15 @@ test,
         margin-top: 20px;
     }
 
+    ol, ul {
+        padding-left: 0;
+        margin-left: 0;
+
+        li {
+            padding-left: 0;
+        }
+    }
+
     ol {
         align-self: start;
         flex: 1;

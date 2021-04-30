@@ -78,6 +78,10 @@ ActivityPage {
         width: 100%;
     }
 
+    li {
+        color: $gray-1;
+    }
+
     PlanTab,
     TeachTab {
         h4 {
@@ -105,26 +109,18 @@ ActivityPage {
             margin: 1.5em 0;
             display: block;
         }
-    }
 
-    ListCard {
-        p {
-            color: $gray-1;
+        .cards-list > basiccard {
             display: flex;
+            flex-direction: column;
 
-            .bullet {
-                font-size: 10px;
-                margin: 5px 20px 0 0;
+            h3 {
+                order: -1;
             }
+        }
 
-            .number {
-                font-size: 14px;
-                margin: 2px 15px 0 0;
-
-                &:after {
-                    content: ".";
-                }
-            }
+        &.last-section .cards-list > * + * {
+            border-top: 1px solid $gray-6;
         }
     }
 
