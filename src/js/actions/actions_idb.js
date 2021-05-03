@@ -1,6 +1,7 @@
 import { openDB, deleteDB, wrap, unwrap } from "idb";
 
 const action_store_name = "actions";
+const ONE_YEAR = 365 * 24 * 60 * 60 * 1000
 
 // store an action of a certain type
 export async function writeAction(action) {
@@ -38,11 +39,8 @@ export async function ensureAction(action) {
     const transaction = actionsDb.transaction(action_store_name, "readwrite");
     const key = await transaction.store.getKey(action.uuid);
 
-    const thisYear = new Date().getFullYear();
-    const beginningOfThisYear = new Date(thisYear, 0, 1);
-
-    // return false - no change made; ignore actions from prior years.
-    if (key || action.date < beginningOfThisYear) {
+    // return false - no change made; ignore actions from more than a year ago
+    if (key || action.date < (new Date() - ONE_YEAR)) {
         return false;
     }
 
