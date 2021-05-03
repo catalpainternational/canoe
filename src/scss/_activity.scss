@@ -84,7 +84,7 @@ ActivityPage {
         right: 1em;
     }
 
-    li {
+    li, p {
         color: $gray-1;
     }
 
@@ -128,6 +128,11 @@ ActivityPage {
         &.last-section .cards-list > * + * {
             border-top: 1px solid $gray-6;
         }
+    }
+
+    TabSection .last-section .cards-list > * + *,
+    ExtendTab .cards-list > * + * {
+        border-top: 1px solid $gray-6;
     }
 
     Html5Card {
