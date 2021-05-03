@@ -7,10 +7,7 @@ export default class AllCourses extends Page {
     get all_tags(): Set<string> {
         if (this.#all_tags === undefined) {
             this.#all_tags = new Set(
-                this.courses
-                    .map((c: any) => c.tags)
-                    .flat()
-                    .map((tag: string) => tag.toLowerCase())
+                this.courses.map((c: any) => c.tags).flat()
             );
         }
         return this.#all_tags;
@@ -20,34 +17,21 @@ export default class AllCourses extends Page {
         return this.childPages;
     }
 
-    courseIdHasATagIn(courseId: number, tags: string[]): boolean {
-        const course = this.data.courses.find(
-            (c: any) => c.data.id == courseId
-        );
-        const courseTags = new Set(course.tags);
-        const tagsSet = new Set(tags);
-        return (
-            [...tagsSet].filter((tag: string) => courseTags.has(tag)).length > 0
-        );
-    }
-
     get coursesInProgress(): Course[] {
         return this.courses.filter(
-            (course: Course) => course.progressStatus == "not-started"
+            (course: Course) => !course.complete && course.latestCompletion
         );
     }
 
     get coursesCompleted(): Course[] {
-        return this.courses.filter(
-            (course: Course) => course.progressStatus == "complete"
-        );
+        return this.courses.filter((course: Course) => course.complete);
     }
 
     get coursesCompleteLast(): Course[] {
         const inComplete: any[] = [];
         const complete: any[] = [];
         this.courses.forEach((course: any) => {
-            if (course.isComplete) {
+            if (course.complete) {
                 complete.push(course);
             } else {
                 inComplete.push(course);
@@ -65,7 +49,7 @@ export default class AllCourses extends Page {
         for (const course of coursesWithCompletions) {
             if (
                 lastWorkedOnCourse &&
-                !course.isComplete &&
+                !course.complete &&
                 course.latestCompletion.completionDate <
                     lastWorkedOnCourse.latestCompletion.completionDate
             ) {
@@ -76,24 +60,24 @@ export default class AllCourses extends Page {
         return lastWorkedOnCourse;
     }
 
-    get countFinishedLessonsAndExams(): number {
-        const tallyFinishedLessonsAndExams = (
-            totalFinished: any,
-            aCourse: any
-        ) => totalFinished + aCourse.numberOfFinishedLessons;
-        return this.courses.reduce(tallyFinishedLessonsAndExams, 0);
+    get description(): string {
+        return this.data.body;
     }
 
-    get countLessonsAndExams(): number {
-        const tallyLessonsAndExams = (totalLessons: any, currentCourse: any) =>
-            totalLessons + currentCourse.numberOfLessons;
+    get countFinishedLessons(): number {
+        const tallyFinishedLessons = (totalFinished: any, course: any) => {
+            return totalFinished + course.lessonsComplete;
+        };
+        return this.courses.reduce(tallyFinishedLessons, 0);
+    }
+
+    get countLessons(): number {
+        const tallyLessonsAndExams = (totalLessons: any, course: any) => {
+            return totalLessons + course.lessons.length;
+        };
         return this.courses.reduce(tallyLessonsAndExams, 0);
     }
-
     get numberOfLessonsLeft(): number {
-        return (
-            this.countFinishedLessonsAndExams -
-            this.countFinishedLessonsAndExams
-        );
+        return this.countLessons - this.countFinishedLessons;
     }
 }

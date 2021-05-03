@@ -17,6 +17,10 @@
                 loading: false,
             },
 
+            TRANSLATIONS: {
+                issue: () => gettext("There was a problem downloading the content"),
+            },
+
             onMounted(props, state) {
                 if(props.contentItem) {
                     props.contentItem.isAvailableOffline().then(cached => {
@@ -35,6 +39,16 @@
                     .then(() => item.isAvailableOffline())
                     .then(cached => {
                         this.update({cached, loading: false});
+                    })
+                    .catch(() => {
+                        this.update({loading: false});
+
+                        const toast = document.getElementById("snackbar");
+                        toast.innerText = this.TRANSLATIONS.issue();
+                        toast.className = "show";
+                        setTimeout(function() {
+                            toast.className = toast.className.replace("show", "");
+                        }, 2500);
                     });
             },
         };

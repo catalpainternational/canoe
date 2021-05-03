@@ -47,7 +47,7 @@
             getRoute
         } from "ReduxImpl/Interface";
 
-        import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
+        import BottomMenu from "riot/Components/BottomMenu.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
         import Toast from "RiotTags/Components/Toast.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
@@ -74,7 +74,8 @@
                 const route = getRoute();
                 const state = {
                     page: route.page,
-                    riotHash: route.riotHash,
+                    pageReady: route.page.ready,
+                    riotHash: route.riotHash || [],
                     browserSupported: isBrowserSupported(),
                 };
                 return state;
@@ -87,13 +88,7 @@
                 },
 
                 storeListener(previousStoreState, storeState) {
-                    if (previousStoreState.language !== storeState.language
-                        || previousStoreState.route.page.type !== storeState.route.page.type
-                        || !this.state.page.ready !== storeState.route.page.ready
-                        || !arrayEquals(this.state.riotHash, storeState.route.riotHash)
-                    ) {
-                        this.update(readState());
-                    }
+                    this.update(readState());
                 }
             }
         }

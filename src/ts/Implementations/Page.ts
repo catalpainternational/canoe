@@ -14,7 +14,10 @@ import { BACKEND_BASE_URL } from "js/urls";
 import {
     getPageData as getPageDataFromStore,
     storePageData,
+    getStoredPageCompletionDate,
+    storePageComplete,
 } from "ReduxImpl/Interface";
+import { persistCompletion } from "js/actions/Completion";
 
 const logger = new Logger("Page");
 
@@ -29,12 +32,14 @@ export class Page extends PublishableItem implements StorableItem {
     #childPages: Page[] | undefined;
     /** the lsit of assets( references stored for efficiency ) */
     #assets: Asset[] = [];
+    /** aany data that might wish to be added to a completion persisted entry */
+    #completionData: Record<string, any> = {};
 
     /**
      * Instantiate a new page from its manifest and id
      * @param manifest the manifest this page comes from
      * @param id the id of this page in the manifest
-     * @param parent the parent of this page ( we could infer this but don't yet )
+     * @param parent the parent of this page ( if not provided is inferred from manifest on need )
      */
     constructor(manifest: Manifest, id: string, parent?: Page) {
         super();
@@ -92,7 +97,7 @@ export class Page extends PublishableItem implements StorableItem {
      */
     async prepare(): Promise<void> {
         const response = await this.getResponse();
-        response
+        return response
             .json()
             .then((manifestData: any) => {
                 this.saveToStore(manifestData);
@@ -144,10 +149,6 @@ export class Page extends PublishableItem implements StorableItem {
 
     get loc_hash(): string {
         return this.manifestData?.loc_hash || "";
-    }
-
-    get slug(): string {
-        return this.manifestData.slug;
     }
 
     get parent(): Page | undefined {
@@ -208,7 +209,9 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     get tags(): string[] {
-        return this.manifestData?.tags || [];
+        return (
+            this.manifestData?.tags.map((s: string) => s.toLowerCase()) || []
+        );
     }
 
     /** This will do a basic integrity check.
@@ -297,32 +300,81 @@ export class Page extends PublishableItem implements StorableItem {
         );
     }
 
-    getAssetsByIdAndType(
-        id: number | string,
-        assetType: string
-    ): TAssetEntry | undefined {
-        const assets = this.manifestData.assets;
-        const filteredAssets = assets.find((a: TAssetEntry) => {
-            return a.id === id.toString() && a.type === assetType;
-        });
-        // Handy code if you want to check what assets are being retrieved
-        // console.log(
-        //     `Getting ${assetType} asset:${id}, and found ${JSON.stringify(
-        //         filteredAssets
-        //     )}`
-        // );
-        return filteredAssets;
+    /** add some data to be stored with the next completion */
+    addCompletionData(data: Record<string, any>): void {
+        Object.assign(this.#completionData, data);
+    }
+    /** returns data to be stored with thi page completion */
+    get completionData(): Record<string, any> {
+        const data = {
+            title: this.title,
+            ...this.#completionData,
+        };
+        this.#completionData = {};
+        return data;
+    }
+    /** sets a page as complete */
+    set complete(complete: boolean) {
+        const data = this.completionData;
+        data["complete"] = !!complete;
+        // store in idb and the server
+        const action = persistCompletion(this.id, data);
+
+        // set in redux store
+        storePageComplete(this.id, action.date, complete);
+    }
+    /** if a page has been marked as complete */
+    get complete(): boolean {
+        return this.completeDate !== undefined;
+    }
+    /** when a page was last marked as complete */
+    get completeDate(): Date | undefined {
+        return getStoredPageCompletionDate(this.id);
     }
 
-    getImageRenditions = (id: number | string): TAssetEntry | undefined =>
-        this.getAssetsByIdAndType(id, "image");
+    /** whether this page is notstarted, in progress or complete */
+    get progressStatus(): ProgressStatus {
+        if (this.complete) {
+            return "complete";
+        } else if (this.childPages.find((c) => c.complete) === undefined) {
+            return "not-started";
+        } else {
+            return "in-progress";
+        }
+    }
+    /** the data to show in a progress bar for this page */
+    get progressValues(): ProgressValues {
+        return {
+            min: this.childPages.filter((c) => c.complete).length,
+            max: this.childPages.length,
+        };
+    }
 
-    getMediaRenditions = (id: number | string): TAssetEntry | undefined =>
-        this.getAssetsByIdAndType(id, "media");
+    getAssetByIdAndType(
+        id: number | string,
+        assetType: string
+    ): Asset | undefined {
+        const asset = this.manifestAssets.find((a: Asset) => {
+            return a.id === id.toString() && a.type === assetType;
+        });
+        if (asset === undefined) {
+            logger.warn("Missing asset %s: %s, %s", this.title, id, assetType);
+        }
+        return asset;
+    }
 
-    getVideoRenditions = (id: number | string): TAssetEntry | undefined =>
-        this.getAssetsByIdAndType(id, "video");
+    imageAsset = (id: number | string): Asset | undefined =>
+        this.getAssetByIdAndType(id, "image");
 
-    getAudioRenditions = (id: number | string): TAssetEntry | undefined =>
-        this.getAssetsByIdAndType(id, "audio");
+    videoAsset = (id: number | string): Asset | undefined =>
+        this.getAssetByIdAndType(id, "video");
+
+    audioAsset = (id: number | string): Asset | undefined =>
+        this.getAssetByIdAndType(id, "audio");
 }
+
+type ProgressStatus = "not-started" | "in-progress" | "complete";
+export type ProgressValues = {
+    min: number;
+    max: number;
+};

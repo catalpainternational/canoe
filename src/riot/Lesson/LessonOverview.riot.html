@@ -1,6 +1,6 @@
 <LessonOverview>
-    <LessonContent lesson="{props.lesson}"></LessonContent>
-    <LessonPage if="{!state.section}"></LessonPage>
+    <LessonContent if="{ section && lesson.ready }"></LessonContent>
+    <LessonPage if="{ !section }"></LessonPage>
 
     <script>
         import { getRoute } from "ReduxImpl/Interface";
@@ -8,23 +8,12 @@
         import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
         import LessonPage from "RiotTags/WagtailPages/LessonPage.riot.html";
 
-        import { getHashPieces } from "js/Routing";
-
-        function readState() {
-            const route = getRoute();
-            const state = {
-                section: route.riotHash[0],
-            };
-            return state;
-        }
-
         function LessonOverview() { return {
-            onBeforeMount(props, state) {
+            get section() {
+                return getRoute().riotHash[0];
             },
-            onBeforeUpdate(props, state) {
-                this.state = {
-                    ...readState(),
-                }
+            get lesson() {
+                return getRoute().page;
             },
         }}
 

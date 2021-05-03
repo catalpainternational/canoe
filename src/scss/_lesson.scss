@@ -57,13 +57,24 @@ LessonFrame {
         }
     }
 
+    // the 25px adds some room for the stacked cards below, the 50px is
+    // for the buttons
+    $base-card-height: calc(100vh - #{$top-menu-height} - 25px - 50px);
+
     .frame-background {
-        // the 25px adds some room for the stacked cards below, the 50px is
-        // for the buttons
-        height: calc(100vh - #{$top-menu-height} - 25px - 50px);
+        height: $base-card-height;
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
+
+        &.safari {
+            height: calc(#{$base-card-height} - 100px);
+        }
+
+        &.chrome,
+        &.firefox {
+            height: calc(#{$base-card-height} - 60px);
+        }
     }
 
     .card-frame {
@@ -92,6 +103,10 @@ LessonFrame {
         justify-content: flex-start;
         height: 100%;
         overflow: scroll;
+
+        &.fade:after {
+            @extend %faded-modal-background;
+        }
     }
 }
 
@@ -321,6 +336,10 @@ iframe {
     box-sizing: border-box;
 }
 
+Test {
+    width: 100%;
+}
+
 TestMultipleAnswer,
 TestSingleAnswer {
     width: 100%;
@@ -352,7 +371,8 @@ TestSingleAnswer {
     }
 }
 
-.test {
+test,
+.answers-block {
     h3 {
         align-self: start;
     }
@@ -382,6 +402,8 @@ TestSingleAnswer {
             p {
                 font-size: 1.2em;
                 margin: 0;
+                padding: 0.5em 1em;
+                line-height: 1.3em;
             }
 
             &.radio {
@@ -391,6 +413,7 @@ TestSingleAnswer {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                text-align: center;
             }
 
             &.selected-pending {
@@ -488,11 +511,6 @@ TestSingleAnswer {
             }
         }
     }
-
-    &.fade:after {
-        @extend %faded-modal-background;
-    }
-
 }
 
 LessonFeedback {

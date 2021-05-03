@@ -1,7 +1,6 @@
 import { getLanguage, setRoute, isAuthenticated } from "ReduxImpl/Interface";
 import { logPageView } from "js/GoogleAnalytics";
 
-import { InitialiseByRequest } from "ts/Implementations/CacheItem";
 import { Manifest } from "ts/Implementations/Manifest";
 
 // If true REQUIRE_LOGIN will always redirect any user who does not have a login to the login page
@@ -11,12 +10,15 @@ const REQUIRE_LOGIN = process.env.REQUIRE_LOGIN;
 const LOGIN_ROUTE = 'login';
 // pages that are rendered by the application
 const CANOE_PAGES = ['settings', 'profile', 'sync'];
-// pages that are shortcuts into a CMS page ( e.g. resources goes to the selected language resource root )
+/** Pages that are shortcuts into a CMS page,
+ * e.g. resources goes to the selected language resource root
+ * 
+ * These are defined as arrays, the first page found in the manifest will be the one returned */
 const CANOE_SHORTCUTS = {
-    "": "homepage",
-    home: "homepage",
-    resources: "resourcesroot",
-    topics: "learningactivitieshomepage",
+    "": ["homepage", "learningactivitieshomepage"],
+    home: ["homepage"],
+    resources: ["resourcesroot"],
+    topics: ["learningactivitieshomepage"],
 };
 
 const IS_PAGE_PREVIEW = /^\?(.+)/;
@@ -63,12 +65,20 @@ async function route(hashWith) {
         } else {
             if(Object.keys(CANOE_SHORTCUTS).includes(pageHash)) {
                 // If we are a shortcut get the first page of that type from the manifest
-                page = manifest.getLanguagePageType(getLanguage(), CANOE_SHORTCUTS[pageHash]);
+                CANOE_SHORTCUTS[pageHash].forEach((shortcutRoute) => {
+                    if (page) {
+                        return;
+                    }
+                    page = manifest.getLanguagePageType(getLanguage(), shortcutRoute);
+                });
             } else {
                 // If we are a shortcut get the first page of that type from the manifest
                 page = manifest.getPageManifestData(pageHash);
             }
-            route = {page, riotHash};
+            route = !!page 
+                ? {page, riotHash}
+                : {page: {type: "pageHash_error", error: `The page shortcut "~{pageHash}" had no match in the Manifest`}};
+
             // refresh the page
             if (!page.ready) {
                 page.prepare();
@@ -93,21 +103,6 @@ async function getValidManifest() {
 
 //  below here deprecated - but still can be found in certain riot tags
 
-export const parseURLHash = () => {
-    const afterTheHash = window.location.hash.substr(1);
-    return afterTheHash.split("/");
-};
-
-export const getSearchQueryFromUrl = () => {
-    const currentHash = parseURLHash();
-    const queryString = currentHash[0].split("?")[1];
-    return queryString;
-};
-
 export function getNextCardsUrl(lessonId, lessonModule, lessonCardIdx) {
     return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx + 2);
-}
-
-export function getHashPieces() {
-    return location.hash.split("/");
 }

@@ -1,9 +1,9 @@
 <AllCoursesList>
     <GuestBanner></GuestBanner>
     <TopMenu extrastyleclasses="with-swoop">
-        <h3>{ TRANSLATIONS.allCourses() }</h3>
+        <h3>{ page.title }</h3>
         <div class="filter-copy-container">
-            <p>{ TRANSLATIONS.coursesIntro() }</p>
+            <p>{ page.description || TRANSLATIONS.coursesIntro() }</p>
             <a
                 if="{showTagFilter()}"
                 class="has-circle {state.showTagList ? 'show-tags' : ''}"
@@ -23,18 +23,12 @@
     <div class="content-wrapper">
         <LoadingDots if="{!page.ready}" extrastyleclasses="dark"></LoadingDots>
         <template
-            if="{state.currentCourse && !state.currentCourse.isFinished()}"
+            if="{page.currentCourse && !page.currentCourse.complete }"
         >
             <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
             <div class="card-container full-width">
                 <Card
-                    status="{courseStatus(page.currentCourse)}"
-                    title="{page.currentCourse.title}"
-                    link="{page.currentCourse.loc_hash}"
-                    progressValue="{page.currentCourse.numberOfFinishedLessons}"
-                    progressMax="{page.currentCourse.numberOfLessons}"
-                    imageUrl="{state.currentCourse.cardImage}"
-                    getCachedPromise="{ course.isAvailableOffline() }"
+                    contentItem="{ page.currentCourse }"
                 ></Card>
             </div>
         </template>
@@ -42,27 +36,13 @@
         <div class="card-container">
             <template each="{ course in page.courses }">
                 <Card
-                    if="{ !course.isComplete && showCourse(course) }"
-                    status="{courseStatus(course)}"
-                    title="{course.title}"
-                    link="{course.loc_hash}"
-                    progress-value="{course.numberOfFinishedLessons}"
-                    progress-max="{course.numberOfLessons}"
-                    progressMax="{course.numberOfLessons}"
-                    imageUrl="{course.cardImage}"
+                    if="{ !course.complete && showCourse(course) }"
                     contentItem="{ course }"
                 ></Card>
             </template>
             <template each="{ course in page.courses }">
                 <Card
-                    if="{ course.isComplete && showCourse(course) }"
-                    status="{courseStatus(course)}"
-                    title="{course.title}"
-                    link="{course.loc_hash}"
-                    progress-value="{course.numberOfFinishedLessons}"
-                    progress-max="{course.numberOfLessons}"
-                    progressMax="{course.numberOfLessons}"
-                    imageUrl="{course.cardImage}"
+                    if="{ course.complete && showCourse(course) }"
                     contentItem="{ course }"
                 ></Card>
             </template>
@@ -76,7 +56,7 @@
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
-        import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
+        import GuestBanner from "riot/Components/GuestBanner.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
@@ -85,7 +65,6 @@
         function AllCoursesList() {
             return {
                 state: {
-                    currentCourse: null,
                     selectedTags: [],
                     showTagList: false,
                 },
@@ -97,12 +76,12 @@
                     continueLearning: () => gettext("Continue Learning"),
                     coursesIntro: () =>
                         gettext(
-                            "Explore a range of courses to suit your needs, expertise, and interests."
+                            "Explore a range of courses to suit your needs, expertise, and interests"
                         ),
                 },
 
-                onBeforeMount(props, state) {
-                    this.page = getRoute().page;
+                get page() {
+                    return getRoute().page;
                 },
 
                 showTagFilter() {
@@ -130,23 +109,8 @@
                     return (
                         !this.state.showTagList ||
                         !this.state.selectedTags.length ||
-                        this.page.courseIdHasATagIn(
-                            course.id,
-                            this.state.selectedTags
-                        )
+                        course.hasATagIn(this.state.selectedTags)
                     );
-                },
-
-                courseStatus(course) {
-                    if (course.numberOfFinishedLessons === 0) {
-                        return "not-started";
-                    } else if (
-                        course.numberOfFinishedLessons < course.numberOfLessons
-                    ) {
-                        return "in-progress";
-                    } else {
-                        return "complete";
-                    }
                 },
             };
         }

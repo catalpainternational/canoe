@@ -1,5 +1,5 @@
 <Toast>
-    <p id="snackbar">{state.toastMessage}</p>
+    <p id="snackbar"></p>
     <script>
         const TOAST_TIMEOUT_MS = 2500;
 
@@ -16,6 +16,7 @@
             showToast() {
                 const toast = document.getElementById("snackbar");
                 toast.className = "show";
+                toast.innerText = this.state.toastMessage;
                 setTimeout(function() {
                     toast.className = toast.className.replace("show", "");
                 }, TOAST_TIMEOUT_MS);

@@ -2,7 +2,7 @@
 const TOGGLED_GUEST_BANNER = "guestBanner/toggled";
 
 // ACTION CREATOR
-export const toggleGuestBanner = (trueOrFalse) => ({
+export const toggleGuestBannerAction = (trueOrFalse) => ({
     type: TOGGLED_GUEST_BANNER,
     isGuestBannerVisible: trueOrFalse,
 });

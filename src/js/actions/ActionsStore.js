@@ -4,23 +4,33 @@
  */
 
 import {
-    writeAction,
-    readActions,
+    writeAction as writeIdbAction,
+    readActions as readIDBActions,
     markActionAsSynced,
     ensureAction,
     unsyncedActions,
 } from "./actions_idb";
 import { postAction, getActions } from "./actions_api";
 import { make_uuid32 } from "./make_uuid32";
-import { ON_ACTION_CHANGE } from "js/Events";
 import { isAuthenticated } from "ReduxImpl/Interface";
+import Logger from "../../ts/Logger"
 
-const COMPLETION_ACTION_TYPE = "completion";
+const logger = new Logger("Actions Store");
+
 const EXAM_ACTION_TYPE = "exam";
-const EXAM_ANSWER_TYPE = `${EXAM_ACTION_TYPE}.answer`;
-const EXAM_FINAL_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
 
-const storeAction = async (actionType, data) => {
+export const COMPLETION_ACTION_TYPE = "completion";
+export const EXAM_ANSWER_TYPE = `${EXAM_ACTION_TYPE}.answer`;
+export const EXAM_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
+
+/**
+ * Saves an action in the persistent local store
+ * If authenticated, posts to the API to persist on the server
+ * @param {*} actionType 
+ * @param {*} data 
+ * @returnsa the data stored in idb 
+ */
+export const saveAndPostAction = (actionType, data) => {
     const action = {
         type: actionType,
         date: new Date(),
@@ -28,53 +38,32 @@ const storeAction = async (actionType, data) => {
         ...data,
     };
 
-    try {
-        await writeAction(action);
-    } catch (err) {
-        console.error(err);
+    // asnchronous persist
+    writeIdbAction(action).catch(err => logger.error);
+
+    // asynchronous post
+    if (isAuthenticated()) {
+        postAction(action).then(isActionSynched => {
+            if (isActionSynched) {
+                markActionAsSynced(action);
+            }
+        }).catch(err => logger.error);
     }
 
-    if (!isAuthenticated()) {
-        // don't continue to post the action if we are not logged in!
-        return;
-    }
-
-    try {
-        const isActionSynched = await postAction(action);
-        // if response is ok set the record to known in idb
-        if (isActionSynched) {
-            markActionAsSynced(action);
-        }
-    } catch (err) {
-        console.error(err);
-    }
+    // synchronous return of stored action
+    return action;
 };
 
-export const storeExamAnswerInIDB = (data) => {
-    storeAction(EXAM_ANSWER_TYPE, data);
-};
-
-export const getExamAnswersFromIdb = () => {
-    return readActions(EXAM_ANSWER_TYPE);
-};
-
-export const storeExamScoreInIDB = (courseSlug, finalScore) => {
-    storeAction(EXAM_FINAL_SCORE_TYPE, { course: courseSlug, finalScore });
-};
-
-export const getExamScoresFromIDB = () => {
-    return readActions(EXAM_FINAL_SCORE_TYPE);
-};
-
-export function storeCompletion(data) {
-    storeAction(COMPLETION_ACTION_TYPE, data);
+/**
+* Returns all actions of a specific type
+*/
+export const readActions = (type) => {
+    return readIDBActions(type);
 }
 
-export function getCompletions() {
-    // deliver from idb
-    return readActions(COMPLETION_ACTION_TYPE);
-}
-
+/**
+* If authenticated sends all local actions to server API
+*/
 export function updateApi() {
     if (!isAuthenticated()) {
         // don't continue to post the action if we are not logged in!
@@ -98,13 +87,16 @@ export function updateApi() {
         .then((results) => {
             if (results.length) {
                 const succesful = results.filter((r) => r);
-                console.info(
+                logger.info(
                     `${results.length} unsynced items found - ${succesful.length} successfuly synced`
                 );
             }
         });
 }
 
+/**
+* If authenticated gets all server actions and applies them to IDB
+*/
 export async function updateIdb() {
     if (!isAuthenticated()) {
         // don't continue to post the action if we are not logged in!
@@ -115,7 +107,8 @@ export async function updateIdb() {
     const actions = await getActions();
     for (const action of actions) {
         await ensureAction(action);
-        window.dispatchEvent(new CustomEvent(ON_ACTION_CHANGE));
-        console.info("Retrieved and applied some server actions");
+    }
+    if (actions.length) {
+        logger.info("Retrieved and applied some server actions");
     }
 }
