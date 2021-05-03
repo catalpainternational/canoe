@@ -262,7 +262,8 @@ ResourceArticle LessonFrame {
     }
 }
 
-LessonFrame {
+LessonFrame,
+ActivityPage {
     ImageWrapper {
         position: relative;
 
@@ -384,6 +385,15 @@ test,
     button {
         flex: end;
         margin-top: 20px;
+    }
+
+    ol, ul {
+        padding-left: 0;
+        margin-left: 0;
+
+        li {
+            padding-left: 0;
+        }
     }
 
     ol {

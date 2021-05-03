@@ -1,8 +1,10 @@
 <ListCard>
     <h3 if="{props.card.title}">{ props.card.title }</h3>
-    <p each="{item in props.card.content}">
-        <span if="{props.card.isNumbered}" class="number">{ props.card.content.indexOf(item) + 1 }</span>
-        <span if="{!props.card.isNumbered}" class="bullet">{ "•" }</span>
-        {item}
-    </p>
+    <ol if="{props.card.isNumbered}">
+        <li each="{item in props.card.content}">{item}</li>
+    </ol>
+
+    <ul if="{!props.card.isNumbered}">
+        <li each="{item in props.card.content}">{item}</li>
+    </ul>
 </ListCard>
