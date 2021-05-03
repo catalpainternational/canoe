@@ -63,6 +63,13 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     /**
+     * The wagtail page live_revision_id
+     */
+    get revisionId(): BigInteger {
+        return this.manifestData?.revision_id;
+    }
+
+    /**
      * The options to make an page api request
      */
     get requestOptions(): RequestInit {
@@ -308,6 +315,8 @@ export class Page extends PublishableItem implements StorableItem {
     get completionData(): Record<string, any> {
         const data = {
             title: this.title,
+            revisionId: this.revisionId,
+            version: this.version,
             ...this.#completionData,
         };
         this.#completionData = {};

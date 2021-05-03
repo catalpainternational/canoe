@@ -62,6 +62,8 @@ export default class Course extends Page {
             lessons: this.childPages.map((l) => {
                 return {
                     id: l.id,
+                    revisionId: l.revisionId,
+                    version: l.version,
                     title: l.title,
                 };
             }),
