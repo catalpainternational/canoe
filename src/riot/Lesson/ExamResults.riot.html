@@ -1,6 +1,6 @@
 <ExamResults>
     <div class="congratulations-container">
-        <template if="{ course.examType === 'prelearning' || props.result.passed }">
+        <template if="{ course.examType === 'prelearning' || props.passed }">
             <span class="superman-success"></span>
             <h2>{ TRANSLATIONS.success() }</h2>
             <h3>{ TRANSLATIONS.completed() }</h3>
@@ -12,7 +12,7 @@
                 { TRANSLATIONS.resources() }
             </button>
         </template>
-        <template if="{ course.examType !== 'prelearning' && !props.result.passed}">
+        <template if="{ course.examType !== 'prelearning' && !props.passed}">
             <div>
                 <span class="incorrect-cross"></span>
                 <h2>{ TRANSLATIONS.notQuite() }</h2>
@@ -57,7 +57,7 @@
             },
 
             goToCourseExam() {
-                location.hash = `#${this.course.loc_hash}:exam:1`;
+                location.hash = `#${this.course.examLink}`;
             },
 
             passedExamMessage() {
@@ -70,7 +70,7 @@
 
                 return gettext(
                     "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam.",
-                    Math.ceil(100 * this.props.result.score)
+                    Math.ceil(100 * this.props.score)
                 );
             },
 
@@ -78,7 +78,7 @@
                 // message when user did not pass exam
                 return gettext(
                     "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later.",
-                    Math.ceil(100 * this.props.result.score),
+                    Math.ceil(100 * this.props.score),
                     this.course.minimumExamScore
                 );
             },
