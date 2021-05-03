@@ -69,6 +69,10 @@ LessonFrame {
 
         &.safari {
             height: calc(#{$base-card-height} - 100px);
+
+            &.hasHomeButton {
+                height: calc(#{$base-card-height} - 85px);
+            }
         }
 
         &.chrome,

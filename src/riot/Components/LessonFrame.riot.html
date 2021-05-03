@@ -55,6 +55,10 @@
 
             userAgent() {
                 const { browser } = getPlatform();
+                // iphone 8+ and earlier models have a max height of 736;
+                if (window.innerHeight <= 736) {
+                    return `${browser.name.toLowerCase()} hasHomeButton`
+                }
                 return browser.name.toLowerCase();
             }
         };
