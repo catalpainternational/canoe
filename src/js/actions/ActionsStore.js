@@ -33,7 +33,7 @@ export const EXAM_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
 export const saveAndPostAction = (actionType, data) => {
     const action = {
         type: actionType,
-        date: new Date(),
+        date: new Date().valueOf(),
         uuid: make_uuid32(),
         ...data,
     };
