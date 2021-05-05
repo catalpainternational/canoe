@@ -59,7 +59,6 @@
             ></DiscussionComment>
         </template>
 
-
     </div>
 
     <div id="toast-message">
@@ -185,7 +184,6 @@
                         date_created: new Date().toISOString().replace('Z', '+00:00'),
                         comment: commentInput.value,
                         id: uuidv4(),
-                        posting_type: 'C',
                     }
 
                     postComment(newComment).then((response) =>{

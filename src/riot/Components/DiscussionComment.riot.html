@@ -94,7 +94,6 @@
                     comment: commentInput.value,
                     id: uuidv4(),
                     parent_id: this.props.comment.id,
-                    posting_type: 'R',
                 }
 
                 this.props.addReply(newComment, commentInput, this.closeReplyTextbox);
