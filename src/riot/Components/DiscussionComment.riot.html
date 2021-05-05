@@ -73,8 +73,16 @@
             },
 
             onMounted(props, state) {
-                // TODO there is a bug here with the way the components get mounted, but check back on it when we have real data coming through. This could just be caused by pushing to the array
                 this.getDate();
+            },
+
+            onUpdated(props, state) {
+                // resolves a bug with the timestamps not updating correctly
+                this.state.oldProps = this.state.newProps;
+                this.state.newProps = props;
+                if (this.state.oldProps && this.state.oldProps.comment.id !== this.state.newProps.comment.id) {
+                    this.getDate();
+                }
             },
 
             toggleReplies() {
