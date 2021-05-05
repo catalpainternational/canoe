@@ -12,9 +12,9 @@
             {props.comment.comment}
         </p>
         <div class="controls">
-            <p class="reply" onclick="{openReplyTextbox}">Reply <span class="reply-arrow"></span></p>
+            <p class="reply" onclick="{openReplyTextbox}">{TRANSLATIONS.reply()} <span class="reply-arrow"></span></p>
             <p>&middot;</p>
-            <p>Flag as inappropriate <span class="flag"></span></p>
+            <p onclick="{flagInappropriate}">{TRANSLATIONS.flag()} <span class="flag"></span></p>
         </div>
         <div if="{props.comment.replies.length}" class="toggle-replies" onclick="{toggleReplies}">
             <template if="{state.showReplies}">&minus;</template>
@@ -42,6 +42,7 @@
             if="{props.comment.replies.length}"
             each="{reply in props.comment.replies}"
             comment="{reply}"
+            flagInappropriate="{props.flagInappropriate}"
         ></DiscussionReply>
     </div>
 
@@ -65,6 +66,8 @@
             },
 
             TRANSLATIONS: {
+                reply: () => gettext("Reply"),
+                flag: () => gettext("Flag as inappropriate"),
                 addReply: () => gettext("Add a reply"),
                 postComment: () => gettext("Post a comment"),
             },
@@ -94,9 +97,11 @@
                     posting_type: 'R',
                 }
 
-                this.props.addReply(newComment);
-                commentInput.value = '';
-                this.closeReplyTextbox();
+                this.props.addReply(newComment, commentInput, this.closeReplyTextbox);
+            },
+
+            flagInappropriate () {
+                this.props.flagInappropriate(this.props.comment);
             },
 
             openReplyTextbox() {

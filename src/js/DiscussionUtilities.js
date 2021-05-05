@@ -12,10 +12,6 @@ export const postComment = async (commentBody) => {
         },
         body: JSON.stringify(commentBody),
     })
-    // .then((response) => {
-    //     if (!response.ok) throw new Error(`Comment failed, HTTP status: ${response.status}`);
-    //     return response.json();
-    // })
 }
 
 export const getDiscussionComments = async (discussionId) => {
@@ -30,5 +26,18 @@ export const getDiscussionComments = async (discussionId) => {
     .then((response) => {
         if (!response.ok) throw new Error(`Comment failed, HTTP status: ${response.status}`);
         return response.json();
+    })
+}
+
+export const flagComment = async (commentBody) => {
+    const token = getAuthenticationToken();
+    return fetch(`${BACKEND_BASE_URL}/discussion/flag/${commentBody.id}/`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            Authorization: `JWT ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(commentBody),
     })
 }

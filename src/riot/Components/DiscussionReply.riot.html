@@ -13,7 +13,7 @@
             {props.comment.comment}
         </p>
         <div class="controls">
-            <p>Flag as inappropriate <span class="flag"></span></p>
+            <p onclick="{flagInappropriate}">{TRANSLATIONS.flag()} <span class="flag"></span></p>
         </div>
     </div>
 
@@ -30,6 +30,10 @@
                 elapsedTime: '',
             },
 
+            TRANSLATIONS: {
+                flag: () => gettext("Flag as inappropriate"),
+            },
+
             onMounted(props, state) {
                 this.getDate();
             },
@@ -38,6 +42,10 @@
                 this.update({ elapsedTime: getElapsedTime(this.props.comment.date_created) });
                 setTimeout(this.getDate, 60000);
             },
+
+            flagInappropriate() {
+                this.props.flagInappropriate(this.props.comment);
+            }
         };
 
     </script>

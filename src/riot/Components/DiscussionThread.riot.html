@@ -28,6 +28,7 @@
 
         <div if="{!state.comments.length}">
             <LoadingDots if="{state.loading}"></LoadingDots>
+            <p if="{state.loading}">Loading!</p>
             <p>TODO (need design): Be the first to contribute to the conversation! Add a comment above.</p>
         </div>
 
@@ -62,14 +63,15 @@
     </div>
 
     <div id="toast-message">
-        <span class="checkmark"></span>
-        <p>{TRANSLATIONS.commentConfirmed()}</p>
+        <span if="{state.successfulToast}" class="checkmark"></span>
+        <span if="{!state.successfulToast}" class="cross red"></span>
+        <p>{state.toastMessage}</p>
     <div>
 
     <script>
         import DiscussionComment from "RiotTags/Components/DiscussionComment.riot.html";
 
-        import { postComment, getDiscussionComments } from "js/DiscussionUtilities";
+        import { postComment, getDiscussionComments, flagComment } from "js/DiscussionUtilities";
         import { v4 as uuidv4 } from "uuid";
 
         function DiscussionThread() {
@@ -79,11 +81,13 @@
                     loading: false,
                     comments: [],
                     sortOptions: [
-                        { sort: 'date_created', order: 'desc', label: gettext('Newest First') },
-                        { sort: 'date_created', order: 'asc', label: gettext('Oldest First') }
+                        { sort: 'date', order: 'desc', label: gettext('Newest First') },
+                        { sort: 'date', order: 'asc', label: gettext('Oldest First') }
                     ],
                     activeSortOption: { sort: 'date_created', order: 'desc', label: 'Newest First' },
                     showSortOptions: false,
+                    toastMessage: '',
+                    successfulToast: true,
                 },
 
                 TRANSLATIONS: {
@@ -91,10 +95,36 @@
                     postComment: () => gettext("Post comment"),
                     sort: () => gettext("Sort by"),
                     commentConfirmed: () => gettext("Comment posted"),
+                    inappropriate: () => gettext("Comment flagged as inappropriate"),
+                    error: () => gettext("An error occurred, please try again later"),
                 },
 
                 onBeforeMount(props, state) {
                     this.updateComments();
+                },
+
+
+                updateComments() {
+                    this.state.loading = true;
+
+                    getDiscussionComments(this.props.question.id).then((response) => {
+                        this.update({ comments: this.mapComments(response), loading: false });
+                        console.log(this.state.comments, this.mapComments(response))
+                    });
+                },
+
+                mapComments(comments) {
+                    return comments.map((comment, index, array) => ({
+                        ...comment,
+                        initials: `${comment.user_first_name[0]}${comment.user_last_name[0]}`,
+                        date: new Date(comment.date_created),
+                        replies: array.filter((it) => it.parent_id === comment.id)
+                            .map(it => ({
+                                ...it,
+                                initials: `${it.user_first_name[0]}${it.user_last_name[0]}`,
+                            })),
+                    }))
+                    .filter((comment) => comment.parent_id === null);
                 },
 
                 toggleSort() {
@@ -117,21 +147,6 @@
                         activeSortOption: sortOption,
                         showSortOptions: false,
                     });
-                },
-
-                mapComments() {
-                    const comments = this.state.comments;
-
-                    return comments.map((comment, index, array) => ({
-                        ...comment,
-                        initials: this.getInitials(comment.user_username),
-                        replies: array.filter((it) => it.parent_id === comment.id)
-                            .map(it => ({
-                                ...it,
-                                initials: this.getInitials(it.user_username)
-                            })),
-                    }))
-                    .filter((comment) => comment.parent_id === null);
                 },
 
                 updateCommentValue() {
@@ -170,19 +185,11 @@
                     return `${firstInitial.toUpperCase()}${secondInitial.toUpperCase()}`
                 },
 
-                updateComments() {
-                    this.state.loading = true;
-
-                    getDiscussionComments(this.props.question.id).then((response) => {
-                        this.update({ comments: response, loading: false });
-                    });
-                },
-
                 addComment() {
                     const commentInput = this.$('#comment');
 
                     const newComment = {
-                        external_id: this.props.lesson.id,
+                        page_id: this.props.lesson.id,
                         discussion_id: this.props.question.id,
                         date_created: new Date().toISOString().replace('Z', '+00:00'),
                         comment: commentInput.value,
@@ -191,43 +198,81 @@
                     }
 
                     postComment(newComment).then((response) =>{
-                        if (!response.ok) throw new Error(`Comment failed, HTTP status: ${response.status}`);
-
-                        this.updateComments();
-                        this.commentSuccess(newComment.id)
+                        if (!response.ok) {
+                            this.commentStatus(newComment.id, this.TRANSLATIONS.error(), false);
+                            throw new Error(`Comment failed, HTTP status: ${response.status}`);
+                        }
+                        else {
+                            commentInput.value = '';
+                            this.updateComments();
+                            this.commentStatus(newComment.id);
+                        }
                     });
-
-
-                    commentInput.value = '';
                 },
 
-                addReply(reply) {
+                addReply(reply, input, closeCallback) {
                     const newReply = {
                         ...reply,
-                        external_id: this.props.lesson.id,
+                        page_id: this.props.lesson.id,
                         discussion_id: this.props.question.id,
                     }
 
                     postComment(newReply).then((response) =>{
-                        if (!response.ok) throw new Error(`Comment failed, HTTP status: ${response.status}`);
-
-                        this.updateComments();
-                        this.commentSuccess(newReply.id)
+                        if (!response.ok) {
+                            this.commentStatus(newReply.id, this.TRANSLATIONS.error(), false);
+                            throw new Error(`Comment failed, HTTP status: ${response.status}`);
+                        }
+                        else {
+                            this.updateComments();
+                            input.value = '';
+                            closeCallback();
+                            this.commentStatus(newReply.id);
+                        }
                     });
                 },
 
-                commentSuccess(id) {
+                commentStatus(id, customMessage = this.TRANSLATIONS.commentConfirmed(), success = true) {
+                    this.update({
+                        toastMessage: customMessage,
+                        successfulToast: success,
+                    });
+
+
                     const toast = document.getElementById('toast-message');
                     toast.className = 'show';
                     setTimeout(function() {
                         toast.className = toast.className.replace('show', '');
-                    }, 3000);
+                    }, 4000);
 
+                    // debugger;
+                    // TODO this ain't workin
                     const newCommentEl = document.getElementById(id);
                     newCommentEl.className = 'recent';
                     setTimeout(function () {
                         newCommentEl.className = '';
                     }, 6000)
+                },
+
+                flagInappropriate(comment) {
+                    const flaggedComment = {
+                        page_id: comment.page_id,
+                        discussion_id: comment.discussion_id,
+                        date_created: new Date().toISOString().replace('Z', '+00:00'),
+                        flag_inappropriate: true,
+                        id: uuidv4(),
+                        posting_id: comment.id,
+                    }
+
+                    flagComment(flaggedComment).then((response) =>{
+                        console.log(response);
+                        if (!response.ok) {
+                            this.commentStatus(flaggedComment.id, this.TRANSLATIONS.error(), false);
+                            throw new Error(`Comment failed, HTTP status: ${response.status}`);
+                        }
+                        else {
+                            this.commentStatus(flaggedComment.id, this.TRANSLATIONS.inappropriate());
+                        }
+                    });
                 },
             };
         };
