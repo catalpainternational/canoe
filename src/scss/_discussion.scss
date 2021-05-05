@@ -253,14 +253,6 @@ DiscussionReply {
 
     .comment {
         color: $gray-1;
-        // TODO need to implement 'see more' button for longer comments
-        // font-size: 0.9em;
-        // line-height: 1.1em;
-        // max-height: calc(4 * 1.1em);
-        // overflow: hidden;
-        // display: -webkit-box;
-        // -webkit-line-clamp: 4;
-        // -webkit-box-orient: vertical;
     }
 
     .comment-block {
@@ -279,6 +271,8 @@ DiscussionReply {
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 1em;
+        line-height: 0.7em;
     }
 
     .meta {
