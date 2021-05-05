@@ -48,11 +48,11 @@
             </div>
 
             <DiscussionComment
-                if="{!state.loading}"
-                each="{comment in mapComments()}"
+                each="{comment in state.comments}"
                 comment="{comment}"
                 lesson="{props.lesson}"
                 addReply="{addReply}"
+                flagInappropriate="{flagInappropriate}"
                 updateCommentValue="{updateCommentValue}"
                 setInputFocus="{setInputFocus}"
                 removeInputFocus="{removeInputFocus}"
@@ -174,15 +174,6 @@
                     } else if (!fieldHasValue) {
                         this.$(fieldElement).classList.remove("is-filled");
                     }
-                },
-
-                getInitials(name) {
-                    const arr = name.split(' ');
-                    const first = arr[0];
-                    const last = arr.length > 1 ? arr[arr.length - 1] : '';
-                    const firstInitial = first[0];
-                    const secondInitial = last ? last[0] : '';
-                    return `${firstInitial.toUpperCase()}${secondInitial.toUpperCase()}`
                 },
 
                 addComment() {
