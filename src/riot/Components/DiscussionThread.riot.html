@@ -1,65 +1,70 @@
 <DiscussionThread>
-    <div class="card full-width">
-        <div class="lesson-title">
-            <span class="arrow" onclick="{() => props.selectDiscussionHandler(null)}"></span>
-            <p class="number">{props.lessonNumber}</p>
-            <p class="title">{props.lesson.title}</p>
-        </div>
-        <div class="discussion-header">
-            <h2 class="no-clamp">{props.question.question}</h2>
-        </div>
-        <div id="comment-input" class="form-group" if="{!state.error}">
-            <label for="comment">{TRANSLATIONS.addComment()}</label>
-            <textarea
-                name="comment"
-                id="comment"
-                oninput="{updateCommentValue}"
-                onfocus="{setInputFocus}"
-                onblur="{removeInputFocus}"
-                maxlength="280"
-            ></textarea>
-        </div>
-        <button
-            if="{state.commentButtonVisible}"
-            class="btn-primary"
-            onclick="{addComment}">
-            {TRANSLATIONS.postComment()}
-        </button>
+    <div class="lesson-title">
+        <span class="arrow" onclick="{() => props.selectDiscussionHandler(null)}"></span>
+        <p class="number">{props.lessonNumber}</p>
+        <p class="title">{props.lesson.title}</p>
+    </div>
+    <div class="discussion-header">
+        <h2 class="no-clamp">{props.question.question}</h2>
+    </div>
+    <div id="comment-input" class="form-group" if="{!state.error && !state.promptLogin}">
+        <label for="comment">{TRANSLATIONS.addComment()}</label>
+        <textarea
+            name="comment"
+            id="comment"
+            oninput="{updateCommentValue}"
+            onfocus="{setInputFocus}"
+            onblur="{removeInputFocus}"
+            maxlength="280"
+        ></textarea>
+    </div>
+    <button
+        if="{state.commentButtonVisible}"
+        class="btn-primary"
+        onclick="{addComment}">
+        {TRANSLATIONS.postComment()}
+    </button>
 
+    <div class="state">
         <LoadingDots if="{state.loading}" extrastyleclasses="dark"></LoadingDots>
         <p if="{state.error}">{TRANSLATIONS.error()}</p>
-        <p if="{!state.loading && !state.comments.length && !state.error}">
+        <p if="{!state.loading && !state.comments.length && !state.error && !state.promptLogin}">
             {TRANSLATIONS.emptyState()}
         </p>
+        <p if="{state.promptLogin}">
+            {TRANSLATIONS.promptLogin()}
+        </p>
+        <button if="{state.promptLogin}" class="btn-primary" onclick="{loginRedirect}">
+            {TRANSLATIONS.login()}
+        </button>
+    </div>
 
-        <template if="{state.comments.length}">
-            <div class="sort-options">
-                <p class="label">{TRANSLATIONS.sort()}</p>
-                <div class="dropdown">
-                    <p class="active" onclick="{toggleSort}">
-                        {state.activeSortOption.label}
-                        <span class="caret" if="{state.showSortOptions}">&#9650;</span>
-                        <span class="caret" if="{!state.showSortOptions}">&#9660;</span>
-                    </p>
-                    <div if="{state.showSortOptions}" class="option">
-                        <p class="option" each="{option in state.sortOptions}" if="{option.label !== state.activeSortOption.label}" onclick="{() => sortComments(option)}">{option.label}</p>
-                    </div>
+    <template if="{state.comments.length}">
+        <div class="sort-options">
+            <p class="label">{TRANSLATIONS.sort()}</p>
+            <div class="dropdown">
+                <p class="active" onclick="{toggleSort}">
+                    {state.activeSortOption.label}
+                    <span class="caret" if="{state.showSortOptions}">&#9650;</span>
+                    <span class="caret" if="{!state.showSortOptions}">&#9660;</span>
+                </p>
+                <div if="{state.showSortOptions}" class="option">
+                    <p class="option" each="{option in state.sortOptions}" if="{option.label !== state.activeSortOption.label}" onclick="{() => sortComments(option)}">{option.label}</p>
                 </div>
             </div>
+        </div>
 
-            <DiscussionComment
-                each="{comment in state.comments}"
-                comment="{comment}"
-                lesson="{props.lesson}"
-                addReply="{addReply}"
-                flagInappropriate="{flagInappropriate}"
-                updateCommentValue="{updateCommentValue}"
-                setInputFocus="{setInputFocus}"
-                removeInputFocus="{removeInputFocus}"
-            ></DiscussionComment>
-        </template>
-
-    </div>
+        <DiscussionComment
+            each="{comment in state.comments}"
+            comment="{comment}"
+            lesson="{props.lesson}"
+            addReply="{addReply}"
+            flagInappropriate="{flagInappropriate}"
+            updateCommentValue="{updateCommentValue}"
+            setInputFocus="{setInputFocus}"
+            removeInputFocus="{removeInputFocus}"
+        ></DiscussionComment>
+    </template>
 
     <div id="toast-message">
         <span if="{state.successfulToast}" class="checkmark"></span>
@@ -80,6 +85,7 @@
                     commentButtonVisible: false,
                     loading: false,
                     error: false,
+                    promptLogin: false,
                     comments: [],
                     sortOptions: [
                         { sort: 'date', order: 'desc', label: gettext('Newest First') },
@@ -98,7 +104,9 @@
                     commentConfirmed: () => gettext("Comment posted"),
                     inappropriate: () => gettext("Comment flagged as inappropriate"),
                     error: () => gettext("An error occurred, please try again later"),
-                    emptyState: () => gettext("There are no comments yet. Be the first to contribute to the conversation! Add a comment above.")
+                    emptyState: () => gettext("There are no comments yet. Be the first to contribute to the conversation! Add a comment above."),
+                    promptLogin: () => gettext("You need to be logged in to use this feature"),
+                    login: () => gettext("Login"),
                 },
 
                 onBeforeMount(props, state) {
@@ -110,11 +118,21 @@
                     this.state.loading = true;
 
                     getDiscussionComments(this.props.question.id).then((response) => {
-                        if (!response.ok) {
-                            this.update({ loading: false, error: true });
-                            throw new Error(`Comment failed, HTTP status: ${response.status}`);
+                        if (typeof response !== "object") {
+                            if (response === 401) {
+                                this.update({ loading: false, promptLogin: true })
+                            } else if (response !== 404) {
+                                this.update({ loading: false, error: true });
+                            }
+                            this.update({ loading: false });
+                            throw new Error(`Comment failed, HTTP status: ${response}`);
                         }
-                        this.update({ comments: this.mapComments(response.json), loading: false, error: false });
+
+                        this.update({
+                            comments: this.mapComments(response),
+                            loading: false,
+                            error: false,
+                        });
                         if (callback) callback(callbackArg);
                     })
                 },
@@ -264,6 +282,10 @@
                             this.commentStatus(flaggedComment.id, this.TRANSLATIONS.inappropriate());
                         }
                     });
+                },
+
+                loginRedirect() {
+                    window.location.hash = "#login";
                 },
             };
         };

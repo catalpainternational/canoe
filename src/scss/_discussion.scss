@@ -75,6 +75,13 @@ DiscussionReply {
         }
     }
 
+    .state {
+        p {
+            text-align: center;
+            margin-bottom: 2em;
+        }
+    }
+
     .form-group {
         width: 100%;
         flex-direction: column;
@@ -85,7 +92,7 @@ DiscussionReply {
         box-shadow: inset 0 2px 3px 0 rgb(42 57 66 / 10%);
         border: 1px solid $gray-7;
         position: relative;
-        margin: 0 20px 1em;
+        margin-bottom: 1em;
 
         &.has-focus {
             border: 1px solid $gray-4;
@@ -133,6 +140,14 @@ DiscussionReply {
 }
 
 DiscussionThread {
+    min-height: inherit;
+    box-sizing: border-box;
+    width: 100vw;
+    background-color: $white;
+    margin-left: -20px;
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+
     .lesson-title {
         grid-template-columns: 20px 25px 1fr;
         padding: 0;
@@ -147,10 +162,13 @@ DiscussionThread {
     .discussion-header {
         width: 100%;
         padding: 1.2em 0;
+
+        h2 {
+            font-weight: 300;
+        }
     }
 
     .sort-options {
-        margin: 0 18px 5px;
         font-size: 0.9em;
         width: 100%;
         display: flex;
@@ -202,11 +220,11 @@ DiscussionComment,
 DiscussionReply {
     display: grid;
     grid-template-columns: 40px 1fr;
-    margin: 0 18px;
     column-gap: 12px;
     padding: 16px 10px 2px;
     border-radius: 8px;
     width: 100%;
+    box-sizing: border-box;
 
     &.recent {
         background-color: rgba(0,112,240,0.07);
