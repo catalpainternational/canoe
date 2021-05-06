@@ -100,10 +100,9 @@
                     ></DiscussionCard>
                 </template>
                 <template if="{state.selectedDiscussionId !== null}">
-                    <!-- TODO fix the lesson number here -->
                     <DiscussionThread
                         lesson="{state.selectedDiscussionLesson}"
-                        lessonNumber="{1}"
+                        lessonNumber="{getLessonNumber()}"
                         selectDiscussionHandler="{selectDiscussion}"
                         question="{state.selectedDiscussion}"
                     ></DiscussionThread>
@@ -222,21 +221,27 @@
                 this.update({ selectedTab: tabName, selectedDiscussionId: null });
             },
 
-            selectDiscussion(index, lesson = null) {
+            selectDiscussion(id, lesson = null) {
                 let discussion = {};
-                if (index === null) {
+                let lessonNumber = null;
+                if (id === null) {
                     location.hash = `#${this.course.loc_hash}:discussion`;
                 }
                 else {
-                    location.hash = `#${this.course.loc_hash}:discussion:${lesson.id}:${index}`;
-                    discussion = lesson.discussion.find((it) => it.id === index);
+                    location.hash = `#${this.course.loc_hash}:discussion:${lesson.id}:${id}`;
+                    discussion = lesson.discussion.find((it) => it.id === id);
                 }
 
                 this.update({
-                    selectedDiscussionId: index,
+                    selectedDiscussionId: id,
                     selectedDiscussionLesson: lesson,
                     selectedDiscussion: discussion,
                 });
+            },
+
+            getLessonNumber() {
+                const lesson = this.state.selectedDiscussionLesson;
+                return this.course.discussions.findIndex((it) => it.id === lesson.id) + 1;
             },
 
             examDescription() {

@@ -10,10 +10,6 @@ export const getDiscussionComments = async (discussionId) => {
             'Content-Type': 'application/json',
         },
     })
-    .then((response) => {
-        if (!response.ok) throw new Error(`Comment failed, HTTP status: ${response.status}`);
-        return response.json();
-    })
 }
 
 const postRequest = async (url, body) => {

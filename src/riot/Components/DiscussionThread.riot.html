@@ -8,7 +8,7 @@
         <div class="discussion-header">
             <h2 class="no-clamp">{props.question.question}</h2>
         </div>
-        <div id="comment-input" class="form-group">
+        <div id="comment-input" class="form-group" if="{!state.error}">
             <label for="comment">{TRANSLATIONS.addComment()}</label>
             <textarea
                 name="comment"
@@ -26,11 +26,11 @@
             {TRANSLATIONS.postComment()}
         </button>
 
-        <div if="{!state.comments.length}">
-            <LoadingDots if="{state.loading}"></LoadingDots>
-            <p if="{state.loading}">Loading!</p>
-            <p>TODO (need design): Be the first to contribute to the conversation! Add a comment above.</p>
-        </div>
+        <LoadingDots if="{state.loading}" extrastyleclasses="dark"></LoadingDots>
+        <p if="{state.error}">{TRANSLATIONS.error()}</p>
+        <p if="{!state.loading && !state.comments.length && !state.error}">
+            {TRANSLATIONS.emptyState()}
+        </p>
 
         <template if="{state.comments.length}">
             <div class="sort-options">
@@ -69,6 +69,7 @@
 
     <script>
         import DiscussionComment from "RiotTags/Components/DiscussionComment.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
         import { postComment, getDiscussionComments, flagComment } from "js/DiscussionUtilities";
         import { v4 as uuidv4 } from "uuid";
@@ -78,6 +79,7 @@
                 state: {
                     commentButtonVisible: false,
                     loading: false,
+                    error: false,
                     comments: [],
                     sortOptions: [
                         { sort: 'date', order: 'desc', label: gettext('Newest First') },
@@ -96,6 +98,7 @@
                     commentConfirmed: () => gettext("Comment posted"),
                     inappropriate: () => gettext("Comment flagged as inappropriate"),
                     error: () => gettext("An error occurred, please try again later"),
+                    emptyState: () => gettext("There are no comments yet. Be the first to contribute to the conversation! Add a comment above.")
                 },
 
                 onBeforeMount(props, state) {
@@ -107,9 +110,13 @@
                     this.state.loading = true;
 
                     getDiscussionComments(this.props.question.id).then((response) => {
-                        this.update({ comments: this.mapComments(response), loading: false });
+                        if (!response.ok) {
+                            this.update({ loading: false, error: true });
+                            throw new Error(`Comment failed, HTTP status: ${response.status}`);
+                        }
+                        this.update({ comments: this.mapComments(response.json), loading: false, error: false });
                         if (callback) callback(callbackArg);
-                    });
+                    })
                 },
 
                 mapComments(comments) {
@@ -263,6 +270,7 @@
 
         DiscussionThread.components = {
             discussioncomment: DiscussionComment,
+            loadingdots: LoadingDots,
         };
 
         export default DiscussionThread;
