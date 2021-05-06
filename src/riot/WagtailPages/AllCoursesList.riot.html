@@ -23,13 +23,12 @@
     <div class="content-wrapper">
         <LoadingDots if="{!page.ready}" extrastyleclasses="dark"></LoadingDots>
         <template
-            if="{page.currentCourse && !page.currentCourse.isFinished()}"
+            if="{page.currentCourse && !page.currentCourse.complete }"
         >
             <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
             <div class="card-container full-width">
                 <Card
                     contentItem="{ page.currentCourse }"
-                    getCachedPromise="{ course.isAvailableOffline() }"
                 ></Card>
             </div>
         </template>
@@ -57,7 +56,7 @@
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
         import TagList from "RiotTags/Components/TagList.riot.html";
-        import GuestBanner from "RiotTags/Components/GuestBanner.riot.html";
+        import GuestBanner from "riot/Components/GuestBanner.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 

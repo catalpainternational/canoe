@@ -74,8 +74,18 @@ ActivityPage {
         padding-bottom: calc(#{$bottom-menu-height});
     }
 
-    img {
+    img.richtext-image {
         width: 100%;
+        border-radius: 8px;
+        margin: unset;
+    }
+
+    ImageWrapper .expand-button {
+        right: 1em;
+    }
+
+    li, p {
+        color: $gray-1;
     }
 
     PlanTab,
@@ -105,27 +115,24 @@ ActivityPage {
             margin: 1.5em 0;
             display: block;
         }
-    }
 
-    ListCard {
-        p {
-            color: $gray-1;
+        .cards-list > basiccard {
             display: flex;
+            flex-direction: column;
 
-            .bullet {
-                font-size: 10px;
-                margin: 5px 20px 0 0;
-            }
-
-            .number {
-                font-size: 14px;
-                margin: 2px 15px 0 0;
-
-                &:after {
-                    content: ".";
-                }
+            h3 {
+                order: -1;
             }
         }
+
+        &.last-section .cards-list > * + * {
+            border-top: 1px solid $gray-6;
+        }
+    }
+
+    TabSection .last-section .cards-list > * + *,
+    ExtendTab .cards-list > * + * {
+        border-top: 1px solid $gray-6;
     }
 
     Html5Card {
