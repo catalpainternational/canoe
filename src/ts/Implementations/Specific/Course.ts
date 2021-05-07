@@ -10,11 +10,8 @@ import Lesson from "./Lesson";
 
 const EXAM_PASS_SCORE = 0.75;
 
-class Discussion {
-}
-
 export default class Course extends Page {
-    get discussions(): Discussion[] {
+    get discussions(): any {
         return this.storedData?.lessons.map((lesson: any) => ({
             title: lesson.title,
             id: lesson.id,
