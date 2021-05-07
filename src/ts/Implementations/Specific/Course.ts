@@ -10,29 +10,7 @@ import Lesson from "./Lesson";
 
 const EXAM_PASS_SCORE = 0.75;
 
-// class Comment {
-// TODO
-//     post_repl(commentData: any) {
-//         // fetch()
-//     }
-// }
-//
 class Discussion {
-    // TODO
-    // #comments: Array<Comment> = [];
-    // get lesson_title(): string {
-    //     return "title";
-    // }
-    // get question(): string {
-    //     return "question";
-    // }
-    // get comments(): Comment {
-    //     return this.#comments;
-    // }
-    //
-    // post_comment(commentData: any) {
-    //     this.#comments.push(new Comment());
-    // }
 }
 
 export default class Course extends Page {
