@@ -8,4 +8,9 @@ export default class TeachingTopic extends Page {
     get description(): string {
         return this.data.description;
     }
+    get completionData(): Record<string, any> {
+        return {
+            pageType: "topic",
+        };
+    }
 }
