@@ -1,7 +1,32 @@
 HonorCode {
     text-align: center;
 
-    $insideBoxLeftMargin: 1.25em;
+    .cross {
+        position: fixed;
+        right: 1em;
+        top: 1em;
+    }
+
+    .modal {
+        height: 85vh;
+        display: block;
+        padding-top: 3em;
+    }
+
+    .warning-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $yellow;
+        height: 40px;
+        width: 40px;
+        margin: 0 auto;
+        border-radius: 50%;
+
+        .warning {
+            background-color: $white;
+        }
+    }
 
     p.score-explanation {
         font-size: 1.1em;
@@ -9,51 +34,51 @@ HonorCode {
 
     .code {
         text-align: left;
-        border: 1px solid $gray-7;
+        border: 2px solid $gray-7;
         border-radius: 8px;
-        padding: 10px;
-
-        h3,
-        h4,
-        p {
-            margin: 0.5em $insideBoxLeftMargin;
-        }
+        padding: 20px;
+        display: block;
+        background-color: $gray-9;
     }
 
-    button {
-        margin-top: 15px;
-        width: 100%;
+    .btn-primary {
+        margin-top: 1.5em;
+        width: 80%;
     }
 
-    div {
-        margin: 1em 0;
-    }
-
-    div.i-agree-container {
-        margin-left: $insideBoxLeftMargin; 
-        display: flex;
-        flex-flow: row nowrap;
+    .i-agree-container {
+        display: grid;
         align-items: center;
-
-        p {
-            color: $gray-3;
-            font-size: 1.1em;
-            font-weight: 500;
-            margin-left: 0.5em;
-            padding-top: .25em;
-        }
+        grid-template-columns: 25px 1fr;
+        column-gap: 20px;
 
         .checkbox {
-            border: 1px solid $gray-5;
+            border: 2px solid $gray-5;
             border-radius: 3px;
-            padding-right: 25px;
             height: 25px;
+            width: 25px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+
+            &.checked {
+                border-color: $app-accent-color;
+            }
         }
 
-        .checkmark {
-            display: inline-block;
-            position: absolute;
-            margin-left: 0.25em;
+        h4 {
+            text-transform: uppercase;
+            margin: 0.5em 0;
+            font-weight: 100;
+        }
+
+        h4,
+        p {
+            color: $gray-1;
+            font-size: 0.9em;
+            padding: 0;
         }
     }
 }
