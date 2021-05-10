@@ -67,8 +67,8 @@
     />
     <LessonFeedback
         if="{ !cardNumber && stage == 'feedback' }"
-        lessonId="{props.lesson.id}"
-        courseId="{props.lesson.course.id}"
+        lessonId="{lesson.id}"
+        courseId="{lesson.course.id}"
     ></LessonFeedback>
     <LessonComplete
         if="{ !cardNumber && stage == 'complete' }"

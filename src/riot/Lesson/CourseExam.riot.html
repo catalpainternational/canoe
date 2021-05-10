@@ -1,8 +1,8 @@
 <CourseExam>
     <template if="{ stage === 'code' || !isNaN(cardNumber) }">
-        <LessonFrame if="{ stage === 'code' && course.examType !== 'prelearning'}" linkTo="{ course.loc_hash }">
+        <template if="{ stage === 'code' && course.examType !== 'prelearning'}">
             <HonorCode minimumScore="{ course.minimumExamScore }"></HonorCode>
-        </LessonFrame>
+        </template>
         <LessonFrame
             if="{ !isNaN(cardNumber) }"
             id="test"
@@ -12,7 +12,7 @@
             progressMax="{ examCards.length }"
         >
             <Test
-                card-number="{ cardNumber }" 
+                card-number="{ cardNumber }"
             ></Test>
         </LessonFrame>
         <div if="{ !isNaN(cardNumber) }" class="bottom-buttons">
