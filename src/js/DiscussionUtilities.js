@@ -31,9 +31,9 @@ const postRequest = async (url, body) => {
 }
 
 export const postComment = async (commentBody) => {
-    return postRequest(`${BACKEND_BASE_URL}/discussion/posting/${commentBody.id}/`, commentBody);
+    return postRequest(`${BACKEND_BASE_URL}/discussion/posting/`, commentBody);
 }
 
 export const flagComment = async (commentBody) => {
-    return postRequest(`${BACKEND_BASE_URL}/discussion/flag/${commentBody.id}/`, commentBody)
+    return postRequest(`${BACKEND_BASE_URL}/discussion/flag/`, commentBody)
 }

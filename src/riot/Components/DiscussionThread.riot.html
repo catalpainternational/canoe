@@ -138,16 +138,24 @@
                 },
 
                 mapComments(comments) {
-                    return comments.map((comment, index, array) => ({
-                        ...comment,
-                        initials: `${comment.user_first_name[0]}${comment.user_last_name[0]}`,
-                        date: new Date(comment.date_created),
-                        replies: array.filter((it) => it.parent_id === comment.id)
-                            .map(it => ({
-                                ...it,
-                                initials: `${it.user_first_name[0]}${it.user_last_name[0]}`,
-                            })),
-                    }))
+                    return comments.map((comment, index, array) => {
+                        const firstname = comment.user_first_name || comment.user_username;
+                        const lastname = comment.user_last_name || comment.user_username;
+                        return {
+                            ...comment,
+                            initials: `${firstname[0]}${lastname[0]}`,
+                            date: new Date(comment.date_created),
+                            replies: array.filter((it) => it.parent_id === comment.id)
+                                .map(it => {
+                                    const firstname = it.user_first_name || it.user_username;
+                                    const lastname = it.user_last_name || it.user_username;
+                                    return {
+                                        ...it,
+                                        initials: `${firstname[0]}${lastname[0]}`,
+                                    };
+                                }),
+                            };
+                    })
                     .filter((comment) => comment.parent_id === null);
                 },
 
