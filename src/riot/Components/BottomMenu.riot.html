@@ -5,8 +5,8 @@
                 <span class="all-courses-icon { page.type === 'homepage' ? 'active' : ''}">
                 </span>
             </a>
-            <a href="#{ profileLink }">
-                <span class="profile-icon { page.type === 'profile' ? 'active' : ''}">
+            <a href="#topics" if="{shouldShowTeachingHome()}">
+                <span class="list-icon { page.type === 'learningactivitieshomepage' ? 'active' : ''}">
                 </span>
             </a>
             <a href="#resources" if="{shouldShowResources()}">
@@ -17,8 +17,8 @@
                 <span class="resources-icon { page.type === 'sync' ? 'active' : ''}">
                 </span>
             </a>
-            <a href="#topics" if="{shouldShowTeachingHome()}">
-                <span class="list-icon { page.type === 'learningactivitieshomepage' ? 'active' : ''}">
+            <a href="#{ profileLink }">
+                <span class="profile-icon { page.type === 'profile' ? 'active' : ''}">
                 </span>
             </a>
         </div>
@@ -72,7 +72,7 @@
                 if (this.page.type === 'coursepage' && this.riotHash[0] === 'exam') {
                     return false;
                 }
-              
+
                 return true;
             },
         };
