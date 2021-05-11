@@ -41,10 +41,13 @@
             </div>
         </div>
     </template>
+    <!-- <ExamResults
+        if="{ stage == 'result' }"
+        result="{ state.result }"
+    ></ExamResults> -->
     <ExamResults
         if="{ stage == 'result' }"
-        passed="{ state.result.passed }"
-        score="{ state.result.score }"
+        result="{ state.mockResult }"
     ></ExamResults>
 
     <script>
@@ -59,6 +62,49 @@
             return {
                 state: {
                     result: undefined,
+                    mockResult: {
+                        passed: false,
+                        score: 0,
+                        answers: [
+                            {
+                                question: "Was this walkthrough useful? (this is a checkbox exam question)",
+                                answer: {
+                                    question: {
+                                        id: "9799aa93-0609-41b8-907b-f3b064160a8a",
+                                        text: "Was this walkthrough useful? (this is a checkbox exam question)"
+                                    },
+                                    answers: [
+                                        {
+                                            tag: "multiAnswer",
+                                            text: "Yes",
+                                            correct: true
+                                        }
+                                    ],
+                                    correct: false,
+                                    attempts: 0
+                                }
+                            },
+                            {
+                                question: "Is education important? (an example of a multiple choice exam question)",
+                                answer: {
+                                    tag: "multiAnswer",
+                                    text: "No",
+                                    correct: false,
+                                    attempts: 0
+                                }
+                            },
+                            {
+                                question: "Which numbers are even?",
+                                answer: {
+                                    tag: "multiAnswer",
+                                    text: "3",
+                                    correct: false,
+                                    attempts: 0
+                                }
+                            }
+                        ],
+                        date: "2021-05-11T04:27:39.418Z"
+                    }
                 },
 
                 TRANSLATIONS: {
@@ -107,6 +153,7 @@
                 },
                 submit() {
                     const result = this.course.saveExamScore();
+                    console.log(result)
                     if (result.error) {
                         alert('check you have answered all questions');
                     }

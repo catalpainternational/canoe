@@ -177,6 +177,19 @@
     width: 100%;
 }
 
+.exploding-computer {
+    @include unmaskable-icons-shared("~img/exploding_computer.png", contain);
+    height: 170px;
+    width: 100%;
+    display: block;
+}
+
+.exam-review {
+    @include unmaskable-icons-shared("~img/exam_review.png", contain);
+    height: 45vh;
+    width: 100%;
+}
+
 .high-fivers {
     @include unmaskable-icons-shared("~img/high_fivers.png", contain);
     height: 100%;

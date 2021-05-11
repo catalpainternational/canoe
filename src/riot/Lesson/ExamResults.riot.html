@@ -1,6 +1,6 @@
 <ExamResults>
     <div class="congratulations-container">
-        <template if="{ course.examType === 'prelearning' || props.passed }">
+        <template if="{ course.examType === 'prelearning' || props.result.passed }">
             <span class="superman-success"></span>
             <h2>{ TRANSLATIONS.success() }</h2>
             <h3>{ TRANSLATIONS.completed() }</h3>
@@ -12,18 +12,21 @@
                 { TRANSLATIONS.resources() }
             </button>
         </template>
-        <template if="{ course.examType !== 'prelearning' && !props.passed}">
+        <template if="{ course.examType !== 'prelearning' && !props.result.passed}">
             <div>
-                <span class="incorrect-cross"></span>
+                <span class="exploding-computer"></span>
                 <h2>{ TRANSLATIONS.notQuite() }</h2>
                 <p>{ failedExamMessage() }</p>
             </div>
-            <button class="btn-primary" onclick="{goToCourseExam}">
+            <button class="btn-primary" onclick="{goToExamReview}">
+                { TRANSLATIONS.review() } <span class="chevron"></span>
+            </button>
+            <a onclick="{goToCourseExam}">
                 { TRANSLATIONS.retake() }
-            </button>
-            <button class="btn-secondary" onclick="{goToCourseOverview}">
+            </a>
+            <a onclick="{goToCourseOverview}">
                 { TRANSLATIONS.backCourse() }
-            </button>
+            </a>
         </template>
     </div>
     <script>
@@ -36,6 +39,7 @@
                 back: () => gettext("Back to Courses"),
                 resources: () => gettext("View Resources"),
                 notQuite: () => gettext("Not quite!"),
+                review: () => gettext("Review your answers"),
                 retake: () => gettext("Retake Exam"),
                 backCourse: () => gettext("Back to Course"),
             },
@@ -60,6 +64,10 @@
                 location.hash = `#${this.course.examLink}`;
             },
 
+            goToExamReview() {
+                // TODO
+            },
+
             passedExamMessage() {
                 // message when user passed the exam
                 if (this.course.examType === 'prelearning') {
@@ -77,8 +85,8 @@
             failedExamMessage() {
                 // message when user did not pass exam
                 return gettext(
-                    "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later.",
-                    Math.ceil(100 * this.props.score),
+                    "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can review your answers, retake this exam now, or finish it later.",
+                    Math.ceil(100 * this.props.result.score),
                     this.course.minimumExamScore
                 );
             },
