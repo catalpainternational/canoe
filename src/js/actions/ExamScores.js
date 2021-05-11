@@ -4,7 +4,7 @@
  * Depends on the action_store module to persist information
  */
 
-import { storeExamScores } from "js/redux/Interface";
+import { storeExamScores, clearExamScores } from "js/redux/Interface";
 import { 
     saveAndPostAction, readActions,
     EXAM_SCORE_TYPE,
@@ -44,10 +44,6 @@ export async function readExamDataIntoState() {
  * @returns the action stored 
  */
 export function persistExamScore(pageId, scoreData) {
-    const extraData = Object.assign(scoreData, {
-        date: new Date(),
-    });
-
     // store and return the action ( asycronously persists via idb and api )
     return saveAndPostAction(EXAM_SCORE_TYPE, { pageId, ...extraData });
 }
