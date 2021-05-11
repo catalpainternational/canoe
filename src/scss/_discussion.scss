@@ -147,6 +147,7 @@ DiscussionThread {
     margin-left: -20px;
     padding: 20px;
     border-radius: 8px 8px 0 0;
+    max-width: calc(100% + 40px);
 
     .lesson-title {
         grid-template-columns: 20px 25px 1fr;

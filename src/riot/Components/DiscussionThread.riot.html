@@ -265,10 +265,12 @@
                     }, 4000);
 
                     const newCommentEl = document.getElementById(id);
-                    newCommentEl.className = 'recent';
-                    setTimeout(function () {
-                        newCommentEl.className = '';
-                    }, 6000)
+                    if (newCommentEl) {
+                        newCommentEl.className = 'recent';
+                        setTimeout(function () {
+                            newCommentEl.className = '';
+                        }, 6000)
+                    }
                 },
 
                 flagInappropriate(comment) {
