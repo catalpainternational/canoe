@@ -31,7 +31,7 @@ export function getActions() {
         })
         .then((actions) => {
             actions.forEach((action) => {
-                action.date = new Date(action.date);
+                action.date = action.date;
             });
             return actions;
         })
