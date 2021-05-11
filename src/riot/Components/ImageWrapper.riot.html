@@ -1,93 +1,70 @@
 <ImageWrapper>
-    <div if="{state.imageFullScreen}"
+    <div if="{ asset() && state.imageFullScreen }"
         class="modal-background fade"
-        onclick="{toggleImageFullScreen}">
+        onclick="{ toggleImageFullScreen }">
     </div>
     <img
-        if="{state.imagePath}"
-        alt="{state.image.alt}"
+        if="{ asset() }"
+        src="{ asset().url }"
+        alt="{ asset().title }"
         class="richtext-image {imageClass()}"
         crossorigin="anonymous"
-        src="{state.imagePath}"
     />
-    <div if="{state.imagePath && !state.imageFullScreen}"
+    <div if="{ asset() && !state.imageFullScreen }"
         class="expand-button"
-        onclick="{toggleImageFullScreen}">
+        onclick="{ toggleImageFullScreen }">
         <span class="expand-arrows"></span>
     </div>
-    <div if="{state.imageFullScreen}"
+    <div if="{ state.imageFullScreen }"
         class="contract-button"
-        onclick="{toggleImageFullScreen}">
+        onclick="{ toggleImageFullScreen }">
         <span class="cross gray"></span>
     </div>
-    <p class="error-message" if="{!state.imagePath}">
-        Sorry: image "{state.image.alt}", is missing.
+    <p class="error-message" if="{ !asset() }">
+        { TRANSLATIONS.missing() }
     </p>
 
     <script>
-        import { Asset } from "ts/Implementations/Asset";
         import { getRoute } from "ReduxImpl/Interface";
-        import { MissingImageError } from "js/Errors";
 
-        export default {
-            state: {
-                imagePath: "",
-                image: {
-                    id: "unknown",
-                    alt: "Unknown Image",
+        export default function ImageWraper() {
+            return {
+                TRANSLATIONS: {
+                    missing: () => gettext("Sorry: This image is missing.")
                 },
-                imageFullScreen: false,
-            },
+                state: {
+                    imageFullScreen: false,
+                },
 
-            loadImage(image) {
-                this.state.image = image;
-                const assetEntry = this.page.getImageRenditions(image.id);
-                if (assetEntry) {
-                    try {
-                        this.state.imagePath = Asset.url(assetEntry);
-                    } catch (error) {
-                        if (error instanceof MissingImageError) {
-                            this.state.imagePath = "";
-                        }
-                    }
-                } else {
-                    this.state.imagePath = "";
-                }
-            },
+                get page() {
+                    return getRoute().page;
+                },
 
-            imageClass() {
-                const fullScreen = this.state.imageFullScreen;
-                const devicePortrait = this.state.devicePortrait;
-                const img = this.$("img");
-                const imgHeight = img.naturalHeight;
-                const imgWidth = img.naturalWidth;
+                asset() {
+                    return this.page.imageAsset(this.props.image.id);
+                },
 
-                let imgOrientation;
+                imageClass() {
+                    const fullScreen = this.state.imageFullScreen;
+                    const devicePortrait = this.state.devicePortrait;
+                    const img = this.$("img");
+                    const imgHeight = img.naturalHeight;
+                    const imgWidth = img.naturalWidth;
 
-                if (imgHeight > imgWidth) imgOrientation = 'portrait';
-                if (imgHeight < imgWidth) imgOrientation = 'landscape';
-                if (imgHeight === imgWidth) imgOrientation = 'square';
+                    let imgOrientation;
+
+                    if (imgHeight > imgWidth) imgOrientation = 'portrait';
+                    if (imgHeight < imgWidth) imgOrientation = 'landscape';
+                    if (imgHeight === imgWidth) imgOrientation = 'square';
 
 
-                return fullScreen ? `full-screen ${imgOrientation}` : '';
-            },
+                    return fullScreen ? `full-screen ${imgOrientation}` : '';
+                },
 
-            onBeforeUpdate(props, state) {
-                if (props.image) {
-                    this.loadImage(props.image);
-                }
-            },
-
-            onBeforeMount(props, state) {
-                this.page = getRoute().page;
-                if (props.image) {
-                    this.loadImage(props.image);
-                }
-            },
-
-            toggleImageFullScreen() {
-                this.update({ imageFullScreen: !this.state.imageFullScreen });
-            },
+                toggleImageFullScreen() {
+                    this.update({ imageFullScreen: !this.state.imageFullScreen });
+                },
+            }
         };
     </script>
 </ImageWrapper>

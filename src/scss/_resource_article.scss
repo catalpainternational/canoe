@@ -18,6 +18,10 @@ ResourceArticle {
         }
     }
 
+    .frame-background {
+        height: calc(100vh - (#{$top-menu-height} * 2)) !important;
+    }
+
     .content-block + .content-block {
         margin-top: 20px;
     }

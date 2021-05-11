@@ -38,11 +38,8 @@ export async function ensureAction(action) {
     const transaction = actionsDb.transaction(action_store_name, "readwrite");
     const key = await transaction.store.getKey(action.uuid);
 
-    const thisYear = new Date().getFullYear();
-    const beginningOfThisYear = new Date(thisYear, 0, 1);
-
-    // return false - no change made; ignore actions from prior years.
-    if (key || action.date < beginningOfThisYear) {
+    // return false - already exists
+    if (key) {
         return false;
     }
 

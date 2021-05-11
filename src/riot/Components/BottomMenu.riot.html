@@ -5,8 +5,8 @@
                 <span class="all-courses-icon { page.type === 'homepage' ? 'active' : ''}">
                 </span>
             </a>
-            <a href="#profile">
-                <span class="profile-icon { page.type === 'profile' ? 'active' : ''}">
+            <a href="#topics" if="{shouldShowTeachingHome()}">
+                <span class="list-icon { page.type === 'learningactivitieshomepage' ? 'active' : ''}">
                 </span>
             </a>
             <a href="#resources" if="{shouldShowResources()}">
@@ -17,8 +17,8 @@
                 <span class="resources-icon { page.type === 'sync' ? 'active' : ''}">
                 </span>
             </a>
-            <a href="#topics" if="{shouldShowTeachingHome()}">
-                <span class="list-icon { page.type === 'learningactivitieshomepage' ? 'active' : ''}">
+            <a href="#{ profileLink }">
+                <span class="profile-icon { page.type === 'profile' ? 'active' : ''}">
                 </span>
             </a>
         </div>
@@ -29,14 +29,15 @@
         import { inAppelflap } from "ts/PlatformDetection";
 
         export default {
-            onBeforeMount() {
-                this.page = getRoute().page;
-                this.riotHash = getRoute().riotHash;
-            },
 
-            onBeforeUpdate() {
-                this.page = getRoute().page;
-                this.riotHash = getRoute().riotHash;
+            get page() {
+                return getRoute().page;
+            },
+            get riotHash() {
+                return getRoute().riotHash;
+            },
+            get profileLink() {
+                return process.env.PROFILE_LINK || 'profile';
             },
 
             shouldShowSync() {
@@ -71,7 +72,7 @@
                 if (this.page.type === 'coursepage' && this.riotHash[0] === 'exam') {
                     return false;
                 }
-              
+
                 return true;
             },
         };

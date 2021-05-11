@@ -25,4 +25,21 @@ export default class TeachingActivity extends Page {
     get curriculum(): string {
         return this.data.curriculum_id;
     }
+
+    get completionData(): Record<string, any> {
+        return {
+            pageType: "activity",
+        };
+    }
+
+    get complete(): boolean {
+        return super.complete;
+    }
+    set complete(complete: boolean) {
+        super.complete = complete;
+        const topicCompelte = this.topic.childPages.every((c) => c.complete);
+        if (this.topic.complete !== topicCompelte) {
+            this.topic.complete = topicCompelte;
+        }
+    }
 }

@@ -55,7 +55,7 @@
                 onclick="{ completeLesson }"
                 if="{ cardNumber === cards.length && !isAQuestion() }"
             >
-                { TRANSLATIONS.finish() } THIS SHOLD NEVER SHOW?????
+                { TRANSLATIONS.finish() }
             </button>
         </div>
     </div>
@@ -67,7 +67,8 @@
     />
     <LessonFeedback
         if="{ !cardNumber && stage == 'feedback' }"
-        lessonName="{ lesson.title }"
+        lessonId="{lesson.id}"
+        courseId="{lesson.course.id}"
     ></LessonFeedback>
     <LessonComplete
         if="{ !cardNumber && stage == 'complete' }"

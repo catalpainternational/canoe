@@ -18,6 +18,14 @@
 
             setInnerHTML() {
                 this.$(".richtext").innerHTML = this.props.card.content;
+                const absolutePath = new RegExp('^(?:[a-z]+:)?//', 'i');
+                const links = [...this.$('.richtext').getElementsByTagName('a')];
+
+                links.forEach((link) => {
+                    if (absolutePath.test(link.href)) {
+                        link.target = "_blank"
+                    }
+                })
             },
 
             onMounted() {
