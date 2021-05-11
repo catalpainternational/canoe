@@ -46,10 +46,6 @@ export async function readCompletionsIntoState() {
  * @returns the action stored
  */
 export function persistCompletion(pageId, extraDataObject = {}) {
-    const extraData = Object.assign(extraDataObject, {
-        date: new Date(),
-    });
-
     // store the action ( via idb and api )
     return saveAndPostAction(COMPLETION_ACTION_TYPE, { pageId, ...extraData });
 }
