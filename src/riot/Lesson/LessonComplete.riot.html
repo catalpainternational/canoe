@@ -10,6 +10,10 @@
                 { TRANSLATIONS.next() }
                 <span class="chevron"></span>
             </button>
+            <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
+                { TRANSLATIONS.discuss() }
+                <span class="chevron"></span>
+            </button>
         </template>
         <template if="{ course.lessonsComplete }">
             <div>
@@ -71,7 +75,7 @@
             },
 
             lessonHasDiscussion() {
-                return this.state.lesson.threads.length;
+                return this.lesson.threads.length;
             },
 
             goToDiscussion() {
