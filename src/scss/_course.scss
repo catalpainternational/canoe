@@ -18,6 +18,34 @@ CoursePage {
 
         .course-details {
             margin-bottom: 2em;
+
+            .btn-primary {
+                width: 220px;
+                display: block;
+                margin: 1.5em 0;
+                position: relative;
+
+                .chevron {
+                    height: 14px;
+                    position: absolute;
+                    right: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+            }
+
+            p {
+                line-height: 1.2em;
+            }
+
+            .clamp-3-lines {
+                line-height: 1.2em;
+                height: calc(3 * 1.2em);
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+            }
         }
     }
 }

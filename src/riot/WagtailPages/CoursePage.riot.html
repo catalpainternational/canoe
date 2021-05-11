@@ -24,26 +24,29 @@
 
     <div class="content-wrapper">
         <div class="course-details">
-            <h2 id="coursePageTitle">{course.title}</h2>
-            <p if="{course.data.subtitle}" class="course-subtitle">
-                {course.data.subtitle}
-            </p>
+            <h2>{course.title}</h2>
             <p>{course.data.short_description}</p>
-            <p if="{course.data.long_description && state.showLongDescription}">
+            <button if="{state.ctaCopy && state.ctaHash}" onclick="{goToCTAHash}" class="btn-primary">
+                {state.ctaCopy}
+                <span class="chevron"></span>
+            </button>
+            <p if="{course.data.long_description}" class="{state.showExpandedDescription ? '' : 'clamp-3-lines'}">
                 {course.data.long_description}
             </p>
-            <a
-                if="{course.data.long_description && state.showLongDescription}"
-                onclick="{toggleCourseDescription}"
-                >{ TRANSLATIONS.less() }
-                <span class="chevron down"></span>
-            </a>
-            <a
-                if="{course.data.long_description && !state.showLongDescription}"
-                onclick="{toggleCourseDescription}"
-                >{ TRANSLATIONS.more() }
-                <span class="chevron up"></span>
-            </a>
+            <template if="{state.hasExpandableDescription}">
+                <a
+                    if="{course.data.long_description && state.showExpandedDescription}"
+                    onclick="{toggleCourseDescription}"
+                    >{ TRANSLATIONS.less() }
+                    <span class="chevron down"></span>
+                </a>
+                <a
+                    if="{course.data.long_description && !state.showExpandedDescription}"
+                    onclick="{toggleCourseDescription}"
+                    >{ TRANSLATIONS.more() }
+                    <span class="chevron up"></span>
+                </a>
+            </template>
         </div>
         <div class="lesson-swoop">
 
@@ -95,9 +98,12 @@
 
         function CoursePage() { return {
             state: {
-                showLongDescription: false,
+                hasExpandableDescription: false,
+                showExpandedDescription: false,
                 showDownloadModal: false,
                 cached: false,
+                ctaCopy: undefined,
+                ctaHash: undefined,
             },
 
             TRANSLATIONS: {
@@ -105,11 +111,15 @@
                 your_lessons: () => gettext("Your lessons"),
                 course_exam: () => gettext("Course exam"),
                 prelearning_survey: () => gettext("Prelearning Survey"),
+                take_exam: () => gettext("Take exam"),
+                take_survey: () => gettext("Take Survey"),
                 highestScore: () => gettext("Highest score"),
                 more: () => gettext("See more"),
                 less: () => gettext("See less"),
                 download_course: () => gettext("Make course available offline"),
                 download_all: () => gettext("Download all lessons"),
+                start: () => gettext("Start learning"),
+                continue: () => gettext("Continue learning"),
             },
 
             get course() {
@@ -121,6 +131,38 @@
                     .then(cached => {
                         this.update({cached});
                     })
+            },
+
+            onMounted(props, state) {
+                const descEl = this.$('.clamp-3-lines');
+                if (descEl.scrollHeight > descEl.clientHeight) {
+                    this.update({hasExpandableDescription: true})
+                }
+
+                const status = this.course.progressStatus;
+
+                if (status === 'in-progress' && this.course.lessonsComplete) {
+                    const ctaCopy = this.course.examIsPrelearning
+                        ? this.TRANSLATIONS.take_survey()
+                        : this.TRANSLATIONS.take_exam();
+                    this.update({ ctaCopy, ctaHash: this.course.examLink });
+
+                } else if (status === 'in-progress' && !this.course.lessonsComplete) {
+                    this.update({
+                        ctaCopy: this.TRANSLATIONS.continue(),
+                        ctaHash: this.course.lessons
+                                    .filter(it => it.progressStatus !== 'complete')[0].loc_hash,
+                    });
+                } else if (status === 'not-started') {
+                    this.update({
+                        ctaCopy: this.TRANSLATIONS.start(),
+                        ctaHash: this.course.lessons[0].loc_hash,
+                    });
+                }
+            },
+
+            goToCTAHash() {
+                location.hash = this.state.ctaHash;
             },
 
             backToAllCourses() {
@@ -151,7 +193,7 @@
 
             toggleCourseDescription() {
                 this.update({
-                    showLongDescription: !this.state.showLongDescription,
+                    showExpandedDescription: !this.state.showExpandedDescription,
                 });
             },
 
@@ -170,7 +212,7 @@
                     ? gettext("%1's Prelearning Survey", this.course.title)
                     : gettext("%1's Course Exam", this.course.title);
             },
-            
+
             examTitle() {
                 return this.course.examIsPrelearning
                     ? this.TRANSLATIONS.prelearning_survey()
