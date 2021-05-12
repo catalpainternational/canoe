@@ -314,7 +314,6 @@ export class Page extends PublishableItem implements StorableItem {
     /** returns data to be stored with thi page completion */
     get completionData(): Record<string, any> {
         const data = {
-            title: this.title,
             revisionId: this.revisionId,
             version: this.version,
             ...this.#completionData,

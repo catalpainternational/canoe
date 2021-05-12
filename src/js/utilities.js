@@ -91,3 +91,61 @@ export const getCardImageUrl = (link, imageUrl) => {
         ? `${process.env.API_BASE_URL}${imageUrl}?cardImageFallback=${fallbackImg}`
         : fallbackImg;
 };
+
+
+export const simplePluralize = (count, noun, suffix = 's') => {
+    return `${count} ${noun}${count !== 1 ? suffix : ''}`;
+}
+
+export const getElapsedTime = (givenDate) => {
+    const minuteInMs = 1 * 60 * 1000;
+    const hourInMs = minuteInMs * 60;
+    const dayInMs = hourInMs * 24;
+    const weekInMs = dayInMs * 7;
+    const monthInMs = dayInMs * 30;
+    const yearInMs = dayInMs * 365;
+
+    const today = new Date();
+    const elapsedTime = today - new Date(givenDate);
+
+    // TODO this needs translatin!
+    if (elapsedTime < minuteInMs) {
+        return 'Seconds ago';
+    }
+    if (elapsedTime < hourInMs) {
+        const timeInMins = Math.round(elapsedTime / minuteInMs);
+        return `${simplePluralize(timeInMins, 'minute')} ago`;
+    }
+    if (elapsedTime < dayInMs) {
+        const timeInHours = Math.round(elapsedTime / hourInMs);
+        return `${simplePluralize(timeInHours, 'hour')} ago`;
+    }
+    if (elapsedTime < weekInMs) {
+        const timeInDays = Math.round(elapsedTime / dayInMs)
+        return `${simplePluralize(timeInDays, 'day')} ago`;
+    }
+    if (elapsedTime < monthInMs) {
+        const timeInWeeks = Math.round(elapsedTime / weekInMs);
+        return `${simplePluralize(timeInWeeks, 'week')} ago`;
+    }
+    if (elapsedTime < yearInMs) {
+        const timeInMonths = Math.round(elapsedTime / monthInMs);
+        return `${simplePluralize(timeInMonths, 'month')} ago`;
+    }
+    if (elapsedTime >= yearInMs) {
+        const timeInYears = Math.round(elapsedTime / yearInMs);
+        return `${simplePluralize(timeInYears, 'year')} ago`;
+    }
+}
+
+export const hashString = (string) => {
+    // Generate an unsigned 32 bit integer hash from any string
+    let hash = 0;
+    for (let ix = 0; ix < string.length; ix++) {
+        const char = string.charCodeAt(ix);
+        hash = char + (hash << 6) + (hash << 16) - hash; // magic constant is (effectively) 65599
+    }
+    const bit32 = Math.pow(2, 32);
+    hash = hash < 0 ? Math.ceil(hash) : Math.floor(hash);
+    return hash - Math.floor(hash / bit32) * bit32;
+}

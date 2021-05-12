@@ -38,6 +38,10 @@ export async function ensureAction(action) {
     const transaction = actionsDb.transaction(action_store_name, "readwrite");
     const key = await transaction.store.getKey(action.uuid);
 
+    // return false - already exists
+    if (key) {
+        return false;
+    }
 
     action.synced = 1;
     await transaction.store.add(action);
