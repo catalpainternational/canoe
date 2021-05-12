@@ -26,8 +26,8 @@
         <div class="course-details">
             <h2>{course.title}</h2>
             <p>{course.data.short_description}</p>
-            <button if="{state.ctaCopy && state.ctaHash}" onclick="{goToCTAHash}" class="btn-primary">
-                {state.ctaCopy}
+            <button if="{ctaObject}" onclick="{goToCTAHash}" class="btn-primary">
+                {ctaObject.copy}
                 <span class="chevron"></span>
             </button>
             <p if="{course.data.long_description}" class="{state.showExpandedDescription ? '' : 'clamp-3-lines'}">
@@ -159,8 +159,6 @@
                 selectedDiscussionId: null,
                 selectedDiscussion: {},
                 selectedDiscussionLesson: {},
-                ctaCopy: undefined,
-                ctaHash: undefined,
             },
 
             TRANSLATIONS: {
@@ -214,31 +212,39 @@
                 if (descEl && descEl.scrollHeight > descEl.clientHeight) {
                     this.update({hasExpandableDescription: true})
                 }
+            },
 
+            get ctaObject() {
                 const status = this.course.progressStatus;
 
+                if (!this.course.lessons.length) return null;
+
                 if (status === 'in-progress' && this.course.lessonsComplete) {
-                    const ctaCopy = this.course.examIsPrelearning
+                    const copy = this.course.examIsPrelearning
                         ? this.TRANSLATIONS.take_survey()
                         : this.TRANSLATIONS.take_exam();
-                    this.update({ ctaCopy, ctaHash: this.course.examLink });
-
+                    return {
+                        copy,
+                        hash: this.course.examLink,
+                    }
                 } else if (status === 'in-progress' && !this.course.lessonsComplete) {
-                    this.update({
-                        ctaCopy: this.TRANSLATIONS.continue(),
-                        ctaHash: this.course.lessons
+                    return {
+                        copy: this.TRANSLATIONS.continue(),
+                        hash: this.course.lessons
                                     .filter(it => it.progressStatus !== 'complete')[0].loc_hash,
-                    });
+                    };
                 } else if (status === 'not-started') {
-                    this.update({
-                        ctaCopy: this.TRANSLATIONS.start(),
-                        ctaHash: this.course.lessons[0].loc_hash,
-                    });
+                    return {
+                        copy: this.TRANSLATIONS.start(),
+                        hash: this.course.lessons[0].loc_hash,
+                    }
                 }
+
+                return null;
             },
 
             goToCTAHash() {
-                location.hash = this.state.ctaHash;
+                location.hash = this.ctaObject.hash;
             },
 
             backToAllCourses() {
