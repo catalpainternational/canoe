@@ -638,20 +638,22 @@ LessonFeedback {
 }
 
 LessonComplete,
-ExamResults {
-    .congratulations-container {
+ExamResults,
+ExamReview {
+    .congratulations-container,
+    .exam-summary {
         display: flex;
         flex-flow: column nowrap;
         justify-content: space-evenly;
         align-items: center;
         text-align: center;
         height: 100%;
-        padding-top: 3em;
 
         h2,
         h3 {
             margin-top: 1em;
             margin-bottom: 1em;
+            padding: 0 1em;
         }
 
         h3 {
@@ -683,13 +685,63 @@ ExamResults {
         .btn-secondary {
             width: 220px;
         }
-    }
 
-    .incorrect-cross {
-        height: 40px;
-        width: 40px;
-        display: block;
-        margin: 1em auto;
+        .exploding-computer,
+        .exam-review,
+        .retake-exam {
+            margin-top: 3em;
+        }
+
+        .close {
+            position: fixed;
+            top: 1em;
+            right: 1em;
+            margin-top: 0;
+        }
+
+
+        .question-block {
+            box-sizing: border-box;
+            padding: 1em;
+            border-top: 2px solid $gray-7;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 40px 1fr 40px;
+            grid-column-gap: 14px;
+            align-items: center;
+            text-align: left;
+
+            &:first-of-type {
+                margin-top: 1em;
+            }
+
+            &:last-of-type {
+                border-bottom: 2px solid $gray-7;
+            }
+
+            p {
+                margin: 0;
+                padding: 0;
+            }
+
+            .question-number {
+                border: 2px solid $gray-7;
+                border-radius: 50%;
+            }
+
+            .question-number,
+            .incorrect-cross {
+                height: 32px;
+                width: 32px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+                font-size: 0.8em;
+                position: relative;
+            }
+        }
     }
 }
 

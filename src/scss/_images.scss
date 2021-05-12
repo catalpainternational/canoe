@@ -186,8 +186,16 @@
 
 .exam-review {
     @include unmaskable-icons-shared("~img/exam_review.png", contain);
-    height: 45vh;
+    height: 140px;
     width: 100%;
+    display: block;
+}
+
+.retake-exam {
+    @include unmaskable-icons-shared("~img/retake_exam.png", contain);
+    height: 140px;
+    width: 100%;
+    display: block;
 }
 
 .high-fivers {

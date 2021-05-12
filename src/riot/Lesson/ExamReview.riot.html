@@ -1,0 +1,144 @@
+<ExamReview>
+    <!-- TODO -->
+
+    <!-- test component for each result incorrect question, but make it non-interactive somehow? just show if the selected answer is or isn't correct -->
+    <!-- summary screen -->
+    <!-- each exam incorrectquestion as card -->
+
+    <div if="{ stage === 'summary'}" class="exam-summary">
+        <span class="exam-review"></span>
+        <h3>{ TRANSLATIONS.review() }</h3>
+
+        <div each="{answer in incorrectAnswers}" class="question-block">
+            <p class="question-number">{answer.questionNumber}</p>
+            <p class="question-text">{answer.question}</p>
+            <span class="incorrect-cross"></span>
+        </div>
+
+        <button class="btn-primary" onclick="{startReview}">{ TRANSLATIONS.start() }</button>
+    </div>
+
+    <template if="{ stage !== 'summary' }">
+        <LessonFrame
+            if="{ !isNaN(stage) }"
+            id="test"
+            extraStyleClasses="test"
+            linkTo="{ course.loc_hash }"
+            progressValue="{ stage }"
+            progressMax="{ incorrectAnswers.length }"
+        >
+        <!-- TODO -->
+            <!-- <Test
+                review=true
+                card-number="{ stage }"
+                cards="{}"
+            ></Test> -->
+        </LessonFrame>
+        <div if="{ !isNaN(stage) }" class="bottom-buttons">
+            <div>
+                <a if="{ stage > 1 }" class="has-circle" onclick="{previousReviewCard}">
+                    <span class="arrow"></span>
+                </a>
+            </div>
+            <div>
+                <button
+                    if="{ stage <= incorrectAnswers.length }"
+                    class="btn-primary"
+                    onclick="{nextReviewCard}"
+                >
+                    { TRANSLATIONS.next() }
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <div if="{ stage === 'complete'}" class="exam-summary">
+
+        <span class="retake-exam"></span>
+        <h2>{ TRANSLATIONS.ready() }</h2>
+        <p>{ TRANSLATIONS.opportunity() }</p>
+
+        <button class="btn-primary" onclick="{goToCourseExam}">
+            { TRANSLATIONS.retake() }
+        </button>
+
+        <a onclick="{goToCourseOverview}">
+            { TRANSLATIONS.backCourse() }
+        </a>
+    </div>
+
+    <script>
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+        import { getRoute } from "ReduxImpl/Interface";
+
+        export default {
+            components: {
+                lessonframe: LessonFrame,
+            },
+
+            TRANSLATIONS: {
+                review: () => gettext('Review the exam questions you answered incorrectly'),
+                start: () => gettext('Start review'),
+                next: () => gettext('Next'),
+                ready: () => gettext('Are you ready to retake your exam?'),
+                opportunity: () => gettext('You have the opportunity to retake the exam now and achieve a successful outcome. Alternatively you can return to the course.'),
+                retake: () => gettext('Retake Exam'),
+                backCourse: () => gettext("Back to Course"),
+            },
+
+            get course() {
+                return getRoute().page;
+            },
+
+            get stage() {
+                const s =  getRoute().riotHash[2];
+
+                if (s) {
+                    return s;
+                }
+            },
+
+            get incorrectAnswers() {
+                // TODO need to use TS to put this on the route object somehow
+                if (this.props && this.props.result) {
+                    const mappedQuestions = this.course.data.exam_cards
+                        .map((it, index) => {
+                            return {
+                                ...it,
+                                questionNumber: index + 1,
+                                userAnswer: this.props.result.answers[index],
+                            }
+                        })
+                    return mappedQuestions.filter((it) => !it.userAnswer.answer.correct)
+                }
+                return [];
+            },
+
+            startReview() {
+                location.hash = `${location.hash.replace('summary', 1)}`;
+            },
+
+            previousReviewCard() {
+                const newCardNumber = Number(this.stage) - 1;
+                location.hash = `${this.course.loc_hash}:exam:review:${newCardNumber}`;
+            },
+
+            nextReviewCard() {
+                if (Number(this.stage) === this.incorrectAnswers.length) {
+                    location.hash = `${this.course.loc_hash}:exam:review:complete`;
+                } else {
+                    const newCardNumber = Number(this.stage) + 1;
+                    location.hash = `${this.course.loc_hash}:exam:review:${newCardNumber}`;
+                }
+            },
+
+            goToCourseOverview() {
+                location.hash = `#${this.course.loc_hash}`;
+            },
+
+            goToCourseExam() {
+                location.hash = `#${this.course.examLink}`;
+            },
+        };
+    </script>
+</ExamReview>

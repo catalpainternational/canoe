@@ -24,8 +24,8 @@
             <a onclick="{goToCourseExam}">
                 { TRANSLATIONS.retake() }
             </a>
-            <a onclick="{goToCourseOverview}">
-                { TRANSLATIONS.backCourse() }
+            <a onclick="{goToCourseOverview}" class="close">
+                <span class="cross gray"></span>
             </a>
         </template>
     </div>
@@ -41,7 +41,6 @@
                 notQuite: () => gettext("Not quite!"),
                 review: () => gettext("Review your answers"),
                 retake: () => gettext("Retake Exam"),
-                backCourse: () => gettext("Back to Course"),
             },
 
             get course() {
@@ -65,7 +64,7 @@
             },
 
             goToExamReview() {
-                // TODO
+                location.hash = `#${this.course.examLink.replace('code', 'review:summary')}`
             },
 
             passedExamMessage() {
