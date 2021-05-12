@@ -128,8 +128,9 @@ export default class Course extends Page {
                 error: "incomplete",
             };
         }
-        const correctAnswers = Object.values(answers).filter((a) => a.correct)
-            .length;
+        const correctAnswers = Object.values(answers).filter(
+            (a) => a.correct
+        ).length;
         const score = correctAnswers / numberOfQuestions;
         const answersAnnotated = this.examCards.map((card) => {
             const answer = answers[card.id];
