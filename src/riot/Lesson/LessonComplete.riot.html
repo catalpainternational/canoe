@@ -10,6 +10,10 @@
                 { TRANSLATIONS.next() }
                 <span class="chevron"></span>
             </button>
+            <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
+                { TRANSLATIONS.discuss() }
+                <span class="chevron"></span>
+            </button>
         </template>
         <template if="{ course.lessonsComplete }">
             <div>
@@ -23,6 +27,10 @@
             </button>
             <button if="{courseHasExam() && !isPrelearningExam()}" class="btn-primary" onclick="{goToCourseExam}">
                 { TRANSLATIONS.exam() }
+                <span class="chevron"></span>
+            </button>
+            <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
+                { TRANSLATIONS.discuss() }
                 <span class="chevron"></span>
             </button>
             <a href="#{lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
@@ -40,6 +48,7 @@
                 exam: () => gettext("Take Exam"),
                 survey: () => gettext("Take Survey"),
                 course: () => gettext("Back to Course"),
+                discuss: () => gettext("Join the discussion"),
             },
 
             get lesson() {
@@ -63,6 +72,14 @@
 
             goToCourseExam() {
                 location.hash = this.lesson.course.examLink;
+            },
+
+            lessonHasDiscussion() {
+                return this.lesson.threads.length;
+            },
+
+            goToDiscussion() {
+                location.hash = `${this.lesson.course.loc_hash}:discussion`;
             },
 
             lessonCompleteMessage() {

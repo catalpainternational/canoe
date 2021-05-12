@@ -41,4 +41,18 @@ export default class Lesson extends Page {
             ),
         });
     }
+
+    get threads(): Array<Thread> {
+        return this.storedData?.discussion;
+    }
+}
+
+class Thread {
+    #id: string;
+    #question?: string;
+
+    constructor(id: string, question?: string) {
+        this.#id = id;
+        this.#question = question;
+    }
 }

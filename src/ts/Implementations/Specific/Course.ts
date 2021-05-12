@@ -12,6 +12,13 @@ import Answer from "../Answer";
 const EXAM_PASS_SCORE = 0.75;
 
 export default class Course extends Page {
+    get discussions(): any {
+        return this.storedData?.lessons.map((lesson: any) => ({
+            title: lesson.title,
+            id: lesson.id,
+            discussion: lesson.discussion,
+        }));
+    }
     get lessons(): any {
         return this.childPages;
     }
