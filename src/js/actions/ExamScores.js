@@ -45,5 +45,5 @@ export async function readExamDataIntoState() {
  */
 export function persistExamScore(pageId, scoreData) {
     // store and return the action ( asycronously persists via idb and api )
-    return saveAndPostAction(EXAM_SCORE_TYPE, { pageId, ...extraData });
+    return saveAndPostAction(EXAM_SCORE_TYPE, { pageId, ...scoreData });
 }
