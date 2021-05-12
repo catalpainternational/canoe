@@ -14,7 +14,7 @@
         <div class="controls">
             <p class="reply" onclick="{openReplyTextbox}">{TRANSLATIONS.reply()} <span class="reply-arrow"></span></p>
             <p>&middot;</p>
-            <p onclick="{flagInappropriate}">{TRANSLATIONS.flag()} <span class="flag"></span></p>
+            <p onclick="{addFlag}">{TRANSLATIONS.flag()} <span class="flag"></span></p>
         </div>
         <div if="{props.comment.replies.length}" class="toggle-replies" onclick="{toggleReplies}">
             <template if="{state.showReplies}">&minus;</template>
@@ -42,7 +42,7 @@
             if="{props.comment.replies.length}"
             each="{reply in props.comment.replies}"
             comment="{reply}"
-            flagInappropriate="{props.flagInappropriate}"
+            addFlag="{props.addFlag}"
         ></DiscussionReply>
     </div>
 
@@ -50,8 +50,8 @@
         import DiscussionReply from "RiotTags/Components/DiscussionReply.riot.html";
         import UserAvatar from "RiotTags/Components/UserAvatar.riot.html";
 
-        import {getElapsedTime} from "js/utilities";
-        import { v4 as uuidv4 } from "uuid";
+        import { getElapsedTime } from "js/utilities";
+        import { Discussion } from "ts/Discussion";
 
         export default {
             components: {
@@ -70,6 +70,10 @@
                 flag: () => gettext("Flag as inappropriate"),
                 addReply: () => gettext("Add a reply"),
                 postComment: () => gettext("Post a comment"),
+            },
+
+            onBeforeMount(props, state) {
+                this.state.discussion = new Discussion();
             },
 
             onMounted(props, state) {
@@ -97,18 +101,16 @@
             addReply() {
                 const commentInput = this.$("#reply");
 
-                const newComment = {
-                    date_created: new Date().toISOString().replace('Z', '+00:00'),
-                    comment: commentInput.value,
-                    id: uuidv4(),
-                    parent_id: this.props.comment.id,
-                }
+                const newComment = this.state.discussion.CreateComment(
+                    commentInput.value,
+                    this.props.comment.id,
+                );
 
                 this.props.addReply(newComment, commentInput, this.closeReplyTextbox);
             },
 
-            flagInappropriate () {
-                this.props.flagInappropriate(this.props.comment);
+            addFlag () {
+                this.props.addFlag(this.props.comment);
             },
 
             openReplyTextbox() {
