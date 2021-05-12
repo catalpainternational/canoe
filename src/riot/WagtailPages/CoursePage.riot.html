@@ -211,7 +211,7 @@
 
             onMounted(props, state) {
                 const descEl = this.$('.clamp-3-lines');
-                if (descEl.scrollHeight > descEl.clientHeight) {
+                if (descEl && descEl.scrollHeight > descEl.clientHeight) {
                     this.update({hasExpandableDescription: true})
                 }
 
