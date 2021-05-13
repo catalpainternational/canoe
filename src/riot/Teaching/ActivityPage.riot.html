@@ -19,16 +19,16 @@
                 <h3>{ page.title }</h3>
                 <p if="{ page.ready }">{ page.description }</p>
                 <button
-                    if="{state.status !== 'complete'}"
+                    if="{ !page.complete }"
                     class="btn-secondary"
-                    onclick="{() => updateActivity('feedback')}"
+                    onclick="{ setComplete }"
                 >
                     { TRANSLATIONS.markComplete() }
                 </button>
                 <button
-                    if="{state.status === 'complete'}"
+                    if="{ page.complete }"
                     class="btn-primary"
-                    onclick="{() => updateActivity('incomplete')}"
+                    onclick="{ setIncomplete }"
                 >
                     <span class="checkmark"></span>
                     { TRANSLATIONS.markIncomplete()}
@@ -90,7 +90,7 @@
         function ActivityPage() { return {
             state: {
                 selectedTab: "plan",
-                status: "incomplete",
+                status: "content",
             },
 
             onBeforeMount(props, state) {
@@ -111,6 +111,15 @@
 
             selectTab(tabName) {
                 this.update({ selectedTab: tabName });
+            },
+
+            setComplete() {
+                this.page.complete = true;
+                this.updateActivity("feedback");
+            },
+
+            setIncomplete() {
+                this.page.complete = false;
             },
 
             updateActivity(status) {

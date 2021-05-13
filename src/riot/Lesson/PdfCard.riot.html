@@ -4,7 +4,7 @@
         >{ TRANSLATIONS.download() }</a
     >
     <script>
-        import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
+        import { BACKEND_BASE_URL } from "js/urls";
 
         export default {
             TRANSLATIONS: {
@@ -12,7 +12,7 @@
             },
 
             getMediaUrl(documentPath) {
-                return `${BACKEND_BASE_URL}${MEDIA_PATH}${documentPath}`;
+                return `${BACKEND_BASE_URL}${documentPath}`;
             },
         };
     </script>

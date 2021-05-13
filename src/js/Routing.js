@@ -103,21 +103,6 @@ async function getValidManifest() {
 
 //  below here deprecated - but still can be found in certain riot tags
 
-export const parseURLHash = () => {
-    const afterTheHash = window.location.hash.substr(1);
-    return afterTheHash.split("/");
-};
-
-export const getSearchQueryFromUrl = () => {
-    const currentHash = parseURLHash();
-    const queryString = currentHash[0].split("?")[1];
-    return queryString;
-};
-
 export function getNextCardsUrl(lessonId, lessonModule, lessonCardIdx) {
     return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx + 2);
-}
-
-export function getHashPieces() {
-    return location.hash.split("/");
 }

@@ -1,25 +1,27 @@
 <HonorCode>
-    <div>
+    <div class="modal-background fade"></div>
+    <span class="cross gray" onclick="{goToCourseOverview}"></span>
+
+    <div class="modal">
+        <div class="warning-container">
+            <span class="warning"></span>
+        </div>
         <h3>{ TRANSLATIONS.exam() }</h3>
         <p class="score-explanation">
             <raw html="{ youMustScoreAtLeastMessage() }"></raw>
         </p>
-    </div>
-    <div class="code">
-        <h4>{ TRANSLATIONS.code() }</h4>
-        <p>{ TRANSLATIONS.promise() }</p>
-        <div class="i-agree-container" onclick="{agreeToCode}">
-            <span class="checkbox"></span>
-            <span if="{state.hasAgreed}" class="checkmark"></span>
-            <p>{ TRANSLATIONS.agree() }</p>
+        <div class="code">
+            <div class="i-agree-container" onclick="{agreeToCode}">
+                <span class="checkbox {state.hasAgreed ? 'checked' : ''}"><span if="{state.hasAgreed}" class="checkmark"></span></span>
+                <div>
+                    <h4>{ TRANSLATIONS.code() }</h4>
+                    <p>{ TRANSLATIONS.promise() }</p>
+                </div>
+
+            </div>
         </div>
-    </div>
-    <div>
         <button class="btn-primary" onclick="{ goToCourseExam }" disabled="{!state.hasAgreed}">
             { TRANSLATIONS.startExam() }
-        </button>
-        <button class="btn-secondary" onclick="{ goToCourseOverview }">
-            { TRANSLATIONS.backCourse() }
         </button>
     </div>
 
@@ -44,7 +46,6 @@
                     gettext(
                         "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?"
                     ),
-                agree: () => gettext("Yes, I agree"),
                 startExam: () => gettext("Start Exam"),
                 backCourse: () => gettext("Back to Course"),
             },

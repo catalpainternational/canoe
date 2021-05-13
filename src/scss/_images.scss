@@ -41,7 +41,7 @@
 }
 
 .filter-icon {
-    @include mask-icons-shared("~img/levers.svg", contain, $blue);
+    @include mask-icons-shared("~img/levers.svg", contain, $app-accent-color);
     height: 20px;
     width: 20px;
 }
@@ -79,7 +79,7 @@
 
 .settings-icon {
     @extend %bottom-nav-shared;
-    @include mask-icons-shared("~img/cog.svg", contain, $blue);
+    @include mask-icons-shared("~img/cog.svg", contain, $app-accent-color);
 }
 
 .search-icon {
@@ -91,7 +91,7 @@
 }
 
 .checkmark {
-    @include mask-icons-shared("~img/checkmark.svg", contain, $blue);
+    @include mask-icons-shared("~img/checkmark.svg", contain, $app-accent-color);
     height: 16px;
     width: 20px;
 }
@@ -105,22 +105,37 @@
     &.gray {
         background: $gray-1;
     }
+
+    &.red {
+        background: $red;
+    }
+}
+
+.reply-arrow {
+    @include mask-icons-shared("~img/reply_arrow.svg", contain, $gray-3);
+    height: 13px;
+    width: 13px;
+}
+
+.flag {
+    @include mask-icons-shared("~img/flag.svg", contain, $gray-3);
+    height: 13px;
+    width: 13px;
 }
 
 %stat-icon-shared {
     height: 25px;
     width: 25px;
-    background: $blue;
 }
 
 .checkmark-circle {
     @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/checkmark_circle.svg", contain, $blue);
+    @include mask-icons-shared("~img/checkmark_circle.svg", contain, $app-accent-color);
 }
 
 .road-sign {
     @extend %stat-icon-shared;
-    @include mask-icons-shared("~img/road_sign.svg", contain, $blue);
+    @include mask-icons-shared("~img/road_sign.svg", contain, $app-accent-color);
 }
 
 .plant {
@@ -193,6 +208,13 @@
     display: inline-block;
 }
 
+.offline-hand {
+    @include unmaskable-icons-shared("~img/offline_hand.png", contain);
+    min-height: 100px;
+    width: 100px;
+    display: inline-block;
+}
+
 .lesson-presentation {
     @include unmaskable-icons-shared("~img/lesson_presentation.png", contain);
     height: 100%;
@@ -213,13 +235,13 @@
 }
 
 .arrow {
-    @include mask-icons-shared("~img/arrow.svg", contain, $blue);
+    @include mask-icons-shared("~img/arrow.svg", contain, $app-accent-color);
     height: 12px;
     width: 17px;
 }
 
 .download {
-    @include mask-icons-shared("~img/download.svg", contain, $blue);
+    @include mask-icons-shared("~img/download.svg", contain, $app-accent-color);
     height: 22px;
     width: 22px;
     margin-left: -2px;
@@ -234,7 +256,7 @@
 }
 
 .quotation-mark {
-    @include mask-icons-shared("~img/quotation_mark.svg", contain, $blue);
+    @include mask-icons-shared("~img/quotation_mark.svg", contain, $app-accent-color);
     height: 22px;
     width: 18px;
 }
@@ -310,7 +332,7 @@
 }
 
 %status-play {
-    @include status-icon("~img/chevron_right.svg", $blue);
+    @include status-icon("~img/chevron_right.svg", $app-accent-color);
 
     .icon {
         width: 13px;

@@ -34,8 +34,25 @@ export default class Lesson extends Page {
     get completionData(): Record<string, any> {
         const answers = getTestAnswers(this.id);
         return Object.assign(super.completionData, {
-            answers,
-            pageType: "lesson",
+            cardData: Object.fromEntries(
+                Object.entries(answers).map(([uuid, answer]) => {
+                    return [uuid, answer.attempts];
+                })
+            ),
         });
+    }
+
+    get threads(): Array<Thread> {
+        return this.storedData?.discussion;
+    }
+}
+
+class Thread {
+    #id: string;
+    #question?: string;
+
+    constructor(id: string, question?: string) {
+        this.#id = id;
+        this.#question = question;
     }
 }

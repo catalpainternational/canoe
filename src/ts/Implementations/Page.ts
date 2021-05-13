@@ -61,6 +61,13 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     /**
+     * The wagtail page live_revision_id
+     */
+    get revisionId(): BigInteger {
+        return this.manifestData?.revision_id;
+    }
+
+    /**
      * The options to make an page api request
      */
     get requestOptions(): RequestInit {
@@ -199,7 +206,9 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     get tags(): string[] {
-        return this.manifestData?.tags || [];
+        return (
+            this.manifestData?.tags.map((s: string) => s.toLowerCase()) || []
+        );
     }
 
     /** This will do a basic integrity check.
@@ -295,7 +304,8 @@ export class Page extends PublishableItem implements StorableItem {
     /** returns data to be stored with thi page completion */
     get completionData(): Record<string, any> {
         const data = {
-            title: this.title,
+            revisionId: this.revisionId,
+            version: this.version,
             ...this.#completionData,
         };
         this.#completionData = {};
@@ -338,34 +348,27 @@ export class Page extends PublishableItem implements StorableItem {
         };
     }
 
-    getAssetsByIdAndType(
+    getAssetByIdAndType(
         id: number | string,
         assetType: string
-    ): TAssetEntry | undefined {
-        const assets = this.manifestData.assets;
-        const filteredAssets = assets.find((a: TAssetEntry) => {
+    ): Asset | undefined {
+        const asset = this.manifestAssets.find((a: Asset) => {
             return a.id === id.toString() && a.type === assetType;
         });
-        // Handy code if you want to check what assets are being retrieved
-        // console.log(
-        //     `Getting ${assetType} asset:${id}, and found ${JSON.stringify(
-        //         filteredAssets
-        //     )}`
-        // );
-        return filteredAssets;
+        if (asset === undefined) {
+            logger.warn("Missing asset %s: %s, %s", this.title, id, assetType);
+        }
+        return asset;
     }
 
-    getImageRenditions = (id: number | string): TAssetEntry | undefined =>
-        this.getAssetsByIdAndType(id, "image");
+    imageAsset = (id: number | string): Asset | undefined =>
+        this.getAssetByIdAndType(id, "image");
 
-    getMediaRenditions = (id: number | string): TAssetEntry | undefined =>
-        this.getAssetsByIdAndType(id, "media");
+    videoAsset = (id: number | string): Asset | undefined =>
+        this.getAssetByIdAndType(id, "video");
 
-    getVideoRenditions = (id: number | string): TAssetEntry | undefined =>
-        this.getAssetsByIdAndType(id, "video");
-
-    getAudioRenditions = (id: number | string): TAssetEntry | undefined =>
-        this.getAssetsByIdAndType(id, "audio");
+    audioAsset = (id: number | string): Asset | undefined =>
+        this.getAssetByIdAndType(id, "audio");
 }
 
 type ProgressStatus = "not-started" | "in-progress" | "complete";

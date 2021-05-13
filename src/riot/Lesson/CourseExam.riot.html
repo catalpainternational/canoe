@@ -1,8 +1,8 @@
 <CourseExam>
-    <template if="{ !state.results }">
-        <LessonFrame if="{ stage === 'code' && course.examType !== 'prelearning'}" linkTo="{ course.loc_hash }">
+    <template if="{ stage === 'code' || !isNaN(cardNumber) }">
+        <template if="{ stage === 'code' && course.examType !== 'prelearning'}">
             <HonorCode minimumScore="{ course.minimumExamScore }"></HonorCode>
-        </LessonFrame>
+        </template>
         <LessonFrame
             if="{ !isNaN(cardNumber) }"
             id="test"
@@ -12,7 +12,7 @@
             progressMax="{ examCards.length }"
         >
             <Test
-                card-number="{ cardNumber }" 
+                card-number="{ cardNumber }"
             ></Test>
         </LessonFrame>
         <div if="{ !isNaN(cardNumber) }" class="bottom-buttons">
@@ -42,8 +42,9 @@
         </div>
     </template>
     <ExamResults
-        if="{ state.results }"
-        result="{ state.results }"
+        if="{ stage == 'result' }"
+        passed="{ state.result.passed }"
+        score="{ state.result.score }"
     ></ExamResults>
 
     <script>
@@ -57,7 +58,7 @@
         function CourseExam() {
             return {
                 state: {
-                    results: false,
+                    result: undefined,
                 },
 
                 TRANSLATIONS: {
@@ -109,7 +110,13 @@
                     if (result.error) {
                         alert('check you have answered all questions');
                     }
-                    this.update({results: result});
+                    this.update({
+                        result:{
+                            passed: result.passed,
+                            score: result.score,
+                        }
+                    });
+                    location.hash = `${this.course.loc_hash}:exam:result`;
                 },
 
                 hasAnswer() {

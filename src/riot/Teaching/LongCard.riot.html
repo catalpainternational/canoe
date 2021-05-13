@@ -1,15 +1,15 @@
 <LongCard>
-    <a class="long-card {props.status}" href="#{props.link}">
+    <a class="long-card { statusClass() }" href="#{ link() }">
         <div class="card-image">
             <img
                 crossorigin="anonymous"
-                src="{getCardImage()}"
+                src="{ getCardImage() }"
                 class="card-hero-image"
             />
             <span class="card-status"><span class="icon"></span></span>
         </div>
         <div class="card-text">
-            <h5>{props.title}</h5>
+            <h5>{ title() }</h5>
         </div>
     </a>
     <script>
@@ -17,7 +17,26 @@
 
         export default {
             getCardImage() {
-                return getCardImageUrl(this.props.link, this.props.imageUrl);
+                const cardImage = this.props.contentItem
+                    ? this.props.contentItem.cardImage
+                    : '';
+                return getCardImageUrl(this.props.link || this.props.contentItem.id, cardImage);
+            },
+            title() {
+                return this.props.title || this.props.contentItem.title;
+            },
+            statusClass() {
+                return this.props.status || this.props.contentItem.progressStatus;
+            },
+            link() {
+                return this.props.link || this.props.contentItem.loc_hash;
+            },
+            progressValues() {
+                if (this.props.hasOwnProperty('progressValues')) {
+                    return this.props.progressValues;
+                } else {
+                    return this.props.contentItem.progressValues;
+                };
             },
         };
     </script>

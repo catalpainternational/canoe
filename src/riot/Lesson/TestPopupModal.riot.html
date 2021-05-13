@@ -24,6 +24,7 @@
 
     <script>
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
+        import Answer from "ts/Implementations/Answer";
 
         import { getRoute, getTestAnswer, clearPageTestAnswers } from "ReduxImpl/Interface";
 
@@ -51,7 +52,10 @@
                 return getTestAnswer(this.page.id, this.card.id);
             },
             get isQuestionComplete() {
-                return this.answer.correct;
+                return Answer.isCorrect(
+                    this.answer.current,
+                    this.card.answers,
+                );
             },
             get isLastQuestion() {
                 return this.cardNumber === this.page.cards.length;

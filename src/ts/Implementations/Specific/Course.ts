@@ -7,10 +7,18 @@ import {
 } from "ReduxImpl/Interface";
 import { persistExamScore } from "js/actions/ExamScores";
 import Lesson from "./Lesson";
+import Answer from "../Answer";
 
 const EXAM_PASS_SCORE = 0.75;
 
 export default class Course extends Page {
+    get discussions(): any {
+        return this.storedData?.lessons.map((lesson: any) => ({
+            title: lesson.title,
+            id: lesson.id,
+            discussion: lesson.discussion,
+        }));
+    }
     get lessons(): any {
         return this.childPages;
     }
@@ -50,6 +58,10 @@ export default class Course extends Page {
         }
     }
 
+    hasATagIn(tags: string[]): boolean {
+        return this.tags.filter((tag: string) => tags.includes(tag)).length > 0;
+    }
+
     /**  If the course has ans exam we store
      *     the child lessons in this course at the time
      *     any exam responses with its completion */
@@ -58,10 +70,10 @@ export default class Course extends Page {
             lessons: this.childPages.map((l) => {
                 return {
                     id: l.id,
-                    title: l.title,
+                    revisionId: l.revisionId,
+                    version: l.version,
                 };
             }),
-            pageType: "course",
         };
         return Object.assign(super.completionData, courseData);
     }
@@ -86,8 +98,13 @@ export default class Course extends Page {
     saveExamScore(): Record<string, any> {
         const result = this.examResult;
         if (!result.error) {
+            const scoreData = Object.assign(result, {
+                pageId: this.id,
+                version: this.version,
+                revisionId: this.revisionId,
+            });
             // persist in idb and api (this is asyncronous, but synchronously returns the uuid )
-            const examScoreAction = persistExamScore(this.id, result);
+            const examScoreAction = persistExamScore(this.id, scoreData);
 
             // save in redux in memory state
             storeExamScore(this.id, examScoreAction.score);
@@ -115,20 +132,19 @@ export default class Course extends Page {
                 error: "incomplete",
             };
         }
-        const correctAnswers = Object.values(answers).filter((a) => a.correct)
-            .length;
+        const correctAnswers = this.examCards.filter((card) => {
+            return Answer.isCorrect(answers[card.id].current, card.answers);
+        }).length;
         const score = correctAnswers / numberOfQuestions;
-        const answersAnnotated = this.examCards.map((card) => {
-            const answer = answers[card.id];
-            return {
-                question: card.question,
-                answer: answer,
-            };
-        });
         return {
+            cardData: Object.fromEntries(
+                Object.entries(answers).map(([uuid, answer]) => {
+                    return [uuid, answer.current];
+                })
+            ),
             passed: score >= EXAM_PASS_SCORE,
             score,
-            answers: answersAnnotated,
+            passScore: EXAM_PASS_SCORE,
         };
     }
 

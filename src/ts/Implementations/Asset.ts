@@ -263,4 +263,14 @@ export class Asset extends PublishableItem {
         // Return the smallest then
         return asset.renditions[prefRenditionSpecs[0]];
     }
+
+    get metadata(): Record<string, any> {
+        return this.#page.manifest.storedData?.videometa[this.id];
+    }
+    get thumbnail(): string {
+        return `${process.env.API_BASE_URL}/${this.metadata.thumbnail}`;
+    }
+    get duration(): number {
+        return this.metadata.duration;
+    }
 }
