@@ -24,26 +24,29 @@
 
     <div class="content-wrapper">
         <div class="course-details">
-            <h2 id="coursePageTitle">{course.title}</h2>
-            <p if="{course.data.subtitle}" class="course-subtitle">
-                {course.data.subtitle}
-            </p>
+            <h2>{course.title}</h2>
             <p>{course.data.short_description}</p>
-            <p if="{course.data.long_description && state.showLongDescription}">
+            <button if="{ctaObject}" onclick="{goToCTAHash}" class="btn-primary">
+                {ctaObject.copy}
+                <span class="chevron"></span>
+            </button>
+            <p if="{course.data.long_description}" class="{state.showExpandedDescription ? '' : 'clamp-3-lines'}">
                 {course.data.long_description}
             </p>
-            <a
-                if="{course.data.long_description && state.showLongDescription}"
-                onclick="{toggleCourseDescription}"
-                >{ TRANSLATIONS.less() }
-                <span class="chevron down"></span>
-            </a>
-            <a
-                if="{course.data.long_description && !state.showLongDescription}"
-                onclick="{toggleCourseDescription}"
-                >{ TRANSLATIONS.more() }
-                <span class="chevron up"></span>
-            </a>
+            <template if="{state.hasExpandableDescription}">
+                <a
+                    if="{course.data.long_description && state.showExpandedDescription}"
+                    onclick="{toggleCourseDescription}"
+                    >{ TRANSLATIONS.less() }
+                    <span class="chevron down"></span>
+                </a>
+                <a
+                    if="{course.data.long_description && !state.showExpandedDescription}"
+                    onclick="{toggleCourseDescription}"
+                    >{ TRANSLATIONS.more() }
+                    <span class="chevron up"></span>
+                </a>
+            </template>
         </div>
         <div class="lesson-swoop">
             <div class="tab-titles" if="{state.courseHasDiscussions}">
@@ -147,7 +150,8 @@
 
         function CoursePage() { return {
             state: {
-                showLongDescription: false,
+                hasExpandableDescription: false,
+                showExpandedDescription: false,
                 showDownloadModal: false,
                 cached: false,
                 courseHasDiscussions: undefined,
@@ -164,6 +168,8 @@
                 discussion: () => gettext("Discussion"),
                 course_exam: () => gettext("Course exam"),
                 prelearning_survey: () => gettext("Prelearning Survey"),
+                take_exam: () => gettext("Take exam"),
+                take_survey: () => gettext("Take Survey"),
                 highestScore: () => gettext("Highest score"),
                 more: () => gettext("See more"),
                 less: () => gettext("See less"),
@@ -171,6 +177,8 @@
                 download_all: () => gettext("Download all lessons"),
                 offline: () => gettext("You need to be online to use the discussion tool"),
                 try_again: () => gettext("Try again later or reconnect to your network to start interacting with your colleagues"),
+                start: () => gettext("Start learning"),
+                continue: () => gettext("Continue learning"),
             },
 
             get course() {
@@ -199,6 +207,45 @@
                     })
             },
 
+            onMounted(props, state) {
+                const descEl = this.$('.clamp-3-lines');
+                if (descEl && descEl.scrollHeight > descEl.clientHeight) {
+                    this.update({hasExpandableDescription: true})
+                }
+            },
+
+            get ctaObject() {
+                const status = this.course.progressStatus;
+
+                if (!this.course.lessons.length) return null;
+
+                if (status === 'in-progress' && this.course.lessonsComplete) {
+                    const copy = this.course.examIsPrelearning
+                        ? this.TRANSLATIONS.take_survey()
+                        : this.TRANSLATIONS.take_exam();
+                    return {
+                        copy,
+                        hash: this.course.examLink,
+                    }
+                } else if (status === 'in-progress' && !this.course.lessonsComplete) {
+                    return {
+                        copy: this.TRANSLATIONS.continue(),
+                        hash: this.course.lessons
+                                    .filter(it => it.progressStatus !== 'complete')[0].loc_hash,
+                    };
+                } else if (status === 'not-started') {
+                    return {
+                        copy: this.TRANSLATIONS.start(),
+                        hash: this.course.lessons[0].loc_hash,
+                    }
+                }
+
+                return null;
+            },
+
+            goToCTAHash() {
+                location.hash = this.ctaObject.hash;
+            },
 
             backToAllCourses() {
                 location.hash = this.course.parent.loc_hash;
@@ -255,7 +302,7 @@
 
             toggleCourseDescription() {
                 this.update({
-                    showLongDescription: !this.state.showLongDescription,
+                    showExpandedDescription: !this.state.showExpandedDescription,
                 });
             },
 
