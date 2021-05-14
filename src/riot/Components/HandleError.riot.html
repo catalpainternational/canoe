@@ -1,14 +1,35 @@
 <HandleError>
-    <span class="logo">
-        { props.error }
-    </span>
+    <div class="error">
+        <p>
+            { message }
+        </p>
+    </div>
 
     <script>
+        import { getRoute } from "ReduxImpl/Interface";
 
-     export default {
-         onMounted(props, state) {
-             throw props.error;
-         }
-     }   
+        export default {
+            TRANSLATIONS: {
+                no_manifest: () => gettext("Sorry, we cannot retrieve site content."),
+                not_found: () => gettext("Sorry, we cannot find this site content."),
+                unknown: () => gettext("Sorry, an unexpected error has occurred.")
+            },
+
+            get error() {
+                return getRoute().page;
+            },
+            get message() {
+                const translation = this.TRANSLATIONS[this.error.errorType];
+                return translation ? translation() : this.TRANSLATIONS.unknown();
+            }
+        }
+
     </script>
+    <style>
+        .error {
+            width: 200px;
+            padding-top: 50px;
+            margin: auto;
+        }
+    </style>
 </HandleError>
