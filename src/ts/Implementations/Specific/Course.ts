@@ -106,12 +106,15 @@ export default class Course extends Page {
                 });
                 this.complete = true;
             }
-
-            // clear the answers from memory so they do not show up next time
-            clearPageTestAnswers(this.id);
         }
         return result;
     }
+
+    clearExamScores(): any {
+        // clear the answers from memory so they do not show up next time
+        clearPageTestAnswers(this.id);
+    }
+
     /** read from state to check if exam passed */
     get examResult(): Record<string, any> {
         const numberOfQuestions = this.examCards.length;

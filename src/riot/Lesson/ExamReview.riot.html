@@ -1,10 +1,4 @@
 <ExamReview>
-    <!-- TODO -->
-
-    <!-- test component for each result incorrect question, but make it non-interactive somehow? just show if the selected answer is or isn't correct -->
-    <!-- summary screen -->
-    <!-- each exam incorrectquestion as card -->
-
     <div if="{ stage === 'summary'}" class="exam-summary">
         <span class="exam-review"></span>
         <h3>{ TRANSLATIONS.review() }</h3>
@@ -27,12 +21,12 @@
             progressValue="{ stage }"
             progressMax="{ incorrectAnswers.length }"
         >
-        <!-- TODO -->
-            <!-- <Test
-                review=true
+            <Test
+                review={true}
                 card-number="{ stage }"
-                cards="{}"
-            ></Test> -->
+                cards="{ incorrectAnswers }"
+            ></Test>
+            <!-- TODO the revision prompt notes -->
         </LessonFrame>
         <div if="{ !isNaN(stage) }" class="bottom-buttons">
             <div>
@@ -69,11 +63,14 @@
 
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+        import Test from "RiotTags/Lesson/Test.riot.html";
+
         import { getRoute } from "ReduxImpl/Interface";
 
         export default {
             components: {
                 lessonframe: LessonFrame,
+                test: Test,
             },
 
             TRANSLATIONS: {
@@ -99,16 +96,60 @@
             },
 
             get incorrectAnswers() {
-                // TODO need to use TS to put this on the route object somehow
-                if (this.props && this.props.result) {
+                const mockedResult = {
+                    passed: false,
+                    score: 0,
+                    answers: [
+                        {
+                            question: "Was this walkthrough useful? (this is a checkbox exam question)",
+                            answer: {
+                                question: {
+                                    id: "9799aa93-0609-41b8-907b-f3b064160a8a",
+                                    text: "Was this walkthrough useful? (this is a checkbox exam question)"
+                                },
+                                answers: [
+                                    {
+                                        tag: "multiAnswer",
+                                        text: "Yes",
+                                        correct: true
+                                    }
+                                ],
+                                correct: false,
+                                attempts: 0
+                            }
+                        },
+                        {
+                            question: "Is education important? (an example of a multiple choice exam question)",
+                            answer: {
+                                tag: "multiAnswer",
+                                text: "No",
+                                correct: false,
+                                attempts: 0
+                            }
+                        },
+                        {
+                            question: "Which numbers are even?",
+                            answer: {
+                                tag: "multiAnswer",
+                                text: "3",
+                                correct: false,
+                                attempts: 0
+                            }
+                        }
+                    ]
+                }
+                // if (mockedResult.answers) {
+                if (this.course.examResult.answers) {
                     const mappedQuestions = this.course.data.exam_cards
                         .map((it, index) => {
                             return {
                                 ...it,
                                 questionNumber: index + 1,
-                                userAnswer: this.props.result.answers[index],
+                                // userAnswer: mockedResult.answers[index],
+                                userAnswer: this.course.examResult.answers[index],
                             }
                         })
+                    console.log(mappedQuestions.filter((it) => !it.userAnswer.answer.correct))
                     return mappedQuestions.filter((it) => !it.userAnswer.answer.correct)
                 }
                 return [];
@@ -133,10 +174,12 @@
             },
 
             goToCourseOverview() {
+                this.course.clearExamScores();
                 location.hash = `#${this.course.loc_hash}`;
             },
 
             goToCourseExam() {
+                this.course.clearExamScores();
                 location.hash = `#${this.course.examLink}`;
             },
         };

@@ -61,7 +61,10 @@
                 return this.route.page;
             },
             get card() {
-                return this.page.examCards 
+                if (this.props && this.props.review && this.props.card) {
+                    return this.props.card;
+                }
+                return this.page.examCards
                     ? this.page.examCards[this.cardIndex]
                     : this.page.cards[this.cardIndex];
             },
@@ -94,10 +97,10 @@
 
             answerClass(answer) {
                 const selected = this.getAnswer();
-                if (selected !== undefined 
+                if (selected !== undefined
                     && selected.answers.find(a=> a.text === answer.text)) {
                     // this answer has been selected
-                    if (this.page.hasExam || !this.state.haveCheckedAnswers) {
+                    if (!this.props.review && (this.page.hasExam || !this.state.haveCheckedAnswers)) {
                         // we are in an exam or we have not checked answers yet
                         return "answer-pending";
                     } else {
@@ -114,6 +117,8 @@
             },
 
             selectAnswer(answer) {
+                if (this.props.review) return;
+
                 const storedAnswerData = this.getAnswer();
 
                 const nextAnswers = storedAnswerData || {
@@ -121,7 +126,7 @@
                         id: this.card.id,
                         text: this.card.question,
                     },
-                    answers: [], 
+                    answers: [],
                 };
                 const selectedAlready = nextAnswers.answers.findIndex(a => a.text === answer.text);
                 if (selectedAlready !== -1) {

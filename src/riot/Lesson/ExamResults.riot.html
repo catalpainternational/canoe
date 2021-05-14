@@ -48,18 +48,22 @@
             },
 
             goToCourseOverview() {
+                this.course.clearExamScores();
                 location.hash = `#${this.course.loc_hash}`;
             },
 
             goToAllCourses() {
+                this.course.clearExamScores();
                 location.hash = "#";
             },
 
             goToResources() {
+                this.course.clearExamScores();
                 location.hash = "#resources";
             },
 
             goToCourseExam() {
+                this.course.clearExamScores();
                 location.hash = `#${this.course.examLink}`;
             },
 

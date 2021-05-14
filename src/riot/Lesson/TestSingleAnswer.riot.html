@@ -38,7 +38,10 @@
                     return this.route.page;
                 },
                 get card() {
-                    return this.page.examCards 
+                    if (this.props && this.props.review && this.props.card) {
+                        return this.props.card;
+                    }
+                    return this.page.examCards
                         ? this.page.examCards[this.cardIndex]
                         : this.page.cards[this.cardIndex];
                 },
@@ -61,7 +64,7 @@
                     const selected = this.getAnswer();
                     if (selected !== undefined && selected.text === answer.text) {
                         // this answer has been selected
-                        if (this.page.hasExam || !this.state.haveCheckedAnswers) {
+                        if (!this.props.review && (this.page.hasExam || !this.state.haveCheckedAnswers)) {
                             // we are in an exam or we have not checked answers yet
                             return "selected-pending";
                         } else {
@@ -78,6 +81,8 @@
                 },
 
                 selectAnswer(answer) {
+                    if (this.props.review) return;
+                    
                     this.state.haveCheckedAnswers = false;
                     answer["attempts"] = this.state.checkCount;
                     this.setAnswer(answer);
