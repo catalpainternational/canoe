@@ -1,5 +1,6 @@
 <HandleError>
     <div class="error">
+        <h2>{ TRANSLATIONS.title() }</h2>
         <p>
             { message }
         </p>
@@ -10,6 +11,7 @@
 
         export default {
             TRANSLATIONS: {
+                title: () => gettext("Whoops! Something has gone wrong"),
                 no_manifest: () => gettext("Sorry, we cannot retrieve site content."),
                 not_found: () => gettext("Sorry, we cannot find this site content."),
                 unknown: () => gettext("Sorry, an unexpected error has occurred.")
@@ -26,10 +28,18 @@
 
     </script>
     <style>
+
+        handleerror {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .error {
-            width: 200px;
-            padding-top: 50px;
+            padding: 50px;
             margin: auto;
+            text-align: center;
         }
     </style>
 </HandleError>
