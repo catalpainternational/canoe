@@ -24,48 +24,101 @@
 
     <div class="content-wrapper">
         <div class="course-details">
-            <h2 id="coursePageTitle">{course.title}</h2>
-            <p if="{course.data.subtitle}" class="course-subtitle">
-                {course.data.subtitle}
-            </p>
+            <h2>{course.title}</h2>
             <p>{course.data.short_description}</p>
-            <p if="{course.data.long_description && state.showLongDescription}">
+            <button if="{ctaObject}" onclick="{goToCTAHash}" class="btn-primary">
+                {ctaObject.copy}
+                <span class="chevron"></span>
+            </button>
+            <p if="{course.data.long_description}" class="{state.showExpandedDescription ? '' : 'clamp-3-lines'}">
                 {course.data.long_description}
             </p>
-            <a
-                if="{course.data.long_description && state.showLongDescription}"
-                onclick="{toggleCourseDescription}"
-                >{ TRANSLATIONS.less() }
-                <span class="chevron down"></span>
-            </a>
-            <a
-                if="{course.data.long_description && !state.showLongDescription}"
-                onclick="{toggleCourseDescription}"
-                >{ TRANSLATIONS.more() }
-                <span class="chevron up"></span>
-            </a>
+            <template if="{state.hasExpandableDescription}">
+                <a
+                    if="{course.data.long_description && state.showExpandedDescription}"
+                    onclick="{toggleCourseDescription}"
+                    >{ TRANSLATIONS.less() }
+                    <span class="chevron down"></span>
+                </a>
+                <a
+                    if="{course.data.long_description && !state.showExpandedDescription}"
+                    onclick="{toggleCourseDescription}"
+                    >{ TRANSLATIONS.more() }
+                    <span class="chevron up"></span>
+                </a>
+            </template>
         </div>
         <div class="lesson-swoop">
-
-            <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
-            <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
-            <div class="card-container">
-                <Card
-                    each="{lesson in course.lessons}"
-                    contentItem="{ lesson }"
-                ></Card>
+            <div class="tab-titles" if="{state.courseHasDiscussions}">
+                <a
+                    href="#{course.loc_hash}"
+                    class="{state.selectedTab === 'lessons' ? 'selected' : ''}"
+                    onclick="{() => selectTab('lessons')}"
+                >
+                    <h5 class="section-title">{ TRANSLATIONS.lessons() }</h5>
+                </a>
+                <a
+                    href="#{course.loc_hash}:discussion"
+                    class="{state.selectedTab === 'discussion' ? 'selected' : ''}"
+                    onclick="{() => selectTab('discussion')}"
+                >
+                    <h5 class="section-title">{ TRANSLATIONS.discussion() }</h5>
+                </a>
             </div>
-            <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
-            <template if="{ course.ready && course.hasExam }">
-                <h5 class="section-title">{ examTitle() }</h5>
-                <div class="card-container full-width">
+
+
+            <template if="{state.selectedTab === 'lessons'}">
+                <h5 if="{!state.courseHasDiscussions && course.lessons.length}" class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
+                <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
+                <div class="card-container">
                     <Card
-                        title="{examCardTitle()}"
-                        description="{examDescription()}"
-                        link="{ course.examLink }"
-                        status="{ examStatus() }"
-                        progress-values="{ false }"
+                        each="{lesson in course.lessons}"
+                        contentItem="{ lesson }"
                     ></Card>
+                </div>
+                <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
+                <template if="{ course.ready && course.hasExam }">
+                    <h5 class="section-title">{ examTitle() }</h5>
+                    <div class="card-container full-width">
+                        <Card
+                            title="{examCardTitle()}"
+                            description="{examDescription()}"
+                            link="{ course.examLink }"
+                            status="{ examStatus() }"
+                            progress-values="{ false }"
+                        ></Card>
+                    </div>
+                </template>
+            </template>
+
+            <template if="{state.selectedTab === 'discussion' && navigator.onLine}">
+                <div if="{!state.courseHasDiscussions}" class="empty-state">
+                </div>
+                <template if="{state.selectedDiscussionId === null && state.courseHasDiscussions}">
+                    <DiscussionCard
+                        each="{(lesson, index) in course.discussions}"
+                        contentItem="{lesson}"
+                        contentIndex="{index}"
+                        selectDiscussionHandler="{selectDiscussion}"
+                    ></DiscussionCard>
+                </template>
+                <template if="{state.selectedDiscussionId !== null}">
+                    <DiscussionThread
+                        lesson="{state.selectedDiscussionLesson}"
+                        lessonNumber="{getLessonNumber()}"
+                        selectDiscussionHandler="{selectDiscussion}"
+                        question="{state.selectedDiscussion}"
+                    ></DiscussionThread>
+                </template>
+            </template>
+
+            <template if="{state.selectedTab === 'discussion' && !navigator.onLine}">
+                <div class="card full-width">
+                    <div class="message-container">
+                        <span class="offline-hand"></span>
+                        <h3>{TRANSLATIONS.offline()}</h3>
+                        <p>{TRANSLATIONS.try_again()}</p>
+                    </div>
                 </div>
             </template>
         </div>
@@ -84,6 +137,8 @@
 
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
+        import DiscussionCard from "RiotTags/Components/DiscussionCard.riot.html";
+        import DiscussionThread from "RiotTags/Components/DiscussionThread.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
@@ -95,21 +150,35 @@
 
         function CoursePage() { return {
             state: {
-                showLongDescription: false,
+                hasExpandableDescription: false,
+                showExpandedDescription: false,
                 showDownloadModal: false,
                 cached: false,
+                courseHasDiscussions: undefined,
+                selectedTab: 'lessons',
+                selectedDiscussionId: null,
+                selectedDiscussion: {},
+                selectedDiscussionLesson: {},
             },
 
             TRANSLATIONS: {
                 no_lessons: () => gettext("There are no lessons yet in this course"),
+                lessons: () => gettext("Lessons"),
                 your_lessons: () => gettext("Your lessons"),
+                discussion: () => gettext("Discussion"),
                 course_exam: () => gettext("Course exam"),
                 prelearning_survey: () => gettext("Prelearning Survey"),
+                take_exam: () => gettext("Take exam"),
+                take_survey: () => gettext("Take Survey"),
                 highestScore: () => gettext("Highest score"),
                 more: () => gettext("See more"),
                 less: () => gettext("See less"),
                 download_course: () => gettext("Make course available offline"),
                 download_all: () => gettext("Download all lessons"),
+                offline: () => gettext("You need to be online to use the discussion tool"),
+                try_again: () => gettext("Try again later or reconnect to your network to start interacting with your colleagues"),
+                start: () => gettext("Start learning"),
+                continue: () => gettext("Continue learning"),
             },
 
             get course() {
@@ -117,10 +186,65 @@
             },
 
             onBeforeMount(props, state) {
+                const route = getRoute()
+                state.courseHasDiscussions = !!this.course.discussions.filter(it => it.discussion && it.discussion.length).length;
+
+                if (route.riotHash[0]) {
+                    state.selectedTab = 'discussion';
+                }
+
+                if (route.riotHash[2]) {
+                    state.selectedDiscussionId = route.riotHash[2];
+                    state.selectedDiscussionLesson = this.course.data.lessons
+                        .find(it => it.id == route.riotHash[1]);
+                    state.selectedDiscussion = state.selectedDiscussionLesson.discussion
+                        .find(it => it.id == state.selectedDiscussionId);
+                }
+
                 this.course.isAvailableOffline()
                     .then(cached => {
                         this.update({cached});
                     })
+            },
+
+            onMounted(props, state) {
+                const descEl = this.$('.clamp-3-lines');
+                if (descEl && descEl.scrollHeight > descEl.clientHeight) {
+                    this.update({hasExpandableDescription: true})
+                }
+            },
+
+            get ctaObject() {
+                const status = this.course.progressStatus;
+
+                if (!this.course.lessons.length) return null;
+
+                if (status === 'in-progress' && this.course.lessonsComplete) {
+                    const copy = this.course.examIsPrelearning
+                        ? this.TRANSLATIONS.take_survey()
+                        : this.TRANSLATIONS.take_exam();
+                    return {
+                        copy,
+                        hash: this.course.examLink,
+                    }
+                } else if (status === 'in-progress' && !this.course.lessonsComplete) {
+                    return {
+                        copy: this.TRANSLATIONS.continue(),
+                        hash: this.course.lessons
+                                    .filter(it => it.progressStatus !== 'complete')[0].loc_hash,
+                    };
+                } else if (status === 'not-started') {
+                    return {
+                        copy: this.TRANSLATIONS.start(),
+                        hash: this.course.lessons[0].loc_hash,
+                    }
+                }
+
+                return null;
+            },
+
+            goToCTAHash() {
+                location.hash = this.ctaObject.hash;
             },
 
             backToAllCourses() {
@@ -140,6 +264,33 @@
                 document.querySelectorAll('.download-state .download').forEach((it) => it.click());
             },
 
+            selectTab(tabName) {
+                this.update({ selectedTab: tabName, selectedDiscussionId: null });
+            },
+
+            selectDiscussion(id, lesson = null) {
+                let discussion = {};
+                let lessonNumber = null;
+                if (id === null) {
+                    location.hash = `#${this.course.loc_hash}:discussion`;
+                }
+                else {
+                    location.hash = `#${this.course.loc_hash}:discussion:${lesson.id}:${id}`;
+                    discussion = lesson.discussion.find((it) => it.id === id);
+                }
+
+                this.update({
+                    selectedDiscussionId: id,
+                    selectedDiscussionLesson: lesson,
+                    selectedDiscussion: discussion,
+                });
+            },
+
+            getLessonNumber() {
+                const lesson = this.state.selectedDiscussionLesson;
+                return this.course.discussions.findIndex((it) => it.id === lesson.id) + 1;
+            },
+
             examDescription() {
                 const course = this.course;
                 return (
@@ -151,7 +302,7 @@
 
             toggleCourseDescription() {
                 this.update({
-                    showLongDescription: !this.state.showLongDescription,
+                    showExpandedDescription: !this.state.showExpandedDescription,
                 });
             },
 
@@ -170,7 +321,7 @@
                     ? gettext("%1's Prelearning Survey", this.course.title)
                     : gettext("%1's Course Exam", this.course.title);
             },
-            
+
             examTitle() {
                 return this.course.examIsPrelearning
                     ? this.TRANSLATIONS.prelearning_survey()
@@ -191,6 +342,8 @@
 
         CoursePage.components = {
             card: Card,
+            discussioncard: DiscussionCard,
+            discussionthread: DiscussionThread,
             courseexam: CourseExam,
             loadingdots: LoadingDots,
             topmenu: TopMenu,

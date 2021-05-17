@@ -1,9 +1,9 @@
 <TestSingleAnswer>
     <ol>
         <li
-            each="{answer in card.answers}"
-            class="radio { answerItemClass(answer) }"
-            onclick="{() => selectAnswer(answer)}"
+            each="{(answer, index) in card.answers}"
+            class="radio { answerClass(index) }"
+            onclick="{() => selectAnswer(index)}"
         >
             <p>{answer.text}</p>
         </li>
@@ -12,7 +12,7 @@
         if="{ !page.hasExam }"
         class="btn-primary"
         onclick="{ showResults }"
-        disabled="{ getAnswer() === undefined }"
+        disabled="{ storedAnswer === undefined }"
     >
         { TRANSLATIONS.checkAnswer() }
     </button>
@@ -46,7 +46,7 @@
                         : this.page.cards[this.cardIndex];
                 },
 
-                getAnswer() {
+                get storedAnswer() {
                     return getTestAnswer(
                         this.page.id,
                         this.card.id
@@ -60,19 +60,19 @@
                     )
                 },
 
-                answerItemClass(answer) {
-                    const selected = this.getAnswer();
-                    if (selected !== undefined && selected.text === answer.text) {
+                answerClass(answerIndex) {
+                    const current = this.storedAnswer ? this.storedAnswer.current : undefined;
+                    if (current !== undefined && current.includes(answerIndex)) {
                         // this answer has been selected
                         if (!this.props.review && (this.page.hasExam || !this.state.haveCheckedAnswers)) {
                             // we are in an exam or we have not checked answers yet
                             return "selected-pending";
                         } else {
                             // show selection feedback
-                            if (!answer.correct) {
-                                return "selected-wrong";
-                            } else {
+                            if (this.card.answers[answerIndex].correct) {
                                 return "selected";
+                            } else {
+                                return "selected-wrong";
                             }
                         }
                     } else {
@@ -80,20 +80,42 @@
                     }
                 },
 
-                selectAnswer(answer) {
+                selectAnswer(answerIndex) {
                     if (this.props.review) return;
                     
+                    // get the previously stored answer
+                    const nextAnswers = this.storedAnswer || {
+                        current: [],
+                    }
+
+                    // add or remove
+                    const selected = nextAnswers.current.indexOf(answerIndex)
+                    if (selected === -1) {
+                        nextAnswers.current = [answerIndex];
+                    } else {
+                        nextAnswers.current = [];
+                    }
+
                     this.state.haveCheckedAnswers = false;
-                    answer["attempts"] = this.state.checkCount;
-                    this.setAnswer(answer);
+                    this.setAnswer(nextAnswers);
                 },
 
                 showResults() {
-                    this.state.checkCount = this.state.checkCount + 1;
+                    // get the previously stored answer
+                    const nextAnswers = this.storedAnswer;
+
+                    // add the current answer set to the attempts array
+                    nextAnswers.attempts = nextAnswers.attempts || [];
+                    nextAnswers.attempts.push(nextAnswers.current.slice());
+
+                    // store the answer
+                    this.setAnswer(nextAnswers);
+
                     this.update({
                         haveCheckedAnswers: true
                     });
-                    if (this.props.toggleModal) {
+
+                    if ( this.props.toggleModal ) {
                         this.props.toggleModal(true);
                     }
                 },

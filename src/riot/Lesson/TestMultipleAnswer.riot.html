@@ -2,8 +2,10 @@
     <div class="answers-block">
         <h4><raw html="{ TRANSLATIONS.checkAllAnswers() }"></raw></h4>
         <ol>
-            <li each="{(answer, index) in card.answers}" onclick="{() => selectAnswer(answer)}">
-                <div class="checkbox-container {answerClass(answer)}">
+            <li
+                each="{(answer, index) in card.answers}"
+                onclick="{() => selectAnswer(index)}">
+                <div class="checkbox-container {answerClass(index)}">
                     <div class="checkbox">
                         <span>{ alphabet[index] }</span>
                     </div>
@@ -13,12 +15,12 @@
         </ol>
     </div>
     <template if="{ !isExam }">
-        <h4 if="{ getAnswer() }">{ TRANSLATIONS.checkCorrect() }</h4>
+        <h4 if="{ storedAnswer }">{ TRANSLATIONS.checkCorrect() }</h4>
         <button
             if="{!props.isCourseExam}"
             class="btn-primary"
             onclick="{ showResults }"
-            disabled="{ !getAnswer() }"
+            disabled="{ !storedAnswer }"
         >
             { TRANSLATIONS.checkAnswers() }
         </button>
@@ -71,11 +73,8 @@
             get isExam() {
                 return !!this.page.hasExam;
             },
-            getAnswer() {
-                return getTestAnswer(
-                    this.page.id,
-                    this.card.id
-                );
+            get storedAnswer() {
+                return getTestAnswer(this.page.id, this.card.id);
             },
             setAnswer(answer) {
                 storeTestAnswer(
@@ -85,30 +84,19 @@
                 )
             },
 
-            showResults() {
-                this.state.checkCount = this.state.checkCount + 1;
-                this.update({
-                    haveCheckedAnswers: true
-                });
-                if ( this.props.toggleModal ) {
-                    this.props.toggleModal(true);
-                }
-            },
-
-            answerClass(answer) {
-                const selected = this.getAnswer();
-                if (selected !== undefined
-                    && selected.answers.find(a=> a.text === answer.text)) {
+            answerClass(answerIndex) {
+                const current = this.storedAnswer ? this.storedAnswer.current : undefined;
+                if (current !== undefined && current.includes(answerIndex)) {
                     // this answer has been selected
                     if (!this.props.review && (this.page.hasExam || !this.state.haveCheckedAnswers)) {
                         // we are in an exam or we have not checked answers yet
                         return "answer-pending";
                     } else {
                         // show selection feedback
-                        if (!answer.correct) {
-                            return "answer-warning";
-                        } else {
+                        if (this.card.answers[answerIndex].correct) {
                             return "answer-success";
+                        } else {
+                            return "answer-warning";
                         }
                     }
                 } else {
@@ -116,31 +104,44 @@
                 }
             },
 
-            selectAnswer(answer) {
+            selectAnswer(answerIndex) {
                 if (this.props.review) return;
-
-                const storedAnswerData = this.getAnswer();
-
-                const nextAnswers = storedAnswerData || {
-                    question: {
-                        id: this.card.id,
-                        text: this.card.question,
-                    },
-                    answers: [],
-                };
-                const selectedAlready = nextAnswers.answers.findIndex(a => a.text === answer.text);
-                if (selectedAlready !== -1) {
-                    nextAnswers.answers.splice(selectedAlready, 1);
-                } else {
-                    nextAnswers.answers.push(answer);
+                
+                // get the previously stored answer
+                const nextAnswers = this.storedAnswer || {
+                    current: [],
                 }
-                nextAnswers.correct = (
-                    nextAnswers.answers.every(a => a.correct)
-                    && this.card.answers.filter(a => a.correct).length == nextAnswers.answers.length
-                );
+
+                // add or remove
+                const selected = nextAnswers.current.indexOf(answerIndex)
+                if (selected === -1) {
+                    nextAnswers.current.push(answerIndex);
+                } else {
+                    nextAnswers.current.splice(selected, 1);
+                }
+
                 this.state.haveCheckedAnswers = false;
-                nextAnswers["attempts"] = this.state.checkCount;
                 this.setAnswer(nextAnswers);
+            },
+
+            showResults() {
+                // get the previously stored answer
+                const nextAnswers = this.storedAnswer;
+
+                // add the current answer set to the attempts array
+                nextAnswers.attempts = nextAnswers.attempts || [];
+                nextAnswers.attempts.push(nextAnswers.current.slice());
+
+                // store the answer
+                this.setAnswer(nextAnswers);
+
+                this.update({
+                    haveCheckedAnswers: true
+                });
+
+                if ( this.props.toggleModal ) {
+                    this.props.toggleModal(true);
+                }
             },
         };
     </script>

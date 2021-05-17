@@ -1,0 +1,391 @@
+DiscussionCard,
+DiscussionThread,
+DiscussionComment,
+DiscussionReply {
+    display: block;
+
+    + DiscussionCard {
+        margin-top: 20px;
+    }
+
+    .lesson-title {
+        display: grid;
+        grid-template-columns: 25px 1fr;
+        align-items: center;
+        gap: 15px;
+        padding: 0 20px;
+        height: 40px;
+
+        .number {
+            height: 26px;
+            width: 26px;
+            background-color: $white;
+            border: 3px solid $gray-7;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            font-size: 0.8em;
+            color: $gray-3;
+            margin: 0 auto;
+        }
+
+        .title {
+            color: $gray-1;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            line-height: 1.1em;
+            max-height: calc(2 * 1.1em);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+    }
+
+    .card {
+        max-width: $tablet;
+        height: auto;
+        margin: 0 auto;
+        padding: 23px 18px;
+        box-sizing: border-box;
+
+        &:first-of-type {
+            margin-top: 5px;
+        }
+
+        & + .card {
+            margin-top: 1em;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 1.1em;
+            line-height: 1.4em;
+            font-weight: 300;
+
+            &:not(.no-clamp) {
+                max-height: calc(3 * 1.4em);
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+            }
+        }
+    }
+
+    .state {
+        p {
+            text-align: center;
+            margin-bottom: 2em;
+        }
+    }
+
+    .form-group {
+        width: 100%;
+        flex-direction: column;
+        margin-bottom: 15px;
+        border-radius: 3px;
+        display: flex;
+        background-color: #ffffff;
+        box-shadow: inset 0 2px 3px 0 rgb(42 57 66 / 10%);
+        border: 1px solid $gray-7;
+        position: relative;
+        margin-bottom: 1em;
+
+        &.has-focus {
+            border: 1px solid $gray-4;
+        }
+
+        &.has-focus,
+        &.is-filled {
+            label {
+                font-size: 0.7em;
+                top: 6%;
+            }
+        }
+    }
+
+    .btn-primary {
+        width: 80%;
+        margin: 0 auto 1em;
+        display: block;
+    }
+
+    label {
+        left: 0;
+        top: 28%;
+        margin: 0;
+        padding-left: 15px;
+        position: absolute;
+        transition: all 0.3s;
+    }
+
+    textarea {
+        box-sizing: border-box;
+        padding: 23px 15px 3px;
+        min-width: 100%;
+        max-width: 100%;
+        min-height: 44px;
+        height: 44px;
+        border: none;
+        padding-top: 16px;
+        background-color: unset;
+    }
+
+    .message-container {
+        padding-bottom: 2em;
+    }
+}
+
+DiscussionThread {
+    min-height: inherit;
+    box-sizing: border-box;
+    width: 100vw;
+    background-color: $gray-10;
+    margin-left: -20px;
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+    max-width: calc(100% + 40px);
+
+    .lesson-title {
+        grid-template-columns: 20px 25px 1fr;
+        padding: 0;
+        width: 100%;
+    }
+
+    .card {
+        display: flex;
+        align-items: center;
+    }
+
+    .discussion-header {
+        width: 100%;
+        padding: 1.2em 0;
+
+        h2 {
+            font-weight: 300;
+        }
+    }
+
+    .sort-options {
+        font-size: 0.9em;
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        gap: 5px;
+
+        .active {
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $gray-1;
+        }
+
+        .caret {
+            font-size: 0.6em;
+            padding-left: 4px;
+        }
+
+        .option {
+            margin: 0;
+        }
+    }
+}
+
+CoursePage .empty-state {
+    border: 3px solid $gray-7;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    margin-top: 7px;
+
+    .warning {
+        margin: 0 auto;
+        background-color: $yellow;
+        width: 20px;
+        height: 20px;
+    }
+
+    p {
+        padding-right: 5px;
+    }
+}
+
+DiscussionComment,
+DiscussionReply {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    column-gap: 12px;
+    padding: 16px 10px 2px;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+
+    &.recent {
+        background-color: rgba(0,112,240,0.07);
+    }
+
+    .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.6em;
+
+        &.first {
+            background-color: $avatar-pink;
+        }
+
+        &.second {
+            background-color: $avatar-yellow;
+        }
+
+        &.third {
+            background-color: $avatar-teal;
+        }
+
+        &.fourth {
+            background-color: $avatar-darkblue;
+        }
+
+        &.fifth {
+            background-color: $avatar-lightblue;
+        }
+
+        &.sixth {
+            background-color: $avatar-purple;
+        }
+
+        & p {
+            color: white;
+        }
+    }
+
+    .comment {
+        color: $gray-1;
+    }
+
+    .comment-block {
+        position: relative;
+    }
+
+    .toggle-replies {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 13px;
+        height: 13px;
+        border: 1px solid $gray-5;
+        color: $gray-5;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1em;
+        line-height: 0.7em;
+    }
+
+    .meta {
+        display: flex;
+        gap: 8px;
+        align-items: baseline;
+
+        p {
+            font-size: 0.9em;
+            margin: 0;
+        }
+    }
+
+    .controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 0.9em;
+        margin-bottom: 8px;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .reply-arrow,
+    .flag {
+        margin-left: 5px;
+        margin-bottom: -2px;
+    }
+
+    .reply-thread {
+        grid-column: 2;
+    }
+
+    .reply-container {
+        grid-column: 1 / span 2;
+
+        .form-group {
+            margin: 0 0 20px;
+        }
+    }
+}
+
+DiscussionReply {
+    margin-left: 0;
+    padding: 5px 0;
+
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+}
+
+.card.full-width {
+    width: 100vw;
+    margin-left: -20px;
+    border-radius: 8px 8px 0 0;
+    max-width: $tablet;
+    height: auto;
+
+    @media screen and (min-width: $tablet) {
+        margin: 0 auto;
+    }
+}
+
+#toast-message {
+    visibility: hidden;
+    box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+    background-color: $gray-8;
+    color: $gray-3;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    position: fixed;
+    z-index: 999;
+    bottom: calc(#{$bottom-menu-height} + 15px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    align-items: center;
+    column-gap: 20px;
+    width: 80%;
+    height: auto;
+    max-height: 100px;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2s;
+    animation: fadein 0.5s, fadeout 0.5s 2s;
+
+    &.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2s;
+        animation: fadein 0.5s, fadeout 0.5s 2s;
+    }
+
+    & > .checkmark {
+        background-color: $green;
+    }
+}
