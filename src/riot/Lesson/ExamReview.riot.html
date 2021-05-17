@@ -17,7 +17,7 @@
             if="{ !isNaN(stage) }"
             id="test"
             extraStyleClasses="test"
-            linkTo="{ course.loc_hash }"
+            close="{ goToCourseOverview }"
             progressValue="{ stage }"
             progressMax="{ incorrectAnswers.length }"
         >
@@ -26,7 +26,10 @@
                 card-number="{ stage }"
                 cards="{ incorrectAnswers }"
             ></Test>
-            <!-- TODO the revision prompt notes -->
+            <div class="revision-note">
+                <h3>{ TRANSLATIONS.revisionNotes() }</h3>
+                <raw html="{ incorrectAnswers[stage - 1].revision_note }"></raw>
+            </div>
         </LessonFrame>
         <div if="{ !isNaN(stage) }" class="bottom-buttons">
             <div>
@@ -64,6 +67,7 @@
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import Test from "RiotTags/Lesson/Test.riot.html";
+        import Raw from "RiotTags/Components/Raw.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
 
@@ -71,6 +75,7 @@
             components: {
                 lessonframe: LessonFrame,
                 test: Test,
+                raw: Raw,
             },
 
             TRANSLATIONS: {
@@ -81,6 +86,7 @@
                 opportunity: () => gettext('You have the opportunity to retake the exam now and achieve a successful outcome. Alternatively you can return to the course.'),
                 retake: () => gettext('Retake Exam'),
                 backCourse: () => gettext("Back to Course"),
+                revisionNotes: () => gettext("Revision notes"),
             },
 
             get course() {
@@ -174,13 +180,13 @@
             },
 
             goToCourseOverview() {
-                this.course.clearExamScores();
                 location.hash = `#${this.course.loc_hash}`;
+                this.course.clearExamScores();
             },
 
             goToCourseExam() {
-                this.course.clearExamScores();
                 location.hash = `#${this.course.examLink}`;
+                this.course.clearExamScores();
             },
         };
     </script>

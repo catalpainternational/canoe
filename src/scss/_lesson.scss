@@ -699,7 +699,6 @@ ExamReview {
             margin-top: 0;
         }
 
-
         .question-block {
             box-sizing: border-box;
             padding: 1em;
@@ -741,6 +740,18 @@ ExamReview {
                 font-size: 0.8em;
                 position: relative;
             }
+        }
+    }
+
+    .revision-note {
+        background-color: $gray-9;
+        border: 2px solid $gray-7;
+        border-radius: 8px;
+        padding: 20px;
+
+        h3 {
+            font-size: 1em;
+            text-transform: uppercase;
         }
     }
 }
