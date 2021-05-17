@@ -672,8 +672,9 @@ ExamReview {
 
             .chevron {
                 position: absolute;
-                right: 20px;
-                top: 12px;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
             }
         }
 
@@ -748,6 +749,7 @@ ExamReview {
         border: 2px solid $gray-7;
         border-radius: 8px;
         padding: 20px;
+        margin-top: 1.5em;
 
         h3 {
             font-size: 1em;

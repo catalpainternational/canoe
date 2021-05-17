@@ -26,7 +26,7 @@
                 card-number="{ stage }"
                 cards="{ incorrectAnswers }"
             ></Test>
-            <div class="revision-note">
+            <div class="revision-note" if="{ incorrectAnswers[stage - 1].revision_note }">
                 <h3>{ TRANSLATIONS.revisionNotes() }</h3>
                 <raw html="{ incorrectAnswers[stage - 1].revision_note }"></raw>
             </div>
@@ -102,60 +102,16 @@
             },
 
             get incorrectAnswers() {
-                const mockedResult = {
-                    passed: false,
-                    score: 0,
-                    answers: [
-                        {
-                            question: "Was this walkthrough useful? (this is a checkbox exam question)",
-                            answer: {
-                                question: {
-                                    id: "9799aa93-0609-41b8-907b-f3b064160a8a",
-                                    text: "Was this walkthrough useful? (this is a checkbox exam question)"
-                                },
-                                answers: [
-                                    {
-                                        tag: "multiAnswer",
-                                        text: "Yes",
-                                        correct: true
-                                    }
-                                ],
-                                correct: false,
-                                attempts: 0
-                            }
-                        },
-                        {
-                            question: "Is education important? (an example of a multiple choice exam question)",
-                            answer: {
-                                tag: "multiAnswer",
-                                text: "No",
-                                correct: false,
-                                attempts: 0
-                            }
-                        },
-                        {
-                            question: "Which numbers are even?",
-                            answer: {
-                                tag: "multiAnswer",
-                                text: "3",
-                                correct: false,
-                                attempts: 0
-                            }
-                        }
-                    ]
-                }
-                // if (mockedResult.answers) {
                 if (this.course.examResult.answers) {
                     const mappedQuestions = this.course.data.exam_cards
                         .map((it, index) => {
                             return {
                                 ...it,
                                 questionNumber: index + 1,
-                                // userAnswer: mockedResult.answers[index],
                                 userAnswer: this.course.examResult.answers[index],
                             }
                         })
-                    console.log(mappedQuestions.filter((it) => !it.userAnswer.answer.correct))
+
                     return mappedQuestions.filter((it) => !it.userAnswer.answer.correct)
                 }
                 return [];
