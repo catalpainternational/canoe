@@ -122,7 +122,9 @@ export class Discussion {
         );
     };
 
-    static FlagComment = async (flagBody: Record<string, any>): Promise<Response> => {
+    static FlagComment = async (
+        flagBody: Record<string, any>
+    ): Promise<Response> => {
         return Discussion.PostRequest(
             `${ROUTES_FOR_REGISTRATION.discussion}flag/`,
             flagBody
