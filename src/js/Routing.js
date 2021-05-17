@@ -49,7 +49,14 @@ async function route(hashWith) {
         try {
             manifest = await getValidManifest();
         } catch (err) {
-            route = {page: {type: "manifest_error", error: `Manifest retrieval failure. Error: ${err}`}};
+            setRoute({
+                page: {
+                    type: "error",
+                    errorType: "no_manifest",
+                    error: err,
+                }
+            });
+            return;
         }
         if( !isAuthenticated() && REQUIRE_LOGIN )
         { 
@@ -73,7 +80,16 @@ async function route(hashWith) {
                 });
             } else {
                 // If we are a shortcut get the first page of that type from the manifest
-                page = manifest.getPageManifestData(pageHash);
+                try {
+                    page = manifest.getPageManifestData(pageHash);
+                } catch(err) {
+                    setRoute({
+                        page: {
+                            type: "error",
+                            errorType: "not_found",
+                        }
+                    });
+                }
             }
             route = !!page 
                 ? {page, riotHash}
