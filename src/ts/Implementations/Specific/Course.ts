@@ -137,8 +137,9 @@ export default class Course extends Page {
         }
         const correctAnswers = this.examCards.filter((card) => {
             return Answer.isCorrect(answers[card.id].current, card.answers);
-        }).length;
-        const score = correctAnswers / numberOfQuestions;
+        });
+        const score = correctAnswers.length / numberOfQuestions;
+
         return {
             cardData: Object.fromEntries(
                 Object.entries(answers).map(([uuid, answer]) => {
@@ -147,6 +148,7 @@ export default class Course extends Page {
             ),
             passed: score >= EXAM_PASS_SCORE,
             score,
+            correctAnswers,
             passScore: EXAM_PASS_SCORE,
         };
     }

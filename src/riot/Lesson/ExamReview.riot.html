@@ -102,19 +102,18 @@
             },
 
             get incorrectAnswers() {
-                if (this.course.examResult.answers) {
-                    const mappedQuestions = this.course.data.exam_cards
-                        .map((it, index) => {
-                            return {
-                                ...it,
-                                questionNumber: index + 1,
-                                userAnswer: this.course.examResult.answers[index],
-                            }
-                        })
+                const mappedQuestions = this.course.data.exam_cards.map((it, index) => ({
+                    ...it,
+                    questionNumber: index + 1,
+                }))
+                const correctAnswers = this.course.examResult.correctAnswers;
 
-                    return mappedQuestions.filter((it) => !it.userAnswer.answer.correct)
+                if (correctAnswers.length) {
+                    return mappedQuestions.filter((it) => {
+                        return correctAnswers.some(a => a.id !== it.id)
+                    })
                 }
-                return [];
+                return mappedQuestions;
             },
 
             startReview() {

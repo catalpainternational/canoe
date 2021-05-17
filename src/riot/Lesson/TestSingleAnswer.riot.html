@@ -47,10 +47,7 @@
                 },
 
                 get storedAnswer() {
-                    return getTestAnswer(
-                        this.page.id,
-                        this.card.id
-                    );
+                    if (this.card) return getTestAnswer(this.page.id, this.card.id);
                 },
                 setAnswer(answer) {
                     storeTestAnswer(
@@ -82,7 +79,7 @@
 
                 selectAnswer(answerIndex) {
                     if (this.props.review) return;
-                    
+
                     // get the previously stored answer
                     const nextAnswers = this.storedAnswer || {
                         current: [],
