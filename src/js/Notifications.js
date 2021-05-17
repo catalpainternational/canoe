@@ -1,4 +1,4 @@
-import { BACKEND_BASE_URL } from "js/urls";
+import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
 import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { getBrowser } from "ts/PlatformDetection";
 import { urlBase64ToUint8Array } from "js/DjangoPushNotifications";
@@ -39,7 +39,6 @@ const askPermission = () => {
 
 const fetchNotificationSubscription = async (registrationId) => {
     const token = getAuthenticationToken();
-    const notificationsApiUrl = `${BACKEND_BASE_URL}/notifications/subscribe/${registrationId}/`;
     const fetchOptions = {
         mode: "cors",
         headers: {
@@ -47,20 +46,28 @@ const fetchNotificationSubscription = async (registrationId) => {
             Authorization: `JWT ${token}`,
         },
     };
+
+    const notificationsApiUrl = registrationId.startsWith("?")
+        ? `${ROUTES_FOR_REGISTRATION.notificationSubscribe}${registrationId}`
+        : `${ROUTES_FOR_REGISTRATION.notificationSubscribe}/${registrationId}/`;
     const response = await fetch(notificationsApiUrl, fetchOptions);
 
     if (!response.ok) {
         throw new Error(response.status);
     }
 
-    const subscriptionOnServer = await response.json();
+    // Yep, sometimes we get an array back and not a single subscription object
+    let subscriptionOnServer = await response.json();
+    if (Array.isArray(subscriptionOnServer)) {
+        subscriptionOnServer = subscriptionOnServer.find((subscription) => subscription.registration_id === registrationId);
+    }
     return subscriptionOnServer;
 };
 
 const postNotificationSubscription = async (subscriptionData) => {
     const token = getAuthenticationToken();
 
-    const response = await fetch(`${BACKEND_BASE_URL}/notifications/subscribe/`, {
+    const response = await fetch(`${ROUTES_FOR_REGISTRATION.notificationSubscribe}/`, {
         mode: "cors",
         headers: {
             "Content-Type": "application/json",
@@ -121,12 +128,10 @@ const turnOnNotifications = async (swRegistration) => {
         // const permissionResult = await askPermission();
         notificationSubscription = await pushManagerSubscribesToNotifications(swRegistration);
     } catch (error) {
-        alert(`notification error: ${error}`);
         if (error instanceof DOMException) {
             return null;
         }
     }
-    alert(`notificationSubscription: ${notificationSubscription}`);
 
     const subscriptionPostJSON = formatSubscriptionForServer(notificationSubscription);
     return await postNotificationSubscription(subscriptionPostJSON);

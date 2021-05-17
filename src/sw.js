@@ -91,8 +91,8 @@ registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagePreviewv2), new NetworkOnly
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly());
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly(), "POST");
 
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly());
-registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly(), "POST");
+registerRoute(new RegExp(`${ROUTES_FOR_REGISTRATION.notificationSubscribe}.*`), new NetworkOnly());
+registerRoute(new RegExp(`${ROUTES_FOR_REGISTRATION.notificationSubscribe}.*`), new NetworkOnly(), "POST");
 
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.discussion), new NetworkOnly());
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.discussion), new NetworkOnly(), "POST");

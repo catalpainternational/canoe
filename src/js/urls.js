@@ -10,7 +10,7 @@ export const ROUTES_FOR_REGISTRATION = {
     tokenAuth: `${BACKEND_BASE_URL}/token-auth/`,
     pagePreviewv2: `${BACKEND_BASE_URL}/api/v2/page_preview`,
     actions: `${BACKEND_BASE_URL}/progress/actions`,
-    subscribe: `${BACKEND_BASE_URL}/notifications/subscribe.*`,
+    notificationSubscribe: `${BACKEND_BASE_URL}/notifications/subscribe`,
     socketInfo: "/sockjs-node/info",
     appelflapPKIsign: `${APPELFLAP_PKI}/sign-cert`,
     discussion: `${BACKEND_BASE_URL}/discussion/`,
