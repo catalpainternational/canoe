@@ -4,7 +4,7 @@ import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { v4 as uuidv4 } from "uuid";
 
 export class Discussion {
-    CreateComment(
+    static CreateComment(
         commentBody: string,
         parentId = "",
         pageId = "",
@@ -24,7 +24,7 @@ export class Discussion {
         return comment;
     }
 
-    CreateFlag(
+    static CreateFlag(
         postingId: string,
         flagInappropriate: boolean
     ): Record<string, any> {
@@ -36,7 +36,7 @@ export class Discussion {
         };
     }
 
-    async Get(
+    static async Get(
         discussionId: string
     ): Promise<Array<Record<string, any>> | number> {
         const url = `${ROUTES_FOR_REGISTRATION.discussion}discussion/${discussionId}/`;
@@ -77,7 +77,7 @@ export class Discussion {
     }
 
     /** Reconstitute discussion hierarchies from the flat list of discussion postings */
-    Rebuild(
+    static Rebuild(
         discussion: Array<Record<string, any>>,
         parentId = null
     ): Array<Record<string, any>> {
@@ -96,7 +96,7 @@ export class Discussion {
         });
     }
 
-    private postRequest = async (
+    static PostRequest = async (
         url: string,
         body: Record<string, any>
     ): Promise<Response> => {
@@ -113,17 +113,17 @@ export class Discussion {
         return fetch(url, init);
     };
 
-    PostComment = async (
+    static PostComment = async (
         commentBody: Record<string, any>
     ): Promise<Response> => {
-        return this.postRequest(
+        return Discussion.PostRequest(
             `${ROUTES_FOR_REGISTRATION.discussion}posting/`,
             commentBody
         );
     };
 
-    FlagComment = async (flagBody: Record<string, any>): Promise<Response> => {
-        return this.postRequest(
+    static FlagComment = async (flagBody: Record<string, any>): Promise<Response> => {
+        return Discussion.PostRequest(
             `${ROUTES_FOR_REGISTRATION.discussion}flag/`,
             flagBody
         );

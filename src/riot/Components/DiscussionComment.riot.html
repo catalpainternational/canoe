@@ -72,10 +72,6 @@
                 postComment: () => gettext("Post a comment"),
             },
 
-            onBeforeMount(props, state) {
-                this.state.discussion = new Discussion();
-            },
-
             onMounted(props, state) {
                 this.getDate();
             },
@@ -101,7 +97,7 @@
             addReply() {
                 const commentInput = this.$("#reply");
 
-                const newComment = this.state.discussion.CreateComment(
+                const newComment = Discussion.CreateComment(
                     commentInput.value,
                     this.props.comment.id,
                 );

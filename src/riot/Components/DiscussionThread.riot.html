@@ -109,14 +109,13 @@
                 },
 
                 onBeforeMount(props, state) {
-                    this.state.discussion = new Discussion();
                     this.updateComments();
                 },
 
                 updateComments(callback, callbackArg) {
                     this.state.loading = true;
 
-                    this.state.discussion.Get(this.props.question.id).then((response) => {
+                    Discussion.Get(this.props.question.id).then((response) => {
                         if (typeof response !== "object") {
                             if (response === 401) {
                                 this.update({ loading: false, promptLogin: true })
@@ -128,7 +127,7 @@
                         }
 
                         this.update({
-                            comments: this.state.discussion.Rebuild(response),
+                            comments: Discussion.Rebuild(response),
                             loading: false,
                             error: false,
                         });
@@ -191,14 +190,14 @@
                 addComment() {
                     const input = this.$('#comment');
 
-                    const newComment = this.state.discussion.CreateComment(
+                    const newComment = Discussion.CreateComment(
                         input.value,
                         "",
                         this.props.lesson.id,
                         this.props.question.id,
                     );
 
-                    this.state.discussion.PostComment(newComment).then((response) =>{
+                    Discussion.PostComment(newComment).then((response) =>{
                         if (!response.ok) {
                             this.commentStatus(newComment.id, this.TRANSLATIONS.error(), false);
                             throw new Error(`Comment failed, HTTP status: ${response.status}`);
@@ -217,7 +216,7 @@
                         discussion_id: this.props.question.id,
                     }
 
-                    this.state.discussion.PostComment(newReply).then((response) =>{
+                    Discussion.PostComment(newReply).then((response) =>{
                         if (!response.ok) {
                             this.commentStatus(newReply.id, this.TRANSLATIONS.error(), false);
                             throw new Error(`Reply failed, HTTP status: ${response.status}`);
@@ -231,12 +230,12 @@
                 },
 
                 addFlag(comment) {
-                    const newFlag = this.state.discussion.CreateFlag(
+                    const newFlag = Discussion.CreateFlag(
                         comment.id,
                         true
                     );
 
-                    this.state.discussion.FlagComment(newFlag).then((response) =>{
+                    Discussion.FlagComment(newFlag).then((response) =>{
                         if (!response.ok) {
                             this.commentStatus(newFlag.id, this.TRANSLATIONS.error(), false);
                             throw new Error(`Flagging failed, HTTP status: ${response.status}`);
