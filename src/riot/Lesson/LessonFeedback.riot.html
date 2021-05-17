@@ -1,5 +1,5 @@
 <LessonFeedback>
-    <LessonFrame linkTo="{ state.lesson.course.loc_hash }">
+    <LessonFrame linkTo="{ lesson.course.loc_hash }">
         <template if="{!state.submittedFeedback}">
             <div class="message-container">
                 <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
@@ -80,7 +80,6 @@
     </div>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
-        import { logLessonFeedback } from "js/GoogleAnalytics";
         import { getRoute } from "ReduxImpl/Interface";
         import saveFeedbackToIdb from "js/Telemetry/idb";
         import { debounce } from "js/utilities";
@@ -122,8 +121,8 @@
                 comment: "",
             },
 
-            onBeforeMount(props, state) {
-                this.state.lesson = getRoute().page;
+            get lesson() {
+                return getRoute().page;
             },
 
             clickedThisLessonIs(rating) {
@@ -155,7 +154,7 @@
             },
 
             goToSectionEnd() {
-                window.location.hash = `#${this.state.lesson.loc_hash}:content:complete`;
+                window.location.hash = `#${this.lesson.loc_hash}:content:complete`;
             },
 
             debounce(func) {
@@ -168,21 +167,14 @@
             },
 
             sendFeedback(feedbackString) {
-                const { lessonId, courseId } = this.props;
                 const { comment } = this.state;
                 const feedback = feedbackString;
 
                 saveFeedbackToIdb({
-                    lesson: lessonId,
-                    course: courseId,
-                    feedback,
-                    comment,
+                    pageId: this.lesson.id,
+                    revisionId: this.lesson.revisionId,
+                    version: this.lesson.version,
                     date: new Date().valueOf(),
-                });
-
-                logLessonFeedback({
-                    lessonId,
-                    courseId,
                     feedback,
                     comment,
                 });

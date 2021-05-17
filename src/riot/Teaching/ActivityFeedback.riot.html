@@ -79,7 +79,7 @@
     </div>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
-        import { logLessonFeedback } from "js/GoogleAnalytics";
+        import saveFeedbackToIdb from "js/Telemetry/idb";
         import { getRoute } from "ReduxImpl/Interface";
 
         export default {
@@ -115,8 +115,8 @@
                 activeSelection: null,
             },
 
-            onBeforeMount(props, state) {
-                this.state.lesson = getRoute().page;
+            get activity() {
+                return getRoute().page;
             },
 
             clickedThisLessonIs(rating) {
@@ -152,14 +152,15 @@
             },
 
             sendFeedback(feedbackString) {
-                const lesson = this.props.lessonName;
                 const feedback = feedbackString;
                 const feedbackComment = document.getElementById("feedback").value;
 
-                logLessonFeedback({
-                    lesson,
+                saveFeedbackToIdb({
+                    pageId: this.actvity.id,
+                    revisionId: this.actvity.revisionId,
+                    version: this.actvity.version,
                     feedback,
-					feedbackComment
+                    feedbackComment,
                 });
             },
 
