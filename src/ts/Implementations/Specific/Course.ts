@@ -23,13 +23,13 @@ export default class Course extends Page {
         return this.childPages;
     }
     get hasExam(): boolean {
-        return this.examCards && !!this.examCards.length;
+        return this.manifestData.has_exam;
     }
     get examType(): string {
-        return this.storedData.exam_type;
+        return this.manifestData.exam_type;
     }
     get examIsPrelearning(): boolean {
-        return this.examCards && this.examType === "prelearning";
+        return this.hasExam && this.examType === "prelearning";
     }
     get examLink(): string {
         const startOrCode = this.examIsPrelearning ? 1 : "code";
@@ -157,15 +157,10 @@ export default class Course extends Page {
      */
     get progressValues(): ProgressValues {
         const values = super.progressValues;
-        if (!this.ready) {
-            // kick of an async prepare to get the exam data
-            this.prepare();
-            // return the progress without exam data
-            return values;
-        } else {
-            values.min += this.isExamFinished ? 1 : 0;
-            values.max += this.hasExam ? 1 : 0;
-            return values;
-        }
+        // if the exam is finished count it in the number done
+        values.min += this.isExamFinished ? 1 : 0;
+        // if the course has an exam count it in the number to do
+        values.max += this.hasExam ? 1 : 0;
+        return values;
     }
 }
