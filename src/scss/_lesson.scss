@@ -751,6 +751,26 @@ ExamReview {
         padding: 20px;
         margin-top: 1.5em;
 
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .warning-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $yellow;
+            height: 2em;
+            width: 2em;
+            border-radius: 50%;
+
+            .warning {
+                background-color: $white;
+            }
+        }
+
         h3 {
             font-size: 1em;
             text-transform: uppercase;

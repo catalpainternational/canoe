@@ -27,7 +27,12 @@
                 cards="{ incorrectAnswers }"
             ></Test>
             <div class="revision-note" if="{ incorrectAnswers[stage - 1].revision_note }">
-                <h3>{ TRANSLATIONS.revisionNotes() }</h3>
+                <div class="title">
+                    <div class="warning-container">
+                        <span class="warning"></span>
+                    </div>
+                    <h3>{ TRANSLATIONS.revisionNotes() }</h3>
+                </div>
                 <raw html="{ incorrectAnswers[stage - 1].revision_note }"></raw>
             </div>
         </LessonFrame>
