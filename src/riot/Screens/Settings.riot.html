@@ -6,8 +6,8 @@
         <div class="content-wrapper">
             <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
                 <div
-                    class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
-                    onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"
+                    class="switch {state.subscribedToNotifications ? 'on' : 'off'}"
+                    onclick="{state.subscribedToNotifications ? unsubscribe : subscribe}"
                 >
                     <input type="checkbox" id="notifications-toggle"/>
                     <div class="slider"></div>
@@ -54,7 +54,7 @@
         export default {
             state: {
                 browserSupportsNotifications: false,
-                isSubscribedToNotifications: false,
+                subscribedToNotifications: false,
                 disableNotificationsButton: false,
                 canAddToHomeScreen: false,
                 isAuthenticated: undefined,
@@ -90,14 +90,14 @@
                 });
 
                 const browserSupportsNotifications = await supportsPushManager();
-
                 if (!browserSupportsNotifications) {
                     return;
                 }
 
+                const subscriptionState = await isSubscribedToNotifications(this.subscribedToNotifications);
                 this.update({
                     browserSupportsNotifications,
-                    isSubscribedToNotifications: await isSubscribedToNotifications(),
+                    subscribedToNotifications: subscriptionState,
                 });
             },
 

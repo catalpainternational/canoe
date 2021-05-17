@@ -20,6 +20,23 @@ const deleteStoredRegistrationId = () => {
     localStorage.removeItem(NOTIFICATION_ID_KEY);
 };
 
+const askPermission = () => {
+    return new Promise((resolve, reject) => {
+        const permissionResult = Notification.requestPermission((result) => {
+            resolve(result);
+        });
+
+        if (permissionResult) {
+            permissionResult.then(resolve, reject);
+        }
+    })
+    .then((permissionResult) => {
+        if (permissionResult !== 'granted') {
+            throw new Error('We weren\'t granted permission.');
+        }
+    });
+}
+
 const fetchNotificationSubscription = async (registrationId) => {
     const token = getAuthenticationToken();
     const notificationsApiUrl = `${BACKEND_BASE_URL}/notifications/subscribe/${registrationId}/`;
@@ -62,10 +79,11 @@ const postNotificationSubscription = async (subscriptionData) => {
 };
 
 const pushManagerSubscribesToNotifications = async (registration) => {
-    const notificationSubscription = await registration.pushManager.subscribe({
+    const subscribeOptions = {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(APPLICATION_SERVER_KEY),
-    });
+    };
+    const notificationSubscription = await registration.pushManager.subscribe(subscribeOptions);
     return notificationSubscription;
 };
 
@@ -100,12 +118,15 @@ const formatSubscriptionForServer = (notificationSubscription) => {
 const turnOnNotifications = async (swRegistration) => {
     let notificationSubscription = null;
     try {
+        // const permissionResult = await askPermission();
         notificationSubscription = await pushManagerSubscribesToNotifications(swRegistration);
     } catch (error) {
+        alert(`notification error: ${error}`);
         if (error instanceof DOMException) {
             return null;
         }
     }
+    alert(`notificationSubscription: ${notificationSubscription}`);
 
     const subscriptionPostJSON = formatSubscriptionForServer(notificationSubscription);
     return await postNotificationSubscription(subscriptionPostJSON);
@@ -145,9 +166,12 @@ export const unsubscribeFromNotifications = async () => {
 };
 
 export const isSubscribedToNotifications = async () => {
-    const localRegistrationID = getStoredRegistrationId();
+    if (!hasPermissionToNotify()) {
+        return false;
+    }
 
-    if (localRegistrationID === null || !hasPermissionToNotify()) {
+    const localRegistrationID = getStoredRegistrationId();
+    if (localRegistrationID === null) {
         return false;
     }
 
