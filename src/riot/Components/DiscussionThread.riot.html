@@ -59,7 +59,7 @@
             comment="{comment}"
             lesson="{props.lesson}"
             addReply="{addReply}"
-            flagInappropriate="{flagInappropriate}"
+            addFlag="{addFlag}"
             updateCommentValue="{updateCommentValue}"
             setInputFocus="{setInputFocus}"
             removeInputFocus="{removeInputFocus}"
@@ -76,8 +76,7 @@
         import DiscussionComment from "RiotTags/Components/DiscussionComment.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
 
-        import { postComment, getDiscussionComments, flagComment } from "js/DiscussionUtilities";
-        import { v4 as uuidv4 } from "uuid";
+        import { Discussion } from "ts/Discussion";
 
         function DiscussionThread() {
             return {
@@ -113,11 +112,10 @@
                     this.updateComments();
                 },
 
-
                 updateComments(callback, callbackArg) {
                     this.state.loading = true;
 
-                    getDiscussionComments(this.props.question.id).then((response) => {
+                    Discussion.Get(this.props.question.id).then((response) => {
                         if (typeof response !== "object") {
                             if (response === 401) {
                                 this.update({ loading: false, promptLogin: true })
@@ -129,34 +127,15 @@
                         }
 
                         this.update({
-                            comments: this.mapComments(response),
+                            comments: Discussion.Rebuild(response),
                             loading: false,
                             error: false,
                         });
-                        if (callback) callback(callbackArg);
-                    })
-                },
 
-                mapComments(comments) {
-                    return comments.map((comment, index, array) => {
-                        const firstname = comment.user_first_name || comment.user_username;
-                        const lastname = comment.user_last_name || comment.user_username;
-                        return {
-                            ...comment,
-                            initials: `${firstname[0]}${lastname[0]}`,
-                            date: new Date(comment.date_created),
-                            replies: array.filter((it) => it.parent_id === comment.id)
-                                .map(it => {
-                                    const firstname = it.user_first_name || it.user_username;
-                                    const lastname = it.user_last_name || it.user_username;
-                                    return {
-                                        ...it,
-                                        initials: `${firstname[0]}${lastname[0]}`,
-                                    };
-                                }),
-                            };
+                        if (callback) {
+                            callback(callbackArg);
+                        }
                     })
-                    .filter((comment) => comment.parent_id === null);
                 },
 
                 toggleSort() {
@@ -209,24 +188,23 @@
                 },
 
                 addComment() {
-                    const commentInput = this.$('#comment');
+                    const input = this.$('#comment');
 
-                    const newComment = {
-                        page_id: this.props.lesson.id,
-                        discussion_id: this.props.question.id,
-                        date_created: new Date().toISOString().replace('Z', '+00:00'),
-                        comment: commentInput.value,
-                        id: uuidv4(),
-                    }
+                    const newComment = Discussion.CreateComment(
+                        input.value,
+                        "",
+                        this.props.lesson.id,
+                        this.props.question.id,
+                    );
 
-                    postComment(newComment).then((response) =>{
+                    Discussion.PostComment(newComment).then((response) =>{
                         if (!response.ok) {
                             this.commentStatus(newComment.id, this.TRANSLATIONS.error(), false);
                             throw new Error(`Comment failed, HTTP status: ${response.status}`);
                         }
                         else {
                             this.updateComments(this.commentStatus, newComment.id);
-                            commentInput.value = '';
+                            input.value = "";
                         }
                     });
                 },
@@ -238,15 +216,32 @@
                         discussion_id: this.props.question.id,
                     }
 
-                    postComment(newReply).then((response) =>{
+                    Discussion.PostComment(newReply).then((response) =>{
                         if (!response.ok) {
                             this.commentStatus(newReply.id, this.TRANSLATIONS.error(), false);
-                            throw new Error(`Comment failed, HTTP status: ${response.status}`);
+                            throw new Error(`Reply failed, HTTP status: ${response.status}`);
                         }
                         else {
                             this.updateComments(this.commentStatus, newReply.id);
-                            input.value = '';
+                            input.value = "";
                             closeCallback();
+                        }
+                    });
+                },
+
+                addFlag(comment) {
+                    const newFlag = Discussion.CreateFlag(
+                        comment.id,
+                        true
+                    );
+
+                    Discussion.FlagComment(newFlag).then((response) =>{
+                        if (!response.ok) {
+                            this.commentStatus(newFlag.id, this.TRANSLATIONS.error(), false);
+                            throw new Error(`Flagging failed, HTTP status: ${response.status}`);
+                        }
+                        else {
+                            this.commentStatus(newFlag.id, this.TRANSLATIONS.inappropriate());
                         }
                     });
                 },
@@ -256,7 +251,6 @@
                         toastMessage: customMessage,
                         successfulToast: success,
                     });
-
 
                     const toast = document.getElementById('toast-message');
                     toast.className = 'show';
@@ -271,27 +265,6 @@
                             newCommentEl.className = '';
                         }, 6000)
                     }
-                },
-
-                flagInappropriate(comment) {
-                    const flaggedComment = {
-                        page_id: comment.page_id,
-                        discussion_id: comment.discussion_id,
-                        date_created: new Date().toISOString().replace('Z', '+00:00'),
-                        flag_inappropriate: true,
-                        id: uuidv4(),
-                        posting_id: comment.id,
-                    }
-
-                    flagComment(flaggedComment).then((response) =>{
-                        if (!response.ok) {
-                            this.commentStatus(flaggedComment.id, this.TRANSLATIONS.error(), false);
-                            throw new Error(`Comment failed, HTTP status: ${response.status}`);
-                        }
-                        else {
-                            this.commentStatus(flaggedComment.id, this.TRANSLATIONS.inappropriate());
-                        }
-                    });
                 },
 
                 loginRedirect() {

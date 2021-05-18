@@ -94,6 +94,9 @@ registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly(), "P
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly());
 registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly(), "POST");
 
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.discussion), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.discussion), new NetworkOnly(), "POST");
+
 // Set up routes to Appelflap, if Canoe is not hosted by Appelflap this does nothing
 buildAppelflapRoutes().forEach((routeDef) => {
     registerRoute(new RegExp(routeDef[0]), new NetworkOnly(), routeDef[1]);
