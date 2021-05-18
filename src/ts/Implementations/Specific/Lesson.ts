@@ -22,13 +22,6 @@ export default class Lesson extends Page {
     get ready(): boolean {
         return super.ready && this.course.ready;
     }
-    /**
-     * Prepare both this page and the parent course
-     */
-    async prepare(): Promise<void> {
-        await super.prepare();
-        return this.course.prepare();
-    }
 
     /**  We store the responses to any test cards with its completion */
     get completionData(): Record<string, any> {
