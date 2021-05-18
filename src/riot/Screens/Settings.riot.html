@@ -26,7 +26,11 @@
                 { TRANSLATIONS.add() }
             </button>
 
-            <button class="btn-secondary" onclick="{logout}">{ TRANSLATIONS.logout() }</button>
+            <button class="btn-secondary" 
+                onclick="{ state.isAuthenticated ? logout : login }"
+            >
+                { state.isAuthenticated ? TRANSLATIONS.logout() : TRANSLATIONS.login() }
+            </button>
 
             <Logos></Logos>
         </div>
@@ -44,7 +48,8 @@
         } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
         import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
-        import { getPlatform } from "js/PlatformDetection";
+        import { getPlatform } from "ts/PlatformDetection";
+        import { isAuthenticated } from "ReduxImpl/Interface";
 
         export default {
             state: {
@@ -52,7 +57,9 @@
                 isSubscribedToNotifications: false,
                 disableNotificationsButton: false,
                 canAddToHomeScreen: false,
+                isAuthenticated: undefined,
             },
+
             components: {
                 languageselector: LanguageSelector,
                 logos: Logos,
@@ -63,16 +70,23 @@
                 settings: () => gettext("Your settings"),
                 notifications: () => gettext("I would like to receive notifications"),
                 add: () => gettext("Add to Home Screen"),
-                logout: () => gettext("Log out"),
+                logout: () => gettext("Logout"),
+                login: () => gettext("Login")
             },
 
             logout() {
                 logout();
+                window.location.hash = "";
+            },
+
+            login() {
+                window.location.hash = "#login";
             },
 
             async refreshSettings() {
                 this.update({
                     canAddToHomeScreen: this.shouldShowAddToHomeScreen(),
+                    isAuthenticated: isAuthenticated(),
                 });
 
                 const browserSupportsNotifications = await supportsPushManager();

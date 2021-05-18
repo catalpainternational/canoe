@@ -5,16 +5,50 @@ TopMenu {
         position: relative;
         max-width: $tablet;
         background-color: inherit;
+        background-size: cover;
+        background-position: center;
     }
 
     .with-swoop {
         @extend %header-swoop;
         height: 100px;
         margin: auto auto 35px auto;
+
+        &.has-image {
+            height: clamp(120px, 20vh, 190px);
+        }
+
+        & h3 {
+            margin-bottom: 0.5em;
+        }
+
+        .filter-copy-container {
+            display: grid;
+            grid-template-columns: 1fr 40px;
+            column-gap: 15%;
+            align-items: center;
+            margin-bottom: 20px;
+
+            & > p {
+                margin: 0;
+            }
+        }
+
+        .show-tags {
+            background-color: $app-accent-color;
+            box-shadow: inset 0 2px 4px 0 rgba(42, 57, 66, 0.5);
+
+            .filter-icon {
+                background-color: white;
+            }
+        }
     }
 
     .without-swoop {
-        @extend %center-with-flex;
+        display: grid;
+        grid-template-columns: 60px 1fr 60px;
+        justify-content: center;
+        align-items: center;
         height: $top-menu-height;
         margin: auto;
 
@@ -25,13 +59,14 @@ TopMenu {
     }
 
     h4 {
-        text-align: center;
         color: $gray-3;
         font-weight: 200;
     }
 
-    h4, h5 {
-        max-width: 70%;
+    h4,
+    h5 {
+        grid-column: 2 / 2;
+        text-align: center;
     }
 
     span {
@@ -45,10 +80,12 @@ TopMenu {
         mask-position: center;
 
         &.right {
+            grid-column: 3 / 3;
             right: 15px;
         }
 
         &.left {
+            grid-column: 1 / 1;
             left: 15px;
         }
     }

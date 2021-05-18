@@ -1,31 +1,32 @@
 <TestPopupModal>
     <PopupModal>
-        <span class="{ props.isQuestionComplete ? 'correct-checkmark' : 'incorrect-cross'}"></span>
-        <h3>{ props.isQuestionComplete ? correctTitleMessage(props.selectedAnswer) : incorrectTitleMessage(props.selectedAnswer) }</h3>
+        <span class="{ isQuestionComplete ? 'correct-checkmark' : 'incorrect-cross'}"></span>
+        <h3>{ isQuestionComplete ? correctTitleMessage : incorrectTitleMessage }</h3>
         <div>
-            <p>{ props.isQuestionComplete ? correctTextMessage(props.selectedAnswer) : incorrectTextMessage(props.selectedAnswer) }</p>
+            <p>{ isQuestionComplete ? correctTextMessage : incorrectTextMessage }</p>
         </div>
-        <button 
-            if="{props.isQuestionComplete && !props.isLastQuestion}" 
-            class="btn-primary" 
-            onclick="{ nextTestCard }" 
+        <button
+            if="{isQuestionComplete && !isLastQuestion}"
+            class="btn-primary"
+            onclick="{ nextCard }"
         >{ TRANSLATIONS.next() }</button>
-        <button 
-            if="{props.isQuestionComplete && props.isLastQuestion}" 
-            class="btn-primary" 
-            onclick="{ completePage }" 
+        <button
+            if="{isQuestionComplete && isLastQuestion}"
+            class="btn-primary"
+            onclick="{ completePage }"
         >{ TRANSLATIONS.finish() }</button>
         <button
-            if="{!props.isQuestionComplete}"
+            if="{!isQuestionComplete}"
             class="btn-primary"
-            onclick="{ () => props.toggleModal(false, {}) }"
+            onclick="{ () => props.toggleModal(false) }"
         >{ TRANSLATIONS.try() }</button>
     </PopupModal>
 
     <script>
-        import { getNextCardsUrl } from "js/Routing";
-        import { setComplete } from "Actions/completion";
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
+        import Answer from "ts/Implementations/Answer";
+
+        import { getRoute, getTestAnswer, clearPageTestAnswers } from "ReduxImpl/Interface";
 
         export default {
             components: {
@@ -38,44 +39,75 @@
                 try: () => gettext('Try again'),
             },
 
-            nextTestCard() {
-                this.props.toggleModal(false, {});
-                window.scroll(0, 0);
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.props.cardIdx
+            get page() {
+                return getRoute().page;
+            },
+            get cardNumber() {
+                return parseInt(getRoute().riotHash[1]);
+            },
+            get card() {
+                return this.page.cards[this.cardNumber - 1];
+            },
+            get answer() {
+                return getTestAnswer(this.page.id, this.card.id);
+            },
+            get isQuestionComplete() {
+                return Answer.isCorrect(
+                    this.answer.current,
+                    this.card.answers,
                 );
+            },
+            get isLastQuestion() {
+                return this.cardNumber === this.page.cards.length;
+            },
+
+
+            nextCard() {
+                this.props.toggleModal(false);
+                window.scroll(0, 0);
+                location.hash = `${this.page.loc_hash}:content:${this.cardNumber + 1}`;
             },
 
             completePage() {
-                this.props.toggleModal(false, {});
-                setComplete(this.props.courseSlug, this.props.lesson.slug, this.props.module);
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.props.cardIdx
-                );
+                this.props.toggleModal(false);
+                this.page.complete = true;
+
+                // clear the answers from memory so they do not show up next time
+                clearPageTestAnswers(this.page.id);
+
+                location.hash = this.page.loc_hash + ":content:feedback";
             },
 
-            correctTitleMessage(selectedAnswer) {
+            get correctTitleMessage() {
                 // title for correct answer feedback
-                return selectedAnswer.feedback_title || gettext("Great");
+                if (this.answer.feedback) {
+                    return this.answer.feedback.title || gettext("Great");
+                }
+                return gettext("Great");
             },
 
-            correctTextMessage(selectedAnswer) {
+            get correctTextMessage() {
                 // text for correct answer feedback
-                return selectedAnswer.feedback_text || gettext("Well done, keep it up!");
+                if (this.answer.feedback) {
+                    return this.answer.feedback.text || gettext("Well done, keep it up!");
+                }
+                return gettext("Well done, keep it up!");
             },
 
-            incorrectTitleMessage(selectedAnswer) {
+            get incorrectTitleMessage() {
                 // title for incorrect answer feedback
-                return selectedAnswer.feedback_title || gettext("Oops");
+                if (this.answer.feedback) {
+                    return this.answer.feedback.title || gettext("Oops");
+                }
+                return gettext("Oops");
             },
 
-            incorrectTextMessage(selectedAnswer) {
+            get incorrectTextMessage() {
                 // text for incorrect answer feedback
-                return selectedAnswer.feedback_text || gettext("Read the question more carefully!");
+                if (this.answer.feedback) {
+                    return this.answer.feedback.text || gettext("Read the question more carefully!");
+                }
+                return gettext("Read the question more carefully!");
             },
         }
     </script>

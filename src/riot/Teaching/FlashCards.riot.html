@@ -1,0 +1,20 @@
+<FlashCards>
+	<div class="flash-cards">
+		<h4>1. { props.card.title }</h4>
+		<p>{ props.card.description }</p>
+		<!-- <button class="btn-primary" onclick="{viewAllTips}">
+			{ TRANSLATIONS.viewAll() }
+		</button> -->
+	</div>
+    <script>
+        export default {
+            TRANSLATIONS: {
+                viewAll: () => gettext("View all tips"),
+            },
+
+            viewAllTips() {
+                this.props.viewAllTips();
+            },
+        };
+    </script>
+</FlashCards>

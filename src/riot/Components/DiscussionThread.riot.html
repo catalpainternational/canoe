@@ -1,0 +1,283 @@
+<DiscussionThread>
+    <div class="lesson-title">
+        <span class="arrow" onclick="{() => props.selectDiscussionHandler(null)}"></span>
+        <p class="number">{props.lessonNumber}</p>
+        <p class="title">{props.lesson.title}</p>
+    </div>
+    <div class="discussion-header">
+        <h2 class="no-clamp">{props.question.question}</h2>
+    </div>
+    <div id="comment-input" class="form-group" if="{!state.error && !state.promptLogin}">
+        <label for="comment">{TRANSLATIONS.addComment()}</label>
+        <textarea
+            name="comment"
+            id="comment"
+            oninput="{updateCommentValue}"
+            onfocus="{setInputFocus}"
+            onblur="{removeInputFocus}"
+            maxlength="280"
+        ></textarea>
+    </div>
+    <button
+        if="{state.commentButtonVisible}"
+        class="btn-primary"
+        onclick="{addComment}">
+        {TRANSLATIONS.postComment()}
+    </button>
+
+    <div class="state">
+        <LoadingDots if="{state.loading}" extrastyleclasses="dark"></LoadingDots>
+        <p if="{state.error}">{TRANSLATIONS.error()}</p>
+        <p if="{!state.loading && !state.comments.length && !state.error && !state.promptLogin}">
+            {TRANSLATIONS.emptyState()}
+        </p>
+        <p if="{state.promptLogin}">
+            {TRANSLATIONS.promptLogin()}
+        </p>
+        <button if="{state.promptLogin}" class="btn-primary" onclick="{loginRedirect}">
+            {TRANSLATIONS.login()}
+        </button>
+    </div>
+
+    <template if="{state.comments.length}">
+        <div class="sort-options">
+            <p class="label">{TRANSLATIONS.sort()}</p>
+            <div class="dropdown">
+                <p class="active" onclick="{toggleSort}">
+                    {state.activeSortOption.label}
+                    <span class="caret" if="{state.showSortOptions}">&#9650;</span>
+                    <span class="caret" if="{!state.showSortOptions}">&#9660;</span>
+                </p>
+                <div if="{state.showSortOptions}" class="option">
+                    <p class="option" each="{option in state.sortOptions}" if="{option.label !== state.activeSortOption.label}" onclick="{() => sortComments(option)}">{option.label}</p>
+                </div>
+            </div>
+        </div>
+
+        <DiscussionComment
+            each="{comment in state.comments}"
+            comment="{comment}"
+            lesson="{props.lesson}"
+            addReply="{addReply}"
+            addFlag="{addFlag}"
+            updateCommentValue="{updateCommentValue}"
+            setInputFocus="{setInputFocus}"
+            removeInputFocus="{removeInputFocus}"
+        ></DiscussionComment>
+    </template>
+
+    <div id="toast-message">
+        <span if="{state.successfulToast}" class="checkmark"></span>
+        <span if="{!state.successfulToast}" class="cross red"></span>
+        <p>{state.toastMessage}</p>
+    <div>
+
+    <script>
+        import DiscussionComment from "RiotTags/Components/DiscussionComment.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+
+        import { Discussion } from "ts/Discussion";
+
+        function DiscussionThread() {
+            return {
+                state: {
+                    commentButtonVisible: false,
+                    loading: false,
+                    error: false,
+                    promptLogin: false,
+                    comments: [],
+                    sortOptions: [
+                        { sort: 'date', order: 'desc', label: gettext('Newest First') },
+                        { sort: 'date', order: 'asc', label: gettext('Oldest First') }
+                    ],
+                    activeSortOption: { sort: 'date_created', order: 'desc', label: 'Newest First' },
+                    showSortOptions: false,
+                    toastMessage: '',
+                    successfulToast: true,
+                },
+
+                TRANSLATIONS: {
+                    addComment: () => gettext("Add a comment"),
+                    postComment: () => gettext("Post comment"),
+                    sort: () => gettext("Sort by"),
+                    commentConfirmed: () => gettext("Comment posted"),
+                    inappropriate: () => gettext("Comment flagged as inappropriate"),
+                    error: () => gettext("An error occurred, please try again later"),
+                    emptyState: () => gettext("There are no comments yet. Be the first to contribute to the conversation! Add a comment above."),
+                    promptLogin: () => gettext("You need to be logged in to use this feature"),
+                    login: () => gettext("Login"),
+                },
+
+                onBeforeMount(props, state) {
+                    this.updateComments();
+                },
+
+                updateComments(callback, callbackArg) {
+                    this.state.loading = true;
+
+                    Discussion.Get(this.props.question.id).then((response) => {
+                        if (typeof response !== "object") {
+                            if (response === 401) {
+                                this.update({ loading: false, promptLogin: true })
+                            } else if (response !== 404) {
+                                this.update({ loading: false, error: true });
+                            }
+                            this.update({ loading: false });
+                            throw new Error(`Comment failed, HTTP status: ${response}`);
+                        }
+
+                        this.update({
+                            comments: Discussion.Rebuild(response),
+                            loading: false,
+                            error: false,
+                        });
+
+                        if (callback) {
+                            callback(callbackArg);
+                        }
+                    })
+                },
+
+                toggleSort() {
+                    this.update({showSortOptions: !this.state.showSortOptions})
+                },
+
+                sortComments(sortOption) {
+                    const sortOptions = this.state.sortOptions;
+                    const comments = this.state.comments;
+
+                    if (sortOption.order === 'asc') {
+                        comments.sort((a, b) => a[sortOption.sort] - b[sortOption.sort]);
+                    }
+                    else if (sortOption.order === 'desc') {
+                        comments.sort((a, b) => b[sortOption.sort] - a[sortOption.sort]);
+                    }
+
+                    this.update({
+                        comments,
+                        activeSortOption: sortOption,
+                        showSortOptions: false,
+                    });
+                },
+
+                updateCommentValue() {
+                    const commentInput = this.$("#comment");
+
+                    if (commentInput.value.length) {
+                        this.update({commentButtonVisible: true});
+                    }
+                    else this.update({commentButtonVisible: false});
+                },
+
+                setInputFocus(event) {
+                    const fieldElement = `#${event.target.id}-input`;
+                    this.$(fieldElement).classList.add("has-focus");
+                },
+
+                removeInputFocus(event) {
+                    const fieldElement = `#${event.target.id}-input`;
+                    const fieldHasValue = event.target.value != "";
+
+                    this.$(fieldElement).classList.remove("has-focus");
+
+                    if (fieldHasValue && !this.$(fieldElement).classList.contains("is-filled")) {
+                        this.$(fieldElement).classList.add("is-filled");
+                    } else if (!fieldHasValue) {
+                        this.$(fieldElement).classList.remove("is-filled");
+                    }
+                },
+
+                addComment() {
+                    const input = this.$('#comment');
+
+                    const newComment = Discussion.CreateComment(
+                        input.value,
+                        "",
+                        this.props.lesson.id,
+                        this.props.question.id,
+                    );
+
+                    Discussion.PostComment(newComment).then((response) =>{
+                        if (!response.ok) {
+                            this.commentStatus(newComment.id, this.TRANSLATIONS.error(), false);
+                            throw new Error(`Comment failed, HTTP status: ${response.status}`);
+                        }
+                        else {
+                            this.updateComments(this.commentStatus, newComment.id);
+                            input.value = "";
+                        }
+                    });
+                },
+
+                addReply(reply, input, closeCallback) {
+                    const newReply = {
+                        ...reply,
+                        page_id: this.props.lesson.id,
+                        discussion_id: this.props.question.id,
+                    }
+
+                    Discussion.PostComment(newReply).then((response) =>{
+                        if (!response.ok) {
+                            this.commentStatus(newReply.id, this.TRANSLATIONS.error(), false);
+                            throw new Error(`Reply failed, HTTP status: ${response.status}`);
+                        }
+                        else {
+                            this.updateComments(this.commentStatus, newReply.id);
+                            input.value = "";
+                            closeCallback();
+                        }
+                    });
+                },
+
+                addFlag(comment) {
+                    const newFlag = Discussion.CreateFlag(
+                        comment.id,
+                        true
+                    );
+
+                    Discussion.FlagComment(newFlag).then((response) =>{
+                        if (!response.ok) {
+                            this.commentStatus(newFlag.id, this.TRANSLATIONS.error(), false);
+                            throw new Error(`Flagging failed, HTTP status: ${response.status}`);
+                        }
+                        else {
+                            this.commentStatus(newFlag.id, this.TRANSLATIONS.inappropriate());
+                        }
+                    });
+                },
+
+                commentStatus(id, customMessage = this.TRANSLATIONS.commentConfirmed(), success = true) {
+                    this.update({
+                        toastMessage: customMessage,
+                        successfulToast: success,
+                    });
+
+                    const toast = document.getElementById('toast-message');
+                    toast.className = 'show';
+                    setTimeout(function() {
+                        toast.className = toast.className.replace('show', '');
+                    }, 4000);
+
+                    const newCommentEl = document.getElementById(id);
+                    if (newCommentEl) {
+                        newCommentEl.className = 'recent';
+                        setTimeout(function () {
+                            newCommentEl.className = '';
+                        }, 6000)
+                    }
+                },
+
+                loginRedirect() {
+                    window.location.hash = "#login";
+                },
+            };
+        };
+
+        DiscussionThread.components = {
+            discussioncomment: DiscussionComment,
+            loadingdots: LoadingDots,
+        };
+
+        export default DiscussionThread;
+    </script>
+</DiscussionThread>

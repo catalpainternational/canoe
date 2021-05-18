@@ -1,0 +1,61 @@
+<DiscussionReply id="{props.comment.id}">
+    <UserAvatar username="{props.comment.user_username}">
+        <p>{props.comment.initials}</p>
+    </UserAvatar>
+
+    <div class="comment-block">
+        <div class="meta">
+            <a>{props.comment.user_first_name} {props.comment.user_last_name}</a>
+            <p>&middot;</p>
+            <p>{state.elapsedTime}</p>
+        </div>
+        <p class="comment">
+            {props.comment.comment}
+        </p>
+        <div class="controls">
+            <p onclick="{addFlag}">{TRANSLATIONS.flag()} <span class="flag"></span></p>
+        </div>
+    </div>
+
+    <script>
+        import UserAvatar from "RiotTags/Components/UserAvatar.riot.html";
+        import {getElapsedTime} from "js/utilities";
+
+        export default {
+            components: {
+                useravatar: UserAvatar,
+            },
+
+            state: {
+                elapsedTime: '',
+            },
+
+            TRANSLATIONS: {
+                flag: () => gettext("Flag as inappropriate"),
+            },
+
+            onMounted(props, state) {
+                this.getDate();
+            },
+
+            onUpdated(props, state) {
+                // resolves a bug with the timestamps not updating correctly
+                this.state.oldProps = this.state.newProps;
+                this.state.newProps = props;
+                if (this.state.oldProps && this.state.oldProps.comment.id !== this.state.newProps.comment.id) {
+                    this.getDate();
+                }
+            },
+
+            getDate() {
+                this.update({ elapsedTime: getElapsedTime(this.props.comment.date_created) });
+                setTimeout(this.getDate, 60000);
+            },
+
+            addFlag() {
+                this.props.addFlag(this.props.comment);
+            }
+        };
+
+    </script>
+</DiscussionReply>

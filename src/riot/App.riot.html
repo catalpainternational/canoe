@@ -1,79 +1,116 @@
 <App>
-    <template if="{!isBrowserSupported()}">
-        <ChangeBrowser></ChangeBrowser>
-    </template>
+    <ChangeBrowser></ChangeBrowser>
 
-    <template if="{isBrowserSupported()}">
-        <OnlineOrOffline></OnlineOrOffline>
+    <template if="{ state.browserSupported }">
         <Toast></Toast>
 
-        <Login if="{userShouldLogin()}"></Login>
-
-        <LoadCompletions if="{!userShouldLogin()}"></LoadCompletions>
-
         <LoadingDots
-            if="{Object.keys(state.wagtailPage).length === 0 && !userShouldLogin()}"
+            if="{ state.page.type === 'initial' }"
             extrastyleclasses="dark app"
         ></LoadingDots>
 
-        <template if="{!userShouldLogin() && areCompletionsReady()}">
-            <DownloadSite></DownloadSite>
-            <AllCoursesPage
-                if="{state.contentType === 'HomePage'}"
-                wagtailPage="{createAllCoursesPage(state.wagtailPage)}"
-            ></AllCoursesPage>
-            <CourseOverview
-                if="{state.contentType === 'CoursePage'}"
-                wagtailPage="{createCoursePage(state.wagtailPage)}"
-            ></CourseOverview>
-            <LessonOverview
-                if="{state.contentType === 'LessonPage'}"
-                wagtailPage="{createLessonPage(state.wagtailPage)}"
-            ></LessonOverview>
-            <Settings if="{state.contentType === 'settings'}"></Settings>
-            <Resources
-                if="{state.contentType === 'resources' || state.contentType === 'ResourcesRoot'}"
-            ></Resources>
-            <ResourceArticle
-                if="{state.contentType === 'ResourceArticle'}"
-                wagtailPage="{createResourceArticle(state.wagtailPage)}"
-            ></ResourceArticle>
-            <Profile if="{state.contentType === 'profile'}"></Profile>
-            <BottomMenu contentType="{state.contentType}"></BottomMenu>
-            <PushSubscription></PushSubscription>
-        </template>
+        <HandleError
+            if="{ state.page.type === 'error' }"
+        ></HandleError>
+
+        <Login if="{state.page.type === 'login'}"></Login>
+        <Settings if="{state.page.type === 'settings'}"></Settings>
+        <Profile if="{state.page.type === 'profile'}"></Profile>
+        <Sync if="{state.page.type === 'sync'}"></Sync>
+
+        <AllCoursesList if="{ state.page.type === 'homepage' }" ></AllCoursesList>
+        <CourseOverview if="{ state.page.type === 'coursepage' }" ></CourseOverview>
+        <LessonOverview
+            if="{state.page.type === 'lessonpage'}"
+            lesson="{ state.page }"
+        ></LessonOverview>
+        <Resources
+            if="{state.page.type === 'resourcesroot'}"
+        ></Resources>
+        <ResourceArticle
+            if="{state.page.type === 'resourcearticle'}"
+        ></ResourceArticle>
+        <AllTopicsList if="{state.page.type === 'learningactivitieshomepage'}"></AllTopicsList>
+        <TopicPage if="{state.page.type === 'learningactivitytopicpage'}"></TopicPage>
+        <ActivityPage if="{state.page.type === 'learningactivitypage'}"></ActivityPage>
+
+        <BottomMenu
+            if="{ state.page.type !== 'initial' }"
+        ></BottomMenu>
+        <PushSubscription></PushSubscription>
     </template>
 
     <script>
-        import { userShouldLogin } from "js/AuthenticationUtilities";
-        import { getPage } from "js/Routing";
-        import { ON_LOG_IN, ON_LOG_OUT, ON_REQUEST_SITE_DOWNLOAD } from "js/Events";
-        import { isBrowserSupported, areCompletionsReady, getManifestFromStore } from "ReduxImpl/Interface";
-        import { logPageView } from "js/GoogleAnalytics";
+        import {
+            isBrowserSupported,
+            getRoute
+        } from "ReduxImpl/Interface";
 
-        import AllCoursesPageJS from "js/AllCoursesPage";
-        import CoursePageJS from "js/CoursePage";
-        import LessonPageJS from "js/LessonPage";
-        import ResourceArticleJS from "js/ResourceArticle";
-
-        import BottomMenu from "RiotTags/Components/BottomMenu.riot.html";
-        import LoadCompletions from "RiotTags/Components/LoadCompletions.riot.html";
-        import DownloadSite from "RiotTags/Components/DownloadSite.riot.html";
+        import BottomMenu from "riot/Components/BottomMenu.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
         import Toast from "RiotTags/Components/Toast.riot.html";
-        import OnlineOrOffline from "RiotTags/Components/OnlineOrOffline.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import HandleError from "RiotTags/Components/HandleError.riot.html";
 
         import Login from "RiotTags/Screens/Login.riot.html";
         import Resources from "RiotTags/Screens/Resources.riot.html";
         import Profile from "RiotTags/Screens/Profile.riot.html";
         import Settings from "RiotTags/Screens/Settings.riot.html";
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
+        import Sync from "RiotTags/Screens/Sync";
 
-        import AllCoursesPage from "RiotTags/WagtailPages/AllCoursesPage.riot.html";
+        import AllCoursesList from "RiotTags/WagtailPages/AllCoursesList.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
+
+        import AllTopicsList from "RiotTags/WagtailPages/AllTopicsList.riot.html";
+        import TopicPage from "RiotTags/Teaching/TopicPage.riot.html";
+        import ActivityPage from "RiotTags/Teaching/ActivityPage.riot.html";
+
+        function App() {
+            function readState() {
+                const route = getRoute();
+                const state = {
+                    page: route.page,
+                    pageReady: route.page.ready,
+                    riotHash: route.riotHash || [],
+                    browserSupported: isBrowserSupported(),
+                };
+                return state;
+            }
+            return {
+                state: readState(),
+
+                onUpdated(props, state) {
+                    scrollToFirstUnfinishedContent();
+                },
+
+                storeListener(previousStoreState, storeState) {
+                    this.update(readState());
+                }
+            }
+        }
+        App.components = {
+            handleerror: HandleError,
+            login: Login,
+            bottommenu: BottomMenu,
+            allcourseslist: AllCoursesList,
+            courseoverview: CourseOverview,
+            lessonoverview: LessonOverview,
+            resources: Resources,
+            profile: Profile,
+            settings: Settings,
+            sync: Sync,
+            pushsubscription: PushSubscription,
+            changebrowser: ChangeBrowser,
+            toast: Toast,
+            resourcearticle: ResourceArticle,
+            alltopicslist: AllTopicsList,
+            topicpage: TopicPage,
+            activitypage: ActivityPage,
+            loadingdots: LoadingDots,
+        }
 
         const scrollToFirstUnfinishedContent = () => {
             const ongoingCards = document.getElementsByClassName("ongoing");
@@ -91,113 +128,15 @@
             window.scroll(unfinishedContentCoords);
         };
 
-        export default {
-            state: {
-                wagtailPage: {},
-                homePageURL: "",
-                appTitle: "",
-            },
-
-            components: {
-                login: Login,
-                bottommenu: BottomMenu,
-                allcoursespage: AllCoursesPage,
-                courseoverview: CourseOverview,
-                lessonoverview: LessonOverview,
-                resources: Resources,
-                profile: Profile,
-                settings: Settings,
-                loadcompletions: LoadCompletions,
-                downloadsite: DownloadSite,
-                pushsubscription: PushSubscription,
-                changebrowser: ChangeBrowser,
-                toast: Toast,
-                onlineoroffline: OnlineOrOffline,
-                resourcearticle: ResourceArticle,
-                loadingdots: LoadingDots,
-            },
-
-            onMounted() {
-                // After authenticating, the app downloads its materials.
-                window.addEventListener(ON_REQUEST_SITE_DOWNLOAD, () => {
-                    this.update();
-                });
-
-                // After downloading its materials, the app starts.
-                window.addEventListener(ON_LOG_IN, async () => {
-                    this.route();
-                });
-
-                window.addEventListener(ON_LOG_OUT, () => {
-                    window.location.hash = "";
-                    this.update();
-                });
-
-                window.addEventListener("hashchange", () => {
-                    if (!this.userShouldLogin()) {
-                        this.route();
-                        logPageView(window.location.hash);
-                    }
-                });
-
-                if (!this.userShouldLogin() && this.areCompletionsReady()) {
-                    // If user returns to site and is logged in.
-                    this.route();
-                }
-            },
-
-            onUpdated() {
-                scrollToFirstUnfinishedContent();
-            },
-
-            storeListener(previousStoreState, storeState) {
-                if (previousStoreState.language != storeState.language) {
-                    this.update();
-                }
-            },
-
-            async route() {
-                const page = await getPage();
-                const pageModel = getWagtailPageModelName(page);
-
-                this.update({
-                    wagtailPage: page,
-                    contentType: pageModel,
-                });
-            },
-
-            isBrowserSupported() {
-                return isBrowserSupported();
-            },
-
-            areCompletionsReady() {
-                return areCompletionsReady();
-            },
-
-            userShouldLogin() {
-                return userShouldLogin();
-            },
-
-            createAllCoursesPage(aWagtailPage) {
-                return new AllCoursesPageJS(aWagtailPage);
-            },
-
-            createCoursePage(aWagtailPage) {
-                return new CoursePageJS(aWagtailPage);
-            },
-
-            createLessonPage(aWagtailPage) {
-                return new LessonPageJS(aWagtailPage);
-            },
-
-            createResourceArticle(aWagtailPage) {
-                return new ResourceArticleJS(aWagtailPage);
-            },
-        };
-
-        function getWagtailPageModelName(wagtailPage) {
-            const type = wagtailPage.meta.type;
-            return type.substring(type.lastIndexOf(".") + 1);
+        function arrayEquals(a, b) {
+            if (a.length !== b.length) return false;
+            for (const [index, element] of a.entries()) {
+                if (element !== b[index] ) return false;
+            }
+            return true;
         }
+
+        export default App;
+
     </script>
 </App>

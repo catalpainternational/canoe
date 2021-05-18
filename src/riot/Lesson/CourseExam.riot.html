@@ -1,202 +1,138 @@
 <CourseExam>
-    <LessonFrame if="{isAtHonorCode(state.cardIdx)}" linkTo="{props.wagtailPage.id}">
-        <HonorCode courseId="{props.wagtailPage.id}" minimumScore="{MINIMUM_SCORE}"></HonorCode>
-    </LessonFrame>
-    <LessonFrame
-        if="{state.cardIdx >= 0 && state.cardIdx < state.cards.length && state.card}"
-        id="test"
-        extraStyleClasses="test"
-        linkTo="{props.wagtailPage.id}"
-        progressValue="{state.cardIdx + 1}"
-        progressMax="{state.cards.length}"
-    >
-        <h3>{state.cardIdx + 1}. {state.card.question}</h3>
-        <TestSingleAnswer
-            if="{state.card.type === SINGLE_CHOICE}"
-            isCourseExam="{true}"
-            card="{state.card}"
-            recordAnswer="{recordAnswer}"
-            savedAnswer="{state.currentAnswer.answers}"
-        ></TestSingleAnswer>
-        <TestMultipleAnswer
-            if="{state.card.type !== SINGLE_CHOICE}"
-            isCourseExam="{true}"
-            card="{state.card}"
-            recordAnswer="{recordAnswer}"
-            savedAnswer="{state.currentAnswer.answers}"
-        ></TestMultipleAnswer>
-    </LessonFrame>
-    <div if="{!isAtHonorCode(state.cardIdx) && !isAtResults(state.cardIdx)}" class="bottom-buttons">
-        <div>
-            <a if="{state.cardIdx > 0}" class="has-circle" onclick="{previousExamCard}">
-                <span class="arrow"></span>
-            </a>
+    <template if="{ stage === 'code' || !isNaN(cardNumber) }">
+        <template if="{ stage === 'code' && course.examType !== 'prelearning'}">
+            <HonorCode minimumScore="{ course.minimumExamScore }"></HonorCode>
+        </template>
+        <LessonFrame
+            if="{ !isNaN(cardNumber) }"
+            id="test"
+            extraStyleClasses="test"
+            linkTo="{ course.loc_hash }"
+            progressValue="{ cardNumber }"
+            progressMax="{ examCards.length }"
+        >
+            <Test
+                card-number="{ cardNumber }"
+            ></Test>
+        </LessonFrame>
+        <div if="{ !isNaN(cardNumber) }" class="bottom-buttons">
+            <div>
+                <a if="{ cardNumber > 1 }" class="has-circle" onclick="{previousExamCard}">
+                    <span class="arrow"></span>
+                </a>
+            </div>
+            <div>
+                <button
+                    if="{ cardNumber < examCards.length }"
+                    class="btn-primary"
+                    onclick="{nextExamCard}"
+                    disabled="{ !hasAnswer() }"
+                >
+                    { TRANSLATIONS.next() }
+                </button>
+                <button
+                    if="{ cardNumber === examCards.length }"
+                    class="btn-primary"
+                    onclick="{nextExamCard}"
+                    disabled="{ !hasAnswer() }"
+                >
+                    { TRANSLATIONS.submit() }
+                </button>
+            </div>
         </div>
-        <div>
-            <button
-                if="{state.cardIdx < state.cards.length - 1}"
-                class="btn-primary"
-                onclick="{nextExamCard}"
-                disabled="{Object.keys(state.currentAnswer).length === 0}"
-            >
-                { TRANSLATIONS.next() }
-            </button>
-            <button
-                if="{state.cardIdx === state.cards.length - 1}"
-                class="btn-primary"
-                onclick="{nextExamCard}"
-                disabled="{Object.keys(state.currentAnswer).length === 0}"
-            >
-                { TRANSLATIONS.submit() }
-            </button>
-        </div>
-    </div>
+    </template>
     <ExamResults
-        if="{isAtResults(state.cardIdx)}"
-        course="{props.wagtailPage}"
-        title="{props.wagtailPage.title}"
-        finalScore="{calculateFinalScore()}"
-        minimumScore="{MINIMUM_SCORE}"
+        if="{ stage == 'result' }"
+        passed="{ state.result.passed }"
+        score="{ state.result.score }"
     ></ExamResults>
 
     <script>
         import ExamResults from "RiotTags/Lesson/ExamResults.riot.html";
-        import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
-        import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import HonorCode from "RiotTags/Lesson/HonorCode.riot.html";
+        import Test from "RiotTags/Lesson/Test.riot.html";
 
-        import { getLessonCardIdx, getPreviousCardsUrl, getNextCardsUrl } from "js/Routing";
-        import { dispatchTestAnswerEvent, ON_ANSWERED_TEST_QUESTION } from "js/Events";
-        import { URLDoesntExist, ExamIsMissingAnAnswer } from "js/Errors";
+        import { getRoute, getTestAnswer } from "ReduxImpl/Interface";
 
-        import ExamGrader from "js/ExamGrader";
+        function CourseExam() {
+            return {
+                state: {
+                    result: undefined,
+                },
 
-        export default {
-            state: {
-                cardIdx: 0,
-                card: null,
-                currentAnswer: {},
-            },
+                TRANSLATIONS: {
+                    next: () => gettext("Next"),
+                    submit: () => gettext("Submit answers"),
+                },
 
-            components: {
-                examresults: ExamResults,
-                testsingleanswer: TestSingleAnswer,
-                testmultipleanswer: TestMultipleAnswer,
-                lessonframe: LessonFrame,
-                honorcode: HonorCode,
-            },
+                onBeforeUpdate() {
+                    window.scroll(0, 0);
+                },
 
-            TRANSLATIONS: {
-                next: () => gettext("Next"),
-                submit: () => gettext("Submit answers"),
-            },
-
-            MINIMUM_SCORE: 75,
-            SINGLE_CHOICE: "single_choice",
-            SECTION: "exam",
-
-            onBeforeMount(props, state) {
-                window.addEventListener("hashchange", this.onHashChange);
-
-                const { cards } = props;
-                this.state.cards = cards;
-                this.shuffleCards(this.state.cards);
-
-                if (cards.length > 5) {
-                    this.state.cards = this.state.cards.slice(0, 5);
-                }
-            },
-
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.onHashChange);
-            },
-
-            onMounted(props, state) {
-                this.onHashChange();
-            },
-
-            shuffleCards(cards) {
-                cards.sort(() => Math.random() - 0.5);
-            },
-
-            onHashChange() {
-                const cardIdx = getLessonCardIdx();
-                this.update({
-                    cardIdx,
-                });
-
-                if (this.isAtHonorCode(cardIdx) || this.isAtResults(cardIdx)) {
-                    return;
-                }
-
-                const card = this.getCard(cardIdx);
-                const previousAnswer = ExamGrader.loadExamAnswer(card.id);
-                const currentAnswer = previousAnswer || {};
-
-                this.state.cardAnswers = card.answers;
-                this.shuffleCards(this.state.cardAnswers);
-                card.answers = this.state.cardAnswers;
-
-                this.update({
-                    card,
-                    currentAnswer,
-                });
-
-                window.scroll(0, 0);
-            },
-
-            isAtHonorCode(cardIdx) {
-                return cardIdx === -1;
-            },
-
-            isAtResults(cardIdx) {
-                return cardIdx === this.state.cards.length;
-            },
-
-            getCard(cardIdx) {
-                const card = this.state.cards[cardIdx];
-                if (!card) {
-                    throw new URLDoesntExist(
-                        `Cannot find exam question at ${window.location.hash}`
-                    );
-                }
-                return card;
-            },
-
-            recordAnswer(response) {
-                console.assert(
-                    response.hasOwnProperty("answers") && response.hasOwnProperty("isCorrect")
-                );
-
-                this.update({ currentAnswer: response });
-            },
-
-            previousExamCard() {
-                const { wagtailPage } = this.props;
-                const { cardIdx } = this.state;
-                location.hash = getPreviousCardsUrl(wagtailPage.id, this.SECTION, cardIdx);
-            },
-
-            nextExamCard() {
-                const { wagtailPage } = this.props;
-                const { cardIdx, card, currentAnswer } = this.state;
-                ExamGrader.saveExamAnswer(card.id, currentAnswer);
-                location.hash = getNextCardsUrl(wagtailPage.id, this.SECTION, cardIdx);
-            },
-
-            calculateFinalScore() {
-                const { cards } = this.props;
-                const listOfExamQuestions = cards.map(card => card.id);
-                try {
-                    return Math.round(ExamGrader.tallyFinalScore(listOfExamQuestions));
-                } catch (err) {
-                    if (err instanceof ExamIsMissingAnAnswer) {
-                        return 0;
+                get route() {
+                    return getRoute();
+                },
+                get course() {
+                    return this.route.page;
+                },
+                get stage() {
+                    const s =  this.route.riotHash[1];
+                    if (s) {
+                        return s;
+                    } else {
+                        return this.course.examType === 'prelearning' ? 1 : 'code';
                     }
-                    throw err;
-                }
-            },
+                },
+                get cardNumber() {
+                    const p =  parseInt(this.stage);
+                    return p;
+                },
+                get examCards() {
+                    return this.course.examCards;
+                },
+
+                previousExamCard() {
+                    const newCardNumber = this.cardNumber - 1;
+                    location.hash = `${this.course.loc_hash}:exam:${newCardNumber}`;
+                },
+
+                nextExamCard() {
+                    if( this.cardNumber === this.examCards.length ) {
+                        this.submit();
+                    } else {
+                        const newCardNumber = this.cardNumber + 1;
+                        location.hash = `${this.course.loc_hash}:exam:${newCardNumber}`;
+                    }
+                },
+                submit() {
+                    const result = this.course.saveExamScore();
+                    if (result.error) {
+                        alert('check you have answered all questions');
+                    }
+                    this.update({
+                        result:{
+                            passed: result.passed,
+                            score: result.score,
+                        }
+                    });
+                    location.hash = `${this.course.loc_hash}:exam:result`;
+                },
+
+                hasAnswer() {
+                    const a = getTestAnswer(this.course.id, this.course.examCards[this.cardNumber - 1].id);
+                    return a;
+                },
+            }
         };
+
+        CourseExam.components =  {
+            examresults: ExamResults,
+            lessonframe: LessonFrame,
+            honorcode: HonorCode,
+            test: Test,
+        };
+
+        export default CourseExam;
     </script>
 </CourseExam>

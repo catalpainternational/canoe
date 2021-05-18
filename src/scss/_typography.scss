@@ -88,7 +88,8 @@ label {
     font-weight: 300;
 }
 
-input {
+input,
+textarea {
     font-family: $app-typography;
     font-size: 1.2em;
     color: $gray-1;
@@ -105,15 +106,24 @@ input[type="text"] {
 ul,
 ol {
     font-family: $app-typography;
-    padding-left: 0;
-    font-size: 13px;
+    padding-left: 20px;
+    line-height: 1.6;
+    font-size: 1em;
     color: $gray-3;
     font-weight: 300;
-    list-style-position: inside;
+}
+
+ol {
+    margin-left: 6px;
+}
+
+li {
+    padding-left: 6px;
 }
 
 li::marker {
     color: $gray-1;
+    font-size: 0.9em;
 }
 
 // lists within lists

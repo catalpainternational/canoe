@@ -1,0 +1,316 @@
+ActivityPage {
+    .topic-and-details {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        h5 {
+            flex: 1;
+            text-transform: uppercase;
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-right: 5px;
+        }
+
+        p {
+            font-size: 10px;
+
+            &.reference {
+                background-color: $gray-8;
+                padding: 5px 13px;
+                border-radius: 12px;
+                letter-spacing: 0.6px;
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    .title-description {
+        button {
+            margin: 1em 0 2.5em;
+            box-shadow: none;
+
+            &.btn-primary {
+                background-color: $teal;
+                position: relative;
+            }
+        }
+
+        .checkmark {
+            background-color: white;
+            height: 12px;
+            position: absolute;
+            left: 13%;
+            top: 36%;
+        }
+    }
+
+    .activity-swoop {
+        @extend %bottom-swoop;
+        border-top-left-radius: 500% 7%;
+        border-top-right-radius: 500% 7%;
+        background: linear-gradient(134.77deg, $gray-8 0%, $gray-7 100%);
+
+        .tab-titles h5 {
+            color: $gray-3;
+        }
+    }
+
+    .first-section {
+        padding-bottom: 1.5em;
+        border-bottom: 2px solid $gray-6;
+    }
+
+    .middle-section {
+        padding: 2em 0;
+        border-bottom: 2px solid $gray-6;
+    }
+
+    .last-section {
+        padding: 2em 0 1em 0;
+    }
+
+    div.content-wrapper {
+        padding-bottom: calc(#{$bottom-menu-height});
+    }
+
+    img.richtext-image {
+        width: 100%;
+        border-radius: 8px;
+        margin: unset;
+    }
+
+    ImageWrapper .expand-button {
+        right: 1em;
+    }
+
+    li, p {
+        color: $gray-1;
+    }
+
+    PlanTab,
+    TeachTab {
+        h4 {
+            align-items: center;
+            display: flex;
+            margin-bottom: 1em;
+        }
+
+        > button {
+            margin-bottom: 1.25em;
+        }
+
+        .has-circle {
+            margin-right: 12px;
+            box-shadow: none;
+        }
+    }
+
+    TabSection {
+        h3 {
+            font-size: 1.1em;
+        }
+
+        .cards-list > * {
+            margin: 1.5em 0;
+            display: block;
+        }
+
+        .cards-list > basiccard {
+            display: flex;
+            flex-direction: column;
+
+            h3 {
+                order: -1;
+            }
+        }
+
+        &.last-section .cards-list > * + * {
+            border-top: 1px solid $gray-6;
+        }
+    }
+
+    TabSection .last-section .cards-list > * + *,
+    ExtendTab .cards-list > * + * {
+        border-top: 1px solid $gray-6;
+    }
+
+    Html5Card {
+        iframe {
+            height: 200px;
+        }
+
+        .btn-primary {
+            margin-top: 0.7em;
+        }
+    }
+
+    FlashCards .flash-cards {
+        height: 210px;
+        width: 100%;
+        box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.2);
+        border-radius: 8px;
+        background-color: white;
+        padding: 25px;
+        box-sizing: border-box;
+        margin: 1em 0;
+
+        h4 {
+            font-size: 1em;
+        }
+
+        p {
+            font-size: 0.9em;
+        }
+
+        button {
+            margin-top: 1em;
+        }
+    }
+}
+
+ActivityFeedback,
+LessonFeedback {
+    .message-container {
+        padding: 0;
+
+        h3 {
+            margin: 0 0 0.5em 0;
+        }
+    }
+
+    .form-group {
+        width: 100%;
+        height: 80px;
+        text-align: left;
+        box-sizing: border-box;
+        position: relative;
+        margin-bottom: 2em;
+
+        label {
+            font-size: 14px;
+            font-weight: 200;
+            color: $gray-3;
+            position: absolute;
+            top: 13px;
+            left: 15px;
+        }
+
+        textarea {
+            height: 100%;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 15px;
+            border: 1px solid $gray-7;
+            border-radius: 3px;
+            box-shadow: inset 0 2px 3px 0 rgba(42, 57, 66, 0.1);
+            font-size: 0.9em;
+            resize: none;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        &.has-focus {
+            textarea {
+                border-color: $gray-4;
+            }
+        }
+
+        &.has-focus,
+        &.is-filled {
+            label {
+                display: none;
+            }
+        }
+    }
+}
+
+ActivityFeedback {
+    .feedback-buttons {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-evenly;
+        margin: 2em 0;
+
+        @media only screen and (max-width: $sm-phone) {
+            flex-flow: column wrap;
+            align-items: center;
+            margin: 1em 0;
+        }
+
+        button {
+            height: 5.687em;
+            width: 5.687em;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+            background-color: white;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:focus {
+                outline: 0;
+            }
+
+            &.active {
+                box-shadow: inset 0 2px 4px 0 rgba(42, 57, 66, 0.5);
+
+                & > span {
+                    background-color: $white;
+                }
+
+                &.neutral {
+                    background-color: $red;
+                }
+
+                &.smiling {
+                    background-color: $yellow;
+                }
+
+                &.thrilled {
+                    background-color: $teal;
+                }
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            @media only screen and (max-width: calc(#{$lg-phone} + 27px)) {
+                height: 5em;
+                width: 5em;
+                margin: 0;
+            }
+
+            @media screen and (max-width: $sm-phone) {
+                margin: 0.5em;
+
+                &:first-of-type {
+                    margin-top: 0;
+                }
+
+                &:last-of-type {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        & .button-label {
+            color: $gray-4;
+            margin-top: 11px;
+        }
+    }
+
+    // Pedro needs smaller buttons at 441px. Better to target an industry
+    // breakpoint and add the extra pixels.
+
+    @media screen and (max-width: $sm-phone) {
+        h3 {
+            padding-bottom: 0;
+        }
+    }
+}

@@ -1,0 +1,56 @@
+<LessonDownload class="download-block">
+    <p class="lesson-number">{props.itemIndex + 1}</p>
+    <p class="title">{props.contentItem.title}</p>
+    <div class="download-state" onclick="{toggleCached}">
+        <span if="{state.cached}" class="download-complete">
+            <span class="icon"></span>
+        </span>
+        <span if="{!state.cached}" class="{state.loading ? 'loading' : ''}">
+            <span class="download"></span>
+        </span>
+    </div>
+
+    <script>
+        export default {
+            state: {
+                cached: undefined,
+                loading: false,
+            },
+
+            TRANSLATIONS: {
+                issue: () => gettext("There was a problem downloading the content"),
+            },
+
+            onMounted(props, state) {
+                if(props.contentItem) {
+                    props.contentItem.isAvailableOffline().then(cached => {
+                        this.update({cached});
+                    });
+                }
+            },
+
+            toggleCached() {
+                this.update({loading: true});
+                const item = this.props.contentItem;
+                const action = this.state.cached
+                    ? item.removeAvailableOffline()
+                    : item.makeAvailableOffline();
+                action
+                    .then(() => item.isAvailableOffline())
+                    .then(cached => {
+                        this.update({cached, loading: false});
+                    })
+                    .catch(() => {
+                        this.update({loading: false});
+
+                        const toast = document.getElementById("snackbar");
+                        toast.innerText = this.TRANSLATIONS.issue();
+                        toast.className = "show";
+                        setTimeout(function() {
+                            toast.className = toast.className.replace("show", "");
+                        }, 2500);
+                    });
+            },
+        };
+    </script>
+</LessonDownload>

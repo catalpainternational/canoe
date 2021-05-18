@@ -1,0 +1,42 @@
+LongCard .long-card {
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+    box-sizing: border-box;
+    height: 90px;
+
+    &.complete .card-status {
+        @extend %absolutely-center;
+        @extend %status-complete;
+        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+    }
+
+    .card-image {
+        position: relative;
+
+        img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px 0 0 8px;
+        }
+    }
+
+    .card-text {
+        padding: 12px 15px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+
+        h5 {
+            margin: 0;
+            color: $gray-1;
+            font-weight: 200;
+        }
+    }
+}

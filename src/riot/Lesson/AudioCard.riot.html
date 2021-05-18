@@ -2,60 +2,45 @@
     <div>
         <h3 class="media-title">{props.media.title}</h3>
         <p class="media-description">{props.media.description}</p>
-        <audio controls crossorigin="anonymous" onplay="{ (event) => storeAnalytics(event) }">
+        <audio 
+            if="{ asset() }"
+            src="{ asset().url }"
+            controls="true"
+            crossorigin="anonymous"
+            duration="{ asset().duration }"
+            onplay="{ (event) => storeAnalytics(event) }"
+            >
             <span>{ TRANSLATIONS.browserSupport() }</span>
         </audio>
-        <p if={state.cached}>{ TRANSLATIONS.cached() }</p>
-        <p if={!state.cached}>{ TRANSLATIONS.notCached() }</p>
+        <p class="error-message" if="{ !state.src }">
+            { TRANSLATIONS.missing() }
+        </p>
     </div>
 
     <script>
-        import { resolveMedia } from "js/utilities";
-        import {
-            isItemCached,
-            addToCache,
-            deleteItemFromCache
-        } from "js/cacheManager/cacheManager.js";
+        import { getRoute } from "ReduxImpl/Interface";
         import { logClickedPlayOnVideo } from "js/GoogleAnalytics";
 
-        export default {
-            state: {
-                cached: false
-            },
+        export default function AudioCard() {
+            return {
+                TRANSLATIONS: {
+                    browserSupport: () => gettext("Your browser does not support the audio element."),
+                    missing: () => gettext("Sorry: This audio is missing.")
+                },
 
-            TRANSLATIONS: {
-                browserSupport: () => gettext("Your browser does not support the audio element."),
-                cached: () => gettext("This audio will play offline."),
-                notCached: () => gettext("This audio is not available offline."),
-            },
+                get page() {
+                    return getRoute().page;
+                },
 
-            async onMounted(props, state) {
-                await this.getCacheInfo();
-                if (!this.state.cached) {
-                    this.toggleAvailableOffline();
-                }
-                this.$("audio").src = await resolveMedia(props.media.id);
-            },
+                asset() {
+                    return this.page.audioAsset(this.props.media.media_id);
+                },
 
-            storeAnalytics() {
-                const mediaTitle = this.props.media.title;
-                logClickedPlayOnVideo(mediaTitle);
-            },
-
-            async getCacheInfo() {
-                const url = await resolveMedia(this.props.media.id);
-                const cached = await isItemCached(url);
-                this.update({ cached });
-            },
-
-            async toggleAvailableOffline(e) {
-                const url = await resolveMedia(this.props.media.id);
-                const action = this.state.cached
-                    ? deleteItemFromCache(url, "media-cache")
-                    : addToCache(url, "media-cache");
-                await action;
-                this.getCacheInfo();
-            },
+                storeAnalytics() {
+                    const mediaTitle = this.props.media.title;
+                    logClickedPlayOnVideo(mediaTitle);
+                },
+            }
         };
     </script>
 </AudioCard>
