@@ -170,14 +170,10 @@
                 const { comment } = this.state;
                 const feedback = feedbackString;
 
-                saveFeedbackToIdb({
-                    pageId: this.lesson.id,
-                    revisionId: this.lesson.revisionId,
-                    version: this.lesson.version,
-                    date: new Date().valueOf(),
+                this.lesson.feedback = {
                     feedback,
                     comment,
-                });
+                };
             },
 
             setTextAreaFocus(event) {

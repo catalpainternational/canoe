@@ -18,6 +18,7 @@ import {
     storePageComplete,
 } from "ReduxImpl/Interface";
 import { persistCompletion } from "js/actions/Completion";
+import { persistFeedback } from "js/UserActions";
 
 const logger = new Logger("Page");
 
@@ -338,6 +339,16 @@ export class Page extends PublishableItem implements StorableItem {
     /** when a page was last marked as complete */
     get completeDate(): Date | undefined {
         return getStoredPageCompletionDate(this.id);
+    }
+
+    /** sets feedback on this page */
+    set feedback(feedbackData: Record<string, any>) {
+        persistFeedback({
+            pageId: this.id,
+            revisionId: this.revisionId,
+            version: this.version,
+            ...feedbackData,
+        });
     }
 
     /** whether this page is notstarted, in progress or complete */

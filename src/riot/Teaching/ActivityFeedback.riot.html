@@ -153,15 +153,12 @@
 
             sendFeedback(feedbackString) {
                 const feedback = feedbackString;
-                const feedbackComment = document.getElementById("feedback").value;
+                const comment = document.getElementById("feedback").value;
 
-                saveFeedbackToIdb({
-                    pageId: this.actvity.id,
-                    revisionId: this.actvity.revisionId,
-                    version: this.actvity.version,
+                this.activity.feedback = {
                     feedback,
-                    feedbackComment,
-                });
+                    comment,
+                };
             },
 
             setInputFocus(event) {
