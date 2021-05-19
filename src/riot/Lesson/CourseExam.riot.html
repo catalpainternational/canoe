@@ -41,14 +41,18 @@
             </div>
         </div>
     </template>
+
     <ExamResults
         if="{ stage == 'result' }"
-        passed="{ state.result.passed }"
-        score="{ state.result.score }"
+        result="{ state.result }"
     ></ExamResults>
+    <ExamReview
+        if="{ stage == 'review' }"
+    ></ExamReview>
 
     <script>
         import ExamResults from "RiotTags/Lesson/ExamResults.riot.html";
+        import ExamReview from "RiotTags/Lesson/ExamReview.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import HonorCode from "RiotTags/Lesson/HonorCode.riot.html";
         import Test from "RiotTags/Lesson/Test.riot.html";
@@ -78,6 +82,7 @@
                 },
                 get stage() {
                     const s =  this.route.riotHash[1];
+
                     if (s) {
                         return s;
                     } else {
@@ -128,6 +133,7 @@
 
         CourseExam.components =  {
             examresults: ExamResults,
+            examreview: ExamReview,
             lessonframe: LessonFrame,
             honorcode: HonorCode,
             test: Test,

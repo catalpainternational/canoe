@@ -35,14 +35,12 @@
                 class="resource-card"
                 href="#{resource.loc_hash}"
             >
-                <template if="{ resource.ready }">
-                    <span each="{card in resource.cards}">
-                        <p>{card.tag}</p>
-                        <span if="{resource.cards.length > 1}">,</span>
-                    </span>
-                </template>
-                <h5>{resource.title}</h5>
-                <h6 if="{ resource.ready }">{resource.description}</h6>
+                <span each="{ type in resource.cardTypes }">
+                    <p>{ type }</p>
+                    <span if="{ resource.cardTypes.length > 1 }">,</span>
+                </span>
+                <h5>{ resource.title }</h5>
+                <h6>{ resource.description }</h6>
             </a>
         </div>
         <p if="{ page.resources.length === 0}" class="no-resources">
