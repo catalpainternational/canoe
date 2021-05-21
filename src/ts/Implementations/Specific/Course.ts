@@ -23,10 +23,10 @@ export default class Course extends Page {
         return this.childPages;
     }
     get hasExam(): boolean {
-        return this.manifestData.has_exam;
+        return this.manifestData.data?.has_exam;
     }
     get examType(): string {
-        return this.manifestData.exam_type;
+        return this.manifestData.data?.exam_type;
     }
     get examIsPrelearning(): boolean {
         return this.hasExam && this.examType === "prelearning";
