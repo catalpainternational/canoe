@@ -1,4 +1,5 @@
 import { Page } from "../Page";
+import { TWagtailPage } from "../../Types/PageTypes";
 import TeachingTopic from "./TeachingTopic";
 
 export default class TeachingActivity extends Page {
@@ -20,6 +21,22 @@ export default class TeachingActivity extends Page {
 
     get extend(): any {
         return this.data.extend;
+    }
+
+    get plan_tips(): TWagtailPage | undefined {
+        return this.plan.tips_page
+            ? this.manifest.pages[this.plan.tips_page]
+            : undefined;
+    }
+
+    // get first_plan_tip(): Page {
+    //     TODO
+    // }
+
+    get teach_tips(): TWagtailPage | undefined {
+        return this.teach.tips_page
+            ? this.manifest.pages[this.teach.tips_page]
+            : undefined;
     }
 
     get curriculum(): string {
