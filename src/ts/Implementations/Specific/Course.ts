@@ -23,10 +23,10 @@ export default class Course extends Page {
         return this.childPages;
     }
     get hasExam(): boolean {
-        return this.manifestData.has_exam;
+        return this.manifestData.data?.has_exam;
     }
     get examType(): string {
-        return this.manifestData.exam_type;
+        return this.manifestData.data?.exam_type;
     }
     get examIsPrelearning(): boolean {
         return this.hasExam && this.examType === "prelearning";
@@ -117,12 +117,15 @@ export default class Course extends Page {
                 });
                 this.complete = true;
             }
-
-            // clear the answers from memory so they do not show up next time
-            clearPageTestAnswers(this.id);
         }
         return result;
     }
+
+    clearExamScores(): any {
+        // clear the answers from memory so they do not show up next time
+        clearPageTestAnswers(this.id);
+    }
+
     /** read from state to check if exam passed */
     get examResult(): Record<string, any> {
         const numberOfQuestions = this.examCards.length;
@@ -134,8 +137,9 @@ export default class Course extends Page {
         }
         const correctAnswers = this.examCards.filter((card) => {
             return Answer.isCorrect(answers[card.id].current, card.answers);
-        }).length;
-        const score = correctAnswers / numberOfQuestions;
+        });
+        const score = correctAnswers.length / numberOfQuestions;
+
         return {
             cardData: Object.fromEntries(
                 Object.entries(answers).map(([uuid, answer]) => {
@@ -144,6 +148,7 @@ export default class Course extends Page {
             ),
             passed: score >= EXAM_PASS_SCORE,
             score,
+            correctAnswers,
             passScore: EXAM_PASS_SCORE,
         };
     }

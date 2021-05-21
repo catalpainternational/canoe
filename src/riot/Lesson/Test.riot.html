@@ -1,21 +1,25 @@
 <Test>
     <ImageWrapper
-        if="{ card.image }"
+        if="{ card && card.image }"
         image="{ card.image }"
     ></ImageWrapper>
     <h3>
         <template if="{ isExam }">
-            { cardNumber }.&nbsp; 
+            { cardNumber }.&nbsp;
         </template>
         { card.question }
     </h3>
     <TestSingleAnswer
         if="{ testType === 'single' }"
         toggleModal="{ props.toggleModal }"
+        review="{ props.review }"
+        card="{ card }"
     ></TestSingleAnswer>
     <TestMultipleAnswer
         if="{ testType === 'multiple' }"
         toggleModal="{ props.toggleModal }"
+        review="{ props.review }"
+        card="{ card }"
     ></TestMultipleAnswer>
     <script>
         import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
@@ -33,6 +37,9 @@
                     return this.cardNumber - 1;
                 },
                 get cardNumber() {
+                    if (this.props && this.props.review) {
+                        return Number(this.props.cardNumber);
+                    }
                     const cardNum = parseInt(this.route.riotHash[1]);
                     return isNaN(cardNum)
                         ? ( this.page.examType === 'prelearning' ? 1 : 'code')
@@ -45,16 +52,21 @@
                     return !!this.page.examCards;
                 },
                 get card() {
-                    return this.page.examCards 
+                    if (this.props && this.props.review) {
+                        return this.props.cards[this.cardNumber - 1];
+                    }
+                    return this.page.examCards
                         ? this.page.examCards[this.cardIndex]
                         : this.page.cards[this.cardIndex];
                 },
                 get testType() {
-                    switch(this.card.tag) {
-                        case "multipleChoice":
-                            return "multiple";
-                        default:
-                            return "single";
+                    if (this.card) {
+                        switch(this.card.tag) {
+                            case "choose multiple":
+                                return "multiple";
+                            default:
+                                return "single";
+                        }
                     }
                 },
             };

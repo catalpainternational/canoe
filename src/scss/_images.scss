@@ -171,7 +171,7 @@
 
 .login-image {
     @include unmaskable-icons-shared("~img/login_image.svg", contain);
-    width: 130px;
+    width: 200px;
     height: 130px;
 }
 
@@ -191,6 +191,27 @@
     @include unmaskable-icons-shared("~img/superman_success.png", contain);
     height: 45vh;
     width: 100%;
+}
+
+.exploding-computer {
+    @include unmaskable-icons-shared("~img/exploding_computer.png", contain);
+    height: 170px;
+    width: 100%;
+    display: block;
+}
+
+.exam-review {
+    @include unmaskable-icons-shared("~img/exam_review.png", contain);
+    height: 140px;
+    width: 100%;
+    display: block;
+}
+
+.retake-exam {
+    @include unmaskable-icons-shared("~img/retake_exam.png", contain);
+    height: 140px;
+    width: 100%;
+    display: block;
 }
 
 .high-fivers {
