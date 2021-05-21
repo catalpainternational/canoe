@@ -342,7 +342,7 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     /** sets feedback on this page */
-    set feedback(feedbackData: Record<string, any>) {
+    sendFeedback(feedbackData: Record<string, any>) {
         persistFeedback({
             pageId: this.id,
             revisionId: this.revisionId,

@@ -170,10 +170,10 @@
                 const { comment } = this.state;
                 const feedback = feedbackString;
 
-                this.lesson.feedback = {
+                this.lesson.sendFeedback({
                     feedback,
                     comment,
-                };
+                });
             },
 
             setTextAreaFocus(event) {
