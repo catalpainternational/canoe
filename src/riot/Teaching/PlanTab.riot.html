@@ -1,22 +1,30 @@
 <PlanTab>
     <TabSection
         class="{'first-section'}"
-        icon="{'brain'}" 
+        icon="{'brain'}"
         title="{TRANSLATIONS.learningOutcomes()}"
-        section={ page.plan.outcomes }
+        section={ plan.outcomes }
     ></TabSection>
     <TabSection
         class="{'middle-section'}"
-        icon="{'binocular'}" 
+        icon="{'binocular'}"
         title="{TRANSLATIONS.overview()}"
-        section={ page.plan.overview }
+        section={ plan.overview }
     ></TabSection>
     <TabSection
         class="{'last-section'}"
-        icon="{'clipboard-pencil'}" 
+        icon="{'clipboard-pencil'}"
         title="{TRANSLATIONS.preparation()}"
-        section={ page.plan.preparation }
+        section={ plan.preparation }
     ></TabSection>
+    <div if="{planTips}" class="card-frame">
+        <div class="card-content">
+            <h4>{planTips.title}</h4>
+            <button onclick="{openTips}" class="btn-primary">{ TRANSLATIONS.viewTips() }</button>
+        </div>
+        <div class="card-shadow"></div>
+        <div class="card-shadow"></div>
+    </div>
     <button class="btn-secondary" onclick="{goToTeach}">
         { TRANSLATIONS.ready() }
     </button>
@@ -25,15 +33,28 @@
         import { getRoute } from "ReduxImpl/Interface";
 
         function PlanTab() { return {
-            onBeforeMount(props, state) {
-                this.page = getRoute().page;
-            },
-
             TRANSLATIONS: {
                 learningOutcomes: () => gettext("Learning outcomes"),
                 overview: () => gettext("Overview"),
                 preparation: () => gettext("Preparation tasks & materials"),
                 ready: () => gettext("Ready to teach"),
+                viewTips: () => gettext("View all tips"),
+            },
+
+            get route() {
+                return getRoute();
+            },
+
+            get plan() {
+                return this.route.page.plan;
+            },
+
+            get planTips() {
+                return this.route.page.plan_tips;
+            },
+
+            openTips() {
+                location.hash = `#${this.planTips.loc_hash}:1`;
             },
 
             goToTeach() {

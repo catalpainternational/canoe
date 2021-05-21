@@ -107,6 +107,7 @@
                     return getRoute().page;
                 },
                 get stage() {
+                    if (this.props && this.props.tips) return getRoute().riotHash[0];
                     return getRoute().riotHash[1];
                 },
                 get cardNumber() {

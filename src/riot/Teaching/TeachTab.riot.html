@@ -1,21 +1,21 @@
 <TeachTab>
     <TabSection
         class="{'first-section'}"
-        icon="{'group-circle'}" 
+        icon="{'group-circle'}"
         title="{ TRANSLATIONS.setup() }"
-        section={ page.teach.setup }
+        section={ teach.setup }
     ></TabSection>
     <TabSection
         class="{'middle-section'}"
-        icon="{'crossed-pencil'}" 
+        icon="{'crossed-pencil'}"
         title="{ TRANSLATIONS.activity() }"
-        section={ page.teach.activity }
+        section={ teach.activity }
     ></TabSection>
     <TabSection
         class="{'last-section'}"
-        icon="{'chat-bubbles'}" 
+        icon="{'chat-bubbles'}"
         title="{ TRANSLATIONS.wrap() }"
-        section={ page.teach.wrapup }
+        section={ teach.wrapup }
     ></TabSection>
     <button class="btn-secondary" onclick="{goToExtend}">
         { TRANSLATIONS.extendKnowledge() }
@@ -25,16 +25,20 @@
         import { getRoute } from "ReduxImpl/Interface";
 
         function TeachTab() { return {
-			onBeforeMount(props, state) {
-				this.page = getRoute().page;
-			},
-
 			TRANSLATIONS: {
 				setup: () => gettext("Setup"),
 				activity: () => gettext("Activity"),
 				wrap: () => gettext("Wrap up"),
 				extendKnowledge: () => gettext("Extend your knowledge"),
 			},
+
+            get route() {
+                return getRoute();
+            },
+
+            get teach() {
+                return this.route.page.teach;
+            },
 
 			goToExtend() {
 				this.props.selectTab("extend");

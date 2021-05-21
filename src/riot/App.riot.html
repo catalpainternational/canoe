@@ -33,6 +33,7 @@
         <AllTopicsList if="{state.page.type === 'learningactivitieshomepage'}"></AllTopicsList>
         <TopicPage if="{state.page.type === 'learningactivitytopicpage'}"></TopicPage>
         <ActivityPage if="{state.page.type === 'learningactivitypage'}"></ActivityPage>
+        <LessonContent if="{state.page.type === 'tipspage'}" tips="{true}"></LessonContent>
 
         <BottomMenu
             if="{ state.page.type !== 'initial' }"
@@ -62,6 +63,7 @@
         import AllCoursesList from "RiotTags/WagtailPages/AllCoursesList.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
+        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
 
         import AllTopicsList from "RiotTags/WagtailPages/AllTopicsList.riot.html";
@@ -98,6 +100,7 @@
             allcourseslist: AllCoursesList,
             courseoverview: CourseOverview,
             lessonoverview: LessonOverview,
+            lessoncontent: LessonContent,
             resources: Resources,
             profile: Profile,
             settings: Settings,
