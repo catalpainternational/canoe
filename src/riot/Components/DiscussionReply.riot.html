@@ -13,7 +13,7 @@
             {props.comment.comment}
         </p>
         <div class="controls">
-            <p onclick="{flagInappropriate}">{TRANSLATIONS.flag()} <span class="flag"></span></p>
+            <p onclick="{addFlag}">{TRANSLATIONS.flag()} <span class="flag"></span></p>
         </div>
     </div>
 
@@ -52,8 +52,8 @@
                 setTimeout(this.getDate, 60000);
             },
 
-            flagInappropriate() {
-                this.props.flagInappropriate(this.props.comment);
+            addFlag() {
+                this.props.addFlag(this.props.comment);
             }
         };
 
