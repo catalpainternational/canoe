@@ -1,6 +1,7 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { unsubscribeFromNotifications } from "js/Notifications";
 import { setAuthenticated, setUnauthenticated, getUser } from "ReduxImpl/Interface";
+import Cookies from "js-cookie";
 
 const authUrl = `${BACKEND_BASE_URL}/auth`;
 /** Post a login request to the server */
@@ -12,6 +13,9 @@ export const login = async (usernameAndPassword) => {
         method: "POST",
         credentials: 'include',
         body: formData,
+        headers: {
+            "X-CSRFToken": Cookies.get("csrftoken"),
+        },
     })
     .then((response) => {
         if (!response.ok) throw new Error(`Login failed, HTTP status: ${response.status}`);
@@ -24,6 +28,9 @@ export const logout = () => {
     return fetch(authUrl, {
         method: "DELETE",
         credentials: 'include',
+        headers: {
+            "X-CSRFToken": Cookies.get("csrftoken"),
+        },
     }).catch((err) => {
         // delete the Canoe=Offline-Session cookie
         // Django is configured to log users out if no Canoe-Offline-Session is received
@@ -83,6 +90,15 @@ export const getCapitalizedUsername = () => {
 export const getUserId = () => {
     const user = getUser();
     return user ? user.userId : null;
+};
+
+const getCookie = (name) => {
+    const found_cookie = document.cookie.split(`; `).find((tokenString) => {
+        const [key] = tokenString.split("=");
+        return key === name;
+    });
+
+    return found_cookie ? found_cookie.substring(found_cookie.indexOf('=') + 1) : null
 };
 
 const deleteCookie = (name) => {

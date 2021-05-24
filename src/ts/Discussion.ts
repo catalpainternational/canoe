@@ -1,7 +1,7 @@
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 
 import { v4 as uuidv4 } from "uuid";
+import Cookies from "js-cookie";
 
 export class Discussion {
     static CreateComment(
@@ -43,9 +43,9 @@ export class Discussion {
         const init = {
             method: "GET",
             mode: "cors",
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
-                Authorization: `JWT ${getAuthenticationToken()}`,
             },
         } as RequestInit;
 
@@ -103,9 +103,10 @@ export class Discussion {
         const init = {
             method: "POST",
             mode: "cors",
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
-                Authorization: `JWT ${getAuthenticationToken()}`,
+                "X-CSRFToken": Cookies.get("csrftoken"),
             },
             body: JSON.stringify(body),
         } as RequestInit;

@@ -3214,6 +3214,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/js-cookie@npm:^2":
+  version: 2.2.6
+  resolution: "@types/js-cookie@npm:2.2.6"
+  checksum: 08d3a2a014d2b7fd97070b5e5039f2ca387f07b9ecc13cfa85040479e7adbd62087901bd8adf94b2afad96457652996d1f051282ad3d4677a7ae1b6bf87a640f
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:*, @types/json-schema@npm:^7.0.3, @types/json-schema@npm:^7.0.5":
   version: 7.0.6
   resolution: "@types/json-schema@npm:7.0.6"
@@ -5306,6 +5313,7 @@ __metadata:
     "@types/eslint": ^7
     "@types/eslint-config-prettier": ^6
     "@types/eslint-plugin-prettier": ^3
+    "@types/js-cookie": ^2
     "@types/node": "*"
     "@types/node-fetch": ^2.5.7
     "@types/prettier": ^2
@@ -5342,6 +5350,7 @@ __metadata:
     idb: ^5.0.4
     idb-keyval: ^5.0.4
     js: "link:src/js"
+    js-cookie: ^2.2.1
     mini-css-extract-plugin: ^0.9.0
     node-fetch: ^2.6.1
     optimize-css-assets-webpack-plugin: ^5.0.3
@@ -9922,6 +9931,13 @@ fsevents@~2.3.1:
   version: 0.3.7
   resolution: "jpeg-js@npm:0.3.7"
   checksum: 144337cbb63f4fa887560260626df5c6a6c8d7b2f8dbfca73f83a8aadedd636fce69ba4824621d5cf963a14abc1fd1841262b6c1e18d5a0a0639e9a3791c96e0
+  languageName: node
+  linkType: hard
+
+"js-cookie@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "js-cookie@npm:2.2.1"
+  checksum: c110f78427cb7715f67c69df0b3430f7cf9dafb5ddb13014df171d4fb61ccda0b1caf9767412cde63cab4bad697a5d4ce83b0c2e7ec650ec9929ed70750d20ae
   languageName: node
   linkType: hard
 
