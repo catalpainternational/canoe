@@ -33,7 +33,7 @@
         <AllTopicsList if="{state.page.type === 'learningactivitieshomepage'}"></AllTopicsList>
         <TopicPage if="{state.page.type === 'learningactivitytopicpage'}"></TopicPage>
         <ActivityPage if="{state.page.type === 'learningactivitypage'}"></ActivityPage>
-        <LessonContent if="{state.page.type === 'tipspage'}" tips="{true}"></LessonContent>
+        <LessonContent if="{state.page.type === 'tipspage'}" isTipsPage="{true}"></LessonContent>
 
         <BottomMenu
             if="{ state.page.type !== 'initial' }"

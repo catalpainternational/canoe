@@ -1,10 +1,10 @@
 <LessonContent>
     <LessonFrame
-        if="{ cardNumber <= cards.length }"
+        if="{ card && cardNumber <= cards.length }"
         extraStyleClasses="{ isAQuestion() ? 'test' : 'content' }"
         progressValue="{ cardNumber }"
         progressMax="{ cards.length }"
-        linkTo="{ lesson.course.loc_hash }"
+        linkTo="{ linkTo }"
     >
         <TitleDescription
             if="{ card.tag === 'titleDescription' }"
@@ -30,7 +30,7 @@
         </Test>
     </LessonFrame>
     <div
-        if="{ cardNumber <= cards.length }"
+        if="{ card && cardNumber <= cards.length }"
         class="bottom-buttons"
     >
         <div>
@@ -65,11 +65,13 @@
         lesson="{ lesson }"
         cardNumber="{ cardNumber }"
     />
+    <!-- TODO fix the course Id here -->
     <LessonFeedback
         if="{ !cardNumber && stage == 'feedback' }"
         lessonId="{ lesson.id }"
-        courseId="{ lesson.course.id }"
+        courseId="{ props.isTipsPage ? null : lesson.course.id }"
     ></LessonFeedback>
+
     <LessonComplete
         if="{ !cardNumber && stage == 'complete' }"
     ></LessonComplete>
@@ -103,22 +105,45 @@
                     next: () => gettext("Next"),
                     finish: () => gettext("Finish"),
                 },
+
+                get route() {
+                    return getRoute();
+                },
                 get lesson() {
-                    return getRoute().page;
+                    return this.route.page;
                 },
                 get stage() {
-                    if (this.props && this.props.tips) return getRoute().riotHash[0];
-                    return getRoute().riotHash[1];
+                    if (this.props && this.props.isTipsPage) {
+                        if (this.route.riotHash[1] === 'feedback') return 'feedback';
+                        return this.route.riotHash[0];
+                    }
+                    return this.route.riotHash[1];
                 },
                 get cardNumber() {
                     return parseInt(this.stage);
                 },
                 get cards() {
-                    return this.lesson.cards;
+                    return this.lesson.cards || this.lesson.data.cards;
                 },
                 get card() {
-                    return this.lesson.cards[this.cardNumber - 1];
+                    if (isNaN(this.cardNumber)) return {};
+
+                    if (this.props && this.props.isTipsPage) {
+                        if (this.lesson.data.cards) return this.lesson.data.cards[this.cardNumber - 1];
+                    } else {
+                        return this.lesson.cards[this.cardNumber - 1];
+                    }
                 },
+                get linkTo() {
+                    if (this.props && this.props.isTipsPage) {
+                        const loc = location.hash;
+                        const slug = this.lesson.data.meta.slug;
+                        return loc.split(`/${slug}`)[0].replace('#', '');
+                    } else if (this.lesson.course) {
+                        return this.lesson.course.loc_hash;
+                    }
+                },
+
                 isAQuestion() {
                     const r =  this.card.tag.includes('Choice');
                     return r;
