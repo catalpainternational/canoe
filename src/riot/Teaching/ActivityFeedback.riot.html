@@ -79,7 +79,6 @@
     </div>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
-        import { logLessonFeedback } from "js/GoogleAnalytics";
         import { getRoute } from "ReduxImpl/Interface";
 
         export default {
@@ -115,8 +114,8 @@
                 activeSelection: null,
             },
 
-            onBeforeMount(props, state) {
-                this.state.lesson = getRoute().page;
+            get activity() {
+                return getRoute().page;
             },
 
             clickedThisLessonIs(rating) {
@@ -152,14 +151,12 @@
             },
 
             sendFeedback(feedbackString) {
-                const lesson = this.props.lessonName;
                 const feedback = feedbackString;
-                const feedbackComment = document.getElementById("feedback").value;
+                const comment = document.getElementById("feedback").value;
 
-                logLessonFeedback({
-                    lesson,
+                this.activity.sendFeedback({
                     feedback,
-					feedbackComment
+                    comment,
                 });
             },
 

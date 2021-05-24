@@ -4,7 +4,7 @@
  */
 import { readCompletionsIntoState, clearStateCompletions } from "js/actions/Completion";
 import { readExamDataIntoState, clearStateExamData } from "js/actions/ExamScores";
-import { updateApi, updateIdb } from "js/actions/ActionsStore";
+import { updateApi, updateIdb, saveAndPostAction } from "js/actions/ActionsStore";
 import { closeAndDeleteDB } from "js/actions/actions_idb";
 import { isAuthenticated, subscribeToStore } from "ReduxImpl/Interface";
 
@@ -12,6 +12,9 @@ const EVERY_FIVE_MINUTES = 1000 * 60 * 5;
 let userActionPoller = null;
 let currentAuthenticatedState = false;
 
+const ACTION_TYPES= {
+    FEEDBACK: "feedback",
+};
 /**
  * Main initialisation entry point, performs actions on a fresh reload of the app
  * starts 5 minute poll to submit any unsynched user actions
@@ -71,4 +74,15 @@ async function clearAppData() {
     clearStateCompletions();
     clearStateExamData();
     await closeAndDeleteDB();
+}
+
+/**
+ * Store page feedback, persist locally, and send to api
+ * @param {*} pageId - the id of the page
+ * @param {*} extraDataObject - any extra data to persist with the feedback
+ * @returns the action stored
+ */
+export function persistFeedback(extraDataObject = {}) {
+    // store the action ( via idb and api )
+    return saveAndPostAction(ACTION_TYPES.FEEDBACK, extraDataObject);
 }
