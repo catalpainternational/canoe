@@ -5340,7 +5340,6 @@ __metadata:
     html-webpack-inline-svg-plugin: ^2.2.6
     html-webpack-plugin: ^4.3.0
     idb: ^5.0.4
-    idb-keyval: ^5.0.4
     js: "link:src/js"
     mini-css-extract-plugin: ^0.9.0
     node-fetch: ^2.6.1
@@ -9102,13 +9101,6 @@ fsevents@~2.3.1:
   dependencies:
     postcss: ^7.0.14
   checksum: 437ba4f7c9543db7a007f3968698ae26c966e2c54e34ac08c8f88737d06181ffacc5de8d17435940367135822a98655e3c6c8f70504d22b2f5cbc8e10798f873
-  languageName: node
-  linkType: hard
-
-"idb-keyval@npm:^5.0.4":
-  version: 5.0.4
-  resolution: "idb-keyval@npm:5.0.4"
-  checksum: cae8c997677ca1749b76e2381770ec2cf1fa38e419363e4d085dd6f1fc1868143b330afe28cdb464b8f3361270ca30911e404ced830db9dda08e38235d23a47d
   languageName: node
   linkType: hard
 

@@ -10,14 +10,12 @@ import { initialiseIdentity } from "js/AuthenticationUtilities";
 import { initialiseUserActions } from "js/UserActions";
 import { initialiseRouting } from "js/Routing"
 import { initialiseBrowserSupport } from "js/BrowserSupport"
-import initialiseFeedback from "js/Telemetry";
 
 initialiseIdentity();
 initialiseOnlineStatus(window);
 initialiseBrowserSupport();
 initialiseRouting();
 initialiseUserActions();
-initialiseFeedback();
 // InitialiseCertChain is done after login or valid initialiseIdentity with a token
 
 riot.install(function (component) {
