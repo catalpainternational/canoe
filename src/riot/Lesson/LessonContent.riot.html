@@ -70,6 +70,7 @@
         if="{ !cardNumber && stage == 'feedback' }"
         lessonId="{ lesson.id }"
         courseId="{ props.isTipsPage ? null : lesson.course.id }"
+        linkTo="{ linkTo }"
     ></LessonFeedback>
 
     <LessonComplete
