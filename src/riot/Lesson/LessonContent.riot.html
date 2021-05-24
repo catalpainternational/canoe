@@ -65,16 +65,15 @@
         lesson="{ lesson }"
         cardNumber="{ cardNumber }"
     />
-    <!-- TODO fix the course Id here -->
     <LessonFeedback
         if="{ !cardNumber && stage == 'feedback' }"
-        lessonId="{ lesson.id }"
-        courseId="{ props.isTipsPage ? null : lesson.course.id }"
         linkTo="{ linkTo }"
     ></LessonFeedback>
 
     <LessonComplete
         if="{ !cardNumber && stage == 'complete' }"
+        isTipsPage="{ props.isTipsPage }"
+        linkTo="{ linkTo }"
     ></LessonComplete>
 
     <script>
@@ -114,11 +113,14 @@
                     return this.route.page;
                 },
                 get stage() {
+                    const hashAtZero = this.route.riotHash[0];
+                    const hashAtOne = this.route.riotHash[1];
+
                     if (this.props && this.props.isTipsPage) {
-                        if (this.route.riotHash[1] === 'feedback') return 'feedback';
-                        return this.route.riotHash[0];
+                        if (hashAtOne === 'feedback' || hashAtOne === 'complete') return hashAtOne;
+                        return hashAtZero;
                     }
-                    return this.route.riotHash[1];
+                    return hashAtOne;
                 },
                 get cardNumber() {
                     return parseInt(this.stage);
