@@ -29,10 +29,6 @@ export default class TeachingActivity extends Page {
             : undefined;
     }
 
-    // get first_plan_tip(): Page {
-    //     TODO
-    // }
-
     get teach_tips(): TWagtailPage | undefined {
         return this.teach.tips_page
             ? this.manifest.pages[this.teach.tips_page]

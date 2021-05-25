@@ -161,12 +161,20 @@
 
                 goBack() {
                     const prevCard = this.cards[this.cardNumber - 2];
-                    location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber - 1}`;
+                    if (this.props && this.props.isTipsPage && this.state.returnTab) {
+                        location.hash = `${this.lesson.loc_hash}:${this.cardNumber - 1}:${this.state.returnTab}`;
+                    } else {
+                        location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber - 1}`;
+                    }
                 },
 
                 nextCard() {
                     window.scroll(0, 0);
-                    location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber + 1}`;
+                    if (this.props && this.props.isTipsPage && this.state.returnTab) {
+                        location.hash = `${this.lesson.loc_hash}:${this.cardNumber + 1}:${this.state.returnTab}`;
+                    } else {
+                        location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber + 1}`;
+                    }
                 },
 
                 completeLesson() {

@@ -104,54 +104,6 @@ ActivityPage {
             margin-right: 12px;
             box-shadow: none;
         }
-
-        .card-frame {
-            margin-bottom: 2.5em;
-            width: 100%;
-            max-width: $tablet;
-            background-color: $gray-10;
-            border-radius: 8px;
-            box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
-            box-sizing: border-box;
-            position: relative;
-
-            @media only screen and (min-width: 610px) {
-                margin: 0 auto 2.5em;
-            }
-        }
-
-        .card-content {
-            position: relative;
-            padding: 1em;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            overflow: scroll;
-        }
-
-        .card-shadow {
-            background-color: $gray-10;
-            height: 20px;
-            width: 96%;
-            position: absolute;
-            bottom: -11px;
-            left: 2%;
-            border-radius: 8px;
-            z-index: -1;
-            box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
-            opacity: 0.9;
-
-            &:nth-child(3) {
-                width: 90%;
-                bottom: -21px;
-                z-index: -2;
-                left: 5%;
-                border-radius: 7px;
-                opacity: 0.55;
-            }
-        }
     }
 
     TabSection {
@@ -193,26 +145,56 @@ ActivityPage {
         }
     }
 
-    FlashCards .flash-cards {
-        height: 210px;
-        width: 100%;
-        box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.2);
-        border-radius: 8px;
-        background-color: white;
-        padding: 25px;
-        box-sizing: border-box;
-        margin: 1em 0;
+    FlashCard {
+        .card-frame {
+            margin-bottom: 2.5em;
+            width: 100%;
+            max-width: $tablet;
+            background-color: $gray-10;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
+            box-sizing: border-box;
+            position: relative;
 
-        h4 {
-            font-size: 1em;
+            @media only screen and (min-width: 610px) {
+                margin: 0 auto 2.5em;
+            }
         }
 
-        p {
-            font-size: 0.9em;
+        .card-content {
+            position: relative;
+            padding: 1em;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow: scroll;
+
+            h4 {
+                margin-bottom: 0.7em;
+            }
         }
 
-        button {
-            margin-top: 1em;
+        .card-shadow {
+            background-color: $gray-10;
+            height: 20px;
+            width: 96%;
+            position: absolute;
+            bottom: -11px;
+            left: 2%;
+            border-radius: 8px;
+            z-index: -1;
+            box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+            opacity: 0.9;
+
+            &:nth-child(3) {
+                width: 90%;
+                bottom: -21px;
+                z-index: -2;
+                left: 5%;
+                border-radius: 7px;
+                opacity: 0.55;
+            }
         }
     }
 }

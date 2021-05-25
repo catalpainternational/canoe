@@ -59,11 +59,13 @@
                     <PlanTab
                         if="{selectedTab === 'plan'}"
                         selectTab="{selectTab}"
+                        getTipCards="{getTipCards}"
                     >
                     </PlanTab>
                     <TeachTab
                         if="{selectedTab === 'teach'}"
                         selectTab="{selectTab}"
+                        getTipCards="{getTipCards}"
                     >
                     </TeachTab>
                     <ExtendTab
@@ -87,6 +89,9 @@
         import { getRoute } from "ReduxImpl/Interface";
         import { getCardImageUrl } from "js/utilities";
 
+        import { BACKEND_BASE_URL } from 'js/urls';
+        import { getAuthenticationToken } from "js/AuthenticationUtilities";
+
         function ActivityPage() { return {
             state: {
                 status: "content",
@@ -106,6 +111,21 @@
 
             get activity() {
                 return this.route.page;
+            },
+
+            getTipCards(url) {
+                const token = getAuthenticationToken();
+
+                return fetch(`${BACKEND_BASE_URL}${url}`, {
+                    mode: 'cors',
+                    headers: {
+                        Authorization: `JWT ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }).then((response) => {
+                    if (!response.ok) return response.status;
+                    return response.json();
+                });
             },
 
             get selectedTab() {

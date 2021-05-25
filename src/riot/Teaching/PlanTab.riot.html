@@ -17,28 +17,43 @@
         title="{TRANSLATIONS.preparation()}"
         section={ plan.preparation }
     ></TabSection>
-    <div if="{planTips}" class="card-frame">
-        <div class="card-content">
-            <h4>{planTips.title}</h4>
-            <button onclick="{openTips}" class="btn-primary">{ TRANSLATIONS.viewTips() }</button>
-        </div>
-        <div class="card-shadow"></div>
-        <div class="card-shadow"></div>
-    </div>
+
+    <FlashCard
+        if="{state.flashCards.length}"
+        title="{planTips.title}"
+        card="{state.flashCards[0]}"
+        numberOfCards="{state.flashCards.length}"
+        viewAllTips="{openTips}"
+    ></FlashCard>
+
     <button class="btn-secondary" onclick="{goToTeach}">
         { TRANSLATIONS.ready() }
     </button>
     <script>
         import TabSection from "RiotTags/Teaching/TabSection.riot.html";
+        import FlashCard from "RiotTags/Teaching/FlashCard.riot.html";
         import { getRoute } from "ReduxImpl/Interface";
 
         function PlanTab() { return {
+            state: {
+                flashCards: [],
+            },
+
             TRANSLATIONS: {
                 learningOutcomes: () => gettext("Learning outcomes"),
                 overview: () => gettext("Overview"),
                 preparation: () => gettext("Preparation tasks & materials"),
                 ready: () => gettext("Ready to teach"),
-                viewTips: () => gettext("View all tips"),
+            },
+
+            onBeforeMount() {
+                if (this.props && this.props.getTipCards) {
+                    this.props.getTipCards(this.planTips.api_url)
+                        .then((response) => {
+                            this.update({ flashCards: response.cards })
+                            return response.cards ? response.cards : [];
+                        });
+                }
             },
 
             get route() {
@@ -65,6 +80,7 @@
 
         PlanTab.components = {
             tabsection: TabSection,
+            flashcard: FlashCard,
         };
 
         export default PlanTab;
