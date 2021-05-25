@@ -4,7 +4,7 @@
             <h4>{ TRANSLATIONS.settings() }</h4>
         </TopMenu>
         <div class="content-wrapper">
-            <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
+            <div if="{state.browserSupportsNotifications && state.isAuthenticated }" class="notifications-toggle">
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
                     onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"

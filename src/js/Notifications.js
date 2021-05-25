@@ -3,6 +3,7 @@ import { getBrowser } from "ts/PlatformDetection";
 import { urlBase64ToUint8Array } from "js/DjangoPushNotifications";
 import { alertIfRequestWasMadeOffline } from "js/Errors";
 import { logUnsubscribedFromNotifications } from "js/GoogleAnalytics";
+import Cookies from "js-cookie";
 
 const APPLICATION_SERVER_KEY = `${process.env.APPLICATION_SERVER_KEY}`;
 const NOTIFICATION_ID_KEY = "notificationRegistrationId";
@@ -45,6 +46,7 @@ const postNotificationSubscription = async (subscriptionData) => {
         credentials: "include",
         headers: {
             "Content-Type": "application/json",
+            "X-CSRFToken": Cookies.get("csrftoken"),
         },
         method: "POST",
         body: JSON.stringify(subscriptionData),
