@@ -26,8 +26,8 @@ const getInitialLanguage = () => {
         localStorage.setItem(LANGUAGE_STORAGE_KEY, ENGLISH_LANG_CODE);
         return ENGLISH_LANG_CODE;
     } else {
-        localStorage.setItem(LANGUAGE_STORAGE_KEY, ENGLISH_LANG_CODE);
-        return ENGLISH_LANG_CODE;
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, TETUN_LANG_CODE);
+        return TETUN_LANG_CODE;
     }
 };
 
