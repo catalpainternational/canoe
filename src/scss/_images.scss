@@ -193,6 +193,13 @@
     width: 100%;
 }
 
+.tip-completion {
+    @include unmaskable-icons-shared("~img/tip_completion.png", contain);
+    height: 160px;
+    width: 100%;
+    margin: 5em 0 1em;
+}
+
 .exploding-computer {
     @include unmaskable-icons-shared("~img/exploding_computer.png", contain);
     height: 170px;

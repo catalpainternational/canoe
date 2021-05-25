@@ -1,7 +1,7 @@
 <LessonComplete>
     <div class="congratulations-container">
-        <!-- TODO change the image -->
-        <span class="superman-success"></span>
+        <span if="{!props.isTipsPage}" class="superman-success"></span>
+        <span if="{props.isTipsPage}" class="tip-completion"></span>
         <template if="{ props.isTipsPage }">
             <div>
                 <h2>{ TRANSLATIONS.great() }</h2>
