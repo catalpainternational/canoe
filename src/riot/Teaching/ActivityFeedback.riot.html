@@ -114,8 +114,8 @@
                 activeSelection: null,
             },
 
-            onBeforeMount(props, state) {
-                this.state.lesson = getRoute().page;
+            get activity() {
+                return getRoute().page;
             },
 
             clickedThisLessonIs(rating) {
@@ -151,9 +151,13 @@
             },
 
             sendFeedback(feedbackString) {
-                const lesson = this.props.lessonName;
                 const feedback = feedbackString;
-                const feedbackComment = document.getElementById("feedback").value;
+                const comment = document.getElementById("feedback").value;
+
+                this.activity.sendFeedback({
+                    feedback,
+                    comment,
+                });
             },
 
             setInputFocus(event) {

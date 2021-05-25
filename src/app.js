@@ -10,13 +10,13 @@ import { initialiseIdentity } from "js/AuthenticationUtilities";
 import { initialiseUserActions } from "js/UserActions";
 import { initialiseRouting } from "js/Routing"
 import { initialiseBrowserSupport } from "js/BrowserSupport"
-import initialiseFeedback from "js/Telemetry";
-import { initialiseCertChain } from "ts/StartUp";
 
 // Synchronous initialization
 // set things we can detect immeditely before riot mounts
 initialiseOnlineStatus(window);
 initialiseBrowserSupport();
+initialiseRouting();
+initialiseUserActions();
 
 // Mount the riot UI to show the loader ASAP
 riot.install(function (component) {
@@ -34,8 +34,7 @@ initialiseIdentity()  // Am I logged in
         // perform independent actions that require login in parallel
         return Promise.all([
             initialiseUserActions(), // read actiion from api and idb
-            initialiseFeedback(),    // send any unsent feedback
-            initialiseCertChain(),   // initialise the appelflap sharing cert
+            // initialiseCertChain(),   // initialise the appelflap sharing cert
         ]);
     }).then(() => {
         initialiseRouting();         // react to the navigation hash
