@@ -1,121 +1,162 @@
-Login > div {
-    $content-width: 18.75em;
-    $background-color: $tan;
-    $button-color: $blue-1;
+Login .modal-background {
+    $content-width: calc(100vw - 40px);
 
     min-height: 100vh;
     flex-direction: column;
     align-items: center;
     display: flex;
-    padding: 20px;
-    background-color: $background-color;
+    background-color: $app-background-color;
 
-    span.site-logo {
-        margin-bottom: 20px;
-    }
+    .with-swoop {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: 270px;
 
-    .site-logo,
-    .login-image {
-        flex: none;
+        span {
+            margin-bottom: 20px;
+        }
+
+        h4 {
+            margin: 0 auto 10px;
+            color: $gray-1;
+            font-weight: 400;
+            font-size: 1.3em;
+        }
     }
 
     .eye {
-        position: absolute;
-        top: 3px;
-        left: 2px;
+        display: inline-block;
     }
 
     LoginForm {
-        max-width: $content-width;
-        width: 100%;
+        max-width: $tablet;
+        width: $content-width;
         display: flex;
         justify-content: center;
-
-        margin-bottom: 1em;
+        margin-top: 1em;
     }
 
     form {
         width: 100%;
 
-        h3 {
-            margin-bottom: 20px;
-            margin-top: 20px;
+        &.has-error {
+            div.form-group {
+                border: 2px solid $red;
+                background-color: rgba(237, 30, 79, 0.05);
+            }
+
+            div.form-group.password {
+                margin-bottom: 0;
+            }
+
+            .error-message {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 10px 0;
+
+                p {
+                    color: $red;
+                    font-size: 0.8em;
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        input[type='password'] {
+            font-family: caption;
+            letter-spacing: 2px;
         }
 
         div.form-group {
-            border: 1px solid $gray-5;
             flex-direction: column;
             margin-bottom: 15px;
-            border-radius: 5px;
-            padding: 5px 10px;
+            border-radius: 3px;
+            padding: 3px 15px;
             display: flex;
+            background-color: $white;
+            box-shadow: inset 0 2px 3px 0 rgba(42, 57, 66, 0.1);
+            border: 1px solid $gray-7;
+            position: relative;
+            height: 40px;
+
+            label {
+                left: 0;
+                top: 28%;
+                margin: 0;
+                padding-left: 15px;
+                position: absolute;
+                transition: all 0.3s;
+            }
 
             &.password {
-                margin-bottom: 10px;
+                margin-bottom: 20px;
+
+                input {
+                    padding-right: 35px;
+                }
+            }
+
+            &.has-focus {
+                border: 1px solid $gray-4;
+            }
+
+            &.has-focus,
+            &.is-filled {
+                label {
+                    font-size: 0.7em;
+                    top: 13%;
+                }
             }
         }
 
-        div:not(.form-group) {
-            margin-bottom: 15px;
-            align-items: center;
+        #icon-box {
+            width: 50px;
+            height: 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
             display: flex;
-
-            p {
-                margin-bottom: 0;
-                margin-left: 5px;
-                margin-top: 0;
-            }
-        }
-
-        button {
-            width: 100%;
-        }
-
-        div.icon-box {
-            width: 30px;
-            height: 30px;
-            position: relative;
-            margin-bottom: 30px;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
 
             &:hover {
                 cursor: pointer;
             }
-        }
-
-        .error-message {
-            margin-top: -15px;
 
             p {
-                font-size: 1em;
+                margin: 0;
+                letter-spacing: 0.4px;
+                font-size: 0.5em;
+                text-transform: uppercase;
             }
         }
     }
 
     .extra-button-space {
         display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
 
-        max-width: $content-width;
-        width: 100%;
+        max-width: $tablet;
+        width: $content-width;
+        margin-top: 30px;
 
-        button {
+        a {
             font-size: 0.875em;
             text-align: center;
 
-            color: $button-color;
-            background-color: $background-color;
+            background-color: $app-background-color;
             border: none;
-
-            margin-top: 1em;
             flex: 1;
         }
     }
 
     input {
         border: none;
-        padding: 0;
-        background-color: $tan;
+        padding-top: 16px;
+        background-color: unset;
 
         &:focus {
             outline: none;
@@ -128,6 +169,17 @@ Login > div {
     input:-webkit-autofill:focus,
     input:-webkit-autofill:active {
         box-shadow: 0 0 0 1000px white inset !important;
+        color: $gray-1 !important;
+        font-size: 1em;
+    }
+
+    .has-error {
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            box-shadow: 0 0 0 1000px rgba(237, 30, 79, 0.05) inset !important;
+        }
     }
 }
 
@@ -143,27 +195,10 @@ Login > div {
     left: 35px;
 }
 
-.crossout:before {
-    position: absolute;
-    content: "";
-    left: 0;
-    top: 50%;
-    right: 0;
-    border-top: 1.5px solid;
-    border-color: $gray-1;
-
-    -webkit-transform: rotate(-35deg);
-    -moz-transform: rotate(-35deg);
-    -ms-transform: rotate(-35deg);
-    -o-transform: rotate(-35deg);
-    transform: rotate(-35deg);
-}
-
 ChangeBrowser div {
     min-height: 800px;
     min-width: 300px;
     padding: 30px;
-    background-color: $tan;
     margin: auto;
 
     span {

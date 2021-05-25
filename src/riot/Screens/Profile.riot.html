@@ -1,151 +1,92 @@
 <Profile>
-    <div class="profile">
-        <div class="profile-header">
-            <div class="header-box">
-                <div class="left-block">
-                    <h3>{ TRANSLATIONS.overall() }</h3>
-                    <h6>{ percentLessonsCompleteMessage() }</h6>
-                    <ContinueLearningButton
-                        if="{state.currentCourse && !state.currentCourse.isFinished()}"
-                        currentCourse="{state.currentCourse}"
-                    ></ContinueLearningButton>
-                </div>
-                <span class="report-card"></span>
-            </div>
+    <TopMenu extrastyleclasses="without-swoop">
+        <h4>{ TRANSLATIONS.yourProfile() }</h4>
+        <a class="top-icon right extra-clickable-space" href="#settings">
+            <span class="settings-icon"> </span>
+        </a>
+    </TopMenu>
+    <div class="content-wrapper">
+        <h2 class="sub-title">{ TRANSLATIONS.courseProgress() }</h2>
+        <div class="tab-titles">
+            <a
+                class="{state.selectedInProgress ? 'selected' : ''}"
+                onclick="{() => selectTab('in-progress')}"
+            >
+                <h5 class="section-title">{ TRANSLATIONS.inProgress() }</h5>
+            </a>
+            <a
+                class="{!state.selectedInProgress ? 'selected' : ''}"
+                onclick="{() => selectTab('completed')}"
+            >
+                <h5 class="section-title">{ TRANSLATIONS.completed() }</h5>
+            </a>
         </div>
-
-        <div class="content-wrapper">
-            <h5 class="section-title">{ TRANSLATIONS.byCourse() }</h5>
-            <ul class="course-progress-list">
-                <li each="{course in state.courses}">
-                    <a class="progress card" href="#{course.id}">
-                        <div class="profile-card">
-                            <h5>{course.title}</h5>
-                            <span class="arrow background-purple"></span>
-                        </div>
-                        <div class="card-footer">
-                            <span class="checkmark"></span>
-                            <p>{ courseLessonsCompletedMessage(course) }</p>
-                            <progress
-                                if="{course.numberOfFinishedLessons > 0}"
-                                value="{course.numberOfFinishedLessons}"
-                                max="{course.numberOfLessons}"
-                            ></progress>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-
-            <h5 class="section-title">{ TRANSLATIONS.learning() }</h5>
-            <div class="stats">
-                <div class="card card-sm no-shadow stat" href="#4">
-                    <div class="profile-card">
-                        <span class="checkmark-circle-blue"></span>
-                        <h3>{countFinishedLessonsAndExams()}</h3>
-                        <h5>{ TRANSLATIONS.lessonsCompleted() }</h5>
-                    </div>
+        <div if="{ state.selectedInProgress && home.coursesInProgress.length }" class="card-container">
+            <Card
+                each="{ course in home.coursesInProgress }"
+                contentItem="{ course }"
+            ></Card>
+        </div>
+        <div if="{ !state.selectedInProgress && home.coursesCompleted.length  }" class="card-container">
+            <Card
+                each="{ course in home.coursesCompleted }"
+                contentItem="{ course }"
+            ></Card>
+        </div>
+        <h2 class="sub-title">{ TRANSLATIONS.learning() }</h2>
+        <div class="stats">
+            <div class="card stat">
+                <div class="profile-card">
+                    <span class="checkmark-circle"></span>
+                    <h3>{ home.countFinishedLessons }</h3>
+                    <h5>{ TRANSLATIONS.lessonsCompleted() }</h5>
                 </div>
-
-                <div class="card card-sm no-shadow stat" href="#4">
-                    <div class="profile-card">
-                        <span class="road-sign"></span>
-                        <h3>{getNumberOfLessonsLeft()}</h3>
-                        <h5>{ TRANSLATIONS.lessonsLeft() }</h5>
-                    </div>
+            </div>
+            <div class="card stat">
+                <div class="profile-card">
+                    <span class="road-sign"></span>
+                    <h3>{ home.numberOfLessonsLeft }</h3>
+                    <h5>{ TRANSLATIONS.lessonsLeft() }</h5>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        import ContinueLearningButton from "RiotTags/Components/ContinueLearningButton.riot.html";
+        import Card from "RiotTags/Components/Card.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
-        import { getHomePage } from "js/WagtailPagesAPI";
-        import { getCapitalizedUsername, isGuestUser } from "js/AuthenticationUtilities";
-        import { getCourseWithLatestCompletion } from "js/utilities";
-
-        import HomePage from "js/HomePage";
+        import { getLanguage, getRoute } from "ReduxImpl/Interface";
 
         export default {
             state: {
-                courses: [],
-                currentCourse: null,
+                selectedInProgress: true,
             },
 
             components: {
-                continuelearningbutton: ContinueLearningButton,
+                card: Card,
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
-                overall: () => gettext("Overall progress"),
-                byCourse: () => gettext("Progress by course"),
+                yourProfile: () => gettext("Your profile"),
+                courseProgress: () => gettext("Course progress"),
                 learning: () => gettext("Learning statistics"),
-                lessonsCompleted: () => gettext("lessons completed so far"),
-                lessonsLeft: () => gettext("lessons remaining to finish your study"),
+                lessonsCompleted: () => gettext("lessons completed"),
+                lessonsLeft: () => gettext("lessons remaining"),
+                inProgress: () => gettext("in progress"),
+                completed: () => gettext("completed"),
             },
 
-            onMounted() {
-                this.renderProfilePage();
+            get home() {
+                return getRoute().page.home;
             },
 
-            async renderProfilePage() {
-                const homePageJSON = await getHomePage();
-                const homePage = new HomePage(homePageJSON);
-
-                let courses = await homePage.getFullCourseObjects();
-
-                if (isGuestUser()) {
-                    courses = courses.filter((course) => course.isVisibleToGuests());
+            selectTab(tabName) {
+                if (tabName === "in-progress") {
+                    this.update({ selectedInProgress: true });
+                } else {
+                    this.update({ selectedInProgress: false });
                 }
-                const lastWorkedOnCourse = getCourseWithLatestCompletion(courses);
-
-                this.update({
-                    courses,
-                    currentCourse: lastWorkedOnCourse,
-                });
-            },
-
-            countFinishedLessonsAndExams() {
-                const { courses } = this.state;
-                const tallyFinishedLessonsAndExams = (totalFinished, aCourse) =>
-                    totalFinished + aCourse.numberOfFinishedLessons;
-                return courses.reduce(tallyFinishedLessonsAndExams, 0);
-            },
-
-            countLessonsAndExams(courses) {
-                const tallyLessonsAndExams = (totalLessons, currentCourse) =>
-                    totalLessons + currentCourse.numberOfLessons;
-                return courses.reduce(tallyLessonsAndExams, 0);
-            },
-
-            getNumberOfLessonsLeft() {
-                const { courses } = this.state;
-                return this.countLessonsAndExams(courses) - this.countFinishedLessonsAndExams();
-            },
-
-            getPercentOfLessonsCompleted() {
-                const percentage =
-                    (this.countFinishedLessonsAndExams() /
-                        this.countLessonsAndExams(this.state.courses)) *
-                    100;
-                return Math.round(percentage) || 0;
-            },
-
-            courseLessonsCompletedMessage(course) {
-                // displays how many lessons of the total in a course have been completed
-                return gettext(
-                    "%1 out of %2 completed",
-                    course.numberOfFinishedLessons,
-                    course.numberOfLessons
-                );
-            },
-
-            percentLessonsCompleteMessage() {
-                // displays percentage of completed lessons in all courses combined
-                return gettext(
-                    "Great work %1! You have completed %2\% of your overall coursework",
-                    getCapitalizedUsername(),
-                    this.getPercentOfLessonsCompleted()
-                );
             },
         };
     </script>

@@ -6,11 +6,8 @@ Logos {
     margin-bottom: 20px;
 
     .logo {
-        background-image: url("~img/logo.svg");
+        @include unmaskable-icons-shared("~img/logo.svg", contain);
         width: 50px;
         height: 50px;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: contain;
     }
 }

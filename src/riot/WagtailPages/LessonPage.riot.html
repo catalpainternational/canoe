@@ -1,191 +1,65 @@
 <LessonPage>
-    <div class="replace-this-with-lessonframe background-blue-1">
-        <div class="content-wrapper">
-            {grabLessonHeaderReference()}
-            <div class="lesson-header">
-                <div>
-                    <a class="arrow-gray" onclick="{backToCoursePage}"></a>
-                </div>
-                <div class="section-title">
-                    <div class="unit">
-                        <p class="truncate-if-long">{ lessonPageTitleMessage() }</p>
-                    </div>
-                </div>
-                <h2 id="lessonPageTitle">{props.wagtailPage.title}</h2>
+    <LessonFrame
+        if="{lesson.ready}"
+        linkTo="{lesson.course.loc_hash}"
+    >
+        <div class="message-container">
+            <h5>{TRANSLATIONS.lesson()}</h5>
+            <h3>{lesson.title}</h3>
+            <div if="{ cardImageUrl }" class="lesson-page-image-wrap">
+                <img
+                    crossorigin="anonymous"
+                    src="{ cardImageUrl }"
+                    class="lesson-page-image"
+                />
             </div>
-
-            <div class="duration">
-                <span class="clock"></span>
-                <p>{ durationOfLessonMessage() }</p>
-            </div>
-            <div class="description">
-                <p>{props.wagtailPage.shortDescription}</p>
-                <p if="{props.wagtailPage.longDescription && state.showLongDescription}">
-                    {props.wagtailPage.longDescription}
-                </p>
-                <a
-                    if="{props.wagtailPage.longDescription && state.showLongDescription}"
-                    onclick="{toggleLessonDescription}"
-                    >{ TRANSLATIONS.less() }</a
-                >
-                <a
-                    if="{props.wagtailPage.longDescription && !state.showLongDescription}"
-                    onclick="{toggleLessonDescription}"
-                    >{ TRANSLATIONS.more() }</a
-                >
-            </div>
-
-            <h5 class="section-title">{ TRANSLATIONS.lesson_activities() }</h5>
-
-            <Card
-                title="1. {props.wagtailPage.objective.title}"
-                description="{props.wagtailPage.objective.aim}"
-                duration="{props.wagtailPage.objective.duration}"
-                link="{props.wagtailPage.id}/{OBJECTIVES}/1"
-                isCompleted="{isModuleComplete(OBJECTIVES)}"
-                type="activity"
-                showFooter="{true}"
-            >
-            </Card>
-
-            <Card
-                title="2. {props.wagtailPage.content.title}"
-                description="{props.wagtailPage.content.aim}"
-                duration="{props.wagtailPage.content.duration}"
-                link="{props.wagtailPage.id}/{CONTENT}/1"
-                isCompleted="{isModuleComplete(CONTENT)}"
-                type="activity"
-                showFooter="{true}"
-            >
-            </Card>
-
-            <Card
-                title="3. {props.wagtailPage.test.title}"
-                description="{props.wagtailPage.test.aim}"
-                duration="{props.wagtailPage.test.duration}"
-                link="{props.wagtailPage.id}/{TEST}/1"
-                isCompleted="{isModuleComplete(TEST)}"
-                type="activity"
-                showFooter="{true}"
-            >
-            </Card>
+            <span if="{!lesson.cardImage}" class="lesson-presentation"></span>
+            <p>{lesson.shortDescription}</p>
+            <p>{lesson.longDescription}</p>
         </div>
+    </LessonFrame>
+    <div if="{lesson.ready}" class="bottom-buttons">
+        <button class="btn-primary" onclick="{startLesson}">
+            { TRANSLATIONS.start() }
+        </button>
     </div>
+
     <script>
-        import Card from "RiotTags/Components/Card.riot.html";
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
-        import { isComplete } from "Actions/completion";
+        import { getRoute } from "ReduxImpl/Interface";
 
-        export default {
-            state: {
-                showLongDescription: false,
-                header: null,
-                lessonPageTitle: null,
-            },
-
-            components: {
-                card: Card,
-            },
-
+        function LessonPage() { return {
             TRANSLATIONS: {
+                lesson: () => gettext("Lesson"),
                 lesson_activities: () => gettext("Lesson Activities"),
-                more: () => gettext("See more"),
-                less: () => gettext("See less"),
+                start: () => gettext("Start lesson"),
             },
 
-            OBJECTIVES: "objectives",
-            CONTENT: "content",
-            TEST: "test",
-
-            onMounted(props, state) {
-                window.addEventListener("scroll", this.stickyHeader);
-                this.disableBlockedLessonModules();
+            get lesson() {
+                return getRoute().page;
             },
 
-            onUpdated() {
-                this.disableBlockedLessonModules();
+            get cardImageUrl() {
+                return this.lesson.cardImage
+                    ? `${process.env.API_BASE_URL}${this.lesson.cardImage}`
+                    : undefined;
             },
 
-            onUnmounted() {
-                window.removeEventListener("scroll", this.stickyHeader);
-            },
-
-            grabLessonHeaderReference() {
-                // "Why does this code exist?", you ask. We ran into a bug where
-                // `this.state.header` lost its dom reference, which broke the
-                // sticky header.
-                //
-                // Let's say you're on the lesson overview. When you flip from
-                // to and from a section (objectives, content, or test), the
-                // overview DOM unmounts and mounts. The lesson header in the
-                // newly mounted DOM is different from `this.state.header`.
-                // `this.state.header` refers to the header in the now-unmounted
-                // DOM. So, flipping between overview and a section broke the
-                // sticky header because the new DOM's header never became
-                // sticky.
-                //
-                // `grabLessonHeaderReference` fires whenever the overview DOM
-                // mounts. It always grabs the freshest lesson header reference.
-                // With the fresh reference, `stickyHeader` always makes the
-                // the right header sticky. Problem solved.
-                this.state.header = document.getElementsByClassName("lesson-header")[0];
-                this.state.lessonPageTitle = this.$("#lessonPageTitle");
-                this.state.headerOffsetTop = this.state.header.offsetTop;
-            },
-
-            stickyHeader() {
-                if (window.pageYOffset > this.state.headerOffsetTop) {
-                    this.state.header.classList.add("sticky");
-                    this.state.lessonPageTitle.classList.add("truncate-if-long");
-                } else {
-                    this.state.header.classList.remove("sticky");
-                    this.state.lessonPageTitle.classList.remove("truncate-if-long");
-                }
+            startLesson() {
+                location.hash = `#${this.lesson.loc_hash}:content:1`;
             },
 
             backToCoursePage() {
-                location.hash = "#" + this.props.wagtailPage.course.id;
+                location.hash = "#" + this.lesson.course.loc_hash;
             },
 
-            toggleLessonDescription() {
-                this.update({
-                    showLongDescription: !this.state.showLongDescription,
-                });
-            },
+        }};
 
-            isModuleComplete(section) {
-                return isComplete(
-                    this.props.wagtailPage.course.slug,
-                    this.props.wagtailPage.slug,
-                    section
-                );
-            },
-
-            disableBlockedLessonModules() {
-                const ongoingCards = [...document.getElementsByClassName("ongoing")];
-
-                const isComingSoon = this.props.wagtailPage.isComingSoon();
-                let sliceFrom = 1;
-
-                if (isComingSoon) {
-                    sliceFrom = 0;
-                }
-
-                const cardsToDisable = ongoingCards.slice(sliceFrom);
-                for (const card of cardsToDisable) {
-                    card.classList.add("disabled");
-                }
-            },
-
-            lessonPageTitleMessage() {
-                // display the title of the lesson
-                return gettext("Lesson - %1", this.props.wagtailPage.course.title);
-            },
-
-            durationOfLessonMessage() {
-                // the total duration of the lesson in minutes
-                return gettext("%1 mins", this.props.wagtailPage.getDuration());
-            },
+        LessonPage.components = {
+            lessonframe: LessonFrame,
         };
+
+        export default LessonPage;
     </script>
 </LessonPage>

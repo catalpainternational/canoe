@@ -1,31 +1,42 @@
-/* Galano Grotesque Alternative */
+/* Circular Standard */
 @font-face {
-    font-family: 'GalanoGrotesqueAlt';
-    src: url('../fonts/GalanoGrotesqueAlt-Regular.woff2') format('woff2');
+    font-family: "CircularStd";
+    src: url("../fonts/CircularStd-Black.ttf") format("truetype");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "CircularStd";
+    src: url("../fonts/CircularStd-Bold.ttf") format("truetype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "CircularStd";
+    src: url("../fonts/CircularStd-Medium.ttf") format("truetype");
     font-weight: 400;
 }
 
 @font-face {
-    font-family: 'GalanoGrotesqueAlt';
-    src: url('../fonts/GalanoGrotesqueAlt-Medium.woff2') format('woff2');
-    font-weight: 500;
+    font-family: "CircularStd";
+    src: url("../fonts/CircularStd-Book.ttf") format("truetype");
+    font-weight: 300;
 }
 
 @font-face {
-    font-family: 'GalanoGrotesqueAlt';
-    src: url('../fonts/GalanoGrotesqueAlt-SemiBold.woff2') format('woff2');
-    font-weight: 600;
-}
-
-/* Tiempos Headline */
-@font-face {
-    font-family: 'TiemposHeadline';
-    src: url('../fonts/TiemposHeadline-Medium.woff2') format('woff2');
-    font-weight: 500;
+    font-family: "TiemposHeadline";
+    src: url("../fonts/TiemposHeadline-Black.otf") format("opentype");
+    font-weight: 400;
 }
 
 @font-face {
-    font-family: 'TiemposHeadline';
-    src: url('../fonts/TiemposHeadline-SemiBold.woff2') format('woff2');
-    font-weight: 600;
+    font-family: "TiemposHeadline";
+    src: url("../fonts/TiemposHeadline-Medium.otf") format("opentype");
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: "TiemposHeadline";
+    src: url("../fonts/TiemposHeadline-Regular.otf") format("opentype");
+    font-weight: 200;
 }

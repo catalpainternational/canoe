@@ -1,56 +1,44 @@
 <Card>
-    <a class="{howToStyle()} lesson card" href="#{props.link}">
-        <div class="card-body {!props.showFooter ? 'no-footer' : ''}">
-            <h4 class="truncate-if-long">{props.title}</h4>
-            <div if="{props.isCompleted}" class="white-check"></div>
-            <h5 if="{props.isComingSoon}">{ TRANSLATIONS.comingSoon() }</h5>
-            <div if="{props.isComingSoon}" class="break-card-footer"></div>
-            <p if="{props.type !== 'course'}">{props.description}</p>
+    <a class="card {statusClass()}" href="#{ link() }">
+        <div class="card-image">
+            <img crossorigin="anonymous" src="{ getCardImage() }" class="card-hero-image" />
+            <span class="card-status"><span class="icon"></span></span>
         </div>
-        <div if="{props.showFooter}" class="card-footer">
-            <div if="{props.isCompleted}" class="status done">
-                <span class="checkmark-circle"></span>
-                <p>{ TRANSLATIONS.completed() }</p>
-            </div>
-            <div if="{!props.isCompleted}" class="status btn-start-lesson">
-                <span class="arrow-blue"></span>
-                <p>{ TRANSLATIONS.startMessages[props.type]() }</p>
-            </div>
-            <div if="{props.duration}" class="duration">
-                <span class="clock"></span>
-                <p>{ durationMessage() }</p>
-            </div>
-            <div if="{props.type === 'course'}" class="duration">
-                <p>{props.description}</p>
-            </div>
+        <div class="card-title">
+            <h5 class="clamp-lines">{ title() }</h5>
+            <progress
+                if="{ progressValues().min > 0 }"
+                value="{ progressValues().min}"
+                max="{ progressValues().max }"
+            ></progress>
         </div>
     </a>
     <script>
+        import { getCardImageUrl } from "js/utilities";
+
         export default {
-            TRANSLATIONS: {
-                comingSoon: () => gettext("Coming Soon!"),
-                completed: () => gettext("completed"),
-                startMessages: {
-                    activity: () => gettext("Start Activity"),
-                    lesson: () => gettext("Start Lesson"),
-                    course: () => gettext("Start Course"),
-                    exam: () => gettext("Start Exam"),
-                },
+            getCardImage() {
+                const cardImage = this.props.contentItem
+                    ? this.props.contentItem.cardImage
+                    : '';
+                return getCardImageUrl(this.props.link || this.props.contentItem.id, cardImage);
             },
 
-            howToStyle() {
-                if (this.props.isCompleted) {
-                    return "done";
-                } else if (this.props.isDisabled) {
-                    return "disabled";
+            title() {
+                return this.props.title || this.props.contentItem.title;
+            },
+            statusClass() {
+                return this.props.status || this.props.contentItem.progressStatus;
+            },
+            link() {
+                return this.props.link || this.props.contentItem.loc_hash;
+            },
+            progressValues() {
+                if (this.props.hasOwnProperty('progressValues')) {
+                    return this.props.progressValues;
                 } else {
-                    return "ongoing";
-                }
-            },
-
-            durationMessage() {
-                // the number of minutes it will take to complete the objective, content, test, or lesson
-                return ngettext("%1 min", "%1 mins", this.props.duration, this.props.duration);
+                    return this.props.contentItem.progressValues;
+                };
             },
         };
     </script>

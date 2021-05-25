@@ -1,0 +1,12 @@
+AllTopicsList,
+TopicPage,
+Activitypage {
+    .with-swoop {
+        height: unset;
+        min-height: 190px;
+    }
+
+    div.content-wrapper {
+        min-height: unset;
+    }
+}

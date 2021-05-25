@@ -1,120 +1,155 @@
-.course {
-    margin-bottom: 40px;
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-}
-
-.course-header {
-    margin-bottom: 10px;
-    display: flex;
-
-    & > span {
-        margin-right: 15px;
+CoursePage {
+    .lesson-swoop {
+        @extend %bottom-swoop;
     }
 
-    & > div {
-        flex-direction: column;
-        display: flex;
-        flex: 1;
-
-        h3 {
-            margin: 0;
-            font-size: 30px;
-            line-height: 30px;
+    .content-wrapper {
+        h2 {
+            margin-bottom: 1em;
         }
 
-        & > div {
-            display: flex;
+        .course-subtitle {
+            color: $gray-3;
+            font-size: 1.2em;
+            margin: 1em 0;
+            width: 100%;
+            line-height: 1.6em;
+        }
 
-            p {
-                margin: 5px 0;
-                flex: 1;
-                font-size: 14px;
+        .course-details {
+            margin-bottom: 2em;
 
-                &.bottom-border {
-                    border-bottom: 1px solid;
-                    border-color: $gray-6;
-                    padding-bottom: 5px;
+            .btn-primary {
+                width: 220px;
+                display: block;
+                margin: 1.5em 0;
+                position: relative;
+
+                .chevron {
+                    height: 14px;
+                    position: absolute;
+                    right: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
                 }
             }
 
-            a {
-                align-items: center;
-                display: flex;
+            p {
+                line-height: 1.2em;
+            }
+
+            .clamp-3-lines {
+                line-height: 1.2em;
+                height: calc(3 * 1.2em);
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
             }
         }
     }
+}
 
-    a {
-        text-transform: uppercase;
-        letter-spacing: 0.2px;
-        color: $gray-1;
+CoursePage,
+Resources {
+    .modal-background.fade:after {
+        z-index: 1;
+    }
 
-        span {
-            margin-left: 5px;
-            margin-bottom: 3px;
+    .course-download-complete {
+        background-color: $teal;
+
+        & > .download {
+            background-color: $white;
         }
     }
 
-    .arrow-gray {
-        display: none;
+    .modal {
+        height: 90vh;
     }
-}
 
-.sticky {
-    position: fixed;
-    top: 0;
-    border: 1px solid $gray-6;
-    padding-right: 10px;
-    min-width: calc(100% - 65px);
-    max-width: calc(100% - 65px);
-    background-color: $tan;
-    z-index: 1;
-    left: 0;
-    padding-left: 55px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-}
+    .modal .btn-primary {
+        max-width: 220px;
+    }
 
-.sticky.course-header {
-    div {
+    .modal-close-btn {
+        position: fixed;
+        right: 1.2em;
+        top: 1.2em;
+        z-index: 1;
+    }
+
+    .download-block {
+        padding: 1em 0;
+        border-top: 2px solid $gray-7;
         width: 100%;
-        max-width: 100%;
-    }
+        display: grid;
+        grid-template-columns: 40px 1fr 40px;
+        grid-column-gap: 14px;
+        align-items: center;
+        text-align: left;
 
-    h3 {
-        font-size: 16px;
-        line-height: 20px;
-    }
+        &:first-of-type {
+            margin-top: 1em;
+        }
 
-    p.bottom-border {
-        border: none;
-    }
+        &:last-of-type {
+            border-bottom: 2px solid $gray-7;
+        }
 
-    @media only screen and (max-width: 600px) {
         p {
-            margin-top: 5px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .lesson-number {
+            border: 2px solid $gray-7;
+            border-radius: 50%;
+        }
+
+        .lesson-number,
+        .download-state {
+            height: 32px;
+            width: 32px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            font-size: 0.8em;
+            position: relative;
+        }
+
+        .download-complete {
+            @extend %status-complete;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            position: relative;
+
+            .icon {
+                height: 12px;
+                width: 15px;
+            }
+        }
+
+        .loading::after {
+            content: '';
+            border: 2px solid $gray-8;
+            border-top: 2px solid $app-accent-color;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
     }
-
-    .arrow-gray {
-        margin: 10px 0 0 15px;
-        display: block;
-    }
-}
-
-.sticky.course-header + .section-title {
-    padding-top: $sticky-header-offset;
-}
-
-CoursePage .course {
-    margin-top: -#{$top-menu-height};
-    padding-top: $top-menu-height;
-}
-
-CoursePage .content-wrapper {
-    border-radius: 30px 30px 0 0;
-    background-color: $gray-10;
-    padding-top: 30px;
 }

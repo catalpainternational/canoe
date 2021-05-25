@@ -1,98 +1,104 @@
 <LessonComplete>
-    <LessonFrame>
-        <div class="confetti background"></div>
-        <template if="{state.lessonSlugs.length}">
-            <div class="congratulations-container">
-                <div class="report-card overlay"></div>
-                <template if="{!isCourseComplete()}">
-                    <div>
-                        <h2>{ TRANSLATIONS.congrats() }</h2>
-                        <p>{ lessonCompleteMessage() }</p>
-                    </div>
-                    <button class="btn-primary" onclick="{goToCourseOverview}">
-                        { TRANSLATIONS.next() }
-                    </button>
-                </template>
-                <template if="{isCourseComplete()}">
-                    <div>
-                        <h2>{ TRANSLATIONS.good() }</h2>
-                        <p>{ lessonCompleteMessage() }</p>
-                        <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
-                    </div>
-                    <button if="{ courseHasExam() }" class="btn-primary" onclick="{goToCourseExam}">
-                        { TRANSLATIONS.exam() }
-                    </button>
-                    <button class="btn-secondary" onclick="{goToCourseOverview}">
-                        { TRANSLATIONS.course() }
-                    </button>
-                </template>
+    <div class="congratulations-container">
+        <span class="superman-success"></span>
+        <template if="{ !course.lessonsComplete }">
+            <div>
+                <h2>{ TRANSLATIONS.congrats() }</h2>
+                <p>{ lessonCompleteMessage() }</p>
             </div>
+            <button class="btn-primary" onclick="{goToCourseOverview}">
+                { TRANSLATIONS.next() }
+                <span class="chevron"></span>
+            </button>
+            <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
+                { TRANSLATIONS.discuss() }
+                <span class="chevron"></span>
+            </button>
         </template>
-    </LessonFrame>
+        <template if="{ course.lessonsComplete }">
+            <div>
+                <h2>{ TRANSLATIONS.good() }</h2>
+                <p>{ lessonCompleteMessage() }</p>
+                <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
+            </div>
+            <button if="{courseHasExam() && isPrelearningExam()}" class="btn-primary" onclick="{goToCourseExam}">
+                { TRANSLATIONS.survey() }
+                <span class="chevron"></span>
+            </button>
+            <button if="{courseHasExam() && !isPrelearningExam()}" class="btn-primary" onclick="{goToCourseExam}">
+                { TRANSLATIONS.exam() }
+                <span class="chevron"></span>
+            </button>
+            <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
+                { TRANSLATIONS.discuss() }
+                <span class="chevron"></span>
+            </button>
+            <a href="#{lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
+        </template>
+    </div>
     <script>
-        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
-        import { getACoursesLessons } from "js/WagtailPagesAPI";
-        import { countFinishedLessonsAmongSlugs } from "js/CompletionInterface";
+        import { getRoute } from "ReduxImpl/Interface";
 
         export default {
-            components: {
-                lessonframe: LessonFrame,
-            },
-
-            state: {
-                lessonSlugs: [],
-            },
 
             TRANSLATIONS: {
                 congrats: () => gettext("Congratulations!"),
                 next: () => gettext("Next Lesson"),
                 good: () => gettext("Good job!"),
                 exam: () => gettext("Take Exam"),
+                survey: () => gettext("Take Survey"),
                 course: () => gettext("Back to Course"),
+                discuss: () => gettext("Join the discussion"),
             },
 
-            onMounted() {
-                this.loadLessonsForIsCourseComplete();
+            get lesson() {
+                return getRoute().page;
             },
-
-            async loadLessonsForIsCourseComplete() {
-                const lessons = await getACoursesLessons(this.props.course.id);
-                const lessonSlugs = lessons.map((lesson) => lesson.slug);
-                this.update({ lessonSlugs });
+            get course() {
+                return this.lesson.course;
             },
 
             courseHasExam() {
-                const { course } = this.props;
-                return course.has_exam;
+                return this.course.hasExam;
             },
 
-            isCourseComplete() {
-                const { course } = this.props;
-                const { lessonSlugs } = this.state;
-                return (
-                    countFinishedLessonsAmongSlugs(course.slug, lessonSlugs) ===
-                    course.lessons_count - Number(course.has_exam)
-                );
+            isPrelearningExam() {
+                return this.course.examType === 'prelearning';
             },
 
             goToCourseOverview() {
-                location.hash = "#" + this.props.course.id;
+                location.hash = this.lesson.course.loc_hash;
             },
 
             goToCourseExam() {
-                location.hash = `#${this.props.course.id}/exam/0`;
+                location.hash = this.lesson.course.examLink;
+            },
+
+            lessonHasDiscussion() {
+                return this.lesson.threads.length;
+            },
+
+            goToDiscussion() {
+                location.hash = `${this.lesson.course.loc_hash}:discussion`;
             },
 
             lessonCompleteMessage() {
                 // message on completion of a lesson %1 is replaced by the lesson title
-                return gettext('You just completed the lesson "%1"', this.props.title);
+                return gettext('You just completed the lesson "%1"', this.lesson.title);
             },
 
             takeCourseExamMessage() {
                 // message on completion of lesson and prompt to take course exam
+                if (this.isPrelearningExam()) {
+                    return gettext(
+                        'Take the pre-learning survey to complete the course "%1"',
+                        this.lesson.course.title
+                    )
+                }
+
                 return gettext(
                     'Take the exam now to complete the course "%1"',
-                    this.props.course.title
+                    this.lesson.course.title
                 );
             },
         };

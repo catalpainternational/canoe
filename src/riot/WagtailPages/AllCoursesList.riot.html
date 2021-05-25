@@ -1,0 +1,128 @@
+<AllCoursesList>
+    <GuestBanner></GuestBanner>
+    <TopMenu extrastyleclasses="with-swoop">
+        <h3>{ page.title }</h3>
+        <div class="filter-copy-container">
+            <p>{ page.description || TRANSLATIONS.coursesIntro() }</p>
+            <a
+                if="{showTagFilter()}"
+                class="has-circle {state.showTagList ? 'show-tags' : ''}"
+                onclick="{toggleTagList}"
+            >
+                <span class="filter-icon"></span>
+            </a>
+        </div>
+        <TagList
+            if="{ state.showTagList }"
+            tags="{ page.all_tags }"
+            onTagClick="{onTagClick}"
+            selectedTags="{state.selectedTags}"
+        ></TagList>
+    </TopMenu>
+
+    <div class="content-wrapper">
+        <LoadingDots if="{!page.ready}" extrastyleclasses="dark"></LoadingDots>
+        <template
+            if="{page.currentCourse && !page.currentCourse.complete }"
+        >
+            <h5 class="section-title">{ TRANSLATIONS.continueLearning() }</h5>
+            <div class="card-container full-width">
+                <Card
+                    contentItem="{ page.currentCourse }"
+                ></Card>
+            </div>
+        </template>
+        <h5 class="section-title">{ TRANSLATIONS.allCourses() }</h5>
+        <div class="card-container">
+            <template each="{ course in page.courses }">
+                <Card
+                    if="{ !course.complete && showCourse(course) }"
+                    contentItem="{ course }"
+                ></Card>
+            </template>
+            <template each="{ course in page.courses }">
+                <Card
+                    if="{ course.complete && showCourse(course) }"
+                    contentItem="{ course }"
+                ></Card>
+            </template>
+        </div>
+
+        <p if="{page.coursesCompleteLast.length === 0}">
+            { TRANSLATIONS.noCourses() }
+        </p>
+    </div>
+
+    <script>
+        import Card from "RiotTags/Components/Card.riot.html";
+        import TagList from "RiotTags/Components/TagList.riot.html";
+        import GuestBanner from "riot/Components/GuestBanner.riot.html";
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function AllCoursesList() {
+            return {
+                state: {
+                    selectedTags: [],
+                    showTagList: false,
+                },
+
+                TRANSLATIONS: {
+                    noCourses: () =>
+                        gettext("There are no courses yet. Check back soon!"),
+                    allCourses: () => gettext("All courses"),
+                    continueLearning: () => gettext("Continue Learning"),
+                    coursesIntro: () =>
+                        gettext(
+                            "Explore a range of courses to suit your needs, expertise, and interests"
+                        ),
+                },
+
+                get page() {
+                    return getRoute().page;
+                },
+
+                showTagFilter() {
+                    // and we don't show the filter unless we have some tags
+                    return this.page.all_tags.size;
+                },
+
+                toggleTagList() {
+                    this.update({ showTagList: !this.state.showTagList });
+                },
+
+                onTagClick(clickedTag) {
+                    if (this.state.selectedTags.includes(clickedTag)) {
+                        const tagIndex = this.state.selectedTags.indexOf(
+                            clickedTag
+                        );
+                        this.state.selectedTags.splice(tagIndex, 1);
+                    } else {
+                        this.state.selectedTags.push(clickedTag);
+                    }
+                    this.update();
+                },
+
+                showCourse(course) {
+                    return (
+                        !this.state.showTagList ||
+                        !this.state.selectedTags.length ||
+                        course.hasATagIn(this.state.selectedTags)
+                    );
+                },
+            };
+        }
+
+        AllCoursesList.components = {
+            card: Card,
+            taglist: TagList,
+            guestbanner: GuestBanner,
+            loadingdots: LoadingDots,
+            topmenu: TopMenu,
+        };
+
+        export default AllCoursesList;
+    </script>
+</AllCoursesList>

@@ -1,70 +1,34 @@
 <CourseOverview>
-    <CoursePage
-        if="{state.hash == null}"
-        wagtailPage="{props.wagtailPage}"
-        examCards="{state.examCards}"
-    ></CoursePage>
-    <CourseExam
-        if="{state.hash === EXAM_MODULE && state.examCards.length > 0}"
-        wagtailPage="{props.wagtailPage}"
-        cards="{state.examCards}"
-    ></CourseExam>
+    <CoursePage if="{ course.ready && !state.showExam }"></CoursePage>
+    <CourseExam if="{ course.ready && state.showExam }"></CourseExam>
+
     <script>
         import CoursePage from "RiotTags/WagtailPages/CoursePage.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
-        import { getHashPieces } from "js/Routing";
 
-        export default {
-            state: {
-                examCards: [],
-                hash: "",
-            },
+        import { getRoute } from "ReduxImpl/Interface";
 
-            components: {
-                coursepage: CoursePage,
-                courseexam: CourseExam,
-            },
+        const EXAM_MODULE = "exam";
 
-            EXAM_MODULE: "exam",
+        function CourseOverview() { return {
 
             onBeforeMount(props, state) {
-                state.hash = getHashPieces()[1];
-                window.addEventListener("hashchange", this.hashChanged);
+                this.readHash();
             },
-
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
+            onBeforeUpdate(props, state) {
+                this.readHash();
             },
+            readHash() {
+                this.course = getRoute().page;
+                this.state.showExam = getRoute().riotHash[0] === EXAM_MODULE;
+            }
+        }};
 
-            onMounted(props, state) {
-                this.renderExam();
-            },
-
-            renderExam() {
-                const { exam } = this.props.wagtailPage;
-                if (!exam) {
-                    return;
-                }
-
-                const examCards = exam.map((card) => {
-                    const { id, type, value } = card;
-                    const { question, answers } = value;
-                    return { id, type, question, answers };
-                });
-                this.update({ examCards });
-            },
-
-            hashChanged() {
-                this.update({
-                    hash: getHashPieces()[1],
-                });
-
-                if (this.state.hash) {
-                    window.removeEventListener("scroll", this.stickyHeader);
-                } else {
-                    window.addEventListener("scroll", this.stickyHeader);
-                }
-            },
+        CourseOverview.components = {
+            coursepage: CoursePage,
+            courseexam: CourseExam,
         };
+
+        export default CourseOverview;
     </script>
 </CourseOverview>

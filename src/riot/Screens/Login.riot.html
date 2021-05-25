@@ -1,90 +1,62 @@
 <Login>
     <div class="modal-background">
-        <span class="site-logo"></span>
-        <span class="login-image"></span>
+        <TopMenu extrastyleclasses="with-swoop">
+            <span class="site-logo"></span>
+            <span class="login-image"></span>
+            <h4>{ TRANSLATIONS.login() }</h4>
+        </TopMenu>
 
         <LoginForm loginFunction="{login}"></LoginForm>
 
         <div class="extra-button-space">
-            <button onclick="{toggleLoginHelpModal}">{ TRANSLATIONS.forgot() }</button>
-            <button if="{state.isLoginAsGuestAvailable}" onclick="{toggleLoginAsGuestModal}">
-                { TRANSLATIONS.guestLogin() }
-            </button>
+            <a onclick="{toggleLoginHelpModal}" tabindex="0">{ TRANSLATIONS.forgot() }</a>
         </div>
-
-        <Logos></Logos>
     </div>
 
     <PopupModal if="{state.showLoginHelpModal}" toggleModal="{toggleLoginHelpModal}">
-        <div class="cross gray close-btn" onclick="{toggleLoginHelpModal}"></div>
+        <div class="cross gray close-btn" onclick="{toggleLoginHelpModal}" tabindex="0"></div>
         <h2 class="header-no-image">{ TRANSLATIONS.help() }</h2>
         <ContactInformation toggleLoginHelpModal="{toggleLoginHelpModal}"></ContactInformation>
-    </PopupModal>
-
-    <PopupModal if="{state.showGuestLoginModal}" toggleModal="{toggleLoginAsGuestModal}">
-        <div class="cross gray close-btn" onclick="{toggleLoginAsGuestModal}"></div>
-        <h2 class="header-no-image">{ TRANSLATIONS.loggingAsGuest() }</h2>
-        <p>
-            { TRANSLATIONS.noProgress() }
-            <a class="send-message" onclick="{switchToContactUsModal}">{ TRANSLATIONS.send() }</a>.
-        </p>
-        <button class="btn-primary" onclick="{loginAsGuest}">
-            { TRANSLATIONS.guestLogin() }
-        </button>
     </PopupModal>
 
     <script>
         import LoginForm from "RiotTags/Components/LoginForm.riot.html";
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
         import ContactInformation from "RiotTags/Components/ContactInformation.riot.html";
-        import Logos from "riot/Components/Logos.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
 
         import { login } from "js/AuthenticationUtilities";
-
-        const GUEST_USERNAME = process.env.GUEST_USERNAME && `${process.env.GUEST_USERNAME}`;
-        const GUEST_PASSWORD = process.env.GUEST_PASSWORD && `${process.env.GUEST_PASSWORD}`;
+        import { getRoute } from "ReduxImpl/Interface";
 
         export default {
             state: {
                 showLoginHelpModal: false,
-                showGuestLoginModal: false,
-                isLoginAsGuestAvailable: false,
             },
 
             components: {
                 popupmodal: PopupModal,
                 contactinformation: ContactInformation,
                 loginform: LoginForm,
-                logos: Logos,
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
                 forgot: () => gettext("Forgot username or password?"),
-                guestLogin: () => gettext("Login as a guest"),
                 help: () => gettext("Need help?"),
-                loggingAsGuest: () => gettext(`You're logging in as a guest`),
-                noProgress: () =>
-                    gettext(
-                        `No learning progress will be saved while you are logged in as a guest. If you would like to create an account, please`
-                    ),
                 send: () => gettext("send us a message"),
+                login: () => gettext("Login"),
             },
 
-            onBeforeMount(props, state) {
-                state.isLoginAsGuestAvailable = !!GUEST_USERNAME && !!GUEST_PASSWORD;
-            },
-
-            async loginAsGuest(event) {
-                event.preventDefault();
-                const usernameAndPassword = {
-                    username: GUEST_USERNAME,
-                    password: GUEST_PASSWORD,
-                };
-                await this.login(usernameAndPassword);
-            },
-
-            async login(usernameAndPassword) {
-                await login(usernameAndPassword);
+            login(usernameAndPassword) {
+                const route = getRoute();
+                this.update({err: false});
+                return login(usernameAndPassword).then(result => {
+                    if (route.riotHash.length) {
+                        location.hash = route.riotHash[0];
+                    } else {
+                        location.hash = "";
+                    }
+                });
             },
 
             fadePageBehindModal() {
@@ -93,7 +65,6 @@
             },
 
             switchToContactUsModal() {
-                this.toggleLoginAsGuestModal();
                 this.toggleLoginHelpModal();
             },
 
@@ -102,14 +73,6 @@
                 const { showLoginHelpModal } = this.state;
                 this.update({
                     showLoginHelpModal: !showLoginHelpModal,
-                });
-            },
-
-            toggleLoginAsGuestModal() {
-                this.fadePageBehindModal();
-                const { showGuestLoginModal } = this.state;
-                this.update({
-                    showGuestLoginModal: !showGuestLoginModal,
                 });
             },
         };

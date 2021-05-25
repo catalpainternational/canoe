@@ -1,0 +1,83 @@
+<Test>
+    <ImageWrapper
+        if="{ card && card.image }"
+        image="{ card.image }"
+    ></ImageWrapper>
+    <h3>
+        <template if="{ isExam }">
+            { cardNumber }.&nbsp;
+        </template>
+        { card.question }
+    </h3>
+    <TestSingleAnswer
+        if="{ testType === 'single' }"
+        toggleModal="{ props.toggleModal }"
+        review="{ props.review }"
+        card="{ card }"
+    ></TestSingleAnswer>
+    <TestMultipleAnswer
+        if="{ testType === 'multiple' }"
+        toggleModal="{ props.toggleModal }"
+        review="{ props.review }"
+        card="{ card }"
+    ></TestMultipleAnswer>
+    <script>
+        import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
+        import TestSingleAnswer from "RiotTags/Lesson/TestSingleAnswer.riot.html";
+        import TestMultipleAnswer from "RiotTags/Lesson/TestMultipleAnswer.riot.html";
+
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function Test() {
+            return {
+                get route() {
+                    return getRoute();
+                },
+                get cardIndex() {
+                    return this.cardNumber - 1;
+                },
+                get cardNumber() {
+                    if (this.props && this.props.review) {
+                        return Number(this.props.cardNumber);
+                    }
+                    const cardNum = parseInt(this.route.riotHash[1]);
+                    return isNaN(cardNum)
+                        ? ( this.page.examType === 'prelearning' ? 1 : 'code')
+                        : cardNum;
+                },
+                get page() {
+                    return this.route.page;
+                },
+                get isExam() {
+                    return !!this.page.examCards;
+                },
+                get card() {
+                    if (this.props && this.props.review) {
+                        return this.props.cards[this.cardNumber - 1];
+                    }
+                    return this.page.examCards
+                        ? this.page.examCards[this.cardIndex]
+                        : this.page.cards[this.cardIndex];
+                },
+                get testType() {
+                    if (this.card) {
+                        switch(this.card.tag) {
+                            case "choose multiple":
+                                return "multiple";
+                            default:
+                                return "single";
+                        }
+                    }
+                },
+            };
+        };
+
+        Test.components = {
+            imagewrapper: ImageWrapper,
+            testsingleanswer: TestSingleAnswer,
+            testmultipleanswer: TestMultipleAnswer,
+        };
+
+        export default Test;
+    </script>
+</Test>

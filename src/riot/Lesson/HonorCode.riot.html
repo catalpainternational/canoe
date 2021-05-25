@@ -1,47 +1,36 @@
 <HonorCode>
-    <div>
+    <div class="modal-background fade"></div>
+    <span class="cross gray" onclick="{goToCourseOverview}"></span>
+
+    <div class="modal">
+        <div class="warning-container">
+            <span class="warning"></span>
+        </div>
         <h3>{ TRANSLATIONS.exam() }</h3>
         <p class="score-explanation">
             <raw html="{ youMustScoreAtLeastMessage() }"></raw>
         </p>
-    </div>
-    <div class="code">
-        <h4>{ TRANSLATIONS.code() }</h4>
-        <p>
-            { TRANSLATIONS.promise() }
-        </p>
-        <div class="i-agree-container" onclick="{agreeToCode}">
-            <span class="checkbox"></span>
-            <span if="{state.hasAgreed}" class="checkmark"></span>
-            <p>{ TRANSLATIONS.agree() }</p>
+        <div class="code">
+            <div class="i-agree-container" onclick="{agreeToCode}">
+                <span class="checkbox {state.hasAgreed ? 'checked' : ''}"><span if="{state.hasAgreed}" class="checkmark"></span></span>
+                <div>
+                    <h4>{ TRANSLATIONS.code() }</h4>
+                    <p>{ TRANSLATIONS.promise() }</p>
+                </div>
+
+            </div>
         </div>
-    </div>
-    <div>
-        <button
-            class="btn-primary"
-            onclick="{goToCourseExam}"
-            disabled="{!state.hasAgreed}"
-        >
+        <button class="btn-primary" onclick="{ goToCourseExam }" disabled="{!state.hasAgreed}">
             { TRANSLATIONS.startExam() }
-        </button>
-        <button class="btn-secondary" onclick="{goToCourseOverview}">
-            { TRANSLATIONS.backCourse() }
         </button>
     </div>
 
     <script>
         import Raw from "RiotTags/Components/Raw.riot.html";
 
-        export default {
-            TRANSLATIONS: {
-                exam: () => gettext('Course exam'),
-                code: () => gettext('Code of conduct'),
-                promise: () => gettext('You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?'),
-                agree: () => gettext('Yes, I agree'),
-                startExam: () => gettext('Start Exam'),
-                backCourse: () => gettext('Back to Course')
-            },
+        import { getRoute } from "ReduxImpl/Interface";
 
+        export default {
             components: {
                 raw: Raw,
             },
@@ -50,22 +39,43 @@
                 hasAgreed: false,
             },
 
+            TRANSLATIONS: {
+                exam: () => gettext("Course exam"),
+                code: () => gettext("Code of conduct"),
+                promise: () =>
+                    gettext(
+                        "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?"
+                    ),
+                startExam: () => gettext("Start Exam"),
+                backCourse: () => gettext("Back to Course"),
+            },
+
+            get route() {
+                return getRoute();
+            },
+            get course() {
+                return this.route.page;
+            },
+
             agreeToCode() {
                 this.update({ hasAgreed: !this.state.hasAgreed });
             },
 
             goToCourseExam() {
-                location.hash = `#${this.props.courseId}/exam/1`;
+                location.hash = `#${this.course.loc_hash}:exam:1`;
             },
 
             goToCourseOverview() {
-                location.hash = "#" + this.props.courseId;
+                location.hash = `#${this.course.loc_hash}`;
             },
 
             youMustScoreAtLeastMessage() {
                 const { minimumScore } = this.props;
                 // message for what percent a user must score to pass the exam
-                return gettext("To pass this exam you need to score <strong>%1% or higher</strong>", minimumScore);
+                return gettext(
+                    "To pass this exam you need to score <strong>%1% or higher</strong>",
+                    this.course.minimumExamScore
+                );
             },
         };
     </script>

@@ -1,10 +1,5 @@
 /* Color pallete */
-$blue-1: #04788e;
-$blue-2: #00b8ad;
-
-$brown: #744d4d;
-
-$tan: #f5f4f0;
+$blue: #0074fc;
 
 $gray-1: #2a3942;
 $gray-2: #3f525e;
@@ -17,39 +12,36 @@ $gray-8: #e8eef1;
 $gray-9: #f4f8fa;
 $gray-10: #fafdff;
 
-$green-1: #007b56;
-$green-2: #10b584;
-$green-3: #f4fffc;
+$teal: #00d2a8;
 
-$orange-1: #f66400;
-$orange-2: #f67c36;
-$orange-3: #ffac51;
+$green: #007b56;
 
-$pink-1: #8a0079;
-$pink-2: #c300ab;
+$yellow: #ffac51;
 
-$purple: #6f6cac;
+$red: #ed1e4f;
 
-$red-1: #de3011;
-$red-2: #ff694d;
+$orange: #ff694d;
 
 $white: #ffffff;
 
 $notifications-banner-orange: #fbbf34;
-$profile-banner-green: #129a62;
-$settings-background-tan: $tan;
 
 /* Layout */
-$bottom-menu-height: 65px;
-$top-menu-height: 65px;
-$top-menu-height-no-footer: 55px;
-$bottom-menu-height-no-footer: 25px;
-$sticky-header-offset: 95px;
+$bottom-menu-height: 70px;
+$top-menu-height: 60px;
 $border: 1px solid $gray-8;
 
-// Breakpoints
+/* Breakpoints */
 $xs-phone: 350px;
 $sm-phone: 374px;
 $lg-phone: 414px;
 $tablet: 600px;
 $tablet-plus: 680px;
+
+/* Avatar colours */
+$avatar-pink: #F100CD;
+$avatar-yellow: #FF9F00;
+$avatar-teal: $teal;
+$avatar-darkblue: #0070F0;
+$avatar-lightblue: #50BCFF;
+$avatar-purple: #A500CE;

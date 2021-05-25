@@ -9,7 +9,13 @@ import { ON_ADD_TO_HOME_SCREEN } from "js/Events";
 
 const SW_UPDATE_INTERVAL = 1000 * 10 * 60 * 4;
 
+export const SKIP_SW = process.env.SKIP_SW;
+
 export async function initializeServiceWorker() {
+    if(SKIP_SW) {
+        changeServiceWorkerState("skip_sw");
+        return;
+    }
     if (!navigator.serviceWorker) {
         changeServiceWorkerState("notsupported")
         return;

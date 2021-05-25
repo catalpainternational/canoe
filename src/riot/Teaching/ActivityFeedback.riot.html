@@ -1,0 +1,185 @@
+<ActivityFeedback>
+    <LessonFrame close="{ props.sentFeedback }">
+        <template if="{!state.madeFeedbackDecision}">
+            <div class="message-container">
+                <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
+                <h5>{ TRANSLATIONS.let_us_know() }</h5>
+                <div class="feedback-buttons">
+                    <div>
+                        <button
+                            onclick="{() => clickedThisLessonIs('fine')}"
+                            class="neutral {state.activeSelection === 'fine' ? 'active' : ''}"
+                        >
+                            <span class="neutral-smiley"></span>
+                        </button>
+                        <p class="button-label">{ TRANSLATIONS.not_great() }</p>
+                    </div>
+                    <div>
+                        <button
+                            onclick="{() => clickedThisLessonIs('good')}"
+                            class="smiling {state.activeSelection === 'good' ? 'active' : ''}"
+                        >
+                            <span class="smiling-smiley"></span>
+                        </button>
+                        <p class="button-label">{ TRANSLATIONS.good() }</p>
+                    </div>
+                    <div>
+                        <button
+                            onclick="{() => clickedThisLessonIs('great')}"
+                            class="thrilled {state.activeSelection === 'great' ? 'active' : ''}"
+                        >
+                            <span class="thrilled-smiley"></span>
+                        </button>
+                        <p class="button-label">
+                            { TRANSLATIONS.really_great() }
+                        </p>
+                    </div>
+                </div>
+                <div id="feedback-input" class="form-group">
+                    <label for="feedback"
+                        >{ TRANSLATIONS.feedbackLabel() }</label
+                    >
+                    <textarea
+                        id="feedback"
+                        onfocus="{setInputFocus}"
+                        onblur="{removeInputFocus}"
+                    ></textarea>
+                </div>
+                <p>{ TRANSLATIONS.give_feedback() }</p>
+            </div>
+        </template>
+        <template if="{state.madeFeedbackDecision}">
+            <div class="message-container">
+                <h3>{ TRANSLATIONS.sent() }</h3>
+                <h5>{ TRANSLATIONS.value_feedback() }</h5>
+                <div class="launch-feedback"></div>
+                <p>{ TRANSLATIONS.feedback_sent() }</p>
+            </div>
+        </template>
+    </LessonFrame>
+    <div if="{!state.madeFeedbackDecision}" class="bottom-buttons">
+        <button class="btn-secondary" onclick="{clickedNoThanks}">
+            { TRANSLATIONS.no() }
+        </button>
+        <button
+            class="btn-primary"
+            onclick="{clickedSubmit}"
+            disabled="{!state.activeSelection}"
+        >
+            { TRANSLATIONS.submit() }
+        </button>
+    </div>
+    <div if="{state.madeFeedbackDecision}" class="bottom-buttons">
+        <button
+            class="btn-primary thank-you-container"
+            onclick="{clickedContinue}"
+        >
+            { TRANSLATIONS.continue() }
+        </button>
+    </div>
+    <script>
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+        import { getRoute } from "ReduxImpl/Interface";
+
+        export default {
+            TRANSLATIONS: {
+                enjoying_lesson: () =>
+                    gettext("Are you enjoying this teaching plan?"),
+                give_feedback: () =>
+                    gettext(
+                        "We value your feedback and all feedback is confidential"
+                    ),
+                feedback_sent: () =>
+                    gettext(
+                        "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
+                    ),
+                no: () => gettext("Maybe later"),
+                sent: () => gettext("Thanks so much"),
+                continue: () => gettext("Continue"),
+                let_us_know: () => gettext("Let us know how you feel"),
+                not_great: () => gettext("Not great"),
+                good: () => gettext("Good"),
+                really_great: () => gettext("Really great!"),
+                value_feedback: () => gettext("We value your feedback"),
+                submit: () => gettext("Submit"),
+                feedbackLabel: () => gettext("Add your comments (optional)"),
+            },
+
+            components: {
+                lessonframe: LessonFrame,
+            },
+
+            state: {
+                madeFeedbackDecision: false,
+                activeSelection: null,
+            },
+
+            get activity() {
+                return getRoute().page;
+            },
+
+            clickedThisLessonIs(rating) {
+                this.update({
+                    activeSelection: rating,
+                });
+            },
+
+            clickedSubmit() {
+                const rating = this.state.activeSelection;
+                if (["fine", "good", "great"].includes(rating)) {
+                    this.sendFeedback(rating);
+                    this.update({
+                        madeFeedbackDecision: true,
+                    });
+                } else {
+                    throw Error(
+                        'You must give a rating of "fine", "good", or "great"'
+                    );
+                }
+            },
+
+            clickedNoThanks() {
+                this.goToSectionEnd();
+            },
+
+            clickedContinue() {
+                this.goToSectionEnd();
+            },
+
+            goToSectionEnd() {
+                this.props.sentFeedback();
+            },
+
+            sendFeedback(feedbackString) {
+                const feedback = feedbackString;
+                const comment = document.getElementById("feedback").value;
+
+                this.activity.sendFeedback({
+                    feedback,
+                    comment,
+                });
+            },
+
+            setInputFocus(event) {
+                const fieldElement = `#${event.target.id}-input`;
+                this.$(fieldElement).classList.add("has-focus");
+            },
+
+            removeInputFocus(event) {
+                const fieldElement = `#${event.target.id}-input`;
+                const fieldHasValue = event.target.value != "";
+
+                this.$(fieldElement).classList.remove("has-focus");
+
+                if (
+                    fieldHasValue &&
+                    !this.$(fieldElement).classList.contains("is-filled")
+                ) {
+                    this.$(fieldElement).classList.add("is-filled");
+                } else if (!fieldHasValue) {
+                    this.$(fieldElement).classList.remove("is-filled");
+                }
+            },
+        };
+    </script>
+</ActivityFeedback>

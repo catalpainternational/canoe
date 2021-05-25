@@ -1,6 +1,5 @@
-import { getAuthenticationToken } from "../AuthenticationUtilities.js";
-import { BACKEND_BASE_URL } from "../urls.js";
-import { fetch_and_denote_unauthenticatedness as fetch} from "../Fetch.js";
+import { getAuthenticationToken } from "js/AuthenticationUtilities";
+import { BACKEND_BASE_URL } from "js/urls";
 
 const ACTIONS_ENDPOINT_URL = `${BACKEND_BASE_URL}/progress/actions`;
 
@@ -32,7 +31,7 @@ export function getActions() {
         })
         .then((actions) => {
             actions.forEach((action) => {
-                action.date = new Date(action.date);
+                action.date = action.date;
             });
             return actions;
         })

@@ -1,49 +1,101 @@
-header {
+TopMenu {
     width: 100%;
 
     .top-menu-container {
         position: relative;
-        height: $top-menu-height;
         max-width: $tablet;
+        background-color: inherit;
+        background-size: cover;
+        background-position: center;
+    }
 
-        padding-right: 15px;
-        padding-left: 15px;
+    .with-swoop {
+        @extend %header-swoop;
+        height: 100px;
+        margin: auto auto 35px auto;
+
+        &.has-image {
+            height: clamp(120px, 20vh, 190px);
+        }
+
+        & h3 {
+            margin-bottom: 0.5em;
+        }
+
+        .filter-copy-container {
+            display: grid;
+            grid-template-columns: 1fr 40px;
+            column-gap: 15%;
+            align-items: center;
+            margin-bottom: 20px;
+
+            & > p {
+                margin: 0;
+            }
+        }
+
+        .show-tags {
+            background-color: $app-accent-color;
+            box-shadow: inset 0 2px 4px 0 rgba(42, 57, 66, 0.5);
+
+            .filter-icon {
+                background-color: white;
+            }
+        }
+    }
+
+    .without-swoop {
+        display: grid;
+        grid-template-columns: 60px 1fr 60px;
+        justify-content: center;
+        align-items: center;
+        height: $top-menu-height;
         margin: auto;
+
+        h4 {
+            color: $gray-1;
+            font-size: 1em;
+        }
     }
 
-    a.site-logo,
-    a.site-logo.white {
-        position: absolute;
-        margin: auto;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        top: 0;
+    h4 {
+        color: $gray-3;
+        font-weight: 200;
     }
 
-    a.arrow-gray,
-    a.arrow-white {
-        margin-left: 15px;
-        top: 20px;
-        left: 0;
-    }
-
-    a.close-btn {
-        margin-left: 15px;
-        position: absolute;
-        top: 28px;
-        left: 0;
-    }
-
-    a.cog {
-        position: absolute;
-        right: -10px;
-        top: 20px;
-        margin-right: 15px;
-    }
-
-    h6 {
-        width: calc(100% - 20px - 20px - 10px);
+    h4,
+    h5 {
+        grid-column: 2 / 2;
         text-align: center;
+    }
+
+    span {
+        display: inline-block;
+    }
+
+    .top-icon {
+        position: absolute;
+        top: 15px;
+        -webkit-mask-position: center;
+        mask-position: center;
+
+        &.right {
+            grid-column: 3 / 3;
+            right: 15px;
+        }
+
+        &.left {
+            grid-column: 1 / 1;
+            left: 15px;
+        }
+    }
+
+    a.extra-clickable-space {
+        top: 7px;
+        padding: 15px;
+
+        &.right {
+            right: 7px;
+        }
     }
 }

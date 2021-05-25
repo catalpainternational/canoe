@@ -1,15 +1,11 @@
-import { dispatchToastEvent } from "js/Events";
 import { getLanguage } from "ReduxImpl/Interface";
-import { BACKEND_BASE_URL, MEDIA_PATH } from "js/urls";
-import { getOrFetchManifest } from "js/WagtailPagesAPI";
+import { BACKEND_BASE_URL } from "js/urls";
 
-export const alertAppIsOffline = () => {
-    dispatchToastEvent("You are offline.");
-};
-
-export const alertAppIsOnline = () => {
-    dispatchToastEvent("You are online.");
-};
+import contentStockImg from "img/stock_content.png";
+import courseStockImg from "img/stock_course.png";
+import lessonStockImg from "img/stock_lesson.png";
+import objectiveStockImg from "img/stock_objective.png";
+import testStockImg from "img/stock_test.png";
 
 export const isCourseInTheCurrentLanguage = (courseSlug) => {
     const currentLanguage = getLanguage();
@@ -23,16 +19,8 @@ export const isCourseInTheCurrentLanguage = (courseSlug) => {
     }
 };
 
-export const getMediaUrl = (mediaPath) => {
-    return `${BACKEND_BASE_URL}${MEDIA_PATH}/${mediaPath}`;
-};
-
-export const resolveMedia = (mediaID) => {
-    return getOrFetchManifest()
-        // Choose smallest media item. Much more elaborate strategies are possible, but they need coordination with the backend 
-        // (through TranscodeDefinition objects) to establish a convention on label use. For instance, for audio, the bitrate
-        // (32/64/128kbit ?) could be encoded into the label, and so could the codec (opus/ogg ?).
-        .then(mfest => getMediaUrl(Object.values(mfest.media[mediaID]).sort((el1,el2) => el1.size - el2.size)[0].mediapath));
+export const getHtmlUrl = (htmlPath) => {
+    return `${BACKEND_BASE_URL}${htmlPath}`;
 };
 
 export const doesTheArrayContainTheObject = (theArray, theObject, matchingFunction) => {
@@ -86,3 +74,78 @@ export const getCourseWithLatestCompletion = (courses) => {
     }
     return lastWorkedOnCourse;
 };
+
+export const getCardImageUrl = (link, imageUrl) => {
+    const stockImages = [
+        contentStockImg,
+        courseStockImg,
+        lessonStockImg,
+        objectiveStockImg,
+        testStockImg,
+    ];
+    const cardId = typeof link === "number" ? link : link.split("/")[0];
+
+    const fallbackImg = stockImages[cardId % stockImages.length];
+
+    return imageUrl
+        ? `${process.env.API_BASE_URL}${imageUrl}?cardImageFallback=${fallbackImg}`
+        : fallbackImg;
+};
+
+
+export const simplePluralize = (count, noun, suffix = 's') => {
+    return `${count} ${noun}${count !== 1 ? suffix : ''}`;
+}
+
+export const getElapsedTime = (givenDate) => {
+    const minuteInMs = 1 * 60 * 1000;
+    const hourInMs = minuteInMs * 60;
+    const dayInMs = hourInMs * 24;
+    const weekInMs = dayInMs * 7;
+    const monthInMs = dayInMs * 30;
+    const yearInMs = dayInMs * 365;
+
+    const today = new Date();
+    const elapsedTime = today - new Date(givenDate);
+
+    // TODO this needs translatin!
+    if (elapsedTime < minuteInMs) {
+        return 'Seconds ago';
+    }
+    if (elapsedTime < hourInMs) {
+        const timeInMins = Math.round(elapsedTime / minuteInMs);
+        return `${simplePluralize(timeInMins, 'minute')} ago`;
+    }
+    if (elapsedTime < dayInMs) {
+        const timeInHours = Math.round(elapsedTime / hourInMs);
+        return `${simplePluralize(timeInHours, 'hour')} ago`;
+    }
+    if (elapsedTime < weekInMs) {
+        const timeInDays = Math.round(elapsedTime / dayInMs)
+        return `${simplePluralize(timeInDays, 'day')} ago`;
+    }
+    if (elapsedTime < monthInMs) {
+        const timeInWeeks = Math.round(elapsedTime / weekInMs);
+        return `${simplePluralize(timeInWeeks, 'week')} ago`;
+    }
+    if (elapsedTime < yearInMs) {
+        const timeInMonths = Math.round(elapsedTime / monthInMs);
+        return `${simplePluralize(timeInMonths, 'month')} ago`;
+    }
+    if (elapsedTime >= yearInMs) {
+        const timeInYears = Math.round(elapsedTime / yearInMs);
+        return `${simplePluralize(timeInYears, 'year')} ago`;
+    }
+}
+
+export const hashString = (string) => {
+    // Generate an unsigned 32 bit integer hash from any string
+    let hash = 0;
+    for (let ix = 0; ix < string.length; ix++) {
+        const char = string.charCodeAt(ix);
+        hash = char + (hash << 6) + (hash << 16) - hash; // magic constant is (effectively) 65599
+    }
+    const bit32 = Math.pow(2, 32);
+    hash = hash < 0 ? Math.ceil(hash) : Math.floor(hash);
+    return hash - Math.floor(hash / bit32) * bit32;
+}

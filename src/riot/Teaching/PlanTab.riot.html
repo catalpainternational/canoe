@@ -1,0 +1,51 @@
+<PlanTab>
+    <TabSection
+        class="{'first-section'}"
+        icon="{'brain'}" 
+        title="{TRANSLATIONS.learningOutcomes()}"
+        section={ page.plan.outcomes }
+    ></TabSection>
+    <TabSection
+        class="{'middle-section'}"
+        icon="{'binocular'}" 
+        title="{TRANSLATIONS.overview()}"
+        section={ page.plan.overview }
+    ></TabSection>
+    <TabSection
+        class="{'last-section'}"
+        icon="{'clipboard-pencil'}" 
+        title="{TRANSLATIONS.preparation()}"
+        section={ page.plan.preparation }
+    ></TabSection>
+    <button class="btn-secondary" onclick="{goToTeach}">
+        { TRANSLATIONS.ready() }
+    </button>
+    <script>
+        import TabSection from "RiotTags/Teaching/TabSection.riot.html";
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function PlanTab() { return {
+            onBeforeMount(props, state) {
+                this.page = getRoute().page;
+            },
+
+            TRANSLATIONS: {
+                learningOutcomes: () => gettext("Learning outcomes"),
+                overview: () => gettext("Overview"),
+                preparation: () => gettext("Preparation tasks & materials"),
+                ready: () => gettext("Ready to teach"),
+            },
+
+            goToTeach() {
+                this.props.selectTab("teach");
+                window.scroll(0, 0);
+            },
+        }}
+
+        PlanTab.components = {
+            tabsection: TabSection,
+        };
+
+        export default PlanTab;
+    </script>
+</PlanTab>

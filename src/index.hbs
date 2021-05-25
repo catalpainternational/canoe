@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <title>{{ htmlWebpackPlugin.options.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color"
+        content="{{ htmlWebpackPlugin.options.theme_color }}">
     {{#if htmlWebpackPlugin.options.include_ga }}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ htmlWebpackPlugin.options.ga_tag }}"></script>
@@ -32,15 +34,15 @@
 
 <body>
     <div id="preapp-messages">
-        <img src="{{ htmlWebpackPlugin.options.favicon_path }}" />
-
         <div id="service-worker-loading">
-            {{> $index_partials/please_wait.hbs}}
+            {{> $index_partials/loading_screen.hbs}}
         </div>
         <div id="service-worker-notsupported" hidden>
+            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" class="favicon" />
             {{> $index_partials/update_browser.hbs}}
         </div>
         <div id="service-worker-failed" onclick="location.reload()" hidden>
+            <img src="{{ htmlWebpackPlugin.options.favicon_path }}" class="favicon" />
             {{> $index_partials/try_again.hbs}}
         </div>
     </div>
@@ -48,42 +50,43 @@
     <style>
         html {
             height: 100%;
-
-            background-color: {
-                    {
-                    htmlWebpackPlugin.options.background_color
-                }
-            }
-
-            ;
+            background-color: #f4f8fa;;
         }
 
-        #preapp-messages div {
-            padding-top: 100px;
-            height: 100%;
+        body {
+            margin: 0;
         }
 
-        #preapp-messages {
+        body.modal-open {
+            position: fixed;
+        }
+
+        #service-worker-notsupported,
+        #service-worker-failed {
             height: 100%;
             margin: -8px;
             width: auto;
-
-            color: {
-                    {
-                    htmlWebpackPlugin.options.theme_color
-                }
-            }
-
-            ;
             padding: 30px;
             font-family: Verdana;
             font-size: xx-large;
             text-align: center;
+            color: {{ htmlWebpackPlugin.options.theme_color }};
         }
 
-        #preapp-messages img {
-            margin: 10px 10px 10px 10px;
+        #preapp-messages {
+            background-color: #E8EEF1;
+        }
+
+        #preapp-messages img.favicon {
+            margin: 20px auto;
             max-height: 100px;
+            display: block;
+        }
+
+        #service-worker-loading {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
     </style>
 </body>

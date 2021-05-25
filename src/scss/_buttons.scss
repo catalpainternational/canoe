@@ -1,6 +1,7 @@
 %buttons-shared {
-    border-radius: 25px;
-    min-width: 220px;
+    border-radius: $app-button-radius;
+    min-width: 180px;
+    width: 100%;
 
     &:focus {
         outline: 0;
@@ -9,54 +10,41 @@
 
 .btn-primary {
     @extend %buttons-shared;
-    box-shadow: 0 10px 8px 0 rgba(42, 57, 66, 0.3);
-    background-color: $blue-1;
-    min-height: 50px;
+    box-shadow: 0 10px 8px 0 rgba(42, 57, 66, 0.2);
+    background-color: $app-accent-color;
+    min-height: 45px;
     color: $white;
     border: none;
     padding-right: 0.5em;
     padding-left: 0.5em;
 
     &:disabled {
-        background-color: $gray-6;
+        background-color: $gray-4;
+        color: $gray-7;
         box-shadow: none;
+        position: relative;
+
+        LoadingDots {
+            top: 0;
+            position: absolute;
+            margin-left: 12px;
+
+            & > .loader {
+              margin: 0.5em auto;
+            }
+        }
+    }
+
+    &:active {
+        box-shadow: 0 10px 8px 0 rgba(42, 57, 66, 0.2) inset;
     }
 }
 
 .btn-secondary {
     @extend %buttons-shared;
     border: none;
-    background-color: $white;
-    min-height: 48px;
-    color: $blue-1;
-}
-
-.btn-continue-learning {
-    @extend %buttons-shared;
-    box-shadow: 0 10px 8px 0 rgba(42, 57, 66, 0.45);
-    background-color: white;
-    margin-bottom: 15px;
-    color: $gray-1;
-    padding: 10px 20px;
-    text-align: center;
-    height: 15px;
-    min-width: 130px;
-    width: 130px;
-
-    @media only screen and (max-width: $sm-phone) {
-        padding: 10px;
-    }
-
-    p {
-        font-size: 12px;
-        margin: 0;
-        line-height: 1.4;
-        font-weight: 600;
-        display: inline-block;
-        margin-right: 5px;
-    }
-}
-
-.btn-wrong {
-    background-color: $red-2;
+    background-color: inherit;
+    min-height: 45px;
+    color: $app-accent-color;
+    border: 2px solid $app-accent-color;
 }

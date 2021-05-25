@@ -1,40 +1,79 @@
 <BottomMenu>
-    <footer if="{state.showBottomMenu}">
-        <a class="courses-icon { props.contentType === 'HomePage' ? 'active' : ''}" href="#"></a>
-        <a
-            class="profile-icon { props.contentType === 'profile' ? 'active' : ''}"
-            href="#profile"
-        ></a>
-        <a
-            class="resources-icon { props.contentType === 'resources' ? 'active' : ''}"
-            href="#resources"
-        ></a>
+    <footer if="{showBottomMenu()}">
+        <div class="bottom-menu">
+            <a href="#" if="{shouldShowLearningHome()}">
+                <span class="all-courses-icon { page.type === 'homepage' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#topics" if="{shouldShowTeachingHome()}">
+                <span class="list-icon { page.type === 'learningactivitieshomepage' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#resources" if="{shouldShowResources()}">
+                <span class="resources-icon { page.type === 'resourcesroot' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#sync" if="{shouldShowSync()}">
+                <span class="resources-icon { page.type === 'sync' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#{ profileLink }">
+                <span class="profile-icon { page.type === 'profile' ? 'active' : ''}">
+                </span>
+            </a>
+        </div>
     </footer>
 
     <script>
-        import { parseURLHash } from "js/Routing";
+        import { getRoute } from "ReduxImpl/Interface";
+        import { inAppelflap } from "ts/PlatformDetection";
 
         export default {
-            onBeforeMount(props, state) {
-                this.updateState();
+
+            get page() {
+                return getRoute().page;
+            },
+            get riotHash() {
+                return getRoute().riotHash;
+            },
+            get profileLink() {
+                return process.env.PROFILE_LINK || 'profile';
             },
 
-            onBeforeUpdate(props, state) {
-                this.updateState();
+            shouldShowSync() {
+                return inAppelflap();
             },
 
-            updateState() {
-                const [afterTheHash, lessonModule] = parseURLHash();
-                this.state.lessonModule = lessonModule;
-                this.state.isObjective = this.state.lessonModule === "objectives";
-                this.state.isContent = this.state.lessonModule === "content";
-                this.state.isTest = this.state.lessonModule === "test";
-                this.state.isExam = this.state.lessonModule === "exam";
-                this.state.showBottomMenu =
-                    !this.state.isObjective &&
-                    !this.state.isContent &&
-                    !this.state.isTest &&
-                    !this.state.isExam;
+            shouldShowLearningHome() {
+                return this.page.manifest.hasPageType('homepage');
+            },
+
+            shouldShowTeachingHome() {
+                return this.page.manifest.hasPageType('learningactivitieshomepage');
+            },
+
+            shouldShowResources() {
+                return this.page.manifest.hasPageType('resourcesroot');
+            },
+
+            showBottomMenu() {
+                if (this.page.type === 'initial') {
+                    return false;
+                }
+
+                if (this.page.type === 'login') {
+                    return false;
+                }
+
+                if (this.page.type === 'lessonpage') {
+                    return false;
+                }
+
+                if (this.page.type === 'coursepage' && this.riotHash[0] === 'exam') {
+                    return false;
+                }
+
+                return true;
             },
         };
     </script>

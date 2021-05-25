@@ -14,8 +14,10 @@
                             document.createElement("div")
                         ),
                         {
-                            imageId: embed.getAttribute("id"),
-                            alt: embed.getAttribute("alt"),
+                            image: {
+                                id: embed.getAttribute("id"),
+                                alt: embed.getAttribute("alt"),
+                            }
                         }
                     );
                 });

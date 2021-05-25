@@ -1,72 +1,112 @@
 import { registerRoute } from "workbox-routing/registerRoute.mjs";
-import { setDefaultHandler } from "workbox-routing/setDefaultHandler.mjs";
+
+import { setCatchHandler } from "workbox-routing/setCatchHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
-import { StaleWhileRevalidate } from "workbox-strategies/StaleWhileRevalidate.mjs";
 import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
+import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
+
 import { RangeRequestsPlugin } from "workbox-range-requests";
+import { ExpirationPlugin } from "workbox-expiration";
 
 import * as googleAnalytics from "workbox-google-analytics";
 
 googleAnalytics.initialize();
 
-import { precacheAndRoute } from "workbox-precaching";
+import { precacheAndRoute, matchPrecache } from "workbox-precaching";
 
 precacheAndRoute(self.__WB_MANIFEST);
+self.__WB_DISABLE_DEV_LOGS = true;
 
-import { BACKEND_BASE_URL } from "./js/urls";
+import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { buildAppelflapRoutes } from "js/RoutingAppelflap";
+
+const cardImageFallbackUrl = (url) => {
+    if (url.match(/cardImageFallback=([^&]*)/)[1]) {
+        return matchPrecache(url.match(/cardImageFallback=([^&]*)/)[1]);
+    };
+    return null;
+};
+
+
+const cardFallbackPlugin = {
+    fetchDidSucceed: async ({request, response, event, state}) => {
+        if (response.status === 404) {
+            return cardImageFallbackUrl(response.url);
+        }
+        return response;
+    },
+    handlerDidError: async ({request, event, error, state}) => {
+        return cardImageFallbackUrl(response.url);
+    },
+    cacheKeyWillBeUsed: async ({request, mode, params, event, state}) => {
+        // `request` is the `Request` object that would otherwise be used as the cache key.
+        // `mode` is either 'read' or 'write'.
+        // Return either a string, or a `Request` whose `url` property will be used as the cache key.
+        // Returning the original `request` will make this a no-op.
+
+        // we split the query off the path here to avoid workbox caching the same image twice
+        const path = request.url.split('?')[0];
+        return path;
+    },
+}
 
 registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/media/media/.+`),
+    function(request) {
+        return request.url.searchParams && request.url.searchParams.has('cardImageFallback')
+    },
     new CacheFirst({
-        cacheName: "media-cache",
+        cacheName: "card-images-cache",
+        matchOptions: { ignoreSearch: true },
+        plugins: [
+            cardFallbackPlugin,
+            new ExpirationPlugin({
+                maxAgeSeconds: 5 * 365 * 24 * 60 * 60,
+                purgeOnQuotaError: true,
+            }),
+        ],
+    })
+);
+
+setCatchHandler(({url, event, params}) => {
+    if (url.searchParams.has('cardImageFallback')) {
+        return cardImageFallbackUrl(url.search);
+   }
+   return Response.error();
+});
+
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagesv2), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.images), new CacheAnyOrFetchOnly());
+registerRoute(
+    new RegExp(ROUTES_FOR_REGISTRATION.media),
+    new CacheAnyOrFetchOnly({
         plugins: [new RangeRequestsPlugin()],
     })
 );
 
-registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/media/images/.+`),
-    new CacheFirst({
-        cacheName: "images-cache",
-    })
-);
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly(), "POST");
 
-registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/api/v2/pages/.*`),
-    new CacheFirst({
-        cacheName: "pages-cache",
-    })
-);
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.pagePreviewv2), new NetworkOnly());
 
-registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/manifest`),
-    new StaleWhileRevalidate({
-        cacheName: "manifest-cache",
-    })
-);
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.actions), new NetworkOnly(), "POST");
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/token-auth/`), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.subscribe), new NetworkOnly(), "POST");
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/token-auth/`), new NetworkOnly(), "POST");
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.discussion), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.discussion), new NetworkOnly(), "POST");
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/api/v2/page_preview`), new NetworkOnly());
+// Set up routes to Appelflap, if Canoe is not hosted by Appelflap this does nothing
+buildAppelflapRoutes().forEach((routeDef) => {
+    registerRoute(new RegExp(routeDef[0]), new NetworkOnly(), routeDef[1]);
+});
 
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/progress/actions`), new NetworkOnly());
-
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/progress/actions`), new NetworkOnly(), "POST");
-
-registerRoute(new RegExp(`${BACKEND_BASE_URL}/notifications/subscribe*`), new NetworkOnly());
-
-registerRoute(
-    new RegExp(`${BACKEND_BASE_URL}/notifications/subscribe*`),
-    new NetworkOnly(),
-    "POST"
-);
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.appelflapPKIsign), new NetworkOnly(), "POST");
 
 // webpack-dev-server communicates over this endpoint. Without this clause, the
 // service worker caches these requests and breaks webpack-dev-server.
-registerRoute(new RegExp(`/sockjs-node/info`), new NetworkOnly());
-
-setDefaultHandler(new CacheFirst());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.socketInfo), new NetworkOnly());
 
 const getNotificationTitleMessageAndTag = (eventData) => {
     let title = null;

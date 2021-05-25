@@ -1,257 +1,155 @@
-.replace-this-with-lessonframe {
-    h2 {
-        margin-top: 0;
-        margin-bottom: 10px;
-        padding-bottom: 0;
-    }
-
-    h3 {
-        margin-bottom: 10px;
-
-        &:first-of-type {
-            margin-top: 0;
-        }
-
-        &:last-of-type {
-            margin-top: 40px;
-        }
-    }
-
-    & > p {
-        margin-bottom: 20px;
-        margin-top: 10px;
-    }
-}
-
 .lesson.card,
 .module.card {
-    .card-body {
-        h4 {
-            margin-bottom: 5px;
-            margin-top: 0;
-            font-size: 14px;
-            color: $gray-2;
-        }
-
-        p {
-            margin: 0;
-        }
-    }
-
-    .card-footer {
-        justify-content: space-between;
-        display: flex;
-    }
-}
-
-.lesson.card.done,
-.module.card.done {
-    .card-body {
-        border-radius: 8px 8px 0 0;
-    }
-
-    .card-footer {
-        div.status p {
-            font-size: 10px;
-            color: $gray-1;
-
-            @media only screen and (max-width: $sm-phone) {
-                line-height: 1.25;
-            }
-        }
-    }
-}
-
-LessonPage .replace-this-with-lessonframe {
-    margin-top: -#{$top-menu-height};
-    padding-top: $top-menu-height;
-}
-
-LessonPage .unit h5 {
-    width: 100%;
-    margin: 5px 0;
-    font-weight: 400;
-}
-
-LessonPage .content-wrapper {
-    border-radius: 30px 30px 0 0;
-    background-color: $gray-10;
-    padding-top: 30px;
-
-    .arrow-gray {
-        display: none;
-    }
-
-    p {
-        margin-top: 5px;
+    h4 {
         margin-bottom: 5px;
-        font-size: 1em;
-    }
-
-    h2 {
-        border-bottom: none;
-    }
-
-    .sticky {
-        position: fixed;
-        top: 0;
-        border: 1px solid $gray-6;
-        padding-right: 10px;
-        min-width: calc(100% - 65px);
-        max-width: calc(100% - 65px);
-        background-color: $tan;
-        z-index: 1;
-        left: 0;
-        padding-left: 55px;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-    }
-
-    .sticky.lesson-header {
-        h2 {
-            font-size: 16px;
-            line-height: 15px;
-        }
-
-        p {
-            font-size: 0.8em;
-        }
-
-        .arrow-gray {
-            margin: 10px 0 0 15px;
-            display: block;
-        }
-    }
-
-    .sticky.lesson-header + .duration {
-        margin-top: $sticky-header-offset;
-    }
-}
-
-LessonPage .content-wrapper .duration {
-    align-items: center;
-    display: flex;
-    border-bottom: 1px solid $gray-6;
-    border-top: 1px solid $gray-6;
-
-    span {
-        margin: 5px;
+        margin-top: 0;
+        font-size: 14px;
+        color: $gray-2;
     }
 
     p {
-        font-size: 12px;
-        margin: 3px 10px 3px;
+        margin: 0;
     }
 }
 
-LessonPage .description {
-    p {
-        font-size: 15px;
-        margin-bottom: 5px;
-        margin-top: 10px;
+LessonPage {
+    .lesson-page-image-wrap {
+        border-radius: 50%;
+        width: 35vw;
+        height: 35vw;
+        max-width: 200px;
+        max-height: 200px;
+        overflow: hidden;
+        margin: 1.5em auto;
     }
 
-    a {
-        font-size: 12px;
-
-        &:hover {
-            cursor: pointer;
-        }
+    .lesson-page-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 }
 
 LessonFrame {
-    $screen-height-minus-top-menu: calc(100vh - #{$top-menu-height});
+    .without-swoop {
+        justify-content: center;
+
+        .card-number {
+            color: $gray-1;
+            font-size: 0.7em;
+            text-align: center;
+
+            .current-card {
+                font-size: 2em;
+            }
+
+            .slash {
+                margin: 0 4px;
+            }
+        }
+
+        a.extra-clickable-space.right {
+            position: absolute;
+        }
+
+        progress {
+            margin-right: 70px;
+        }
+    }
+
+    // the 25px adds some room for the stacked cards below, the 50px is
+    // for the buttons
+    $base-card-height: calc(100vh - #{$top-menu-height} - 25px - 50px);
 
     .frame-background {
-        min-height: $screen-height-minus-top-menu;
+        height: $base-card-height;
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
-    }
 
-    .card-container {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        align-items: center;
+        &.safari {
+            height: calc(#{$base-card-height} - 100px);
 
-        height: 100%;
+            &.hasHomeButton {
+                height: calc(#{$base-card-height} - 85px);
+            }
+        }
+
+        &.chrome,
+        &.firefox {
+            height: calc(#{$base-card-height} - 60px);
+        }
     }
 
     .card-frame {
-        margin: 0 10px 1.5em;
-        padding: 30px;
-
+        margin: 0 5px 1.5em;
         width: 100%;
         max-width: $tablet;
-        background-color: $white;
-        border-radius: 30px;
+        height: calc(100% - 1.5em);
+        background-color: $gray-10;
+        border-radius: 8px;
         box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
+        box-sizing: border-box;
+        position: relative;
 
-        @media only screen and (min-width: $tablet-plus) {
+        @media only screen and (min-width: 610px) {
             margin: 0 auto 1.5em;
         }
     }
-}
 
-LessonObjective .objective {
-    h3 {
-        margin-bottom: 15px;
-        margin-top: 5px;
-        text-align: center;
-        font-family: "GalanoGrotesqueAlt";
-        text-transform: uppercase;
-        font-size: 14px;
-    }
-
-    p {
-        margin-bottom: 20px;
-        margin-top: 0;
-        flex: 1;
-    }
-
-    .carousel-card {
-        align-items: center;
-    }
-
-    .center-objective {
-        margin-top: 40px;
-        line-height: 30px;
-        font-size: 20px;
-        font-weight: 500;
-        text-align: center;
-    }
-
-    .card-number {
-        font-size: 12px;
-        margin-bottom: -5px;
-        flex: 0;
-    }
-
-    .bottom-buttons {
+    .card-content {
+        position: relative;
+        padding: 30px 20px;
+        box-sizing: border-box;
         display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        width: 100%;
-        margin-bottom: 15px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100%;
+        overflow: scroll;
 
-        .arrow-gray {
-            display: inline-block;
-            position: relative;
-            left: unset;
-            height: 50px;
-        }
-
-        .btn-primary {
-            min-width: 90px;
-            font-size: 12px;
+        &.fade:after {
+            @extend %faded-modal-background;
         }
     }
 }
 
-LessonContent .content {
-    padding-bottom: $bottom-menu-height-no-footer;
+.card-shadow {
+    background-color: $gray-10;
+    height: 20px;
+    width: 96%;
+    position: absolute;
+    bottom: -11px;
+    left: 2%;
+    border-radius: 8px;
+    z-index: -1;
+    box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+    opacity: 0.9;
+
+    &:nth-child(3) {
+        width: 90%;
+        bottom: -21px;
+        z-index: -2;
+        left: 5%;
+        border-radius: 7px;
+        opacity: 0.55;
+    }
+}
+
+TitleDescription {
+    height: 100%;
+    width: 100%;
+}
+
+LessonContent .content,
+ResourceArticle LessonFrame {
+    padding-bottom: 25px;
+
+    div.content-wrapper {
+        flex-direction: column;
+        padding-top: 30px;
+        display: flex;
+    }
 
     raw,
     basiccard,
@@ -259,20 +157,34 @@ LessonContent .content {
     listcard,
     VideoCard,
     AudioCard,
-    PdfCard {
+    PdfCard,
+    Html5Card {
         flex: 1;
         width: 100%;
+    }
+
+    Html5Card {
+        height: inherit;
+
+        .html-card {
+            display: flex;
+            flex-direction: column;
+            height: inherit;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        button {
+            margin-top: 1em;
+        }
     }
 
     basiccard,
     quotecard,
     listcard {
         text-align: left;
-    }
-
-    VideoCard,
-    AudioCard {
-        text-align: center;
     }
 
     audio {
@@ -288,12 +200,9 @@ LessonContent .content {
 
     quotecard {
         margin-top: 1em;
-        font-size: 1.125em;
 
         .quote-container {
-            display: flex;
-            flex-direction: row;
-            margin-top: 2em;
+            margin: 2em;
 
             &.long {
                 margin-top: 0;
@@ -301,26 +210,19 @@ LessonContent .content {
         }
 
         h3 {
-            font-weight: 500;
-            flex: 1;
+            font-weight: 200;
             margin: 0;
+            font-size: 1.2em;
         }
 
-        span {
-            color: $blue-1;
-            margin: -0.1em 0.1em;
-            align-self: flex-start;
-            font-size: 1.7em;
-
-            &:last-of-type {
-                align-self: flex-end;
-            }
+        .quotation-mark {
+            display: block;
+            margin-bottom: 10px;
         }
 
         & p {
-            padding-top: 2em;
-            font-size: 1em;
-            margin-left: 1em;
+            padding-top: 0.7em;
+            font-size: 0.9em;
 
             &.long {
                 padding-top: 0;
@@ -332,20 +234,11 @@ LessonContent .content {
     listcard {
         width: 100%;
 
-        p {
-            font-size: 1em;
-        }
-
         span {
-            margin-right: 7px;
-            color: $blue-1;
+            margin-right: 18px;
+            color: $gray-1;
             font-weight: 600;
         }
-    }
-
-    img.richtext-image {
-        margin: 1em 0;
-        width: 100%;
     }
 
     h3.media-title {
@@ -355,264 +248,282 @@ LessonContent .content {
 
     p,
     li {
-        font-size: 18px;
+        font-size: 1em;
         line-height: 1.3em;
         margin: 0.3em 0;
     }
 
-    ul,
-    ol {
-        padding-left: 20px;
-    }
-
     p.media-description {
-        font-size: 18px;
+        font-size: 1em;
     }
 
     p.error-message {
         color: red;
     }
+}
 
-    .bottom-buttons {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        width: 100%;
-        margin-bottom: 15px;
-    }
-
-    .arrow-gray {
-        display: inline-block;
+LessonFrame,
+ActivityPage {
+    ImageWrapper {
         position: relative;
-        left: unset;
-        height: 50px;
+
+        .modal-background.fade:after {
+            z-index: 1;
+        }
     }
 
-    .speaker,
-    .film {
-        margin: 0 auto;
+    img.richtext-image {
+        width: calc(100% + (2 * 20px));
+        margin-left: -20px;
+        margin-right: -20px;
+        margin-top: -30px;
+        border-radius: 8px 8px 0 0;
     }
 
-    .btn-primary {
-        min-width: 90px;
-        font-size: 12px;
+    img.richtext-image.full-screen {
+        max-width: 100vw;
+        max-height: 100vh;
+        margin: unset;
+        border-radius: unset;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
     }
 
-    .card-number {
-        font-size: 12px;
-        margin-bottom: -5px;
-        flex: 0;
-        text-align: center;
+    img.richtext-image.full-screen.portrait {
+        width: auto;
     }
-}
 
-LessonContent div.content-wrapper {
-    flex-direction: column;
-    padding-top: 30px;
-    display: flex;
-}
+    img.richtext-image.full-screen.landscape {
+        height: auto;
+    }
 
-LessonTest,
-CourseExam,
-TestSingleAnswer,
-TestMultipleAnswer,
-TestPopupModal {
-    .answer {
-        width: 100%;
-        flex: 1;
+    img.richtext-image.full-screen.square {
+        width: 100vmin;
+        height: 100vmin;
+    }
+
+    ImageWrapper .expand-button,
+    ImageWrapper .contract-button {
+        position: absolute;
+        right: 0;
+        bottom: 1em;
+        background-color: rgba($white, 0.4);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border-radius: 5px;
+        height: 32px;
+        width: 32px;
         display: flex;
-        flex-direction: column;
-
-        h4 {
-            align-self: start;
-            margin: 0 0 1.5em 0;
-            font-weight: 100;
-            font-size: 1em;
-            color: $gray-3;
-        }
-
-        button {
-            width: 90px;
-            align-self: center;
-        }
-
-        .answers-block {
-            align-self: start;
-            flex: 1;
-        }
+        align-items: center;
+        justify-content: center;
     }
 
-    .test {
-        h3 {
-            align-self: start;
-            margin-bottom: 0.3em;
-        }
+    ImageWrapper .contract-button {
+        z-index: 3;
+        position: fixed;
+        top: 1em;
+        right: 1em;
 
-        @media only screen and (max-width: $sm-phone) {
-            margin-bottom: 1rem;
-        }
-
-        button {
-            flex: end;
-        }
-
-        ol {
-            align-self: start;
-            flex: 1;
-
-            li {
-                flex-direction: column;
-                margin-bottom: 15px;
-                display: flex;
-
-                & > div {
-                    align-items: center;
-                    display: flex;
-
-                    p {
-                        flex-shrink: 1;
-                        margin: 0;
-                    }
-                }
-
-                & > div:nth-child(2) {
-                    padding-left: 35px;
-
-                    p {
-                        margin-left: 5px;
-                    }
-                }
-
-                .radio {
-                    background-color: $white;
-                    border-radius: 50%;
-                    margin-right: 10px;
-                    position: relative;
-                    border: $border;
-                    flex-shrink: 0;
-                    height: 23px;
-                    width: 23px;
-
-                    & > div {
-                        border-radius: 50%;
-                        position: absolute;
-                        margin: auto;
-                        height: 11px;
-                        width: 11px;
-                        bottom: 0;
-                        right: 0;
-                        left: 0;
-                        top: 0;
-                    }
-                }
-
-                .pendingAnswer,
-                .success,
-                .warning {
-                    height: 15px;
-                    width: 18px;
-                    display: inline-block;
-                    position: absolute;
-                    margin-left: 5px;
-                }
-
-                .pendingAnswer {
-                    background-color: $blue-1;
-                    border-radius: 15px;
-                    width: 15px;
-                }
-
-                .warning {
-                    margin-left: 4px;
-                }
-
-                .checkbox {
-                    content: "";
-                    box-sizing: border-box;
-                    height: 25px;
-                    width: 25px;
-                    border: 1px solid $gray-5;
-                    border-radius: 3px;
-                    margin-right: 15px;
-                    flex: none;
-                }
-            }
-
-            li:hover {
-                cursor: pointer;
-            }
-
-            li.selected {
-                .radio {
-                    & > div {
-                        background-color: $green-1;
-                    }
-                }
-            }
-
-            li.selected-wrong {
-                .radio {
-                    border: 2px solid $red-2;
-                    height: 21px;
-                    width: 21px;
-
-                    & > div {
-                        background-color: $red-2;
-                    }
-                }
-            }
-
-            li.selected-pending {
-                .radio {
-                    border: 2px solid $blue-1;
-                    height: 21px;
-                    width: 21px;
-
-                    & > div {
-                        background-color: $blue-1;
-                    }
-                }
-            }
-
-            li:last-child {
-                margin-bottom: 0;
-            }
-        }
-
-        .btn-primary {
-            font-size: 12px;
-        }
-
-        .card-number {
-            font-size: 12px;
-            margin-bottom: -5px;
-            flex: 0;
-            text-align: center;
+        > span {
+             mix-blend-mode: difference;
         }
     }
 }
 
-LessonModuleComplete {
-    .body {
-        text-align: center;
+iframe {
+    border: 3px solid $app-accent-color;
+    width: 100%;
+    flex: 1;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
 
-        h2 {
-            font-size: 1.562em;
-            border-bottom: none;
-        }
+Test {
+    width: 100%;
+}
 
-        h3 {
-            font-size: 1.125em;
-        }
+TestMultipleAnswer,
+TestSingleAnswer {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 
-        p {
-            font-size: 1em;
-        }
+    h4 {
+        align-self: start;
+        margin: 0 0 1.5em 0;
+        font-weight: 100;
+        font-size: 1em;
+        color: $gray-3;
     }
 
     button {
+        width: 90px;
+        align-self: center;
+    }
+
+    .answers-block {
+        align-self: start;
+        flex: 1;
         width: 100%;
-        margin-bottom: 1em;
+
+        & + h4 {
+            margin: 1.5em 0 0;
+        }
+    }
+}
+
+test,
+.answers-block {
+    h3 {
+        align-self: start;
+    }
+
+    button {
+        flex: end;
+        margin-top: 20px;
+    }
+
+    ol, ul {
+        padding-left: 0;
+        margin-left: 0;
+
+        li {
+            padding-left: 0;
+        }
+    }
+
+    ol {
+        align-self: start;
+        flex: 1;
+        width: 100%;
+
+        li {
+            margin-bottom: 15px;
+            list-style-type: none;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            p {
+                font-size: 1.2em;
+                margin: 0;
+                padding: 0.5em 1em;
+                line-height: 1.3em;
+            }
+
+            &.radio {
+                border: 2px solid $gray-6;
+                border-radius: 25px;
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+
+            &.selected-pending {
+                border-color: $app-accent-color;
+                background-color: rgba($app-accent-color, 0.05);
+            }
+
+            &.selected-wrong {
+                border-color: $red;
+                background-color: rgba($red, 0.05);
+
+                > p {
+                    color: $red;
+                }
+            }
+
+            &.selected {
+                border-color: $teal;
+                background-color: rgba($teal, 0.05);
+            }
+
+            .checkbox-container {
+                position: relative;
+                border-radius: 20px;
+                overflow: hidden;
+                min-height: 40px;
+                display: grid;
+                grid-template-columns: 33px 1fr;
+                color: $gray-3;
+
+                > .checkbox {
+                    box-sizing: border-box;
+                    height: 100%;
+                    width: 100%;
+                    border: 2px solid $gray-6;
+                    border-radius: 20px 0 0 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding-left: 4px;
+                }
+
+                > .label {
+                    box-sizing: border-box;
+                    border: 2px solid $gray-6;
+                    border-left: none;
+                    border-radius: 0 20px 20px 0;
+                    height: 100%;
+                    padding: 5px 12px;
+                    display: flex;
+                    align-items: center;
+                }
+
+                &.answer-pending {
+                    > .checkbox {
+                        background-color: $app-accent-color;
+                        border-color: $app-accent-color;
+                        color: $white;
+                    }
+
+                    > .label {
+                        background-color: rgba($app-accent-color, 0.05);
+                        border-color: $app-accent-color;
+                        color: $gray-1;
+                    }
+                }
+
+                &.answer-success {
+                    > .checkbox {
+                        background-color: $teal;
+                        border-color: $teal;
+                        color: $white;
+                    }
+
+                    > .label {
+                        background-color: rgba($teal, 0.05);
+                        border-color: $teal;
+                        color: $gray-1;
+                    }
+                }
+
+                &.answer-warning {
+                    > .checkbox {
+                        background-color: $red;
+                        border-color: $red;
+                        color: $white;
+                    }
+
+                    > .label {
+                        background-color: rgba($red, 0.05);
+                        border-color: $red;
+                        color: $gray-1;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -628,200 +539,264 @@ LessonFeedback {
             align-items: center;
             margin: 1em 0;
         }
-    }
 
-    .feedback-icon {
-        display: flex;
-        flex-flow: column nowrap;
-
-        .sun {
-            height: 3em;
-            width: 3em;
-            margin: auto;
-        }
-
-        h2 {
-            font-size: 1em;
-            font-weight: 500;
-            color: $gray-3;
-            letter-spacing: 0.8px;
-            text-transform: capitalize;
-            text-align: center;
+        button {
+            height: 5.687em;
+            width: 5.687em;
+            border-radius: 50%;
             border: none;
-            padding: 0;
-            font-family: "GalanoGrotesqueAlt";
+            box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+            background-color: white;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:focus {
+                outline: 0;
+            }
+
+            &.active {
+                box-shadow: inset 0 2px 4px 0 rgba(42, 57, 66, 0.5);
+
+                & > span {
+                    background-color: $white;
+                }
+
+                &.neutral {
+                    background-color: $red;
+                }
+
+                &.smiling {
+                    background-color: $yellow;
+                }
+
+                &.thrilled {
+                    background-color: $teal;
+                }
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            @media only screen and (max-width: calc(#{$lg-phone} + 27px)) {
+                height: 5em;
+                width: 5em;
+                margin: 0;
+            }
+
+            @media screen and (max-width: $sm-phone) {
+                margin: 0.5em;
+
+                &:first-of-type {
+                    margin-top: 0;
+                }
+
+                &:last-of-type {
+                    margin-bottom: 0;
+                }
+            }
         }
-    }
 
-    @mixin feedback-containers {
-        text-align: center;
-    }
-
-    .feedback-container {
-        @include feedback-containers;
-    }
-
-    .thank-you-container {
-        @include feedback-containers;
-
-        .correct-flag {
-            height: 6em;
-            width: 6em;
-            margin: auto;
-        }
-    }
-
-    button.feedback {
-        height: 5.687em;
-        width: 5.687em;
-        border-radius: 50%;
-        border: 2px solid $gray-6;
-        margin: 0 10px;
-        background-color: white;
-
-        &:focus {
-            border: 2px solid $blue-1;
-            -webkit-box-shadow: inset 0 1px 1px $gray-6, inset 0 2px 2px $gray-6,
-                inset 0 4px 4px $gray-6, inset 0 8px 8px $gray-6;
-            outline: 0;
-        }
-
-        &.border-blue-1 {
-            border-color: 2px solid $blue-1;
-        }
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    button.no-thanks {
-        color: $blue-1;
-        box-shadow: none;
-        background: none;
-
-        &:hover {
-            cursor: pointer;
+        & .button-label {
+            color: $gray-4;
+            margin-top: 11px;
         }
     }
 
     // Pedro needs smaller buttons at 441px. Better to target an industry
     // breakpoint and add the extra pixels.
-    @media only screen and (max-width: calc(#{$lg-phone} + 27px)) {
-        button.feedback {
-            height: 5em;
-            width: 5em;
-            margin: 0;
-        }
-    }
 
     @media screen and (max-width: $sm-phone) {
         h3 {
             padding-bottom: 0;
         }
+    }
+}
 
-        button.feedback {
-            margin: 0.5em;
+.message-container {
+    text-align: center;
+    padding-top: 2em;
 
-            &:first-of-type {
-                margin-top: 0;
-            }
+    @media screen and (max-width: $sm-phone) {
+        padding-top: 1em;
+    }
 
-            &:last-of-type {
-                margin-bottom: 0;
-            }
-        }
+    h3 {
+        margin: 0.5em;
+    }
+
+    h5 {
+        text-transform: uppercase;
+        font-weight: 300;
+    }
+
+    p {
+        color: $gray-1;
     }
 }
 
 LessonComplete,
-ExamResults {
-    h2 {
-        border-bottom: none;
-    }
-
-    .congratulations-container {
+ExamResults,
+ExamReview {
+    .congratulations-container,
+    .exam-summary {
         display: flex;
         flex-flow: column nowrap;
-        justify-content: start;
+        justify-content: space-evenly;
         align-items: center;
         text-align: center;
+        height: 100%;
 
-        button {
-            width: 100%;
-            margin-bottom: 10px;
+        h2,
+        h3 {
+            margin-top: 1em;
+            margin-bottom: 1em;
+            padding: 0 1em;
+        }
+
+        h3 {
+            font-size: 1.2em;
+        }
+
+        p {
+            color: $gray-1;
+            margin: 0.5em 1em;
+        }
+
+        .btn-primary {
+            margin-top: 1.5em;
+            width: 220px;
+            position: relative;
+
+            .chevron {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
+
+        a,
+        .btn-secondary {
+            margin-top: 1.5em;
         }
 
         .btn-secondary {
-            margin-top: 1em;
+            width: 220px;
         }
 
-        @media only screen and (max-width: $sm-phone) {
-            h2 {
-                font-size: 1.9em;
+        .exploding-computer,
+        .exam-review,
+        .retake-exam {
+            margin-top: 3em;
+        }
+
+        .close {
+            position: fixed;
+            top: 1em;
+            right: 1em;
+            margin-top: 0;
+        }
+
+        .question-block {
+            box-sizing: border-box;
+            padding: 1em;
+            border-top: 2px solid $gray-7;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 40px 1fr 40px;
+            grid-column-gap: 14px;
+            align-items: center;
+            text-align: left;
+
+            &:first-of-type {
+                margin-top: 1em;
+            }
+
+            &:last-of-type {
+                border-bottom: 2px solid $gray-7;
+            }
+
+            p {
+                margin: 0;
+                padding: 0;
+            }
+
+            .question-number {
+                border: 2px solid $gray-7;
+                border-radius: 50%;
+            }
+
+            .question-number,
+            .incorrect-cross {
+                height: 32px;
+                width: 32px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+                font-size: 0.8em;
+                position: relative;
             }
         }
     }
 
-    .background {
-        position: absolute;
-        top: -1em;
-        left: -1em;
-    }
+    .revision-note {
+        background-color: $gray-9;
+        border: 2px solid $gray-7;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 1.5em;
 
-    .incorrect-flag {
-        height: 150px;
-        width: 150px;
-    }
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-    .congratulations {
-        flex-direction: column;
-        text-align: center;
-        display: flex;
+        .warning-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $yellow;
+            height: 2em;
+            width: 2em;
+            border-radius: 50%;
 
-        span.confetti {
-            margin: auto;
+            .warning {
+                background-color: $white;
+            }
         }
 
         h3 {
-            margin-bottom: 20px;
-            margin-top: 20px;
-        }
-
-        p {
-            margin-bottom: 40px;
-            margin-top: 0;
+            font-size: 1em;
+            text-transform: uppercase;
         }
     }
 }
 
-CourseExam {
-    .card-number {
-        font-size: 12px;
-        margin-bottom: -5px;
-        flex: 0;
+// Shared lesson styles
+.bottom-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 25px;
+    width: 100%;
+    max-width: $tablet;
+    padding: 7px 20px 12px;
+    box-sizing: border-box;
+    margin: 0 auto;
+
+    button {
+        min-width: 120px;
     }
+}
 
-    .bottom-buttons {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        width: 100%;
-        margin-bottom: 15px;
-
-        .arrow-gray {
-            display: inline-block;
-            position: relative;
-            left: unset;
-            height: 50px;
-        }
-
-        .btn-primary {
-            min-width: 160px;
-        }
-    }
-
-    div.card-container {
-        justify-content: unset;
-    }
+LessonPage .btn-primary,
+.thank-you-container.btn-primary {
+    margin: 0 30px;
 }

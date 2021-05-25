@@ -1,91 +1,147 @@
 <LessonFeedback>
-    <LessonFrame>
-        <template if="{!state.madeFeedbackDecision}">
-            <div class="feedback-icon">
-                <div class="sun"></div>
-                <h2>{ TRANSLATIONS.feedback() }</h2>
-            </div>
-            <div class="feedback-container">
+    <LessonFrame linkTo="{ lesson.course.loc_hash }">
+        <template if="{!state.submittedFeedback}">
+            <div class="message-container">
                 <h3>{ TRANSLATIONS.enjoying_lesson() }</h3>
+                <h5>{ TRANSLATIONS.let_us_know() }</h5>
                 <div class="feedback-buttons">
-                    <button class="feedback" onclick="{clickedThisLessonIsFine}">
-                        <span class="neutral-smiley"></span>
-                    </button>
-                    <button class="feedback" onclick="{clickedThisLessonIsGood}">
-                        <span class="smiling-smiley"></span>
-                    </button>
-                    <button class="feedback" onclick="{clickedThisLessonIsGreat}">
-                        <span class="thrilled-smiley"></span>
-                    </button>
+                    <div>
+                        <button
+                            onclick="{() => clickedThisLessonIs(FINE)}"
+                            class="neutral {state.activeSelection === FINE ? 'active' : ''}"
+                        >
+                            <span class="neutral-smiley"></span>
+                        </button>
+                        <p class="button-label">{ TRANSLATIONS.not_great() }</p>
+                    </div>
+                    <div>
+                        <button
+                            onclick="{() => clickedThisLessonIs(GOOD)}"
+                            class="smiling {state.activeSelection === GOOD ? 'active' : ''}"
+                        >
+                            <span class="smiling-smiley"></span>
+                        </button>
+                        <p class="button-label">{ TRANSLATIONS.good() }</p>
+                    </div>
+                    <div>
+                        <button
+                            onclick="{() => clickedThisLessonIs(GREAT)}"
+                            class="thrilled {state.activeSelection === GREAT ? 'active' : ''}"
+                        >
+                            <span class="thrilled-smiley"></span>
+                        </button>
+                        <p class="button-label">
+                            { TRANSLATIONS.really_great() }
+                        </p>
+                    </div>
                 </div>
-                <p>
-                    { TRANSLATIONS.give_feedback() }
-                
-                </p>
+                <div id="feedback-input" class="form-group">
+                    <label for="feedback"
+                        >{ TRANSLATIONS.feedbackLabel() }</label
+                    >
+                    <textarea
+                        id="feedback"
+                        onfocus="{setTextAreaFocus}"
+                        onblur="{removeTextAreaFocus}"
+                        oninput="{debounce(bindCommentToState)}"
+                    ></textarea>
+                </div>
+                <p>{ TRANSLATIONS.give_feedback() }</p>
             </div>
-            <button class="btn-primary no-thanks" onclick="{clickedNoThanks}">
-                { TRANSLATIONS.no() }
-            </button>
         </template>
-        <template if="{state.madeFeedbackDecision}">
-            <div class="feedback-icon">
-                <div class="sun"></div>
-                <h2>{ TRANSLATIONS.feedback() }</h2>
-            </div>
-            <div class="thank-you-container">
+        <template if="{state.submittedFeedback}">
+            <div class="message-container">
                 <h3>{ TRANSLATIONS.sent() }</h3>
-                <div class="correct-flag"></div>
-                <p>
-                    { TRANSLATIONS.feedback_sent() }
-                </p>
+                <h5>{ TRANSLATIONS.value_feedback() }</h5>
+                <div class="launch-feedback"></div>
+                <p>{ TRANSLATIONS.feedback_sent() }</p>
             </div>
-            <button class="btn-primary thank-you-container" onclick="{clickedContinue}">
-                { TRANSLATIONS.continue() }
-            </button>
         </template>
     </LessonFrame>
+    <div if="{!state.submittedFeedback}" class="bottom-buttons">
+        <button class="btn-secondary" onclick="{clickedNoThanks}">
+            { TRANSLATIONS.no() }
+        </button>
+        <button
+            class="btn-primary"
+            onclick="{clickedSubmit}"
+            disabled="{!state.activeSelection}"
+        >
+            { TRANSLATIONS.submit() }
+        </button>
+    </div>
+    <div if="{state.submittedFeedback}" class="bottom-buttons">
+        <button
+            class="btn-primary thank-you-container"
+            onclick="{clickedContinue}"
+        >
+            { TRANSLATIONS.continue() }
+        </button>
+    </div>
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
-        import { logLessonFeedback } from "js/GoogleAnalytics";
-        import { parseURLHash } from "js/Routing";
+        import { getRoute } from "ReduxImpl/Interface";
+        import { debounce } from "js/utilities";
 
         export default {
             TRANSLATIONS: {
-                feedback: () => gettext('FEEDBACK'),
-                enjoying_lesson: () => gettext('Are you enjoying this lesson?'),
-                give_feedback: () => gettext("Let us know what you think of this lesson. We value your feedback and treat all feedback as confidential."),
-                feedback_sent: () => gettext("Thanks for your feedback. Your opinion matters to us and we are working hard to continually improve your experience"),
-                no: () => gettext('No thanks'),
-                sent: () => gettext('Successfully sent!'),
-                continue: () => gettext('Continue')
+                enjoying_lesson: () => gettext("Are you enjoying this lesson?"),
+                give_feedback: () =>
+                    gettext(
+                        "We value your feedback and all feedback is confidential."
+                    ),
+                feedback_sent: () =>
+                    gettext(
+                        "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
+                    ),
+                no: () => gettext("Maybe later"),
+                sent: () => gettext("Thanks so much"),
+                continue: () => gettext("Continue"),
+                let_us_know: () => gettext("Let us know how you feel"),
+                not_great: () => gettext("Not great"),
+                good: () => gettext("Good"),
+                really_great: () => gettext("Really great!"),
+                value_feedback: () => gettext("We value your feedback"),
+                submit: () => gettext("Submit"),
+                feedbackLabel: () => gettext("Add your comments (optional)"),
             },
+
+            FINE: "fine",
+            GOOD: "good",
+            GREAT: "great",
+
             components: {
                 lessonframe: LessonFrame,
             },
 
             state: {
-                madeFeedbackDecision: false,
+                activeSelection: null,
+                submittedFeedback: false,
+                comment: "",
             },
 
-            clickedThisLessonIsFine() {
-                this.sendFeedback("bad");
+            get lesson() {
+                return getRoute().page;
+            },
+
+            clickedThisLessonIs(rating) {
                 this.update({
-                    madeFeedbackDecision: true,
+                    activeSelection: rating,
                 });
             },
 
-            clickedThisLessonIsGood() {
-                this.sendFeedback("fine");
-                this.update({
-                    madeFeedbackDecision: true,
-                });
-            },
+            clickedSubmit() {
+                const { FINE, GOOD, GREAT, state } = this;
+                const rating = state.activeSelection;
 
-            clickedThisLessonIsGreat() {
-                this.sendFeedback("great");
-                this.update({
-                    madeFeedbackDecision: true,
-                });
+                if ([FINE, GOOD, GREAT].includes(rating)) {
+                    this.sendFeedback(rating);
+                    this.update({ submittedFeedback: true });
+                } else {
+                    throw Error(
+                        `You must give a rating of "${FINE}", "${GOOD}", or "${GREAT}"`
+                    );
+                }
             },
 
             clickedNoThanks() {
@@ -97,19 +153,47 @@
             },
 
             goToSectionEnd() {
-                const [lessonNumber, section, cardNumber] = parseURLHash();
-                const nextCardNumber = new Number(cardNumber) + 1;
-                window.location.hash = `#${lessonNumber}/${section}/${nextCardNumber}`;
+                window.location.hash = `#${this.lesson.loc_hash}:content:complete`;
+            },
+
+            debounce(func) {
+                const delay = 250;
+                return debounce(func, delay);
+            },
+
+            bindCommentToState(event) {
+                this.state.comment = event.target.value;
             },
 
             sendFeedback(feedbackString) {
-                const lesson = this.props.lessonName;
+                const { comment } = this.state;
                 const feedback = feedbackString;
 
-                logLessonFeedback({
-                    lesson,
+                this.lesson.sendFeedback({
                     feedback,
+                    comment,
                 });
+            },
+
+            setTextAreaFocus(event) {
+                const fieldElement = `#${event.target.id}-input`;
+                this.$(fieldElement).classList.add("has-focus");
+            },
+
+            removeTextAreaFocus(event) {
+                const fieldElement = `#${event.target.id}-input`;
+                const fieldHasValue = event.target.value !== "";
+
+                this.$(fieldElement).classList.remove("has-focus");
+
+                if (
+                    fieldHasValue &&
+                    !this.$(fieldElement).classList.contains("is-filled")
+                ) {
+                    this.$(fieldElement).classList.add("is-filled");
+                } else if (!fieldHasValue) {
+                    this.$(fieldElement).classList.remove("is-filled");
+                }
             },
         };
     </script>

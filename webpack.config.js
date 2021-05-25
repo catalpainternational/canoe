@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require("webpack");
-const { mergeWithCustomize, customizeArray } = require('webpack-merge');
+const { mergeWithCustomize, customizeArray } = require("webpack-merge");
 const path = require("path");
-const fs = require("fs");
 
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { InjectManifest } = require("workbox-webpack-plugin");
@@ -12,6 +12,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const defaultEnvironmentConfiguration = require("./canoe-environment-default.js");
 const defaultProjectConfiguration = require("./canoe-project-default.js");
@@ -19,11 +20,13 @@ const defaultProjectConfiguration = require("./canoe-project-default.js");
 // uncomment this to find the source of webpack deprecation warnings
 // process.traceDeprecation = true;
 
-module.exports = (env) => {
+module.exports = env => {
     // read the environment configuration
     const environmentConfiguration = Object.assign(
         defaultEnvironmentConfiguration,
-        env && env.ENVIRONMENT_CONFIG_PATH ? require(env.ENVIRONMENT_CONFIG_PATH) : {}
+        env && env.ENVIRONMENT_CONFIG_PATH
+            ? require(env.ENVIRONMENT_CONFIG_PATH)
+            : {}
     );
 
     // read the project configuration
@@ -33,17 +36,26 @@ module.exports = (env) => {
     );
 
     // merge environment and project configurations for use in webpack compilation
-    // webpack.DefinePlugin will replace process.env.CONFIG_KEY with configured valuea
-    const processEnvironment = Object.keys(environmentConfiguration).reduce((prev, next) => {
-        prev[`process.env.${next}`] = JSON.stringify(environmentConfiguration[next]);
-        return prev;
-    }, {});
-    processEnvironment["process.env.SITE_NAME"] = JSON.stringify(projectConfiguration.SITE_NAME);
+    // webpack.DefinePlugin will replace process.env.CONFIG_KEY with configured values
+    const processEnvironment = Object.keys(environmentConfiguration).reduce(
+        (prev, next) => {
+            prev[`process.env.${next}`] = JSON.stringify(
+                environmentConfiguration[next]
+            );
+            return prev;
+        },
+        {}
+    );
+    processEnvironment["process.env.REQUIRE_LOGIN"] = projectConfiguration.REQUIRE_LOGIN;
+    processEnvironment["process.env.PROFILE_LINK"] = JSON.stringify(projectConfiguration.PROFILE_LINK);
+    processEnvironment["process.env.SITE_NAME"] = JSON.stringify(
+        projectConfiguration.SITE_NAME
+    );
 
     const baseConfig = {
         context: __dirname,
         mode: "development",
-        devtool: "inline-source-map",
+        devtool: "eval-source-map",
         optimization: {
             minimizer: [new TerserPlugin(), new OptimizeCSSAssetsPlugin({})],
         },
@@ -59,25 +71,25 @@ module.exports = (env) => {
             contentBase: path.resolve(__dirname, "dist"),
         },
         resolve: {
+            extensions: [".ts", ".js", ".cjs", ".mjs", ".json", ".riot.html"],
             modules: [path.resolve(__dirname, "src")],
-            alias: {
-                RiotTags: path.resolve(__dirname, "src/riot/"),
-                js: path.resolve(__dirname, "src/js"),
-                ReduxImpl: path.resolve(__dirname, "src/js/redux"),
-                Actions: path.resolve(__dirname, "src/js/actions"),
-            },
             plugins: [
                 PnpWebpackPlugin,
             ],
         },
         resolveLoader: {
-            plugins: [
-                PnpWebpackPlugin.moduleLoader(module),
-            ],
+            plugins: [PnpWebpackPlugin.moduleLoader(module)],
         },
         module: {
             rules: [
-                { test: /\.hbs$/, loader: "handlebars-loader" },
+                {
+                    test: /\.hbs$/,
+                    loader: "handlebars-loader",
+                    query: {
+                        inlineRequires: 'img\/',
+                        rootRelative: '',
+                    }
+                },
                 {
                     test: /\.riot.html$/,
                     exclude: /node_modules/,
@@ -111,7 +123,12 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.(png|jpg|gif)$/,
-                    use: ["file-loader"],
+                    use: {
+                        loader: "file-loader",
+                        options: {
+                            esModule: false,
+                        },
+                    },
                 },
                 {
                     test: /\.svg$/,
@@ -123,13 +140,36 @@ module.exports = (env) => {
                     },
                 },
                 {
-                    test: /\.m?js$/,
-                    exclude: /node_modules/,
+                    test: /\.(js|cjs|mjs)$/,
+                    exclude: [/node_modules/, "/src/**/tests/**/*"],
+                    use: {
+                        loader: "babel-loader",
+                    },
+                },
+                {
+                    test: /\.(ts)$/,
+                    exclude: [/node_modules/, "/src/**/tests/**/*"],
                     use: {
                         loader: "babel-loader",
                         options: {
-                            presets: ["@babel/preset-env"],
-                            plugins: ["@babel/plugin-transform-runtime"],
+                            presets: [
+                                "@babel/preset-typescript",
+                                "@babel/preset-env",
+                            ],
+                            plugins: [
+                                [
+                                    "@babel/plugin-transform-runtime",
+                                    {
+                                        regenerator: true,
+                                    },
+                                ],
+                                [
+                                    "@babel/plugin-proposal-class-properties",
+                                    {
+                                        loose: true,
+                                    },
+                                ],
+                            ],
                         },
                     },
                 },
@@ -148,7 +188,6 @@ module.exports = (env) => {
                 include_ga: Boolean(environmentConfiguration.GA_TAG),
                 ga_tag: environmentConfiguration.GA_TAG,
                 theme_color: projectConfiguration.THEME_COLOR,
-                background_color: projectConfiguration.BACKGROUND_COLOR,
             }),
             new HtmlWebpackInlineSVGPlugin({ runPreEmit: true }),
             new WebpackPwaManifest({
@@ -157,27 +196,23 @@ module.exports = (env) => {
                 name: projectConfiguration.SITE_NAME,
                 short_name: projectConfiguration.SITE_SHORT_NAME,
                 description: projectConfiguration.SITE_DESCRIPTION,
-                background_color: projectConfiguration.BACKGROUND_COLOR,
-                theme_color: projectConfiguration.BACKGROUND_COLOR,
+                background_color: "black",
+                theme_color: "blue",
                 start_url: "/",
                 icons: [
                     {
-                        src: projectConfiguration.FAVICON_PATH,
+                        src: projectConfiguration.ICON_PATH,
                         sizes: [120],
-                        destination: path.join("icons", "ios"),
-                        ios: true,
-                        manifest: false,
-                    },
-                    {
-                        src: projectConfiguration.FAVICON_PATH,
-                        size: [120],
-                        destination: path.join("icons", "ios"),
+                        destination: path.join("icons"),
                         ios: "startup",
+                        purpose: "any maskable",
                     },
                     {
-                        src: projectConfiguration.FAVICON_PATH,
-                        sizes: [512],
-                        destination: path.join("icons", "android"),
+                        src: projectConfiguration.ICON_PATH,
+                        sizes: [1024],
+                        destination: path.join("icons"),
+                        ios: true,
+                        purpose: "any maskable",
                     },
                 ],
             }),
@@ -190,15 +225,22 @@ module.exports = (env) => {
                 ngettext: ["js/Translation", "ngettext"],
             }),
             new MiniCssExtractPlugin(),
+            new ForkTsCheckerWebpackPlugin({
+                async: false,
+                eslint: {
+                    files: ["./src/**/*.ts"],
+                },
+            }),
         ],
     };
 
-    const productionWebpackConfig = env && env.PRODUCTION ? require("./webpack.prod.js") : {};
+    const productionWebpackConfig =
+        env && env.PRODUCTION ? require("./webpack.prod.js") : {};
 
     const config = mergeWithCustomize({
         customizeArray: customizeArray({
-            'resolve.modules': 'prepend'
-          })
+            "resolve.modules": "prepend",
+        }),
     })(
         baseConfig,
         projectConfiguration.WEBPACK_CONFIG,

@@ -1,12 +1,11 @@
 <BasicCard>
-    <h3 if="{ props.card.header }">{ props.card.header }</h3>
-
     <ImageWrapper
         if="{ props.card.image }"
-        imageId="{ props.card.image.id }"
-        alt="{ props.card.image.alt }"
+        image="{ props.card.image }"
     >
     </ImageWrapper>
+
+    <h3 if="{ props.card.header }">{ props.card.header }</h3>
 
     <div class="richtext" />
 
@@ -19,6 +18,14 @@
 
             setInnerHTML() {
                 this.$(".richtext").innerHTML = this.props.card.content;
+                const absolutePath = new RegExp('^(?:[a-z]+:)?//', 'i');
+                const links = [...this.$('.richtext').getElementsByTagName('a')];
+
+                links.forEach((link) => {
+                    if (absolutePath.test(link.href)) {
+                        link.target = "_blank"
+                    }
+                })
             },
 
             onMounted() {

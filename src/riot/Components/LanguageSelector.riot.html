@@ -1,10 +1,12 @@
 <LanguageSelector>
-    <h4>{ TRANSLATIONS.language() }</h4>
+    <label for="language">{ TRANSLATIONS.language() }</label>
 
-    <select id="language" name="language" onchange="{ setLanguage }">
-        <option value="tet" selected="{state.language=='tet'}">Tetum</option>
-        <option value="en" selected="{state.language=='en'}">English</option>
-    </select>
+    <div class="select-wrapper">
+      <select id="language" name="language" onchange="{ setLanguage }">
+          <option value="tet" selected="{state.language=='tet'}">Tetun</option>
+          <option value="en" selected="{state.language=='en'}">English</option>
+      </select>
+    </div>
 
     <script>
         import { getLanguage, changeLanguage } from "ReduxImpl/Interface";
@@ -16,7 +18,7 @@
                 },
 
                 TRANSLATIONS: {
-                    language: () => gettext("Language"),
+                    language: () => gettext("Select your language"),
                 },
 
                 setLanguage(e) {

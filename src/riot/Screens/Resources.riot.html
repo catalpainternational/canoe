@@ -1,161 +1,154 @@
 <Resources>
-    <div class="content-wrapper" if="{state.hash == null}">
-        <div class="resources-bar">
-            <span class="resources-icon title"></span>
-            <h3>{ TRANSLATIONS.resources() }</h3>
+    <template if="{state.showDownloadModal}">
+        <div class="modal-background fade"
+            onclick="{toggleDownloadModal}">
         </div>
+        <div class="cross gray modal-close-btn"
+            onclick="{toggleDownloadModal}">
+        </div>
+    </template>
+
+    <TopMenu extrastyleclasses="without-swoop">
+        <h5>{ TRANSLATIONS.resources() }</h5>
+        <a if="{page.resources.length}"
+            class="top-icon right has-circle {state.cached ? 'course-download-complete' : ''}"
+            onclick="{toggleDownloadModal}">
+            <span class="download"></span>
+        </a>
+    </TopMenu>
+    <div if="{state.hash == null}" class="content-wrapper">
         <SearchBar
-            if="{state.articles.length > 0}"
+            if="{page.resources.length > 0}"
             searchString="{state.searchString}"
             submitSearch="{submitSearch}"
         ></SearchBar>
         <TagList
-            if="{state.listOfAllTags.length > 0 && state.articles.length > 0}"
-            tags="{state.listOfAllTags}"
-            onTagClick="{onTagClick}"
-            selectedTags="{state.selectedTags}"
+            if="{ page.all_tags.size }"
+            tags="{ page.all_tags }"
+            onTagClick="{ onTagClick }"
+            selectedTags="{ state.selectedTags }"
         ></TagList>
-        <div each="{article in state.articles}">
-            <Card
-                if="{isResourceArticleVisible(article)}"
-                title="{article.title}"
-                description="{article.description}"
-                link="{article.id}"
-                showFooter="{false}"
-            ></Card>
+        <div class="list-resources">
+            <a
+                each="{resource in page.resources}"
+                if="{isResourceVisible(resource)}"
+                class="resource-card"
+                href="#{resource.loc_hash}"
+            >
+                <span each="{ type in resource.cardTypes }">
+                    <p>{ type }</p>
+                    <span if="{ resource.cardTypes.length > 1 }">,</span>
+                </span>
+                <h5>{ resource.title }</h5>
+                <h6>{ resource.description }</h6>
+            </a>
         </div>
-        <LoadingDots if="{state.isLoading}" extrastyleclasses="dark"></LoadingDots>
-        <p if="{!state.isLoading && state.articles.length === 0}">
+        <p if="{ page.resources.length === 0}" class="no-resources">
             { TRANSLATIONS.noArticlesYet() }
         </p>
     </div>
 
+    <PopupModal if="{state.showDownloadModal}" togalModal="{toggleDownloadModal}">
+        <span class="download-course"></span>
+        <h3>{ TRANSLATIONS.download_resources() }</h3>
+        <!-- <button class="btn-primary" onclick="{downloadAllResources}">{ TRANSLATIONS.download_all() }</button> -->
+        <LessonDownload
+            each="{(resource, index) in page.resources}"
+            contentItem="{resource}"
+            itemIndex="{index}"
+        ></LessonDownload>
+    </PopupModal>
+
     <script>
         import TagList from "RiotTags/Components/TagList.riot.html";
-        import Card from "RiotTags/Components/Card.riot.html";
         import SearchBar from "RiotTags/Components/SearchBar.riot.html";
-        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+        import PopupModal from "RiotTags/Components/PopupModal.riot.html";
+        import LessonDownload from "RiotTags/Components/LessonDownload.riot.html";
 
-        import { getSearchQueryFromUrl, parseURLHash } from "js/Routing";
-        import { getResources } from "js/WagtailPagesAPI";
+        import { getRoute } from "ReduxImpl/Interface";
+
         import {
-            getTagsFromPages,
             doPageTagsMatchSelections,
             doesQueryMatchSearchContent,
         } from "js/SearchAndFiltering";
-
-        import ResourceArticle from "js/ResourceArticle";
 
         export default {
             state: {
                 selectedTags: [],
                 searchString: "",
-                articles: [],
-                listOfAllTags: [],
                 isLoading: false,
+                showDonloadModal: false,
+                cached: false,
             },
 
             components: {
                 taglist: TagList,
-                card: Card,
                 searchbar: SearchBar,
-                loadingdots: LoadingDots,
+                topmenu: TopMenu,
+                popupmodal: PopupModal,
+                lessondownload: LessonDownload,
             },
 
             TRANSLATIONS: {
                 resources: () => gettext("Resources"),
                 noArticlesYet: () => gettext("There are no resources yet. Check back soon!"),
+                download_resources: () => gettext("Make resources available offline"),
+                download_all: () => gettext("Download all resources"),
             },
 
-            async onMounted() {
-                this.toggleLoadingMessage();
-                const articles = (await getResources()).map(
-                    (resource) => new ResourceArticle(resource)
-                );
-                const listOfAllTags = getTagsFromPages(articles);
-                this.update({
-                    articles,
-                    listOfAllTags,
-                    selectedTags: [],
-                });
-
-                const urlParams = this.generateUrlParams();
-
-                const query = urlParams.get("qs");
-                if (!!query) {
-                    this.update({ searchString: decodeURIComponent(query) });
-                }
-
-                const filter = urlParams.getAll("filter");
-                if (filter.length > 0) {
-                    for (var i = 0; i < filter.length; ++i) {
-                        if (listOfAllTags.includes(filter[i])) {
-                            this.onTagClick(decodeURIComponent(filter[i]), true);
-                        }
-                    }
-                }
-                this.toggleLoadingMessage();
+            onBeforeMount() {
+                this.page = getRoute().page;
+                this.state.isLoading = !this.page.ready;
             },
-
-            toggleLoadingMessage() {
-                this.update({ isLoading: !this.state.isLoading });
-            },
-
-            generateUrlParams() {
-                const queryStringFromUrl = getSearchQueryFromUrl();
-                return new URLSearchParams(queryStringFromUrl);
+            onBeforeUpdate() {
+                this.state.isLoading = !this.page.ready;
             },
 
             onTagClick(clickedTag, isFromUrl) {
-                const urlParams = this.generateUrlParams();
-
                 if (this.state.selectedTags.includes(clickedTag)) {
-                    const tagIndex = this.state.selectedTags.indexOf(clickedTag);
+                    const tagIndex = this.state.selectedTags.indexOf(
+                        clickedTag
+                    );
                     this.state.selectedTags.splice(tagIndex, 1);
-                    urlParams.delete("filter");
-
-                    if (this.state.selectedTags.length > 0) {
-                        for (var i = 0; i < this.state.selectedTags.length; ++i) {
-                            const pendingTag = this.state.selectedTags[i].toLowerCase();
-                            urlParams.append("filter", pendingTag);
-                        }
-                    }
-                    this.replaceUrlQuery(urlParams);
                 } else {
                     this.state.selectedTags.push(clickedTag);
-                    urlParams.append("filter", clickedTag);
-                    !isFromUrl && this.replaceUrlQuery(urlParams);
-                    this.update();
                 }
                 this.update();
             },
 
             submitSearch(searchString) {
-                const urlParams = this.generateUrlParams();
-
-                urlParams.set("qs", searchString);
-                this.replaceUrlQuery(urlParams);
                 this.update({ searchString });
             },
 
-            isResourceArticleVisible(article) {
+            toggleDownloadModal() {
+                this.update({showDownloadModal: !this.state.showDownloadModal});
+                document.body.classList.toggle('modal-open');
+            },
+
+            downloadAllResources() {
+                document.querySelectorAll('.download-state .download').forEach((it) => it.click());
+            },
+
+            isResourceVisible(resource) {
                 const { searchString, selectedTags } = this.state;
 
                 const isQueryMatch = doesQueryMatchSearchContent(
                     searchString,
-                    article.title,
-                    article.description
+                    resource.title,
+                    resource.description ? resource.description : ''
                 );
 
-                const lowercaseArticleTags = article.tags.map((tag) => tag.toLowerCase());
-                const isTagMatch = doPageTagsMatchSelections(lowercaseArticleTags, selectedTags);
+                const lowercaseTags = resource.tags.map((tag) =>
+                    tag.toLowerCase()
+                );
+                const isTagMatch = doPageTagsMatchSelections(
+                    lowercaseTags,
+                    selectedTags
+                );
 
-                const showArticle = isQueryMatch && isTagMatch;
-                return showArticle;
-            },
-
-            replaceUrlQuery(urlParams) {
-                window.history.replaceState({}, "", `${location.pathname}#resources?${urlParams}`);
+                const show = isQueryMatch && isTagMatch;
+                return show;
             },
         };
     </script>

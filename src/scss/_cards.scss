@@ -1,205 +1,130 @@
 .card {
-    box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.35);
-    flex-direction: column;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #d5dbdf;
     display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid $gray-7;
+    box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
+    background-color: $gray-10;
+    height: 200px;
+    max-width: 170px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
 
-    &.disabled {
-        pointer-events: none;
-        opacity: 0.5;
-    }
+    .card-image {
+        background-color: $gray-9;
+        border-bottom: 0.5px solid $gray-8;
+        border-radius: 7px 7px 0 0;
+        position: relative;
+        overflow: hidden;
+        height: 100px;
 
-    &.no-shadow {
-        box-shadow: none;
-    }
-
-    .card-body {
-        background-color: $white;
-        border-radius: 8px 8px 0 0;
-        padding: 20px;
-        display: grid;
-
-        h4 {
-            grid-row: 1;
-            grid-column: 1 / 7;
+        .card-hero-image {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
         }
+    }
+
+    .card-title {
+        padding: 15px;
 
         h5 {
-            grid-row: 1;
-            grid-column: 6;
             margin: 0;
-
-            font-size: 0.6em;
-            text-align: right;
+            color: $gray-1;
         }
 
-        p {
-            grid-row: 2;
-            grid-column: 1 / 7;
+        .clamp-lines {
+            line-height: 1.2em;
+            height: calc(3 * 1.2em);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
         }
+    }
 
-        &.no-footer {
+    &.complete .card-status,
+    &.in-progress .card-status,
+    &.disabled .card-status,
+    &.coming-soon .card-status {
+        @extend %absolutely-center;
+        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+    }
+
+    &.complete .card-status {
+        @extend %status-complete;
+    }
+
+    &.in-progress .card-status {
+        @extend %status-play;
+        box-shadow: 0 5px 8px 0 rgba(42, 57, 66, 0.1);
+    }
+
+    &.disabled,
+    &.coming-soon {
+        pointer-events: none;
+        box-shadow: none;
+        filter: grayscale(100%);
+
+        &:after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba($gray-7, 0.6);
             border-radius: 8px;
         }
 
-        @media only screen and (max-width: $sm-phone) {
-            padding: 15px;
-        }
-
-        @media only screen and (max-width: $xs-phone) {
-            padding: 10px;
+        .card-status {
+            @extend %status-lock;
         }
     }
+}
 
-    .card-footer {
-        border-radius: 0 0 8px 8px;
-        background-color: white;
-        padding: 0px 20px 20px 20px;
+AllTopicsList .card {
+    .card-image {
+        height: 150px;
+    }
+}
 
-        @media only screen and (max-width: $sm-phone) {
-            flex-wrap: wrap;
-            padding: 0px 15px 15px 15px;
-        }
+.card-container {
+    display: grid;
+    grid-gap: 20px 7%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    justify-content: space-between;
 
-        @media only screen and (max-width: $xs-phone) {
-            padding: 0px 10px 10px 10px;
-        }
+    @media only screen and (min-width: 500px) {
+        grid-template-columns: repeat(3, 1fr);
     }
 
-    div.status,
-    div.duration {
-        align-items: center;
-        display: flex;
-        border-bottom: none;
-        border-top: none;
+    &.full-width {
+        grid-template-columns: 1fr;
 
-        & > span {
-            margin-right: 5px;
+        .card {
+            max-width: unset;
         }
 
-        & > .checkmark-circle {
-            margin-left: 3px;
-            margin-top: 2px;
-        }
+        .card-title {
+            min-height: 80px;
 
-        & > p {
-            margin: 0;
-        }
-    }
-
-    div.status {
-        flex: 1;
-
-        & > p {
-            color: $blue-1;
-        }
-    }
-
-    div.duration {
-        p {
-            font-size: 10px;
-            margin-right: 10px;
-
-            @media only screen and (max-width: $sm-phone) {
-                margin-right: 0;
+            .clamp-lines {
+                height: calc(2 * 1.2em);
+                -webkit-line-clamp: 2;
             }
         }
     }
-
-    .status.btn-start-lesson {
-        border-radius: 10px;
-        max-width: fit-content;
-        max-width: -moz-fit-content;
-        border: 1px solid $blue-1;
-        box-sizing: border-box;
-        background-color: rgba(4, 120, 142, 0.07);
-        padding: 6px;
-
-        p {
-            font-size: 10px;
-            line-height: 10px;
-            font-weight: 600;
-        }
-    }
-
-    .status.start-exam {
-        max-width: 100px;
-    }
-
-    .status.done {
-        background-color: $gray-7;
-        max-width: 100px;
-        padding: 3px;
-        border-radius: 5px;
-
-        p {
-            line-height: 10px;
-            font-weight: 600;
-        }
-    }
 }
 
-.card.done {
-    box-shadow: none;
-
-    .card-body {
-        border-radius: 8px 8px 0 0;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .card-body:after {
-        content: "";
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0 35px 35px 0;
-        right: 0;
-        top: 0;
-        border-color: transparent $green-2 transparent transparent;
-        position: absolute;
-    }
-
-    .white-check {
-        text-align: center;
-        display: inline-block;
-        transform: rotate(45deg);
-        height: 10px;
-        width: 4px;
-        position: absolute;
-        right: 9px;
-        top: 5px;
-        z-index: 1;
-        border-bottom: 1.25px solid white;
-        border-right: 1.25px solid white;
-    }
-}
-
-.carousel-card {
-    display: flex;
-    flex-direction: column;
-
-    margin: 0 10px #{$bottom-menu-height-no-footer};
-    padding: 30px;
-    border-radius: 30px;
-    box-shadow: 0 10px 20px 0 rgba(42, 57, 66, 0.3);
-
-    overflow-y: auto;
-    min-height: calc(100vh - (#{$bottom-menu-height-no-footer} * 6));
-    max-width: $tablet;
-
-    background-color: $white;
-
-    @media only screen and (min-width: $tablet-plus) {
-        margin: auto;
-    }
-}
-
+// Legacy needs this (?)
 .notification-card {
     background-color: rgba(4, 120, 142, 0.05);
-    border: 1px solid $blue-1;
+    border: 1px solid $app-accent-color;
     margin-bottom: 15px;
     border-radius: 3px;
     padding: 20px;
@@ -226,8 +151,4 @@
 .notification-card.old {
     background-color: $white;
     border-color: $gray-7;
-}
-
-Card:last-child {
-    margin-bottom: 0;
 }

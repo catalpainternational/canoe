@@ -1,330 +1,416 @@
-%icons-shared {
+// Masking icons so we can dynamically set their color
+@mixin mask-icons-shared($image, $contain-or-cover, $color) {
+    -webkit-mask-image: url($image);
+    mask-image: url($image);
+
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-size: $contain-or-cover;
+    mask-size: $contain-or-cover;
+
+    background-color: $color;
+    display: inline-block;
+}
+
+@mixin unmaskable-icons-shared($image, $contain-or-cover) {
+    background-image: url($image);
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: $contain-or-cover;
+    background-position: center;
+}
+
+.has-circle {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 6px 9px 0 rgba(42, 57, 66, 0.1);
+    background-color: white;
+    position: relative;
+
+    span {
+        @extend %absolutely-center;
+    }
 }
 
 .site-logo {
-    @extend %icons-shared;
-    @extend %mask-icons-shared;
-    background-image: url("~img/site_logo.svg");
-    background-position: center;
-    height: 20px;
+    @include unmaskable-icons-shared("~img/site_logo.svg", contain);
+    height: 36px;
     width: 87px;
-
-    &.white {
-        background-image: url("~img/site_logo_white.svg");
-    }
 }
 
-.cog {
-    @extend %icons-shared;
-    background-image: url("~img/cog_white.svg");
-    height: 40px;
-    width: 40px;
+.filter-icon {
+    @include mask-icons-shared("~img/levers.svg", contain, $app-accent-color);
+    height: 20px;
+    width: 20px;
 }
 
 %bottom-nav-shared {
-    @extend %icons-shared;
-    background-position-x: center;
-    height: 45px;
-    width: 60px;
-}
-
-.courses-icon {
-    @extend %bottom-nav-shared;
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/courses.svg");
-    background-color: $gray-4;
+    -webkit-mask-position-x: center;
+    mask-position: center;
+    height: 22px;
+    width: 22px;
 
     &.active {
-        background-color: $blue-1;
+        background-color: $app-accent-color;
     }
+}
+
+.all-courses-icon {
+    @extend %bottom-nav-shared;
+    @include mask-icons-shared("~img/all_courses.svg", contain, $gray-4);
 }
 
 .profile-icon {
     @extend %bottom-nav-shared;
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/profile.svg");
-    background-color: $gray-4;
-
-    &.active {
-        background-color: $blue-1;
-    }
-}
-
-.notifications-icon {
-    @extend %bottom-nav-shared;
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/notifications.svg");
-    background-color: $gray-4;
-
-    &.active {
-        background-color: $blue-1;
-    }
+    @include mask-icons-shared("~img/profile.svg", contain, $gray-4);
 }
 
 .resources-icon {
     @extend %bottom-nav-shared;
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("../img/clipboard.svg");
-    background-color: $gray-4;
+    @include mask-icons-shared("~img/clipboard.svg", contain, $gray-4);
+}
 
-    &.active,
-    &.title {
-        background-color: $blue-1;
-    }
+.list-icon {
+    @extend %bottom-nav-shared;
+    @include mask-icons-shared("~img/list.svg", contain, $gray-4);
+}
+
+.settings-icon {
+    @extend %bottom-nav-shared;
+    @include mask-icons-shared("~img/cog.svg", contain, $app-accent-color);
 }
 
 .search-icon {
-    @extend %bottom-nav-shared;
-    background-image: url("../img/magnifier.svg");
-}
-
-.checkmark-circle {
-    @extend %icons-shared;
-    background-image: url("~img/checkmark_circle.svg");
-    height: 14px;
-    width: 12px;
+    @include mask-icons-shared("~img/magnifier.svg", contain, $gray-3);
+    -webkit-mask-position-x: center;
+    mask-position: center;
+    width: 1em;
+    height: 1em;
 }
 
 .checkmark {
-    @extend %icons-shared;
-    background-image: url("~img/checkmark.svg");
-    height: 10px;
-    width: 12px;
+    @include mask-icons-shared("~img/checkmark.svg", contain, $app-accent-color);
+    height: 16px;
+    width: 20px;
 }
 
 .cross {
-    @extend %icons-shared;
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/cross.svg");
-    height: 10px;
-    width: 12px;
+    @include mask-icons-shared("~img/cross.svg", contain, $gray-3);
+    height: 13px;
+    width: 13px;
     background: $white;
 
     &.gray {
-        background: $gray-4;
-        min-width: 1em;
-        height: 1em;
+        background: $gray-1;
+    }
+
+    &.red {
+        background: $red;
     }
 }
 
+.reply-arrow {
+    @include mask-icons-shared("~img/reply_arrow.svg", contain, $gray-3);
+    height: 13px;
+    width: 13px;
+}
+
+.flag {
+    @include mask-icons-shared("~img/flag.svg", contain, $gray-3);
+    height: 13px;
+    width: 13px;
+}
+
 %stat-icon-shared {
-    @extend %icons-shared;
     height: 25px;
     width: 25px;
 }
 
-.checkmark-circle-blue {
+.checkmark-circle {
     @extend %stat-icon-shared;
-    background-image: url("~img/checkmark_circle_blue.svg");
+    @include mask-icons-shared("~img/checkmark_circle.svg", contain, $app-accent-color);
 }
 
 .road-sign {
     @extend %stat-icon-shared;
-    background-image: url("~img/road_sign.svg");
+    @include mask-icons-shared("~img/road_sign.svg", contain, $app-accent-color);
 }
 
 .plant {
-    @extend %icons-shared;
-    background-image: url("~img/plant.svg");
+    @include unmaskable-icons-shared("~img/plant.svg", contain);
     height: 50px;
     width: 45px;
 }
 
-%arrow-shared {
-    @extend %icons-shared;
-    background-position: center;
-    background-size: 17px 12px;
-    position: absolute;
-    height: 30px;
-    width: 30px;
-    left: 0;
-
-    &:hover {
-        cursor: pointer;
-    }
-}
-
-.arrow-white {
-    @extend %arrow-shared;
-    background-image: url("~img/arrow_white.svg");
-}
-
-.arrow-gray {
-    @extend %arrow-shared;
-    background-image: url("~img/arrow_gray.svg");
-}
-
-.arrow-blue {
-    @extend %icons-shared;
-    background-image: url("~img/arrow_blue.svg");
-    height: 10px;
-    width: 13px;
-}
-
-%lesson-card-shared {
-    @extend %icons-shared;
-    height: 14px;
-    width: 12px;
-}
-
-.clock {
-    @extend %lesson-card-shared;
-    background-image: url("~img/clock.svg");
-}
-
 .warning {
-    @extend %icons-shared;
-    background-image: url("~img/warning.svg");
-    height: 16px;
+    @extend %bottom-nav-shared;
+    @include mask-icons-shared("~img/warning.svg", contain, $red);
+    height: 15px;
     width: 15px;
 }
 
 .success {
-    @extend %icons-shared;
-    background-image: url("~img/success.svg");
+    @include mask-icons-shared("~img/success.svg", contain, $green);
     height: 18px;
     width: 15px;
 }
 
-.report-card {
-    @extend %icons-shared;
-    background-image: url("~img/report_card.svg");
-    background-position: center;
-    height: 200px;
-    max-width: 200px;
-}
-
 .notifications-image {
-    @extend %icons-shared;
-    background-image: url("~img/notifications_header.svg");
-    background-position: center;
+    @include mask-icons-shared(
+        "~img/notifications_header.svg",
+        contain,
+        $gray-3
+    );
+    -webkit-mask-position: center;
+    mask-position: center;
     height: 145px;
     width: 118px;
 }
 
 .login-image {
-    @extend %icons-shared;
-    background-image: url("~img/login_image.svg");
-    background-position: center;
-    max-width: 250px;
-    height: 190px;
-    width: 100%;
+    @include unmaskable-icons-shared("~img/login_image.svg", contain);
+    width: 200px;
+    height: 130px;
 }
 
 .eye {
-    @extend %icons-shared;
-    background-image: url("~img/eye.svg");
-    height: 25px;
-    width: 25px;
+    @include mask-icons-shared("~img/eye.svg", contain, $gray-3);
+    height: 13px;
+    width: 20px;
 }
 
-.home-background-image {
-    @extend %icons-shared;
-    background-image: url("~img/home_header_figure.svg");
-    background-position: center;
-    z-index: 2;
-    height: 142px;
-    width: 84px;
+.eye.crossout {
+    @include mask-icons-shared("~img/eye-crossout.svg", contain, $gray-3);
+    height: 13px;
+    width: 20px;
+}
+
+.superman-success {
+    @include unmaskable-icons-shared("~img/superman_success.png", contain);
+    height: 45vh;
+    width: 100%;
+}
+
+.exploding-computer {
+    @include unmaskable-icons-shared("~img/exploding_computer.png", contain);
+    height: 170px;
+    width: 100%;
+    display: block;
+}
+
+.exam-review {
+    @include unmaskable-icons-shared("~img/exam_review.png", contain);
+    height: 140px;
+    width: 100%;
+    display: block;
+}
+
+.retake-exam {
+    @include unmaskable-icons-shared("~img/retake_exam.png", contain);
+    height: 140px;
+    width: 100%;
+    display: block;
+}
+
+.high-fivers {
+    @include unmaskable-icons-shared("~img/high_fivers.png", contain);
+    height: 100%;
+    width: 100%;
+    max-height: 200px;
     display: inline-block;
 }
 
-.wave {
-    @extend %icons-shared;
-    background-image: url("~img/home_header_wave.svg");
-    z-index: -1;
-    position: absolute;
-    background-position-x: 50%;
-    background-position-y: 25%;
-    padding-top: 60px;
-    height: 78%;
-    width: 100%;
-
-    @media only screen and (min-width: $tablet) {
-        background-image: none;
-        height: 120%;
-    }
-}
-
-.confetti {
-    @extend %icons-shared;
-    background-image: url("~img/confetti.svg");
-    height: 45%;
-    width: 60%;
-    max-width: 300px;
-}
-
-.sun {
-    @extend %icons-shared;
-    background-image: url("~img/sun.svg");
-    height: 100px;
+.download-course {
+    @include unmaskable-icons-shared("~img/hand_cloud_phone.png", contain);
+    min-height: 100px;
     width: 100px;
+    display: inline-block;
 }
 
-// Masking icons so we can dynamically set their color
-%mask-icons-shared {
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: contain;
+.offline-hand {
+    @include unmaskable-icons-shared("~img/offline_hand.png", contain);
+    min-height: 100px;
+    width: 100px;
+    display: inline-block;
 }
 
-%courses-icon-shared {
-    @extend %mask-icons-shared;
-    -webkit-mask-position: center;
-    height: 35px;
-    width: 35px;
+.lesson-presentation {
+    @include unmaskable-icons-shared("~img/lesson_presentation.png", contain);
+    height: 100%;
+    width: 100%;
+    max-height: 160px;
+    display: inline-block;
+    margin: 1em auto;
+}
+
+.launch-feedback {
+    @include unmaskable-icons-shared("~img/launch_feedback.png", contain);
+    height: 20vh;
+    min-height: 100px;
+    max-height: 200px;
+    width: 100%;
+    display: inline-block;
+    margin: 1.5em auto;
 }
 
 .arrow {
-    @extend %mask-icons-shared;
-    -webkit-mask-image: url("~img/arrow.svg");
-    height: 10px;
-    width: 13px;
+    @include mask-icons-shared("~img/arrow.svg", contain, $app-accent-color);
+    height: 12px;
+    width: 17px;
 }
 
-.incorrect-flag {
-    @extend %icons-shared;
-    background-image: url("~img/incorrect_flag.svg");
+.download {
+    @include mask-icons-shared("~img/download.svg", contain, $app-accent-color);
+    height: 22px;
+    width: 22px;
+    margin-left: -2px;
+    margin-top: -2px;
 }
 
-.correct-flag {
-    @extend %icons-shared;
-    background-image: url("~img/correct_flag.svg");
+.expand-arrows {
+    @include mask-icons-shared("~img/expand_arrows.svg", contain, $white);
+    height: 100%;
+    width: 100%;
+    margin-bottom: -8px;
 }
 
-@mixin feedback-icons {
-    height: 50px;
-    width: 41px;
-    background-color: $blue-1;
+.quotation-mark {
+    @include mask-icons-shared("~img/quotation_mark.svg", contain, $app-accent-color);
+    height: 22px;
+    width: 18px;
+}
+
+.incorrect-cross {
+    @include unmaskable-icons-shared("~img/incorrect_cross.svg", contain);
+}
+
+.correct-checkmark {
+    @include unmaskable-icons-shared("~img/correct_checkmark.svg", contain);
+}
+
+%feedback-icons {
+    height: 30px;
+    width: 30px;
     display: block;
     margin: auto;
-    margin-top: 0.5em;
 }
 
 .neutral-smiley {
-    @extend %mask-icons-shared;
-    @include feedback-icons;
-    -webkit-mask-image: url("~img/neutral.png");
+    @include mask-icons-shared("~img/neutral.svg", contain, $app-accent-color);
+    @extend %feedback-icons;
+    background: $red;
 }
 
 .smiling-smiley {
-    @extend %mask-icons-shared;
-    @include feedback-icons;
-    -webkit-mask-image: url("~img/smile.png");
+    @include mask-icons-shared("~img/smile.svg", contain, $app-accent-color);
+    @extend %feedback-icons;
+    background: $yellow;
 }
 
 .thrilled-smiley {
-    @extend %mask-icons-shared;
-    @include feedback-icons;
-    -webkit-mask-image: url("~img/thrilled.png");
+    @include mask-icons-shared("~img/thrilled.svg", contain, $app-accent-color);
+    @extend %feedback-icons;
+    background: $teal;
 }
 
-.speaker {
-    @extend %stat-icon-shared;
-    background-image: url("~img/speaker.svg");
+.chevron {
+    @include mask-icons-shared("~img/chevron_right.svg", contain, $white);
+    height: 17px;
+    width: 10px;
+    margin-left: 1px;
+
+    &.down {
+        transform: rotate(-90deg);
+        background-color: $app-accent-color;
+        height: 10px;
+        width: 6px;
+        margin-left: 8px;
+    }
+
+    &.up {
+        transform: rotate(90deg);
+        background-color: $app-accent-color;
+        height: 10px;
+        width: 6px;
+        margin-left: 8px;
+    }
 }
 
-.film {
-    @extend %stat-icon-shared;
-    background-image: url("~img/film.svg");
+// Icons for card status
+@mixin status-icon($icon, $circle-color) {
+    background-color: $circle-color;
+    display: flex;
+    box-sizing: border-box;
+
+    .icon {
+        @include mask-icons-shared($icon, contain, $white);
+        @extend %absolutely-center;
+        width: 15px;
+        height: 15px;
+    }
+}
+
+%status-play {
+    @include status-icon("~img/chevron_right.svg", $app-accent-color);
+
+    .icon {
+        width: 13px;
+        margin-left: 2px;
+    }
+}
+
+%status-complete {
+    @include status-icon("~img/checkmark.svg", $teal);
+
+    .icon {
+        width: 20px;
+    }
+}
+
+%status-lock {
+    @include status-icon("~img/lock.svg", $gray-4);
+
+    .icon {
+        height: 19px;
+        width: 19px;
+    }
+}
+
+// Teaching icons
+.clipboard-pencil {
+    @include mask-icons-shared("~img/clipboard_pencil.svg", contain, $app-accent-color);
+    width: 13px;
+    height: 14px;
+}
+
+.brain {
+    @include mask-icons-shared("~img/brain.svg", contain, $app-accent-color);
+    width: 14px;
+    height: 14px;
+}
+
+.binocular {
+    @include mask-icons-shared("~img/binoculars.svg", contain, $app-accent-color);
+    width: 14px;
+    height: 12px;
+}
+
+.group-circle {
+    @include mask-icons-shared("~img/group.svg", contain, $app-accent-color);
+    width: 13px;
+    height: 12px;
+}
+
+.crossed-pencil {
+    @include mask-icons-shared("~img/crossed_pencil.svg", contain, $app-accent-color);
+    width: 12px;
+    height: 12px;
+}
+
+.chat-bubbles {
+    @include mask-icons-shared("~img/chat.svg", contain, $app-accent-color);
+    width: 14px;
+    height: 12px;
 }

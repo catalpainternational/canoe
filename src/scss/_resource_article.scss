@@ -1,0 +1,50 @@
+ResourceArticle {
+    .no-card {
+        width: 100%;
+        margin: 7px auto 0;
+        max-width: $tablet;
+        background-color: $gray-10;
+
+        ImageWrapper img.richtext-image {
+            width: calc(100% + (2 * 22px));
+            margin-left: -22px;
+            margin-right: -22px;
+            border-radius: 0;
+            margin-top: unset;
+
+            &.full-screen {
+                margin: unset;
+            }
+        }
+    }
+
+    .frame-background {
+        height: calc(100vh - (#{$top-menu-height} * 2)) !important;
+    }
+
+    .content-block + .content-block {
+        margin-top: 20px;
+    }
+
+    .resource-description {
+        color: $gray-1;
+        font-size: 1.2em;
+        margin: 1em 0;
+        width: 100%;
+        line-height: 1.6em;
+    }
+
+    BasicCard h3,
+    AudioCard h3,
+    VideoCard h3,
+    QuoteCard h3,
+    ListCard h3,
+    PdfCard h3,
+    Raw h2 {
+        font-family: "TiemposHeadline";
+        font-size: 1.5em;
+        color: $gray-1;
+        font-weight: 300;
+        margin: 0.8em 0;
+    }
+}

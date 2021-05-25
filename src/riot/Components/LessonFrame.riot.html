@@ -1,9 +1,66 @@
 <LessonFrame>
-    <div class="frame-background background-blue-1">
-        <div class="card-frame">
-            <div class="card-container {props.extrastyleclasses}">
+    <TopMenu extrastyleclasses="without-swoop">
+        <template if="{props.progressValue}">
+            <p class="card-number">
+                <span class="current-card">{ props.progressValue }</span
+                ><span class="slash">/</span>{ props.progressMax }
+            </p>
+            <progress
+                value="{props.progressValue}"
+                max="{props.progressMax}"
+            ></progress>
+        </template>
+        <a
+            if="{props.noCardStyle}"
+            class="has-circle top-icon left"
+            href="#{props.linkTo}"
+        >
+            <span class="arrow"></span>
+        </a>
+        <h5 if="{props.resourceTitle}">{props.resourceTitle}</h5>
+        <a
+            if="{!props.noCardStyle}"
+            class="top-icon right extra-clickable-space"
+            onclick="{closeFrame}"
+        >
+            <span class="cross gray"></span>
+        </a>
+    </TopMenu>
+    <div class="frame-background {userAgent()}">
+        <div class="{!props.noCardStyle ? 'card-frame' : 'no-card'}">
+            <div class="card-content {props.extrastyleclasses}">
                 <slot />
             </div>
+            <template if="{!props.noCardStyle}">
+                <div class="card-shadow"></div>
+                <div class="card-shadow"></div>
+            </template>
         </div>
     </div>
+
+    <script>
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+        import { getPlatform } from "ts/PlatformDetection";
+
+        export default {
+            components: {
+                topmenu: TopMenu,
+            },
+
+            closeFrame() {
+                this.props.close
+                    ? this.props.close()
+                    : (window.location.hash = `#${this.props.linkTo}`);
+            },
+
+            userAgent() {
+                const { browser } = getPlatform();
+                // iphone 8+ and earlier models have a max height of 736;
+                if (window.innerHeight <= 736) {
+                    return `${browser.name.toLowerCase()} hasHomeButton`
+                }
+                return browser.name.toLowerCase();
+            }
+        };
+    </script>
 </LessonFrame>

@@ -1,125 +1,124 @@
-import {
-    fetchPage,
-    getOrFetchWagtailPage,
-    getOrFetchManifest,
-    getHomePage,
-} from "js/WagtailPagesAPI.js";
-import { getLanguage } from "ReduxImpl/Interface";
-import { PageLacksTranslationDataError } from "js/Errors";
+import { getLanguage, setRoute, isAuthenticated } from "ReduxImpl/Interface";
+import { logPageView } from "js/GoogleAnalytics";
 
-const IS_SETTINGS_RESOURCES_OR_PROFILE = /#([A-Za-z]+)/;
-const IS_WAGTAIL_PAGE = /#([\d]+)/; // should match '#3' and '#3/objectives'
+import { Manifest } from "ts/Implementations/Manifest";
+
+// If true REQUIRE_LOGIN will always redirect any user who does not have a login to the login page
+// unless they have a manifest cache in place already
+const REQUIRE_LOGIN = process.env.REQUIRE_LOGIN;
+
+const LOGIN_ROUTE = 'login';
+// pages that are rendered by the application
+const CANOE_PAGES = ['settings', 'profile', 'sync'];
+/** Pages that are shortcuts into a CMS page,
+ * e.g. resources goes to the selected language resource root
+ * 
+ * These are defined as arrays, the first page found in the manifest will be the one returned */
+const CANOE_SHORTCUTS = {
+    "": ["homepage", "learningactivitieshomepage"],
+    home: ["homepage"],
+    resources: ["resourcesroot"],
+    topics: ["learningactivitieshomepage"],
+};
+
 const IS_PAGE_PREVIEW = /^\?(.+)/;
 
-const getPreviewPageUrl = (queryString) => {
-    const params = {};
-    queryString.replace(/([^=&]+)=([^&]*)/g, function (m, key, value) {
-        params[decodeURIComponent(key)] = decodeURIComponent(value);
+export function initialiseRouting() {
+    window.addEventListener("hashchange", async () => {
+        route(window.location.hash);
     });
-    const contentType = encodeURIComponent(params["content_type"]);
-    const token = encodeURIComponent(params["token"]);
-    const apiURL = `/api/v2/page_preview/1/?content_type=${contentType}&token=${token}&format=json`;
-    return apiURL;
-};
-
-const routeToTranslation = (translationPageId) => {
-    const [, section, cardNumber] = parseURLHash();
-    let translatedPageUrl = `#${translationPageId}`;
-    if (section) {
-        translatedPageUrl += `/${section}/`;
-    }
-    if (cardNumber) {
-        translatedPageUrl += `${cardNumber}`;
-    }
-    window.location = translatedPageUrl;
-};
-
-export const getWagtailPageOrRouteToTranslation = async (pageId) => {
-    const manifest = await getOrFetchManifest();
-    const pageUrl = manifest.pages[pageId];
-    const page = await getOrFetchWagtailPage(pageUrl);
-
-    const currentLanguage = getLanguage();
-    const translationInfo = page.data.translations;
-
-    if (!translationInfo) {
-        throw new PageLacksTranslationDataError(
-            "Routable page objects must have a `.data.translations`"
-        );
-    }
-
-    const translationsLangCodes = Object.keys(translationInfo);
-    // The default case:
-    // The page you're viewing is in the current language, which means the
-    // page's translations should lack the current language. Return the page.
-    if (!translationsLangCodes.includes(currentLanguage)) {
-        return page;
-    }
-
-    // Otherwise, we want the page in the current language. Grab it from the
-    // incorrect page's translations.
-    const translationPageId = translationInfo[currentLanguage];
-    routeToTranslation(translationPageId);
-    return page;
-};
-
-export const getPage = async () => {
-    const wagtailPageMatch = window.location.hash.match(IS_WAGTAIL_PAGE);
-    const wagtailPreviewMatch = window.location.search.match(IS_PAGE_PREVIEW);
-    const appPageMatch = window.location.hash.match(IS_SETTINGS_RESOURCES_OR_PROFILE);
-
-    let page = null;
-    let pageUrl = null;
-
-    if (wagtailPageMatch) {
-        const pageId = wagtailPageMatch[1];
-        page = await getWagtailPageOrRouteToTranslation(pageId);
-    } else if (wagtailPreviewMatch) {
-        const queryString = wagtailPreviewMatch[1];
-        pageUrl = getPreviewPageUrl(queryString);
-        page = await fetchPage(pageUrl);
-    } else if (appPageMatch) {
-        const pageType = appPageMatch[1];
-        page = {
-            meta: {
-                type: pageType,
-            },
-        };
-    } else {
-        page = await getHomePage();
-    }
-
-    return page;
-};
-
-export const getPreviewQueryFromURL = () => {
-    const queryString = window.location.search.replace(/^\?/, "");
-    return queryString;
-};
-
-export const parseURLHash = () => {
-    const afterTheHash = window.location.hash.substr(1);
-    return afterTheHash.split("/");
-};
-
-export const getSearchQueryFromUrl = () => {
-    const currentHash = parseURLHash();
-    const queryString = currentHash[0].split("?")[1];
-    return queryString;
-};
-
-export function getLessonCardIdx() {
-    return parseInt(location.hash.split("/")[2]) - 1;
+    route(window.location.hash);
 }
+
+async function route(hashWith) {
+    const hash = hashWith.slice(1);
+    const hashParts = hash.split(":");
+    const pageHash = hashParts[0];
+    const riotHash = hashParts.slice(1);
+    let page = undefined;
+    let manifest = undefined;
+    let route = undefined;
+
+    logPageView(hash);
+
+    if(pageHash === LOGIN_ROUTE) {
+        // If we are a simple canoe page all should be good
+        route = {page: {type: LOGIN_ROUTE}, riotHash};
+    } else {
+        // otherwise we need a manifest ( bottom nav always needs to know )
+        try {
+            manifest = await getValidManifest();
+        } catch (err) {
+            setRoute({
+                page: {
+                    type: "error",
+                    errorType: "no_manifest",
+                    error: err,
+                }
+            });
+            return;
+        }
+        if( !isAuthenticated() && REQUIRE_LOGIN )
+        { 
+            // if the site is configured to require login and we are not logged in, show the login page 
+            window.location.hash = `#${LOGIN_ROUTE}`;
+            return;
+        }
+
+        if(CANOE_PAGES.includes(pageHash)) {
+            // If we are a canoe page that needs page data, get it
+            page = manifest.getLanguagePageType(getLanguage(), 'homepage');
+            route = {page: {type: pageHash, home:page, manifest: manifest}, riotHash};
+        } else {
+            if(Object.keys(CANOE_SHORTCUTS).includes(pageHash)) {
+                // If we are a shortcut get the first page of that type from the manifest
+                CANOE_SHORTCUTS[pageHash].forEach((shortcutRoute) => {
+                    if (page) {
+                        return;
+                    }
+                    page = manifest.getLanguagePageType(getLanguage(), shortcutRoute);
+                });
+            } else {
+                // If we are a shortcut get the first page of that type from the manifest
+                try {
+                    page = manifest.getPageManifestData(pageHash);
+                } catch(err) {
+                    setRoute({
+                        page: {
+                            type: "error",
+                            errorType: "not_found",
+                        }
+                    });
+                }
+            }
+            route = !!page 
+                ? {page, riotHash}
+                : {page: {type: "pageHash_error", error: `The page shortcut "~{pageHash}" had no match in the Manifest`}};
+
+            // refresh the page
+            if (!page.ready) {
+                page.prepare();
+            }
+        }
+    }
+
+    setRoute(route);
+}
+
+async function getValidManifest() {
+    const manifest = new Manifest();
+    if (!manifest.isValid) {
+        // we need to wait
+        await manifest.prepare();
+    } else {
+        // let's not wait, but still refresh
+        manifest.prepare();
+    }
+    return Promise.resolve(manifest);
+}
+
+//  below here deprecated - but still can be found in certain riot tags
 
 export function getNextCardsUrl(lessonId, lessonModule, lessonCardIdx) {
     return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx + 2);
-}
-
-export function getPreviousCardsUrl(lessonId, lessonModule, lessonCardIdx) {
-    return "#" + lessonId + "/" + lessonModule + "/" + lessonCardIdx;
-}
-
-export function getHashPieces() {
-    return location.hash.split("/");
 }

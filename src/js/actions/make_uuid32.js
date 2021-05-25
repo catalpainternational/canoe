@@ -8,4 +8,3 @@ export function make_uuid32() {
     }
     return u;
 }
-

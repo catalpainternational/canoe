@@ -1,0 +1,41 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+      "@typescript-eslint", 
+      "prettier"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "prettier",
+        "prettier/@typescript-eslint"
+    ],
+    "overrides": [
+        {
+            "files": ["*.ts"],
+            "excludedFiles": ["*.test.js"],
+            "plugins": ["@typescript-eslint"],
+            "extends": [
+                "plugin:@typescript-eslint/eslint-recommended",
+                "plugin:@typescript-eslint/recommended"
+            ],
+            "rules": {
+                "@typescript-eslint/no-explicit-any": 0, // Turn this rule off
+                "@typescript-eslint/member-delimiter-style": 0,
+                "@typescript-eslint/interface-name-prefix": 0,
+                "@typescript-eslint/no-use-before-define": 0
+            }
+        }
+    ],
+    "rules": {
+        "@typescript-eslint/no-explicit-any": 0, // Means disable rule
+        "no-console": 1, // Means warning
+        "prettier/prettier": 2 // Means error
+    },
+    "settings": {}
+}

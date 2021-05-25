@@ -1,132 +1,356 @@
 <CoursePage>
-    <div class="course background-blue-1">
-        <div class="content-wrapper">
-            <div class="course-header">
-                <div>
-                    <div>
-                        <a class="arrow-gray" onclick="{backToHome}"></a>
+    <template if="{state.showDownloadModal}">
+        <div class="modal-background fade"
+            onclick="{toggleDownloadModal}">
+        </div>
+        <div class="cross gray modal-close-btn"
+            onclick="{toggleDownloadModal}">
+        </div>
+    </template>
+
+    <TopMenu
+        extrastyleclasses="with-swoop has-image"
+        backgroundImage="{getCardImage(course.loc_hash, course.cardImage)}"
+    >
+        <a class="top-icon left has-circle" onclick="{backToAllCourses}">
+            <span class="arrow"></span>
+        </a>
+        <a if="{course.lessons.length}"
+            class="top-icon right has-circle {state.cached ? 'course-download-complete' : ''}"
+            onclick="{toggleDownloadModal}">
+            <span class="download"></span>
+        </a>
+    </TopMenu>
+
+    <div class="content-wrapper">
+        <div class="course-details">
+            <h2>{course.title}</h2>
+            <p>{course.data.short_description}</p>
+            <button if="{ctaObject}" onclick="{goToCTAHash}" class="btn-primary">
+                {ctaObject.copy}
+                <span class="chevron"></span>
+            </button>
+            <p if="{course.data.long_description}" class="{state.showExpandedDescription ? '' : 'clamp-3-lines'}">
+                {course.data.long_description}
+            </p>
+            <template if="{state.hasExpandableDescription}">
+                <a
+                    if="{course.data.long_description && state.showExpandedDescription}"
+                    onclick="{toggleCourseDescription}"
+                    >{ TRANSLATIONS.less() }
+                    <span class="chevron down"></span>
+                </a>
+                <a
+                    if="{course.data.long_description && !state.showExpandedDescription}"
+                    onclick="{toggleCourseDescription}"
+                    >{ TRANSLATIONS.more() }
+                    <span class="chevron up"></span>
+                </a>
+            </template>
+        </div>
+        <div class="lesson-swoop">
+            <div class="tab-titles" if="{state.courseHasDiscussions}">
+                <a
+                    href="#{course.loc_hash}"
+                    class="{state.selectedTab === 'lessons' ? 'selected' : ''}"
+                    onclick="{() => selectTab('lessons')}"
+                >
+                    <h5 class="section-title">{ TRANSLATIONS.lessons() }</h5>
+                </a>
+                <a
+                    href="#{course.loc_hash}:discussion"
+                    class="{state.selectedTab === 'discussion' ? 'selected' : ''}"
+                    onclick="{() => selectTab('discussion')}"
+                >
+                    <h5 class="section-title">{ TRANSLATIONS.discussion() }</h5>
+                </a>
+            </div>
+
+
+            <template if="{state.selectedTab === 'lessons'}">
+                <h5 if="{!state.courseHasDiscussions && course.lessons.length}" class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
+                <h5 if="{ !course.lessons.length }">{ TRANSLATIONS.no_lessons() }</h5>
+                <div class="card-container">
+                    <Card
+                        each="{lesson in course.lessons}"
+                        contentItem="{ lesson }"
+                    ></Card>
+                </div>
+                <LoadingDots if="{ !course.ready }" extrastyleclasses="dark"></LoadingDots>
+                <template if="{ course.ready && course.hasExam }">
+                    <h5 class="section-title">{ examTitle() }</h5>
+                    <div class="card-container full-width">
+                        <Card
+                            title="{examCardTitle()}"
+                            description="{examDescription()}"
+                            link="{ course.examLink }"
+                            status="{ examStatus() }"
+                            progress-values="{ false }"
+                        ></Card>
                     </div>
-                    <div>
-                        <p>{ TRANSLATIONS.course() }</p>
-                    </div>
-                    <h3 id="coursePageTitle">{props.wagtailPage.title}</h3>
-                    <div>
-                        <p class="bottom-border">{ numberOfLessonsCompleteMessage() }</p>
+                </template>
+            </template>
+
+            <template if="{state.selectedTab === 'discussion' && navigator.onLine}">
+                <div if="{!state.courseHasDiscussions}" class="empty-state">
+                </div>
+                <template if="{state.selectedDiscussionId === null && state.courseHasDiscussions}">
+                    <DiscussionCard
+                        each="{(lesson, index) in course.discussions}"
+                        contentItem="{lesson}"
+                        contentIndex="{index}"
+                        selectDiscussionHandler="{selectDiscussion}"
+                    ></DiscussionCard>
+                </template>
+                <template if="{state.selectedDiscussionId !== null}">
+                    <DiscussionThread
+                        lesson="{state.selectedDiscussionLesson}"
+                        lessonNumber="{getLessonNumber()}"
+                        selectDiscussionHandler="{selectDiscussion}"
+                        question="{state.selectedDiscussion}"
+                    ></DiscussionThread>
+                </template>
+            </template>
+
+            <template if="{state.selectedTab === 'discussion' && !navigator.onLine}">
+                <div class="card full-width">
+                    <div class="message-container">
+                        <span class="offline-hand"></span>
+                        <h3>{TRANSLATIONS.offline()}</h3>
+                        <p>{TRANSLATIONS.try_again()}</p>
                     </div>
                 </div>
-            </div>
-            <h5 class="section-title">{ TRANSLATIONS.your_lessons() }</h5>
-            <LoadingDots if="{state.lessons.length === 0}" extrastyleclasses="dark"></LoadingDots>
-            <Card
-                each="{lesson in state.lessons}"
-                title="{lesson.title}"
-                description="{lesson.shortDescription}"
-                duration="{lesson.getDuration()}"
-                link="{lesson.id}"
-                isCompleted="{lesson.isFinished()}"
-                isComingSoon="{lesson.isComingSoon()}"
-                showFooter="{true}"
-                type="lesson"
-            ></Card>
-            <template if="{state.lessons.length > 0 && props.examCards.length > 0}">
-                <h5 class="section-title">{ TRANSLATIONS.course_exam() }</h5>
-                <Card
-                    title="{ courseExamTitle() }"
-                    description="{props.wagtailPage.hasUserTriedExam() ? `${TRANSLATIONS.highestScore()}: ${props.wagtailPage.getExamHighScore()}%` : ''}"
-                    link="{props.wagtailPage.id}/exam/0"
-                    isCompleted="{props.wagtailPage.isExamFinished()}"
-                    isComingSoon="{false}"
-                    showFooter="{true}"
-                    isDisabled="{examDisabled()}"
-                    type="exam"
-                ></Card>
             </template>
         </div>
     </div>
 
+    <PopupModal if="{state.showDownloadModal}" togalModal="{toggleDownloadModal}">
+        <span class="download-course"></span>
+        <h3>{ TRANSLATIONS.download_course() }</h3>
+        <!-- <button class="btn-primary" onclick="{downloadAllLessons}">{ TRANSLATIONS.download_all() }</button> -->
+        <LessonDownload
+            each="{(lesson, index) in course.lessons}"
+            contentItem="{lesson}"
+            itemIndex="{index}"
+        ></LessonDownload>
+    </PopupModal>
+
     <script>
         import Card from "RiotTags/Components/Card.riot.html";
+        import DiscussionCard from "RiotTags/Components/DiscussionCard.riot.html";
+        import DiscussionThread from "RiotTags/Components/DiscussionThread.riot.html";
         import CourseExam from "RiotTags/Lesson/CourseExam.riot.html";
         import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+        import PopupModal from "RiotTags/Components/PopupModal.riot.html";
+        import LessonDownload from "RiotTags/Components/LessonDownload.riot.html";
 
-        import { isGuestUser } from "js/AuthenticationUtilities";
+        import { isAuthenticated, getRoute } from "ReduxImpl/Interface";
+        import { getCardImageUrl } from "js/utilities";
 
-        export default {
-            TRANSLATIONS: {
-                your_lessons: () => gettext("Your lessons"),
-                course: () => gettext("Course"),
-                course_exam: () => gettext("Course exam"),
-                highestScore: () => gettext("Highest score"),
-            },
-
-            components: {
-                card: Card,
-                courseexam: CourseExam,
-                loadingdots: LoadingDots,
-            },
-
+        function CoursePage() { return {
             state: {
-                header: null,
-                coursePageTitle: null,
-                lessons: [],
+                hasExpandableDescription: false,
+                showExpandedDescription: false,
+                showDownloadModal: false,
+                cached: false,
+                courseHasDiscussions: undefined,
+                selectedTab: 'lessons',
+                selectedDiscussionId: null,
+                selectedDiscussion: {},
+                selectedDiscussionLesson: {},
             },
 
-            async onMounted(props, state) {
-                const header = this.$(".course-header");
-                const coursePageTitle = this.$("#coursePageTitle");
-                const { wagtailPage: course } = props;
-                const lessons = await course.getFullLessonObjects();
-
-                this.update({ header, lessons, coursePageTitle });
-
-                window.addEventListener("scroll", this.stickyHeader);
+            TRANSLATIONS: {
+                no_lessons: () => gettext("There are no lessons yet in this course"),
+                lessons: () => gettext("Lessons"),
+                your_lessons: () => gettext("Your lessons"),
+                discussion: () => gettext("Discussion"),
+                course_exam: () => gettext("Course exam"),
+                prelearning_survey: () => gettext("Prelearning Survey"),
+                take_exam: () => gettext("Take exam"),
+                take_survey: () => gettext("Take Survey"),
+                highestScore: () => gettext("Highest score"),
+                more: () => gettext("See more"),
+                less: () => gettext("See less"),
+                download_course: () => gettext("Make course available offline"),
+                download_all: () => gettext("Download all lessons"),
+                offline: () => gettext("You need to be online to use the discussion tool"),
+                try_again: () => gettext("Try again later or reconnect to your network to start interacting with your colleagues"),
+                start: () => gettext("Start learning"),
+                continue: () => gettext("Continue learning"),
             },
 
-            onUnmounted() {
-                window.removeEventListener("scroll", this.stickyHeader);
+            get course() {
+                return getRoute().page;
             },
 
-            calculateCourseProgress() {
-                const { wagtailPage } = this.props;
-                return wagtailPage.numberOfFinishedLessons + " / " + wagtailPage.numberOfLessons;
+            onBeforeMount(props, state) {
+                const route = getRoute()
+                state.courseHasDiscussions = !!this.course.discussions.filter(it => it.discussion && it.discussion.length).length;
+
+                if (route.riotHash[0]) {
+                    state.selectedTab = 'discussion';
+                }
+
+                if (route.riotHash[2]) {
+                    state.selectedDiscussionId = route.riotHash[2];
+                    state.selectedDiscussionLesson = this.course.data.lessons
+                        .find(it => it.id == route.riotHash[1]);
+                    state.selectedDiscussion = state.selectedDiscussionLesson.discussion
+                        .find(it => it.id == state.selectedDiscussionId);
+                }
+
+                this.course.isAvailableOffline()
+                    .then(cached => {
+                        this.update({cached});
+                    })
             },
 
-            backToHome() {
-                location.hash = "#";
-            },
-
-            stickyHeader() {
-                if (window.pageYOffset > this.state.header.offsetTop) {
-                    this.state.header.classList.add("sticky");
-                    this.state.coursePageTitle.classList.add("truncate-if-long");
-                } else {
-                    this.state.header.classList.remove("sticky");
-                    this.state.coursePageTitle.classList.remove("truncate-if-long");
+            onMounted(props, state) {
+                const descEl = this.$('.clamp-3-lines');
+                if (descEl && descEl.scrollHeight > descEl.clientHeight) {
+                    this.update({hasExpandableDescription: true})
                 }
             },
 
-            examDisabled() {
-                // Exams are enabled if you complete all lessons or if you are a
-                // guest user.
-                const { wagtailPage: course } = this.props;
-                const isExamUnlocked =
-                    course.numberOfFinishedLessons === course.numberOfLessons - 1;
-                return !isExamUnlocked && !isGuestUser();
+            get ctaObject() {
+                const status = this.course.progressStatus;
+
+                if (!this.course.lessons.length) return null;
+
+                if (status === 'in-progress' && this.course.lessonsComplete) {
+                    const copy = this.course.examIsPrelearning
+                        ? this.TRANSLATIONS.take_survey()
+                        : this.TRANSLATIONS.take_exam();
+                    return {
+                        copy,
+                        hash: this.course.examLink,
+                    }
+                } else if (status === 'in-progress' && !this.course.lessonsComplete) {
+                    return {
+                        copy: this.TRANSLATIONS.continue(),
+                        hash: this.course.lessons
+                                    .filter(it => it.progressStatus !== 'complete')[0].loc_hash,
+                    };
+                } else if (status === 'not-started') {
+                    return {
+                        copy: this.TRANSLATIONS.start(),
+                        hash: this.course.lessons[0].loc_hash,
+                    }
+                }
+
+                return null;
             },
 
-            numberOfLessonsCompleteMessage() {
-                // the number of lessons completed in a course
-                return ngettext(
-                    "%1 lesson complete",
-                    "%1 lessons complete",
-                    this.calculateCourseProgress()
+            goToCTAHash() {
+                location.hash = this.ctaObject.hash;
+            },
+
+            backToAllCourses() {
+                location.hash = this.course.parent.loc_hash;
+            },
+
+            toggleDownloadModal() {
+                this.update({showDownloadModal: !this.state.showDownloadModal});
+                document.body.classList.toggle('modal-open');
+                this.course.isAvailableOffline()
+                    .then(cached => {
+                        this.update({cached});
+                    })
+            },
+
+            downloadAllLessons() {
+                document.querySelectorAll('.download-state .download').forEach((it) => it.click());
+            },
+
+            selectTab(tabName) {
+                this.update({ selectedTab: tabName, selectedDiscussionId: null });
+            },
+
+            selectDiscussion(id, lesson = null) {
+                let discussion = {};
+                let lessonNumber = null;
+                if (id === null) {
+                    location.hash = `#${this.course.loc_hash}:discussion`;
+                }
+                else {
+                    location.hash = `#${this.course.loc_hash}:discussion:${lesson.id}:${id}`;
+                    discussion = lesson.discussion.find((it) => it.id === id);
+                }
+
+                this.update({
+                    selectedDiscussionId: id,
+                    selectedDiscussionLesson: lesson,
+                    selectedDiscussion: discussion,
+                });
+            },
+
+            getLessonNumber() {
+                const lesson = this.state.selectedDiscussionLesson;
+                return this.course.discussions.findIndex((it) => it.id === lesson.id) + 1;
+            },
+
+            examDescription() {
+                const course = this.course;
+                return (
+                    course.hasUserTriedExam
+                     ? `${this.TRANSLATIONS.highestScore()}: ${course.examHighScore}%`
+                     : ''
                 );
             },
 
-            courseExamTitle() {
-                let p = gettext("%1's Course Exam", this.props.wagtailPage.title);
-                return p;
+            toggleCourseDescription() {
+                this.update({
+                    showExpandedDescription: !this.state.showExpandedDescription,
+                });
             },
+
+            getCardImage(link, cardImage) {
+                return getCardImageUrl(link, cardImage);
+            },
+
+            isExamEnabled() {
+                // Exams are enabled if you complete all lessons or if you are a
+                // guest user.
+                return this.course.lessonsComplete || !isAuthenticated();
+            },
+
+            examCardTitle() {
+                return this.course.examIsPrelearning
+                    ? gettext("%1's Prelearning Survey", this.course.title)
+                    : gettext("%1's Course Exam", this.course.title);
+            },
+
+            examTitle() {
+                return this.course.examIsPrelearning
+                    ? this.TRANSLATIONS.prelearning_survey()
+                    : this.TRANSLATIONS.course_exam();
+            },
+
+            examStatus() {
+                if ((this.course.examIsPrelearning && this.course.examHighScore !== undefined)
+                    || this.course.isExamFinished) {
+                    return "complete";
+                } else if (!this.isExamEnabled()) {
+                    return "disabled";
+                } else {
+                    return "not-started";
+                }
+            },
+        }};
+
+        CoursePage.components = {
+            card: Card,
+            discussioncard: DiscussionCard,
+            discussionthread: DiscussionThread,
+            courseexam: CourseExam,
+            loadingdots: LoadingDots,
+            topmenu: TopMenu,
+            popupmodal: PopupModal,
+            lessondownload: LessonDownload,
         };
+
+        export default CoursePage;
     </script>
 </CoursePage>

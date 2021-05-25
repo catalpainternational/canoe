@@ -1,17 +1,18 @@
 <Settings>
     <div class="settings">
+        <TopMenu extrastyleclasses="with-swoop">
+            <h4>{ TRANSLATIONS.settings() }</h4>
+        </TopMenu>
         <div class="content-wrapper">
-            <h3>{ TRANSLATIONS.settings() }</h3>
-
             <div if="{state.browserSupportsNotifications}" class="notifications-toggle">
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
                     onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"
                 >
-                    <input type="checkbox" />
+                    <input type="checkbox" id="notifications-toggle"/>
                     <div class="slider"></div>
                 </div>
-                <p>{ TRANSLATIONS.notifications() }</p>
+                <label for="notifications-toggle">{ TRANSLATIONS.notifications() }</label>
             </div>
 
             <LanguageSelector></LanguageSelector>
@@ -25,16 +26,19 @@
                 { TRANSLATIONS.add() }
             </button>
 
-            <button class="btn-secondary" onclick="{logout}">{ TRANSLATIONS.logout() }</button>
+            <button class="btn-secondary" 
+                onclick="{ state.isAuthenticated ? logout : login }"
+            >
+                { state.isAuthenticated ? TRANSLATIONS.logout() : TRANSLATIONS.login() }
+            </button>
 
             <Logos></Logos>
-
-            <!-- <CacheDisplay></CacheDisplay> -->
         </div>
     </div>
     <script>
         import LanguageSelector from "riot/Components/LanguageSelector.riot.html";
         import Logos from "riot/Components/Logos.riot.html";
+        import TopMenu from "riot/Components/TopMenu.riot.html";
         import { logout } from "js/AuthenticationUtilities";
         import {
             supportsPushManager,
@@ -43,9 +47,9 @@
             isSubscribedToNotifications,
         } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
-        // import CacheDisplay from "RiotTags/CacheDisplay.riot.html";
         import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
-        import { getPlatform } from "js/PlatformDetection";
+        import { getPlatform } from "ts/PlatformDetection";
+        import { isAuthenticated } from "ReduxImpl/Interface";
 
         export default {
             state: {
@@ -53,26 +57,36 @@
                 isSubscribedToNotifications: false,
                 disableNotificationsButton: false,
                 canAddToHomeScreen: false,
+                isAuthenticated: undefined,
             },
+
             components: {
                 languageselector: LanguageSelector,
                 logos: Logos,
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
                 settings: () => gettext("Your settings"),
-                notifications: () => gettext("Would you like to receive app notifications?"),
+                notifications: () => gettext("I would like to receive notifications"),
                 add: () => gettext("Add to Home Screen"),
-                logout: () => gettext("Log out"),
+                logout: () => gettext("Logout"),
+                login: () => gettext("Login")
             },
 
             logout() {
                 logout();
+                window.location.hash = "";
+            },
+
+            login() {
+                window.location.hash = "#login";
             },
 
             async refreshSettings() {
                 this.update({
                     canAddToHomeScreen: this.shouldShowAddToHomeScreen(),
+                    isAuthenticated: isAuthenticated(),
                 });
 
                 const browserSupportsNotifications = await supportsPushManager();

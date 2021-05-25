@@ -1,45 +1,69 @@
 <ImageWrapper>
+    <div if="{ asset() && state.imageFullScreen }"
+        class="modal-background fade"
+        onclick="{ toggleImageFullScreen }">
+    </div>
     <img
-        if="{state.imagePath}"
-        alt="{props.alt}"
-        class="richtext-image"
+        if="{ asset() }"
+        src="{ asset().url }"
+        alt="{ asset().title }"
+        class="richtext-image {imageClass()}"
         crossorigin="anonymous"
-        src="{state.imagePath}"
     />
-    <p class="error-message" if="{!state.imagePath}">
-        Error: image {props.imageId}, "{props.alt}", is missing.
+    <div if="{ asset() && !state.imageFullScreen }"
+        class="expand-button"
+        onclick="{ toggleImageFullScreen }">
+        <span class="expand-arrows"></span>
+    </div>
+    <div if="{ state.imageFullScreen }"
+        class="contract-button"
+        onclick="{ toggleImageFullScreen }">
+        <span class="cross gray"></span>
+    </div>
+    <p class="error-message" if="{ !asset() }">
+        { TRANSLATIONS.missing() }
     </p>
 
     <script>
-        import { MissingImageError } from "js/Errors";
-        import { getImageUrl } from "js/RenditionSelector";
+        import { getRoute } from "ReduxImpl/Interface";
 
-        export default {
-            state: {
-                imagePath: "",
-                imageId: "",
-            },
-            onUpdated(props, state) {
-                this.setImagePath(props, state);
-            },
+        export default function ImageWraper() {
+            return {
+                TRANSLATIONS: {
+                    missing: () => gettext("Sorry: This image is missing.")
+                },
+                state: {
+                    imageFullScreen: false,
+                },
 
-            onMounted(props, state) {
-                this.setImagePath(props, state);
-            },
+                get page() {
+                    return getRoute().page;
+                },
 
-            async setImagePath(props) {
-                const { imageId } = props;
-                if (this.state.imageId === imageId) {
-                    return;
-                }
-                try {
-                    const imagePath = await getImageUrl(imageId);
-                    this.update({imagePath, imageId});
-                } catch (error) {
-                    if (!(error instanceof MissingImageError)) {
-                        throw error;
-                    }
-                }
+                asset() {
+                    return this.page.imageAsset(this.props.image.id);
+                },
+
+                imageClass() {
+                    const fullScreen = this.state.imageFullScreen;
+                    const devicePortrait = this.state.devicePortrait;
+                    const img = this.$("img");
+                    const imgHeight = img.naturalHeight;
+                    const imgWidth = img.naturalWidth;
+
+                    let imgOrientation;
+
+                    if (imgHeight > imgWidth) imgOrientation = 'portrait';
+                    if (imgHeight < imgWidth) imgOrientation = 'landscape';
+                    if (imgHeight === imgWidth) imgOrientation = 'square';
+
+
+                    return fullScreen ? `full-screen ${imgOrientation}` : '';
+                },
+
+                toggleImageFullScreen() {
+                    this.update({ imageFullScreen: !this.state.imageFullScreen });
+                },
             }
         };
     </script>

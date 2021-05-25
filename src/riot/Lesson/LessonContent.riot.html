@@ -1,69 +1,80 @@
 <LessonContent>
     <LessonFrame
-        if="{!props.isLessonPage || state.cardIdx < props.lessonContent.cards.length}"
-        extraStyleClasses="content"
+        if="{ cardNumber <= cards.length }"
+        extraStyleClasses="{ isAQuestion() ? 'test' : 'content' }"
+        progressValue="{ cardNumber }"
+        progressMax="{ cards.length }"
+        linkTo="{ lesson.course.loc_hash }"
     >
-        <Raw
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'raw'}"
-            html="{props.lessonContent.cards[state.cardIdx].content}"
+        <TitleDescription
+            if="{ card.tag === 'titleDescription' }"
+            card="{ card }"
         />
-        <BasicCard
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'basic'}"
-            card="{props.lessonContent.cards[state.cardIdx]}"
-        />
+        <Raw if="{ card.tag === 'raw'}" html="{ card.content }" />
+        <BasicCard if="{ card.tag === 'basic'}" card="{ card }" />
         <AudioCard
-            if="{props.lessonContent.cards[state.cardIdx].media_type === 'audio'}"
-            media="{props.lessonContent.cards[state.cardIdx]}"
+            if="{ card.media_type === 'audio' }"
+            media="{ card }"
         />
         <VideoCard
-            if="{props.lessonContent.cards[state.cardIdx].media_type === 'video'}"
-            media="{props.lessonContent.cards[state.cardIdx]}"
+            if="{ card.media_type === 'video' }"
+            media="{ card }"
         />
-        <QuoteCard
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'quote'}"
-            card="{props.lessonContent.cards[state.cardIdx]}"
-        />
-        <ListCard
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'list'}"
-            card="{props.lessonContent.cards[state.cardIdx]}"
-        />
-        <PdfCard
-            if="{props.lessonContent.cards[state.cardIdx].tag === 'pdf'}"
-            card="{props.lessonContent.cards[state.cardIdx]}"
-        />
-        <div if="{props.isLessonPage}" class="bottom-buttons">
-            <div>
-                <a if="{state.cardIdx > 0}" class="arrow-gray" onclick="{goBack}"></a>
-            </div>
-            <div>
-                <button
-                    class="btn-primary"
-                    onclick="{nextContentPage}"
-                    if="{state.cardIdx < props.lessonContent.cards.length - 1}"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    class="btn-primary"
-                    onclick="{completeContentModal}"
-                    if="{state.cardIdx === props.lessonContent.cards.length - 1}"
-                >
-                    { TRANSLATIONS.finish() }
-                </button>
-            </div>
-        </div>
-        <p if="{props.isLessonPage}" class="card-number">{ cardNumberMessage() }</p>
+        <QuoteCard if="{ card.tag === 'quote' }" card="{ card }" />
+        <ListCard if="{ card.tag === 'list' }" card="{ card }" />
+        <PdfCard if="{ card.tag === 'pdf' }" card="{ card }" />
+        <Html5Card if="{ card.tag === 'html5' }" card="{ card }" />
+        <Test
+            if="{ isAQuestion() }"
+            toggleModal="{ toggleTestModal }">
+        </Test>
     </LessonFrame>
-    <LessonModuleComplete
-        if="{props.isLessonPage && state.cardIdx === props.lessonContent.cards.length}"
-        lessonId="{props.lesson.id}"
-        module="{props.module}"
-        nextModule="{props.nextModule}"
-        title="{props.title}"
-    ></LessonModuleComplete>
+    <div
+        if="{ cardNumber <= cards.length }"
+        class="bottom-buttons"
+    >
+        <div>
+            <a
+                if="{ cardNumber > 1 }"
+                class="has-circle"
+                onclick="{ goBack }"
+            >
+                <span class="arrow"></span>
+            </a>
+        </div>
+        <div>
+            <button
+                class="btn-primary"
+                onclick="{ nextCard }"
+                if="{ cardNumber < cards.length && !isAQuestion() }"
+            >
+                { TRANSLATIONS.next() }
+            </button>
+            <button
+                class="btn-primary"
+                onclick="{ completeLesson }"
+                if="{ cardNumber === cards.length && !isAQuestion() }"
+            >
+                { TRANSLATIONS.finish() }
+            </button>
+        </div>
+    </div>
+    <TestPopupModal
+        if="{ state.showModal }"
+        toggleModal="{ toggleTestModal }"
+        lesson="{ lesson }"
+        cardNumber="{ cardNumber }"
+    />
+    <LessonFeedback
+        if="{ !cardNumber && stage == 'feedback' }"
+        lessonId="{ lesson.id }"
+        courseId="{ lesson.course.id }"
+    ></LessonFeedback>
+    <LessonComplete
+        if="{ !cardNumber && stage == 'complete' }"
+    ></LessonComplete>
 
     <script>
-        import LessonModuleComplete from "RiotTags/Lesson/LessonModuleComplete.riot.html";
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import Raw from "RiotTags/Components/Raw.riot.html";
         import BasicCard from "RiotTags/Components/BasicCard.riot.html";
@@ -72,90 +83,99 @@
         import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
         import ListCard from "RiotTags/Lesson/ListCard.riot.html";
         import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
+        import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
+        import TitleDescription from "RiotTags/Components/TitleDescription.riot.html";
+        import LessonComplete from "RiotTags/Lesson/LessonComplete.riot.html";
+        import LessonFeedback from "RiotTags/Lesson/LessonFeedback.riot.html";
+        import Test from "RiotTags/Lesson/Test.riot.html";
+        import TestPopupModal from "RiotTags/Lesson/TestPopupModal.riot.html";
+        import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
 
-        import { getLessonCardIdx, getNextCardsUrl, getPreviousCardsUrl } from "js/Routing";
-        import { setComplete } from "Actions/completion";
+        import { getRoute, clearPageTestAnswers } from "ReduxImpl/Interface";
 
-        export default {
-            state: {
-                cardIdx: 0,
-                iframes: [],
-            },
+        function LessonContent() {
+            return {
+                state: {
+                    showModal: false,
+                },
 
-            components: {
-                lessonmodulecomplete: LessonModuleComplete,
-                basiccard: BasicCard,
-                quotecard: QuoteCard,
-                listcard: ListCard,
-                raw: Raw,
-                lessonframe: LessonFrame,
-                videocard: VideoCard,
-                audiocard: AudioCard,
-                pdfcard: PdfCard,
-            },
+                TRANSLATIONS: {
+                    next: () => gettext("Next"),
+                    finish: () => gettext("Finish"),
+                },
+                get lesson() {
+                    return getRoute().page;
+                },
+                get stage() {
+                    return getRoute().riotHash[1];
+                },
+                get cardNumber() {
+                    return parseInt(this.stage);
+                },
+                get cards() {
+                    return this.lesson.cards;
+                },
+                get card() {
+                    return this.lesson.cards[this.cardNumber - 1];
+                },
+                isAQuestion() {
+                    const r =  this.card.tag.includes('Choice');
+                    return r;
+                },
 
-            TRANSLATIONS: {
-                next: () => gettext("Next"),
-                finish: () => gettext("Finish"),
-            },
+                goBack() {
+                    const prevCard = this.cards[this.cardNumber - 2];
+                    location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber - 1}`;
+                },
 
-            onBeforeMount(props, state) {
-                state.cardIdx = props.isLessonPage ? getLessonCardIdx() : "0";
-                window.addEventListener("hashchange", this.hashChanged);
-            },
+                nextCard() {
+                    window.scroll(0, 0);
+                    location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber + 1}`;
+                },
 
-            onBeforeUnmount(props, state) {
-                window.removeEventListener("hashchange", this.hashChanged);
-            },
+                completeLesson() {
+                    // set this lesson as complete in the store
+                    // this will persist in local storage and the server
+                    this.lesson.complete = true;
 
-            hashChanged() {
-                this.update({
-                    cardIdx: getLessonCardIdx(),
-                });
-            },
+                    // clear the answers from memory so they do not show up next time
+                    clearPageTestAnswers(this.lesson.id);
 
-            goBack() {
-                location.hash = getPreviousCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
-            },
+                    location.hash = `${this.lesson.loc_hash}:content:feedback`;
+                },
 
-            cardNumberMessage() {
-                // display the number of the current card out of the total number of cards
-                return gettext(
-                    "%1 of %2",
-                    this.state.cardIdx + 1,
-                    this.props.lessonContent.cards.length
-                );
-            },
+                toggleTestModal(showModal) {
+                    this.update({
+                        showModal,
+                    });
+                    const testElement = this.$(".card-content");
+                    if (showModal) {
+                        testElement.classList.add("fade");
+                    } else {
+                        testElement.classList.remove("fade");
+                    }
+                },
+            };
+        }
 
-            nextContentPage() {
-                window.scroll(0, 0);
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
-            },
-
-            completeContentModal() {
-                setComplete(this.props.course.slug, this.props.lesson.slug, this.props.module);
-                location.hash = getNextCardsUrl(
-                    this.props.lesson.id,
-                    this.props.module,
-                    this.state.cardIdx
-                );
-            },
-
-            checkForPlayableVideos() {
-                this.state.iframes = this.$$("iframe");
-            },
-
-            onUpdated() {
-                this.checkForPlayableVideos();
-            },
+        LessonContent.components = {
+            basiccard: BasicCard,
+            quotecard: QuoteCard,
+            listcard: ListCard,
+            raw: Raw,
+            lessonframe: LessonFrame,
+            videocard: VideoCard,
+            audiocard: AudioCard,
+            pdfcard: PdfCard,
+            html5card: Html5Card,
+            titledescription: TitleDescription,
+            lessoncomplete: LessonComplete,
+            lessonfeedback: LessonFeedback,
+            test: Test,
+            testpopupmodal: TestPopupModal,
+            imagewrapper: ImageWrapper,
         };
+
+        export default LessonContent;
     </script>
 </LessonContent>

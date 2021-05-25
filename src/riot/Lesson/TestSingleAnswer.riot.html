@@ -1,96 +1,125 @@
-<TestSingleAnswer class="answer">
+<TestSingleAnswer>
     <ol>
         <li
-            each="{answer in props.card.answers}"
-            class="{doAnswersMatch(answer, state.selectedAnswer) && howToStyleThe(answer)}"
-            onclick="{() => selectAnswer(answer)}"
+            each="{(answer, index) in card.answers}"
+            class="radio { answerClass(index) }"
+            onclick="{() => selectAnswer(index)}"
         >
-            <div>
-                <div class="radio">
-                    <div></div>
-                </div>
-                <p>{answer.text}</p>
-            </div>
+            <p>{answer.text}</p>
         </li>
     </ol>
+    <button
+        if="{ !page.hasExam }"
+        class="btn-primary"
+        onclick="{ showResults }"
+        disabled="{ storedAnswer === undefined }"
+    >
+        { TRANSLATIONS.checkAnswer() }
+    </button>
 
     <script>
-        import { dispatchTestAnswerEvent } from "js/Events";
+        import { getRoute, getTestAnswer, storeTestAnswer } from "ReduxImpl/Interface";
+        function TestSingleAnswer() {
+            return {
+                state: {
+                    haveCheckedAnswers: false,
+                    checkCount: 0,
+                },
+                TRANSLATIONS: {
+                    checkAnswer: () => gettext("Check answer"),
+                },
+                get route() {
+                    return getRoute();
+                },
+                get cardIndex() {
+                    return parseInt(this.route.riotHash[1]) - 1;
+                },
+                get page() {
+                    return this.route.page;
+                },
+                get card() {
+                    if (this.props && this.props.review && this.props.card) {
+                        return this.props.card;
+                    }
+                    return this.page.examCards
+                        ? this.page.examCards[this.cardIndex]
+                        : this.page.cards[this.cardIndex];
+                },
 
-        export default {
-            state: {
-                selectedAnswer: {},
-            },
+                get storedAnswer() {
+                    if (this.card) return getTestAnswer(this.page.id, this.card.id);
+                },
+                setAnswer(answer) {
+                    storeTestAnswer(
+                        this.page.id,
+                        this.card.id,
+                        answer
+                    )
+                },
 
-            onMounted(props, state) {
-                this.restoreSavedAnswer();
-            },
+                answerClass(answerIndex) {
+                    const current = this.storedAnswer ? this.storedAnswer.current : undefined;
+                    if (current !== undefined && current.includes(answerIndex)) {
+                        // this answer has been selected
+                        if (!this.props.review && (this.page.hasExam || !this.state.haveCheckedAnswers)) {
+                            // we are in an exam or we have not checked answers yet
+                            return "selected-pending";
+                        } else {
+                            // show selection feedback
+                            if (this.card.answers[answerIndex].correct) {
+                                return "selected";
+                            } else {
+                                return "selected-wrong";
+                            }
+                        }
+                    } else {
+                        return "";
+                    }
+                },
 
-            onUpdated(props, state) {
-                if (Object.keys(state.selectedAnswer).length === 0) {
-                    this.restoreSavedAnswer();
-                } else {
-                    this.handleRiotMemoryLeaks();
-                }
-            },
+                selectAnswer(answerIndex) {
+                    if (this.props.review) return;
 
-            restoreSavedAnswer() {
-                const { savedAnswer } = this.props;
-                if (!savedAnswer) {
-                    return;
-                }
+                    // get the previously stored answer
+                    const nextAnswers = this.storedAnswer || {
+                        current: [],
+                    }
 
-                this.update({
-                    selectedAnswer: savedAnswer[0],
-                });
-            },
+                    // add or remove
+                    const selected = nextAnswers.current.indexOf(answerIndex)
+                    if (selected === -1) {
+                        nextAnswers.current = [answerIndex];
+                    } else {
+                        nextAnswers.current = [];
+                    }
 
-            handleRiotMemoryLeaks() {
-                // This method fixes a riot bug(?) that occurs when two
-                // TestSingleAnswers are back to back. If question one
-                // has a selected answer that matches an answer in question two,
-                // question two will automatically select that answer. We don't
-                // want that, so this method clears the selected answer between
-                // questions.
-                this.state.selectedAnswer = {};
-            },
+                    this.state.haveCheckedAnswers = false;
+                    this.setAnswer(nextAnswers);
+                },
 
-            doAnswersMatch(left, right) {
-                return left.text === right.text;
-            },
+                showResults() {
+                    // get the previously stored answer
+                    const nextAnswers = this.storedAnswer;
 
-            howToStyleThe(answer) {
-                if (this.props.isCourseExam) {
-                    return "selected-pending";
-                } else if (!answer.correct) {
-                    return "selected-wrong";
-                } else {
-                    return "selected";
-                }
-            },
+                    // add the current answer set to the attempts array
+                    nextAnswers.attempts = nextAnswers.attempts || [];
+                    nextAnswers.attempts.push(nextAnswers.current.slice());
 
-            selectAnswer(answer) {
-                this.update({ selectedAnswer: answer });
-                const eventData = {
-                    lesson: this.props.lessonName,
-                    question: this.props.card.question,
-                    answer: answer.text,
-                    isAnswerCorrect: answer.correct,
-                };
-                dispatchTestAnswerEvent(eventData);
+                    // store the answer
+                    this.setAnswer(nextAnswers);
 
-                const { isCourseExam } = this.props;
-                if (isCourseExam) {
-                    const isCorrect = this.gradeAnswer(answer);
-                    this.props.recordAnswer({ isCorrect, answers: [answer] });
-                } else {
-                    this.props.toggleModal(true, answer, answer.correct);
-                }
-            },
+                    this.update({
+                        haveCheckedAnswers: true
+                    });
 
-            gradeAnswer(answer) {
-                return answer.correct;
-            },
-        };
+                    if ( this.props.toggleModal ) {
+                        this.props.toggleModal(true);
+                    }
+                },
+            }
+        }
+
+        export default TestSingleAnswer;
+
     </script>
 </TestSingleAnswer>
