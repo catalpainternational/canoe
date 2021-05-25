@@ -37,19 +37,19 @@
             <div class="activity-swoop">
                 <div class="tab-titles">
                     <a
-                        class="{state.selectedTab === 'plan' ? 'selected' : ''}"
+                        class="{selectedTab === 'plan' ? 'selected' : ''}"
                         onclick="{() => selectTab('plan')}"
                     >
                         <h5 class="section-title">{ TRANSLATIONS.plan() }</h5>
                     </a>
                     <a
-                        class="{state.selectedTab === 'teach' ? 'selected' : ''}"
+                        class="{selectedTab === 'teach' ? 'selected' : ''}"
                         onclick="{() => selectTab('teach')}"
                     >
                         <h5 class="section-title">{ TRANSLATIONS.teach() }</h5>
                     </a>
                     <a
-                        class="{state.selectedTab === 'extend' ? 'selected' : ''}"
+                        class="{selectedTab === 'extend' ? 'selected' : ''}"
                         onclick="{() => selectTab('extend')}"
                     >
                         <h5 class="section-title">{ TRANSLATIONS.extend() }</h5>
@@ -57,17 +57,17 @@
                 </div>
                 <template if="{ activity.ready }">
                     <PlanTab
-                        if="{state.selectedTab === 'plan'}"
+                        if="{selectedTab === 'plan'}"
                         selectTab="{selectTab}"
                     >
                     </PlanTab>
                     <TeachTab
-                        if="{state.selectedTab === 'teach'}"
+                        if="{selectedTab === 'teach'}"
                         selectTab="{selectTab}"
                     >
                     </TeachTab>
                     <ExtendTab
-                        if="{state.selectedTab === 'extend'}"
+                        if="{selectedTab === 'extend'}"
                     ></ExtendTab>
                 </template>
             </div>
@@ -89,7 +89,6 @@
 
         function ActivityPage() { return {
             state: {
-                selectedTab: "plan",
                 status: "content",
             },
 
@@ -109,12 +108,30 @@
                 return this.route.page;
             },
 
-            getCardImage(link, cardImage) {
-                return getCardImageUrl(link, cardImage);
+            get selectedTab() {
+                const t = this.route.riotHash[0];
+
+                if (t) {
+                    return t;
+                } else {
+                    return 'plan';
+                }
             },
 
             selectTab(tabName) {
-                this.update({ selectedTab: tabName });
+                const currentTab = this.route.riotHash[0];
+
+                if (currentTab) {
+                    location.hash = location.hash.replace(
+                        `:${currentTab}`, `:${tabName}`
+                    );
+                } else {
+                    location.hash = `${location.hash}:${tabName}`;
+                }
+            },
+
+            getCardImage(link, cardImage) {
+                return getCardImageUrl(link, cardImage);
             },
 
             setComplete() {
