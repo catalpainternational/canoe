@@ -17,6 +17,14 @@
         title="{ TRANSLATIONS.wrap() }"
         section={ teach.wrapup }
     ></TabSection>
+    <div if="{teachTips}" class="card-frame">
+        <div class="card-content">
+            <h4>{teachTips.title}</h4>
+            <button onclick="{openTips}" class="btn-primary">{ TRANSLATIONS.viewTips() }</button>
+        </div>
+        <div class="card-shadow"></div>
+        <div class="card-shadow"></div>
+    </div>
     <button class="btn-secondary" onclick="{goToExtend}">
         { TRANSLATIONS.extendKnowledge() }
     </button>
@@ -30,6 +38,7 @@
 				activity: () => gettext("Activity"),
 				wrap: () => gettext("Wrap up"),
 				extendKnowledge: () => gettext("Extend your knowledge"),
+                viewTips: () => gettext("View all tips"),
 			},
 
             get route() {
@@ -38,6 +47,14 @@
 
             get teach() {
                 return this.route.page.teach;
+            },
+
+            get teachTips() {
+                return this.route.page.teach_tips;
+            },
+
+            openTips() {
+                location.hash = `#${this.teachTips.loc_hash}:1:teach`;
             },
 
 			goToExtend() {
