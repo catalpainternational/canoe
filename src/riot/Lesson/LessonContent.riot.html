@@ -185,7 +185,12 @@
                     // clear the answers from memory so they do not show up next time
                     clearPageTestAnswers(this.lesson.id);
 
-                    location.hash = `${this.lesson.loc_hash}:content:feedback`;
+                    if (this.props && this.props.isTipsPage && this.state.returnTab) {
+                        // we don't show feedback for tips
+                        location.hash = `${this.lesson.loc_hash}:content:complete`;
+                    } else {
+                        location.hash = `${this.lesson.loc_hash}:content:feedback`;
+                    }
                 },
 
                 toggleTestModal(showModal) {
