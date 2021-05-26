@@ -272,9 +272,13 @@ export class Asset extends PublishableItem {
         return this.#page.manifest.storedData?.videometa[this.id];
     }
     get thumbnail(): string {
-        return `${process.env.API_BASE_URL}/${this.metadata.thumbnail}`;
+        return this.metadata && this.metadata.thumbnail
+            ? `${process.env.API_BASE_URL}/${this.metadata.thumbnail}`
+            : "";
     }
     get duration(): number {
-        return this.metadata.duration;
+        return this.metadata && this.metadata.duration
+            ? this.metadata.duration
+            : 0;
     }
 }
