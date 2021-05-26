@@ -1,3 +1,4 @@
+import { BACKEND_BASE_URL } from "js/urls";
 import Logger from "../Logger";
 
 export enum UpdatePolicy {
@@ -29,6 +30,17 @@ export abstract class PublishableItem {
         };
     }
 
+    getRequestOptions(): RequestInit {
+        return Object.assign(
+            {
+                credentials: "include",
+                mode: "cors",
+                method: "GET",
+                referrer: BACKEND_BASE_URL,
+            },
+            this.requestOptions
+        );
+    }
     /**
      * Get a network response for this item, caching it appropriately
      * @returns a request response for this item
@@ -38,7 +50,7 @@ export abstract class PublishableItem {
         logger.log("using network for %s:%s", this.str, this.url);
         let response;
         try {
-            response = await fetch(this.url, this.requestOptions);
+            response = await fetch(this.url, this.getRequestOptions());
         } catch {
             logger.warn("request failed for %s:%s", this.str, this.url);
             throw Error("Network error");

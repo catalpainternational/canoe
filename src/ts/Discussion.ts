@@ -1,7 +1,7 @@
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
-
 import { v4 as uuidv4 } from "uuid";
+import Cookies from "js-cookie";
+
+const DISCUSSION_BASE_URL = `${process.env.API_BASE_URL}/discussion`;
 
 export class Discussion {
     static CreateComment(
@@ -39,13 +39,13 @@ export class Discussion {
     static async Get(
         discussionId: string
     ): Promise<Array<Record<string, any>> | number> {
-        const url = `${ROUTES_FOR_REGISTRATION.discussion}discussion/${discussionId}/`;
+        const url = `${DISCUSSION_BASE_URL}/discussion/${discussionId}/`;
         const init = {
             method: "GET",
             mode: "cors",
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
-                Authorization: `JWT ${getAuthenticationToken()}`,
             },
         } as RequestInit;
 
@@ -103,9 +103,10 @@ export class Discussion {
         const init = {
             method: "POST",
             mode: "cors",
+            credentials: "include",
             headers: {
                 "content-type": "application/json",
-                Authorization: `JWT ${getAuthenticationToken()}`,
+                "X-CSRFToken": Cookies.get("csrftoken"),
             },
             body: JSON.stringify(body),
         } as RequestInit;
@@ -117,7 +118,7 @@ export class Discussion {
         commentBody: Record<string, any>
     ): Promise<Response> => {
         return Discussion.PostRequest(
-            `${ROUTES_FOR_REGISTRATION.discussion}posting/`,
+            `${DISCUSSION_BASE_URL}/posting/`,
             commentBody
         );
     };
@@ -125,9 +126,6 @@ export class Discussion {
     static FlagComment = async (
         flagBody: Record<string, any>
     ): Promise<Response> => {
-        return Discussion.PostRequest(
-            `${ROUTES_FOR_REGISTRATION.discussion}flag/`,
-            flagBody
-        );
+        return Discussion.PostRequest(`${DISCUSSION_BASE_URL}/flag/`, flagBody);
     };
 }

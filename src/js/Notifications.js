@@ -1,9 +1,9 @@
 import { BACKEND_BASE_URL } from "js/urls";
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { getBrowser } from "ts/PlatformDetection";
 import { urlBase64ToUint8Array } from "js/DjangoPushNotifications";
 import { alertIfRequestWasMadeOffline } from "js/Errors";
 import { logUnsubscribedFromNotifications } from "js/GoogleAnalytics";
+import Cookies from "js-cookie";
 
 const APPLICATION_SERVER_KEY = `${process.env.APPLICATION_SERVER_KEY}`;
 const NOTIFICATION_ID_KEY = "notificationRegistrationId";
@@ -21,13 +21,12 @@ const deleteStoredRegistrationId = () => {
 };
 
 const fetchNotificationSubscription = async (registrationId) => {
-    const token = getAuthenticationToken();
     const notificationsApiUrl = `${BACKEND_BASE_URL}/notifications/subscribe/${registrationId}/`;
     const fetchOptions = {
         mode: "cors",
+        credentials: "include",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `JWT ${token}`,
         },
     };
     const response = await fetch(notificationsApiUrl, fetchOptions);
@@ -41,13 +40,13 @@ const fetchNotificationSubscription = async (registrationId) => {
 };
 
 const postNotificationSubscription = async (subscriptionData) => {
-    const token = getAuthenticationToken();
 
     const response = await fetch(`${BACKEND_BASE_URL}/notifications/subscribe/`, {
         mode: "cors",
+        credentials: "include",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `JWT ${token}`,
+            "X-CSRFToken": Cookies.get("csrftoken"),
         },
         method: "POST",
         body: JSON.stringify(subscriptionData),

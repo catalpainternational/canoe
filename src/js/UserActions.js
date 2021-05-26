@@ -22,7 +22,7 @@ const ACTION_TYPES= {
  */
 export function initialiseUserActions() {
     currentAuthenticatedState = isAuthenticated();
-    readFromStoreAndStartPolling()
+    return readFromStoreAndStartPolling()
         .then(() => {
             subscribeToStore(storeListener);
         });

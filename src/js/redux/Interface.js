@@ -83,6 +83,10 @@ export const getStoredPageCompletionDate = (pageId) => {
     const pageIdInt = parseInt(pageId);
     return completions ? completions[pageIdInt] : undefined;
 }
+export const userActionsReady = () => {
+    const state = store.getState()
+    return state.completions !== null && state.examScores != null;
+}
 //#endregion
 
 //#region ExamScores
@@ -135,6 +139,9 @@ export const setOffline = () => {
 //#endregion
 
 //#region Identity
+export const isAuthenticationDetected = () => {
+    return store.getState().identity.isAuthenticated !== undefined;
+};
 export const isAuthenticated = () => {
     return store.getState().identity.isAuthenticated;
 };
