@@ -12,7 +12,7 @@
             >
             <span>{ TRANSLATIONS.browserSupport() }</span>
         </audio>
-        <p class="error-message" if="{ !state.src }">
+        <p class="error-message" if="{ !asset().url }">
             { TRANSLATIONS.missing() }
         </p>
     </div>
