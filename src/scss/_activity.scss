@@ -173,6 +173,21 @@ ActivityPage {
             h4 {
                 margin-bottom: 0.7em;
             }
+
+            .tip-image-wrap {
+                width: calc(100% + 2em);
+                margin-left: -1em;
+                margin-top: -1em;
+                border-radius: 8px 8px 0 0;
+                overflow: hidden;
+                max-height: 200px;
+                margin-bottom: 1em;
+            }
+
+            .tip-card-image {
+                width: 100%;
+                object-fit: cover;
+            }
         }
 
         .card-shadow {
