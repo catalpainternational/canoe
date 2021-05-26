@@ -2,12 +2,12 @@
 	<div class="card-frame">
 		<div class="card-content">
 			<div if="{ cardImageUrl }" class="tip-image-wrap">
-                <img
-                    crossorigin="anonymous"
-                    src="{ cardImageUrl }"
-                    class="tip-card-image"
-                />
-            </div>
+				<img
+					crossorigin="anonymous"
+					src="{ cardImageUrl }"
+					class="tip-card-image"
+				/>
+			</div>
 			<h4>{props.card.title}</h4>
 			<p if="{props.card.data.description}">
 				{props.card.data.description}
@@ -32,14 +32,14 @@
             },
 
 			components: {
-                imagewrapper: ImageWrapper,
-            },
+				imagewrapper: ImageWrapper,
+			},
 
 			get cardImageUrl() {
-                return this.props && this.props.card.card_image
-                    ? `${process.env.API_BASE_URL}${this.props.card.card_image}`
-                    : undefined;
-            },
+				return this.props && this.props.card.card_image
+					? `${process.env.API_BASE_URL}${this.props.card.card_image}`
+					: undefined;
+			},
 
             viewAllTips() {
                 this.props.viewAllTips();
