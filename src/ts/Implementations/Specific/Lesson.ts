@@ -16,13 +16,6 @@ export default class Lesson extends Page {
         return this.storedData?.cards;
     }
 
-    /**
-     * a lesson needs its course to be ready
-     */
-    get ready(): boolean {
-        return super.ready && this.course.ready;
-    }
-
     /**  We store the responses to any test cards with its completion */
     get completionData(): Record<string, any> {
         const answers = getTestAnswers(this.id);
