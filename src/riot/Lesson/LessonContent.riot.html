@@ -99,21 +99,11 @@
             return {
                 state: {
                     showModal: false,
-                    returnTab: undefined,
                 },
 
                 TRANSLATIONS: {
                     next: () => gettext("Next"),
                     finish: () => gettext("Finish"),
-                },
-
-                onBeforeMount(props, state) {
-                    const tipTabs = ['plan', 'teach', 'extend'];
-                    const returnTab = this.route.riotHash[1];
-
-                    if (returnTab && tipTabs.includes(returnTab)) {
-                        this.state.returnTab = returnTab;
-                    }
                 },
 
                 get route() {
@@ -147,9 +137,21 @@
                         return this.lesson.cards[this.cardNumber - 1];
                     }
                 },
+                get returnTab() {
+                    const tipTabs = ['plan', 'teach', 'extend'];
+                    const returnTab = this.route.riotHash[1] === 'complete'
+                        ? this.route.riotHash[2]
+                        : this.route.riotHash[1];
+
+                    if (returnTab && tipTabs.includes(returnTab)) {
+                        return returnTab;
+                    } else {
+                        return undefined;
+                    }
+                },
                 get linkTo() {
-                    if (this.props && this.props.isTipsPage && this.state.returnTab) {
-                        return `${this.lesson.parent.loc_hash}:${this.state.returnTab}`;
+                    if (this.props && this.props.isTipsPage && this.returnTab) {
+                        return `${this.lesson.parent.loc_hash}:${this.returnTab}`;
                     }
                     return this.lesson.parent.loc_hash;
                 },
@@ -161,8 +163,8 @@
 
                 goBack() {
                     const prevCard = this.cards[this.cardNumber - 2];
-                    if (this.props && this.props.isTipsPage && this.state.returnTab) {
-                        location.hash = `${this.lesson.loc_hash}:${this.cardNumber - 1}:${this.state.returnTab}`;
+                    if (this.props && this.props.isTipsPage && this.returnTab) {
+                        location.hash = `${this.lesson.loc_hash}:${this.cardNumber - 1}:${this.returnTab}`;
                     } else {
                         location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber - 1}`;
                     }
@@ -170,8 +172,8 @@
 
                 nextCard() {
                     window.scroll(0, 0);
-                    if (this.props && this.props.isTipsPage && this.state.returnTab) {
-                        location.hash = `${this.lesson.loc_hash}:${this.cardNumber + 1}:${this.state.returnTab}`;
+                    if (this.props && this.props.isTipsPage && this.returnTab) {
+                        location.hash = `${this.lesson.loc_hash}:${this.cardNumber + 1}:${this.returnTab}`;
                     } else {
                         location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber + 1}`;
                     }
@@ -185,9 +187,9 @@
                     // clear the answers from memory so they do not show up next time
                     clearPageTestAnswers(this.lesson.id);
 
-                    if (this.props && this.props.isTipsPage && this.state.returnTab) {
+                    if (this.props && this.props.isTipsPage && this.returnTab) {
                         // we don't show feedback for tips
-                        location.hash = `${this.lesson.loc_hash}:content:complete`;
+                        location.hash = `${this.lesson.loc_hash}:content:complete:${this.returnTab}`;
                     } else {
                         location.hash = `${this.lesson.loc_hash}:content:feedback`;
                     }
