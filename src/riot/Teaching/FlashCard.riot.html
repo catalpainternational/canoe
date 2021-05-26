@@ -24,12 +24,12 @@
 		<div class="card-shadow"></div>
 	</div>
 
-    <script>
+	<script>
 		import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
-        export default {
-            TRANSLATIONS: {
-                viewAll: () => gettext("View all tips"),
-            },
+		export default {
+			TRANSLATIONS: {
+				viewAll: () => gettext("View all tips"),
+			},
 
 			components: {
 				imagewrapper: ImageWrapper,
@@ -41,9 +41,9 @@
 					: undefined;
 			},
 
-            viewAllTips() {
-                this.props.viewAllTips();
-            },
-        };
-    </script>
+			viewAllTips() {
+				this.props.viewAllTips();
+			},
+		};
+	</script>
 </FlashCard>

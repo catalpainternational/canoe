@@ -33,13 +33,13 @@
         import { getRoute } from "ReduxImpl/Interface";
 
         function TeachTab() { return {
-			TRANSLATIONS: {
-				setup: () => gettext("Setup"),
-				activity: () => gettext("Activity"),
-				wrap: () => gettext("Wrap up"),
-				extendKnowledge: () => gettext("Extend your knowledge"),
+            TRANSLATIONS: {
+                setup: () => gettext("Setup"),
+                activity: () => gettext("Activity"),
+                wrap: () => gettext("Wrap up"),
+                extendKnowledge: () => gettext("Extend your knowledge"),
                 viewTips: () => gettext("View all tips"),
-			},
+            },
 
             get route() {
                 return getRoute();
@@ -57,11 +57,11 @@
                 location.hash = `#${this.teachTips.loc_hash}:1:teach`;
             },
 
-			goToExtend() {
-				this.props.selectTab("extend");
-				window.scroll(0, 0);
-			},
-		}}
+            goToExtend() {
+                this.props.selectTab("extend");
+                window.scroll(0, 0);
+            },
+        }}
 
         TeachTab.components = {
             tabsection: TabSection,
