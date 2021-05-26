@@ -1,31 +1,9 @@
 <FlashCard>
 	<div class="card-frame">
 		<div class="card-content">
-			<h4>{props.title}</h4>
-			<TitleDescription
-	            if="{ props.card.tag === 'titleDescription' }"
-	            card="{ props.card }"
-	        />
-			<Raw if="{ props.card.tag === 'raw'}" html="{ props.card.content }" />
-	        <BasicCard if="{ props.card.tag === 'basic'}" card="{ props.card }" />
-	        <AudioCard
-	            if="{ props.card.media_type === 'audio' }"
-	            media="{ props.card }"
-	        />
-	        <VideoCard
-	            if="{ props.card.media_type === 'video' }"
-	            media="{ props.card }"
-	        />
-	        <QuoteCard if="{ props.card.tag === 'quote' }" card="{ props.card }" />
-	        <ListCard if="{ props.card.tag === 'list' }" card="{ props.card }" />
-	        <PdfCard if="{ props.card.tag === 'pdf' }" card="{ props.card }" />
-	        <Html5Card if="{ props.card.tag === 'html5' }" card="{ props.card }" />
-			<!-- <Test
-				if="{ isAQuestion() }"
-				toggleModal="{ toggleTestModal }">
-			</Test> -->
+			<h4>{props.card.title}</h4>
 
-			<button if="{ props.numberOfCards > 1 }" class="btn-primary" onclick="{viewAllTips}">
+			<button class="btn-primary" onclick="{viewAllTips}">
 				{ TRANSLATIONS.viewAll() }
 			</button>
 		</div>
@@ -34,32 +12,10 @@
 	</div>
 
     <script>
-		import Raw from "RiotTags/Components/Raw.riot.html";
-		import BasicCard from "RiotTags/Components/BasicCard.riot.html";
-		import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
-		import AudioCard from "RiotTags/Lesson/AudioCard.riot.html";
-		import QuoteCard from "RiotTags/Components/QuoteCard.riot.html";
-		import ListCard from "RiotTags/Lesson/ListCard.riot.html";
-		import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
-		import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
-		import TitleDescription from "RiotTags/Components/TitleDescription.riot.html";
-
         export default {
             TRANSLATIONS: {
                 viewAll: () => gettext("View all tips"),
             },
-
-			components: {
-				basiccard: BasicCard,
-	            quotecard: QuoteCard,
-	            listcard: ListCard,
-	            raw: Raw,
-				videocard: VideoCard,
-	            audiocard: AudioCard,
-	            pdfcard: PdfCard,
-	            html5card: Html5Card,
-	            titledescription: TitleDescription,
-			},
 
 			onBeforeMount() {
 				console.log(this.props.card)

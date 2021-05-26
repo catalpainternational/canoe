@@ -19,10 +19,8 @@
     ></TabSection>
 
     <FlashCard
-        if="{state.flashCards.length}"
-        title="{teachTips.title}"
-        card="{state.flashCards[0]}"
-        numberOfCards="{state.flashCards.length}"
+        if="{teachTips}"
+        card="{teachTips}"
         viewAllTips="{openTips}"
     ></FlashCard>
 
@@ -35,10 +33,6 @@
         import { getRoute } from "ReduxImpl/Interface";
 
         function TeachTab() { return {
-            state: {
-                flashCards: [],
-            },
-
 			TRANSLATIONS: {
 				setup: () => gettext("Setup"),
 				activity: () => gettext("Activity"),
@@ -46,16 +40,6 @@
 				extendKnowledge: () => gettext("Extend your knowledge"),
                 viewTips: () => gettext("View all tips"),
 			},
-
-            onBeforeMount() {
-                if (this.props && this.props.getTipCards) {
-                    this.props.getTipCards(this.teachTips.api_url)
-                        .then((response) => {
-                            this.update({ flashCards: response.cards })
-                            return response.cards ? response.cards : [];
-                        });
-                }
-            },
 
             get route() {
                 return getRoute();

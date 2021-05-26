@@ -19,10 +19,8 @@
     ></TabSection>
 
     <FlashCard
-        if="{state.flashCards.length}"
-        title="{planTips.title}"
-        card="{state.flashCards[0]}"
-        numberOfCards="{state.flashCards.length}"
+        if="{planTips}"
+        card="{planTips}"
         viewAllTips="{openTips}"
     ></FlashCard>
 
@@ -35,25 +33,11 @@
         import { getRoute } from "ReduxImpl/Interface";
 
         function PlanTab() { return {
-            state: {
-                flashCards: [],
-            },
-
             TRANSLATIONS: {
                 learningOutcomes: () => gettext("Learning outcomes"),
                 overview: () => gettext("Overview"),
                 preparation: () => gettext("Preparation tasks & materials"),
                 ready: () => gettext("Ready to teach"),
-            },
-
-            onBeforeMount() {
-                if (this.props && this.props.getTipCards) {
-                    this.props.getTipCards(this.planTips.api_url)
-                        .then((response) => {
-                            this.update({ flashCards: response.cards })
-                            return response.cards ? response.cards : [];
-                        });
-                }
             },
 
             get route() {
