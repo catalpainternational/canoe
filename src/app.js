@@ -15,8 +15,6 @@ import { initialiseBrowserSupport } from "js/BrowserSupport"
 // set things we can detect immeditely before riot mounts
 initialiseOnlineStatus(window);
 initialiseBrowserSupport();
-initialiseRouting();
-initialiseUserActions();
 
 // Mount the riot UI to show the loader ASAP
 riot.install(function (component) {
