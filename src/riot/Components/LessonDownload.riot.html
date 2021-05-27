@@ -1,14 +1,29 @@
-<LessonDownload class="download-block">
-    <p class="lesson-number">{props.itemIndex + 1}</p>
-    <p class="title">{props.contentItem.title}</p>
-    <div class="download-state" onclick="{toggleCached}">
-        <span if="{state.cached}" class="download-complete">
-            <span class="icon"></span>
-        </span>
-        <span if="{!state.cached}" class="{state.loading ? 'loading' : ''}">
-            <span class="download"></span>
-        </span>
-    </div>
+<LessonDownload class="{ props.iconOnly ? '' : 'download-block' }">
+    <template if="{!props.iconOnly}">
+        <p class="lesson-number">{props.itemIndex + 1}</p>
+        <p class="title">{props.contentItem.title}</p>
+        <div class="download-state" onclick="{toggleCached}">
+            <span if="{state.cached}" class="download-complete">
+                <span class="icon"></span>
+            </span>
+            <span if="{!state.cached}" class="{state.loading ? 'loading' : ''}">
+                <span class="download"></span>
+            </span>
+        </div>
+    </template>
+
+    <template if="{props.iconOnly}">
+        <div onclick="{ toggleCached }" class="download-button">
+            <template if="{ state.cached }">
+                <span class="download"></span>
+                <p>{ TRANSLATIONS.downloaded() }</p>
+            </template>
+            <template if="{ !state.cached }">
+                <span class="download gray"></span>
+                <p>{ TRANSLATIONS.make() }</p>
+            </template>
+        </div>
+    </template>
 
     <script>
         export default {
@@ -19,6 +34,8 @@
 
             TRANSLATIONS: {
                 issue: () => gettext("There was a problem downloading the content"),
+                make: () => gettext("Make offline"),
+                downloaded: () => gettext("Downloaded"),
             },
 
             onMounted(props, state) {

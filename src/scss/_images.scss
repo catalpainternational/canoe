@@ -267,6 +267,10 @@
     width: 22px;
     margin-left: -2px;
     margin-top: -2px;
+
+    &.gray {
+        background: $gray-1;
+    }
 }
 
 .expand-arrows {
