@@ -1,10 +1,10 @@
 <LessonContent>
     <LessonFrame
-        if="{ cardNumber <= cards.length }"
+        if="{ card && cardNumber <= cards.length }"
         extraStyleClasses="{ isAQuestion() ? 'test' : 'content' }"
         progressValue="{ cardNumber }"
         progressMax="{ cards.length }"
-        linkTo="{ lesson.course.loc_hash }"
+        linkTo="{ linkTo }"
     >
         <TitleDescription
             if="{ card.tag === 'titleDescription' }"
@@ -30,7 +30,7 @@
         </Test>
     </LessonFrame>
     <div
-        if="{ cardNumber <= cards.length }"
+        if="{ card && cardNumber <= cards.length }"
         class="bottom-buttons"
     >
         <div>
@@ -67,11 +67,13 @@
     />
     <LessonFeedback
         if="{ !cardNumber && stage == 'feedback' }"
-        lessonId="{ lesson.id }"
-        courseId="{ lesson.course.id }"
+        linkTo="{ linkTo }"
     ></LessonFeedback>
+
     <LessonComplete
         if="{ !cardNumber && stage == 'complete' }"
+        isTipsPage="{ props.isTipsPage }"
+        linkTo="{ linkTo }"
     ></LessonComplete>
 
     <script>
@@ -103,21 +105,57 @@
                     next: () => gettext("Next"),
                     finish: () => gettext("Finish"),
                 },
+
+                get route() {
+                    return getRoute();
+                },
                 get lesson() {
-                    return getRoute().page;
+                    return this.route.page;
                 },
                 get stage() {
-                    return getRoute().riotHash[1];
+                    const hashAtZero = this.route.riotHash[0];
+                    const hashAtOne = this.route.riotHash[1];
+
+                    if (this.props && this.props.isTipsPage) {
+                        if (hashAtOne === 'feedback' || hashAtOne === 'complete') return hashAtOne;
+                        return hashAtZero;
+                    }
+                    return hashAtOne;
                 },
                 get cardNumber() {
                     return parseInt(this.stage);
                 },
                 get cards() {
-                    return this.lesson.cards;
+                    return this.lesson.cards || this.lesson.data.cards;
                 },
                 get card() {
-                    return this.lesson.cards[this.cardNumber - 1];
+                    if (isNaN(this.cardNumber)) return {};
+
+                    if (this.props && this.props.isTipsPage) {
+                        if (this.lesson.data.cards) return this.lesson.data.cards[this.cardNumber - 1];
+                    } else {
+                        return this.lesson.cards[this.cardNumber - 1];
+                    }
                 },
+                get returnTab() {
+                    const tipTabs = ['plan', 'teach', 'extend'];
+                    const returnTab = this.route.riotHash[1] === 'complete'
+                        ? this.route.riotHash[2]
+                        : this.route.riotHash[1];
+
+                    if (returnTab && tipTabs.includes(returnTab)) {
+                        return returnTab;
+                    } else {
+                        return undefined;
+                    }
+                },
+                get linkTo() {
+                    if (this.props && this.props.isTipsPage && this.returnTab) {
+                        return `${this.lesson.parent.loc_hash}:${this.returnTab}`;
+                    }
+                    return this.lesson.parent.loc_hash;
+                },
+
                 isAQuestion() {
                     const r =  this.card.tag.includes('choose');
                     return r;
@@ -125,12 +163,20 @@
 
                 goBack() {
                     const prevCard = this.cards[this.cardNumber - 2];
-                    location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber - 1}`;
+                    if (this.props && this.props.isTipsPage && this.returnTab) {
+                        location.hash = `${this.lesson.loc_hash}:${this.cardNumber - 1}:${this.returnTab}`;
+                    } else {
+                        location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber - 1}`;
+                    }
                 },
 
                 nextCard() {
                     window.scroll(0, 0);
-                    location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber + 1}`;
+                    if (this.props && this.props.isTipsPage && this.returnTab) {
+                        location.hash = `${this.lesson.loc_hash}:${this.cardNumber + 1}:${this.returnTab}`;
+                    } else {
+                        location.hash = `${this.lesson.loc_hash}:content:${this.cardNumber + 1}`;
+                    }
                 },
 
                 completeLesson() {
@@ -141,7 +187,12 @@
                     // clear the answers from memory so they do not show up next time
                     clearPageTestAnswers(this.lesson.id);
 
-                    location.hash = `${this.lesson.loc_hash}:content:feedback`;
+                    if (this.props && this.props.isTipsPage && this.returnTab) {
+                        // we don't show feedback for tips
+                        location.hash = `${this.lesson.loc_hash}:content:complete:${this.returnTab}`;
+                    } else {
+                        location.hash = `${this.lesson.loc_hash}:content:feedback`;
+                    }
                 },
 
                 toggleTestModal(showModal) {

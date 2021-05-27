@@ -2,31 +2,31 @@
     <template if="{state.status !== 'feedback'}">
         <TopMenu
             extrastyleclasses="with-swoop"
-            backgroundImage="{getCardImage(page.loc_hash, page.cardImage)}"
+            backgroundImage="{getCardImage(activity.loc_hash, activity.cardImage)}"
         >
-            <a class="has-circle top-icon left" href="#{page.topic.loc_hash}">
+            <a class="has-circle top-icon left" href="#{activity.topic.loc_hash}">
                 <span class="arrow"></span>
             </a>
         </TopMenu>
         <div class="content-wrapper">
             <div class="topic-and-details">
-                <h5>{ page.topic.title }</h5>
-                <p if="{ page.curriculum }" class="reference">
-                    { page.curriculum }
+                <h5>{ activity.topic.title }</h5>
+                <p if="{ activity.curriculum }" class="reference">
+                    { activity.curriculum }
                 </p>
             </div>
             <div class="title-description">
-                <h3>{ page.title }</h3>
-                <p if="{ page.ready }">{ page.description }</p>
+                <h3>{ activity.title }</h3>
+                <p if="{ activity.ready }">{ activity.description }</p>
                 <button
-                    if="{ !page.complete }"
+                    if="{ !activity.complete }"
                     class="btn-secondary"
                     onclick="{ setComplete }"
                 >
                     { TRANSLATIONS.markComplete() }
                 </button>
                 <button
-                    if="{ page.complete }"
+                    if="{ activity.complete }"
                     class="btn-primary"
                     onclick="{ setIncomplete }"
                 >
@@ -37,37 +37,39 @@
             <div class="activity-swoop">
                 <div class="tab-titles">
                     <a
-                        class="{state.selectedTab === 'plan' ? 'selected' : ''}"
+                        class="{selectedTab === 'plan' ? 'selected' : ''}"
                         onclick="{() => selectTab('plan')}"
                     >
                         <h5 class="section-title">{ TRANSLATIONS.plan() }</h5>
                     </a>
                     <a
-                        class="{state.selectedTab === 'teach' ? 'selected' : ''}"
+                        class="{selectedTab === 'teach' ? 'selected' : ''}"
                         onclick="{() => selectTab('teach')}"
                     >
                         <h5 class="section-title">{ TRANSLATIONS.teach() }</h5>
                     </a>
                     <a
-                        class="{state.selectedTab === 'extend' ? 'selected' : ''}"
+                        class="{selectedTab === 'extend' ? 'selected' : ''}"
                         onclick="{() => selectTab('extend')}"
                     >
                         <h5 class="section-title">{ TRANSLATIONS.extend() }</h5>
                     </a>
                 </div>
-                <template if="{ page.ready }">
+                <template if="{ activity.ready }">
                     <PlanTab
-                        if="{state.selectedTab === 'plan'}"
+                        if="{selectedTab === 'plan'}"
                         selectTab="{selectTab}"
+                        getTipCards="{getTipCards}"
                     >
                     </PlanTab>
                     <TeachTab
-                        if="{state.selectedTab === 'teach'}"
+                        if="{selectedTab === 'teach'}"
                         selectTab="{selectTab}"
+                        getTipCards="{getTipCards}"
                     >
                     </TeachTab>
                     <ExtendTab
-                        if="{state.selectedTab === 'extend'}"
+                        if="{selectedTab === 'extend'}"
                     ></ExtendTab>
                 </template>
             </div>
@@ -89,12 +91,7 @@
 
         function ActivityPage() { return {
             state: {
-                selectedTab: "plan",
                 status: "content",
-            },
-
-            onBeforeMount(props, state) {
-                this.page = getRoute().page;
             },
 
             TRANSLATIONS: {
@@ -105,21 +102,47 @@
                 extend: () => gettext("extend"),
             },
 
+            get route() {
+                return getRoute();
+            },
+
+            get activity() {
+                return this.route.page;
+            },
+
+            get selectedTab() {
+                const t = this.route.riotHash[0];
+
+                if (t) {
+                    return t;
+                } else {
+                    return 'plan';
+                }
+            },
+
+            selectTab(tabName) {
+                const currentTab = this.route.riotHash[0];
+
+                if (currentTab) {
+                    location.hash = location.hash.replace(
+                        `:${currentTab}`, `:${tabName}`
+                    );
+                } else {
+                    location.hash = `${location.hash}:${tabName}`;
+                }
+            },
+
             getCardImage(link, cardImage) {
                 return getCardImageUrl(link, cardImage);
             },
 
-            selectTab(tabName) {
-                this.update({ selectedTab: tabName });
-            },
-
             setComplete() {
-                this.page.complete = true;
+                this.activity.complete = true;
                 this.updateActivity("feedback");
             },
 
             setIncomplete() {
-                this.page.complete = false;
+                this.activity.complete = false;
             },
 
             updateActivity(status) {

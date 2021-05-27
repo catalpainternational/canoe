@@ -7,10 +7,10 @@ export default class Lesson extends Page {
         return this.parent as Course;
     }
     get shortDescription(): string {
-        return this.storedData?.description;
+        return this.manifestData.data?.description;
     }
     get longDescription(): string {
-        return this.storedData?.long_description;
+        return this.manifestData.data?.long_description;
     }
     get cards(): any {
         return this.storedData?.cards;
