@@ -1,3 +1,10 @@
 <LoadingDots>
     <div class="loader {props.extrastyleclasses}"></div>
+    <p if="{ props.message }">{ props.message }</p>
+    <style>
+        p {
+            width: fit-content;
+            margin: auto;
+        }
+    </style>
 </LoadingDots>

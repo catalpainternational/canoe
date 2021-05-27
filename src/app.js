@@ -11,18 +11,29 @@ import { initialiseUserActions } from "js/UserActions";
 import { initialiseRouting } from "js/Routing"
 import { initialiseBrowserSupport } from "js/BrowserSupport"
 
-initialiseIdentity();
+// Synchronous initialization
+// set things we can detect immeditely before riot mounts
 initialiseOnlineStatus(window);
 initialiseBrowserSupport();
-initialiseRouting();
-initialiseUserActions();
-// InitialiseCertChain is done after login or valid initialiseIdentity with a token
 
+// Mount the riot UI to show the loader ASAP
 riot.install(function (component) {
     // all components will pass through here
     installTranslationPlugin(component);
     installReduxPlugin(component);
 });
-
 riot.register("app", App);
-riot.mount("app");
+const mounted = riot.mount("app");
+
+// Asynchronous initialization
+// Initialise things that require network calls or async ops
+initialiseIdentity()  // Am I logged in
+    .then(() => {
+        // perform independent actions that require login in parallel
+        return Promise.all([
+            initialiseUserActions(), // read actiion from api and idb
+            // initialiseCertChain(),   // initialise the appelflap sharing cert
+        ]);
+    }).then(() => {
+        initialiseRouting();         // react to the navigation hash
+    });

@@ -1,7 +1,6 @@
 import { IPublishableItem } from "../Interfaces/PublishableItemInterfaces";
 
 // See ts/Typings for the type definitions for these imports
-import { getAuthenticationToken } from "js/AuthenticationUtilities";
 import { BACKEND_BASE_URL } from "js/urls";
 
 /** A collection of utility methods for working with manifest, pages and assets in the cache */
@@ -26,10 +25,6 @@ const BuildRequestObject = (item: IPublishableItem): Request => {
     const headers: any = {
         "Content-Type": item.contentType,
     };
-    const token = getAuthenticationToken();
-    if (token) {
-        headers["Authorization"] = `JWT ${token}`;
-    }
     // Migrate any headers we want from the previous response
     for (const [key, value] of Object.entries(item.respHeaders)) {
         switch (key.toLowerCase()) {

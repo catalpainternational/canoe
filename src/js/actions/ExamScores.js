@@ -17,7 +17,7 @@ const logger = new Logger("Exam Scores");
  * Clear the in memory store of exam scores - for use on logout
  */
 export const clearStateExamData = () => {
-    clearExamStore();
+    clearExamScores();
 };
 
 /**
@@ -31,9 +31,7 @@ export async function readExamDataIntoState() {
         logger.warn("Error in reading exam data from idb %o", e);
     }
     const scoresToStore = scores.filter((a) => a.pageId);
-    if (scoresToStore.length) {
-        storeExamScores(scoresToStore);
-    }
+    storeExamScores(scoresToStore);
 }
 
 /**

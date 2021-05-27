@@ -6,8 +6,10 @@ const UNAUTHENTICATED = "identity/setUnAuthed";
 export const setAuthenticatedState = (user) => ({ type: AUTHENTICATED, user: user });
 export const setUnAuthenticatedState = () => ({ type: UNAUTHENTICATED});
 
+const INITIAL_STATE = {isAuthenticated: undefined, user: undefined};
+
 // REDUCER
-const identity = (state = "", action) => {
+const identity = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case AUTHENTICATED:
             return {isAuthenticated: true, user: action.user};

@@ -20,7 +20,6 @@ import {
 import { getBrowser } from "../PlatformDetection";
 
 // See ts/Typings for the type definitions for these imports
-import { BACKEND_BASE_URL } from "js/urls";
 
 /** This is a subjective in-order list of the above rendition IDs
  * Its intended use is to be intersected with an array of available renditions
@@ -100,9 +99,6 @@ export class Asset extends PublishableItem {
     get requestOptions(): RequestInit {
         return {
             cache: "force-cache", // assets are (almost always) invariant on filename
-            method: "GET",
-            mode: "cors",
-            referrer: BACKEND_BASE_URL,
         } as RequestInit;
     }
 
@@ -272,9 +268,13 @@ export class Asset extends PublishableItem {
         return this.#page.manifest.storedData?.videometa[this.id];
     }
     get thumbnail(): string {
-        return `${process.env.API_BASE_URL}/${this.metadata.thumbnail}`;
+        return this.metadata && this.metadata.thumbnail
+            ? `${process.env.API_BASE_URL}/${this.metadata.thumbnail}`
+            : "";
     }
     get duration(): number {
-        return this.metadata.duration;
+        return this.metadata && this.metadata.duration
+            ? this.metadata.duration
+            : 0;
     }
 }
