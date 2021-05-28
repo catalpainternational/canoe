@@ -6,13 +6,13 @@
         </h4>
         <div class="cards-list">
             <template each="{ card in props.section }">
-                <BasicCard if="{card.tag === 'basic'}" card="{card}"></BasicCard>
-                <ListCard if="{card.tag === 'list'}" card="{card}"></ListCard>
-                <AudioCard if="{card.tag === 'audio'}" media="{card}"></AudioCard>
-                <VideoCard if="{card.tag === 'video'}" media="{card}"></VideoCard>
-                <Html5Card if="{card.tag === 'html5'}" card="{card}"></Html5Card>
-                <PdfCard if="{card.tag === 'pdf'}" card="{card}"></PdfCard>
-                <Raw if="{card.tag === 'raw'}" html="{card.content}"></Raw>
+                <BasicCard if="{ card.tag === 'basic' }" card="{ card }"></BasicCard>
+                <ListCard if="{ card.tag === 'list' }" card="{ card }"></ListCard>
+                <AudioCard if="{ card.tag === 'media' && card.media_type === 'audio' }" media="{ card }"></AudioCard>
+                <VideoCard if="{ card.tag === 'media' && card.media_type === 'video' }" media="{ card }"></VideoCard>
+                <Html5Card if="{ card.tag === 'html5' }" card="{ card }"></Html5Card>
+                <PdfCard if="{ card.tag === 'pdf' }" card="{ card }"></PdfCard>
+                <Raw if="{ card.tag === 'raw' }" card="{ card }"></Raw>
             </template>
         </div>
     </div>
@@ -35,6 +35,9 @@
                 html5card: Html5Card,
                 raw: Raw
             },
+			onBeforeMount(props, state) {
+                console.log(props);
+			},
         };
     </script>
 </TabSection>
