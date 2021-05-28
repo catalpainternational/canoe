@@ -3,7 +3,7 @@
         <span class="{ isQuestionComplete ? 'correct-checkmark' : 'incorrect-cross'}"></span>
         <h3>{ isQuestionComplete ? correctTitleMessage : incorrectTitleMessage }</h3>
         <div>
-            <p>{ isQuestionComplete ? correctTextMessage : incorrectTextMessage }</p>
+            <p class="scrollable">{ isQuestionComplete ? correctTextMessage : incorrectTextMessage }</p>
         </div>
         <button
             if="{isQuestionComplete && !isLastQuestion}"

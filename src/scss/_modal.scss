@@ -73,6 +73,11 @@
             margin-left: 0.4em;
         }
     }
+
+    .scrollable {
+        max-height: 35vh;
+        overflow: scroll;
+    }
 }
 
 @keyframes slideDown {
