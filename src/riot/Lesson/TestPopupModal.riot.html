@@ -2,8 +2,8 @@
     <PopupModal>
         <span class="{ isQuestionComplete ? 'correct-checkmark' : 'incorrect-cross'}"></span>
         <h3>{ isQuestionComplete ? correctTitleMessage : incorrectTitleMessage }</h3>
-        <div>
-            <p class="scrollable">{ isQuestionComplete ? correctTextMessage : incorrectTextMessage }</p>
+        <div class="scrollable">
+            <p>{ isQuestionComplete ? correctTextMessage : incorrectTextMessage }</p>
         </div>
         <button
             if="{isQuestionComplete && !isLastQuestion}"
