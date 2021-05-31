@@ -11,6 +11,7 @@
         <div class="extra-button-space">
             <a onclick="{toggleLoginHelpModal}" tabindex="0">{ TRANSLATIONS.forgot() }</a>
         </div>
+        <Logos></Logos>
     </div>
 
     <PopupModal if="{state.showLoginHelpModal}" toggleModal="{toggleLoginHelpModal}">
@@ -24,6 +25,7 @@
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
         import ContactInformation from "RiotTags/Components/ContactInformation.riot.html";
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+        import Logos from "riot/Components/Logos.riot.html";
 
         import { login } from "js/AuthenticationUtilities";
         import { getRoute } from "ReduxImpl/Interface";
@@ -38,6 +40,7 @@
                 contactinformation: ContactInformation,
                 loginform: LoginForm,
                 topmenu: TopMenu,
+                logos: Logos,
             },
 
             TRANSLATIONS: {
