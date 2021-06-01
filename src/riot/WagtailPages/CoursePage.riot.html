@@ -91,7 +91,7 @@
                 </template>
             </template>
 
-            <template if="{state.selectedTab === 'discussion' && navigator.onLine}">
+            <template if="{state.selectedTab === 'discussion' && state.isOnline}">
                 <div if="{!state.courseHasDiscussions}" class="empty-state">
                 </div>
                 <template if="{state.selectedDiscussionId === null && state.courseHasDiscussions}">
@@ -112,7 +112,7 @@
                 </template>
             </template>
 
-            <template if="{state.selectedTab === 'discussion' && !navigator.onLine}">
+            <template if="{state.selectedTab === 'discussion' && !state.isOnline}">
                 <div class="card full-width">
                     <div class="message-container">
                         <span class="offline-hand"></span>
@@ -159,6 +159,7 @@
                 selectedDiscussionId: null,
                 selectedDiscussion: {},
                 selectedDiscussionLesson: {},
+                isOnline: true,
             },
 
             TRANSLATIONS: {
@@ -336,6 +337,14 @@
                     return "disabled";
                 } else {
                     return "not-started";
+                }
+            },
+
+            storeListener(previousStoreState, storeState) {
+                if (previousStoreState.online !== storeState.online) {
+                    this.update({
+                        isOnline: storeState.online,
+                    });
                 }
             },
         }};
