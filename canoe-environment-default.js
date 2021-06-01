@@ -3,7 +3,8 @@
 
 module.exports = {
     GA_TAG: false,
-    API_BASE_URL: "http://127.0.0.1:8000",
+    // To do local testing with Appelflap, API_BASE_URL MUST be "http://localhost:8080"
+    API_BASE_URL: "http://localhost:8000",
     SKIP_SW: false,
     DONT_SHOW_COMPLETIONS_AFTER: "2020-2-15",
     APPLICATION_SERVER_KEY: "",
