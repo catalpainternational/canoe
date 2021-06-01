@@ -16,12 +16,12 @@ Profile {
 
     a {
         width: 50%;
-        border-bottom: 2px solid $gray-7;
+        border-bottom: 2px solid $gray-6;
 
         h5.section-title {
             font-weight: 300;
             font-size: 0.8em;
-            color: $gray-4;
+            color: $gray-1;
             letter-spacing: 1px;
             justify-content: center;
             text-align: center;
@@ -31,7 +31,6 @@ Profile {
             border-bottom: 3px solid $app-accent-color;
 
             h5.section-title {
-                color: $gray-1;
                 font-weight: 500;
             }
         }
