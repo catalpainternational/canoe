@@ -94,6 +94,10 @@
     @include mask-icons-shared("~img/checkmark.svg", contain, $app-accent-color);
     height: 16px;
     width: 20px;
+
+    &.teal {
+        background: $teal;
+    }
 }
 
 .cross {

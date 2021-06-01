@@ -47,17 +47,9 @@ DiscussionReply {
     .card {
         max-width: $tablet;
         height: auto;
-        margin: 0 auto;
+        margin: 1em auto 0;
         padding: 23px 18px;
         box-sizing: border-box;
-
-        &:first-of-type {
-            margin-top: 5px;
-        }
-
-        & + .card {
-            margin-top: 1em;
-        }
 
         h2 {
             margin: 0;
@@ -102,13 +94,19 @@ DiscussionReply {
         &.is-filled {
             label {
                 font-size: 0.7em;
-                top: 6%;
+                background-color: $white;
+                box-sizing: border-box;
+                width: 96%;
+                top: 0;
+                left: 3px;
+                padding-top: 2px;
+                border-radius: 3px;
+                box-shadow: inset 0 2px 3px 0 rgb(42 57 66 / 10%);
             }
         }
     }
 
     .btn-primary {
-        width: 80%;
         margin: 0 auto 1em;
         display: block;
     }
@@ -174,6 +172,7 @@ DiscussionThread {
         h2 {
             font-weight: 300;
             font-size: 1.2em;
+            margin-bottom: unset;
         }
     }
 
@@ -292,26 +291,30 @@ DiscussionReply {
         position: absolute;
         top: 5px;
         right: 5px;
-        width: 13px;
-        height: 13px;
-        border: 1px solid $gray-5;
+        width: 14px;
+        height: 14px;
+        border: 2px solid $gray-5;
         color: $gray-5;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1em;
-        line-height: 0.7em;
+        font-weight: 700;
     }
 
     .meta {
-        display: flex;
-        gap: 8px;
-        align-items: baseline;
-
         p {
             font-size: 0.9em;
             margin: 0;
+        }
+
+        a {
+            text-transform: capitalize;
+        }
+
+        span {
+            margin-left: 8px;
         }
     }
 
@@ -339,6 +342,7 @@ DiscussionReply {
 
     .reply-container {
         grid-column: 1 / span 2;
+        padding-top: 1em;
 
         .form-group {
             margin: 0 0 20px;
@@ -370,8 +374,7 @@ DiscussionReply {
 #toast-message {
     visibility: hidden;
     box-shadow: 0 5px 10px 0 rgba(42, 57, 66, 0.2);
-    background-color: $gray-8;
-    color: $gray-3;
+    background-color: $white;
     border-radius: 5px;
     padding: 0.5em 1em;
     position: fixed;
@@ -389,6 +392,10 @@ DiscussionReply {
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2s;
     animation: fadein 0.5s, fadeout 0.5s 2s;
 
+    p {
+        color: $gray-0;
+    }
+
     &.show {
         visibility: visible;
         -webkit-animation: fadein 0.5s, fadeout 0.5s 2s;
@@ -396,6 +403,7 @@ DiscussionReply {
     }
 
     & > .checkmark {
-        background-color: $green;
+        width: 17px;
+        height: 12px;
     }
 }

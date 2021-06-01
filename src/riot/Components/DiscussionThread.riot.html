@@ -67,7 +67,7 @@
     </template>
 
     <div id="toast-message">
-        <span if="{state.successfulToast}" class="checkmark"></span>
+        <span if="{state.successfulToast}" class="checkmark teal"></span>
         <span if="{!state.successfulToast}" class="cross red"></span>
         <p>{state.toastMessage}</p>
     <div>
@@ -263,7 +263,7 @@
                         newCommentEl.className = 'recent';
                         setTimeout(function () {
                             newCommentEl.className = '';
-                        }, 6000)
+                        }, 6000);
                     }
                 },
 
