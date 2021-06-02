@@ -52,7 +52,7 @@ export default class Course extends Page {
         if (this.examIsPrelearning && score !== undefined) {
             return true;
         } else {
-            return score !== undefined && score > this.minimumExamScore / 100;
+            return score !== undefined && score > this.minimumExamScoreDecimal;
         }
     }
 
@@ -144,15 +144,19 @@ export default class Course extends Page {
                     return [uuid, answer.current];
                 })
             ),
-            passed: score >= this.minimumExamScore / 100,
+            passed: score >= this.minimumExamScoreDecimal,
             score,
             correctAnswers,
-            passScore: this.minimumExamScore / 100,
+            passScore: this.minimumExamScoreDecimal,
         };
     }
 
-    get minimumExamScore(): number {
-        return this.manifestData.data?.exam_pass_score;
+    get minimumExamScoreDecimal(): number {
+        return this.storedData.exam_pass_score / 100;
+    }
+
+    get minimumExamScorePercentage(): number {
+        return this.storedData.exam_pass_score;
     }
 
     /** the data to show in a progress bar for a course includes
