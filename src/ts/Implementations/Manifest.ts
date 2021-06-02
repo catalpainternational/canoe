@@ -51,6 +51,7 @@ export class Manifest extends PublishableItem implements StorableItem {
      */
     get requestOptions(): RequestInit {
         const reqInit: any = {
+            credentials: "include",
             cache: "default", // manifest can be returned from cache ( has conditional handling )
         };
 
