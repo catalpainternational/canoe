@@ -9,8 +9,6 @@ import { persistExamScore } from "js/actions/ExamScores";
 import Lesson from "./Lesson";
 import Answer from "../Answer";
 
-const EXAM_PASS_SCORE = 0.75;
-
 export default class Course extends Page {
     get discussions(): any {
         return this.storedData?.lessons.map((lesson: any) => ({
@@ -54,7 +52,7 @@ export default class Course extends Page {
         if (this.examIsPrelearning && score !== undefined) {
             return true;
         } else {
-            return score !== undefined && score > EXAM_PASS_SCORE;
+            return score !== undefined && score > this.minimumExamScore / 100;
         }
     }
 
@@ -146,15 +144,15 @@ export default class Course extends Page {
                     return [uuid, answer.current];
                 })
             ),
-            passed: score >= EXAM_PASS_SCORE,
+            passed: score >= this.minimumExamScore / 100,
             score,
             correctAnswers,
-            passScore: EXAM_PASS_SCORE,
+            passScore: this.minimumExamScore / 100,
         };
     }
 
     get minimumExamScore(): number {
-        return Math.ceil(EXAM_PASS_SCORE * 100);
+        return this.manifestData.data?.exam_pass_score;
     }
 
     /** the data to show in a progress bar for a course includes
