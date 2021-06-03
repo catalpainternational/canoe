@@ -197,6 +197,13 @@
     width: 100%;
 }
 
+.site-error {
+    @include unmaskable-icons-shared("~img/error.png", contain);
+    height: 160px;
+    width: 100%;
+    display: block;
+}
+
 .tip-completion {
     @include unmaskable-icons-shared("~img/tip_completion.png", contain);
     height: 160px;
