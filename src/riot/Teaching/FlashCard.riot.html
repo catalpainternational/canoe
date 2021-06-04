@@ -36,7 +36,7 @@
 			},
 
 			get cardImageUrl() {
-				return this.props && this.props.card.card_image
+				return this.props && this.props.card && this.props.card.card_image
 					? `${process.env.API_BASE_URL}${this.props.card.card_image}`
 					: undefined;
 			},
