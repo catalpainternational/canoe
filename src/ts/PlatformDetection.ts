@@ -33,7 +33,7 @@ export function getBrowser(): TBrowser {
         M.splice(1, 1, tem[1]);
     }
 
-    if (navigator.userAgent.startsWith("io.catalpa.canoe.")) {
+    if (inAppelflap()) {
         M = ["Firefox", 1000];
     }
 
@@ -44,7 +44,9 @@ export function getBrowser(): TBrowser {
 }
 
 export function inAppelflap(): boolean {
-    return navigator.userAgent.startsWith("io.catalpa.canoe.");
+    const hasCanoe = navigator.userAgent.startsWith("io.catalpa.canoe");
+    const hasBero = navigator.userAgent.startsWith("io.catalpa.bero");
+    return hasCanoe || hasBero;
 }
 
 function inPWAMode(): boolean {
