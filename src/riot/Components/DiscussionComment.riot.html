@@ -4,9 +4,11 @@
     </UserAvatar>
     <div class="comment-block">
         <div class="meta">
-            <a>{props.comment.user_first_name} {props.comment.user_last_name}</a>
-            <p>&middot;</p>
-            <p>{state.elapsedTime}</p>
+            <p>
+                <a>{props.comment.user_first_name} {props.comment.user_last_name}</a>
+                <span>&middot;</span>
+                <span>{state.elapsedTime}</span>
+            </p>
         </div>
         <p class="comment">
             {props.comment.comment}

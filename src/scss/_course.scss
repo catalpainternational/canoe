@@ -152,4 +152,20 @@ Resources {
           100% { transform: rotate(360deg); }
         }
     }
+
+    .download-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        height: 100%;
+
+        p {
+            font-size: 0.5em;
+            text-align: center;
+            text-transform: uppercase;
+            color: $gray-4;
+        }
+    }
 }

@@ -73,6 +73,7 @@ export class Page extends PublishableItem implements StorableItem {
      */
     get requestOptions(): RequestInit {
         const reqInit: any = {
+            credentials: "include",
             cache: "force-cache", // pages have version query params we can rely on the cache
         };
         return reqInit as RequestInit;

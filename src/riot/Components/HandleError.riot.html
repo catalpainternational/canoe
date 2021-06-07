@@ -1,9 +1,16 @@
 <HandleError>
     <div class="error">
+        <span class="site-error"></span>
         <h2>{ TRANSLATIONS.title() }</h2>
         <p>
             { message }
         </p>
+        <template if="{error.errorType === 'no_manifest'}">
+            <button onclick="{refresh}" class="btn-primary">{ TRANSLATIONS.refresh() }</button>
+        </template>
+        <template if="{error.errorType === 'not_found'}">
+            <button onclick="{goHome}" class="btn-primary">{ TRANSLATIONS.go_home() }</button>
+        </template>
     </div>
 
     <script>
@@ -12,9 +19,11 @@
         export default {
             TRANSLATIONS: {
                 title: () => gettext("Whoops! Something has gone wrong"),
-                no_manifest: () => gettext("Sorry, we cannot retrieve site content."),
+                no_manifest: () => gettext("We're having trouble fetching what you need right now, try refreshing this page."),
                 not_found: () => gettext("Sorry, we cannot find this site content."),
-                unknown: () => gettext("Sorry, an unexpected error has occurred.")
+                unknown: () => gettext("Sorry, an unexpected error has occurred."),
+                refresh: () => gettext("Refresh"),
+                go_home: () => gettext("Go home"),
             },
 
             get error() {
@@ -23,12 +32,17 @@
             get message() {
                 const translation = this.TRANSLATIONS[this.error.errorType];
                 return translation ? translation() : this.TRANSLATIONS.unknown();
-            }
+            },
+            refresh() {
+                location.reload();
+            },
+            goHome() {
+                location.hash = "#";
+            },
         }
 
     </script>
     <style>
-
         handleerror {
             height: 100vh;
             display: flex;
@@ -40,6 +54,10 @@
             padding: 50px;
             margin: auto;
             text-align: center;
+        }
+
+        .btn-primary {
+            margin-top: 2em;
         }
     </style>
 </HandleError>

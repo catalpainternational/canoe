@@ -91,7 +91,7 @@
                 </template>
             </template>
 
-            <template if="{state.selectedTab === 'discussion' && navigator.onLine}">
+            <template if="{state.selectedTab === 'discussion' && isOnline}">
                 <div if="{!state.courseHasDiscussions}" class="empty-state">
                 </div>
                 <template if="{state.selectedDiscussionId === null && state.courseHasDiscussions}">
@@ -112,7 +112,7 @@
                 </template>
             </template>
 
-            <template if="{state.selectedTab === 'discussion' && !navigator.onLine}">
+            <template if="{state.selectedTab === 'discussion' && !isOnline}">
                 <div class="card full-width">
                     <div class="message-container">
                         <span class="offline-hand"></span>
@@ -145,7 +145,7 @@
         import PopupModal from "RiotTags/Components/PopupModal.riot.html";
         import LessonDownload from "RiotTags/Components/LessonDownload.riot.html";
 
-        import { isAuthenticated, getRoute } from "ReduxImpl/Interface";
+        import { isAuthenticated, getRoute, isOnline } from "ReduxImpl/Interface";
         import { getCardImageUrl } from "js/utilities";
 
         function CoursePage() { return {
@@ -183,6 +183,10 @@
 
             get course() {
                 return getRoute().page;
+            },
+
+            get isOnline() {
+                return isOnline();
             },
 
             onBeforeMount(props, state) {

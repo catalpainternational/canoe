@@ -177,6 +177,7 @@ ActivityPage {
             .tip-image-wrap {
                 width: calc(100% + 2em);
                 margin-left: -1em;
+                margin-right: -1em;
                 margin-top: -1em;
                 border-radius: 8px 8px 0 0;
                 overflow: hidden;
@@ -187,6 +188,10 @@ ActivityPage {
             .tip-card-image {
                 width: 100%;
                 object-fit: cover;
+            }
+
+            .btn-primary {
+                margin-top: 1em;
             }
         }
 
