@@ -15,7 +15,7 @@ export async function readActions(type) {
     return actionsDb.getAllFromIndex(
         action_store_name,
         "type",
-        IDBKeyRange.bound([type], [type, ""])
+        IDBKeyRange.bound([type], [type, []])
     );
 }
 

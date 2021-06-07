@@ -31,7 +31,7 @@ export async function readExamDataIntoState() {
         logger.warn("Error in reading exam data from idb %o", e);
     }
     const scoresToStore = scores.filter((a) => a.pageId);
-    storeExamScores(scoresToStore);
+    return storeExamScores(scoresToStore);
 }
 
 /**
