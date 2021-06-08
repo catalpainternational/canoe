@@ -6,17 +6,13 @@
         </h4>
         <div class="cards-list">
             <template each="{ card in props.section }">
-                <BasicCard if="{card.tag === 'basic'}" card="{card}"></BasicCard>
-                <ListCard if="{card.tag === 'list'}" card="{card}"></ListCard>
-                <AudioCard if="{card.tag === 'audio'}" media="{card}"></AudioCard>
-                <VideoCard if="{card.tag === 'video'}" media="{card}"></VideoCard>
-                <Html5Card if="{card.tag === 'html5'}" card="{card}"></Html5Card>
-                <PdfCard if="{card.tag === 'pdf'}" card="{card}"></PdfCard>
-                <Raw if="{card.tag === 'raw'}" html="{card.content}"></Raw>
-                <FlashCards
-                    if="{card.tag === 'flashcards'}"
-                    card="{card}"
-                ></FlashCards>
+                <BasicCard if="{ card.tag === 'basic' }" card="{ card }"></BasicCard>
+                <ListCard if="{ card.tag === 'list' }" card="{ card }"></ListCard>
+                <AudioCard if="{ card.tag === 'media' && card.media_type === 'audio' }" media="{ card }"></AudioCard>
+                <VideoCard if="{ card.tag === 'media' && card.media_type === 'video' }" media="{ card }"></VideoCard>
+                <Html5Card if="{ card.tag === 'html5' }" card="{ card }"></Html5Card>
+                <PdfCard if="{ card.tag === 'pdf' }" card="{ card }"></PdfCard>
+                <Raw if="{ card.tag === 'raw' }" card="{ card }"></Raw>
             </template>
         </div>
     </div>
@@ -27,7 +23,6 @@
         import ListCard from "RiotTags/Lesson/ListCard.riot.html";
         import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
         import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
-        import FlashCards from "RiotTags/Teaching/FlashCards.riot.html";
         import Raw from "RiotTags/Components/Raw.riot.html";
 
         export default {
@@ -38,7 +33,6 @@
                 listcard: ListCard,
                 pdfcard: PdfCard,
                 html5card: Html5Card,
-                flashcards: FlashCards,
                 raw: Raw
             },
         };

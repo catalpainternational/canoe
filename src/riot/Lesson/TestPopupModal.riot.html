@@ -2,7 +2,7 @@
     <PopupModal>
         <span class="{ isQuestionComplete ? 'correct-checkmark' : 'incorrect-cross'}"></span>
         <h3>{ isQuestionComplete ? correctTitleMessage : incorrectTitleMessage }</h3>
-        <div>
+        <div class="scrollable">
             <p>{ isQuestionComplete ? correctTextMessage : incorrectTextMessage }</p>
         </div>
         <button
@@ -78,34 +78,39 @@
                 location.hash = this.page.loc_hash + ":content:feedback";
             },
 
+            get givenAnswer() {
+                const answerIndex = this.answer.current[0];
+                return this.card.answers[answerIndex];
+            },
+
             get correctTitleMessage() {
                 // title for correct answer feedback
-                if (this.answer.feedback) {
-                    return this.answer.feedback.title || gettext("Great");
+                if (this.givenAnswer.feedback) {
+                    return this.givenAnswer.feedback.title || gettext("Great");
                 }
                 return gettext("Great");
             },
 
             get correctTextMessage() {
                 // text for correct answer feedback
-                if (this.answer.feedback) {
-                    return this.answer.feedback.text || gettext("Well done, keep it up!");
+                if (this.givenAnswer.feedback) {
+                    return this.givenAnswer.feedback.text || gettext("Well done, keep it up!");
                 }
                 return gettext("Well done, keep it up!");
             },
 
             get incorrectTitleMessage() {
                 // title for incorrect answer feedback
-                if (this.answer.feedback) {
-                    return this.answer.feedback.title || gettext("Oops");
+                if (this.givenAnswer.feedback) {
+                    return this.givenAnswer.feedback.title || gettext("Oops");
                 }
                 return gettext("Oops");
             },
 
             get incorrectTextMessage() {
                 // text for incorrect answer feedback
-                if (this.answer.feedback) {
-                    return this.answer.feedback.text || gettext("Read the question more carefully!");
+                if (this.givenAnswer.feedback) {
+                    return this.givenAnswer.feedback.text || gettext("Read the question more carefully!");
                 }
                 return gettext("Read the question more carefully!");
             },

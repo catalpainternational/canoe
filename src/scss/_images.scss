@@ -94,6 +94,10 @@
     @include mask-icons-shared("~img/checkmark.svg", contain, $app-accent-color);
     height: 16px;
     width: 20px;
+
+    &.teal {
+        background: $teal;
+    }
 }
 
 .cross {
@@ -193,6 +197,20 @@
     width: 100%;
 }
 
+.site-error {
+    @include unmaskable-icons-shared("~img/error.png", contain);
+    height: 160px;
+    width: 100%;
+    display: block;
+}
+
+.tip-completion {
+    @include unmaskable-icons-shared("~img/tip_completion.png", contain);
+    height: 160px;
+    width: 100%;
+    margin: 5em 0 1em;
+}
+
 .exploding-computer {
     @include unmaskable-icons-shared("~img/exploding_computer.png", contain);
     height: 170px;
@@ -267,6 +285,10 @@
     width: 22px;
     margin-left: -2px;
     margin-top: -2px;
+
+    &.gray {
+        background: $gray-1;
+    }
 }
 
 .expand-arrows {

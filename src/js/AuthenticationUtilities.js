@@ -1,26 +1,95 @@
 import { BACKEND_BASE_URL } from "js/urls";
 import { unsubscribeFromNotifications } from "js/Notifications";
 import { setAuthenticated, setUnauthenticated, getUser } from "ReduxImpl/Interface";
+import Cookies from "js-cookie";
 
-import { initialiseCertChain } from "ts/StartUp";
+const authUrl = `${BACKEND_BASE_URL}/auth`;
+/** Post a login request to the server */
+export const login = async (usernameAndPassword) => {
+    const formData = new FormData();
+    formData.append('username', usernameAndPassword.username);
+    formData.append('password', usernameAndPassword.password);
+    return fetch(authUrl, {
+        method: "POST",
+        credentials: 'include',
+        body: formData,
+        headers: {
+            "X-CSRFToken": Cookies.get("csrftoken"),
+        },
+    })
+    .then((response) => {
+        if (!response.ok) throw new Error(`Login failed, HTTP status: ${response.status}`);
+        return response.json();
+    }).then(setAuthenticated);
+};
 
-const USERNAME_STORAGE_KEY = "username";
-const USER_ID_STORAGE_KEY = "userId";
-const JWT_TOKEN_STORAGE_KEY = "token";
-const USER_GROUPS_STORAGE_KEY = "userGroups";
+/** Post a logout request to the server */
+export const logout = () => {
+    return fetch(authUrl, {
+        method: "DELETE",
+        credentials: 'include',
+        headers: {
+            "X-CSRFToken": Cookies.get("csrftoken"),
+        },
+    }).catch((err) => {
+        // delete the Canoe=Offline-Session cookie
+        // Django is configured to log users out if no Canoe-Offline-Session is received
+        deleteCookie('Canoe-Offline-Session');
+    }).finally(() => {
+        unsubscribeFromNotifications();
+        setUnauthenticated();
+    });
+};
 
-const setCookie = (name, value, keyOnlyAttributes = [], attributes = {}) => {
-    // sets name=value cookie
-    // sets keyOnlyAttributes provided eg ['secure', 'samesite']
-    // sets value attributes provided eg {max-age: 3e8} to set expiry to 10 years in the future.
-    // and potentially does vastly different things, because it does not escape inputs.
-    document.cookie = Object.entries(attributes).reduce(
-        (cookieString, keyValue) => `${cookieString};${keyValue[0]}=${keyValue[1]}`,
-        keyOnlyAttributes.reduce(
-            (cookieString, attribute) => `${cookieString};${attribute}`,
-            `${name}=${value}`
-        )
-    );
+/** detect the login status */
+export const initialiseIdentity = async () => {
+    return fetch(authUrl, {
+        method: "GET",
+        credentials: "include",
+    }).then(async (response) => {
+        if(response.status === 401) {
+            // The server has told us we are unauthenticated
+            return setUnauthenticated();
+        } else if (response.ok) {
+            // The server says we are authenticated, set the identity
+            const responseClone = response.clone();
+            const userDetails = await response.json();
+            caches.open('user-details').then((cache) => {
+                cache.put(authUrl, responseClone);
+            });
+            return setAuthenticated(userDetails);
+        } else {
+            throw new Error('unexpected auth response');
+        }
+    }).catch(async (err) => {
+        // we may be offline, check the cache for auth details
+        const cache = await caches.open('user-details');
+        const match = await cache.match(authUrl);
+        if (match !== undefined) {
+            const userDetails = await match.json();
+            // The cache says we are authenticated, set the identity
+            return setAuthenticated(userDetails);
+        }
+        else {
+            // The cache has told us we are unauthenticated
+            return setUnauthenticated();
+        }
+    });
+}
+
+export const getUsername = () => {
+    const user = getUser();
+    return user ? user.name : "Guest";
+};
+
+export const getCapitalizedUsername = () => {
+    const username = getUsername();
+    return username[0].toUpperCase() + username.slice(1);
+};
+
+export const getUserId = () => {
+    const user = getUser();
+    return user ? user.userId : null;
 };
 
 const getCookie = (name) => {
@@ -33,86 +102,5 @@ const getCookie = (name) => {
 };
 
 const deleteCookie = (name) => {
-    document.cookie = `${name}=; expired=${new Date(0)}`;
-};
-
-const fetchAuthToken = async (usernameAndPassword) => {
-    return fetch(`${BACKEND_BASE_URL}/token-auth/`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(usernameAndPassword),
-    })
-    .then((response) => {
-        if (!response.ok) throw new Error(`Login failed, HTTP status: ${response.status}`);
-        return response.json();
-    })
-};
-
-export const login = async (usernameAndPassword) => {
-    const { token, username, userId, groups } = await fetchAuthToken(usernameAndPassword);
-
-    // Browsers refuse to set secure cookies from non https locations
-    setCookie(
-        JWT_TOKEN_STORAGE_KEY,
-        token,
-        window.location.protocol === "https:" ? ["secure"] : [],
-        { "max-age": 3e8, samesite: "lax" }
-    );
-    localStorage.setItem(USERNAME_STORAGE_KEY, username);
-    localStorage.setItem(USER_ID_STORAGE_KEY, userId);
-    localStorage.setItem(USER_GROUPS_STORAGE_KEY, groups);
-    setAuthenticated({username, userId, groups});
-
-    initialiseCertChain(window);
-};
-
-export const logout = async () => {
-    deleteCookie(JWT_TOKEN_STORAGE_KEY);
-    localStorage.clear();
-    unsubscribeFromNotifications();
-    setUnauthenticated();
-
-    // Add something here to revoke the certChain
-};
-
-export const initialiseIdentity = () => {
-    const token = getAuthenticationToken();
-    if (token) {
-        setAuthenticated({
-            username: localStorage.getItem(USERNAME_STORAGE_KEY),
-            userId: localStorage.getItem(USER_ID_STORAGE_KEY),
-            groups: localStorage.getItem(USER_GROUPS_STORAGE_KEY),
-        });
-        initialiseCertChain(window);
-    }
-}
-
-export const getAuthenticationToken = () => {
-    return getCookie(JWT_TOKEN_STORAGE_KEY) || "";
-};
-
-export const getUsername = () => {
-    const user = getUser();
-    return user ? user.username : "Guest";
-};
-
-export const getCapitalizedUsername = () => {
-    const username = getUsername();
-    return username[0].toUpperCase() + username.slice(1);
-};
-
-export const isGuestUser = () => {
-    return process.env.GUEST_USERNAME === getUsername();
-};
-
-export const getUserId = () => {
-    const user = getUser();
-    return user ? user.userId : null;
-};
-
-export const getUserGroups = () => {
-    const user = getUser();
-    return user ? user.groups : null;
+    document.cookie = `${name}=; expires=${new Date(0)}`;
 };

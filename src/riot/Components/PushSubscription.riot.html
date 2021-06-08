@@ -6,12 +6,13 @@
             unsubscribeFromNotifications,
             isSubscribedToNotifications
         } from "js/Notifications";
+        import { isAuthenticated } from "js/redux/Interface"
 
         export default {
             async subscribe() {
                 const browserSupportsNotifications = await supportsPushManager();
 
-                if (browserSupportsNotifications) {
+                if (browserSupportsNotifications && isAuthenticated()) {
                     const alreadySubscribedToNotifications = await isSubscribedToNotifications();
                     if (alreadySubscribedToNotifications) {
                         return;

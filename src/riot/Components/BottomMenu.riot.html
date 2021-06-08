@@ -65,7 +65,12 @@
                     return false;
                 }
 
-                if (this.page.type === 'lessonpage') {
+                if (this.page.type === 'error') {
+                    if (this.page.errorType === 'not_found') return true;
+                    return false;
+                }
+
+                if (this.page.type === 'lessonpage' || this.page.type === 'tipspage') {
                     return false;
                 }
 

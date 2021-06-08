@@ -1,39 +1,51 @@
 <LessonComplete>
     <div class="congratulations-container">
-        <span class="superman-success"></span>
-        <template if="{ !course.lessonsComplete }">
+        <span if="{!props.isTipsPage}" class="superman-success"></span>
+        <span if="{props.isTipsPage}" class="tip-completion"></span>
+        <template if="{ props.isTipsPage }">
             <div>
-                <h2>{ TRANSLATIONS.congrats() }</h2>
-                <p>{ lessonCompleteMessage() }</p>
+                <h2>{ TRANSLATIONS.great() }</h2>
+                <p>{ TRANSLATIONS.tipsComplete() }</p>
             </div>
-            <button class="btn-primary" onclick="{goToCourseOverview}">
-                { TRANSLATIONS.next() }
-                <span class="chevron"></span>
-            </button>
-            <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
-                { TRANSLATIONS.discuss() }
-                <span class="chevron"></span>
+            <button class="btn-primary" onclick="{returnToActivity}">
+                { TRANSLATIONS.finish() }
             </button>
         </template>
-        <template if="{ course.lessonsComplete }">
-            <div>
-                <h2>{ TRANSLATIONS.good() }</h2>
-                <p>{ lessonCompleteMessage() }</p>
-                <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
-            </div>
-            <button if="{courseHasExam() && isPrelearningExam()}" class="btn-primary" onclick="{goToCourseExam}">
-                { TRANSLATIONS.survey() }
-                <span class="chevron"></span>
-            </button>
-            <button if="{courseHasExam() && !isPrelearningExam()}" class="btn-primary" onclick="{goToCourseExam}">
-                { TRANSLATIONS.exam() }
-                <span class="chevron"></span>
-            </button>
-            <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
-                { TRANSLATIONS.discuss() }
-                <span class="chevron"></span>
-            </button>
-            <a href="#{lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
+        <template if="{ course }">
+            <template if="{ !course.lessonsComplete }">
+                <div>
+                    <h2>{ TRANSLATIONS.congrats() }</h2>
+                    <p>{ lessonCompleteMessage() }</p>
+                </div>
+                <button class="btn-primary" onclick="{goToCourseOverview}">
+                    { TRANSLATIONS.next() }
+                    <span class="chevron"></span>
+                </button>
+                <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
+                    { TRANSLATIONS.discuss() }
+                    <span class="chevron"></span>
+                </button>
+            </template>
+            <template if="{ course.lessonsComplete }">
+                <div>
+                    <h2>{ TRANSLATIONS.good() }</h2>
+                    <p>{ lessonCompleteMessage() }</p>
+                    <p if="{ courseHasExam() }">{ takeCourseExamMessage() }</p>
+                </div>
+                <button if="{courseHasExam() && isPrelearningExam()}" class="btn-primary" onclick="{goToCourseExam}">
+                    { TRANSLATIONS.survey() }
+                    <span class="chevron"></span>
+                </button>
+                <button if="{courseHasExam() && !isPrelearningExam()}" class="btn-primary" onclick="{goToCourseExam}">
+                    { TRANSLATIONS.exam() }
+                    <span class="chevron"></span>
+                </button>
+                <button if="{lessonHasDiscussion()}" class="btn-primary" onclick="{goToDiscussion}">
+                    { TRANSLATIONS.discuss() }
+                    <span class="chevron"></span>
+                </button>
+                <a href="#{lesson.course.loc_hash}">{ TRANSLATIONS.course() }</a>
+            </template>
         </template>
     </div>
     <script>
@@ -45,10 +57,13 @@
                 congrats: () => gettext("Congratulations!"),
                 next: () => gettext("Next Lesson"),
                 good: () => gettext("Good job!"),
+                great: () => gettext("Great job!"),
                 exam: () => gettext("Take Exam"),
                 survey: () => gettext("Take Survey"),
                 course: () => gettext("Back to Course"),
                 discuss: () => gettext("Join the discussion"),
+                tipsComplete: () => gettext("You've just completed this set of tips. You can now finish and return to the learning activity."),
+                finish: () => gettext("Finish"),
             },
 
             get lesson() {
@@ -68,6 +83,10 @@
 
             goToCourseOverview() {
                 location.hash = this.lesson.course.loc_hash;
+            },
+
+            returnToActivity() {
+                location.hash = this.props.linkTo;
             },
 
             goToCourseExam() {

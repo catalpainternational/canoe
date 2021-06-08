@@ -1,13 +1,18 @@
 <App>
+    <LoadingDots
+        if="{ !isAuthenticationDetected }"
+        extrastyleclasses="dark app"
+        message="Checking who you are..."
+    ></LoadingDots>
+    <LoadingDots
+        if="{ isAuthenticationDetected && !userActionsReady }"
+        extrastyleclasses="dark app"
+        message="Loading your history..."
+    ></LoadingDots>
     <ChangeBrowser></ChangeBrowser>
 
     <template if="{ state.browserSupported }">
         <Toast></Toast>
-
-        <LoadingDots
-            if="{ state.page.type === 'initial' }"
-            extrastyleclasses="dark app"
-        ></LoadingDots>
 
         <HandleError
             if="{ state.page.type === 'error' }"
@@ -33,6 +38,7 @@
         <AllTopicsList if="{state.page.type === 'learningactivitieshomepage'}"></AllTopicsList>
         <TopicPage if="{state.page.type === 'learningactivitytopicpage'}"></TopicPage>
         <ActivityPage if="{state.page.type === 'learningactivitypage'}"></ActivityPage>
+        <LessonContent if="{state.page.type === 'tipspage'}" isTipsPage="{true}"></LessonContent>
 
         <BottomMenu
             if="{ state.page.type !== 'initial' }"
@@ -43,13 +49,15 @@
     <script>
         import {
             isBrowserSupported,
+            isAuthenticationDetected,
+            userActionsReady,
             getRoute
         } from "ReduxImpl/Interface";
 
+        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import BottomMenu from "riot/Components/BottomMenu.riot.html";
         import PushSubscription from "RiotTags/Components/PushSubscription.riot.html";
         import Toast from "RiotTags/Components/Toast.riot.html";
-        import LoadingDots from "RiotTags/Components/LoadingDots.riot.html";
         import HandleError from "RiotTags/Components/HandleError.riot.html";
 
         import Login from "RiotTags/Screens/Login.riot.html";
@@ -62,6 +70,7 @@
         import AllCoursesList from "RiotTags/WagtailPages/AllCoursesList.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
+        import LessonContent from "RiotTags/Lesson/LessonContent.riot.html";
         import ResourceArticle from "RiotTags/WagtailPages/ResourceArticle.riot.html";
 
         import AllTopicsList from "RiotTags/WagtailPages/AllTopicsList.riot.html";
@@ -82,6 +91,9 @@
             return {
                 state: readState(),
 
+                get isAuthenticationDetected() { return isAuthenticationDetected(); },
+                get userActionsReady() { return userActionsReady(); },
+
                 onUpdated(props, state) {
                     scrollToFirstUnfinishedContent();
                 },
@@ -98,6 +110,7 @@
             allcourseslist: AllCoursesList,
             courseoverview: CourseOverview,
             lessonoverview: LessonOverview,
+            lessoncontent: LessonContent,
             resources: Resources,
             profile: Profile,
             settings: Settings,

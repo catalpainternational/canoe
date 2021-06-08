@@ -1,39 +1,59 @@
 <PlanTab>
     <TabSection
         class="{'first-section'}"
-        icon="{'brain'}" 
+        icon="{'brain'}"
         title="{TRANSLATIONS.learningOutcomes()}"
-        section={ page.plan.outcomes }
+        section={ plan.outcomes }
     ></TabSection>
     <TabSection
         class="{'middle-section'}"
-        icon="{'binocular'}" 
+        icon="{'binocular'}"
         title="{TRANSLATIONS.overview()}"
-        section={ page.plan.overview }
+        section={ plan.overview }
     ></TabSection>
     <TabSection
         class="{'last-section'}"
-        icon="{'clipboard-pencil'}" 
+        icon="{'clipboard-pencil'}"
         title="{TRANSLATIONS.preparation()}"
-        section={ page.plan.preparation }
+        section={ plan.preparation }
     ></TabSection>
+
+    <FlashCard
+        if="{planTips}"
+        card="{planTips}"
+        viewAllTips="{openTips}"
+    ></FlashCard>
+
     <button class="btn-secondary" onclick="{goToTeach}">
         { TRANSLATIONS.ready() }
     </button>
     <script>
         import TabSection from "RiotTags/Teaching/TabSection.riot.html";
+        import FlashCard from "RiotTags/Teaching/FlashCard.riot.html";
         import { getRoute } from "ReduxImpl/Interface";
 
         function PlanTab() { return {
-            onBeforeMount(props, state) {
-                this.page = getRoute().page;
-            },
-
             TRANSLATIONS: {
                 learningOutcomes: () => gettext("Learning outcomes"),
                 overview: () => gettext("Overview"),
                 preparation: () => gettext("Preparation tasks & materials"),
                 ready: () => gettext("Ready to teach"),
+            },
+
+            get route() {
+                return getRoute();
+            },
+
+            get plan() {
+                return this.route.page.plan;
+            },
+
+            get planTips() {
+                return this.route.page.plan_tips;
+            },
+
+            openTips() {
+                location.hash = `#${this.planTips.loc_hash}:1:plan`;
             },
 
             goToTeach() {
@@ -44,6 +64,7 @@
 
         PlanTab.components = {
             tabsection: TabSection,
+            flashcard: FlashCard,
         };
 
         export default PlanTab;

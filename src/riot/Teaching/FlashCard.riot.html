@@ -1,0 +1,49 @@
+<FlashCard>
+	<div class="card-frame">
+		<div class="card-content">
+			<div if="{ cardImageUrl }" class="tip-image-wrap">
+				<img
+					crossorigin="anonymous"
+					src="{ cardImageUrl }"
+					class="tip-card-image"
+				/>
+			</div>
+			<h4>{props.card.title}</h4>
+			<p if="{props.card.data.description}">
+				{props.card.data.description}
+			</p>
+			<p if="{props.card.data.long_description}">
+				{props.card.data.long_description}
+			</p>
+
+			<button class="btn-primary" onclick="{viewAllTips}">
+				{ TRANSLATIONS.viewAll() }
+			</button>
+		</div>
+		<div class="card-shadow"></div>
+		<div class="card-shadow"></div>
+	</div>
+
+	<script>
+		import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
+		export default {
+			TRANSLATIONS: {
+				viewAll: () => gettext("View all tips"),
+			},
+
+			components: {
+				imagewrapper: ImageWrapper,
+			},
+
+			get cardImageUrl() {
+				return this.props && this.props.card && this.props.card.card_image
+					? `${process.env.API_BASE_URL}${this.props.card.card_image}`
+					: undefined;
+			},
+
+			viewAllTips() {
+				this.props.viewAllTips();
+			},
+		};
+	</script>
+</FlashCard>

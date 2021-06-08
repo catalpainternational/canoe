@@ -7,20 +7,13 @@ export default class Lesson extends Page {
         return this.parent as Course;
     }
     get shortDescription(): string {
-        return this.storedData?.description;
+        return this.manifestData.data?.description;
     }
     get longDescription(): string {
-        return this.storedData?.long_description;
+        return this.manifestData.data?.long_description;
     }
     get cards(): any {
         return this.storedData?.cards;
-    }
-
-    /**
-     * a lesson needs its course to be ready
-     */
-    get ready(): boolean {
-        return super.ready && this.course.ready;
     }
 
     /**  We store the responses to any test cards with its completion */
@@ -34,7 +27,27 @@ export default class Lesson extends Page {
             ),
         });
     }
-
+    get complete(): boolean {
+        return super.complete;
+    }
+    set complete(complete: boolean) {
+        super.complete = complete;
+        // if the course has no other incomplete lessons, and the course has no exam
+        // also set the course to complete
+        if (
+            complete &&
+            !this.course.hasExam &&
+            this.course.childPages.filter(
+                (c) => c.id !== this.id && !c.complete
+            ).length === 0
+        ) {
+            this.course.complete = true;
+        }
+        // if setting the lesson incomplete, also set the course as incomplete
+        if (!complete) {
+            this.course.complete = false;
+        }
+    }
     get threads(): Array<Thread> {
         return this.storedData?.discussion;
     }
