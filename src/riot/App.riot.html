@@ -23,7 +23,8 @@
         <Profile if="{state.page.type === 'profile'}"></Profile>
         <Sync if="{state.page.type === 'sync'}"></Sync>
 
-        <AllCoursesList if="{ state.page.type === 'homepage' }" ></AllCoursesList>
+        <BeroHome if="{ state.page.type === 'berohomepage' }" ></BeroHome>
+        <AllCoursesList if="{ state.page.type === 'courseshomepage' }" ></AllCoursesList>
         <CourseOverview if="{ state.page.type === 'coursepage' }" ></CourseOverview>
         <LessonOverview
             if="{state.page.type === 'lessonpage'}"
@@ -67,6 +68,7 @@
         import ChangeBrowser from "RiotTags/Screens/ChangeBrowser.riot.html";
         import Sync from "RiotTags/Screens/Sync";
 
+        import BeroHome from "RiotTags/WagtailPages/BeroHome.riot.html";
         import AllCoursesList from "RiotTags/WagtailPages/AllCoursesList.riot.html";
         import CourseOverview from "RiotTags/Lesson/CourseOverview.riot.html";
         import LessonOverview from "RiotTags/Lesson/LessonOverview.riot.html";
@@ -107,7 +109,8 @@
             handleerror: HandleError,
             login: Login,
             bottommenu: BottomMenu,
-            allcourseslist: AllCoursesList,
+            berohome: BeroHome,
+            allourseslist: AllCoursesList,
             courseoverview: CourseOverview,
             lessonoverview: LessonOverview,
             lessoncontent: LessonContent,

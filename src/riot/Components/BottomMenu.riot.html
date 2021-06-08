@@ -2,7 +2,7 @@
     <footer if="{showBottomMenu()}">
         <div class="bottom-menu">
             <a href="#" if="{shouldShowLearningHome()}">
-                <span class="all-courses-icon { page.type === 'homepage' ? 'active' : ''}">
+                <span class="all-courses-icon { page.type === 'courseshomepage' ? 'active' : ''}">
                 </span>
             </a>
             <a href="#topics" if="{shouldShowTeachingHome()}">
@@ -45,7 +45,7 @@
             },
 
             shouldShowLearningHome() {
-                return this.page.manifest.hasPageType('homepage');
+                return this.page.manifest.hasPageType('courseshomepage');
             },
 
             shouldShowTeachingHome() {

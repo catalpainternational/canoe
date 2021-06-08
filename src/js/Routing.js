@@ -15,8 +15,8 @@ const CANOE_PAGES = ['settings', 'profile', 'sync'];
  * 
  * These are defined as arrays, the first page found in the manifest will be the one returned */
 const CANOE_SHORTCUTS = {
-    "": ["homepage", "learningactivitieshomepage"],
-    home: ["homepage"],
+    "": ["berohomepage", "learningactivitieshomepage"],
+    home: ["berohomepage"],
     resources: ["resourcesroot"],
     topics: ["learningactivitieshomepage"],
 };
@@ -67,7 +67,7 @@ async function route(hashWith) {
 
         if(CANOE_PAGES.includes(pageHash)) {
             // If we are a canoe page that needs page data, get it
-            page = manifest.getLanguagePageType(getLanguage(), 'homepage');
+            page = manifest.getLanguagePageType(getLanguage(), 'berohomepage');
             route = {page: {type: pageHash, home:page, manifest: manifest}, riotHash};
         } else {
             if(Object.keys(CANOE_SHORTCUTS).includes(pageHash)) {

@@ -1,0 +1,71 @@
+<BeroHome>
+    <GuestBanner></GuestBanner>
+    </div>
+
+    <script>
+        import { getRoute } from "ReduxImpl/Interface";
+
+        function BeroHome() {
+            return {
+                state: {
+                    selectedTags: [],
+                    showTagList: false,
+                },
+
+                TRANSLATIONS: {
+                    noCourses: () =>
+                        gettext("There are no courses yet. Check back soon!"),
+                    allCourses: () => gettext("All courses"),
+                    continueLearning: () => gettext("Continue Learning"),
+                    coursesIntro: () =>
+                        gettext(
+                            "Explore a range of courses to suit your needs, expertise, and interests"
+                        ),
+                },
+
+                get page() {
+                    return getRoute().page;
+                },
+
+                showTagFilter() {
+                    // and we don't show the filter unless we have some tags
+                    return this.page.all_tags.size;
+                },
+
+                toggleTagList() {
+                    this.update({ showTagList: !this.state.showTagList });
+                },
+
+                onTagClick(clickedTag) {
+                    if (this.state.selectedTags.includes(clickedTag)) {
+                        const tagIndex = this.state.selectedTags.indexOf(
+                            clickedTag
+                        );
+                        this.state.selectedTags.splice(tagIndex, 1);
+                    } else {
+                        this.state.selectedTags.push(clickedTag);
+                    }
+                    this.update();
+                },
+
+                showCourse(course) {
+                    return (
+                        !this.state.showTagList ||
+                        !this.state.selectedTags.length ||
+                        course.hasATagIn(this.state.selectedTags)
+                    );
+                },
+            };
+        }
+
+        AllCoursesList.components = {
+            card: Card,
+            taglist: TagList,
+            guestbanner: GuestBanner,
+            loadingdots: LoadingDots,
+            topmenu: TopMenu,
+        };
+
+        export default AllCoursesList;
+    </script>
+</BeroHome>
