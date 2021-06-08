@@ -228,6 +228,11 @@ export class Page extends PublishableItem implements StorableItem {
         return `Page ${this.title}`;
     }
 
+    get isNew(): boolean {
+        // TODO implement this properly when the backend is done
+        return true;
+    }
+
     /**
      * Check if the page is in the correct cache
      * @returns true if this page, assets, and children is cached in the correct cache , false if not
