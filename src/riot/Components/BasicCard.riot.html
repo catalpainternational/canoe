@@ -11,6 +11,8 @@
 
     <script>
         import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
+        import { externalLinks } from "js/utilities";
+
         export default {
             components: {
                 imagewrapper: ImageWrapper,
@@ -18,14 +20,7 @@
 
             setInnerHTML() {
                 this.$(".richtext").innerHTML = this.props.card.content;
-                const absolutePath = new RegExp('^(?:[a-z]+:)?//', 'i');
-                const links = [...this.$('.richtext').getElementsByTagName('a')];
-
-                links.forEach((link) => {
-                    if (absolutePath.test(link.href)) {
-                        link.target = "_blank"
-                    }
-                })
+                externalLinks(this.$(".richtext"));
             },
 
             onMounted() {
