@@ -26,6 +26,8 @@
 
 	<script>
 		import ImageWrapper from "RiotTags/Components/ImageWrapper.riot.html";
+		import { BACKEND_BASE_URL } from "js/urls";
+
 		export default {
 			TRANSLATIONS: {
 				viewAll: () => gettext("View all tips"),
@@ -37,7 +39,7 @@
 
 			get cardImageUrl() {
 				return this.props && this.props.card && this.props.card.card_image
-					? `${process.env.API_BASE_URL}${this.props.card.card_image}`
+					? `${BACKEND_BASE_URL}${this.props.card.card_image}`
 					: undefined;
 			},
 
