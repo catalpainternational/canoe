@@ -253,12 +253,23 @@ ResourceArticle LessonFrame {
         margin: 0.3em 0;
     }
 
+    p {
+        margin: 0.7em 0;
+    }
+
     p.media-description {
         font-size: 1em;
     }
 
     p.error-message {
         color: red;
+    }
+
+    raw,
+    basiccard {
+        hr {
+            margin: 1.5em 0;
+        }
     }
 }
 
