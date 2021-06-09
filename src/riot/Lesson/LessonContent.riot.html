@@ -162,6 +162,7 @@
                 },
 
                 goBack() {
+                    document.getElementsByClassName('card-content')[0].scroll(0, 0);
                     const prevCard = this.cards[this.cardNumber - 2];
                     if (this.props && this.props.isTipsPage && this.returnTab) {
                         location.hash = `${this.lesson.loc_hash}:${this.cardNumber - 1}:${this.returnTab}`;
@@ -171,7 +172,7 @@
                 },
 
                 nextCard() {
-                    window.scroll(0, 0);
+                    document.getElementsByClassName('card-content')[0].scroll(0, 0);
                     if (this.props && this.props.isTipsPage && this.returnTab) {
                         location.hash = `${this.lesson.loc_hash}:${this.cardNumber + 1}:${this.returnTab}`;
                     } else {
