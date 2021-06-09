@@ -139,11 +139,9 @@ export class Asset extends PublishableItem {
         return this!.entry!.renditions;
     }
 
-    /**
-     * Description for log lines
-     */
-    get str(): string {
-        return `Asset ${this.id} in ${this.#page.str}`;
+    /** Description for log lines */
+    toString(): string {
+        return `Asset ${this.id} in ${this.#page.toString()}`;
     }
 
     /**

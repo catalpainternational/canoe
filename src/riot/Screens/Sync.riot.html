@@ -15,12 +15,14 @@
                         <h5>ID:{statusListing.id} {statusListing.type}:{statusListing.title} <small>({statusListing.version})</small> </h5>
                     </div>
 
-                    <div class="sync-body">
-                        <span>Store URL:{ statusListing.url }</span>
+                    <div if="{statusListing.url === statusListing.cacheKey}" class="sync-body">
+                        <span><small>Store URL/Cache Key:</small> { statusListing.url }</span>
                     </div>
-
-                    <div class="sync-body">
-                        <span>Cache Key:{ statusListing.cacheKey }</span>
+                    <div if="{statusListing.url != statusListing.cacheKey}" class="sync-body">
+                        <span><small>Store URL:</small> { statusListing.url }</span>
+                    </div>
+                    <div if="{statusListing.url != statusListing.cacheKey}" class="sync-body">
+                        <span><small>Cache Key:</small> { statusListing.cacheKey }</span>
                     </div>
 
                     <div class="sync-body">

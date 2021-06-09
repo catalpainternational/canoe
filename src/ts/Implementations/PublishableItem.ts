@@ -18,8 +18,6 @@ export abstract class PublishableItem {
     abstract get cacheKey(): string;
     /** Request options dict used to retrieve this item */
     abstract get requestOptions(): RequestInit;
-    /** Brief descriptive string for logs */
-    abstract get str(): string;
 
     /** The options used to query the caches for this item */
     get cacheOptions(): MultiCacheQueryOptions {
@@ -39,28 +37,32 @@ export abstract class PublishableItem {
         );
     }
 
+    private logMessage(message: string): void {
+        logger.log("%s for %s:%s", message, this, this.url);
+    }
+
     /**
      * Get a network response for this item, caching it appropriately
      * @returns a request response for this item
      * @throws Error if network failure or response not OK
      */
     async getResponseFromNetwork(): Promise<Response> {
-        logger.log("using network for %s:%s", this.str, this.url);
+        this.logMessage("using network");
 
         let response;
         try {
             response = await fetch(this.url, this.getRequestOptions());
         } catch {
-            logger.warn("request failed for %s:%s", this.str, this.url);
+            this.logMessage("request failed");
             throw Error("Network error");
         }
 
         if (!response.ok) {
-            logger.warn("request not ok for %s:%s", this.str, this.url);
+            this.logMessage("request not ok");
             throw Error("Network response not ok");
         }
 
-        logger.log("caching response for %s:%s", this.str, this.url);
+        this.logMessage("caching response");
         const responseClone = response.clone();
         await caches
             .open(this.cacheKey)
@@ -75,16 +77,14 @@ export abstract class PublishableItem {
      * @throws Error if network used and failure or response not OK
      */
     async getResponseFromCache(): Promise<Response | undefined> {
-        logger.log("checking cache for %s:%s", this.str, this.url);
+        this.logMessage("checking cache");
 
         return caches
             .match(this.url, this.cacheOptions)
             .then((cacheResponse) => {
-                const logTemplate =
-                    cacheResponse === undefined
-                        ? "Cache miss for %s:%s"
-                        : "Use cache for %s:%s";
-                logger.log(logTemplate, this.str, this.url);
+                this.logMessage(
+                    cacheResponse === undefined ? "cache miss" : "use cache"
+                );
 
                 return cacheResponse;
             });
@@ -92,15 +92,20 @@ export abstract class PublishableItem {
 
     /**
      * Gets a response from this item either from the cache or network
-     * @param updatePolicy Default to check cache the network
-     *  Force to use network only
+     * @param updatePolicy `Default` to check cache before the network.
+     *  `Force` to use network only
      * @returns a response for this item
      * @throws Error if network used and failure or response not OK, or strategy not handled
      */
     async getResponse(
         updatePolicy: UpdatePolicy = UpdatePolicy.Default
     ): Promise<Response> {
-        logger.info("Get response for %s:%s using %s", this.str, updatePolicy);
+        logger.info(
+            "Get response for %s:%s using %s",
+            this,
+            this.url,
+            updatePolicy
+        );
         let response: Response;
         switch (updatePolicy) {
             case UpdatePolicy.Default:

@@ -1,5 +1,8 @@
 // import { TSubscriptions } from "./Types/CacheTypes";
-// import { TAppelflapResult } from "./Types/CanoeEnums";
+import {
+    // TAppelflapResult,
+    TItemType,
+} from "./Types/CanoeEnums";
 import { TWagtailPage } from "./Types/PageTypes";
 import { TItemListing } from "./Types/PublishableItemTypes";
 
@@ -57,7 +60,7 @@ export class AppDataStatus {
             url: this.manifest.url,
             cacheKey: this.manifest.cacheKey,
             version: this.manifest.version,
-            type: "manifest",
+            type: "manifest" as TItemType,
             isValid: this.manifest.isValid,
             isAvailableOffline: isAvailableOffline,
             isPublishable: this.manifest.isPublishable,
@@ -90,7 +93,7 @@ export class AppDataStatus {
             url: statusId,
             cacheKey: manifestPage.storage_container,
             version: manifestPage.version,
-            type: "page",
+            type: "page" as TItemType,
             isValid: isValid,
             isAvailableOffline: isAvailableOffline,
             isPublishable: isPublishable,
