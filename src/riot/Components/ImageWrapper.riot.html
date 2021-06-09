@@ -62,6 +62,15 @@
                 },
 
                 toggleImageFullScreen() {
+                    // stacking rules mean we can't position the image over the top of the footer,
+                    // so we cheat by making the footer invisible when we're in full-screen mode
+                    const footerEl = document.getElementsByTagName('footer')[0];
+                    if (footerEl && footerEl.style.visibility !== 'hidden') {
+                        footerEl.style.visibility = 'hidden'
+                    } else {
+                        footerEl.style.visibility = '';
+                    }
+
                     this.update({ imageFullScreen: !this.state.imageFullScreen });
                 },
             }
