@@ -1,3 +1,4 @@
+import { BACKEND_BASE_URL } from "js/urls";
 import Logger from "../Logger";
 
 export enum UpdatePolicy {
@@ -9,15 +10,20 @@ export enum UpdatePolicy {
 const logger = new Logger("ContentItem");
 
 /** A network backed content item that can be stored and retrieved from a named cache
- * The item can be queeried for cache status and added and remove from the cache
+ * @remarks The item can be queried for cache status and added and removed from the cache
  */
 export abstract class PublishableItem {
-    /** The url to retrieve this item from */
-    abstract get url(): string;
+    /** The api_url of this item as recorded in the manifest */
+    abstract get api_url(): string;
     /** The name of the cache used to store this item */
     abstract get cacheKey(): string;
     /** Request options dict used to retrieve this item */
     abstract get requestOptions(): RequestInit;
+
+    /** The (full) url to retrieve this item from */
+    get url(): string {
+        return this.api_url ? `${BACKEND_BASE_URL}${this.api_url}` : "";
+    }
 
     /** The options used to query the caches for this item */
     get cacheOptions(): MultiCacheQueryOptions {
@@ -130,7 +136,7 @@ export abstract class PublishableItem {
 
     /**
      * Check if the item is in the correct cache
-     * @returns true if this item is cached in the correct cache , false if not
+     * @returns true if this item is cached in the correct cache, false if not
      */
     async isAvailableOffline(): Promise<boolean> {
         const match = await caches.match(this.url, this.cacheOptions);
@@ -139,7 +145,7 @@ export abstract class PublishableItem {
 
     /**
      * Add this item to the correct cache
-     * @returns true if succeeds
+     * @returns true on success
      */
     async makeAvailableOffline(): Promise<boolean> {
         await this.getResponseFromNetwork();
@@ -148,7 +154,7 @@ export abstract class PublishableItem {
 
     /**
      * Remove this content from the cache
-     * @returns true if succeds
+     * @returns true on success
      */
     async removeAvailableOffline(): Promise<boolean> {
         const cache = await caches.open(this.cacheKey);

@@ -1,12 +1,8 @@
-import {
-    TItemCacheStatus,
-    TItemStoreStatus,
-    TItemType,
-} from "ts/Types/CanoeEnums";
+import { TItemType } from "./CanoeEnums";
 
 /** The id fields for a manifest, page or asset item */
 export type TItemId = {
-    url: string;
+    api_url: string;
 };
 
 /** Describes the common fields for a manifest, page or asset item */

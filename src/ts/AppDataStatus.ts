@@ -8,10 +8,7 @@ import { TItemListing } from "./Types/PublishableItemTypes";
 
 // import { TPublishableItem } from "./Types/PublishableItemTypes";
 
-import {
-    CacheKeys,
-    // InitialiseFromCache
-} from "./Implementations/CacheItem";
+import { CacheKeys, InitialiseFromCache } from "./Implementations/CacheItem";
 // import {
 //     getSubscriptions,
 //     publishItem,
@@ -57,7 +54,7 @@ export class AppDataStatus {
 
         return {
             title: "manifest",
-            url: this.manifest.url,
+            api_url: this.manifest.api_url,
             cacheKey: this.manifest.cacheKey,
             version: this.manifest.version,
             type: "manifest" as TItemType,
@@ -90,7 +87,7 @@ export class AppDataStatus {
         // TODO: add code to get item status (isValid, etc.)
         return {
             title: manifestPage.title,
-            url: statusId,
+            api_url: statusId,
             cacheKey: manifestPage.storage_container,
             version: manifestPage.version,
             type: "page" as TItemType,

@@ -47,11 +47,8 @@ export class Page extends PublishableItem implements StorableItem {
         this.#parent = parent;
     }
 
-    /**
-     * The api url of this page
-     */
-    get url(): string {
-        return `${process.env.API_BASE_URL}${this.manifestData?.api_url}`;
+    get api_url(): string {
+        return this.manifestData?.api_url || "";
     }
 
     /**

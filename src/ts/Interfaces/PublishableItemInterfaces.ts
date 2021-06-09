@@ -1,4 +1,4 @@
-import { TPublishableItem } from "ts/Types/PublishableItemTypes";
+import { TPublishableItem } from "../Types/PublishableItemTypes";
 
 export interface IPublishableItem extends TPublishableItem {
     /** The original request object (stripped of any authentication values) that works as the key into the cache for this item */
