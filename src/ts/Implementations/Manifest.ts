@@ -59,6 +59,7 @@ export class Manifest extends PublishableItem implements StorableItem {
     }
 
     /** StorableItem implementations */
+
     /** set the manifest data in the manifest store */
     saveToStore(data: TManifestData): void {
         storeManifest(data);
@@ -86,7 +87,6 @@ export class Manifest extends PublishableItem implements StorableItem {
                 throw new ManifestError("Mainfest failed to deserialize");
             });
     }
-    /** end StorableItem implementations */
 
     get data(): TManifestData | undefined {
         return this.storedData;
@@ -147,10 +147,6 @@ export class Manifest extends PublishableItem implements StorableItem {
         return this.childPagesValid;
     }
 
-    async isAvailableOffline(): Promise<boolean> {
-        return this.isValid;
-    }
-
     get isPublishable(): boolean {
         return this.isValid;
     }
@@ -169,15 +165,6 @@ export class Manifest extends PublishableItem implements StorableItem {
         return [...languageCodes];
     }
 
-    GetDataFromStore(): void {
-        // depecated
-        return;
-    }
-
-    StoreDataToStore(): void {
-        // depecated
-        return;
-    }
     get updatedResp(): Response {
         //deprecated
         return new Response();
@@ -252,6 +239,7 @@ export class Manifest extends PublishableItem implements StorableItem {
             })
             .includes(pageType);
     }
+
     get str(): string {
         return "Site Manifest";
     }

@@ -1,37 +1,34 @@
 // import { TSubscriptions } from "./Types/CacheTypes";
 // import { TAppelflapResult } from "./Types/CanoeEnums";
-// import { TWagtailPage } from "./Types/PageTypes";
-// import { TItemListing, TItemStorageStatus } from "./Types/PublishableItemTypes";
+import { TWagtailPage } from "./Types/PageTypes";
 import { TItemListing } from "./Types/PublishableItemTypes";
 
 // import { TPublishableItem } from "./Types/PublishableItemTypes";
 
-/*
-import { CacheKeys, InitialiseFromCache } from "./Implementations/CacheItem";
 import {
-    getSubscriptions,
-    publishItem,
-    setSubscriptions,
-    unpublishItem,
-} from "./Implementations/ItemActions";
-*/
+    CacheKeys,
+    // InitialiseFromCache
+} from "./Implementations/CacheItem";
+// import {
+//     getSubscriptions,
+//     publishItem,
+//     setSubscriptions,
+//     unpublishItem,
+// } from "./Implementations/ItemActions";
 import { Manifest } from "./Implementations/Manifest";
-// import { Page } from "./Implementations/Page";
+import { Page } from "./Implementations/Page";
 
 // import { AppelflapConnect } from "./AppelflapConnect";
 
-/*
-import {
-    getPageData as getPageDataFromStore,
-    getItemStorageStatus,
-} from "ReduxImpl/Interface";
-*/
+import { getPageData as getPageDataFromStore } from "ReduxImpl/Interface";
+
 /*
 type AfcFunction = (
     item: TPublishableItem,
     appelflapConnect: AppelflapConnect
 ) => Promise<TAppelflapResult>;
 */
+
 /** An overview of the status for all data used by the app */
 export class AppDataStatus {
     manifest: Manifest;
@@ -51,25 +48,21 @@ export class AppDataStatus {
 
         return Promise.resolve("Manifest valid");
     }
-    /*
 
-    ManifestListing(): TItemListing {
+    async ManifestListing(): Promise<TItemListing> {
+        const isAvailableOffline = await this.manifest.isAvailableOffline();
+
         return {
-            id: this.manifest.id,
             title: "manifest",
-            api_url: this.manifest.api_url,
+            url: this.manifest.url,
             cacheKey: this.manifest.cacheKey,
             version: this.manifest.version,
             type: "manifest",
-            storeStatus: this.manifest.status.storeStatus,
-            cacheStatus: this.manifest.status.cacheStatus,
             isValid: this.manifest.isValid,
-            isAvailableOffline: this.manifest.isAvailableOffline,
+            isAvailableOffline: isAvailableOffline,
             isPublishable: this.manifest.isPublishable,
         };
     }
-    */
-    /*
 
     async PageListing(
         pageId: string,
@@ -77,51 +70,36 @@ export class AppDataStatus {
         inCache: boolean
     ): Promise<TItemListing> {
         const statusId = manifestPage.storage_container;
-        const pageStatus = getItemStorageStatus(statusId);
-        const status =
-            pageStatus !== null
-                ? (pageStatus as TItemStorageStatus)
-                : ({
-                      storeStatus: "unset",
-                      cacheStatus: "unset",
-                  } as TItemStorageStatus);
         let isValid = false;
         let isAvailableOffline = false;
         let isPublishable = false;
 
         const pageData = getPageDataFromStore(pageId);
-        status.storeStatus = pageData ? "ready" : "unset";
 
         if (inCache) {
-            const page = new Page(this.manifest, pageId, statusId);
-            await InitialiseFromCache(page);
-            status.cacheStatus = page.status.cacheStatus;
+            const page = new Page(this.manifest, pageId);
+            // await InitialiseFromCache(page);
             isValid = page.isValid;
-            isAvailableOffline = page.isAvailableOffline;
-            isPublishable = page.isPublishable;
+            isAvailableOffline = await page.isAvailableOffline();
+            isPublishable = await page.isPublishable();
         }
 
         // TODO: add code to get item status (isValid, etc.)
         return {
-            id: pageId,
             title: manifestPage.title,
-            api_url: statusId,
+            url: statusId,
             cacheKey: manifestPage.storage_container,
             version: manifestPage.version,
             type: "page",
-            storeStatus: status.storeStatus,
-            cacheStatus: status.cacheStatus,
             isValid: isValid,
             isAvailableOffline: isAvailableOffline,
             isPublishable: isPublishable,
         };
     }
-    */
-    /*
 
     async BuildList(): Promise<void> {
         this.itemListings = [];
-        this.itemListings.push(this.ManifestListing());
+        this.itemListings.push(await this.ManifestListing());
 
         const pageIds = Object.keys(this.manifest.pages);
         const cacheKeys = await CacheKeys();
@@ -138,7 +116,6 @@ export class AppDataStatus {
             this.itemListings.push(pageListing);
         }
     }
-    */
     /*
 
     private async PerformAll(

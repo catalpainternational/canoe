@@ -1,6 +1,4 @@
 import { TPublishableItem } from "ts/Types/PublishableItemTypes";
-import { TPage, TWagtailPage } from "ts/Types/PageTypes";
-import { TAssetEntry } from "ts/Types/AssetTypes";
 
 export interface IPublishableItem extends TPublishableItem {
     /** The original request object (stripped of any authentication values) that works as the key into the cache for this item */
@@ -17,9 +15,3 @@ export interface IPublishableItem extends TPublishableItem {
     /** Get the new response to use when updating this item in the cache */
     updatedResp: Response;
 }
-
-export interface IPage extends TPage, TPublishableItem {}
-
-export interface IWagtailPage extends TWagtailPage, TPublishableItem {}
-
-export interface IAssetEntry extends TAssetEntry, TPublishableItem {}
