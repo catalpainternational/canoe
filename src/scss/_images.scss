@@ -72,6 +72,11 @@
     @include mask-icons-shared("~img/clipboard.svg", contain, $gray-4);
 }
 
+.sync-icon {
+    @extend %bottom-nav-shared;
+    @include mask-icons-shared("~img/sync_9.svg", contain, $gray-4);
+}
+
 .list-icon {
     @extend %bottom-nav-shared;
     @include mask-icons-shared("~img/list.svg", contain, $gray-4);

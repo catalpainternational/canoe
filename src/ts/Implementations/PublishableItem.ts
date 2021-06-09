@@ -38,6 +38,7 @@ export abstract class PublishableItem {
             this.requestOptions
         );
     }
+
     /**
      * Get a network response for this item, caching it appropriately
      * @returns a request response for this item
@@ -45,6 +46,7 @@ export abstract class PublishableItem {
      */
     async getResponseFromNetwork(): Promise<Response> {
         logger.log("using network for %s:%s", this.str, this.url);
+
         let response;
         try {
             response = await fetch(this.url, this.getRequestOptions());
@@ -52,15 +54,18 @@ export abstract class PublishableItem {
             logger.warn("request failed for %s:%s", this.str, this.url);
             throw Error("Network error");
         }
+
         if (!response.ok) {
             logger.warn("request not ok for %s:%s", this.str, this.url);
             throw Error("Network response not ok");
         }
+
         logger.log("caching response for %s:%s", this.str, this.url);
         const responseClone = response.clone();
         await caches
             .open(this.cacheKey)
             .then((c) => c.put(this.url, responseClone));
+
         return response;
     }
 
@@ -71,14 +76,16 @@ export abstract class PublishableItem {
      */
     async getResponseFromCache(): Promise<Response | undefined> {
         logger.log("checking cache for %s:%s", this.str, this.url);
+
         return caches
             .match(this.url, this.cacheOptions)
             .then((cacheResponse) => {
-                if (cacheResponse === undefined) {
-                    logger.log("Cache miss for %s:%s", this.str, this.url);
-                } else {
-                    logger.log("Use cache for %s:%s", this.str, this.url);
-                }
+                const logTemplate =
+                    cacheResponse === undefined
+                        ? "Cache miss for %s:%s"
+                        : "Use cache for %s:%s";
+                logger.log(logTemplate, this.str, this.url);
+
                 return cacheResponse;
             });
     }

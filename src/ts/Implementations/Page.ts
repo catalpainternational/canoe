@@ -268,7 +268,7 @@ export class Page extends PublishableItem implements StorableItem {
 
     /**
      * Remove this page, assets, and children from the cache
-     * @returns true if succeds
+     * @returns true if succeeds
      */
     async removeAvailableOffline(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
@@ -280,6 +280,7 @@ export class Page extends PublishableItem implements StorableItem {
             }),
             super.removeAvailableOffline(),
         ];
+
         return Promise.all(promises).then((results) =>
             results.every((result) => result)
         );
@@ -287,23 +288,24 @@ export class Page extends PublishableItem implements StorableItem {
 
     /** A page isPublishable if it, and all of its assets, are publishable.
      * That is, are they all present in this page's cache. */
-    isPublishable(): Promise<boolean> {
+    async isPublishable(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
             ...this.manifestAssets.map((asset) => {
                 return asset.isAvailableOffline();
             }),
             super.isAvailableOffline(),
         ];
-        return Promise.all(promises).then((results) =>
-            results.every((result) => result)
-        );
+        const results = await Promise.all(promises);
+
+        return results.every((res) => res);
     }
 
-    /** add some data to be stored with the next completion */
+    /** Add some data to be stored with the next completion */
     addCompletionData(data: Record<string, any>): void {
         Object.assign(this.#completionData, data);
     }
-    /** returns data to be stored with thi page completion */
+
+    /** Returns data to be stored with this page completion */
     get completionData(): Record<string, any> {
         const data = {
             revisionId: this.revisionId,
@@ -313,7 +315,8 @@ export class Page extends PublishableItem implements StorableItem {
         this.#completionData = {};
         return data;
     }
-    /** sets a page as complete */
+
+    /** Sets a page as complete */
     set complete(complete: boolean) {
         const data = this.completionData;
         data["complete"] = !!complete;
@@ -323,16 +326,18 @@ export class Page extends PublishableItem implements StorableItem {
         // set in redux store
         storePageComplete(this.id, action.date, complete);
     }
-    /** if a page has been marked as complete */
+
+    /** Get if a page has been marked as complete */
     get complete(): boolean {
         return this.completeDate !== undefined;
     }
-    /** when a page was last marked as complete */
+
+    /** Get when a page was last marked as complete */
     get completeDate(): Date | undefined {
         return getStoredPageCompletionDate(this.id);
     }
 
-    /** sets feedback on this page */
+    /** Sets feedback on this page */
     sendFeedback(feedbackData: Record<string, any>): void {
         persistFeedback({
             pageId: this.id,
@@ -342,7 +347,7 @@ export class Page extends PublishableItem implements StorableItem {
         });
     }
 
-    /** whether this page is notstarted, in progress or complete */
+    /** Get whether this page is not-started, in progress or complete */
     get progressStatus(): ProgressStatus {
         if (this.complete) {
             return "complete";
@@ -352,6 +357,7 @@ export class Page extends PublishableItem implements StorableItem {
             return "in-progress";
         }
     }
+
     /** the data to show in a progress bar for this page */
     get progressValues(): ProgressValues {
         return {
