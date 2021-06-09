@@ -4,7 +4,10 @@ import { TManifestData } from "../Types/ManifestTypes";
 import { TWagtailPage } from "../Types/PageTypes";
 import { StorableItem } from "../Interfaces/StorableItem";
 
-import { PublishableItem } from "./PublishableItem";
+import {
+    PublishableItem,
+    UpdatePolicy,
+} from "../Implementations/PublishableItem";
 import { Page } from "./Page";
 
 import AllCourses from "./Specific/AllCourses";
@@ -81,8 +84,11 @@ export class Manifest extends PublishableItem implements StorableItem {
     }
     // #endregion StorableItem implementations
 
-    async prepare(): Promise<void> {
-        const response = await this.getResponse();
+    async prepare(isPreview = false): Promise<void> {
+        const response = await this.getResponse(
+            isPreview,
+            isPreview ? UpdatePolicy.ForceUpdate : UpdatePolicy.Default
+        );
         return response
             .json()
             .then((manifestData: any) => {

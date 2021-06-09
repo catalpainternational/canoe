@@ -25,16 +25,18 @@ const IS_PAGE_PREVIEW = /^\?(.+)/;
 
 export function initialiseRouting() {
     window.addEventListener("hashchange", async () => {
-        route(window.location.hash);
+        route(window.location);
     });
-    route(window.location.hash);
+    route(window.location);
 }
 
-async function route(hashWith) {
-    const hash = hashWith.slice(1);
+async function route(location) {
+    const hash = location.hash.slice(1);
+    const queryParams = new URLSearchParams(location.search);
     const hashParts = hash.split(":");
     const pageHash = hashParts[0];
     const riotHash = hashParts.slice(1);
+    const isPreview = queryParams.has("preview");
     let page = undefined;
     let manifest = undefined;
     let route = undefined;
@@ -47,7 +49,8 @@ async function route(hashWith) {
     } else {
         // otherwise we need a manifest ( bottom nav always needs to know )
         try {
-            manifest = await getValidManifest();
+            // manifest needs to know if we are getting a preview
+            manifest = await getValidManifest(isPreview);
         } catch (err) {
             setRoute({
                 page: {
@@ -96,8 +99,8 @@ async function route(hashWith) {
                 : {page: {type: "pageHash_error", error: `The page shortcut "~{pageHash}" had no match in the Manifest`}};
 
             // refresh the page
-            if (!page.ready) {
-                page.prepare();
+            if (!page.ready || isPreview) {
+                page.prepare(isPreview);
             }
         }
     }
@@ -105,11 +108,11 @@ async function route(hashWith) {
     setRoute(route);
 }
 
-async function getValidManifest() {
+async function getValidManifest(isPreview) {
     const manifest = Manifest.getInstance();
-    if (!manifest.isValid) {
+    if (!manifest.isValid || isPreview) {
         // we need to wait
-        await manifest.prepare();
+        await manifest.prepare(isPreview);
     } else {
         // let's not wait, but still refresh
         manifest.prepare();

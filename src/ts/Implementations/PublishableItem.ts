@@ -54,12 +54,15 @@ export abstract class PublishableItem {
      * @returns a request response for this item
      * @throws Error if network failure or response not OK
      */
-    async getResponseFromNetwork(): Promise<Response> {
+    async getResponseFromNetwork(isPreview = false): Promise<Response> {
         this.logMessage("using network");
-
         let response;
         try {
-            response = await fetch(this.url, this.getRequestOptions());
+            const url = new URL(this.url);
+            if (isPreview) {
+                url.searchParams.append("preview", "");
+            }
+            response = await fetch(url.toString(), this.getRequestOptions());
         } catch {
             this.logMessage("request failed");
             throw Error("Network error");
@@ -104,6 +107,7 @@ export abstract class PublishableItem {
      * @throws Error if network used and failure or response not OK, or strategy not handled
      */
     async getResponse(
+        isPreview = false,
         updatePolicy: UpdatePolicy = UpdatePolicy.Default
     ): Promise<Response> {
         logger.info(
@@ -127,7 +131,7 @@ export abstract class PublishableItem {
                 );
                 break;
             case UpdatePolicy.ForceUpdate:
-                response = await this.getResponseFromNetwork();
+                response = await this.getResponseFromNetwork(isPreview);
                 break;
             default:
                 throw Error("Unhandled prepare strategy");

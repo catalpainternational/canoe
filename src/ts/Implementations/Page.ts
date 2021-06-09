@@ -3,7 +3,10 @@ import { TWagtailPageData } from "../Types/PageTypes";
 import { TAssetEntry } from "../Types/AssetTypes";
 import { StorableItem } from "../Interfaces/StorableItem";
 
-import { PublishableItem } from "../Implementations/PublishableItem";
+import {
+    PublishableItem,
+    UpdatePolicy,
+} from "../Implementations/PublishableItem";
 import { Asset } from "../Implementations/Asset";
 
 import Logger from "../Logger";
@@ -81,8 +84,11 @@ export class Page extends PublishableItem implements StorableItem {
     // #endregion StorableItem implementations
 
     /** Get and store this page, used in routing */
-    async prepare(): Promise<void> {
-        const response = await this.getResponse();
+    async prepare(isPreview = false): Promise<void> {
+        const response = await this.getResponse(
+            isPreview,
+            isPreview ? UpdatePolicy.ForceUpdate : UpdatePolicy.Default
+        );
         return response
             .json()
             .then((manifestData: any) => {
