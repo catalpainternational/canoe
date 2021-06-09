@@ -234,10 +234,11 @@
 
 .high-fivers {
     @include unmaskable-icons-shared("~img/high_fivers.png", contain);
-    height: 100%;
     width: 100%;
-    max-height: 200px;
+    height: 160px;
     display: inline-block;
+    margin-top: 2.5em;
+    margin-bottom: 1em;
 }
 
 .download-course {
