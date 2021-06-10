@@ -149,3 +149,15 @@ export const hashString = (string) => {
     hash = hash < 0 ? Math.ceil(hash) : Math.floor(hash);
     return hash - Math.floor(hash / bit32) * bit32;
 }
+
+export const externalLinks = (parentElement) => {
+    // Set the target for all external links to "_blank"
+    const absolutePath = new RegExp('^(?:[a-z]+:)?//', 'i');
+    const links = [...parentElement.getElementsByTagName('a')];
+
+    links.forEach((link) => {
+        if (absolutePath.test(link.href)) {
+            link.target = "_blank"
+        }
+    })
+}
