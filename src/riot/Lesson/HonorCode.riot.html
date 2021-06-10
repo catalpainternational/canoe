@@ -70,11 +70,10 @@
             },
 
             youMustScoreAtLeastMessage() {
-                const { minimumScore } = this.props;
                 // message for what percent a user must score to pass the exam
                 return gettext(
                     "To pass this exam you need to score <strong>%1% or higher</strong>",
-                    this.course.minimumExamScore
+                    this.course.minimumExamScorePercentage
                 );
             },
         };
