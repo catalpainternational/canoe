@@ -69,6 +69,7 @@ module.exports = env => {
         },
         devServer: {
             contentBase: path.resolve(__dirname, "dist"),
+            historyApiFallback: true,
         },
         resolve: {
             extensions: [".ts", ".js", ".cjs", ".mjs", ".json", ".riot.html"],
