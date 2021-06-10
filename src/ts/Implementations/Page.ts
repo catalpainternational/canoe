@@ -134,7 +134,7 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     get title(): string {
-        return this.manifestData?.title || this.toString() || "";
+        return this.manifestData?.title || "";
     }
 
     get loc_hash(): string {
