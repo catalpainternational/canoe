@@ -20,6 +20,7 @@ import {
 import { getBrowser } from "../PlatformDetection";
 
 // See ts/Typings for the type definitions for these imports
+import { BACKEND_BASE_URL } from "js/urls";
 
 /** This is a subjective in-order list of the above rendition IDs
  * Its intended use is to be intersected with an array of available renditions
@@ -75,9 +76,7 @@ export class Asset extends PublishableItem {
     /** The platform specific media url of this asset item */
     static url(asset: TAssetEntry): string {
         const assetPath = Asset.platformSpecificRendition(asset)?.path || "";
-        return assetPath
-            ? `${process.env.API_BASE_URL}/media/${assetPath}`
-            : "";
+        return assetPath ? `${BACKEND_BASE_URL}/media/${assetPath}` : "";
     }
 
     /**
@@ -251,7 +250,7 @@ export class Asset extends PublishableItem {
 
     get thumbnail(): string {
         return this.metadata && this.metadata.thumbnail
-            ? `${process.env.API_BASE_URL}/${this.metadata.thumbnail}`
+            ? `${BACKEND_BASE_URL}/${this.metadata.thumbnail}`
             : "";
     }
 

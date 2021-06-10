@@ -27,6 +27,7 @@
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
+        import { BACKEND_BASE_URL } from "js/urls";
         import { getRoute } from "ReduxImpl/Interface";
 
         function LessonPage() { return {
@@ -42,7 +43,7 @@
 
             get cardImageUrl() {
                 return this.lesson.cardImage
-                    ? `${process.env.API_BASE_URL}${this.lesson.cardImage}`
+                    ? `${BACKEND_BASE_URL}${this.lesson.cardImage}`
                     : undefined;
             },
 

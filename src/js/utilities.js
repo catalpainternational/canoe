@@ -88,7 +88,7 @@ export const getCardImageUrl = (link, imageUrl) => {
     const fallbackImg = stockImages[cardId % stockImages.length];
 
     return imageUrl
-        ? `${process.env.API_BASE_URL}${imageUrl}?cardImageFallback=${fallbackImg}`
+        ? `${BACKEND_BASE_URL}${imageUrl}?cardImageFallback=${fallbackImg}`
         : fallbackImg;
 };
 
