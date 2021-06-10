@@ -2,7 +2,7 @@ import {
     TItemCacheStatus,
     TItemStoreStatus,
     TItemType,
-} from "ts/Types/CanoeEnums";
+} from "./CanoeEnums";
 
 /** The id fields for a manifest, page or asset item */
 export type TItemId = {

@@ -47,30 +47,22 @@ export class Page extends PublishableItem implements StorableItem {
         this.#parent = parent;
     }
 
-    /**
-     * The api url of this page
-     */
+    /** The api url of this page */
     get url(): string {
         return `${process.env.API_BASE_URL}${this.manifestData?.api_url}`;
     }
 
-    /**
-     * The cache in which the page is stored
-     */
+    /** The cache in which the page is stored */
     get cacheKey(): string {
         return this.manifestData?.storage_container;
     }
 
-    /**
-     * The wagtail page live_revision_id
-     */
+    /** The wagtail page live_revision_id */
     get revisionId(): BigInteger {
         return this.manifestData?.revision_id;
     }
 
-    /**
-     * The options to make an page api request
-     */
+    /** The options to make an page api request */
     get requestOptions(): RequestInit {
         const reqInit: any = {
             credentials: "include",
@@ -91,9 +83,7 @@ export class Page extends PublishableItem implements StorableItem {
     }
     // end StorableItem implementations
 
-    /**
-     * Get and store this page, used in routing
-     */
+    /** Get and store this page, used in routing */
     async prepare(): Promise<void> {
         const response = await this.getResponse();
         return response
@@ -108,7 +98,7 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     /** Is this item `ready` to be used now!?
-     * Has it been succesfully prepared?
+     * @remarks Has it been succesfully prepared?
      */
     get ready(): boolean {
         return this.storedData !== undefined;
@@ -120,7 +110,7 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     /** The data for this page as defined in the manifest
-     * legacy alias for manifestData
+     * @remarks legacy alias for manifestData
      */
     get data(): TWagtailPageData {
         return this.storedData || {};
@@ -213,8 +203,7 @@ export class Page extends PublishableItem implements StorableItem {
         );
     }
 
-    /** This will do a basic integrity check.
-     */
+    /** This will do a basic integrity check. */
     get isValid(): boolean {
         // Has the wagtail version of this page been loaded
         return !!this.manifestData;
@@ -230,7 +219,7 @@ export class Page extends PublishableItem implements StorableItem {
 
     /**
      * Check if the page is in the correct cache
-     * @returns true if this page, assets, and children is cached in the correct cache , false if not
+     * @returns `true` if this page, assets, and children is cached in the correct cache, `false` if not
      */
     async isAvailableOffline(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
@@ -249,7 +238,7 @@ export class Page extends PublishableItem implements StorableItem {
 
     /**
      * Add this page, assets, and children to the correct cache
-     * @returns true if succeeds
+     * @returns `true` on success
      */
     async makeAvailableOffline(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
@@ -268,7 +257,7 @@ export class Page extends PublishableItem implements StorableItem {
 
     /**
      * Remove this page, assets, and children from the cache
-     * @returns true if succeds
+     * @returns `true` on success
      */
     async removeAvailableOffline(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
@@ -286,7 +275,7 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     /** A page isPublishable if it, and all of its assets, are publishable.
-     * That is, are they all present in this page's cache. */
+     * @remarks That is, are they all present in this page's cache. */
     isPublishable(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
             ...this.manifestAssets.map((asset) => {
@@ -313,6 +302,7 @@ export class Page extends PublishableItem implements StorableItem {
         this.#completionData = {};
         return data;
     }
+
     /** sets a page as complete */
     set complete(complete: boolean) {
         const data = this.completionData;
@@ -323,10 +313,12 @@ export class Page extends PublishableItem implements StorableItem {
         // set in redux store
         storePageComplete(this.id, action.date, complete);
     }
+
     /** if a page has been marked as complete */
     get complete(): boolean {
         return this.completeDate !== undefined;
     }
+
     /** when a page was last marked as complete */
     get completeDate(): Date | undefined {
         return getStoredPageCompletionDate(this.id);
@@ -352,6 +344,7 @@ export class Page extends PublishableItem implements StorableItem {
             return "in-progress";
         }
     }
+
     /** the data to show in a progress bar for this page */
     get progressValues(): ProgressValues {
         return {
