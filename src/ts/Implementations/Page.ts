@@ -17,6 +17,7 @@ import {
 } from "ReduxImpl/Interface";
 import { persistCompletion } from "js/actions/Completion";
 import { persistFeedback } from "js/UserActions";
+import { BACKEND_BASE_URL } from "js/urls";
 
 const logger = new Logger("Page");
 
@@ -51,7 +52,7 @@ export class Page extends PublishableItem implements StorableItem {
      * The api url of this page
      */
     get url(): string {
-        return `${process.env.API_BASE_URL}${this.manifestData?.api_url}`;
+        return `${BACKEND_BASE_URL}${this.manifestData?.api_url}`;
     }
 
     /**
