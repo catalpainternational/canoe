@@ -17,7 +17,7 @@ import TeachingTopic from "./Specific/TeachingTopic";
 import TeachingActivity from "./Specific/TeachingActivity";
 
 // See ts/Typings for the type definitions for these imports
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
 import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 
 const logger = new Logger("Manifest");
@@ -29,7 +29,7 @@ class ManifestError extends Error {
     }
 }
 
-export const ManifestAPIURL = `${process.env.API_BASE_URL}/manifest/v1`;
+export const ManifestAPIURL = `${BACKEND_BASE_URL}/manifest/v1`;
 export const ManifestCacheKey = "canoe-manifest";
 
 export class Manifest extends PublishableItem implements StorableItem {

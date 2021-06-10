@@ -1,7 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 import Cookies from "js-cookie";
 
-const DISCUSSION_BASE_URL = `${process.env.API_BASE_URL}/discussion`;
+import { BACKEND_BASE_URL } from "js/urls";
+
+const DISCUSSION_BASE_URL = `${BACKEND_BASE_URL}/discussion`;
 
 export class Discussion {
     static CreateComment(
