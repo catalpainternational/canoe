@@ -124,8 +124,8 @@ export class Asset extends PublishableItem {
     }
 
     /** Description for log lines */
-    get str(): string {
-        return `Asset ${this.id} in ${this.#page.str}`;
+    toString(): string {
+        return `Asset ${this.id} in ${this.#page}`;
     }
 
     /** The appropriate rendition for the platform we are running on */
