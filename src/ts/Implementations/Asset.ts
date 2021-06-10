@@ -46,7 +46,7 @@ const RENDITION_PREFERENCE = [
  * whereby we will take the preferred rendition over the smallest rendition */
 const SIZE_DIFF_PERCENT = 0.02;
 
-/** A asset ( binary resource ) than can be cached */
+/** An asset ( binary resource ) than can be cached */
 export class Asset extends PublishableItem {
     /** id of this asset in the manifest page */
     #id: string;
