@@ -1,5 +1,5 @@
-import { TWagtailPage } from "ts/Types/PageTypes";
-import { TItemCommon } from "ts/Types/PublishableItemTypes";
+import { TWagtailPage } from "./PageTypes";
+import { TItemCommon } from "./PublishableItemTypes";
 
 export type TManifestData = {
     pages: Record<string, TWagtailPage>;

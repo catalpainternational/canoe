@@ -1,8 +1,11 @@
 <raw>
     <script>
+        import { externalLinks } from "js/utilities";
+
         export default {
             setInnerHTML() {
                 this.root.innerHTML = this.props.html || this.props.card.content;
+                externalLinks(this.root);
             },
 
             onMounted() {

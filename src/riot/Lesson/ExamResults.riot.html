@@ -90,7 +90,7 @@
                 return gettext(
                     "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can review your answers, retake this exam now, or finish it later.",
                     Math.ceil(100 * this.props.result.score),
-                    this.course.minimumExamScore
+                    this.course.minimumExamScorePercentage
                 );
             },
         };

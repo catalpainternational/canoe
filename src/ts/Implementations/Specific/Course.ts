@@ -9,8 +9,6 @@ import { persistExamScore } from "js/actions/ExamScores";
 import Lesson from "./Lesson";
 import Answer from "../Answer";
 
-const EXAM_PASS_SCORE = 0.75;
-
 export default class Course extends Page {
     get discussions(): any {
         return this.storedData?.lessons.map((lesson: any) => ({
@@ -54,7 +52,7 @@ export default class Course extends Page {
         if (this.examIsPrelearning && score !== undefined) {
             return true;
         } else {
-            return score !== undefined && score > EXAM_PASS_SCORE;
+            return score !== undefined && score > this.minimumExamScoreDecimal;
         }
     }
 
@@ -62,9 +60,9 @@ export default class Course extends Page {
         return this.tags.filter((tag: string) => tags.includes(tag)).length > 0;
     }
 
-    /**  If the course has ans exam we store
-     *     the child lessons in this course at the time
-     *     any exam responses with its completion */
+    /** If the course has ans exam we store
+     * - the child lessons in this course at the time
+     * - any exam responses with its completion */
     get completionData(): Record<string, any> {
         const courseData: Record<string, any> = {
             lessons: this.childPages.map((l) => {
@@ -146,15 +144,19 @@ export default class Course extends Page {
                     return [uuid, answer.current];
                 })
             ),
-            passed: score >= EXAM_PASS_SCORE,
+            passed: score >= this.minimumExamScoreDecimal,
             score,
             correctAnswers,
-            passScore: EXAM_PASS_SCORE,
+            passScore: this.minimumExamScoreDecimal,
         };
     }
 
-    get minimumExamScore(): number {
-        return Math.ceil(EXAM_PASS_SCORE * 100);
+    get minimumExamScoreDecimal(): number {
+        return this.storedData.exam_pass_score / 100;
+    }
+
+    get minimumExamScorePercentage(): number {
+        return this.storedData.exam_pass_score;
     }
 
     /** the data to show in a progress bar for a course includes
