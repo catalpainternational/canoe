@@ -88,7 +88,7 @@ export const getCardImageUrl = (link, imageUrl) => {
     const fallbackImg = stockImages[cardId % stockImages.length];
 
     return imageUrl
-        ? `${process.env.API_BASE_URL}${imageUrl}?cardImageFallback=${fallbackImg}`
+        ? `${BACKEND_BASE_URL}${imageUrl}?cardImageFallback=${fallbackImg}`
         : fallbackImg;
 };
 
@@ -148,4 +148,16 @@ export const hashString = (string) => {
     const bit32 = Math.pow(2, 32);
     hash = hash < 0 ? Math.ceil(hash) : Math.floor(hash);
     return hash - Math.floor(hash / bit32) * bit32;
+}
+
+export const externalLinks = (parentElement) => {
+    // Set the target for all external links to "_blank"
+    const absolutePath = new RegExp('^(?:[a-z]+:)?//', 'i');
+    const links = [...parentElement.getElementsByTagName('a')];
+
+    links.forEach((link) => {
+        if (absolutePath.test(link.href)) {
+            link.target = "_blank"
+        }
+    })
 }

@@ -17,7 +17,7 @@ import TeachingTopic from "./Specific/TeachingTopic";
 import TeachingActivity from "./Specific/TeachingActivity";
 
 // See ts/Typings for the type definitions for these imports
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
+import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
 import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 
 const logger = new Logger("Manifest");
@@ -29,26 +29,21 @@ class ManifestError extends Error {
     }
 }
 
-export const ManifestAPIURL = `${process.env.API_BASE_URL}/manifest/v1`;
+export const ManifestAPIURL = `${BACKEND_BASE_URL}/manifest/v1`;
 export const ManifestCacheKey = "canoe-manifest";
 
 export class Manifest extends PublishableItem implements StorableItem {
-    /**
-     * The api url of the manifest
-     */
+    /** The api url of the manifest */
     get url(): string {
         return ManifestAPIURL;
     }
-    /**
-     * The cache in which the manifest is stored
-     */
+
+    /** The cache in which the manifest is stored */
     get cacheKey(): string {
         return ManifestCacheKey;
     }
 
-    /**
-     * The options to make a manifest request
-     */
+    /** The options to make a manifest request */
     get requestOptions(): RequestInit {
         const reqInit: any = {
             credentials: "include",
@@ -58,7 +53,7 @@ export class Manifest extends PublishableItem implements StorableItem {
         return reqInit as RequestInit;
     }
 
-    /** StorableItem implementations */
+    // #region StorableItem implementations
     /** set the manifest data in the manifest store */
     saveToStore(data: TManifestData): void {
         storeManifest(data);
@@ -67,7 +62,7 @@ export class Manifest extends PublishableItem implements StorableItem {
     get storedData(): TManifestData | undefined {
         return getManifestFromStore();
     }
-    /** end StorableItem implementations */
+    // #endregion StorableItem implementations
 
     async prepare(): Promise<void> {
         const response = await this.getResponse();
@@ -86,7 +81,6 @@ export class Manifest extends PublishableItem implements StorableItem {
                 throw new ManifestError("Mainfest failed to deserialize");
             });
     }
-    /** end StorableItem implementations */
 
     get data(): TManifestData | undefined {
         return this.storedData;
@@ -252,7 +246,9 @@ export class Manifest extends PublishableItem implements StorableItem {
             })
             .includes(pageType);
     }
-    get str(): string {
+
+    /** Description for log lines */
+    toString(): string {
         return "Site Manifest";
     }
 }

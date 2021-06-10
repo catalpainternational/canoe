@@ -1,7 +1,7 @@
 <CourseExam>
     <template if="{ stage === 'code' || !isNaN(cardNumber) }">
         <template if="{ stage === 'code' && course.examType !== 'prelearning'}">
-            <HonorCode minimumScore="{ course.minimumExamScore }"></HonorCode>
+            <HonorCode></HonorCode>
         </template>
         <LessonFrame
             if="{ !isNaN(cardNumber) }"

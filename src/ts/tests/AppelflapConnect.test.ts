@@ -6,12 +6,12 @@ global.atob = require("atob");
 
 import { buildFakeNavigator } from "./fakeNavigator";
 
-import { AppelflapConnect } from "ts/AppelflapConnect";
+import { AppelflapConnect } from "../AppelflapConnect";
 import {
     TCertificate,
     TPublication,
     TSubscriptions,
-} from "ts/Types/CacheTypes";
+} from "../Types/CacheTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
