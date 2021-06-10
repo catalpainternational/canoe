@@ -1,6 +1,6 @@
-import { TSubscriptions } from "ts/Types/CacheTypes";
+import { TSubscriptions } from "./Types/CacheTypes";
 
-import { AppelflapConnect } from "ts/AppelflapConnect";
+import { AppelflapConnect } from "./AppelflapConnect";
 
 export class CacheSubscribe {
     #subscriptions: TSubscriptions = { origins: {} };

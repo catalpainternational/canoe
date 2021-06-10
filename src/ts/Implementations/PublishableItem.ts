@@ -118,7 +118,7 @@ export abstract class PublishableItem {
 
     /**
      * Check if the item is in the correct cache
-     * @returns true if this item is cached in the correct cache , false if not
+     * @returns `true` if this item is cached in the correct cache, `false` if not
      */
     async isAvailableOffline(): Promise<boolean> {
         const match = await caches.match(this.url, this.cacheOptions);
@@ -127,7 +127,7 @@ export abstract class PublishableItem {
 
     /**
      * Add this item to the correct cache
-     * @returns true if succeeds
+     * @returns `true` on success
      */
     async makeAvailableOffline(): Promise<boolean> {
         await this.getResponseFromNetwork();
@@ -136,7 +136,7 @@ export abstract class PublishableItem {
 
     /**
      * Remove this content from the cache
-     * @returns true if succeds
+     * @returns `true` on success
      */
     async removeAvailableOffline(): Promise<boolean> {
         const cache = await caches.open(this.cacheKey);
