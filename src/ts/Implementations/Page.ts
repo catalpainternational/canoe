@@ -71,7 +71,7 @@ export class Page extends PublishableItem implements StorableItem {
         return reqInit as RequestInit;
     }
 
-    // StorableItem implementations
+    // #region StorableItem implementations
     /** Set the page data in the page store */
     saveToStore(data: TWagtailPageData): void {
         storePageData(this.#id, data);
@@ -81,7 +81,7 @@ export class Page extends PublishableItem implements StorableItem {
     get storedData(): TWagtailPageData {
         return getPageDataFromStore(this.#id);
     }
-    // end StorableItem implementations
+    // #endregion StorableItem implementations
 
     /** Get and store this page, used in routing */
     async prepare(): Promise<void> {

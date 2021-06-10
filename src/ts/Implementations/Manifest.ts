@@ -53,7 +53,7 @@ export class Manifest extends PublishableItem implements StorableItem {
         return reqInit as RequestInit;
     }
 
-    // StorableItem implementations
+    // #region StorableItem implementations
     /** set the manifest data in the manifest store */
     saveToStore(data: TManifestData): void {
         storeManifest(data);
@@ -62,7 +62,7 @@ export class Manifest extends PublishableItem implements StorableItem {
     get storedData(): TManifestData | undefined {
         return getManifestFromStore();
     }
-    // end StorableItem implementations
+    // #endregion StorableItem implementations
 
     async prepare(): Promise<void> {
         const response = await this.getResponse();
