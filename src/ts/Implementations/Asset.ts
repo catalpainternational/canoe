@@ -47,8 +47,7 @@ const RENDITION_PREFERENCE = [
  * whereby we will take the preferred rendition over the smallest rendition */
 const SIZE_DIFF_PERCENT = 0.02;
 
-/** A asset ( binary resource ) than can be cached
- */
+/** An asset ( binary resource ) than can be cached */
 export class Asset extends PublishableItem {
     /** id of this asset in the manifest page */
     #id: string;
@@ -68,17 +67,13 @@ export class Asset extends PublishableItem {
         this.#id = id;
     }
 
-    /**
-     * The platform specific media url of this asset item
-     */
+    /** The platform specific media url of this asset item */
     get url(): string {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return Asset.url(this!.entry as TAssetEntry);
     }
 
-    /**
-     * The platform specific media url of this asset item
-     */
+    /** The platform specific media url of this asset item */
     static url(asset: TAssetEntry): string {
         const assetPath = Asset.platformSpecificRendition(asset)?.path || "";
         return assetPath ? `${BACKEND_BASE_URL}/media/${assetPath}` : "";
@@ -86,24 +81,20 @@ export class Asset extends PublishableItem {
 
     /**
      * The cache in which the asset is stored
-     * Currently uses the page cache
+     * @remarks Currently uses the page cache
      */
     get cacheKey(): string {
         return this.#page.cacheKey;
     }
 
-    /**
-     * The options to make an asset request
-     */
+    /** The options to make an asset request */
     get requestOptions(): RequestInit {
         return {
             cache: "force-cache", // assets are (almost always) invariant on filename
         } as RequestInit;
     }
 
-    /**
-     * The data from the manifest about this asset
-     */
+    /** The data from the manifest about this asset */
     get entry(): TAssetEntry | undefined {
         if (!this.#entry) {
             this.#entry = this.#page.manifestData.assets.find(
@@ -113,23 +104,17 @@ export class Asset extends PublishableItem {
         return this.#entry;
     }
 
-    /**
-     * The id of this asset in the manifest page entry
-     */
+    /** The id of this asset in the manifest page entry */
     get id(): string {
         return this.#id;
     }
 
-    /**
-     * The type of this asset (image|video|audio)
-     */
+    /** The type of this asset (image|video|audio) */
     get type(): string | undefined {
         return this.entry?.type;
     }
 
-    /**
-     * Array of renditions for this asset
-     */
+    /** Array of renditions for this asset */
     get renditions(): Record<string, TRendition> {
         if (Object.keys(this?.entry?.renditions || {}).length === 0) {
             throw new Error("Renditions cannot be accessed");
@@ -138,16 +123,12 @@ export class Asset extends PublishableItem {
         return this!.entry!.renditions;
     }
 
-    /**
-     * Description for log lines
-     */
+    /** Description for log lines */
     get str(): string {
         return `Asset ${this.id} in ${this.#page.str}`;
     }
 
-    /**
-     * The appropriate rendition for the platform we are running on
-     */
+    /** The appropriate rendition for the platform we are running on */
     get platformSpecificRendition(): TRendition {
         if (Object.keys(this?.entry?.renditions || {}).length === 0) {
             throw new Error("Renditions cannot be accessed");
@@ -266,11 +247,13 @@ export class Asset extends PublishableItem {
     get metadata(): Record<string, any> {
         return this.#page.manifest.storedData?.videometa[this.id];
     }
+
     get thumbnail(): string {
         return this.metadata && this.metadata.thumbnail
             ? `${BACKEND_BASE_URL}/${this.metadata.thumbnail}`
             : "";
     }
+
     get duration(): number {
         return this.metadata && this.metadata.duration
             ? this.metadata.duration

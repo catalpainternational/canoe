@@ -1,4 +1,4 @@
-import { TItemCommon, TPublishableItem } from "ts/Types/PublishableItemTypes";
+import { TItemCommon, TPublishableItem } from "./PublishableItemTypes";
 
 export type TRendition = {
     /** Path to the asset rendition, a partial URL */

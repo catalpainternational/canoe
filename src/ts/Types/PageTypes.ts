@@ -1,6 +1,6 @@
-import { TPageType } from "ts/Types/CanoeEnums";
-import { TItemCommon, TPublishableItem } from "ts/Types/PublishableItemTypes";
-import { TAssetEntry } from "ts/Types/AssetTypes";
+import { TPageType } from "./CanoeEnums";
+import { TItemCommon, TPublishableItem } from "./PublishableItemTypes";
+import { TAssetEntry } from "./AssetTypes";
 
 export type TPageData = {
     loc_hash: string;
