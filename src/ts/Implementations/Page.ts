@@ -92,7 +92,7 @@ export class Page extends PublishableItem implements StorableItem {
                 this.saveToStore(manifestData);
             })
             .catch((err) => {
-                logger.warn("%s:%s deserialize %o", this.str, this.url, err);
+                logger.warn("%s:%s deserialize %o", this, this.url, err);
                 throw new Error("Page failed to deserialize");
             });
     }
@@ -133,7 +133,7 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     get title(): string {
-        return this.manifestData?.title || "";
+        return this.manifestData?.title || this.toString() || "";
     }
 
     get loc_hash(): string {
@@ -213,7 +213,8 @@ export class Page extends PublishableItem implements StorableItem {
         return this.#id;
     }
 
-    get str(): string {
+    /** Description for log lines */
+    toString(): string {
         return `Page ${this.title}`;
     }
 

@@ -246,7 +246,9 @@ export class Manifest extends PublishableItem implements StorableItem {
             })
             .includes(pageType);
     }
-    get str(): string {
+
+    /** Description for log lines */
+    toString(): string {
         return "Site Manifest";
     }
 }
