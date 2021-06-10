@@ -230,10 +230,9 @@ export class Page extends PublishableItem implements StorableItem {
 
     get isNew(): boolean {
         return (
-            !this.complete &&
             this.progressStatus === "not-started" &&
-            Number(new Date(this.version / 1000)) >
-                Number(Date.now() - 1000 * 60 * 60 * 24 * 7)
+            new Date(this.version / 1000).valueOf() >
+                Date.now() - 1000 * 60 * 60 * 24 * 7
         );
     }
 
