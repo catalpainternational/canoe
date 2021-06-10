@@ -229,8 +229,12 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     get isNew(): boolean {
-        // TODO implement this properly when the backend is done
-        return true;
+        return (
+            !this.complete &&
+            this.progressStatus === "not-started" &&
+            Number(new Date(this.version / 1000)) >
+                Number(Date.now() - 1000 * 60 * 60 * 24 * 7)
+        );
     }
 
     /**
