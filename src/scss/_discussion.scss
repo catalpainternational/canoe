@@ -221,7 +221,7 @@ CoursePage .empty-state {
 
     p {
         padding-right: 5px;
-        font-size: 0.9em;
+        font-size: 0.8em;
         margin: 0;
     }
 }
@@ -385,7 +385,7 @@ DiscussionReply {
     display: grid;
     grid-template-columns: 20px 1fr;
     align-items: center;
-    column-gap: 20px;
+    column-gap: 12px;
     width: 80%;
     height: auto;
     max-height: 100px;
@@ -394,6 +394,7 @@ DiscussionReply {
 
     p {
         color: $gray-0;
+        font-size: 0.9em;
     }
 
     &.show {
@@ -403,7 +404,8 @@ DiscussionReply {
     }
 
     & > .checkmark {
-        width: 17px;
-        height: 12px;
+        width: 15px;
+        height: 11px;
+        margin: 0 auto;
     }
 }
