@@ -68,15 +68,10 @@ export class Asset extends PublishableItem {
     }
 
     /** The platform specific media url of this asset item */
-    get url(): string {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return Asset.url(this!.entry as TAssetEntry);
-    }
-
-    /** The platform specific media url of this asset item */
-    static url(asset: TAssetEntry): string {
-        const assetPath = Asset.platformSpecificRendition(asset)?.path || "";
-        return assetPath ? `${BACKEND_BASE_URL}/media/${assetPath}` : "";
+    get api_url(): string {
+        const assetPath =
+            Asset.platformSpecificRendition(this.assetEntry)?.path || "";
+        return assetPath ? `/media/${assetPath}` : "";
     }
 
     /**
@@ -120,7 +115,7 @@ export class Asset extends PublishableItem {
             throw new Error("Renditions cannot be accessed");
         }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return this!.entry!.renditions;
+        return this.assetEntry!.renditions;
     }
 
     /** Description for log lines */
@@ -133,8 +128,12 @@ export class Asset extends PublishableItem {
         if (Object.keys(this?.entry?.renditions || {}).length === 0) {
             throw new Error("Renditions cannot be accessed");
         }
+        return Asset.platformSpecificRendition(this.assetEntry);
+    }
+
+    get assetEntry(): TAssetEntry {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return Asset.platformSpecificRendition(this!.entry as TAssetEntry);
+        return this!.entry as TAssetEntry;
     }
 
     static platformSpecificRendition(asset: TAssetEntry): TRendition {
