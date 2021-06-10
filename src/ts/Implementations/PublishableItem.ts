@@ -21,8 +21,6 @@ export abstract class PublishableItem {
     abstract get cacheKey(): string;
     /** Request options dict used to retrieve this item */
     abstract get requestOptions(): RequestInit;
-    /** Brief descriptive string for logs */
-    abstract get str(): string;
 
     /** The (full) url to retrieve this item from */
     get url(): string {
@@ -46,25 +44,33 @@ export abstract class PublishableItem {
             this.requestOptions
         );
     }
+
+    private logMessage(message: string): void {
+        logger.log("%s for %s:%s", message, this, this.url);
+    }
+
     /**
      * Get a network response for this item, caching it appropriately
      * @returns a request response for this item
      * @throws Error if network failure or response not OK
      */
     async getResponseFromNetwork(): Promise<Response> {
-        logger.log("using network for %s:%s", this.str, this.url);
+        this.logMessage("using network");
+
         let response;
         try {
             response = await fetch(this.url, this.getRequestOptions());
         } catch {
-            logger.warn("request failed for %s:%s", this.str, this.url);
+            this.logMessage("request failed");
             throw Error("Network error");
         }
+
         if (!response.ok) {
-            logger.warn("request not ok for %s:%s", this.str, this.url);
+            this.logMessage("request not ok");
             throw Error("Network response not ok");
         }
-        logger.log("caching response for %s:%s", this.str, this.url);
+
+        this.logMessage("caching response");
         const responseClone = response.clone();
         await caches
             .open(this.cacheKey)
@@ -78,15 +84,14 @@ export abstract class PublishableItem {
      * @throws Error if network used and failure or response not OK
      */
     async getResponseFromCache(): Promise<Response | undefined> {
-        logger.log("checking cache for %s:%s", this.str, this.url);
+        this.logMessage("checking cache");
+
         return caches
             .match(this.url, this.cacheOptions)
             .then((cacheResponse) => {
-                if (cacheResponse === undefined) {
-                    logger.log("Cache miss for %s:%s", this.str, this.url);
-                } else {
-                    logger.log("Use cache for %s:%s", this.str, this.url);
-                }
+                this.logMessage(
+                    cacheResponse === undefined ? "cache miss" : "use cache"
+                );
                 return cacheResponse;
             });
     }
@@ -101,7 +106,13 @@ export abstract class PublishableItem {
     async getResponse(
         updatePolicy: UpdatePolicy = UpdatePolicy.Default
     ): Promise<Response> {
-        logger.info("Get response for %s:%s using %s", this.str, updatePolicy);
+        logger.info(
+            "Get response for %s:%s using %s",
+            this,
+            this.url,
+            updatePolicy
+        );
+
         let response: Response;
         switch (updatePolicy) {
             case UpdatePolicy.Default:
@@ -121,6 +132,7 @@ export abstract class PublishableItem {
             default:
                 throw Error("Unhandled prepare strategy");
         }
+
         return response;
     }
 
