@@ -88,7 +88,7 @@ export class Asset extends PublishableItem {
         return this.#page.cacheKey;
     }
 
-    /** The options to make an asset request*/
+    /** The options to make an asset request */
     get requestOptions(): RequestInit {
         return {
             cache: "force-cache", // assets are (almost always) invariant on filename
