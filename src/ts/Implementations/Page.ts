@@ -217,6 +217,14 @@ export class Page extends PublishableItem implements StorableItem {
         return `Page ${this.title}`;
     }
 
+    get isNew(): boolean {
+        return (
+            this.progressStatus === "not-started" &&
+            new Date(this.version / 1000).valueOf() >
+                Date.now() - 1000 * 60 * 60 * 24 * 7
+        );
+    }
+
     /**
      * Check if the page is in the correct cache
      * @returns `true` if this page, assets, and children is cached in the correct cache, `false` if not
