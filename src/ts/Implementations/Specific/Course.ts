@@ -152,11 +152,11 @@ export default class Course extends Page {
     }
 
     get minimumExamScoreDecimal(): number {
-        return this.storedData.exam_pass_score / 100;
+        return this.storedData?.exam_pass_score / 100;
     }
 
     get minimumExamScorePercentage(): number {
-        return this.storedData.exam_pass_score;
+        return this.storedData?.exam_pass_score;
     }
 
     /** the data to show in a progress bar for a course includes
