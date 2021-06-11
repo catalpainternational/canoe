@@ -47,7 +47,7 @@ export class Page extends PublishableItem implements StorableItem {
         this.#parent = parent;
     }
 
-    get api_url(): string {
+    get backendPath(): string {
         return this.manifestData?.api_url || "";
     }
 

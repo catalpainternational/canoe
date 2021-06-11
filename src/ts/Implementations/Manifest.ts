@@ -28,12 +28,12 @@ class ManifestError extends Error {
     }
 }
 
-export const ManifestAPIURL = "/manifest/v1";
+export const ManifestBackendPath = "/manifest/v1";
 export const ManifestCacheKey = "bero-manifest";
 
 export class Manifest extends PublishableItem implements StorableItem {
-    get api_url(): string {
-        return ManifestAPIURL;
+    get backendPath(): string {
+        return ManifestBackendPath;
     }
 
     /** The cache in which the manifest is stored */

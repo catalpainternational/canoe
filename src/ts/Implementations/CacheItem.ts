@@ -168,7 +168,7 @@ export const InitialiseFromCache = async (
     item: IPublishableItem
 ): Promise<boolean> => {
     const itemCache = await AccessCache(item.cacheKey);
-    if (!itemCache || !item.api_url) {
+    if (!itemCache || !item.backendPath) {
         item.status.cacheStatus = "prepared";
         return false;
     }

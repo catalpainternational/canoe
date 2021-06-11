@@ -15,8 +15,8 @@ const logger = new Logger("ContentItem");
  * @remarks The item can be queried for cache status and added and removed from the cache
  */
 export abstract class PublishableItem {
-    /** The api_url of this item as recorded in the manifest */
-    abstract get api_url(): string;
+    /** The backendPath of this item as recorded in the manifest (in some form or other) */
+    abstract get backendPath(): string;
     /** The name of the cache used to store this item */
     abstract get cacheKey(): string;
     /** Request options dict used to retrieve this item */
@@ -24,7 +24,7 @@ export abstract class PublishableItem {
 
     /** The (full) url to retrieve this item from */
     get url(): string {
-        return this.api_url ? `${BACKEND_BASE_URL}${this.api_url}` : "";
+        return this.backendPath ? `${BACKEND_BASE_URL}${this.backendPath}` : "";
     }
 
     /** The options used to query the caches for this item */

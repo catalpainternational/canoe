@@ -68,7 +68,7 @@ export class Asset extends PublishableItem {
     }
 
     /** The platform specific media url of this asset item */
-    get api_url(): string {
+    get backendPath(): string {
         const assetPath =
             Asset.platformSpecificRendition(this.assetEntry)?.path || "";
         return assetPath ? `/media/${assetPath}` : "";
