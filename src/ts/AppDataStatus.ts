@@ -56,7 +56,7 @@ export class AppDataStatus {
         
         return {
             title: "manifest",
-            api_url: this.manifest.api_url,
+            backendPath: this.manifest.backendPath,
             cacheKey: this.manifest.cacheKey,
             version: this.manifest.version,
             type: "manifest",
@@ -88,7 +88,7 @@ export class AppDataStatus {
 
         return {
             title: manifestPage.title,
-            api_url: statusId,
+            backendPath: statusId,
             cacheKey: manifestPage.storage_container,
             version: manifestPage.version,
             type: "page",

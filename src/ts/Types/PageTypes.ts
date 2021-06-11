@@ -3,14 +3,20 @@ import { TItemCommon, TPublishableItem } from "./PublishableItemTypes";
 import { TAssetEntry } from "./AssetTypes";
 
 export type TPageData = {
+    title: string;
+    type: TPageType | string;
     loc_hash: string;
     storage_container: string;
-    assets: Array<TAssetEntry>;
+    version: number;
+    slug: string;
+    api_url: string;
     language: string;
     children: Array<string>;
     depth: number;
-    type: TPageType | string;
-    title: string;
+    card_image: string;
+    tags: Array<string>;
+    revision_id: BigInteger;
+    assets: Array<TAssetEntry>;
 } & TItemCommon;
 
 export type TPage = TPageData & TPublishableItem;
