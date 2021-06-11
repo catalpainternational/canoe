@@ -15,13 +15,13 @@
                         <h5>ID:{statusListing.id} {statusListing.type}:{statusListing.title} <small>({statusListing.version})</small> </h5>
                     </div>
 
-                    <div if="{statusListing.api_url === statusListing.cacheKey}" class="sync-body">
-                        <span><small>Store URL/Cache Key:</small> { statusListing.api_url }</span>
+                    <div if="{statusListing.backendPath === statusListing.cacheKey}" class="sync-body">
+                        <span><small>Store Path/Cache Key:</small> { statusListing.backendPath }</span>
                     </div>
-                    <div if="{statusListing.api_url != statusListing.cacheKey}" class="sync-body">
-                        <span><small>Store URL:</small> { statusListing.api_url }</span>
+                    <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
+                        <span><small>Store Path:</small> { statusListing.backendPath }</span>
                     </div>
-                    <div if="{statusListing.api_url != statusListing.cacheKey}" class="sync-body">
+                    <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
                         <span><small>Cache Key:</small> { statusListing.cacheKey }</span>
                     </div>
 

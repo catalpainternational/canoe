@@ -1,15 +1,10 @@
 import { TItemType } from "./CanoeEnums";
 
-/** The id fields for a manifest, page or asset item */
-export type TItemId = {
-    api_url: string;
-};
-
 /** Describes the common fields for a manifest, page or asset item */
 export type TItemCommon = {
     // Other fields
     [x: string]: any;
-} & TItemId;
+};
 
 /** Describe the status of this manifest, page or asset item itself */
 export type TItemStatus = {
@@ -33,10 +28,10 @@ export type TItemStatus = {
 export type TItemListing = {
     title: string;
     type: TItemType;
+    backendPath: string;
     cacheKey: string;
     version: number;
-} & TItemId &
-    TItemStatus;
+} & TItemStatus;
 
 /** Describe the state of a manifest, page or asset item */
 export type TPublishableItem = {

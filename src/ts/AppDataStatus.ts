@@ -5,7 +5,6 @@ import { TItemListing } from "./Types/PublishableItemTypes";
 
 // import { TPublishableItem } from "./Types/PublishableItemTypes";
 
-
 import {
     CacheKeys,
     // InitialiseFromCache
@@ -53,7 +52,7 @@ export class AppDataStatus {
 
     async ManifestListing(): Promise<TItemListing> {
         const isAvailableOffline = await this.manifest.isAvailableOffline();
-        
+
         return {
             title: "manifest",
             backendPath: this.manifest.backendPath,
