@@ -141,10 +141,6 @@ export class Manifest extends PublishableItem implements StorableItem {
         return this.childPagesValid;
     }
 
-    async isAvailableOffline(): Promise<boolean> {
-        return this.isValid;
-    }
-
     get isPublishable(): boolean {
         return this.isValid;
     }
