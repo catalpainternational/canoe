@@ -1,34 +1,30 @@
-// import { TSubscriptions } from "./Types/CacheTypes";
-// import { TAppelflapResult } from "./Types/CanoeEnums";
+import { TSubscriptions } from "./Types/CacheTypes";
+import { TAppelflapResult } from "./Types/CanoeEnums";
 import { TWagtailPage } from "./Types/PageTypes";
-import { TItemListing } from "./Types/PublishableItemTypes";
-
-// import { TPublishableItem } from "./Types/PublishableItemTypes";
+import { TItemListing, TPublishableItem } from "./Types/PublishableItemTypes";
+import { TSyncData } from "./Types/SyncTypes";
 
 import {
     CacheKeys,
     // InitialiseFromCache
 } from "./Implementations/CacheItem";
-// import {
-//     getSubscriptions,
-//     publishItem,
-//     setSubscriptions,
-//     unpublishItem,
-// } from "./Implementations/ItemActions";
-
+import {
+    getSubscriptions,
+    publishItem,
+    setSubscriptions,
+    unpublishItem,
+} from "./Implementations/ItemActions";
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
 
-// import { AppelflapConnect } from "./AppelflapConnect";
+import { AppelflapConnect } from "./AppelflapConnect";
 
 import { getPageData as getPageDataFromStore } from "ReduxImpl/Interface";
 
-/*
 type AfcFunction = (
     item: TPublishableItem,
     appelflapConnect: AppelflapConnect
 ) => Promise<TAppelflapResult>;
-*/
 
 /** An overview of the status for all data used by the app */
 export class AppDataStatus {
@@ -117,7 +113,26 @@ export class AppDataStatus {
         }
     }
 
-    /*
+    private async ManifestToPublishableItem(
+        manifest: Manifest
+    ): Promise<TPublishableItem> {
+        return {
+            cacheKey: manifest.cacheKey,
+            isValid: manifest.isValid,
+            isAvailableOffline: await manifest.isAvailableOffline(),
+            isPublishable: manifest.isPublishable,
+        } as TPublishableItem;
+    }
+
+    private async PageToPublishableItem(page: Page): Promise<TPublishableItem> {
+        return {
+            cacheKey: page.cacheKey,
+            isValid: page.isValid,
+            isAvailableOffline: await page.isAvailableOffline(),
+            isPublishable: await page.isPublishable(),
+        } as TPublishableItem;
+    }
+
     private async PerformAll(
         filter: (item: TItemListing) => boolean,
         action: AfcFunction
@@ -130,8 +145,10 @@ export class AppDataStatus {
             const item = performable[ix];
             if (item.type === "manifest") {
                 try {
+                    const publishableManifest =
+                        await this.ManifestToPublishableItem(this.manifest);
                     performed[this.manifest.cacheKey] = await action(
-                        this.manifest,
+                        publishableManifest,
                         appelflapConnect
                     );
                 } catch {
@@ -143,8 +160,10 @@ export class AppDataStatus {
                     performed[item.cacheKey] = "not relevant";
                 } else {
                     try {
+                        const publishablePage =
+                            await this.PageToPublishableItem(page);
                         performed[item.cacheKey] =
-                            (await action(page, appelflapConnect)) ||
+                            (await action(publishablePage, appelflapConnect)) ||
                             "not relevant";
                     } catch {
                         performed[item.cacheKey] = "failed";
@@ -157,25 +176,19 @@ export class AppDataStatus {
     }
 
     /** Publish everything currently flagged as isPublishable */
-    /*
     async PublishAll(): Promise<Record<string, TAppelflapResult>> {
         return this.PerformAll((listing) => listing.isPublishable, publishItem);
     }
-    */
-    /*
 
     /** Unpublish everything currently not flagged as isPublishable */
-    /*
     async UnpublishAll(): Promise<Record<string, TAppelflapResult>> {
         return this.PerformAll(
             (listing) => !listing.isPublishable,
             unpublishItem
         );
     }
-    */
 
     /** Get all current subscriptions */
-    /*
     async GetSubscriptions(): Promise<TSubscriptions> {
         const appelflapConnect = new AppelflapConnect();
         const subscriptions = await getSubscriptions(appelflapConnect);
@@ -186,7 +199,6 @@ export class AppDataStatus {
     }
 
     /** Set all current subscriptions */
-    /*
     async SetSubscriptions(): Promise<TSubscriptions> {
         const appelflapConnect = new AppelflapConnect();
         const subscriptions = await setSubscriptions(
@@ -199,22 +211,8 @@ export class AppDataStatus {
         return subscriptions;
     }
 
-    async SyncAll(): Promise<
-        Record<
-            string,
-            {
-                published: TAppelflapResult;
-                unpublished: TAppelflapResult;
-            }
-        >
-    > {
-        const syncAllStatus: Record<
-            string,
-            {
-                published: TAppelflapResult;
-                unpublished: TAppelflapResult;
-            }
-        > = {};
+    async SyncAll(): Promise<TSyncData> {
+        const syncAllStatus: TSyncData = {};
 
         this.itemListings.forEach((listing) => {
             syncAllStatus[listing.cacheKey] = {
@@ -248,8 +246,9 @@ export class AppDataStatus {
         if (publishSubscribeMismatch) {
             subscriptions = await this.SetSubscriptions();
             origins = Object.keys(subscriptions.origins);
+            const firstOrigin = origins[0];
             subscribed = Object.entries(
-                subscriptions.origins[origins[0]].caches
+                subscriptions.origins[firstOrigin].caches
             );
         }
 
@@ -262,5 +261,4 @@ export class AppDataStatus {
 
         return syncAllStatus;
     }
-    */
 }
