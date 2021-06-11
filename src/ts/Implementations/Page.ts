@@ -284,22 +284,23 @@ export class Page extends PublishableItem implements StorableItem {
 
     /** A page isPublishable if it, and all of its assets, are publishable.
      * @remarks That is, are they all present in this page's cache. */
-    isPublishable(): Promise<boolean> {
+    async isPublishable(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
             ...this.manifestAssets.map((asset) => {
                 return asset.isAvailableOffline();
             }),
             super.isAvailableOffline(),
         ];
-        return Promise.all(promises).then((results) =>
-            results.every((result) => result)
-        );
+        const results = await Promise.all(promises);
+
+        return results.every((res) => res);
     }
 
     /** add some data to be stored with the next completion */
     addCompletionData(data: Record<string, any>): void {
         Object.assign(this.#completionData, data);
     }
+
     /** returns data to be stored with thi page completion */
     get completionData(): Record<string, any> {
         const data = {
