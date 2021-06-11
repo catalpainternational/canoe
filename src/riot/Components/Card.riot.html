@@ -1,4 +1,7 @@
 <Card>
+    <p if="{contentIsNew()}" class="badge">
+        {TRANSLATIONS.new()}
+    </p>
     <a class="card {statusClass()}" href="#{ link() }">
         <div class="card-image">
             <img crossorigin="anonymous" src="{ getCardImage() }" class="card-hero-image" />
@@ -17,13 +20,15 @@
         import { getCardImageUrl } from "js/utilities";
 
         export default {
+            TRANSLATIONS: {
+                new: () => gettext("New"),
+            },
             getCardImage() {
                 const cardImage = this.props.contentItem
                     ? this.props.contentItem.cardImage
                     : '';
                 return getCardImageUrl(this.props.link || this.props.contentItem.id, cardImage);
             },
-
             title() {
                 return this.props.title || this.props.contentItem.title;
             },
@@ -39,6 +44,10 @@
                 } else {
                     return this.props.contentItem.progressValues;
                 };
+            },
+            contentIsNew() {
+                if (this.props && this.props.contentItem) return this.props.contentItem.isNew;
+                return false;
             },
         };
     </script>
