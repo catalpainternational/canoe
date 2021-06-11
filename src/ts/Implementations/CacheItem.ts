@@ -19,7 +19,7 @@ const AccessCache = async (cacheKey: string): Promise<Cache> => {
 };
 
 /** Build a request object we can use to fetch the item
- * The item must have a valid `fullUrl`
+ * The item must have a valid `url`
  */
 const BuildRequestObject = (item: IPublishableItem): Request => {
     const headers: any = {
@@ -42,7 +42,7 @@ const BuildRequestObject = (item: IPublishableItem): Request => {
         referrer: BACKEND_BASE_URL,
     };
 
-    return new Request(item.fullUrl, reqInit as RequestInit);
+    return new Request(item.url, reqInit as RequestInit);
 };
 
 /** Cleans the supplied request object and uses it to set the item's requestObject and requestObjectCleaned values */
@@ -87,7 +87,7 @@ const CleanRequestObject = (item: IPublishableItem, srcReq: Request): void => {
 const GetRequestObject = async (
     item: IPublishableItem
 ): Promise<Request | undefined> => {
-    if (!item.fullUrl || item.fullUrl === "/") {
+    if (!item.url || item.url === "/") {
         // "The full url could not be determined for this item, it is not retrievable";
         return Promise.resolve(undefined);
     }
@@ -99,7 +99,7 @@ const GetRequestObject = async (
         reqObjectLoaded:
             item.isValid &&
             item.requestObject &&
-            item.requestObject.url === item.fullUrl,
+            item.requestObject.url === item.url,
     };
 
     if (!itemCacheState.cacheExists) {
@@ -110,7 +110,7 @@ const GetRequestObject = async (
         }
     }
 
-    const requests = await itemCache.keys(item.fullUrl, {
+    const requests = await itemCache.keys(item.url, {
         ignoreMethod: true,
         ignoreSearch: true,
         ignoreVary: true,
@@ -119,7 +119,7 @@ const GetRequestObject = async (
 
     if (!itemCacheState.reqObjectLoaded) {
         if (!itemCacheState.reqObjectInCache) {
-            // `Could not find ${item.fullUrl} within the cache`;
+            // `Could not find ${item.url} within the cache`;
             return Promise.resolve(undefined);
         } else {
             CleanRequestObject(item, item.requestObject);
@@ -168,7 +168,7 @@ export const InitialiseFromCache = async (
     item: IPublishableItem
 ): Promise<boolean> => {
     const itemCache = await AccessCache(item.cacheKey);
-    if (!itemCache || !item.api_url) {
+    if (!itemCache || !item.backendPath) {
         item.status.cacheStatus = "prepared";
         return false;
     }
@@ -214,11 +214,11 @@ export const InitialiseByRequest = async (
     let reqObj = await GetRequestObject(item);
     if (!reqObj) {
         item.status.cacheStatus = "prepared";
-        if (item.fullUrl && item.fullUrl !== "/") {
+        if (item.url && item.url !== "/") {
             reqObj = BuildRequestObject(item);
             CleanRequestObject(item, reqObj);
         } else {
-            // Without a fullUrl we cannot retrieve this item
+            // Without a full url we cannot retrieve this item
             // from either the cache or the network
             return false;
         }
@@ -235,9 +235,7 @@ export const InitialiseByRequest = async (
         // * request is a cross-origin no-cors request
         //   (in which case the reported status is always 0.)
         // eslint-disable-next-line no-console
-        console.error(
-            `Error trying to add ${item.cacheKey} for ${item.fullUrl}.`
-        );
+        console.error(`Error trying to add ${item.cacheKey} for ${item.url}.`);
         // eslint-disable-next-line no-console
         console.error(tex);
 
@@ -266,11 +264,11 @@ export const UpdateCachedItem = async (
     let reqObj = await GetRequestObject(item);
     if (!reqObj) {
         item.status.cacheStatus = "prepared";
-        if (item.fullUrl && item.fullUrl !== "/") {
+        if (item.url && item.url !== "/") {
             reqObj = BuildRequestObject(item);
             CleanRequestObject(item, reqObj);
         } else {
-            // Without a fullUrl we cannot retrieve this item
+            // Without a full url we cannot retrieve this item
             // from either the cache or the network
             return false;
         }

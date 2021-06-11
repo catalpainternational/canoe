@@ -17,7 +17,6 @@ import TeachingTopic from "./Specific/TeachingTopic";
 import TeachingActivity from "./Specific/TeachingActivity";
 
 // See ts/Typings for the type definitions for these imports
-import { BACKEND_BASE_URL, ROUTES_FOR_REGISTRATION } from "js/urls";
 import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
 
 const logger = new Logger("Manifest");
@@ -29,13 +28,12 @@ class ManifestError extends Error {
     }
 }
 
-export const ManifestAPIURL = `${BACKEND_BASE_URL}/manifest/v1`;
-export const ManifestCacheKey = "canoe-manifest";
+export const ManifestBackendPath = "/manifest/v1";
+export const ManifestCacheKey = "bero-manifest";
 
 export class Manifest extends PublishableItem implements StorableItem {
-    /** The api url of the manifest */
-    get url(): string {
-        return ManifestAPIURL;
+    get backendPath(): string {
+        return ManifestBackendPath;
     }
 
     /** The cache in which the manifest is stored */
@@ -96,10 +94,6 @@ export class Manifest extends PublishableItem implements StorableItem {
 
     get version(): number {
         return this.storedData?.version || -1;
-    }
-
-    get fullUrl(): string {
-        return ROUTES_FOR_REGISTRATION.manifest;
     }
 
     get contentType(): string {

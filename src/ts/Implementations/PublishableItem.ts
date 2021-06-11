@@ -1,5 +1,8 @@
 import Logger from "../Logger";
 
+// See ts/Typings for the type definitions for these imports
+import { BACKEND_BASE_URL } from "js/urls";
+
 export enum UpdatePolicy {
     Default = "default",
     ForceUpdate = "forceUpdate",
@@ -9,15 +12,20 @@ export enum UpdatePolicy {
 const logger = new Logger("ContentItem");
 
 /** A network backed content item that can be stored and retrieved from a named cache
- * The item can be queeried for cache status and added and remove from the cache
+ * @remarks The item can be queried for cache status and added and removed from the cache
  */
 export abstract class PublishableItem {
-    /** The url to retrieve this item from */
-    abstract get url(): string;
+    /** The backendPath of this item as recorded in the manifest (in some form or other) */
+    abstract get backendPath(): string;
     /** The name of the cache used to store this item */
     abstract get cacheKey(): string;
     /** Request options dict used to retrieve this item */
     abstract get requestOptions(): RequestInit;
+
+    /** The (full) url to retrieve this item from */
+    get url(): string {
+        return this.backendPath ? `${BACKEND_BASE_URL}${this.backendPath}` : "";
+    }
 
     /** The options used to query the caches for this item */
     get cacheOptions(): MultiCacheQueryOptions {
