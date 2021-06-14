@@ -50,14 +50,11 @@
         import { AppelflapConnect } from "ts/AppelflapConnect";
         import { CacheUtilities } from "ts/CacheUtilities";
         import { CachePublish } from "ts/CachePublish";
-        import { Manifest } from "ts/Implementations/Manifest";
 
         export default {
             state: {
                 statusListings: [],
                 publications: "",
-                manifest: "",
-                page: "",
                 appDataStatus: new AppDataStatus(),
                 appelflapConnect: null,
             },
@@ -87,7 +84,6 @@
                 this.update(({ publications: JSON.stringify(publications) }));
 
                 // Get the Item Status Listing
-                await this.state.appDataStatus.Initialise();
                 await this.state.appDataStatus.BuildList();
                 this.update({statusListings: this.state.appDataStatus.itemListings});
             },

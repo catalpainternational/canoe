@@ -30,24 +30,16 @@ type AfcFunction = (
 ) => Promise<TAppelflapResult>;
 */
 
-/** An overview of the status for all data used by the app */
+/** An overview of the status for all cached data used by the app */
 export class AppDataStatus {
     manifest: Manifest;
     itemListings: TItemListing[];
 
     constructor() {
+        // note that `new Manifest()` is all that is required to
+        // get the manifest data from the store in a usable manner
         this.manifest = new Manifest();
         this.itemListings = [];
-    }
-
-    async Initialise(): Promise<string> {
-        if (!this.manifest.isValid) {
-            return Promise.reject(
-                "Manifest is not valid, and initialisation from the network failed"
-            );
-        }
-
-        return Promise.resolve("Manifest valid");
     }
 
     async ManifestListing(): Promise<TItemListing> {
