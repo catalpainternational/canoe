@@ -36,9 +36,7 @@ export class AppDataStatus {
     itemListings: TItemListing[];
 
     constructor() {
-        // note that `new Manifest()` is all that is required to
-        // get the manifest data from the store in a usable manner
-        this.manifest = new Manifest();
+        this.manifest = Manifest.getInstance();
         this.itemListings = [];
     }
 

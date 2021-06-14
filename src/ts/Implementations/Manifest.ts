@@ -32,6 +32,23 @@ export const ManifestBackendPath = "/manifest/v1";
 export const ManifestCacheKey = "bero-manifest";
 
 export class Manifest extends PublishableItem implements StorableItem {
+    //#region Implement as Singleton
+    static instance: Manifest;
+
+    private constructor() {
+        super();
+        logger.log("Singleton created");
+    }
+
+    public static getInstance(): Manifest {
+        if (!Manifest.instance) {
+            Manifest.instance = new Manifest();
+        }
+
+        return Manifest.instance;
+    }
+    //#endregion
+
     get backendPath(): string {
         return ManifestBackendPath;
     }
