@@ -7,3 +7,8 @@ export type TSyncData = Record<
         unpublished: TAppelflapResult;
     }
 >;
+
+export type TPublishResult = Record<
+    string,
+    { result: TAppelflapResult; reason: any }
+>;

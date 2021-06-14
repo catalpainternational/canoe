@@ -23,7 +23,7 @@ export class CachePublish {
     };
 
     /** Instructs Appelflap to cease publishing a single publication */
-    unpublish = async (publication: TPublicationTarget): Promise<void> => {
+    unpublish = async (publication: TPublication): Promise<void> => {
         await this.#afc.unpublish(publication);
     };
 }

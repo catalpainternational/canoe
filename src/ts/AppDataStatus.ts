@@ -2,7 +2,7 @@ import { TSubscriptions } from "./Types/CacheTypes";
 import { TAppelflapResult } from "./Types/CanoeEnums";
 import { TWagtailPage } from "./Types/PageTypes";
 import { TItemListing, TPublishableItem } from "./Types/PublishableItemTypes";
-import { TSyncData } from "./Types/SyncTypes";
+import { TPublishResult, TSyncData } from "./Types/SyncTypes";
 
 import {
     CacheKeys,
@@ -118,6 +118,7 @@ export class AppDataStatus {
     ): Promise<TPublishableItem> {
         return {
             cacheKey: manifest.cacheKey,
+            version: manifest.version,
             isValid: manifest.isValid,
             isAvailableOffline: await manifest.isAvailableOffline(),
             isPublishable: manifest.isPublishable,
@@ -127,6 +128,7 @@ export class AppDataStatus {
     private async PageToPublishableItem(page: Page): Promise<TPublishableItem> {
         return {
             cacheKey: page.cacheKey,
+            version: page.version,
             isValid: page.isValid,
             isAvailableOffline: await page.isAvailableOffline(),
             isPublishable: await page.isPublishable(),
@@ -140,33 +142,50 @@ export class AppDataStatus {
         const appelflapConnect = new AppelflapConnect();
         const performable = this.itemListings.filter(filter);
 
-        const performed: Record<string, TAppelflapResult> = {};
+        const performed: TPublishResult = {};
         for (let ix = 0; ix < performable.length; ix++) {
             const item = performable[ix];
             if (item.type === "manifest") {
                 try {
                     const publishableManifest =
                         await this.ManifestToPublishableItem(this.manifest);
-                    performed[this.manifest.cacheKey] = await action(
+                    const result = await action(
                         publishableManifest,
                         appelflapConnect
                     );
-                } catch {
-                    performed[this.manifest.cacheKey] = "failed";
+                    performed[this.manifest.cacheKey] = {
+                        result: result,
+                        reason: result,
+                    };
+                } catch (err) {
+                    performed[this.manifest.cacheKey] = {
+                        result: "failed",
+                        reason: err,
+                    };
                 }
             } else if (item.type === "page") {
                 const page = this.manifest.getPageManifestData(item.cacheKey);
                 if (!page) {
-                    performed[item.cacheKey] = "not relevant";
+                    performed[item.cacheKey] = {
+                        result: "not relevant",
+                        reason: "not relevant",
+                    };
                 } else {
                     try {
                         const publishablePage =
                             await this.PageToPublishableItem(page);
-                        performed[item.cacheKey] =
+                        const result =
                             (await action(publishablePage, appelflapConnect)) ||
                             "not relevant";
-                    } catch {
-                        performed[item.cacheKey] = "failed";
+                        performed[item.cacheKey] = {
+                            result: result,
+                            reason: result,
+                        };
+                    } catch (err) {
+                        performed[item.cacheKey] = {
+                            result: "failed",
+                            reason: err,
+                        };
                     }
                 }
             }
@@ -176,12 +195,12 @@ export class AppDataStatus {
     }
 
     /** Publish everything currently flagged as isPublishable */
-    async PublishAll(): Promise<Record<string, TAppelflapResult>> {
+    async PublishAll(): Promise<TPublishResult> {
         return this.PerformAll((listing) => listing.isPublishable, publishItem);
     }
 
     /** Unpublish everything currently not flagged as isPublishable */
-    async UnpublishAll(): Promise<Record<string, TAppelflapResult>> {
+    async UnpublishAll(): Promise<TPublishResult> {
         return this.PerformAll(
             (listing) => !listing.isPublishable,
             unpublishItem
@@ -253,10 +272,10 @@ export class AppDataStatus {
         }
 
         Object.entries(published).forEach((pub) => {
-            syncAllStatus[pub[0]].published = pub[1];
+            syncAllStatus[pub[0]].published = pub[1].result;
         });
         Object.entries(unpublished).forEach((pub) => {
-            syncAllStatus[pub[0]].unpublished = pub[1];
+            syncAllStatus[pub[0]].unpublished = pub[1].result;
         });
 
         return syncAllStatus;

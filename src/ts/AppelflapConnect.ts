@@ -139,10 +139,10 @@ export class AppelflapConnect {
         )) as Promise<TPublications>;
     };
 
-    private publicationPath = (publication: TPublicationTarget) => {
+    private publicationPath = (publication: TPublication) => {
         const prepWebOrigin = encodeURIComponent(publication.webOrigin);
         const prepCacheName = encodeURIComponent(publication.cacheName);
-        return `${prepWebOrigin}/${prepCacheName}`;
+        return `${prepWebOrigin}/${prepCacheName}/${publication.version}`;
     };
 
     public publish = async (publication: TPublication): Promise<string> => {
@@ -158,9 +158,7 @@ export class AppelflapConnect {
         return await this.performCommand(requestPath, commandInit, "text");
     };
 
-    public unpublish = async (
-        publication: TPublicationTarget
-    ): Promise<string> => {
+    public unpublish = async (publication: TPublication): Promise<string> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.deletePublication;
         const requestPath = `${commandPath}/${this.publicationPath(
             publication
