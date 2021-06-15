@@ -1,4 +1,4 @@
-import { TSubscriptions } from "./Types/CacheTypes";
+import { TSubscriptions } from "../Types/CacheTypes";
 
 import { AppelflapConnect } from "./AppelflapConnect";
 

@@ -11,6 +11,8 @@ import { initialiseUserActions } from "js/UserActions";
 import { initialiseRouting } from "js/Routing"
 import { initialiseBrowserSupport } from "js/BrowserSupport"
 
+import { initialiseCertChain } from "ts/Appelflap/StartUp";
+
 // Synchronous initialization
 // set things we can detect immeditely before riot mounts
 initialiseOnlineStatus(window);
@@ -32,7 +34,7 @@ initialiseIdentity()  // Am I logged in
         // perform independent actions that require login in parallel
         return Promise.all([
             initialiseUserActions(), // read actiion from api and idb
-            // initialiseCertChain(),   // initialise the appelflap sharing cert
+            initialiseCertChain(),   // initialise the appelflap sharing cert
         ]);
     }).then(() => {
         initialiseRouting();         // react to the navigation hash

@@ -13,7 +13,7 @@ export class CacheUtilities {
         return JSON.parse(statusDescription);
     };
 
-    /** Instruct Appelflap to reboot Canoe */
+    /** Instruct Appelflap to reboot Bero */
     reboot = async (): Promise<void> => {
         await this.#afc.doReboot();
     };

@@ -1,8 +1,13 @@
-import { TCertificate } from "./Types/CacheTypes";
+import { TCertificate } from "../Types/CacheTypes";
 
+import Logger from "../Logger";
 import { AppelflapConnect } from "./AppelflapConnect";
 
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
+// See ts/Typings for the type definitions for these imports
+import { BACKEND_BASE_URL } from "js/urls";
+
+const logger = new Logger("CertChain");
+const appelflapPKIsign = `${BACKEND_BASE_URL}/appelflap_PKI/sign-cert`;
 
 export class CertChain {
     #afc?: AppelflapConnect;
@@ -22,11 +27,28 @@ export class CertChain {
         return this.#lastError;
     }
 
+    get certState(): string {
+        return !this.#packageCert
+            ? "undefined"
+            : this.#packageCert.isCertSigned
+            ? "signed"
+            : "unsigned";
+    }
+
     async initialise(): Promise<boolean> {
+        logger.info("Initialise");
         try {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
-            if (!this.#packageCert?.isCertSigned) {
+            logger.info(`Package publishing certificate is ${this.certState}`);
+            if (this.certState === "unsigned") {
                 const lastError = await this.PostPackageCertificateForSigning();
+                if (lastError) {
+                    if (lastError.startsWith("No action taken:")) {
+                        logger.warn(lastError);
+                    } else {
+                        logger.error(this.#lastError);
+                    }
+                }
                 if (!lastError && this.#packageCert) {
                     const result =
                         await this.PostPackageCertificateToAppelflap();
@@ -41,7 +63,12 @@ export class CertChain {
             this.#lastError = e;
             this.#packageCert = undefined;
         }
-        return !!this.#packageCert;
+
+        logger.info(
+            `Initialisation completed, package publishing certificate is ${this.certState}`
+        );
+
+        return this.certState === "signed";
     }
 
     private GetPackageCertificateFromAppelflap = async (): Promise<
@@ -51,11 +78,11 @@ export class CertChain {
     };
 
     private PostPackageCertificateForSigning = async (): Promise<string> => {
-        if (!this.#packageCert || this.#packageCert.isCertSigned) {
-            this.#lastError = this.#packageCert
-                ? "No action taken: package publishing certificate already signed"
-                : "No action taken: no unsigned package publishing certificate available (no Appelflap)";
-            return this.#lastError;
+        switch (this.certState) {
+            case "undefined":
+                return "No action taken: no unsigned package publishing certificate available (no Appelflap)";
+            case "signed":
+                return "No action taken: package publishing certificate already signed";
         }
 
         try {
@@ -67,10 +94,8 @@ export class CertChain {
                 credentials: "include",
                 body: this.#packageCert?.cert,
             } as RequestInit;
-            const resp = await fetch(
-                ROUTES_FOR_REGISTRATION.appelflapPKIsign,
-                init
-            );
+            const resp = await fetch(appelflapPKIsign, init);
+
             if (!resp.ok) {
                 this.#lastError =
                     "Http error getting package publishing certificate signed";
@@ -82,6 +107,9 @@ export class CertChain {
                     isCertSigned: false,
                 };
                 this.#lastError = "";
+                logger.info(
+                    "Package publishing certificate signed successfully"
+                );
             }
         } catch (e) {
             this.#lastError = `Error getting package publishing certificate signed\n${e}`;
