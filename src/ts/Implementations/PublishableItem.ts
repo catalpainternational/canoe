@@ -59,10 +59,12 @@ export abstract class PublishableItem {
         let response;
         try {
             const url = new URL(this.url);
+            const requestOptions = this.getRequestOptions();
             if (isPreview) {
                 url.searchParams.append("preview", "");
+                requestOptions.cache = "no-cache";
             }
-            response = await fetch(url.toString(), this.getRequestOptions());
+            response = await fetch(url.toString(), requestOptions);
         } catch {
             this.logMessage("request failed");
             throw Error("Network error");
