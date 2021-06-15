@@ -3,7 +3,7 @@ import {
     TPublicationTarget,
     TPublications,
     TPublication,
-} from "./Types/CacheTypes";
+} from "../Types/CacheTypes";
 
 export class CachePublish {
     #afc: AppelflapConnect;
