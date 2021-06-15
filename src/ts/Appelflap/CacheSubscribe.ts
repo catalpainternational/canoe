@@ -1,24 +1,22 @@
 import { TSubscriptions } from "../Types/CacheTypes";
-
 import { AppelflapConnect } from "./AppelflapConnect";
 
 export class CacheSubscribe {
-    #subscriptions: TSubscriptions = { origins: {} };
-    #afc: AppelflapConnect;
-
-    constructor(afc: AppelflapConnect) {
-        this.#afc = afc;
+    static async getSubscriptions(): Promise<TSubscriptions> {
+        if (AppelflapConnect.Instance) {
+            return await AppelflapConnect.Instance.getSubscriptions();
+        }
+        return { origins: {} };
     }
 
-    async getSubscriptions(): Promise<TSubscriptions> {
-        this.#subscriptions = await this.#afc.getSubscriptions();
-        return this.#subscriptions;
-    }
-
-    async setSubscriptions(
+    static async setSubscriptions(
         subscriptions: TSubscriptions
     ): Promise<TSubscriptions> {
-        this.#subscriptions = await this.#afc.setSubscriptions(subscriptions);
-        return this.#subscriptions;
+        if (AppelflapConnect.Instance) {
+            return await AppelflapConnect.Instance.setSubscriptions(
+                subscriptions
+            );
+        }
+        return { origins: {} };
     }
 }

@@ -23,7 +23,9 @@ import { AF_LOCALHOSTURI, AF_EIKEL_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS
 test.before((t: any) => {
     t.context["testPort"] = 9090;
     global["navigator"] = buildFakeNavigator(t.context.testPort);
-    t.context["afc"] = new AppelflapConnect();
+    const gt = globalThis as Record<string, any>;
+    gt["AFC_MOCKMODE"] = true;
+    t.context["afc"] = AppelflapConnect.Instance;
 });
 
 test.beforeEach((t: any) => {
@@ -221,7 +223,7 @@ test("Cache: publish", async (t: any) => {
     const webOrigin = "some-web-origin";
     const cacheName = "some-cache-name";
     const version = 10;
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${webOrigin}/${cacheName}`;
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${webOrigin}/${cacheName}/${version}`;
     const publication: TPublication = {
         webOrigin: webOrigin,
         cacheName: cacheName,
@@ -260,7 +262,7 @@ test("Cache: unpublish", async (t: any) => {
     const webOrigin = "some-web-origin";
     const cacheName = "some-cache-name";
     const version = 10;
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${webOrigin}/${cacheName}`;
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${webOrigin}/${cacheName}/${version}`;
     const publication: TPublication = {
         webOrigin: webOrigin,
         cacheName: cacheName,

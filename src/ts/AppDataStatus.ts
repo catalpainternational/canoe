@@ -17,15 +17,7 @@ import {
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
 
-import { AppelflapConnect } from "./Appelflap/AppelflapConnect";
-
-// See ts/Typings for the type definitions for these imports
-import { getPageData as getPageDataFromStore } from "ReduxImpl/Interface";
-
-type AfcFunction = (
-    item: TPublishableItem,
-    appelflapConnect: AppelflapConnect
-) => Promise<TAppelflapResult>;
+type AfcFunction = (item: TPublishableItem) => Promise<TAppelflapResult>;
 
 /** An overview of the status for all cached data used by the app */
 export class AppDataStatus {
@@ -61,8 +53,6 @@ export class AppDataStatus {
         let isValid = false;
         let isAvailableOffline = false;
         let isPublishable = false;
-
-        const pageData = getPageDataFromStore(pageId);
 
         if (inCache) {
             const page = new Page(this.manifest, pageId);
@@ -130,7 +120,6 @@ export class AppDataStatus {
         filter: (item: TItemListing) => boolean,
         action: AfcFunction
     ) {
-        const appelflapConnect = new AppelflapConnect();
         const performable = this.itemListings.filter(filter);
 
         const performed: TPublishResult = {};
@@ -140,10 +129,7 @@ export class AppDataStatus {
                 try {
                     const publishableManifest =
                         await this.ManifestToPublishableItem(this.manifest);
-                    const result = await action(
-                        publishableManifest,
-                        appelflapConnect
-                    );
+                    const result = await action(publishableManifest);
                     performed[this.manifest.cacheKey] = {
                         result: result,
                         reason: result,
@@ -166,8 +152,7 @@ export class AppDataStatus {
                         const publishablePage =
                             await this.PageToPublishableItem(page);
                         const result =
-                            (await action(publishablePage, appelflapConnect)) ||
-                            "not relevant";
+                            (await action(publishablePage)) || "not relevant";
                         performed[item.cacheKey] = {
                             result: result,
                             reason: result,
@@ -200,8 +185,7 @@ export class AppDataStatus {
 
     /** Get all current subscriptions */
     async GetSubscriptions(): Promise<TSubscriptions> {
-        const appelflapConnect = new AppelflapConnect();
-        const subscriptions = await getSubscriptions(appelflapConnect);
+        const subscriptions = await getSubscriptions();
         if (typeof subscriptions === "string") {
             return { origins: {} };
         }
@@ -210,11 +194,7 @@ export class AppDataStatus {
 
     /** Set all current subscriptions */
     async SetSubscriptions(): Promise<TSubscriptions> {
-        const appelflapConnect = new AppelflapConnect();
-        const subscriptions = await setSubscriptions(
-            this.itemListings,
-            appelflapConnect
-        );
+        const subscriptions = await setSubscriptions(this.itemListings);
         if (typeof subscriptions === "string") {
             return { origins: {} };
         }

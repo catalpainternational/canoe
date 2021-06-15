@@ -1,30 +1,32 @@
 import { AppelflapConnect } from "./AppelflapConnect";
 
 export class CacheUtilities {
-    #afc: AppelflapConnect;
-
-    constructor(afc: AppelflapConnect) {
-        this.#afc = afc;
+    /** Get the status of the cache from Appelflap */
+    static async status(): Promise<any> {
+        if (AppelflapConnect.Instance) {
+            return JSON.parse(await AppelflapConnect.Instance.getCacheStatus());
+        }
+        return {};
     }
 
-    /** Get the status of the cache from Appelflap */
-    status = async (): Promise<any> => {
-        const statusDescription = await this.#afc.getCacheStatus();
-        return JSON.parse(statusDescription);
-    };
-
     /** Instruct Appelflap to reboot Bero */
-    reboot = async (): Promise<void> => {
-        await this.#afc.doReboot();
-    };
+    static async reboot(): Promise<void> {
+        if (AppelflapConnect.Instance) {
+            await AppelflapConnect.Instance.doReboot();
+        }
+    }
 
     /** Instruct Appelflap to consider the cache as 'locked' */
-    lock = async (): Promise<void> => {
-        await this.#afc.lock();
-    };
+    static async lock(): Promise<void> {
+        if (AppelflapConnect.Instance) {
+            await AppelflapConnect.Instance.lock();
+        }
+    }
 
     /** Instruct Appelflap to consider the cache as 'unlocked' */
-    unlock = async (): Promise<void> => {
-        await this.#afc.unlock();
-    };
+    static async unlock(): Promise<void> {
+        if (AppelflapConnect.Instance) {
+            await AppelflapConnect.Instance.unlock();
+        }
+    }
 }

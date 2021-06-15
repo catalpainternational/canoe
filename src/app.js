@@ -34,7 +34,7 @@ initialiseIdentity()  // Am I logged in
         // perform independent actions that require login in parallel
         return Promise.all([
             initialiseUserActions(), // read actiion from api and idb
-            initialiseCertChain(),   // initialise the appelflap sharing cert
+            initialiseCertChain(),   // initialise the appelflap package publishing cert
         ]);
     }).then(() => {
         initialiseRouting();         // react to the navigation hash

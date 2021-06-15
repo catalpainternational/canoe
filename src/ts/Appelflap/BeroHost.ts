@@ -1,30 +1,39 @@
-import { inAppelflap } from "../PlatformDetection";
 import { AppelflapConnect } from "./AppelflapConnect";
 import Logger from "../Logger";
 
 const logger = new Logger("BeroHost");
 
 export class BeroHost {
-    #afc?: AppelflapConnect;
+    //#region Implement as Singleton
+    static instance: BeroHost;
 
-    constructor() {
-        this.#afc = inAppelflap() ? new AppelflapConnect() : undefined;
+    private constructor() {
+        logger.log("Singleton created");
     }
 
-    get appelflapConnect(): AppelflapConnect | undefined {
-        return this.#afc;
+    /** Gets the single instance of BeroHost */
+    public static get Instance(): BeroHost {
+        if (!BeroHost.instance) {
+            BeroHost.instance = new BeroHost();
+        }
+
+        return BeroHost.instance;
     }
+    //#endregion
 
     /** Tell Appelflap that Bero is 'locked'
      * and should not be rebooted */
     LockBero = async (): Promise<string> => {
-        return this.#afc ? await this.#afc.lock() : "notOk";
+        if (AppelflapConnect.Instance) {
+            return await AppelflapConnect.Instance.lock();
+        }
+        return "notOk";
     };
 
     StartBero = async (startUp: () => void): Promise<boolean> => {
         let lockResult = true;
         logger.info("Starting Bero");
-        if (inAppelflap()) {
+        if (AppelflapConnect.Instance) {
             logger.info("Calling Appelflap to 'lock' Bero");
             try {
                 const lockText = await this.LockBero();
