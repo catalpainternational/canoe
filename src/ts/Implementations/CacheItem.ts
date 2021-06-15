@@ -149,107 +149,107 @@ const GetRequestObject = async (
 };
 
 /** Get the item from the cache */
-const GetFromCache = async (
-    item: IPublishableItem
-): Promise<Response | undefined> => {
-    const itemCache = await AccessCache(item.cacheKey);
+// const GetFromCache = async (
+//     item: IPublishableItem
+// ): Promise<Response | undefined> => {
+//     const itemCache = await AccessCache(item.cacheKey);
 
-    if (!item.requestObject || !itemCache) {
-        return undefined;
-    }
+//     if (!item.requestObject || !itemCache) {
+//         return undefined;
+//     }
 
-    return item.requestObject && !!itemCache
-        ? await itemCache.match(item.requestObject)
-        : undefined;
-};
+//     return item.requestObject && !!itemCache
+//         ? await itemCache.match(item.requestObject)
+//         : undefined;
+// };
 
 /** Initialise this item from the cache */
-export const InitialiseFromCache = async (
-    item: IPublishableItem
-): Promise<boolean> => {
-    const itemCache = await AccessCache(item.cacheKey);
-    if (!itemCache || !item.backendPath) {
-        item.status.cacheStatus = "prepared";
-        return false;
-    }
+// export const InitialiseFromCache = async (
+//     item: IPublishableItem
+// ): Promise<boolean> => {
+//     const itemCache = await AccessCache(item.cacheKey);
+//     if (!itemCache || !item.backendPath) {
+//         item.status.cacheStatus = "prepared";
+//         return false;
+//     }
 
-    const reqObj = await GetRequestObject(item);
-    if (!reqObj) {
-        item.status.cacheStatus = "prepared";
-        return false;
-    }
-    const reqUrl = new URL(reqObj.url);
-    const params = reqUrl.searchParams;
-    const version = parseInt(params.get("version") || "-1");
-    item.version = isNaN(version) ? -1 : version;
+//     const reqObj = await GetRequestObject(item);
+//     if (!reqObj) {
+//         item.status.cacheStatus = "prepared";
+//         return false;
+//     }
+//     const reqUrl = new URL(reqObj.url);
+//     const params = reqUrl.searchParams;
+//     const version = parseInt(params.get("version") || "-1");
+//     item.version = isNaN(version) ? -1 : version;
 
-    item.status.cacheStatus = "loading";
-    const response = (await GetFromCache(item))?.clone();
+//     item.status.cacheStatus = "loading";
+//     const response = (await GetFromCache(item))?.clone();
 
-    if (!response) {
-        item.status.cacheStatus = "prepared";
-        return false;
-    }
+//     if (!response) {
+//         item.status.cacheStatus = "prepared";
+//         return false;
+//     }
 
-    const isInitialised = await item.initialiseFromResponse(response);
-    item.status.cacheStatus = isInitialised ? "ready" : "loading";
+//     const isInitialised = await item.initialiseFromResponse(response);
+//     item.status.cacheStatus = isInitialised ? "ready" : "loading";
 
-    return isInitialised;
-};
+//     return isInitialised;
+// };
 
 /** Initialise this item from a network request */
-export const InitialiseByRequest = async (
-    item: IPublishableItem
-): Promise<boolean> => {
-    item.status.cacheStatus = "loading";
+// export const InitialiseByRequest = async (
+//     item: IPublishableItem
+// ): Promise<boolean> => {
+//     item.status.cacheStatus = "loading";
 
-    const itemCache = await AccessCache(item.cacheKey);
+//     const itemCache = await AccessCache(item.cacheKey);
 
-    if (!itemCache) {
-        // Couldn't get the cache open (this is a very unusual circumstance)
-        item.status.cacheStatus = "prepared";
-        return false;
-    }
+//     if (!itemCache) {
+//         // Couldn't get the cache open (this is a very unusual circumstance)
+//         item.status.cacheStatus = "prepared";
+//         return false;
+//     }
 
-    let reqObj = await GetRequestObject(item);
-    if (!reqObj) {
-        item.status.cacheStatus = "prepared";
-        if (item.url && item.url !== "/") {
-            reqObj = BuildRequestObject(item);
-            CleanRequestObject(item, reqObj);
-        } else {
-            // Without a full url we cannot retrieve this item
-            // from either the cache or the network
-            return false;
-        }
-    }
+//     let reqObj = await GetRequestObject(item);
+//     if (!reqObj) {
+//         item.status.cacheStatus = "prepared";
+//         if (item.url && item.url !== "/") {
+//             reqObj = BuildRequestObject(item);
+//             CleanRequestObject(item, reqObj);
+//         } else {
+//             // Without a full url we cannot retrieve this item
+//             // from either the cache or the network
+//             return false;
+//         }
+//     }
 
-    // Fetch the asset from the network, direct into the cache
-    try {
-        await itemCache.add(reqObj);
-    } catch (tex: any) {
-        // TypeError if it wasn't `http` or `https`
-        // Also:
-        // Underlying Response status wasn't 200
-        // * request didn't return successfully
-        // * request is a cross-origin no-cors request
-        //   (in which case the reported status is always 0.)
-        // eslint-disable-next-line no-console
-        console.error(`Error trying to add ${item.cacheKey} for ${item.url}.`);
-        // eslint-disable-next-line no-console
-        console.error(tex);
+//     // Fetch the asset from the network, direct into the cache
+//     try {
+//         await itemCache.add(reqObj);
+//     } catch (tex: any) {
+//         // TypeError if it wasn't `http` or `https`
+//         // Also:
+//         // Underlying Response status wasn't 200
+//         // * request didn't return successfully
+//         // * request is a cross-origin no-cors request
+//         //   (in which case the reported status is always 0.)
+//         // eslint-disable-next-line no-console
+//         console.error(`Error trying to add ${item.cacheKey} for ${item.url}.`);
+//         // eslint-disable-next-line no-console
+//         console.error(tex);
 
-        item.status.cacheStatus = "prepared";
-        return false;
-    }
+//         item.status.cacheStatus = "prepared";
+//         return false;
+//     }
 
-    const isInitialised = await InitialiseFromCache(item);
-    if (isInitialised) {
-        item.status.cacheStatus = "ready";
-    }
+//     const isInitialised = await InitialiseFromCache(item);
+//     if (isInitialised) {
+//         item.status.cacheStatus = "ready";
+//     }
 
-    return isInitialised;
-};
+//     return isInitialised;
+// };
 
 /** Updates the item in the cache and ensures it is 'cleaned' ready for publishing */
 export const UpdateCachedItem = async (
