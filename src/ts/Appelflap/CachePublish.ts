@@ -1,9 +1,5 @@
 import { AppelflapConnect } from "./AppelflapConnect";
-import {
-    TPublicationTarget,
-    TPublications,
-    TPublication,
-} from "../Types/CacheTypes";
+import { TPublications, TPublication } from "../Types/CacheTypes";
 
 export class CachePublish {
     #afc: AppelflapConnect;
@@ -23,7 +19,7 @@ export class CachePublish {
     };
 
     /** Instructs Appelflap to cease publishing a single publication */
-    unpublish = async (publication: TPublicationTarget): Promise<void> => {
+    unpublish = async (publication: TPublication): Promise<void> => {
         await this.#afc.unpublish(publication);
     };
 }
