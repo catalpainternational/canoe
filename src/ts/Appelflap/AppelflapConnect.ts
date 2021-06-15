@@ -4,7 +4,7 @@ import {
     TPublication,
     TPublications,
     TSubscriptions,
-} from "./Types/CacheTypes";
+} from "../Types/CacheTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -13,7 +13,7 @@ import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS, Appelfl
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
-import Logger from "./Logger";
+import Logger from "../Logger";
 
 const logger = new Logger("AppelflapConnect");
 

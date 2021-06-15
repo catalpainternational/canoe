@@ -1,11 +1,13 @@
-import { TCertificate } from "./Types/CacheTypes";
+import { TCertificate } from "../Types/CacheTypes";
 
-import Logger from "./Logger";
+import Logger from "../Logger";
 import { AppelflapConnect } from "./AppelflapConnect";
 
-import { ROUTES_FOR_REGISTRATION } from "js/urls";
+// See ts/Typings for the type definitions for these imports
+import { BACKEND_BASE_URL } from "js/urls";
 
 const logger = new Logger("CertChain");
+const appelflapPKIsign = `${BACKEND_BASE_URL}/appelflap_PKI/sign-cert`;
 
 export class CertChain {
     #afc?: AppelflapConnect;
@@ -92,10 +94,7 @@ export class CertChain {
                 credentials: "include",
                 body: this.#packageCert?.cert,
             } as RequestInit;
-            const resp = await fetch(
-                ROUTES_FOR_REGISTRATION.appelflapPKIsign,
-                init
-            );
+            const resp = await fetch(appelflapPKIsign, init);
 
             if (!resp.ok) {
                 this.#lastError =

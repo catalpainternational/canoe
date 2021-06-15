@@ -17,8 +17,9 @@ import {
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
 
-import { AppelflapConnect } from "./AppelflapConnect";
+import { AppelflapConnect } from "./Appelflap/AppelflapConnect";
 
+// See ts/Typings for the type definitions for these imports
 import { getPageData as getPageDataFromStore } from "ReduxImpl/Interface";
 
 type AfcFunction = (

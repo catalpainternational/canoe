@@ -6,7 +6,7 @@ global.atob = require("atob");
 
 import { buildFakeNavigator } from "./fakeNavigator";
 
-import { AppelflapConnect } from "../AppelflapConnect";
+import { AppelflapConnect } from "../Appelflap/AppelflapConnect";
 import {
     TCertificate,
     TPublication,

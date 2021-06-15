@@ -11,7 +11,7 @@ import { initialiseUserActions } from "js/UserActions";
 import { initialiseRouting } from "js/Routing"
 import { initialiseBrowserSupport } from "js/BrowserSupport"
 
-import { initialiseCertChain } from "ts/StartUp";
+import { initialiseCertChain } from "ts/Appelflap/StartUp";
 
 // Synchronous initialization
 // set things we can detect immeditely before riot mounts
