@@ -1,23 +1,9 @@
-import { TItemCacheStatus, TItemStoreStatus, TItemType } from "./CanoeEnums";
-
-/** The id fields for a manifest, page or asset item */
-export type TItemId = {
-    api_url: string;
-};
+import { TItemType } from "./CanoeEnums";
 
 /** Describes the common fields for a manifest, page or asset item */
 export type TItemCommon = {
     // Other fields
     [x: string]: any;
-} & TItemId;
-
-/** Describe the storage status of the manifest, page or asset item */
-export type TItemStorageStatus = {
-    /** What is the state of this manifest, page or asset item within the cache? */
-    cacheStatus: TItemCacheStatus;
-
-    /** What is the state of this manifest, page or asset item within the redux store? */
-    storeStatus: TItemStoreStatus;
 };
 
 /** Describe the status of this manifest, page or asset item itself */
@@ -42,11 +28,10 @@ export type TItemStatus = {
 export type TItemListing = {
     title: string;
     type: TItemType;
+    backendPath: string;
     cacheKey: string;
     version: number;
-} & TItemId &
-    TItemStorageStatus &
-    TItemStatus;
+} & TItemStatus;
 
 /** Describe the state of a manifest, page or asset item */
 export type TPublishableItem = {
