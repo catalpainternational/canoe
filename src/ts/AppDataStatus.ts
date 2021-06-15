@@ -255,10 +255,12 @@ export class AppDataStatus {
         if (publishSubscribeMismatch) {
             subscriptions = await this.SetSubscriptions();
             origins = Object.keys(subscriptions.origins);
-            const firstOrigin = origins[0];
-            subscribed = Object.entries(
-                subscriptions.origins[firstOrigin].caches
-            );
+            if (origins.length) {
+                const firstOrigin = origins[0];
+                subscribed = Object.entries(
+                    subscriptions.origins[firstOrigin].caches
+                );
+            }
         }
 
         Object.entries(published).forEach((pub) => {
