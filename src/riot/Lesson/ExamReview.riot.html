@@ -1,4 +1,4 @@
-<ExamReview>
+<ExamReview class="fill-screen">
     <div if="{ stage === 'summary'}" class="exam-summary">
         <span class="exam-review"></span>
         <h3>{ TRANSLATIONS.review() }</h3>
@@ -35,23 +35,23 @@
                 </div>
                 <raw html="{ incorrectAnswers[stage - 1].revision_note }"></raw>
             </div>
+            <div slot="bottom-buttons" if="{ !isNaN(stage) }" class="bottom-buttons">
+                <div>
+                    <a if="{ stage > 1 }" class="has-circle" onclick="{previousReviewCard}">
+                        <span class="arrow"></span>
+                    </a>
+                </div>
+                <div>
+                    <button
+                        if="{ stage <= incorrectAnswers.length }"
+                        class="btn-primary"
+                        onclick="{nextReviewCard}"
+                    >
+                        { TRANSLATIONS.next() }
+                    </button>
+                </div>
+            </div>
         </LessonFrame>
-        <div if="{ !isNaN(stage) }" class="bottom-buttons">
-            <div>
-                <a if="{ stage > 1 }" class="has-circle" onclick="{previousReviewCard}">
-                    <span class="arrow"></span>
-                </a>
-            </div>
-            <div>
-                <button
-                    if="{ stage <= incorrectAnswers.length }"
-                    class="btn-primary"
-                    onclick="{nextReviewCard}"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-            </div>
-        </div>
     </template>
 
     <div if="{ stage === 'complete'}" class="exam-summary">

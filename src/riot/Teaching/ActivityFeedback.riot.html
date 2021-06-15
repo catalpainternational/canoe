@@ -56,27 +56,31 @@
                 <p>{ TRANSLATIONS.feedback_sent() }</p>
             </div>
         </template>
+        <div slot="bottom-buttons" class="bottom-buttons">
+            <template if="{!state.madeFeedbackDecision}">
+                <button class="btn-secondary" onclick="{clickedNoThanks}">
+                    { TRANSLATIONS.no() }
+                </button>
+                <button
+                    class="btn-primary"
+                    onclick="{clickedSubmit}"
+                    disabled="{!state.activeSelection}"
+                >
+                    { TRANSLATIONS.submit() }
+                </button>
+            </template>
+            <template if="{state.madeFeedbackDecision}">
+                <button
+                    class="btn-primary thank-you-container"
+                    onclick="{clickedContinue}"
+                >
+                    { TRANSLATIONS.continue() }
+                </button>
+
+            </template>
+        </div>
     </LessonFrame>
-    <div if="{!state.madeFeedbackDecision}" class="bottom-buttons">
-        <button class="btn-secondary" onclick="{clickedNoThanks}">
-            { TRANSLATIONS.no() }
-        </button>
-        <button
-            class="btn-primary"
-            onclick="{clickedSubmit}"
-            disabled="{!state.activeSelection}"
-        >
-            { TRANSLATIONS.submit() }
-        </button>
-    </div>
-    <div if="{state.madeFeedbackDecision}" class="bottom-buttons">
-        <button
-            class="btn-primary thank-you-container"
-            onclick="{clickedContinue}"
-        >
-            { TRANSLATIONS.continue() }
-        </button>
-    </div>
+
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { getRoute } from "ReduxImpl/Interface";
