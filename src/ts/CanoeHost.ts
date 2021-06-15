@@ -1,5 +1,8 @@
 import { inAppelflap } from "./PlatformDetection";
 import { AppelflapConnect } from "./AppelflapConnect";
+import Logger from "./Logger";
+
+const logger = new Logger("CanoeHost");
 
 export class CanoeHost {
     #afc?: AppelflapConnect;
@@ -20,11 +23,15 @@ export class CanoeHost {
 
     StartCanoe = async (startUp: () => void): Promise<boolean> => {
         let lockResult = true;
+        logger.info("Starting Bero");
         if (inAppelflap()) {
+            logger.info("Calling Appelflap to 'lock' Bero");
             try {
-                lockResult = (await this.LockCanoe()) === "ok";
-            } catch {
+                const lockText = await this.LockCanoe();
+                lockResult = lockText.toLowerCase() === "ok";
+            } catch (e) {
                 // We don't know why Appelflap is thought to be around, and yet it failed.
+                logger.warn(`Appelflap could not achieve 'lock' ${e}`);
                 lockResult = false;
             }
         }

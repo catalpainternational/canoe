@@ -13,6 +13,10 @@ import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS, Appelfl
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
+import Logger from "./Logger";
+
+const logger = new Logger("AppelflapConnect");
+
 export class AppelflapConnect {
     /** Get the Authorisation Header details that Appelflap requires
      * @remarks See: https://github.com/catalpainternational/appelflap/blob/7a4072f8b914748563333238bb1a49ea527480bd/docs/API/determining-endpoint.md for more info
@@ -83,16 +87,17 @@ export class AppelflapConnect {
             return Promise.reject(new Error("Nope, that's not OK"));
         }
 
+        /* eslint-disable no-case-declarations */
         switch (returnType) {
             case "json":
                 return await response.json();
             case "text":
-                return await response.text();
+                const testResult = await response.text();
+                return testResult || response.statusText;
             case "pem":
                 // A `application/x-pem-file` is actually a sub-type of `text`
                 // But we need to include a little extra info from the repsonse header.
                 // So we'll actually return it as an object (i.e. json)
-                /* eslint-disable no-case-declarations */
                 const encodedCertificate = await response.text();
                 const isCertSigned =
                     response.headers.get(AF_CERTCHAIN_LENGTH_HEADER) === "3";
@@ -100,10 +105,10 @@ export class AppelflapConnect {
                     cert: encodedCertificate,
                     isCertSigned: isCertSigned,
                 } as TCertificate;
-                /* eslint-enable no-case-declarations */
 
                 return cert;
         }
+        /* eslint-enable no-case-declarations */
     };
 
     public getLargeObjectIndexStatus = async (): Promise<any> => {
@@ -113,11 +118,13 @@ export class AppelflapConnect {
 
     public lock = async (): Promise<string> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.setLock;
+        logger.info(`'Locking' Bero`);
         return await this.performCommand(commandPath, { method }, "text");
     };
 
     public unlock = async (): Promise<string> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.releaseLock;
+        logger.info(`'Unlocking' Bero`);
         return await this.performCommand(commandPath, { method }, "text");
     };
 
@@ -197,11 +204,15 @@ export class AppelflapConnect {
     public getCertificate = async (): Promise<TCertificate> => {
         const { commandPath } = APPELFLAPCOMMANDS.getCertificate;
 
-        return (await this.performCommand(
+        const certificate = (await this.performCommand(
             commandPath,
             undefined,
             "pem"
-        )) as Promise<TCertificate>;
+        )) as TCertificate;
+
+        const certSigned = certificate.isCertSigned ? "signed" : "unsigned";
+        logger.info(`Got ${certSigned} certificate`);
+        return certificate;
     };
 
     public saveCertificate = async (
@@ -215,12 +226,15 @@ export class AppelflapConnect {
             body: cert,
         };
 
+        const certSigned = certificate.isCertSigned ? "signed" : "unsigned";
+        logger.info(`Saving ${certSigned} certificate`);
         return await this.performCommand(commandPath, commandInit, "text");
     };
 
     public deleteCertificate = async (): Promise<string> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.deleteCertificate;
 
+        logger.info(`Deleting certificate`);
         return await this.performCommand(commandPath, { method }, "text");
     };
 }
