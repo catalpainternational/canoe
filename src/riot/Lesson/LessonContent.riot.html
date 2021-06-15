@@ -1,4 +1,4 @@
-<LessonContent>
+<LessonContent class="fill-screen">
     <LessonFrame
         if="{ card && cardNumber <= cards.length }"
         extraStyleClasses="{ isAQuestion() ? 'test' : 'content' }"
@@ -28,37 +28,39 @@
             if="{ isAQuestion() }"
             toggleModal="{ toggleTestModal }">
         </Test>
+        <div
+            slot="bottom-buttons"
+            if="{ card && cardNumber <= cards.length }"
+            class="bottom-buttons"
+        >
+            <div>
+                <a
+                    if="{ cardNumber > 1 }"
+                    class="has-circle"
+                    onclick="{ goBack }"
+                >
+                    <span class="arrow"></span>
+                </a>
+            </div>
+            <div>
+                <button
+                    class="btn-primary"
+                    onclick="{ nextCard }"
+                    if="{ cardNumber < cards.length && !isAQuestion() }"
+                >
+                    { TRANSLATIONS.next() }
+                </button>
+                <button
+                    class="btn-primary"
+                    onclick="{ completeLesson }"
+                    if="{ cardNumber === cards.length && !isAQuestion() }"
+                >
+                    { TRANSLATIONS.finish() }
+                </button>
+            </div>
+        </div>
     </LessonFrame>
-    <div
-        if="{ card && cardNumber <= cards.length }"
-        class="bottom-buttons"
-    >
-        <div>
-            <a
-                if="{ cardNumber > 1 }"
-                class="has-circle"
-                onclick="{ goBack }"
-            >
-                <span class="arrow"></span>
-            </a>
-        </div>
-        <div>
-            <button
-                class="btn-primary"
-                onclick="{ nextCard }"
-                if="{ cardNumber < cards.length && !isAQuestion() }"
-            >
-                { TRANSLATIONS.next() }
-            </button>
-            <button
-                class="btn-primary"
-                onclick="{ completeLesson }"
-                if="{ cardNumber === cards.length && !isAQuestion() }"
-            >
-                { TRANSLATIONS.finish() }
-            </button>
-        </div>
-    </div>
+
     <TestPopupModal
         if="{ state.showModal }"
         toggleModal="{ toggleTestModal }"
