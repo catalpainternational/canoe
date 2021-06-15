@@ -3,7 +3,6 @@ import {
     TCertificate,
     TPublication,
     TPublications,
-    TPublicationTarget,
     TSubscriptions,
 } from "./Types/CacheTypes";
 

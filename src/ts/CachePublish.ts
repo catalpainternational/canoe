@@ -1,9 +1,5 @@
 import { AppelflapConnect } from "./AppelflapConnect";
-import {
-    TPublicationTarget,
-    TPublications,
-    TPublication,
-} from "./Types/CacheTypes";
+import { TPublications, TPublication } from "./Types/CacheTypes";
 
 export class CachePublish {
     #afc: AppelflapConnect;
