@@ -3,6 +3,7 @@ import { registerRoute } from "workbox-routing/registerRoute.mjs";
 import { setCatchHandler } from "workbox-routing/setCatchHandler.mjs";
 import { CacheFirst } from "workbox-strategies/CacheFirst.mjs";
 import { CacheAnyOrFetchOnly } from "js/CacheAnyOrFetchOnly.mjs";
+import { NetworkOnly } from "workbox-strategies/NetworkOnly.mjs";
 
 import { RangeRequestsPlugin } from "workbox-range-requests";
 import { ExpirationPlugin } from "workbox-expiration";
@@ -78,6 +79,15 @@ registerRoute(
         plugins: [new RangeRequestsPlugin()],
     })
 );
+
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly());
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.tokenAuth), new NetworkOnly(), "POST");
+
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.appelflapPKIsign), new NetworkOnly(), "POST");
+
+// webpack-dev-server communicates over this endpoint. Without this clause, the
+// service worker caches these requests and breaks webpack-dev-server.
+registerRoute(new RegExp(ROUTES_FOR_REGISTRATION.socketInfo), new NetworkOnly());
 
 const getNotificationTitleMessageAndTag = (eventData) => {
     let title = null;
