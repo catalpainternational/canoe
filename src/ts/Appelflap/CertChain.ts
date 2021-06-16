@@ -9,15 +9,28 @@ import { BACKEND_BASE_URL } from "js/urls";
 const logger = new Logger("CertChain");
 const appelflapPKIsign = `${BACKEND_BASE_URL}/appelflap_PKI/sign-cert`;
 
+export type TCertState = "undefined" | "unsigned" | "signed";
+
 export class CertChain {
-    #afc?: AppelflapConnect;
+    //#region Implement as Singleton
+    static instance: CertChain;
     #packageCert?: TCertificate;
     #lastError: string;
 
-    constructor(afc: AppelflapConnect) {
-        this.#afc = afc;
+    private constructor() {
         this.#lastError = "";
+        logger.log("Singleton created");
     }
+
+    /** Gets the single instance of CertChain */
+    public static get Instance(): CertChain {
+        if (!CertChain.instance) {
+            CertChain.instance = new CertChain();
+        }
+
+        return CertChain.instance;
+    }
+    //#endregion
 
     get packageCertificate(): TCertificate | undefined {
         return this.#packageCert;
@@ -27,7 +40,7 @@ export class CertChain {
         return this.#lastError;
     }
 
-    get certState(): string {
+    get certState(): TCertState {
         return !this.#packageCert
             ? "undefined"
             : this.#packageCert.isCertSigned
@@ -40,7 +53,7 @@ export class CertChain {
         try {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
             logger.info(`Package publishing certificate is ${this.certState}`);
-            if (this.certState === "unsigned") {
+            if (this.certState === "undefined") {
                 const lastError = await this.PostPackageCertificateForSigning();
                 if (lastError) {
                     if (lastError.startsWith("No action taken:")) {
@@ -74,7 +87,10 @@ export class CertChain {
     private GetPackageCertificateFromAppelflap = async (): Promise<
         TCertificate | undefined
     > => {
-        return this.#afc ? await this.#afc.getCertificate() : undefined;
+        if (AppelflapConnect.Instance) {
+            return await AppelflapConnect.Instance.getCertificate();
+        }
+        return undefined;
     };
 
     private PostPackageCertificateForSigning = async (): Promise<string> => {
@@ -119,8 +135,8 @@ export class CertChain {
     };
 
     private PostPackageCertificateToAppelflap = async (): Promise<string> => {
-        return this.#afc && this.#packageCert
-            ? await this.#afc.saveCertificate(this.#packageCert)
+        return AppelflapConnect.Instance && this.#packageCert
+            ? await AppelflapConnect.Instance.saveCertificate(this.#packageCert)
             : "";
     };
 }

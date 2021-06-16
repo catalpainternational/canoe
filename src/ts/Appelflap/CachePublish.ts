@@ -2,24 +2,25 @@ import { AppelflapConnect } from "./AppelflapConnect";
 import { TPublications, TPublication } from "../Types/CacheTypes";
 
 export class CachePublish {
-    #afc: AppelflapConnect;
-
-    constructor(afc: AppelflapConnect) {
-        this.#afc = afc;
+    /** Get a list of published items from Appelflap */
+    static async publications(): Promise<TPublications> {
+        if (AppelflapConnect.Instance) {
+            return await AppelflapConnect.Instance.getPublications();
+        }
+        return {};
     }
 
-    /** Get a list of published items from Appelflap */
-    publications = async (): Promise<TPublications> => {
-        return await this.#afc.getPublications();
-    };
-
     /** Instructs Appelflap to 'publish' a single publication */
-    publish = async (publication: TPublication): Promise<void> => {
-        await this.#afc.publish(publication);
-    };
+    static async publish(publication: TPublication): Promise<void> {
+        if (AppelflapConnect.Instance) {
+            await AppelflapConnect.Instance.publish(publication);
+        }
+    }
 
     /** Instructs Appelflap to cease publishing a single publication */
-    unpublish = async (publication: TPublication): Promise<void> => {
-        await this.#afc.unpublish(publication);
-    };
+    static async unpublish(publication: TPublication): Promise<void> {
+        if (AppelflapConnect.Instance) {
+            await AppelflapConnect.Instance.unpublish(publication);
+        }
+    }
 }

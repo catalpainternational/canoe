@@ -14,10 +14,42 @@ import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS, Appelfl
 /* eslint-enable prettier/prettier */
 
 import Logger from "../Logger";
+import { inAppelflap } from "../PlatformDetection";
 
 const logger = new Logger("AppelflapConnect");
 
 export class AppelflapConnect {
+    //#region Implement as Singleton
+    static instance: AppelflapConnect | undefined;
+
+    private constructor() {
+        logger.log("Singleton created");
+    }
+
+    /**
+     * Gets the single instance of AppelflapConnect
+     * or undefined if we're not inAppelflap
+     */
+    public static get Instance(): AppelflapConnect | undefined {
+        if (!AppelflapConnect.instance) {
+            const gt = globalThis as Record<string, any>;
+            gt["AFC_MOCKMODE"] = gt["AFC_MOCKMODE"] || false;
+
+            if (!gt["AFC_MOCKMODE"]) {
+                AppelflapConnect.instance = inAppelflap()
+                    ? new AppelflapConnect()
+                    : undefined;
+            } else {
+                // Return a 'mock' of AppelflapConnect
+                // to be used only in testing
+                AppelflapConnect.instance = new AppelflapConnect();
+            }
+        }
+
+        return AppelflapConnect.instance;
+    }
+    //#endregion
+
     /** Get the Authorisation Header details that Appelflap requires
      * @remarks See: https://github.com/catalpainternational/appelflap/blob/7a4072f8b914748563333238bb1a49ea527480bd/docs/API/determining-endpoint.md for more info
      * @returns The auth header as `Basic btoaEncodedStuff` or 'None' if the credentials are not available

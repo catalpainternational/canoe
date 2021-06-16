@@ -47,7 +47,6 @@
 
     <script>
         import { AppDataStatus } from "ts/AppDataStatus";
-        import { AppelflapConnect } from "ts/Appelflap/AppelflapConnect";
         import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
         import { CachePublish } from "ts/Appelflap/CachePublish";
 
@@ -56,7 +55,6 @@
                 statusListings: [],
                 publications: "",
                 appDataStatus: new AppDataStatus(),
-                appelflapConnect: null,
             },
 
             TRANSLATIONS: {
@@ -70,17 +68,13 @@
 
             async appelflapStatus() {
                 this.update({ appelflapMeta: "Getting" });
-                
-                this.state.appelflapConnect = new AppelflapConnect();
 
                 /* Not yet implemented
-                const cacheUtilities = new CacheUtilities(this.state.appelflapConnect);
-                const cacheStatus = await cacheUtilities.status();
+                const cacheStatus = await CacheUtilities.status();
                 this.update({ cacheStatus: JSON.stringify(cacheStatus) });
                 */
 
-                const cachePublish = new CachePublish(this.state.appelflapConnect);
-                const publications = await cachePublish.publications();
+                const publications = await CachePublish.publications();
                 this.update(({ publications: JSON.stringify(publications) }));
 
                 // Get the Item Status Listing
@@ -89,14 +83,13 @@
             },
 
             async syncMe() {
-                const cacheUtilities = new CacheUtilities(this.state.appelflapConnect);
-                await cacheUtilities.unlock();
+                await CacheUtilities.unlock();
 
                 // Identify what needs to be subscribed to, and what needs to be published
                 const appDataStatus = this.state.appDataStatus;
                 const syncStatus = await appDataStatus.SyncAll();
 
-                await cacheUtilities.lock();
+                await CacheUtilities.lock();
 
                 // window.alert(`Published: ${JSON.stringify(syncStatus)}`);
             },

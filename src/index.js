@@ -10,9 +10,6 @@ import { EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
 let currentServiceWorkerState = getServiceWorkerState();
 
-// Create the global beroHost and certChain objects
-var beroHost = null;
-var certChain = null;
 // Initialise the beroHost object
 InitialiseBeroHost();
 
