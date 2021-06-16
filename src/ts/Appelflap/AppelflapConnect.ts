@@ -34,7 +34,7 @@ export class AppelflapConnect {
         if (!AppelflapConnect.instance) {
             const gt = globalThis as Record<string, any>;
             gt["AFC_MOCKMODE"] = gt["AFC_MOCKMODE"] || false;
-    
+
             if (!gt["AFC_MOCKMODE"]) {
                 AppelflapConnect.instance = inAppelflap()
                     ? new AppelflapConnect()
