@@ -249,7 +249,7 @@ export class Asset extends PublishableItem {
 
     get thumbnail(): string {
         return this.metadata && this.metadata.thumbnail
-            ? `${BACKEND_BASE_URL}/${this.metadata.thumbnail}`
+            ? `${BACKEND_BASE_URL}${this.metadata.thumbnail}`
             : "";
     }
 
