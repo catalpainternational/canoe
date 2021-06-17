@@ -1,71 +1,113 @@
 <BeroHome>
     <GuestBanner></GuestBanner>
-    </div>
+    hello! it's the home page
+
+    <template if="{learningActivities}">
+        <h4>{TRANSLATIONS.learning()}</h4>
+        <div class="cards-container">
+            <Card
+                each="{topic in learningActivities}"
+                contentItem="{topic}"
+            ></Card>
+        </div>
+    </template>
+
+    <template if="{courses}">
+        <h4>{TRANSLATIONS.latestCourses()}</h4>
+        <div class="cards-container">
+            <Card
+                each="{course in courses}"
+                contentItem="{course}"
+            ></Card>
+        </div>
+    </template>
+
+    <template if="{courseCategories}">
+        <h4>{TRANSLATIONS.courseCategories()}</h4>
+        <div class="cards-container">
+            <Card
+                each="{category in courseCategories}"
+                contentItem="{category}"
+            ></Card>
+        </div>
+    </template>
+
+    <template if="{resources}">
+        <h4>{TRANSLATIONS.resources()}</h4>
+        <div class="cards-container">
+            <Card
+                each="{resource in resources}"
+                contentItem="{resource}"
+            ></Card>
+        </div>
+    </template>
 
     <script>
         import { getRoute } from "ReduxImpl/Interface";
 
+        import Card from "RiotTags/Components/Card.riot.html";
+        import GuestBanner from "riot/Components/GuestBanner.riot.html";
+
         function BeroHome() {
             return {
-                state: {
-                    selectedTags: [],
-                    showTagList: false,
-                },
+                // state: {
+                // },
 
                 TRANSLATIONS: {
-                    noCourses: () =>
-                        gettext("There are no courses yet. Check back soon!"),
-                    allCourses: () => gettext("All courses"),
-                    continueLearning: () => gettext("Continue Learning"),
-                    coursesIntro: () =>
-                        gettext(
-                            "Explore a range of courses to suit your needs, expertise, and interests"
-                        ),
+                    learning: () => gettext("Learning Activities"),
+                    latestCourses: () => gettext("Latest Courses"),
+                    courseCategories: () => gettext("Courses by Category"),
+                    resources: () => gettext("Resources"),
                 },
 
                 get page() {
                     return getRoute().page;
                 },
 
-                showTagFilter() {
-                    // and we don't show the filter unless we have some tags
-                    return this.page.all_tags.size;
+                get manifest() {
+                    return this.page.manifest;
                 },
 
-                toggleTagList() {
-                    this.update({ showTagList: !this.state.showTagList });
+                getPagesWithType(pageType) {
+                    let matches = [];
+                    Object.entries(this.manifest.pages).forEach(([id, data]) => {
+                        if (data.type === pageType) {
+                            matches.push(this.manifest.getSpecificPage(id));
+                        }
+                    })
+                    return matches;
                 },
 
-                onTagClick(clickedTag) {
-                    if (this.state.selectedTags.includes(clickedTag)) {
-                        const tagIndex = this.state.selectedTags.indexOf(
-                            clickedTag
-                        );
-                        this.state.selectedTags.splice(tagIndex, 1);
-                    } else {
-                        this.state.selectedTags.push(clickedTag);
-                    }
-                    this.update();
+                get learningActivities () {
+                    if (!this.manifest.hasPageType('learningactivitytopicpage')) return false;
+                    return this.getPagesWithType('learningactivitytopicpage');
                 },
 
-                showCourse(course) {
-                    return (
-                        !this.state.showTagList ||
-                        !this.state.selectedTags.length ||
-                        course.hasATagIn(this.state.selectedTags)
-                    );
+                get courses() {
+                    if (!this.manifest.hasPageType('coursepage')) return false;
+                    return this.getPagesWithType('coursepage');
+                },
+
+                get courseCategories () {
+                    // TODO
+                    return false;
+                },
+
+                get resources() {
+                    if (!this.manifest.hasPageType('resourcearticle')) return false;
+                    return this.getPagesWithType('resourcearticle');
                 },
             };
         }
 
-        AllCoursesList.components = {
+        BeroHome.components = {
             card: Card,
-            taglist: TagList,
+            // taglist: TagList,
             guestbanner: GuestBanner,
-            loadingdots: LoadingDots,
-            topmenu: TopMenu,
+            // loadingdots: LoadingDots,
+            // topmenu: TopMenu,
         };
 
-        export default AllCoursesList;
+        export default BeroHome;
     </script>
 </BeroHome>

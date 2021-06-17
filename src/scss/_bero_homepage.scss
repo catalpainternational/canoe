@@ -1,0 +1,15 @@
+BeroHome {
+    display: block;
+    padding-bottom: 100px;
+
+    .cards-container {
+        display: flex;
+        gap: 1em;
+        padding: 0 1em 1em 1em;
+        overflow: scroll;
+    }
+
+    .card {
+        width: 40vw;
+    }
+}

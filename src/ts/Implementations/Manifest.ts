@@ -7,6 +7,7 @@ import { StorableItem } from "../Interfaces/StorableItem";
 import { PublishableItem } from "./PublishableItem";
 import { Page } from "./Page";
 
+import BeroHome from "./Specific/BeroHome";
 import AllCourses from "./Specific/AllCourses";
 import Course from "./Specific/Course";
 import Lesson from "./Specific/Lesson";
@@ -195,7 +196,9 @@ export class Manifest extends PublishableItem implements StorableItem {
         const pageType = this.storedData?.pages[pageId].type;
 
         switch (pageType) {
-            case "homepage":
+            case "berohomepage":
+                return new BeroHome(this, pageId, parent);
+            case "courseshomepage":
                 return new AllCourses(this, pageId, parent);
             case "coursepage":
                 return new Course(this, pageId, parent);

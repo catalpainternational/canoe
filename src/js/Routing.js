@@ -12,11 +12,12 @@ const LOGIN_ROUTE = 'login';
 const CANOE_PAGES = ['settings', 'profile', 'sync'];
 /** Pages that are shortcuts into a CMS page,
  * e.g. resources goes to the selected language resource root
- * 
+ *
  * These are defined as arrays, the first page found in the manifest will be the one returned */
 const CANOE_SHORTCUTS = {
     "": ["berohomepage", "learningactivitieshomepage"],
     home: ["berohomepage"],
+    courses: ["courseshomepage"],
     resources: ["resourcesroot"],
     topics: ["learningactivitieshomepage"],
 };
@@ -59,8 +60,8 @@ async function route(hashWith) {
             return;
         }
         if( !isAuthenticated() && REQUIRE_LOGIN )
-        { 
-            // if the site is configured to require login and we are not logged in, show the login page 
+        {
+            // if the site is configured to require login and we are not logged in, show the login page
             window.location.hash = `#${LOGIN_ROUTE}`;
             return;
         }
@@ -91,7 +92,7 @@ async function route(hashWith) {
                     });
                 }
             }
-            route = !!page 
+            route = !!page
                 ? {page, riotHash}
                 : {page: {type: "pageHash_error", error: `The page shortcut "~{pageHash}" had no match in the Manifest`}};
 

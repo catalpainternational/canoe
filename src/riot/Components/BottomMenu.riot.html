@@ -1,7 +1,11 @@
 <BottomMenu>
     <footer if="{showBottomMenu()}">
         <div class="bottom-menu">
-            <a href="#" if="{shouldShowLearningHome()}">
+            <a href="#" if="{shouldShowBeroHome()}">
+                <span class="home-icon { page.type === 'berohomepage' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#courses" if="{shouldShowLearningHome()}">
                 <span class="all-courses-icon { page.type === 'courseshomepage' ? 'active' : ''}">
                 </span>
             </a>
@@ -42,6 +46,10 @@
 
             shouldShowSync() {
                 return inAppelflap();
+            },
+
+            shouldShowBeroHome() {
+                return this.page.manifest.hasPageType('berohomepage');
             },
 
             shouldShowLearningHome() {
