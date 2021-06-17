@@ -49,22 +49,20 @@ const SIZE_DIFF_PERCENT = 0.02;
 
 /** An asset ( binary resource ) than can be cached */
 export class Asset extends PublishableItem {
-    /** id of this asset in the manifest page */
-    #id: string;
     /** reference to the parent page (used to point to the correct cache) */
     #page: Page;
     /** stored reference to the Asset details */
-    #entry: TAssetEntry | undefined;
+    #entry: TAssetEntry;
 
     /**
      * Instantiate a new asset from its page and id
      * @param page the page this asset is associated with
      * @param id the id of this asset
      */
-    constructor(page: Page, id: string) {
+    constructor(page: Page, entry: TAssetEntry) {
         super();
         this.#page = page;
-        this.#id = id;
+        this.#entry = entry;
     }
 
     /** The platform specific media url of this asset item */
@@ -90,22 +88,17 @@ export class Asset extends PublishableItem {
     }
 
     /** The data from the manifest about this asset */
-    get entry(): TAssetEntry | undefined {
-        if (!this.#entry) {
-            this.#entry = this.#page.manifestData.assets.find(
-                (a: any) => a["id"] === this.#id
-            );
-        }
+    get entry(): TAssetEntry {
         return this.#entry;
     }
 
     /** The id of this asset in the manifest page entry */
     get id(): string {
-        return this.#id;
+        return this.entry.id;
     }
 
     /** The type of this asset (image|video|audio) */
-    get type(): string | undefined {
+    get type(): string {
         return this.entry?.type;
     }
 
@@ -120,7 +113,7 @@ export class Asset extends PublishableItem {
 
     /** Description for log lines */
     toString(): string {
-        return `Asset ${this.id} in ${this.#page}`;
+        return `Asset ${this.type} ${this.id} in ${this.#page}`;
     }
 
     /** The appropriate rendition for the platform we are running on */
