@@ -9,7 +9,7 @@ import {
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS, AppelflapPortNo } from "js/RoutingAppelflap";
+import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS } from "./AppelflapRouting";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -20,7 +20,12 @@ const logger = new Logger("AppelflapConnect");
 
 export class AppelflapConnect {
     //#region Implement as Singleton
-    static instance: AppelflapConnect | undefined;
+    static instance?: AppelflapConnect;
+    #endpointProperties?: {
+        username: string;
+        password: string;
+        port: number;
+    };
 
     private constructor() {
         logger.log("Singleton created");
@@ -43,6 +48,9 @@ export class AppelflapConnect {
                 // Return a 'mock' of AppelflapConnect
                 // to be used only in testing
                 AppelflapConnect.instance = new AppelflapConnect();
+                AppelflapConnect.instance.#endpointProperties = {
+                    username: "a", password: "b", port: 9090
+                }
             }
         }
 
@@ -51,34 +59,30 @@ export class AppelflapConnect {
     //#endregion
 
     /** Get the Authorisation Header details that Appelflap requires
-     * @remarks See: https://github.com/catalpainternational/appelflap/blob/7a4072f8b914748563333238bb1a49ea527480bd/docs/API/determining-endpoint.md for more info
+     * @remarks See: https://github.com/catalpainternational/appelflap/blob/12ab990462012a50e73956e17d2006b425678eae/docs/API/determining-endpoint.md for more info
      * @returns The auth header as `Basic btoaEncodedStuff` or 'None' if the credentials are not available
      */
-    get authHeader(): string {
-        const credentialsExtract = (prefix: string) => {
-            const rex = RegExp(`^${prefix}-[a-z]{5}$`);
-            const match = navigator.languages.filter((word) =>
-                rex.test(word)
-            )[0];
+    private get authHeader(): string {
+        if (!this.#endpointProperties) {
+            return "None";
+        }
 
-            return match ? match.substring(4) : match;
-        };
-
-        const creds = ["ecu", "ecp"].map(credentialsExtract);
-        return !creds.every(Boolean)
-            ? "None"
-            : `Basic ${btoa(creds.join(":"))}`;
+        const creds = `${this.#endpointProperties.username}:${
+            this.#endpointProperties.password
+        }`;
+        return `Basic ${btoa(creds)}`;
     }
 
     private appelflapFetch = async (
         commandPath: string,
         commandInit?: RequestInit
     ): Promise<Response> => {
-        const requestInfo = `${AF_LOCALHOSTURI}:${AppelflapPortNo()}/${commandPath}`;
+        const requestInfo = `${AF_LOCALHOSTURI}:${
+            this.#endpointProperties!.port
+        }/${commandPath}`;
 
         const authorization = this.authHeader;
-        const weHaveAuthorization =
-            ["Not Set", "None"].indexOf(authorization) === -1;
+        const weHaveAuthorization = authorization !== "None";
 
         // Somewhere, some documentation says it is preferable to set requestInit to undefined
         // if all the values are defaults (e.g. `method: GET`), but I can't find it currently.
@@ -103,6 +107,13 @@ export class AppelflapConnect {
         commandInit?: RequestInit,
         returnType: "json" | "text" | "pem" = "json"
     ): Promise<any> => {
+        await this.getEndpointProperties();
+        if (!this.#endpointProperties) {
+            return Promise.reject(
+                new Error("No Appelflap endpoint properties")
+            );
+        }
+
         const response = await this.appelflapFetch(commandPath, commandInit);
 
         if (!response.ok) {
@@ -141,6 +152,17 @@ export class AppelflapConnect {
                 return cert;
         }
         /* eslint-enable no-case-declarations */
+    };
+
+    private getEndpointProperties = async (): Promise<void> => {
+        if (!this.#endpointProperties) {
+            const { commandPath } = APPELFLAPCOMMANDS.getEndpointProperties;
+            logger.info(`Getting endpoint properties`);
+
+            const response = await fetch(commandPath);
+            this.#endpointProperties = await response.json();
+            logger.info("Got endpoint properties");
+        }
     };
 
     public getLargeObjectIndexStatus = async (): Promise<any> => {

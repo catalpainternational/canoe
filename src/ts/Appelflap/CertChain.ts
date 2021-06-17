@@ -53,7 +53,7 @@ export class CertChain {
         try {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
             logger.info(`Package publishing certificate is ${this.certState}`);
-            if (this.certState === "undefined") {
+            if (this.certState === "unsigned") {
                 const lastError = await this.PostPackageCertificateForSigning();
                 if (lastError) {
                     if (lastError.startsWith("No action taken:")) {
