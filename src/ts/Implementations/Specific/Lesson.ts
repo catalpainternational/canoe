@@ -51,6 +51,11 @@ export default class Lesson extends Page {
     get threads(): Array<Thread> {
         return this.storedData?.discussion;
     }
+    /** extend the prepare call to make the lesson available offline pre-loading assets used */
+    async prepare(): Promise<void> {
+        super.prepare();
+        this.makeAvailableOffline();
+    }
 }
 
 class Thread {
