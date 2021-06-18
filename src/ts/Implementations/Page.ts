@@ -17,6 +17,7 @@ import {
     storePageData,
     getStoredPageCompletionDate,
     storePageComplete,
+    getPreviewing,
 } from "ReduxImpl/Interface";
 import { persistCompletion } from "js/actions/Completion";
 import { persistFeedback } from "js/UserActions";
@@ -84,10 +85,9 @@ export class Page extends PublishableItem implements StorableItem {
     // #endregion StorableItem implementations
 
     /** Get and store this page, used in routing */
-    async prepare(isPreview = false): Promise<void> {
+    async prepare(): Promise<void> {
         const response = await this.getResponse(
-            isPreview,
-            isPreview ? UpdatePolicy.ForceUpdate : UpdatePolicy.Default
+            getPreviewing() ? UpdatePolicy.ForceUpdate : UpdatePolicy.Default
         );
         return response
             .json()

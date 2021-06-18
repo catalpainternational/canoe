@@ -11,6 +11,7 @@ import route from "./ducks/Route";
 import completion from "./ducks/Completion";
 import examScores from "./ducks/ExamScores";
 import testAnswers from "./ducks/TestAnswers";
+import previewing from "./ducks/Wagtailpreview";
 
 export const reducers = combineReducers({
     ...siteReducer,
@@ -24,4 +25,5 @@ export const reducers = combineReducers({
     ...completion,
     ...examScores,
     ...testAnswers,
+    ...previewing,
 });

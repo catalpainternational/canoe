@@ -9,6 +9,7 @@ import { clearCompletionsAction, setCompletionAction, setManyCompletionsAction }
 import { clearExamScoresAction, storeExamScoreAction, storeExamScoresAction } from "./ducks/ExamScores";
 import { clearPageAnswersAction, storeTestAnswerAction } from "./ducks/TestAnswers";
 import { changeOnlineAction } from "./ducks/Online";
+import { setPreviewAction } from "./ducks/Wagtailpreview";
 import {
     setAuthenticatedState,
     setUnAuthenticatedState,
@@ -162,6 +163,20 @@ export const setRoute = (route) => {
 };
 export const getRoute = () => {
     return store.getState().route;
+};
+//#endregion
+
+//#region Preview
+export const setAndGetPreviewing = (pageId) => {
+    const previewing = getPreviewing();
+    if (pageId !== previewing) {
+        store.dispatch(setPreviewAction(pageId));
+        return pageId;
+    }
+    return previewing;
+};
+export const getPreviewing = () => {
+    return store.getState().previewing;
 };
 //#endregion
 

@@ -20,7 +20,11 @@ import TeachingTopic from "./Specific/TeachingTopic";
 import TeachingActivity from "./Specific/TeachingActivity";
 
 // See ts/Typings for the type definitions for these imports
-import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
+import {
+    storeManifest,
+    getManifestFromStore,
+    getPreviewing,
+} from "ReduxImpl/Interface";
 
 const logger = new Logger("Manifest");
 
@@ -84,10 +88,9 @@ export class Manifest extends PublishableItem implements StorableItem {
     }
     // #endregion StorableItem implementations
 
-    async prepare(isPreview = false): Promise<void> {
+    async prepare(): Promise<void> {
         const response = await this.getResponse(
-            isPreview,
-            isPreview ? UpdatePolicy.ForceUpdate : UpdatePolicy.Default
+            getPreviewing() ? UpdatePolicy.ForceUpdate : UpdatePolicy.Default
         );
         return response
             .json()

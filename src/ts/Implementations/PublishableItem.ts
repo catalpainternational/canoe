@@ -2,6 +2,7 @@ import Logger from "../Logger";
 
 // See ts/Typings for the type definitions for these imports
 import { BACKEND_BASE_URL } from "js/urls";
+import { getPreviewing } from "ReduxImpl/Interface";
 
 export enum UpdatePolicy {
     Default = "default",
@@ -54,14 +55,15 @@ export abstract class PublishableItem {
      * @returns a request response for this item
      * @throws Error if network failure or response not OK
      */
-    async getResponseFromNetwork(isPreview = false): Promise<Response> {
+    async getResponseFromNetwork(): Promise<Response> {
         this.logMessage("using network");
         let response;
         try {
             const url = new URL(this.url);
             const requestOptions = this.getRequestOptions();
-            if (isPreview) {
-                url.searchParams.append("preview", "");
+            const previewing = getPreviewing();
+            if (previewing) {
+                url.searchParams.append("preview", previewing);
                 requestOptions.cache = "no-cache";
             }
             response = await fetch(url.toString(), requestOptions);
@@ -109,7 +111,6 @@ export abstract class PublishableItem {
      * @throws Error if network used and failure or response not OK, or strategy not handled
      */
     async getResponse(
-        isPreview = false,
         updatePolicy: UpdatePolicy = UpdatePolicy.Default
     ): Promise<Response> {
         logger.info(
@@ -133,7 +134,7 @@ export abstract class PublishableItem {
                 );
                 break;
             case UpdatePolicy.ForceUpdate:
-                response = await this.getResponseFromNetwork(isPreview);
+                response = await this.getResponseFromNetwork();
                 break;
             default:
                 throw Error("Unhandled prepare strategy");
