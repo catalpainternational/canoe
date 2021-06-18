@@ -13,4 +13,5 @@ module.exports = {
         },
     },
     GUEST_USERNAME: "Guest",
+    CSRF_COOKIE_NAME: 'csrftoken',
 };
