@@ -15,24 +15,17 @@
                         <h5>ID:{statusListing.id} {statusListing.type}:{statusListing.title} <small>({statusListing.version})</small> </h5>
                     </div>
 
-                    <div
-                        class="sync-body"
-                        if="{statusListing.storeStatus !== 'unset' || statusListing.cacheStatus !== 'unset'}"
-                    >
-                        <span>Store URL:{ statusListing.api_url }, status:{ statusListing.storeStatus }</span>
+                    <div if="{statusListing.backendPath === statusListing.cacheKey}" class="sync-body">
+                        <span><small>Store Path/Cache Key:</small> { statusListing.backendPath }</span>
+                    </div>
+                    <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
+                        <span><small>Store Path:</small> { statusListing.backendPath }</span>
+                    </div>
+                    <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
+                        <span><small>Cache Key:</small> { statusListing.cacheKey }</span>
                     </div>
 
-                    <div
-                        class="sync-body"
-                        if="{statusListing.storeStatus !== 'unset' || statusListing.cacheStatus !== 'unset'}"
-                    >
-                        <span>Cache Key:{ statusListing.cacheKey }, status:{ statusListing.cacheStatus }</span>
-                    </div>
-
-                    <div
-                        class="sync-body"
-                        if="{statusListing.storeStatus !== 'unset' || statusListing.cacheStatus !== 'unset'}"
-                    >
+                    <div class="sync-body">
                         <span>Validity:{ statusListing.isValid },  </span>
                         <span>Availablity:{ statusListing.isAvailableOffline },  </span>
                         <span>Publishable:{ statusListing.isPublishable }, </span>
@@ -54,19 +47,14 @@
 
     <script>
         import { AppDataStatus } from "ts/AppDataStatus";
-        import { AppelflapConnect } from "ts/AppelflapConnect";
-        import { CacheUtilities } from "ts/CacheUtilities";
-        import { CachePublish } from "ts/CachePublish";
-        import { Manifest } from "ts/Implementations/Manifest";
+        import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
+        import { CachePublish } from "ts/Appelflap/CachePublish";
 
         export default {
             state: {
                 statusListings: [],
                 publications: "",
-                manifest: "",
-                page: "",
                 appDataStatus: new AppDataStatus(),
-                appelflapConnect: null,
             },
 
             TRANSLATIONS: {
@@ -80,36 +68,30 @@
 
             async appelflapStatus() {
                 this.update({ appelflapMeta: "Getting" });
-                
-                this.state.appelflapConnect = new AppelflapConnect();
 
                 /* Not yet implemented
-                const cacheUtilities = new CacheUtilities(this.state.appelflapConnect);
-                const cacheStatus = await cacheUtilities.status();
+                const cacheStatus = await CacheUtilities.status();
                 this.update({ cacheStatus: JSON.stringify(cacheStatus) });
                 */
 
-                const cachePublish = new CachePublish(this.state.appelflapConnect);
-                const publications = await cachePublish.publications();
+                const publications = await CachePublish.publications();
                 this.update(({ publications: JSON.stringify(publications) }));
 
                 // Get the Item Status Listing
-                // await this.state.appDataStatus.Initialise();
-                // await this.state.appDataStatus.BuildList();
+                await this.state.appDataStatus.BuildList();
                 this.update({statusListings: this.state.appDataStatus.itemListings});
             },
 
             async syncMe() {
-                const cacheUtilities = new CacheUtilities(this.state.appelflapConnect);
-                await cacheUtilities.unlock();
+                await CacheUtilities.unlock();
 
                 // Identify what needs to be subscribed to, and what needs to be published
                 const appDataStatus = this.state.appDataStatus;
-                // const syncStatus = await appDataStatus.SyncAll();
+                const syncStatus = await appDataStatus.SyncAll();
 
-                await cacheUtilities.lock();
+                await CacheUtilities.lock();
 
-                //window.alert(`Published: ${JSON.stringify(syncStatus)}`);
+                // window.alert(`Published: ${JSON.stringify(syncStatus)}`);
             },
         };
     </script>

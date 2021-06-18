@@ -26,7 +26,7 @@
             <span class="cross gray"></span>
         </a>
     </TopMenu>
-    <div class="frame-background {userAgent()}">
+    <div class="frame-background">
         <div class="{!props.noCardStyle ? 'card-frame' : 'no-card'}">
             <div class="card-content {props.extrastyleclasses}">
                 <slot />
@@ -37,6 +37,7 @@
             </template>
         </div>
     </div>
+    <slot name="bottom-buttons" />
 
     <script>
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
@@ -52,15 +53,6 @@
                     ? this.props.close()
                     : (window.location.hash = `#${this.props.linkTo}`);
             },
-
-            userAgent() {
-                const { browser } = getPlatform();
-                // iphone 8+ and earlier models have a max height of 736;
-                if (window.innerHeight <= 736) {
-                    return `${browser.name.toLowerCase()} hasHomeButton`
-                }
-                return browser.name.toLowerCase();
-            }
         };
     </script>
 </LessonFrame>

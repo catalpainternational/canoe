@@ -2,8 +2,8 @@
 
 /** Note that the module name here MUST match how it's used in the .ts files */
 declare module "ReduxImpl/Interface" {
-    import { TManifestData } from "ts/Types/ManifestTypes";
-    import { TWagtailPageData } from "ts/Types/PageTypes";
+    import { TManifestData } from "src/ts/Types/ManifestTypes";
+    import { TWagtailPageData } from "src/ts/Types/PageTypes";
 
     export function storeManifest(manifest: Record<string, any>): void;
     export function getManifestFromStore(): TManifestData;

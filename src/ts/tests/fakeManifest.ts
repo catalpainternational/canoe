@@ -1,6 +1,6 @@
-import { Manifest } from "ts/Implementations/Manifest";
+import { Manifest } from "../Implementations/Manifest";
 
 export function buildFakeManifest(): Manifest {
-    const fakeMani = new Manifest();
+    const fakeMani = Manifest.getInstance();
     return fakeMani;
 }

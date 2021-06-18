@@ -3,9 +3,9 @@ import { TAppelflapResult } from "../Types/CanoeEnums";
 import { TItemListing } from "../Types/PublishableItemTypes";
 import { TPublishableItem } from "../Types/PublishableItemTypes";
 
-import { AppelflapConnect } from "../AppelflapConnect";
-import { CachePublish } from "../CachePublish";
-import { CacheSubscribe } from "../CacheSubscribe";
+import { AppelflapConnect } from "../Appelflap/AppelflapConnect";
+import { CachePublish } from "../Appelflap/CachePublish";
+import { CacheSubscribe } from "../Appelflap/CacheSubscribe";
 
 /** Define the 'target' within the cache for Appelflap */
 const CacheTarget = (item: TPublishableItem): TPublication => {
@@ -23,17 +23,14 @@ const CacheTarget = (item: TPublishableItem): TPublication => {
  * - reject("failed") on error (404 or 500)
  */
 export async function publishItem(
-    item: TPublishableItem,
-    appelflapConnect: AppelflapConnect
+    item: TPublishableItem
 ): Promise<TAppelflapResult> {
-    if (!item || !item.isPublishable || !appelflapConnect) {
+    if (!item || !item.isPublishable || !AppelflapConnect.Instance) {
         return Promise.resolve("not relevant");
     }
 
-    const cachePublish = new CachePublish(appelflapConnect);
-
     try {
-        await cachePublish.publish(CacheTarget(item));
+        await CachePublish.publish(CacheTarget(item));
         return Promise.resolve("succeeded");
     } catch (error) {
         return Promise.reject("failed");
@@ -47,17 +44,14 @@ export async function publishItem(
  * - reject("failed") on error (404 or 500)
  */
 export async function unpublishItem(
-    item: TPublishableItem,
-    appelflapConnect: AppelflapConnect
+    item: TPublishableItem
 ): Promise<TAppelflapResult> {
-    if (!item || item.isPublishable || !appelflapConnect) {
+    if (!item || item.isPublishable || !AppelflapConnect.Instance) {
         return Promise.resolve("not relevant");
     }
 
-    const cachePublish = new CachePublish(appelflapConnect);
-
     try {
-        await cachePublish.unpublish(CacheTarget(item));
+        await CachePublish.unpublish(CacheTarget(item));
         return Promise.resolve("succeeded");
     } catch (error) {
         return Promise.reject("failed");
@@ -70,17 +64,13 @@ export async function unpublishItem(
  * - resolve("not relevant") if appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
-export async function getSubscriptions(
-    appelflapConnect: AppelflapConnect
-): Promise<TSubscriptions | string> {
-    if (!appelflapConnect) {
+export async function getSubscriptions(): Promise<TSubscriptions | string> {
+    if (!AppelflapConnect.Instance) {
         return Promise.resolve("not relevant");
     }
 
-    const cacheSubscribe = new CacheSubscribe(appelflapConnect);
-
     try {
-        const subscriptions = await cacheSubscribe.getSubscriptions();
+        const subscriptions = await CacheSubscribe.getSubscriptions();
         return Promise.resolve(subscriptions);
     } catch (error) {
         return Promise.reject("failed");
@@ -94,19 +84,16 @@ export async function getSubscriptions(
  * - reject("failed") on error (404 or 500)
  */
 export async function setSubscriptions(
-    items: TItemListing[],
-    appelflapConnect: AppelflapConnect
+    items: TItemListing[]
 ): Promise<TSubscriptions | string> {
     if (
         !items ||
         !items.length ||
         !items.some((item) => !item.isPublishable) ||
-        !appelflapConnect
+        !AppelflapConnect.Instance
     ) {
         return Promise.resolve("not relevant");
     }
-
-    const cacheSubscribe = new CacheSubscribe(appelflapConnect);
 
     const subscriptions: TSubscriptions = {
         origins: {},
@@ -125,7 +112,7 @@ export async function setSubscriptions(
     });
 
     try {
-        const result = await cacheSubscribe.setSubscriptions(subscriptions);
+        const result = await CacheSubscribe.setSubscriptions(subscriptions);
         return Promise.resolve(result);
     } catch (error) {
         return Promise.reject("failed");

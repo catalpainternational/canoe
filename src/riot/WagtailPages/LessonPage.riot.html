@@ -1,4 +1,4 @@
-<LessonPage>
+<LessonPage class="fill-screen">
     <LessonFrame
         if="{lesson.ready}"
         linkTo="{lesson.course.loc_hash}"
@@ -17,16 +17,17 @@
             <p>{lesson.shortDescription}</p>
             <p>{lesson.longDescription}</p>
         </div>
+        <div slot="bottom-buttons" if="{lesson.ready}" class="bottom-buttons">
+            <button class="btn-primary" onclick="{startLesson}">
+                { TRANSLATIONS.start() }
+            </button>
+        </div>
     </LessonFrame>
-    <div if="{lesson.ready}" class="bottom-buttons">
-        <button class="btn-primary" onclick="{startLesson}">
-            { TRANSLATIONS.start() }
-        </button>
-    </div>
 
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
 
+        import { BACKEND_BASE_URL } from "js/urls";
         import { getRoute } from "ReduxImpl/Interface";
 
         function LessonPage() { return {
@@ -42,7 +43,7 @@
 
             get cardImageUrl() {
                 return this.lesson.cardImage
-                    ? `${process.env.API_BASE_URL}${this.lesson.cardImage}`
+                    ? `${BACKEND_BASE_URL}${this.lesson.cardImage}`
                     : undefined;
             },
 

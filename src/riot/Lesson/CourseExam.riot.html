@@ -1,7 +1,7 @@
-<CourseExam>
+<CourseExam class="fill-screen">
     <template if="{ stage === 'code' || !isNaN(cardNumber) }">
         <template if="{ stage === 'code' && course.examType !== 'prelearning'}">
-            <HonorCode minimumScore="{ course.minimumExamScore }"></HonorCode>
+            <HonorCode></HonorCode>
         </template>
         <LessonFrame
             if="{ !isNaN(cardNumber) }"
@@ -14,32 +14,32 @@
             <Test
                 card-number="{ cardNumber }"
             ></Test>
+            <div slot="bottom-buttons" if="{ !isNaN(cardNumber) }" class="bottom-buttons">
+                <div>
+                    <a if="{ cardNumber > 1 }" class="has-circle" onclick="{previousExamCard}">
+                        <span class="arrow"></span>
+                    </a>
+                </div>
+                <div>
+                    <button
+                        if="{ cardNumber < examCards.length }"
+                        class="btn-primary"
+                        onclick="{nextExamCard}"
+                        disabled="{ !hasAnswer() }"
+                    >
+                        { TRANSLATIONS.next() }
+                    </button>
+                    <button
+                        if="{ cardNumber === examCards.length }"
+                        class="btn-primary"
+                        onclick="{nextExamCard}"
+                        disabled="{ !hasAnswer() }"
+                    >
+                        { TRANSLATIONS.submit() }
+                    </button>
+                </div>
+            </div>
         </LessonFrame>
-        <div if="{ !isNaN(cardNumber) }" class="bottom-buttons">
-            <div>
-                <a if="{ cardNumber > 1 }" class="has-circle" onclick="{previousExamCard}">
-                    <span class="arrow"></span>
-                </a>
-            </div>
-            <div>
-                <button
-                    if="{ cardNumber < examCards.length }"
-                    class="btn-primary"
-                    onclick="{nextExamCard}"
-                    disabled="{ !hasAnswer() }"
-                >
-                    { TRANSLATIONS.next() }
-                </button>
-                <button
-                    if="{ cardNumber === examCards.length }"
-                    class="btn-primary"
-                    onclick="{nextExamCard}"
-                    disabled="{ !hasAnswer() }"
-                >
-                    { TRANSLATIONS.submit() }
-                </button>
-            </div>
-        </div>
     </template>
 
     <ExamResults

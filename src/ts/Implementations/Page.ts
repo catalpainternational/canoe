@@ -27,8 +27,6 @@ export class Page extends PublishableItem implements StorableItem {
     #manifest: Manifest;
     /** the parent of this page, if it has one */
     #parent: Page | undefined;
-    /** the children of this page ( references stored for efficiency ) */
-    #childPages: Page[] | undefined;
     /** the lsit of assets( references stored for efficiency ) */
     #assets: Asset[] = [];
     /** aany data that might wish to be added to a completion persisted entry */
@@ -47,30 +45,21 @@ export class Page extends PublishableItem implements StorableItem {
         this.#parent = parent;
     }
 
-    /**
-     * The api url of this page
-     */
-    get url(): string {
-        return `${process.env.API_BASE_URL}${this.manifestData?.api_url}`;
+    get backendPath(): string {
+        return this.manifestData?.api_url || "";
     }
 
-    /**
-     * The cache in which the page is stored
-     */
+    /** The cache in which the page is stored */
     get cacheKey(): string {
         return this.manifestData?.storage_container;
     }
 
-    /**
-     * The wagtail page live_revision_id
-     */
+    /** The wagtail page live_revision_id */
     get revisionId(): BigInteger {
         return this.manifestData?.revision_id;
     }
 
-    /**
-     * The options to make an page api request
-     */
+    /** The options to make an page api request */
     get requestOptions(): RequestInit {
         const reqInit: any = {
             credentials: "include",
@@ -79,7 +68,7 @@ export class Page extends PublishableItem implements StorableItem {
         return reqInit as RequestInit;
     }
 
-    // StorableItem implementations
+    // #region StorableItem implementations
     /** Set the page data in the page store */
     saveToStore(data: TWagtailPageData): void {
         storePageData(this.#id, data);
@@ -89,11 +78,9 @@ export class Page extends PublishableItem implements StorableItem {
     get storedData(): TWagtailPageData {
         return getPageDataFromStore(this.#id);
     }
-    // end StorableItem implementations
+    // #endregion StorableItem implementations
 
-    /**
-     * Get and store this page, used in routing
-     */
+    /** Get and store this page, used in routing */
     async prepare(): Promise<void> {
         const response = await this.getResponse();
         return response
@@ -102,13 +89,13 @@ export class Page extends PublishableItem implements StorableItem {
                 this.saveToStore(manifestData);
             })
             .catch((err) => {
-                logger.warn("%s:%s deserialize %o", this.str, this.url, err);
+                logger.warn("%s:%s deserialize %o", this, this.url, err);
                 throw new Error("Page failed to deserialize");
             });
     }
 
     /** Is this item `ready` to be used now!?
-     * Has it been succesfully prepared?
+     * @remarks Has it been succesfully prepared?
      */
     get ready(): boolean {
         return this.storedData !== undefined;
@@ -120,7 +107,7 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     /** The data for this page as defined in the manifest
-     * legacy alias for manifestData
+     * @remarks legacy alias for manifestData
      */
     get data(): TWagtailPageData {
         return this.storedData || {};
@@ -131,15 +118,10 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     get childPages(): Page[] {
-        if (this.#childPages) {
-            return this.#childPages;
-        }
-
-        this.#childPages = this.children.map(
+        return this.children.map(
             (pageId) => this.#manifest.getSpecificPage(pageId, this),
             this.#manifest
         );
-        return this.#childPages;
     }
 
     get title(): string {
@@ -178,12 +160,10 @@ export class Page extends PublishableItem implements StorableItem {
 
     /** The asset data as defined in the manifest for this page */
     get manifestAssets(): Asset[] {
-        return this.manifestData["assets"]
-            .filter((assetEntry: TAssetEntry) => assetEntry.id)
-            .map(
-                (assetEntry: TAssetEntry) => new Asset(this, assetEntry.id),
-                this
-            );
+        return this.manifestData["assets"].map(
+            (assetEntry: TAssetEntry) => new Asset(this, assetEntry),
+            this
+        );
     }
 
     /** The assets associated with this page */
@@ -213,8 +193,7 @@ export class Page extends PublishableItem implements StorableItem {
         );
     }
 
-    /** This will do a basic integrity check.
-     */
+    /** This will do a basic integrity check. */
     get isValid(): boolean {
         // Has the wagtail version of this page been loaded
         return !!this.manifestData;
@@ -224,13 +203,22 @@ export class Page extends PublishableItem implements StorableItem {
         return this.#id;
     }
 
-    get str(): string {
+    /** Description for log lines */
+    toString(): string {
         return `Page ${this.title}`;
+    }
+
+    get isNew(): boolean {
+        return (
+            this.progressStatus === "not-started" &&
+            new Date(this.version / 1000).valueOf() >
+                Date.now() - 1000 * 60 * 60 * 24 * 7
+        );
     }
 
     /**
      * Check if the page is in the correct cache
-     * @returns true if this page, assets, and children is cached in the correct cache , false if not
+     * @returns `true` if this page, assets, and children is cached in the correct cache, `false` if not
      */
     async isAvailableOffline(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
@@ -249,7 +237,7 @@ export class Page extends PublishableItem implements StorableItem {
 
     /**
      * Add this page, assets, and children to the correct cache
-     * @returns true if succeeds
+     * @returns `true` on success
      */
     async makeAvailableOffline(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
@@ -268,7 +256,7 @@ export class Page extends PublishableItem implements StorableItem {
 
     /**
      * Remove this page, assets, and children from the cache
-     * @returns true if succeds
+     * @returns `true` on success
      */
     async removeAvailableOffline(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
@@ -286,23 +274,24 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     /** A page isPublishable if it, and all of its assets, are publishable.
-     * That is, are they all present in this page's cache. */
-    isPublishable(): Promise<boolean> {
+     * @remarks That is, are they all present in this page's cache. */
+    async isPublishable(): Promise<boolean> {
         const promises: Promise<boolean>[] = [
             ...this.manifestAssets.map((asset) => {
                 return asset.isAvailableOffline();
             }),
             super.isAvailableOffline(),
         ];
-        return Promise.all(promises).then((results) =>
-            results.every((result) => result)
-        );
+        const results = await Promise.all(promises);
+
+        return results.every((res) => res);
     }
 
     /** add some data to be stored with the next completion */
     addCompletionData(data: Record<string, any>): void {
         Object.assign(this.#completionData, data);
     }
+
     /** returns data to be stored with thi page completion */
     get completionData(): Record<string, any> {
         const data = {
@@ -313,6 +302,7 @@ export class Page extends PublishableItem implements StorableItem {
         this.#completionData = {};
         return data;
     }
+
     /** sets a page as complete */
     set complete(complete: boolean) {
         const data = this.completionData;
@@ -323,10 +313,12 @@ export class Page extends PublishableItem implements StorableItem {
         // set in redux store
         storePageComplete(this.id, action.date, complete);
     }
+
     /** if a page has been marked as complete */
     get complete(): boolean {
         return this.completeDate !== undefined;
     }
+
     /** when a page was last marked as complete */
     get completeDate(): Date | undefined {
         return getStoredPageCompletionDate(this.id);
@@ -352,6 +344,7 @@ export class Page extends PublishableItem implements StorableItem {
             return "in-progress";
         }
     }
+
     /** the data to show in a progress bar for this page */
     get progressValues(): ProgressValues {
         return {
