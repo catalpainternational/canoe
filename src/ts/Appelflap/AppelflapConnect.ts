@@ -48,9 +48,6 @@ export class AppelflapConnect {
                 // Return a 'mock' of AppelflapConnect
                 // to be used only in testing
                 AppelflapConnect.instance = new AppelflapConnect();
-                AppelflapConnect.instance.#endpointProperties = {
-                    username: "a", password: "b", port: 9090
-                }
             }
         }
 

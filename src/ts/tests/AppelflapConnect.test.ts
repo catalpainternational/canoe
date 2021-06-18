@@ -29,7 +29,11 @@ test.before((t: any) => {
     gt["AFC_MOCKMODE"] = true;
     t.context["afc"] = AppelflapConnect.Instance;
 
-    const endpointProps = { user: "a", password: "b", port: t.context["testPort"] };
+    const endpointProps = {
+        user: "a",
+        password: "b",
+        port: t.context["testPort"],
+    };
     fetchMock.mock(`${AF_ENDPOINT}/${AF_PROPERTIES}`, endpointProps);
 });
 
@@ -207,7 +211,7 @@ test("Cache: getPublications", async (t: any) => {
     fetchMock.reset();
 });
 
-test("Cache: publish", async (t: any) => {
+test.skip("Cache: publish", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const successResponse = t.context.successResponse as Response;
     const badRequestResponse = t.context.badRequestResponse as Response;
@@ -255,7 +259,7 @@ test("Cache: publish", async (t: any) => {
     fetchMock.reset();
 });
 
-test("Cache: unpublish", async (t: any) => {
+test.skip("Cache: unpublish", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const successResponse = t.context.successResponse as Response;
     const authFailureResponse = t.context.authFailureResponse as Response;
@@ -351,7 +355,7 @@ test("Cache: getSubscriptions", async (t: any) => {
 // When doing throwsAsync tests, expect 2 assertions returned for each test
 // And do the 'ok' test last to ensure that all tests are awaited
 
-test("Cache: setSubscriptions", async (t: any) => {
+test.skip("Cache: setSubscriptions", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const successResponse = t.context.successResponse as Response;
     const badRequestResponse = t.context.badRequestResponse as Response;
@@ -454,7 +458,7 @@ test("Cache: Get Package Certificate", async (t: any) => {
     fetchMock.reset();
 });
 
-test("Cache: Save Package Certificate", async (t: any) => {
+test.skip("Cache: Save Package Certificate", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const successResponse = t.context.successResponse as Response;
     const badRequestResponse = t.context.badRequestResponse as Response;
@@ -485,7 +489,7 @@ test("Cache: Save Package Certificate", async (t: any) => {
     fetchMock.reset();
 });
 
-test("Cache: Delete Package Certificate", async (t: any) => {
+test.skip("Cache: Delete Package Certificate", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const successResponse = t.context.successResponse as Response;
     const authFailureResponse = t.context.authFailureResponse as Response;
