@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import Cookies from "js-cookie";
 
-import { BACKEND_BASE_URL } from "js/urls";
+import { BACKEND_BASE_URL, CSRF_COOKIE_NAME } from "js/urls";
 
 const DISCUSSION_BASE_URL = `${BACKEND_BASE_URL}/discussion`;
 
@@ -108,7 +108,7 @@ export class Discussion {
             credentials: "include",
             headers: {
                 "content-type": "application/json",
-                "X-CSRFToken": Cookies.get("csrftoken"),
+                "X-CSRFToken": Cookies.get(CSRF_COOKIE_NAME),
             },
             body: JSON.stringify(body),
         } as RequestInit;
