@@ -1,12 +1,7 @@
 import { Page } from "../Page";
-// import Course from "./Course";
 // import AllCourses from "./AllCourses";
 
 export default class BeroHome extends Page {
-    // get courses(): any {
-    //     return this.childPages;
-    // }
-
     get imageUrl(): string {
         return this.data.card_image;
     }
@@ -15,9 +10,29 @@ export default class BeroHome extends Page {
         return this.data.description;
     }
 
-    // get coursesHomePage(): AllCourses {
-    //     console.log(this);
-    //
-    //     return this.data;
+    // TODO should this be courses(): AllCourses ?
+    get courses(): any {
+        return this.manifest.getLanguagePageType(
+            this.language,
+            "courseshomepage"
+        );
+    }
+
+    get learningActivities(): any {
+        return this.manifest.getLanguagePageType(
+            this.language,
+            "learningactivitieshomepage"
+        );
+    }
+
+    get resources(): any {
+        return this.manifest.getLanguagePageType(
+            this.language,
+            "resourcesroot"
+        );
+    }
+
+    // get courseCategories(): any {
+    //     // TODO
     // }
 }

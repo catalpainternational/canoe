@@ -1,6 +1,5 @@
 <BeroHome>
     <GuestBanner></GuestBanner>
-    hello! it's the home page
 
     <template if="{learningActivities}">
         <h4>{TRANSLATIONS.learning()}</h4>
@@ -50,9 +49,6 @@
 
         function BeroHome() {
             return {
-                // state: {
-                // },
-
                 TRANSLATIONS: {
                     learning: () => gettext("Learning Activities"),
                     latestCourses: () => gettext("Latest Courses"),
@@ -64,28 +60,13 @@
                     return getRoute().page;
                 },
 
-                get manifest() {
-                    return this.page.manifest;
-                },
-
-                getPagesWithType(pageType) {
-                    let matches = [];
-                    Object.entries(this.manifest.pages).forEach(([id, data]) => {
-                        if (data.type === pageType) {
-                            matches.push(this.manifest.getSpecificPage(id));
-                        }
-                    })
-                    return matches;
-                },
-
                 get learningActivities () {
-                    if (!this.manifest.hasPageType('learningactivitytopicpage')) return false;
-                    return this.getPagesWithType('learningactivitytopicpage');
+                    return this.page.learningActivities.topics;
                 },
 
                 get courses() {
-                    if (!this.manifest.hasPageType('coursepage')) return false;
-                    return this.getPagesWithType('coursepage');
+                    // TODO fix the ordering of this so it matches ordering on courses homepage
+                    return this.page.courses.courses;
                 },
 
                 get courseCategories () {
@@ -94,18 +75,14 @@
                 },
 
                 get resources() {
-                    if (!this.manifest.hasPageType('resourcearticle')) return false;
-                    return this.getPagesWithType('resourcearticle');
+                    return this.page.resources.resources;
                 },
             };
         }
 
         BeroHome.components = {
             card: Card,
-            // taglist: TagList,
             guestbanner: GuestBanner,
-            // loadingdots: LoadingDots,
-            // topmenu: TopMenu,
         };
 
         export default BeroHome;
