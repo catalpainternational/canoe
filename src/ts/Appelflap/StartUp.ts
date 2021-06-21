@@ -4,6 +4,9 @@ import { BeroHost } from "./BeroHost";
 import { CertChain } from "./CertChain";
 import Logger from "../Logger";
 
+// See ts/Typings for the type definitions for these imports
+import { isAuthenticated } from "ReduxImpl/Interface";
+
 const logger = new Logger("StartUp");
 
 /** Initialise the BeroHost (a wrapper around Appelflap)
@@ -32,9 +35,12 @@ export const InitialiseBeroHost = async (
 export const initialiseCertChain = async (): Promise<void> => {
     const haveAFC = AppelflapConnect.Instance;
     const haveSignedCert = CertChain.Instance.certState === "signed";
-    if (!haveAFC || haveSignedCert) {
+    if (!haveAFC || (haveSignedCert && isAuthenticated())) {
+        // We're not hosted in Appelflap,
+        // or we have a signed certificate and the user is authenticated
         return;
     }
+
     try {
         const hasCert = await CertChain.Instance.initialise();
         if (!hasCert) {
