@@ -39,4 +39,8 @@ declare module "ReduxImpl/Interface" {
         answer: any
     ): void;
     export function clearPageTestAnswers(pageId: string | number): void;
+
+    export function isAuthenticated(): boolean;
+
+    export function subscribeToStore(subscription: (args: any) => void): void;    
 }
