@@ -7,7 +7,10 @@ export type TPublicationVersion = {
     version: number;
 };
 
-export type TPublication = TPublicationTarget & TPublicationVersion;
+export type TPublication = {
+    bundleType: string;
+} & TPublicationTarget &
+    TPublicationVersion;
 
 export type TPublicationSize = {
     size: number;

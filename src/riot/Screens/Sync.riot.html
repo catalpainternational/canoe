@@ -69,13 +69,9 @@
             async appelflapStatus() {
                 this.update({ appelflapMeta: "Getting" });
 
-                /* Not yet implemented
-                const cacheStatus = await CacheUtilities.status();
-                this.update({ cacheStatus: JSON.stringify(cacheStatus) });
-                */
-
                 const publications = await CachePublish.publications();
                 this.update(({ publications: JSON.stringify(publications) }));
+                // window.alert(`Published: ${JSON.stringify(publications)}`);
 
                 // Get the Item Status Listing
                 await this.state.appDataStatus.BuildList();

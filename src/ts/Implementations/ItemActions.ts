@@ -10,6 +10,7 @@ import { CacheSubscribe } from "../Appelflap/CacheSubscribe";
 /** Define the 'target' within the cache for Appelflap */
 const CacheTarget = (item: TPublishableItem): TPublication => {
     return {
+        bundleType: "CACHE",
         webOrigin: btoa(self.origin),
         cacheName: btoa(item.cacheKey),
         version: item.version,
