@@ -1,4 +1,4 @@
-import { TPublication, TSubscriptions } from "../Types/CacheTypes";
+import { TPublication, TPublications, TSubscriptions } from "../Types/CacheTypes";
 import { TAppelflapResult } from "../Types/CanoeEnums";
 import { TItemListing } from "../Types/PublishableItemTypes";
 import { TPublishableItem } from "../Types/PublishableItemTypes";
@@ -16,6 +16,27 @@ const CacheTarget = (item: TPublishableItem): TPublication => {
         version: item.version,
     };
 };
+
+/** Asks Appelflap to identify all caches that it is currently publishing
+ * @returns
+ * - resolve("succeeded") on success (200),
+ * - resolve("not relevant") if appelflap connect wasn't provided,
+ * - reject("failed") on error (404 or 500)
+ */
+ export async function getPublications(
+    item: TPublishableItem
+): Promise<TPublications | string> {
+    if (!AppelflapConnect.Instance) {
+        return Promise.resolve("not relevant");
+    }
+
+    try {
+        const publications = await CachePublish.publications();
+        return Promise.resolve(publications);
+    } catch (error) {
+        return Promise.reject("failed");
+    }
+}
 
 /** Tells Appelflap to publish this item's cache
  * @returns
