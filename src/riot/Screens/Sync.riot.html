@@ -12,23 +12,23 @@
                 <li
                     each="{(statusListing, index) in state.statusListings}">
                     <div class="sync-header">
-                        <h5>ID:{statusListing.id} {statusListing.type}:{statusListing.title} <small>({statusListing.version})</small> </h5>
+                        <h5><small>{statusListing.type}:</small> { statusListing.title }</h5>
                     </div>
-
-                    <div if="{statusListing.backendPath === statusListing.cacheKey}" class="sync-body">
+                    <!-- <div class="sync-body"><small>version: {statusListing.version}</small></div> -->
+                    <!-- <div if="{statusListing.backendPath === statusListing.cacheKey}" class="sync-body">
                         <span><small>Store Path/Cache Key:</small> { statusListing.backendPath }</span>
-                    </div>
-                    <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
+                    </div> -->
+                    <!-- <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
                         <span><small>Store Path:</small> { statusListing.backendPath }</span>
-                    </div>
-                    <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
+                    </div> -->
+                    <!-- <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
                         <span><small>Cache Key:</small> { statusListing.cacheKey }</span>
-                    </div>
+                    </div> -->
 
                     <div class="sync-body">
-                        <span>Validity:{ statusListing.isValid },  </span>
-                        <span>Availablity:{ statusListing.isAvailableOffline },  </span>
-                        <span>Publishable:{ statusListing.isPublishable }, </span>
+                        <span><small>Validity:</small> { statusListing.isValid },  </span>
+                        <span><small>Availablity:</small> { statusListing.isAvailableOffline },  </span>
+                        <span><small>Publishable:</small> { statusListing.isPublishable }, </span>
                     </div>
 
                     <!-- <div class="sync-footer">

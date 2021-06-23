@@ -81,6 +81,7 @@ export class AppDataStatus {
         const pageIds = Object.keys(this.manifest.pages);
         const cacheKeys = await CacheKeys();
 
+        const pageListings: TItemListing[] = [];
         for (let ix = 0; ix < pageIds.length; ix++) {
             const pageId = pageIds[ix];
             const manifestPage = this.manifest.pages[pageId];
@@ -90,8 +91,35 @@ export class AppDataStatus {
                 manifestPage,
                 inCache
             );
-            this.itemListings.push(pageListing);
+            pageListings.push(pageListing);
         }
+
+        // Add the page listings in order of published, publishable, available, valid, none of the above
+        this.itemListings.push(
+            ...pageListings.filter((pageListing) => pageListing.isPublishable)
+        );
+        this.itemListings.push(
+            ...pageListings.filter(
+                (pageListing) =>
+                    !pageListing.isPublishable && pageListing.isAvailableOffline
+            )
+        );
+        this.itemListings.push(
+            ...pageListings.filter(
+                (pageListing) =>
+                    !pageListing.isPublishable &&
+                    !pageListing.isAvailableOffline &&
+                    pageListing.isValid
+            )
+        );
+        this.itemListings.push(
+            ...pageListings.filter(
+                (pageListing) =>
+                    !pageListing.isPublishable &&
+                    !pageListing.isAvailableOffline &&
+                    !pageListing.isValid
+            )
+        );
     }
 
     private async ManifestToPublishableItem(
