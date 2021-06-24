@@ -35,7 +35,7 @@ export class AppelflapConnect {
      * Gets the single instance of AppelflapConnect
      * or undefined if we're not inAppelflap
      */
-    public static get Instance(): AppelflapConnect | undefined {
+    public static getInstance(): AppelflapConnect | undefined {
         if (!AppelflapConnect.instance) {
             const gt = globalThis as Record<string, any>;
             gt["AFC_MOCKMODE"] = gt["AFC_MOCKMODE"] || false;
