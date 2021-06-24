@@ -54,7 +54,7 @@ export class CertChain {
         logger.info("Initialise");
 
         if (isAuthenticated()) {
-            await this.CreateCertChain();
+            await this.createCertChain();
         } else {
             // Purge signed cert
             await this.DeletePackageCertificateFromAppelflap();
@@ -71,7 +71,7 @@ export class CertChain {
         return this.certState === "signed";
     }
 
-    private async CreateCertChain(): Promise<void> {
+    private async createCertChain(): Promise<void> {
         try {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
             logger.info(`Package publishing certificate is ${this.certState}`);
