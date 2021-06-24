@@ -51,7 +51,7 @@ export async function getPublications(
 export async function publishItem(
     item: TPublishableItem
 ): Promise<TAppelflapResult> {
-    if (!item || !item.isPublishable || !AppelflapConnect.Instance) {
+    if (!item || !item.isPublishable || !AppelflapConnect.getInstance()) {
         return Promise.resolve("not relevant");
     }
 
@@ -72,7 +72,7 @@ export async function publishItem(
 export async function unpublishItem(
     item: TPublishableItem
 ): Promise<TAppelflapResult> {
-    if (!item || item.isPublishable || !AppelflapConnect.Instance) {
+    if (!item || item.isPublishable || !AppelflapConnect.getInstance()) {
         return Promise.resolve("not relevant");
     }
 
@@ -91,7 +91,7 @@ export async function unpublishItem(
  * - reject("failed") on error (404 or 500)
  */
 export async function getSubscriptions(): Promise<TSubscriptions | string> {
-    if (!AppelflapConnect.Instance) {
+    if (!AppelflapConnect.getInstance()) {
         return Promise.resolve("not relevant");
     }
 
@@ -116,7 +116,7 @@ export async function setSubscriptions(
         !items ||
         !items.length ||
         !items.some((item) => !item.isPublishable) ||
-        !AppelflapConnect.Instance
+        !AppelflapConnect.getInstance()
     ) {
         return Promise.resolve("not relevant");
     }

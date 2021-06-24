@@ -27,7 +27,7 @@ test.before((t: any) => {
     global["navigator"] = buildFakeNavigator(t.context.testPort);
     const gt = globalThis as Record<string, any>;
     gt["AFC_MOCKMODE"] = true;
-    t.context["afc"] = AppelflapConnect.Instance;
+    t.context["afc"] = AppelflapConnect.getInstance();
 
     const endpointProps = {
         user: "a",

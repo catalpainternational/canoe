@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { TCertificate } from "../Types/CacheTypes";
 
 import Logger from "../Logger";
@@ -25,7 +26,7 @@ export class CertChain {
     }
 
     /** Gets the single instance of CertChain */
-    public static get Instance(): CertChain {
+    public static getInstance(): CertChain {
         if (!CertChain.instance) {
             CertChain.instance = new CertChain();
         }
@@ -54,14 +55,12 @@ export class CertChain {
         logger.info("Initialise");
 
         if (isAuthenticated()) {
-            await this.CreateCertChain();
+            await this.createCertChain();
         } else {
             // Purge signed cert
             await this.DeletePackageCertificateFromAppelflap();
             this.#packageCert = undefined;
-            logger.info(
-                `User not authenticated, package publishing certificate is ${this.certState}`
-            );
+            logger.info("User no longer authenticated");
         }
 
         logger.info(
@@ -71,7 +70,7 @@ export class CertChain {
         return this.certState === "signed";
     }
 
-    private async CreateCertChain(): Promise<void> {
+    private async createCertChain(): Promise<void> {
         try {
             this.#packageCert = await this.GetPackageCertificateFromAppelflap();
             logger.info(`Package publishing certificate is ${this.certState}`);
@@ -104,15 +103,15 @@ export class CertChain {
     private async GetPackageCertificateFromAppelflap(): Promise<
         TCertificate | undefined
     > {
-        if (AppelflapConnect.Instance) {
-            return await AppelflapConnect.Instance.getCertificate();
+        if (AppelflapConnect.getInstance()) {
+            return await AppelflapConnect.getInstance()!.getCertificate();
         }
         return undefined;
     }
 
     private async DeletePackageCertificateFromAppelflap(): Promise<string> {
-        if (AppelflapConnect.Instance) {
-            return await AppelflapConnect.Instance.deleteCertificate();
+        if (AppelflapConnect.getInstance()) {
+            return await AppelflapConnect.getInstance()!.deleteCertificate();
         }
         return "";
     }
@@ -174,8 +173,9 @@ export class CertChain {
 
     /** POST the signed package publishing certificate back to Appelflap */
     private async PostPackageCertificateToAppelflap(): Promise<string> {
-        return AppelflapConnect.Instance && this.#packageCert
-            ? await AppelflapConnect.Instance.saveCertificate(this.#packageCert)
+        const afcInstance = AppelflapConnect.getInstance();
+        return afcInstance && this.#packageCert
+            ? await afcInstance!.saveCertificate(this.#packageCert)
             : "";
     }
 }

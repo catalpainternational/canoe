@@ -16,7 +16,7 @@ export const InitialiseBeroHost = async (
     startup: () => void = () => {}
 ): Promise<string> => {
     try {
-        await BeroHost.Instance.StartBero(startup);
+        await BeroHost.getInstance().StartBero(startup);
         logger.info("BeroHost initialised");
         return await Promise.resolve("");
     } catch (e) {
@@ -28,13 +28,13 @@ export const InitialiseBeroHost = async (
 };
 
 /** Initialise the certificate chain, this should only work if:
- * - Bero is hosted in Appelflap (test the Appelflap.Instance exists)
+ * - Bero is hosted in Appelflap (test the Appelflap.getInstance() exists)
  * - The user is logged in
  * - The user has the correct permissions to publish
  */
 export const initialiseCertChain = async (): Promise<void> => {
-    const haveAFC = AppelflapConnect.Instance;
-    const haveSignedCert = CertChain.Instance.certState === "signed";
+    const haveAFC = AppelflapConnect.getInstance();
+    const haveSignedCert = CertChain.getInstance().certState === "signed";
     if (!haveAFC || (haveSignedCert && isAuthenticated())) {
         // We're not hosted in Appelflap,
         // or we have a signed certificate and the user is authenticated
@@ -42,7 +42,7 @@ export const initialiseCertChain = async (): Promise<void> => {
     }
 
     try {
-        const hasCert = await CertChain.Instance.initialise();
+        const hasCert = await CertChain.getInstance().initialise();
         if (!hasCert) {
             throw new Error(
                 "Publishing certificate chain could not be initialised. \
