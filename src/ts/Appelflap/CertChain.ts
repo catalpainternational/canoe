@@ -59,9 +59,7 @@ export class CertChain {
             // Purge signed cert
             await this.DeletePackageCertificateFromAppelflap();
             this.#packageCert = undefined;
-            logger.info(
-                `User not authenticated, package publishing certificate is ${this.certState}`
-            );
+            logger.info("User no longer authenticated");
         }
 
         logger.info(
