@@ -1,10 +1,15 @@
 import { AppelflapConnect } from "./AppelflapConnect";
 
 export class CacheUtilities {
-    /** Get the status of the cache from Appelflap */
+    /**
+     * Get the status of the cache from Appelflap
+     * @deprecated No longer available from Appelflap, returns 404
+     */
     static async status(): Promise<any> {
         if (AppelflapConnect.Instance) {
-            return JSON.parse(await AppelflapConnect.Instance.getCacheStatus());
+            const cacheStatus =
+                await AppelflapConnect.Instance.getCacheStatus();
+            return JSON.parse(cacheStatus);
         }
         return {};
     }

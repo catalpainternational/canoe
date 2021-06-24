@@ -180,6 +180,10 @@ export class AppelflapConnect {
         return await this.performCommand(commandPath, { method }, "text");
     };
 
+    /**
+     * Get the status of the cache from Appelflap
+     * @deprecated No longer available from Appelflap, returns 404
+     */
     public getCacheStatus = async (): Promise<any> => {
         const { commandPath } = APPELFLAPCOMMANDS.getCacheStatus;
         return await this.performCommand(commandPath);
