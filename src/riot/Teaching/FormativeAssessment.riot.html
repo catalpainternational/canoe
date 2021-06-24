@@ -1,0 +1,251 @@
+<FormativeAssessment>
+    <!-- states for:
+        - student counter (interactive)
+        - question card (non-interactive)
+        - answer counter (interactive)
+        - summary showing correct answer (non-interactive)
+     -->
+    <LessonFrame
+        if="{state.cardState !== 'complete'}"
+        progressValue="{ state.currentCardNumber }"
+        progressMax="{ totalCards }"
+        linkTo="{ '' }"
+        close="{ props.closeAssessment }"
+    >
+        <template if="{state.cardState === 'studentCounter'}">
+            <span class="students"></span>
+            <h3>{ TRANSLATIONS.howMany() }</h3>
+            <div class="counter">
+                <button class="minus {state.totalStudents === 1 ? 'disabled' : ''}" onclick="{decreaseStudents}">&minus;</button>
+                <div class="number">
+                    <h2>{ state.totalStudents }</h2>
+                    <p>{ TRANSLATIONS.students() }</p>
+                </div>
+                <button class="plus" onclick="{increaseStudents}">&plus;</button>
+            </div>
+        </template>
+
+        <template if="{state.cardState === 'questionAsk'}">
+            <h4>{ state.questionNumber }. { currentQuestion.question }</h4>
+            <p>{ TRANSLATIONS.choose() }</p>
+            <div class="answers">
+                <div each="{answer in currentQuestion.answers}" class="answer">
+                    <p>{ answer.alpha }</p>
+                    <p>{ answer.text }</p>
+                </div>
+            </div>
+        </template>
+
+        <template if="{state.cardState === 'questionCount'}">
+            <span class="students"></span>
+            <h4>{ TRANSLATIONS.howManyChose() } { currentQuestion.answers[0].alpha }. { currentQuestion.answers[0].text }?</h4>
+            <div class="counter">
+                <button class="minus {currentQuestion.answers[0].tally === 0 ? 'disabled' : ''}" onclick="{decrementQuestionTally}">&minus;</button>
+                <div class="number">
+                <h2>{ currentQuestion.answers[0].tally }</h2>
+                <p>{ TRANSLATIONS.students() }</p>
+                </div>
+                <button class="plus {currentQuestion.answers[0].tally === state.totalStudents ? 'disabled' : ''}" onclick="{incrementQuestionTally}">&plus;</button>
+            </div>
+
+            <div class="alt-answer-counter">
+                <p>{ currentQuestion.answers[1].alpha }</p>
+                <p>{ currentQuestion.answers[1].text }</p>
+                <p>{ currentQuestion.answers[1].tally } { TRANSLATIONS.students() }</p>
+            </div>
+        </template>
+
+        <template if="{state.cardState === 'questionReview'}">
+            <span class="lesson-presentation"></span>
+            <h2 if="{majorityCorrect}">{ TRANSLATIONS.excellent() }</h2>
+            <h2 if="{!majorityCorrect}">{ TRANSLATIONS.notBad() }</h2>
+            <p>{ TRANSLATIONS.letsSee() }</p>
+
+            <div class="pill-container">
+                <div class="pill {answer.correct ? 'correct' : 'incorrect'}" each="{ answer in currentQuestion.answers }">
+                    <p>{ answer.alpha }</p>
+                    <p>{ answer.text }</p>
+                    <p>{ answer.tally } <span class="{answer.correct ? 'checkmark' : 'cross'}"></span></p>
+                    <div class="percentage-bar" style="width: {answer.tally / state.totalStudents * 100}%"></div>
+                </div>
+            </div>
+        </template>
+
+        <div slot="bottom-buttons" class="bottom-buttons">
+             <div>
+                 <a
+                     if="{ state.currentCardNumber > 1 }"
+                     class="has-circle"
+                     onclick="{ prevCard }"
+                 >
+                     <span class="arrow"></span>
+                 </a>
+             </div>
+             <div>
+                 <button
+                     class="btn-primary"
+                     onclick="{ nextCard }"
+                 >
+                     { TRANSLATIONS.next() }
+                 </button>
+             </div>
+        </div>
+    </LessonFrame>
+
+    <div if="{state.cardState === 'complete'}" class="congratulations-container">
+        <span class="assessment-complete"></span>
+        <h2>{ TRANSLATIONS.lovely() }</h2>
+        <p>{ TRANSLATIONS.completed() }</p>
+
+        <button class="btn-primary" onclick="{props.closeAssessment}">
+            { TRANSLATIONS.finish() } <span class="chevron"></span>
+        </button>
+    </div>
+
+    <script>
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+
+        function FormativeAssessment() {
+            return {
+                TRANSLATIONS: {
+                    howMany: () => gettext("How many students are undertaking this assessment?"),
+                    howManyChose: () => gettext("How many students chose the answer"),
+                    students: () => gettext("Students"),
+                    next: () => gettext("Next"),
+                    choose: () => gettext("Students can choose one of the following answers"),
+                    excellent: () => gettext("Excellent work!"),
+                    notBad: () => gettext("Not bad..."),
+                    letsSee: () => gettext("Let's see how we did"),
+                    lovely: () => gettext("Lovely work!"),
+                    completed: () => gettext("You've just completed this formative assessment. You can now finish and return to the learning activity"),
+                    finish: () => gettext("Finish"),
+                },
+
+                state: {
+                    totalStudents: 1,
+                    questionNumber: 1,
+                    cardState: 'studentCounter',
+                    currentCardNumber: 1,
+                    questions: [],
+                    // TODO change this if necessary
+                    passScore: 0.5,
+                },
+
+                onBeforeMount(props, state) {
+                    if (this.props && this.props.content) {
+                        const questions = this.props.content;
+                        const alphabet = ['A','B'];
+                        this.state.questions = questions.map((question) => ({
+                            ...question,
+                            answers: question.answers.map((answer, index) => ({
+                                ...answer,
+                                alpha: alphabet[index],
+                                tally: 0,
+                            })),
+                        }));
+                    }
+                },
+
+                get totalCards() {
+                    // multiply total in content array by x for each question, add 2 for intro counting + closing cards
+                    const numOfCardsPerQuestion = 3;
+                    return this.state.questions.length * numOfCardsPerQuestion + 2;
+                },
+
+                get currentQuestion() {
+                    return this.state.questions[this.state.questionNumber - 1];
+                },
+
+                get majorityCorrect() {
+                    if (this.currentQuestion) {
+                        const correctAnswer = this.currentQuestion.answers.find(it => it.correct);
+
+                        return (correctAnswer.tally / this.state.totalStudents) > this.state.passScore;
+                    }
+                },
+
+                nextCard() {
+                    switch (this.state.cardState) {
+                        case 'studentCounter':
+                            this.state.questions.forEach((question) => {
+                                question.answers[1].tally = this.state.totalStudents;
+                            })
+                            this.update({ cardState: 'questionAsk' });
+                            break;
+                        case 'questionAsk':
+                            this.update({ cardState: 'questionCount' });
+                            break;
+                        case 'questionCount':
+                            this.update({ cardState: 'questionReview' });
+                            break;
+                        case 'questionReview':
+                            if (this.state.questions.length === this.state.questionNumber) {
+                                this.update({ cardState: 'complete' });
+                            } else {
+                                this.update({ cardState: 'questionAsk', questionNumber: this.state.questionNumber + 1 });
+                            }
+                    }
+                    this.update({ currentCardNumber: this.state.currentCardNumber + 1 });
+                },
+
+                prevCard() {
+                    switch (this.state.cardState) {
+                        case 'questionReview':
+                            this.update({ cardState: 'questionCount' });
+                            break;
+                        case 'questionCount':
+                            this.update({ cardState: 'questionAsk' });
+                            break;
+                        case 'questionAsk':
+                            if (this.state.questionNumber > 1) {
+                                this.update({ cardState: 'questionReview', questionNumber: this.state.questionNumber - 1 });
+                            }
+                            else {
+                                this.update({ cardState: 'studentCounter' });
+                            }
+                            break;
+                    }
+                    this.update({ currentCardNumber: this.state.currentCardNumber - 1 });
+                },
+
+                increaseStudents() {
+                    this.update({ totalStudents: this.state.totalStudents + 1 })
+                },
+                decreaseStudents() {
+                    // TODO https://stackoverflow.com/questions/28127507/incrementing-value-continuously-on-mouse-hold#28127763
+                    if (this.state.totalStudents > 1) {
+                        this.update({ totalStudents: this.state.totalStudents - 1 })
+                    }
+                },
+
+                decrementQuestionTally() {
+                    var answerA = this.currentQuestion.answers[0];
+                    var answerB = this.currentQuestion.answers[1];
+
+                    if (answerA.tally > 0) {
+                        answerA.tally -= 1;
+                        answerB.tally = this.state.totalStudents - answerA.tally;
+                    }
+                    this.update();
+                },
+
+                incrementQuestionTally() {
+                    var answerA = this.currentQuestion.answers[0];
+                    var answerB = this.currentQuestion.answers[1];
+
+                    if (answerA.tally < this.state.totalStudents) {
+                        answerA.tally += 1;
+                        answerB.tally = this.state.totalStudents - answerA.tally;
+                    }
+                    this.update();
+                },
+            };
+        };
+
+        FormativeAssessment.components = {
+            lessonframe: LessonFrame,
+        };
+
+        export default FormativeAssessment;
+    </script>
+</FormativeAssessment>
