@@ -30,7 +30,7 @@ const CacheTarget = (item: TPublishableItem): TPublication => {
 export async function getPublications(
     item: TPublishableItem
 ): Promise<TPublications | string> {
-    if (!AppelflapConnect.Instance) {
+    if (!AppelflapConnect.getInstance()) {
         return Promise.resolve("not relevant");
     }
 
