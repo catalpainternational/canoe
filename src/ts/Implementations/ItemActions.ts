@@ -1,4 +1,8 @@
-import { TPublication, TPublications, TSubscriptions } from "../Types/CacheTypes";
+import {
+    TPublication,
+    TPublications,
+    TSubscriptions,
+} from "../Types/CacheTypes";
 import { TAppelflapResult } from "../Types/CanoeEnums";
 import { TItemListing } from "../Types/PublishableItemTypes";
 import { TPublishableItem } from "../Types/PublishableItemTypes";
@@ -23,7 +27,7 @@ const CacheTarget = (item: TPublishableItem): TPublication => {
  * - resolve("not relevant") if appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
- export async function getPublications(
+export async function getPublications(
     item: TPublishableItem
 ): Promise<TPublications | string> {
     if (!AppelflapConnect.Instance) {
