@@ -27,9 +27,7 @@ const CacheTarget = (item: TPublishableItem): TPublication => {
  * - resolve("not relevant") if appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
-export async function getPublications(
-    item: TPublishableItem
-): Promise<TPublications | string> {
+export async function getPublications(): Promise<TPublications | string> {
     if (!AppelflapConnect.getInstance()) {
         return Promise.resolve("not relevant");
     }
