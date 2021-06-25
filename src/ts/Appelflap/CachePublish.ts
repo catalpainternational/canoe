@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AppelflapConnect } from "./AppelflapConnect";
-import { TPublications, TPublication } from "../Types/CacheTypes";
+import { TPublication } from "../Types/CacheTypes";
+import { TBundles } from "../Types/BundleTypes";
 
 export class CachePublish {
     /** Get a list of published items from Appelflap */
-    static async publications(): Promise<TPublications> {
+    static async publications(): Promise<TBundles> {
         if (AppelflapConnect.getInstance()) {
             return await AppelflapConnect.getInstance()!.getPublications();
         }
-        return {};
+        return { bundles: [] };
     }
 
     /** Instructs Appelflap to 'publish' a single publication */

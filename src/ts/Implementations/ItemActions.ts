@@ -10,6 +10,7 @@ import { TPublishableItem } from "../Types/PublishableItemTypes";
 import { AppelflapConnect } from "../Appelflap/AppelflapConnect";
 import { CachePublish } from "../Appelflap/CachePublish";
 import { CacheSubscribe } from "../Appelflap/CacheSubscribe";
+import { TBundles } from "../Types/BundleTypes";
 
 /** Define the 'target' within the cache for Appelflap */
 const CacheTarget = (item: TPublishableItem): TPublication => {
@@ -27,14 +28,14 @@ const CacheTarget = (item: TPublishableItem): TPublication => {
  * - resolve("not relevant") if appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
-export async function getPublications(): Promise<TPublications | string> {
+export async function getPublications(): Promise<TBundles | string> {
     if (!AppelflapConnect.getInstance()) {
         return Promise.resolve("not relevant");
     }
 
     try {
-        const publications = await CachePublish.publications();
-        return Promise.resolve(publications);
+        const bundles = await CachePublish.publications();
+        return Promise.resolve(bundles);
     } catch (error) {
         return Promise.reject("failed");
     }
@@ -125,12 +126,14 @@ export async function setSubscriptions(
 
     subscriptions.origins[self.origin] = { caches: {} };
 
+    const aDay = 24 * 60 * 60 * 1000;
+
     items.forEach((item) => {
         subscriptions.origins[self.origin].caches[item.cacheKey] = {
-            injection_version_min: item.version,
-            injection_version_max: item.version,
-            p2p_version_min: item.version,
-            p2p_version_max: item.version,
+            injection_version_min: item.version - aDay,
+            injection_version_max: item.version + aDay,
+            p2p_version_min: item.version - aDay,
+            p2p_version_max: item.version + aDay,
             injected_version: item.isPublishable ? item.version : null,
         };
     });
