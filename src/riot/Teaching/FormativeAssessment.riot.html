@@ -1,10 +1,4 @@
 <FormativeAssessment>
-    <!-- states for:
-        - student counter (interactive)
-        - question card (non-interactive)
-        - answer counter (interactive)
-        - summary showing correct answer (non-interactive)
-     -->
     <LessonFrame
         if="{state.cardState !== 'complete'}"
         progressValue="{ state.currentCardNumber }"
@@ -14,7 +8,7 @@
     >
         <template if="{state.cardState === 'studentCounter'}">
             <span class="students"></span>
-            <h3>{ TRANSLATIONS.howMany() }</h3>
+            <h4>{ TRANSLATIONS.howMany() }</h4>
             <div class="counter">
                 <button class="minus {state.totalStudents === 1 ? 'disabled' : ''}" onclick="{decreaseStudents}">&minus;</button>
                 <div class="number">
@@ -26,8 +20,8 @@
         </template>
 
         <template if="{state.cardState === 'questionAsk'}">
-            <h4>{ state.questionNumber }. { currentQuestion.question }</h4>
-            <p>{ TRANSLATIONS.choose() }</p>
+            <h4 class="question">{ state.questionNumber }. { currentQuestion.question }</h4>
+            <p class="capitalize">{ TRANSLATIONS.choose() }</p>
             <div class="answers">
                 <div each="{answer in currentQuestion.answers}" class="answer">
                     <p>{ answer.alpha }</p>
@@ -59,7 +53,7 @@
             <span class="lesson-presentation"></span>
             <h2 if="{majorityCorrect}">{ TRANSLATIONS.excellent() }</h2>
             <h2 if="{!majorityCorrect}">{ TRANSLATIONS.notBad() }</h2>
-            <p>{ TRANSLATIONS.letsSee() }</p>
+            <p class="capitalize">{ TRANSLATIONS.letsSee() }</p>
 
             <div class="pill-container">
                 <div class="pill {answer.correct ? 'correct' : 'incorrect'}" each="{ answer in currentQuestion.answers }">
@@ -122,12 +116,11 @@
                 },
 
                 state: {
-                    totalStudents: 1,
+                    totalStudents: 15,
                     questionNumber: 1,
                     cardState: 'studentCounter',
                     currentCardNumber: 1,
                     questions: [],
-                    // TODO change this if necessary
                     passScore: 0.5,
                 },
 
@@ -147,9 +140,9 @@
                 },
 
                 get totalCards() {
-                    // multiply total in content array by x for each question, add 2 for intro counting + closing cards
+                    // multiply total in content array by x for each question, add 1 for intro counting card
                     const numOfCardsPerQuestion = 3;
-                    return this.state.questions.length * numOfCardsPerQuestion + 2;
+                    return this.state.questions.length * numOfCardsPerQuestion + 1;
                 },
 
                 get currentQuestion() {
@@ -212,7 +205,6 @@
                     this.update({ totalStudents: this.state.totalStudents + 1 })
                 },
                 decreaseStudents() {
-                    // TODO https://stackoverflow.com/questions/28127507/incrementing-value-continuously-on-mouse-hold#28127763
                     if (this.state.totalStudents > 1) {
                         this.update({ totalStudents: this.state.totalStudents - 1 })
                     }

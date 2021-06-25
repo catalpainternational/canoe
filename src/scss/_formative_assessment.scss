@@ -86,6 +86,19 @@ FormativeAssessment {
         }
     }
 
+    h4:not(.question) {
+        text-align: center;
+        margin-bottom: 1.5em;
+    }
+
+    .capitalize {
+        text-transform: uppercase;
+        color: $gray-3;
+        font-size: 0.85em;
+        letter-spacing: 0.05ch;
+        margin-bottom: 1.5em;
+    }
+
     .pill-container {
         width: 100%;
 
