@@ -151,6 +151,7 @@ export class AppelflapConnect {
         /* eslint-enable no-case-declarations */
     };
 
+    //#region Appelflap Administration
     private getEndpointProperties = async (): Promise<void> => {
         if (!this.#endpointProperties) {
             const { commandPath } = APPELFLAPCOMMANDS.getEndpointProperties;
@@ -179,6 +180,10 @@ export class AppelflapConnect {
         return await this.performCommand(commandPath, { method }, "text");
     };
 
+    /**
+     * Get the status of the cache from Appelflap
+     * @deprecated No longer available from Appelflap, returns 404
+     */
     public getCacheStatus = async (): Promise<any> => {
         const { commandPath } = APPELFLAPCOMMANDS.getCacheStatus;
         return await this.performCommand(commandPath);
@@ -188,7 +193,9 @@ export class AppelflapConnect {
         const { commandPath, method } = APPELFLAPCOMMANDS.doReboot;
         return await this.performCommand(commandPath, { method }, "text");
     };
+    //#endregion
 
+    //#region Publication
     public getPublications = async (): Promise<TPublications> => {
         const { commandPath } = APPELFLAPCOMMANDS.getPublications;
         return (await this.performCommand(
@@ -197,9 +204,10 @@ export class AppelflapConnect {
     };
 
     private publicationPath = (publication: TPublication) => {
+        const bundleType = "CACHE";
         const prepWebOrigin = encodeURIComponent(publication.webOrigin);
         const prepCacheName = encodeURIComponent(publication.cacheName);
-        return `${prepWebOrigin}/${prepCacheName}/${publication.version}`;
+        return `${bundleType}/${prepWebOrigin}/${prepCacheName}/${publication.version}`;
     };
 
     public publish = async (publication: TPublication): Promise<string> => {
@@ -223,7 +231,9 @@ export class AppelflapConnect {
 
         return await this.performCommand(requestPath, { method }, "text");
     };
+    //#endregion
 
+    //#region Subscriptions
     public getSubscriptions = async (): Promise<TSubscriptions> => {
         const { commandPath } = APPELFLAPCOMMANDS.getSubscriptions;
 
@@ -251,7 +261,9 @@ export class AppelflapConnect {
             "text"
         )) as Promise<TSubscriptions>;
     };
+    //#endregion
 
+    //#region Certificates
     public getCertificate = async (): Promise<TCertificate> => {
         const { commandPath } = APPELFLAPCOMMANDS.getCertificate;
 
@@ -288,4 +300,5 @@ export class AppelflapConnect {
         logger.info(`Deleting certificate`);
         return await this.performCommand(commandPath, { method }, "text");
     };
+    //#endregion
 }

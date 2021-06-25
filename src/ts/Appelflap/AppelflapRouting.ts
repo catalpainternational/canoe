@@ -42,6 +42,7 @@ export const APPELFLAPCOMMANDS = {
         commandPath: `${AF_CACHE_API}/${AF_INS_LOCK}`,
         method: "DELETE",
     },
+    /** @deprecated No longer available from Appelflap, returns 404 */
     getCacheStatus: {
         commandPath: `${AF_CACHE_API}/${AF_STATUS}`,
         method: "GET",
