@@ -61,7 +61,12 @@
             },
 
             async onMounted() {
+                await CacheUtilities.unlock();
                 await this.appelflapStatus();
+            },
+
+            async onUnmounted() {
+                await CacheUtilities.lock();
             },
 
             async appelflapStatus() {
@@ -77,13 +82,10 @@
             },
 
             async syncMe() {
-                await CacheUtilities.unlock();
 
                 // Identify what needs to be subscribed to, and what needs to be published
                 const appDataStatus = this.state.appDataStatus;
                 const syncStatus = await appDataStatus.SyncAll();
-
-                await CacheUtilities.lock();
 
                 // window.alert(`Published: ${JSON.stringify(syncStatus)}`);
             },
