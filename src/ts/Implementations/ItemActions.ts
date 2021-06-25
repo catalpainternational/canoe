@@ -1,8 +1,4 @@
-import {
-    TPublication,
-    TPublications,
-    TSubscriptions,
-} from "../Types/CacheTypes";
+import { TPublication, TSubscriptions } from "../Types/CacheTypes";
 import { TAppelflapResult } from "../Types/CanoeEnums";
 import { TItemListing } from "../Types/PublishableItemTypes";
 import { TPublishableItem } from "../Types/PublishableItemTypes";
@@ -121,15 +117,18 @@ export async function setSubscriptions(
     }
 
     const subscriptions: TSubscriptions = {
-        origins: {},
+        types: {
+            CACHE: {
+                groups: {},
+            },
+        },
     };
-
-    subscriptions.origins[self.origin] = { caches: {} };
+    subscriptions.types.CACHE.groups[self.origin] = { names: {} };
 
     const aDay = 24 * 60 * 60 * 1000;
 
     items.forEach((item) => {
-        subscriptions.origins[self.origin].caches[item.cacheKey] = {
+        subscriptions.types.CACHE.groups[self.origin].names[item.cacheKey] = {
             injection_version_min: item.version - aDay,
             injection_version_max: item.version + aDay,
             p2p_version_min: item.version - aDay,

@@ -367,33 +367,37 @@ test.skip("Cache: setSubscriptions", async (t: any) => {
 
     const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`;
     const subscriptions: TSubscriptions = {
-        origins: {
-            "some-web-origin": {
-                caches: {
-                    "some-cache-name": {
-                        injection_version_min: 10,
-                        injection_version_max: 20,
-                        p2p_version_min: 200,
-                        p2p_version_max: 888,
-                        injected_version: 12,
+        types: {
+            CACHE: {
+                groups: {
+                    "some-web-origin": {
+                        names: {
+                            "some-cache-name": {
+                                injection_version_min: 10,
+                                injection_version_max: 20,
+                                p2p_version_min: 200,
+                                p2p_version_max: 888,
+                                injected_version: 12,
+                            },
+                            "another-cache-name": {
+                                injection_version_min: 42,
+                                injection_version_max: 42,
+                                p2p_version_min: 1,
+                                p2p_version_max: 9000,
+                                injected_version: null,
+                            },
+                        },
                     },
-                    "another-cache-name": {
-                        injection_version_min: 42,
-                        injection_version_max: 42,
-                        p2p_version_min: 1,
-                        p2p_version_max: 9000,
-                        injected_version: null,
-                    },
-                },
-            },
-            "some-other-web-origin": {
-                caches: {
-                    "yet-another-cache-name": {
-                        injection_version_min: 42,
-                        injection_version_max: 42,
-                        p2p_version_min: 1,
-                        p2p_version_max: 9000,
-                        injected_version: null,
+                    "some-other-web-origin": {
+                        names: {
+                            "yet-another-cache-name": {
+                                injection_version_min: 42,
+                                injection_version_max: 42,
+                                p2p_version_min: 1,
+                                p2p_version_max: 9000,
+                                injected_version: null,
+                            },
+                        },
                     },
                 },
             },

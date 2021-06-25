@@ -215,7 +215,7 @@ export class AppDataStatus {
     async GetSubscriptions(): Promise<TSubscriptions> {
         const subscriptions = await getSubscriptions();
         if (typeof subscriptions === "string") {
-            return { origins: {} };
+            return { types: { CACHE: { groups: {} } } };
         }
         return subscriptions;
     }
@@ -224,7 +224,7 @@ export class AppDataStatus {
     async SetSubscriptions(): Promise<TSubscriptions> {
         const subscriptions = await setSubscriptions(this.itemListings);
         if (typeof subscriptions === "string") {
-            return { origins: {} };
+            return { types: { CACHE: { groups: {} } } };
         }
         return subscriptions;
     }
@@ -242,10 +242,12 @@ export class AppDataStatus {
         const published = await this.PublishAll();
         const unpublished = await this.UnpublishAll();
         let subscriptions = await this.GetSubscriptions();
-        let origins = Object.keys(subscriptions.origins);
+        let origins = Object.keys(subscriptions.types.CACHE.groups);
         let subscribed =
             origins.length === 1
-                ? Object.entries(subscriptions.origins[origins[0]].caches)
+                ? Object.entries(
+                      subscriptions.types.CACHE.groups[origins[0]].names
+                  )
                 : [];
         let publishSubscribeMismatch = false;
         if (this.itemListings.length !== subscribed.length) {
@@ -263,11 +265,11 @@ export class AppDataStatus {
 
         if (publishSubscribeMismatch) {
             subscriptions = await this.SetSubscriptions();
-            origins = Object.keys(subscriptions.origins);
+            origins = Object.keys(subscriptions.types.CACHE.groups);
             if (origins.length) {
                 const firstOrigin = origins[0];
                 subscribed = Object.entries(
-                    subscriptions.origins[firstOrigin].caches
+                    subscriptions.types.CACHE.groups[firstOrigin].names
                 );
             }
         }

@@ -16,12 +16,6 @@ export type TPublicationSize = {
     size: number;
 };
 
-export type TPublications = {
-    [name: string]: {
-        [name: string]: TPublicationVersion & TPublicationSize;
-    };
-};
-
 export type TSubscriptionVersion = {
     injection_version_min?: number;
     injection_version_max?: number;
@@ -33,10 +27,13 @@ export type TSubscriptionVersion = {
 export type TSubscription = TPublicationTarget & TSubscriptionVersion;
 
 export type TSubscriptions = {
-    origins: Record<
+    types: Record<
         string,
         {
-            caches: Record<string, TSubscriptionVersion>;
+            groups: Record<
+                string,
+                { names: Record<string, TSubscriptionVersion> }
+            >;
         }
     >;
 };
