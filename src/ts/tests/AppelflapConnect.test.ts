@@ -27,7 +27,7 @@ test.before((t: any) => {
     global["navigator"] = buildFakeNavigator(t.context.testPort);
     const gt = globalThis as Record<string, any>;
     gt["AFC_MOCKMODE"] = true;
-    t.context["afc"] = AppelflapConnect.Instance;
+    t.context["afc"] = AppelflapConnect.getInstance();
 
     const endpointProps = {
         user: "a",
@@ -221,11 +221,13 @@ test.skip("Cache: publish", async (t: any) => {
     const serviceUnavailableResponse = t.context
         .serviceUnavailableResponse as Response;
 
+    const bundleType = "CACHE";
     const webOrigin = "some-web-origin";
     const cacheName = "some-cache-name";
     const version = 10;
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${webOrigin}/${cacheName}/${version}`;
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${bundleType}/${webOrigin}/${cacheName}/${version}`;
     const publication: TPublication = {
+        bundleType: bundleType,
         webOrigin: webOrigin,
         cacheName: cacheName,
         version: version,
@@ -266,11 +268,13 @@ test.skip("Cache: unpublish", async (t: any) => {
     const notFoundResponse = t.context.notFoundResponse as Response;
     const conflictResponse = t.context.conflictResponse as Response;
 
+    const bundleType = "CACHE";
     const webOrigin = "some-web-origin";
     const cacheName = "some-cache-name";
     const version = 10;
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${webOrigin}/${cacheName}/${version}`;
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${bundleType}/${webOrigin}/${cacheName}/${version}`;
     const publication: TPublication = {
+        bundleType: bundleType,
         webOrigin: webOrigin,
         cacheName: cacheName,
         version: version,

@@ -1,4 +1,8 @@
-import { TPublication, TSubscriptions } from "../Types/CacheTypes";
+import {
+    TPublication,
+    TPublications,
+    TSubscriptions,
+} from "../Types/CacheTypes";
 import { TAppelflapResult } from "../Types/CanoeEnums";
 import { TItemListing } from "../Types/PublishableItemTypes";
 import { TPublishableItem } from "../Types/PublishableItemTypes";
@@ -10,11 +14,31 @@ import { CacheSubscribe } from "../Appelflap/CacheSubscribe";
 /** Define the 'target' within the cache for Appelflap */
 const CacheTarget = (item: TPublishableItem): TPublication => {
     return {
+        bundleType: "CACHE",
         webOrigin: btoa(self.origin),
         cacheName: btoa(item.cacheKey),
         version: item.version,
     };
 };
+
+/** Asks Appelflap to identify all caches that it is currently publishing
+ * @returns
+ * - resolve("succeeded") on success (200),
+ * - resolve("not relevant") if appelflap connect wasn't provided,
+ * - reject("failed") on error (404 or 500)
+ */
+export async function getPublications(): Promise<TPublications | string> {
+    if (!AppelflapConnect.getInstance()) {
+        return Promise.resolve("not relevant");
+    }
+
+    try {
+        const publications = await CachePublish.publications();
+        return Promise.resolve(publications);
+    } catch (error) {
+        return Promise.reject("failed");
+    }
+}
 
 /** Tells Appelflap to publish this item's cache
  * @returns
@@ -25,7 +49,7 @@ const CacheTarget = (item: TPublishableItem): TPublication => {
 export async function publishItem(
     item: TPublishableItem
 ): Promise<TAppelflapResult> {
-    if (!item || !item.isPublishable || !AppelflapConnect.Instance) {
+    if (!item || !item.isPublishable || !AppelflapConnect.getInstance()) {
         return Promise.resolve("not relevant");
     }
 
@@ -46,7 +70,7 @@ export async function publishItem(
 export async function unpublishItem(
     item: TPublishableItem
 ): Promise<TAppelflapResult> {
-    if (!item || item.isPublishable || !AppelflapConnect.Instance) {
+    if (!item || item.isPublishable || !AppelflapConnect.getInstance()) {
         return Promise.resolve("not relevant");
     }
 
@@ -65,7 +89,7 @@ export async function unpublishItem(
  * - reject("failed") on error (404 or 500)
  */
 export async function getSubscriptions(): Promise<TSubscriptions | string> {
-    if (!AppelflapConnect.Instance) {
+    if (!AppelflapConnect.getInstance()) {
         return Promise.resolve("not relevant");
     }
 
@@ -90,7 +114,7 @@ export async function setSubscriptions(
         !items ||
         !items.length ||
         !items.some((item) => !item.isPublishable) ||
-        !AppelflapConnect.Instance
+        !AppelflapConnect.getInstance()
     ) {
         return Promise.resolve("not relevant");
     }

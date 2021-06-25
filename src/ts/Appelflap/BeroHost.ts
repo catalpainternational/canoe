@@ -12,7 +12,7 @@ export class BeroHost {
     }
 
     /** Gets the single instance of BeroHost */
-    public static get Instance(): BeroHost {
+    public static getInstance(): BeroHost {
         if (!BeroHost.instance) {
             BeroHost.instance = new BeroHost();
         }
@@ -24,8 +24,9 @@ export class BeroHost {
     /** Tell Appelflap that Bero is 'locked'
      * and should not be rebooted */
     LockBero = async (): Promise<string> => {
-        if (AppelflapConnect.Instance) {
-            return await AppelflapConnect.Instance.lock();
+        if (AppelflapConnect.getInstance()) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return await AppelflapConnect.getInstance()!.lock();
         }
         return "notOk";
     };
@@ -33,7 +34,7 @@ export class BeroHost {
     StartBero = async (startUp: () => void): Promise<boolean> => {
         let lockResult = true;
         logger.info("Starting Bero");
-        if (AppelflapConnect.Instance) {
+        if (AppelflapConnect.getInstance()) {
             logger.info("Calling Appelflap to 'lock' Bero");
             try {
                 const lockText = await this.LockBero();

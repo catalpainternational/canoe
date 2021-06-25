@@ -61,19 +61,20 @@
             },
 
             async onMounted() {
+                await CacheUtilities.unlock();
                 await this.appelflapStatus();
+            },
+
+            async onUnmounted() {
+                await CacheUtilities.lock();
             },
 
             async appelflapStatus() {
                 this.update({ appelflapMeta: "Getting" });
 
-                /* Not yet implemented
-                const cacheStatus = await CacheUtilities.status();
-                this.update({ cacheStatus: JSON.stringify(cacheStatus) });
-                */
-
                 const publications = await CachePublish.publications();
                 this.update(({ publications: JSON.stringify(publications) }));
+                // window.alert(`Published: ${JSON.stringify(publications)}`);
 
                 // Get the Item Status Listing
                 await this.state.appDataStatus.BuildList();
@@ -81,13 +82,10 @@
             },
 
             async syncMe() {
-                await CacheUtilities.unlock();
 
                 // Identify what needs to be subscribed to, and what needs to be published
                 const appDataStatus = this.state.appDataStatus;
                 const syncStatus = await appDataStatus.SyncAll();
-
-                await CacheUtilities.lock();
 
                 // window.alert(`Published: ${JSON.stringify(syncStatus)}`);
             },
