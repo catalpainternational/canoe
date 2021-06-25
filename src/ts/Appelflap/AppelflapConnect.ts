@@ -2,9 +2,9 @@
 import {
     TCertificate,
     TPublication,
-    TPublications,
     TSubscriptions,
 } from "../Types/CacheTypes";
+import { TBundles } from "../Types/BundleTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -196,11 +196,11 @@ export class AppelflapConnect {
     //#endregion
 
     //#region Publication
-    public getPublications = async (): Promise<TPublications> => {
+    public getPublications = async (): Promise<TBundles> => {
         const { commandPath } = APPELFLAPCOMMANDS.getPublications;
         return (await this.performCommand(
             commandPath
-        )) as Promise<TPublications>;
+        )) as Promise<TBundles>;
     };
 
     private publicationPath = (publication: TPublication) => {
