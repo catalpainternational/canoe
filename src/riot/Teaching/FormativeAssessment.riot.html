@@ -91,7 +91,7 @@
         <h2>{ TRANSLATIONS.lovely() }</h2>
         <p>{ TRANSLATIONS.completed() }</p>
 
-        <button class="btn-primary" onclick="{props.closeAssessment}">
+        <button class="btn-primary" onclick="{finishAssessment}">
             { TRANSLATIONS.finish() } <span class="chevron"></span>
         </button>
     </div>
@@ -230,6 +230,11 @@
                         answerB.tally = this.state.totalStudents - answerA.tally;
                     }
                     this.update();
+                },
+
+                finishAssessment() {
+                    this.props.activity.saveAssessmentResults(this.state.questions);
+                    this.props.closeAssessment();
                 },
             };
         };

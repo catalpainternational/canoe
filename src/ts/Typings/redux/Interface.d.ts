@@ -39,4 +39,9 @@ declare module "ReduxImpl/Interface" {
         answer: any
     ): void;
     export function clearPageTestAnswers(pageId: string | number): void;
+
+    export function storeAssessmentResults(
+        pageId: string | number,
+        resultData: Array<any>
+    ): void;
 }

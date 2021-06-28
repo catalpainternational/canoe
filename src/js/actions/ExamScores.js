@@ -5,9 +5,10 @@
  */
 
 import { storeExamScores, clearExamScores } from "js/redux/Interface";
-import { 
+import {
     saveAndPostAction, readActions,
     EXAM_SCORE_TYPE,
+    FORMATIVE_ASSESSMENT_RESULTS_TYPE
 } from "./ActionsStore";
 import Logger from "../../ts/Logger";
 
@@ -39,9 +40,14 @@ export async function readExamDataIntoState() {
  * @param {*} pageId - the id of the page the exam is on
  * @param {*} score - the score in the exam
  * @param {*} scoreData - extra data to persist
- * @returns the action stored 
+ * @returns the action stored
  */
 export function persistExamScore(pageId, scoreData) {
     // store and return the action ( asycronously persists via idb and api )
     return saveAndPostAction(EXAM_SCORE_TYPE, { pageId, ...scoreData });
+}
+
+export function persistAssessmentResults(pageId, data = {}) {
+    // store the action ( via idb and api )
+    return saveAndPostAction(FORMATIVE_ASSESSMENT_RESULTS_TYPE, { pageId, data });
 }
