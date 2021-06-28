@@ -91,6 +91,20 @@ FormativeAssessment {
         margin-bottom: 1.5em;
     }
 
+    .question {
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        background-color: rgba($app-accent-color, 0.25);
+        box-sizing: border-box;
+        width: calc(100% + 40px);
+        top: -30px;
+        margin: 0;
+        position: relative;
+        border-radius: 8px 8px 0 0;
+        padding: 1em;
+    }
+
     .capitalize {
         text-transform: uppercase;
         color: $gray-3;

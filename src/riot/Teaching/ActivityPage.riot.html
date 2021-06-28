@@ -83,6 +83,7 @@
     <FormativeAssessment
         if="{state.status === 'assessment' && activity.teach}"
         content="{activity.teach.formative_assessment}"
+        activity="{activity}"
         closeAssessment="{() => updateActivity('content')}">
     </FormativeAssessment>
     <script>
