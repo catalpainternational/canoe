@@ -351,19 +351,22 @@ test("Cache: getSubscriptions", async (t: any) => {
                                 p2p_version_min: 1,
                                 p2p_version_max: 9000,
                                 injected_version: 2,
-                            }
-                        }
-                    }
-                }
-            }
+                            },
+                        },
+                    },
+                },
+            },
         },
     };
 
-    const successEmptyResponse = new Response(JSON.stringify(testEmptyResponse), {
-        status: 200,
-        statusText: "Ok",
-        headers: { "Content-Type": "application/json" },
-    });
+    const successEmptyResponse = new Response(
+        JSON.stringify(testEmptyResponse),
+        {
+            status: 200,
+            statusText: "Ok",
+            headers: { "Content-Type": "application/json" },
+        }
+    );
 
     const successResponse = new Response(JSON.stringify(testResponse), {
         status: 200,
