@@ -21,8 +21,17 @@ msgstr "%1 uza sistema notifikasaun hodi haruka atualizasuan no notifikasaun kon
 msgid "%1's Course Exam"
 msgstr "%1's Ezame ba Kursu"
 
+msgid "%1's Prelearning Survey"
+msgstr ""
+
 msgid "Activity"
 msgstr "Hahu Atividade"
+
+msgid "Add a comment"
+msgstr ""
+
+msgid "Add a reply"
+msgstr ""
 
 msgid "Add to Home Screen"
 msgstr "Aumenta ba pájina prinsipál"
@@ -36,14 +45,17 @@ msgstr "Lista Kursu Sira"
 msgid "Amazing work!"
 msgstr "Parabéns! Serbisu diak loos!"
 
+msgid "An error occurred, please try again later"
+msgstr ""
+
 msgid "Are you enjoying this lesson?"
 msgstr "Ita gosta lisaun ne'e?"
 
 msgid "Are you enjoying this teaching plan?"
 msgstr "Ita gosta lisaun ne'e?"
 
-msgid "Available offline"
-msgstr "Audio ne’e la disponivel offline"
+msgid "Are you ready to retake your exam?"
+msgstr ""
 
 msgid "Back to Course"
 msgstr "Fila fali ba kursu"
@@ -66,6 +78,12 @@ msgstr "Hein lai"
 msgid "Code of conduct"
 msgstr " Kindut"
 
+msgid "Comment flagged as inappropriate"
+msgstr ""
+
+msgid "Comment posted"
+msgstr ""
+
 msgid "completed"
 msgstr "Kompleta ona"
 
@@ -74,6 +92,10 @@ msgstr "Parabéns! "
 
 msgid "Continue"
 msgstr "Kontinua"
+
+#, fuzzy
+msgid "Continue learning"
+msgstr "Kontinua aprende"
 
 msgid "Continue Learning"
 msgstr "Kontinua aprende"
@@ -84,10 +106,20 @@ msgstr "Ezama ba kursu"
 msgid "Course progress"
 msgstr "Ita nia progresu ba kursu"
 
+msgid "Discussion"
+msgstr ""
+
+msgid "Download all lessons"
+msgstr ""
+
 msgid "Download this PDF to your device"
 msgstr "Download PDF ne’e ba ita nian telemovel"
 
-msgid "Explore a range of courses to suit your needs, expertise, and interests."
+msgid "Downloaded"
+msgstr ""
+
+#, fuzzy
+msgid "Explore a range of courses to suit your needs, expertise, and interests"
 msgstr "Esplora kursu sira ne'ebé tuir ita-nia presiza, espesialidadi no interese"
 
 msgid "extend"
@@ -102,8 +134,14 @@ msgstr "Buka no hili resposta hotu ne’ebé lo’os"
 msgid "Finish"
 msgstr "Remata"
 
+msgid "Flag as inappropriate"
+msgstr ""
+
 msgid "Forgot username or password?"
 msgstr "Haluha uzuáriu ka seña?"
+
+msgid "Go home"
+msgstr ""
 
 msgid "Good"
 msgstr "Di'ak"
@@ -113,6 +151,9 @@ msgstr "Serbisu di'ak tebes!"
 
 msgid "Great"
 msgstr "Di'ak tebes!"
+
+msgid "Great job!"
+msgstr "Serbisu di'ak tebes!"
 
 msgid "hide"
 msgstr "subar"
@@ -132,6 +173,9 @@ msgstr "Ita nia progresu ba kursu"
 msgid "In the meantime please use Safari."
 msgstr "Iha tempu leet, favór uza Safari"
 
+msgid "Join the discussion"
+msgstr ""
+
 msgid "Latest notifications"
 msgstr "Notifikasaun ikus liu"
 
@@ -150,6 +194,10 @@ msgstr "Lisaun"
 msgid "Lesson Activities"
 msgstr "Atividade sira husi lisaun"
 
+#, fuzzy
+msgid "Lessons"
+msgstr "Lisaun"
+
 msgid "lessons completed"
 msgstr "lisaun sira ne'ebé kompleta ona"
 
@@ -165,6 +213,14 @@ msgstr "Tama"
 msgid "Logout"
 msgstr ""
 
+#, fuzzy
+msgid "Make course available offline"
+msgstr "Audio ne’e la disponivel offline"
+
+#, fuzzy
+msgid "Make offline"
+msgstr "Audio ne’e la disponivel offline"
+
 msgid "Mark complete"
 msgstr "Kompleta ona"
 
@@ -177,11 +233,20 @@ msgstr "Karik orasida"
 msgid "Need help?"
 msgstr "Presiza ajuda?"
 
+msgid "New"
+msgstr ""
+
+msgid "Newest First"
+msgstr ""
+
 msgid "Next"
 msgstr "Tuir mai"
 
 msgid "Next Lesson"
 msgstr "Lisaun tuir mai"
+
+msgid "No discussions have been started. Please check back again later"
+msgstr ""
 
 msgid "No notifications."
 msgstr "La iha notifikasaun. "
@@ -195,11 +260,11 @@ msgstr "Ladi'ak"
 msgid "Not quite!"
 msgstr "Resposta ne'e ladun lo'os ida!"
 
-msgid "Not yet available offline"
-msgstr "Audio ne’e la disponivel offline"
-
 msgid "Notifications"
 msgstr "Notifikasaun"
+
+msgid "Oldest First"
+msgstr ""
 
 msgid "Oops"
 msgstr "Oppss"
@@ -211,6 +276,15 @@ msgid "Password"
 msgstr "Seña "
 
 msgid "plan"
+msgstr ""
+
+msgid "Post a comment"
+msgstr ""
+
+msgid "Post comment"
+msgstr ""
+
+msgid "Prelearning Survey"
 msgstr ""
 
 msgid "Preparation tasks & materials"
@@ -225,11 +299,27 @@ msgstr ""
 msgid "Really great!"
 msgstr "Di'ak loos!"
 
+msgid "Refresh"
+msgstr ""
+
+msgid "Reply"
+msgstr ""
+
 msgid "Resources"
 msgstr "Rekursu"
 
 msgid "Retake Exam"
 msgstr "Koko Foti Ezame"
+
+#, fuzzy
+msgid "Review the exam questions you answered incorrectly"
+msgstr "Koko lee didi'ak ninia pergunta"
+
+msgid "Review your answers"
+msgstr ""
+
+msgid "Revision notes"
+msgstr ""
 
 msgid "Search"
 msgstr "Buka"
@@ -261,23 +351,47 @@ msgstr ""
 msgid "show"
 msgstr "hatudu"
 
+msgid "Sorry, an unexpected error has occurred."
+msgstr ""
+
+msgid "Sorry, we cannot find this site content."
+msgstr ""
+
 msgid "Sorry: This audio is missing."
+msgstr ""
+
+msgid "Sorry: This image is missing."
 msgstr ""
 
 msgid "Sorry: This video is missing."
 msgstr ""
 
+msgid "Sort by"
+msgstr ""
+
 msgid "Start Exam"
 msgstr "Komesa Ezame"
 
+#, fuzzy
+msgid "Start learning"
+msgstr "Komesa lisaun"
+
 msgid "Start lesson"
 msgstr "Komesa lisaun"
+
+#, fuzzy
+msgid "Start review"
+msgstr "Komesa kursu"
 
 msgid "Submit"
 msgstr "Submete"
 
 msgid "Submit answers"
 msgstr "Submete"
+
+#, fuzzy
+msgid "Take exam"
+msgstr "Foti Ezame"
 
 msgid "Take Exam"
 msgstr "Foti Ezame"
@@ -300,6 +414,9 @@ msgstr "Obrigado ba ita nia komentáriu. Ita nia opiniaun importante ba ami no a
 msgid "Thanks so much"
 msgstr "Obrigado barak"
 
+msgid "There are no comments yet. Be the first to contribute to the conversation! Add a comment above."
+msgstr ""
+
 msgid "There are no courses yet. Check back soon!"
 msgstr "Seidauk iha kursu. Favor cek fila fali iha tempu badak!"
 
@@ -309,11 +426,8 @@ msgstr "Seidauk iha rekursu. Favor cek fila fali pajina ne’e iha tempu badak!"
 msgid "There are no resources yet. Check back soon!"
 msgstr "Seidauk iha rekursu. Favor cek fila fali pajina ne’e iha tempu badak!"
 
-msgid "This audio is not available offline."
-msgstr "Audio ne’e la disponivel offline"
-
-msgid "This audio will play offline."
-msgstr "Audio ne’e bele rona offline"
+msgid "There was a problem downloading the content"
+msgstr ""
 
 #. message for what percent a user must score to pass the exam
 msgid "To pass this exam you need to score <strong>%1% or higher</strong>"
@@ -324,6 +438,9 @@ msgstr "Ita nia progresu ba kursu"
 
 msgid "Try again"
 msgstr "Koko fila fali"
+
+msgid "Try again later or reconnect to your network to start interacting with your colleagues"
+msgstr ""
 
 msgid "Username"
 msgstr "Uzuáriu"
@@ -346,17 +463,24 @@ msgstr "Ami apresia ita-nia komentáriu"
 msgid "We value your feedback and all feedback is confidential"
 msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál"
 
+#, fuzzy
+msgid "We value your feedback and all feedback is confidential."
+msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál"
+
+msgid "We're having trouble fetching what you need right now, try refreshing this page."
+msgstr ""
+
 msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
 msgstr "Ami husu deskulpa! Ami sei aumenta suporta balun ba Asteroid uza ho Chrome iha iOS."
 
 msgid "Well done, keep it up!"
 msgstr "Kapás, kontinua nafatin!"
 
-msgid "Wrap up"
+msgid "Whoops! Something has gone wrong"
 msgstr ""
 
-msgid "Yes, I agree"
-msgstr "Sim, ha'u konkorda"
+msgid "Wrap up"
+msgstr ""
 
 msgid "You are offline!"
 msgstr ""
@@ -365,21 +489,34 @@ msgid "You are online!"
 msgstr ""
 
 #. message when user did not pass exam
-msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can retake this exam now or later."
+#, fuzzy
+msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can review your answers, retake this exam now, or finish it later."
 msgstr "Ita hetan valór %1%. Ida ne'e la to'o atu pasa ezame ne'e. Atu bele pasa ita presiza atu hetan valór %2% ka liu. Ita bele koko foti fila ezame ne'e orsida ka tempu seluk atu bele hetan valór ne'ebé diak liu."
 
 msgid "You have completed the pre-learning survey and you can now keep progressing your learning."
 msgstr "Ita kompleta ona survey antes komesa ita-nia aprendizajen no agora ita bele kontinua avansa ho ita-nia aprendizajen tuir-mai"
 
+msgid "You have the opportunity to retake the exam now and achieve a successful outcome. Alternatively you can return to the course."
+msgstr ""
+
 #. message on completion of a lesson %1 is replaced by the lesson title
 msgid "You just completed the lesson \"%1\""
 msgstr "Ita foin halo remata lisaun \"%1\""
+
+msgid "You need to be logged in to use this feature"
+msgstr ""
+
+msgid "You need to be online to use the discussion tool"
+msgstr ""
 
 msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
 msgstr "Ita pasa ezame ho %1%. Se ita hakarak hadiak liutan ita nia klasifikasaun, ita bele tuir fali tan ezame nee."
 
 msgid "You've completed the course"
 msgstr "Ita kompleta ona kursu"
+
+msgid "You've just completed this set of tips. You can now finish and return to the learning activity."
+msgstr ""
 
 msgid "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?"
 msgstr "Ita atu komesa ezame ba kursu ne'e. Ita promete atu halo hotu ezame ne'e mesak no la uza ema seluk nian ajuda?"
@@ -401,6 +538,15 @@ msgstr "Ita-nia konfigurasaun"
 
 msgid "Your username or password is incorrect"
 msgstr "Haluha uzuáriu ka seña?"
+
+#~ msgid "This audio is not available offline."
+#~ msgstr "Audio ne’e la disponivel offline"
+
+#~ msgid "This audio will play offline."
+#~ msgstr "Audio ne’e bele rona offline"
+
+#~ msgid "Yes, I agree"
+#~ msgstr "Sim, ha'u konkorda"
 
 #~ msgid "Log out"
 #~ msgstr "Sai"
@@ -428,9 +574,6 @@ msgstr "Haluha uzuáriu ka seña?"
 
 #~ msgid "Content"
 #~ msgstr "Konteúdu"
-
-#~ msgid "Great job!"
-#~ msgstr "Serbisu di'ak tebes!"
 
 #~ msgid "Keep going"
 #~ msgstr "Favór kontinua nafatin"
@@ -513,9 +656,6 @@ msgstr "Haluha uzuáriu ka seña?"
 
 #~ msgid "Show Password"
 #~ msgstr "Hatudu Seña"
-
-#~ msgid "Start Course"
-#~ msgstr "Komesa kursu"
 
 #~ msgid "Start Lesson"
 #~ msgstr "Komesa lisaun"
