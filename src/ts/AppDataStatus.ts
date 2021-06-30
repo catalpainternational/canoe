@@ -242,11 +242,12 @@ export class AppDataStatus {
         const published = await this.PublishAll();
         const unpublished = await this.UnpublishAll();
         let subscriptions = await this.GetSubscriptions();
-        let origins = Object.keys(subscriptions.types.CACHE.groups);
+        let origins = Object.keys(subscriptions.types.CACHE?.groups || {});
         let subscribed =
             origins.length === 1
                 ? Object.entries(
-                      subscriptions.types.CACHE.groups[origins[0]].names
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      subscriptions.types.CACHE!.groups[origins[0]].names
                   )
                 : [];
         let publishSubscribeMismatch = false;
@@ -265,11 +266,12 @@ export class AppDataStatus {
 
         if (publishSubscribeMismatch) {
             subscriptions = await this.SetSubscriptions();
-            origins = Object.keys(subscriptions.types.CACHE.groups);
+            origins = Object.keys(subscriptions.types.CACHE?.groups || {});
             if (origins.length) {
                 const firstOrigin = origins[0];
                 subscribed = Object.entries(
-                    subscriptions.types.CACHE.groups[firstOrigin].names
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    subscriptions.types.CACHE!.groups[firstOrigin].names
                 );
             }
         }

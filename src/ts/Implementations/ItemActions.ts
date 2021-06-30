@@ -123,12 +123,14 @@ export async function setSubscriptions(
             },
         },
     };
-    subscriptions.types.CACHE.groups[self.origin] = { names: {} };
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    subscriptions.types.CACHE!.groups[self.origin] = { names: {} };
 
     const aDay = 24 * 60 * 60 * 1000;
 
     items.forEach((item) => {
-        subscriptions.types.CACHE.groups[self.origin].names[item.cacheKey] = {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        subscriptions.types.CACHE!.groups[self.origin].names[item.cacheKey] = {
             injection_version_min: item.version - aDay,
             injection_version_max: item.version + aDay,
             p2p_version_min: item.version - aDay,

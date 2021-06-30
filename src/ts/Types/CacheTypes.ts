@@ -26,16 +26,15 @@ export type TSubscriptionVersion = {
 
 export type TSubscription = TPublicationTarget & TSubscriptionVersion;
 
+export type TSubscriptionCache = {
+    groups: Record<string, { names: Record<string, TSubscriptionVersion> }>;
+};
+
 export type TSubscriptions = {
-    types: Record<
-        string,
-        {
-            groups: Record<
-                string,
-                { names: Record<string, TSubscriptionVersion> }
-            >;
-        }
-    >;
+    types: {
+        CACHE?: TSubscriptionCache;
+        SWORK?: TSubscriptionCache;
+    };
 };
 
 export type TCertificate = {
