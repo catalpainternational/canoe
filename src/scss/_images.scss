@@ -278,6 +278,10 @@
     @include mask-icons-shared("~img/arrow.svg", contain, $app-accent-color);
     height: 12px;
     width: 17px;
+
+    &.right {
+        transform: scaleX(-1)
+    }
 }
 
 .download {
@@ -303,6 +307,18 @@
     @include mask-icons-shared("~img/quotation_mark.svg", contain, $app-accent-color);
     height: 22px;
     width: 18px;
+}
+
+.sync-icon {
+    @include mask-icons-shared("~img/sync.svg", contain, $app-accent-color);
+    height: 25px;
+    width: 25px;
+}
+
+.toggle-icon {
+    @include mask-icons-shared("~img/toggle.svg", contain, $app-accent-color);
+    height: 30px;
+    width: 30px;
 }
 
 .incorrect-cross {

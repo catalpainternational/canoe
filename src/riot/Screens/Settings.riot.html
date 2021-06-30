@@ -1,21 +1,34 @@
 <Settings>
     <div class="settings">
-        <TopMenu extrastyleclasses="with-swoop">
-            <h4>{ TRANSLATIONS.settings() }</h4>
-        </TopMenu>
-        <div class="content-wrapper">
-            <div if="{state.browserSupportsNotifications && state.isAuthenticated }" class="notifications-toggle">
-                <div
-                    class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
-                    onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"
-                >
-                    <input type="checkbox" id="notifications-toggle"/>
-                    <div class="slider"></div>
-                </div>
-                <label for="notifications-toggle">{ TRANSLATIONS.notifications() }</label>
-            </div>
+        <TopMenu extrastyleclasses="without-swoop">
+            <template if="{!state.generalSettings}">
+                <h4>{ TRANSLATIONS.settings() }</h4>
+                <a class="top-icon right extra-clickable-space" href="#profile">
+                    <span class="settings-icon"> </span>
+                </a>
+            </template>
+            <template if="{state.generalSettings}">
+                <a class="top-icon left has-circle" onclick="{toggleGeneralSettings}">
+                    <span class="arrow"></span>
+                </a>
+                <h4>{ TRANSLATIONS.general() }</h4>
+            </template>
 
-            <LanguageSelector></LanguageSelector>
+        </TopMenu>
+
+        <template if="{!state.generalSettings}">
+            <div class="menu">
+                <a onclick="{toggleGeneralSettings}" class="menu-item">
+                    <span class="toggle-icon"></span>
+                    <p>{ TRANSLATIONS.general() }</p>
+                    <span class="arrow right"></span>
+                </a>
+                <a href="#sync" class="menu-item">
+                    <span class="sync-icon"></span>
+                    <p>{ TRANSLATIONS.sync() }</p>
+                    <span class="arrow right"></span>
+                </a>
+            </div>
 
             <button
                 if="{state.canAddToHomeScreen}"
@@ -26,7 +39,7 @@
                 { TRANSLATIONS.add() }
             </button>
 
-            <button class="btn-secondary" 
+            <button class="btn-secondary"
                 onclick="{ state.isAuthenticated ? logout : login }"
             >
                 { state.isAuthenticated ? TRANSLATIONS.logout() : TRANSLATIONS.login() }
@@ -40,6 +53,22 @@
                 { TRANSLATIONS.launchStorageManager() }
             </button>
             <Logos></Logos>
+        </template>
+
+        <div if="{state.generalSettings}" class="content-wrapper">
+            <h2>{ TRANSLATIONS.preferences() }</h2>
+            <div if="{state.browserSupportsNotifications && state.isAuthenticated }" class="notifications-toggle">
+                <div
+                    class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
+                    onclick="{state.isSubscribedToNotifications ? unsubscribe : subscribe}"
+                >
+                    <input type="checkbox" id="notifications-toggle"/>
+                    <div class="slider"></div>
+                </div>
+                <label for="notifications-toggle">{ TRANSLATIONS.notifications() }</label>
+            </div>
+
+            <LanguageSelector></LanguageSelector>
         </div>
     </div>
     <script>
@@ -55,7 +84,7 @@
         } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
         import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
-        import { getPlatform } from "ts/PlatformDetection";
+        import { getPlatform, inAppelflap } from "ts/PlatformDetection";
         import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
         import { isAuthenticated } from "ReduxImpl/Interface";
 
@@ -66,6 +95,7 @@
                 disableNotificationsButton: false,
                 canAddToHomeScreen: false,
                 isAuthenticated: undefined,
+                generalSettings: false,
             },
 
             components: {
@@ -75,13 +105,21 @@
             },
 
             TRANSLATIONS: {
-                settings: () => gettext("Your settings"),
+                settings: () => gettext("Settings"),
                 notifications: () => gettext("I would like to receive notifications"),
                 add: () => gettext("Add to Home Screen"),
                 logout: () => gettext("Logout"),
                 login: () => gettext("Login"),
                 launchWiFiPicker: () => gettext("Launch WiFi Picker"),
                 launchStorageManager: () => gettext("Launch storage manager"),
+                general: () => gettext("General settings"),
+                sync: () => gettext("Offline sync"),
+                advanced: () => gettext("Advanced settings"),
+                preferences: () => gettext("Your preferences"),
+            },
+
+            toggleGeneralSettings() {
+                this.update({generalSettings: !this.state.generalSettings})
             },
 
             logout() {
@@ -162,6 +200,10 @@
             shouldShowAddToHomeScreen() {
                 const { browser, inAppelflap, inPWAMode } = getPlatform();
                 return !(browser.name === "Safari" || inPWAMode || inAppelflap);
+            },
+
+            shouldShowSync() {
+                return inAppelflap();
             },
 
             onMounted() {
