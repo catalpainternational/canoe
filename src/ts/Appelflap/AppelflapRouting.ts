@@ -19,8 +19,12 @@ export const AF_INS_LOCK = "insertion-lock";
 export const AF_PUBLICATIONS = "publications";
 export const AF_SUBSCRIPTIONS = "subscriptions";
 export const AF_STATUS = "status";
-export const AF_REBOOT = "reboot";
 export const AF_CERTCHAIN = "certchain";
+
+export const AF_REBOOT_HARD = "hard-reboot";
+export const AF_REBOOT_SOFT = "soft-reboot";
+export const AF_LAUNCH_WIFIPICKER = "launch-wifipicker";
+export const AF_LAUNCH_STORAGEMANAGER = "launch-storagemanager";
 
 export const AF_CERTCHAIN_LENGTH_HEADER = "X-Appelflap-Chain-Length";
 
@@ -47,8 +51,20 @@ export const APPELFLAPCOMMANDS = {
         commandPath: `${AF_CACHE_API}/${AF_STATUS}`,
         method: "GET",
     },
-    doReboot: {
-        commandPath: `${AF_ACTION_API}/${AF_REBOOT}`,
+    doRebootHard: {
+        commandPath: `${AF_ACTION_API}/${AF_REBOOT_HARD}`,
+        method: "POST",
+    },
+    doRebootSoft: {
+        commandPath: `${AF_ACTION_API}/${AF_REBOOT_SOFT}`,
+        method: "POST",
+    },
+    doLaunchWiFiPicker: {
+        commandPath: `${AF_ACTION_API}/${AF_LAUNCH_WIFIPICKER}`,
+        method: "POST",
+    },
+    doLaunchStorageManager: {
+        commandPath: `${AF_ACTION_API}/${AF_LAUNCH_STORAGEMANAGER}`,
         method: "POST",
     },
     getPublications: {

@@ -188,9 +188,27 @@ export class AppelflapConnect {
         const { commandPath } = APPELFLAPCOMMANDS.getCacheStatus;
         return await this.performCommand(commandPath);
     };
+    //#endregion
 
-    public doReboot = async (): Promise<any> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.doReboot;
+    //#region Appleflap Actions
+    public doRebootHard = async (): Promise<any> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.doRebootHard;
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    public doRebootSoft = async (): Promise<any> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.doRebootSoft;
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    public doLaunchWiFiPicker = async (): Promise<any> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.doLaunchWiFiPicker;
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    public doLaunchStorageManager = async (): Promise<any> => {
+        const { commandPath, method } =
+            APPELFLAPCOMMANDS.doLaunchStorageManager;
         return await this.performCommand(commandPath, { method }, "text");
     };
     //#endregion

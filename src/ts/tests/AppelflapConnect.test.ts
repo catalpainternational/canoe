@@ -165,7 +165,7 @@ test("Cache: status", async (t: any) => {
     fetchMock.reset();
 });
 
-test("Cache: canoe reboot", async (t: any) => {
+test("Cache: canoe reboot soft", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const successResponse = t.context.successResponse as Response;
     const authFailureResponse = t.context.authFailureResponse as Response;
@@ -173,11 +173,11 @@ test("Cache: canoe reboot", async (t: any) => {
     const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_ACTION_API}/${AF_REBOOT}`;
 
     fetchMock.post(testUri, successResponse);
-    const successResult = await afc.doReboot();
+    const successResult = await afc.doRebootSoft();
     t.is(successResult, "ok");
 
     fetchMock.post(testUri, authFailureResponse, { overwriteRoutes: true });
-    const result = await t.throwsAsync(afc.doReboot());
+    const result = await t.throwsAsync(afc.doRebootSoft());
     t.is(result.message, authFailureResponse.statusText);
 
     fetchMock.reset();
@@ -351,19 +351,22 @@ test("Cache: getSubscriptions", async (t: any) => {
                                 p2p_version_min: 1,
                                 p2p_version_max: 9000,
                                 injected_version: 2,
-                            }
-                        }
-                    }
-                }
-            }
+                            },
+                        },
+                    },
+                },
+            },
         },
     };
 
-    const successEmptyResponse = new Response(JSON.stringify(testEmptyResponse), {
-        status: 200,
-        statusText: "Ok",
-        headers: { "Content-Type": "application/json" },
-    });
+    const successEmptyResponse = new Response(
+        JSON.stringify(testEmptyResponse),
+        {
+            status: 200,
+            statusText: "Ok",
+            headers: { "Content-Type": "application/json" },
+        }
+    );
 
     const successResponse = new Response(JSON.stringify(testResponse), {
         status: 200,

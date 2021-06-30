@@ -15,10 +15,31 @@ export class CacheUtilities {
         return {};
     }
 
-    /** Instruct Appelflap to reboot Bero */
-    static async reboot(): Promise<void> {
+    /** Instruct Appelflap to hard reboot Bero */
+    static async rebootHard(): Promise<void> {
         if (AppelflapConnect.getInstance()) {
-            await AppelflapConnect.getInstance()!.doReboot();
+            await AppelflapConnect.getInstance()!.doRebootHard();
+        }
+    }
+
+    /** Instruct Appelflap to soft reboot Bero */
+    static async rebootSoft(): Promise<void> {
+        if (AppelflapConnect.getInstance()) {
+            await AppelflapConnect.getInstance()!.doRebootSoft();
+        }
+    }
+
+    /** Instruct Appelflap to launch the Android WiFi picker */
+    static async launchWiFiPicker(): Promise<void> {
+        if (AppelflapConnect.getInstance()) {
+            await AppelflapConnect.getInstance()!.doLaunchWiFiPicker();
+        }
+    }
+
+    /** Instruct Appelflap to launch the Android storage manager */
+    static async launchStorageManager(): Promise<void> {
+        if (AppelflapConnect.getInstance()) {
+            await AppelflapConnect.getInstance()!.doLaunchStorageManager();
         }
     }
 
