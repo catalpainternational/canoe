@@ -5,9 +5,13 @@ import { AppelflapConnect } from "./AppelflapConnect";
 export class CacheSubscribe {
     static async getSubscriptions(): Promise<TSubscriptions> {
         if (AppelflapConnect.getInstance()) {
-            return await AppelflapConnect.getInstance()!.getSubscriptions();
+            const subscriptions =
+                await AppelflapConnect.getInstance()!.getSubscriptions();
+            if (subscriptions.types.CACHE) {
+                return subscriptions;
+            }
         }
-        return { origins: {} };
+        return { types: { CACHE: { groups: {} } } };
     }
 
     static async setSubscriptions(
@@ -18,6 +22,6 @@ export class CacheSubscribe {
                 subscriptions
             );
         }
-        return { origins: {} };
+        return { types: { CACHE: { groups: {} } } };
     }
 }

@@ -198,9 +198,8 @@ export class AppelflapConnect {
     //#region Publication
     public getPublications = async (): Promise<TBundles> => {
         const { commandPath } = APPELFLAPCOMMANDS.getPublications;
-        return (await this.performCommand(
-            commandPath
-        )) as Promise<TBundles>;
+        const bundles = await this.performCommand(commandPath);
+        return bundles as Promise<TBundles>;
     };
 
     private publicationPath = (publication: TPublication) => {
@@ -237,9 +236,8 @@ export class AppelflapConnect {
     public getSubscriptions = async (): Promise<TSubscriptions> => {
         const { commandPath } = APPELFLAPCOMMANDS.getSubscriptions;
 
-        return (await this.performCommand(
-            commandPath
-        )) as Promise<TSubscriptions>;
+        const subscriptions = await this.performCommand(commandPath);
+        return subscriptions as Promise<TSubscriptions>;
     };
 
     public setSubscriptions = async (
