@@ -119,6 +119,7 @@ export class AppelflapConnect {
                 case 401:
                 case 404:
                 case 409:
+                case 500:
                 case 503:
                     return Promise.reject(new Error(response.statusText));
             }
