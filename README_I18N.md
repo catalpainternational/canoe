@@ -50,10 +50,13 @@ All the above steps can be performed for all languages using `yarn translate`
 
 ## Adding a new language
 
-1. Create a new .po file and save in `./locale/<lang>/bero.po`
-
-You can use a number of tools to create a po file. GNU gettext `msginit` command line, or Poedit
+1. Create a new .po file and save in `./locale/<lang>/bero.po` - You can use a number of tools to create a po file. GNU gettext `msginit` command line, or Poedit
 2. Edit `src/js/Translations.js`:AVAILABLE_LANGUAGES to enable it and provide it a name
 3. Edit `i18n/i18n.js`:language_codes to make sure the tool chain updates and builds it
 4. Use the guidance above to make sure it has all necessary messages
-5. Configure your project to use the new language in the project config js file
+5. Edit `src/js/Translations.js` to import the compiled json and load it
+6. Configure your project to use the new language in the project config js file
+
+TODO: I wanted to make adding a new language 1 edit step instead of 2, but I had problems with 
+1. importing ES6 modules from CommonJs scripts ( they had to be CommonJs because I could not get the extractor library to import under ES6 )
+2. dynamically importing and loading the compiled json files, it did not seem to work as expected
