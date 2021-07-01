@@ -13,12 +13,8 @@
                 <span class="resources-icon { page.type === 'resourcesroot' ? 'active' : ''}">
                 </span>
             </a>
-            <a href="#sync" if="{shouldShowSync()}">
-                <span class="resources-icon { page.type === 'sync' ? 'active' : ''}">
-                </span>
-            </a>
             <a href="#{ profileLink }">
-                <span class="profile-icon { page.type === 'profile' ? 'active' : ''}">
+                <span class="profile-icon { profileIsActiveTab ? 'active' : ''}">
                 </span>
             </a>
         </div>
@@ -26,7 +22,6 @@
 
     <script>
         import { getRoute } from "ReduxImpl/Interface";
-        import { inAppelflap } from "ts/PlatformDetection";
 
         export default {
 
@@ -39,9 +34,10 @@
             get profileLink() {
                 return process.env.PROFILE_LINK || 'profile';
             },
-
-            shouldShowSync() {
-                return inAppelflap();
+            get profileIsActiveTab() {
+                return this.page.type === 'profile'
+                    || this.page.type === 'settings'
+                    || this.page.type === 'sync'
             },
 
             shouldShowLearningHome() {
