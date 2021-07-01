@@ -56,4 +56,14 @@ export class CacheUtilities {
             await AppelflapConnect.getInstance()!.unlock();
         }
     }
+
+    /**
+     * Inject all relevant bundles into the browser's cache
+     * @remarks When this call returns it indicates conclusively that cache syncing has completed
+     */
+    static async injectAll(): Promise<void> {
+        if (AppelflapConnect.getInstance()) {
+            await AppelflapConnect.getInstance()!.injectAll();
+        }
+    }
 }

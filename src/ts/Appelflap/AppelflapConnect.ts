@@ -318,4 +318,17 @@ export class AppelflapConnect {
         return await this.performCommand(commandPath, { method }, "text");
     };
     //#endregion
+
+    //#region Appelflap Debug
+    /**
+     * Inject all relevant bundles into the browser's cache
+     * @remarks When this call returns it indicates conclusively that cache syncing has completed
+     */
+    public injectAll = async (): Promise<string> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.setInjectAll;
+
+        logger.info(`Injecting all relevant bundles into the browser's cache`);
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+    //#endregion
 }
