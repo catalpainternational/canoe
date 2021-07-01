@@ -45,13 +45,6 @@
                 { state.isAuthenticated ? TRANSLATIONS.logout() : TRANSLATIONS.login() }
             </button>
 
-            <button class="btn-secondary" onclick="{launchWiFiPicker}">
-                { TRANSLATIONS.launchWiFiPicker() }
-            </button>
-
-            <button class="btn-secondary" onclick="{launchStorageManager}">
-                { TRANSLATIONS.launchStorageManager() }
-            </button>
             <Logos></Logos>
         </template>
 
@@ -85,7 +78,6 @@
         import { dispatchInstallAppEvent } from "js/Events";
         import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
         import { getPlatform, inAppelflap } from "ts/PlatformDetection";
-        import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
         import { isAuthenticated } from "ReduxImpl/Interface";
 
         export default {
@@ -110,8 +102,6 @@
                 add: () => gettext("Add to Home Screen"),
                 logout: () => gettext("Logout"),
                 login: () => gettext("Login"),
-                launchWiFiPicker: () => gettext("Launch WiFi Picker"),
-                launchStorageManager: () => gettext("Launch storage manager"),
                 general: () => gettext("General settings"),
                 sync: () => gettext("Offline sync"),
                 advanced: () => gettext("Advanced settings"),
@@ -130,14 +120,6 @@
 
             login() {
                 window.location.hash = "#login";
-            },
-
-            async launchWiFiPicker() {
-                const result = await CacheUtilities.launchWiFiPicker();
-            },
-
-            async launchStorageManager() {
-                const result = await CacheUtilities.launchStorageManager();
             },
 
             async refreshSettings() {

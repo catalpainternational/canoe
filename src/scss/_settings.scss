@@ -136,6 +136,15 @@ Sync {
 
     .group {
         margin-top: 2em;
+
+        h4 {
+            font-size: 1em;
+            font-weight: 300;
+        }
+
+        p {
+            font-size: 0.85em;
+        }
     }
 
     .sync-status {
@@ -148,15 +157,6 @@ Sync {
         padding: 0.5em 1.5em;
         align-items: center;
         background-color: $white;
-
-        h4 {
-            font-size: 1em;
-            font-weight: 300;
-        }
-
-        p {
-            font-size: 0.85em;
-        }
     }
 
     .download-state {
@@ -258,6 +258,79 @@ Sync {
 
         &.purple {
             background-color: $avatar-purple;
+        }
+    }
+
+    .wifi-panel {
+        background-color: $white;
+        border: 2px solid $gray-7;
+        border-radius: 8px;
+        padding: 1em 1.5em;
+        display: grid;
+        grid-template-columns: 1fr 30px;
+        align-items: center;
+        gap: 1em;
+
+        p {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .wifi-icon,
+        .settings-icon {
+            height: 0.9em;
+            width: 1em;
+            margin-right: 4px;
+        }
+
+        .connected {
+            @extend %status-complete;
+            width: 32px;
+            height: 32px;
+            position: relative;
+            border-radius: 50%;
+
+            .icon {
+                height: 12px;
+                width: 15px;
+            }
+        }
+
+        .incorrect-cross {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    .percentage-bar-container {
+        height: 1em;
+        width: 100%;
+        background-color: $gray-7;
+        border-radius: 8px;
+        overflow: hidden;
+
+        .percentage-bar {
+            background-color: $teal;
+            height: 100%;
+            border-radius: 8px;
+
+            &.orange {
+                background-color: $orange;
+            }
+
+            &.red {
+                background-color: $red;
+            }
+        }
+    }
+
+    .wifi-panel,
+    .storage-panel {
+        p {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
     }
 }

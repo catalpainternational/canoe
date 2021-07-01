@@ -82,6 +82,15 @@
     @include mask-icons-shared("~img/cog.svg", contain, $app-accent-color);
 }
 
+.wifi-icon {
+    @extend %bottom-nav-shared;
+    @include mask-icons-shared("~img/wifi.svg", contain, $gray-3);
+
+    &.active {
+        background-color: $app-accent-color;
+    }
+}
+
 .search-icon {
     @include mask-icons-shared("~img/magnifier.svg", contain, $gray-3);
     -webkit-mask-position-x: center;

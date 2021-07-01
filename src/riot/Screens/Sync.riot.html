@@ -54,9 +54,46 @@
             <div class="group">
                 <h2>{ TRANSLATIONS.wifi() }</h2>
 
-                <div class="panel">
+                <div class="wifi-panel">
+                    <div>
+                        <template if="{connection.type === 'wifi'}">
+                            <h4>{ TRANSLATIONS.connected() }</h4>
+                            <p>
+                                <template if="{connection.networkName}">
+                                    <span><span class="wifi-icon"></span> { connection.networkName }</span>
+                                    <span>&middot;</span>
+                                </template>
+                                <a onclick="{launchWiFiPicker}"><span class="settings-icon"></span> { TRANSLATIONS.settings() }</a>
+                            </p>
 
+                        </template>
+
+                        <template if="{connection.type !== 'wifi'}">
+                            <h4>{ TRANSLATIONS.notConnected() }</h4>
+                            <p>
+                                <a onclick="{launchWiFiPicker}"><span class="wifi-icon active"></span> { TRANSLATIONS.connect() }</a>
+                            </p>
+                        </template>
+                    </div>
+                    <div if="{connection.type === 'wifi'}" class="connected">
+                        <span class="icon"></span>
+                    </div>
+                    <span if="{connection.type !== 'wifi'}" class="incorrect-cross"></span>
                 </div>
+            </div>
+
+            <div class="group storage-panel">
+                <h2>{ TRANSLATIONS.storage() }</h2>
+                <div class="percentage-bar-container">
+                    <div class="percentage-bar {usedSpacePercentage > 50 && usedSpacePercentage <= 90 ? 'orange' : ''} {usedSpacePercentage > 90 ? 'red' : ''}"
+                        style="width: {usedSpacePercentage}%">
+                    </div>
+                </div>
+                <p>
+                    <span>{usedSpacePercentage}% { TRANSLATIONS.full() }</span>
+                    <span>&middot;</span>
+                    <a onclick="{launchStorageManager}">{ TRANSLATIONS.launchStorageManager() }</a>
+                </p>
             </div>
 
 
@@ -133,7 +170,11 @@
                 wifi: () => gettext("Your Wi-Fi network"),
                 connected: () => gettext("You're connected to Wi-Fi"),
                 notConnected: () => gettext("You're not connected to Wi-Fi"),
+                settings: () => gettext("Settings"),
+                connect: () => gettext("Connect to wi-fi"),
                 storage: () => gettext("Manage storage"),
+                full: () => gettext("Full"),
+                launchStorageManager: () => gettext("Free up space"),
             },
 
             get mappedPeers() {
@@ -146,17 +187,19 @@
                     'acorn','moss','nettle','flower'];
 
 
-                return peers.map((it) => {
-                    // TODO needs tweaking, some duplicates coming through
-                    const idHash = hashString(it);
+            get usedSpacePercentage() {
+                // TODO the percentage of device storage used
+                return '30';
+            },
 
-                    return {
-                        id: it,
-                        color: colors[idHash % colors.length],
-                        animal: animals[idHash % animals.length],
-                        plant: plants[idHash % plants.length],
-                    }
-                })
+            get connection() {
+                return {
+                    // TODO this API is only available on android and chrome OS, so I couldn't test it
+                    // https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/type
+                    type: NetworkInformation.type,
+                    // TODO I'm not sure if we can get the network name?
+                    networkName: undefined,
+                }
             },
 
             async onMounted() {
@@ -182,18 +225,25 @@
 
             async syncMe() {
                 this.update({syncStatus: 'syncing'})
-                // console.log('syncing!')
-                setTimeout(() => {
-                    // for the purposes of testing / visualising. delete.
-                    this.update({syncStatus: 'updated'})
-                }, 3000)
+                // setTimeout(() => {
+                //     // TODO this timeout is for testing / visualising in not-android. delete.
+                //     this.update({syncStatus: 'updated'})
+                // }, 3000)
 
                 // Identify what needs to be subscribed to, and what needs to be published
                 const appDataStatus = this.state.appDataStatus;
                 const syncStatus = await appDataStatus.SyncAll();
 
                 // window.alert(`Published: ${JSON.stringify(syncStatus)}`);
-                // this.update({syncStatus: 'updated'})
+                this.update({syncStatus: 'updated'})
+            },
+
+            async launchWiFiPicker() {
+                const result = await CacheUtilities.launchWiFiPicker();
+            },
+
+            async launchStorageManager() {
+                const result = await CacheUtilities.launchStorageManager();
             },
         };
     </script>
