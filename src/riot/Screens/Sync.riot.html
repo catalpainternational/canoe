@@ -16,6 +16,7 @@
                         <h4 if="{state.syncStatus === 'outdated'}">{ TRANSLATIONS.foundNew() }</h4>
                         <h4 if="{state.syncStatus === 'syncing'}">{ TRANSLATIONS.syncing() }</h4>
                         <h4 if="{state.syncStatus === 'updated'}">{ TRANSLATIONS.current() }</h4>
+                        <!-- TODO I don't know where we get this date -->
                         <p>{ new Date().toDateString() }</p>
                     </div>
                     <div if="{state.syncStatus === 'outdated' || state.syncStatus === 'syncing'}"
@@ -32,10 +33,10 @@
             <div class="group">
                 <h2>{ TRANSLATIONS.avatar() }</h2>
 
-                <p class="avatar yellow">
-                    Yellow<br>
-                    Bird<br>
-                    Tree
+                <p class="avatar {yourSyncAvatar.color}">
+                    {yourSyncAvatar.color}<br>
+                    {yourSyncAvatar.animal}<br>
+                    {yourSyncAvatar.plant}
                 </p>
             </div>
 
@@ -149,7 +150,7 @@
                 // mocked data below
                 deviceId: '2198734892374',
                 peers: ['123456789','328947230','213897472','890374185','5','dsa-r34jkl','1asbd','2dhdflgiam'],
-                // could be 'outdated', 'syncing', 'updated'
+                // could be 'outdated', 'syncing', 'updated' (defines the text & loading animation logic)
                 syncStatus: 'outdated',
             },
 
@@ -177,15 +178,34 @@
                 launchStorageManager: () => gettext("Free up space"),
             },
 
-            get mappedPeers() {
-                const peers = this.state.peers;
-
+            mapAvatar(id) {
+                // TODO we'll probably need to translate these (but the colors for classes need to remain in English)
                 const colors = ['pink','red','orange','yellow','teal','blue','purple'];
                 const animals = ['bird','monkey','fish','dog','seal','shrimp','whale','dolphin',
-                    'starfish','urchin','shark','porpoise'];
+                    'starfish','urchin','shark','porpoise','sloth','python','frog'];
                 const plants = ['tree','grass','weed','sedge','shrub','rush','fern','coral',
                     'acorn','moss','nettle','flower'];
 
+                const idHash = hashString(id);
+
+                return {
+                    id,
+                    color: colors[idHash % colors.length],
+                    animal: animals[idHash % animals.length],
+                    plant: plants[idHash % plants.length],
+                }
+            },
+
+            get yourSyncAvatar() {
+                // TODO actual device id
+                return this.mapAvatar(this.state.deviceId);
+            },
+
+            get mappedPeers() {
+                // TODO the actual peers
+                const peers = this.state.peers;
+                return peers.map((it) => this.mapAvatar(it));
+            },
 
             get usedSpacePercentage() {
                 // TODO the percentage of device storage used
