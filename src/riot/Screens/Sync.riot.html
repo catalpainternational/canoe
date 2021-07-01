@@ -1,13 +1,103 @@
 <Sync>
     <div class="sync">
-        <TopMenu extrastyleclasses="with-swoop">
-            <h3>{ TRANSLATIONS.latest() }</h3>
-            <div class="filter-copy-container">
-                <a class="btn btn-primary" onclick="{syncMe}">Sync Me</a>
-            </div>
-        </TopMenu>        
+        <TopMenu extrastyleclasses="without-swoop">
+            <a class="top-icon left has-circle" href="#settings">
+                <span class="arrow"></span>
+            </a>
+            <h4>{ TRANSLATIONS.syncTitle() }</h4>
+        </TopMenu>
 
         <div class="content-wrapper">
+            <div class="group">
+                <h2>{ TRANSLATIONS.status() }</h2>
+
+                <div class="sync-status">
+                    <div>
+                        <h4>{ syncStatusText }</h4>
+                        <!-- TODO Get this date from the Manifest -->
+                        <p>{ new Date().toDateString() }</p>
+                    </div>
+                    <div if="{state.syncStatus === 'outdated' || state.syncStatus === 'syncing'}"
+                        class="download-state {state.syncStatus === 'syncing' ? 'loading' : ''}"
+                        onclick="{syncMe}">
+                            <span class="download"></span>
+                    </div>
+                    <div if="{state.syncStatus === 'updated'}" class="download-state complete">
+                        <span class="icon"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <h2>{ TRANSLATIONS.avatar() }</h2>
+
+                <p class="avatar {yourSyncAvatar.color}">
+                    {yourSyncAvatar.color}<br>
+                    {yourSyncAvatar.animal}<br>
+                    {yourSyncAvatar.plant}
+                </p>
+            </div>
+
+            <div if="{mappedPeers}" class="group">
+                <h2>{ TRANSLATIONS.peers() }</h2>
+
+                <div class="peers">
+                    <p each="{peer in mappedPeers}" class="avatar {peer.color}">
+                        {peer.color}<br>
+                        {peer.animal}<br>
+                        {peer.plant}
+                    </p>
+                </div>
+            </div>
+
+            <div class="group">
+                <h2>{ TRANSLATIONS.wifi() }</h2>
+
+                <div class="wifi-panel">
+                    <div>
+                        <template if="{connection.type === 'wifi'}">
+                            <h4>{ TRANSLATIONS.connected() }</h4>
+                            <p>
+                                <template if="{connection.networkName}">
+                                    <span><span class="wifi-icon"></span> { connection.networkName }</span>
+                                    <span>&middot;</span>
+                                </template>
+                                <a onclick="{launchWiFiPicker}"><span class="settings-icon"></span> { TRANSLATIONS.settings() }</a>
+                            </p>
+
+                        </template>
+
+                        <template if="{connection.type !== 'wifi'}">
+                            <h4>{ TRANSLATIONS.notConnected() }</h4>
+                            <p>
+                                <a onclick="{launchWiFiPicker}"><span class="wifi-icon active"></span> { TRANSLATIONS.connect() }</a>
+                            </p>
+                        </template>
+                    </div>
+                    <div if="{connection.type === 'wifi'}" class="connected">
+                        <span class="icon"></span>
+                    </div>
+                    <span if="{connection.type !== 'wifi'}" class="incorrect-cross"></span>
+                </div>
+            </div>
+
+            <div class="group storage-panel">
+                <h2>{ TRANSLATIONS.storage() }</h2>
+                <div if="{usedSpacePercentage}" class="percentage-bar-container">
+                    <div class="percentage-bar {usedSpacePercentageColor}"
+                        style="width: {usedSpacePercentage}%">
+                    </div>
+                </div>
+                <p>
+                    <template if="{usedSpacePercentage}">
+                        <span>{usedSpacePercentage}% { TRANSLATIONS.full() }</span>
+                        <span>&middot;</span>
+                    </template>
+                    <a onclick="{launchStorageManager}">{ TRANSLATIONS.launchStorageManager() }</a>
+                </p>
+            </div>
+
+            <!-- TODO I think this list can be removed - it's no longer in the design -->
             <ol class="sync-list">
                 <li
                     each="{(statusListing, index) in state.statusListings}">
@@ -47,21 +137,130 @@
         import { AppDataStatus } from "ts/AppDataStatus";
         import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
         import { CachePublish } from "ts/Appelflap/CachePublish";
+        import { hashString } from "js/utilities";
+
+        import TopMenu from "riot/Components/TopMenu.riot.html";
 
         export default {
             state: {
                 statusListings: [],
                 publications: "",
                 appDataStatus: new AppDataStatus(),
+                // mocked data below
+                deviceId: '2198734892374',
+                peers: ['123456789','328947230','213897472','890374185','5','dsa-r34jkl','1asbd','2dhdflgiam'],
+                // could be "outdated" or "current" - determined from the Manifest
+                contentStatus: "outdated",
+                // We will know if 'content' (cache bandles) are outdated from what the Manifest tells us
+                // We will not know whether updates are available for them (totally depends on our peers sharing stuff)
+                // We will know whether everything that has been shared by others has been loaded in to our caches
+                // could be "syncOff", "syncOn" (in progress), "syncCompleted"
+                syncStatus: "syncOff",
+            },
+
+            components: {
+                topmenu: TopMenu,
             },
 
             TRANSLATIONS: {
-                latest: () => gettext("Latest syncs"),
                 start: () => gettext("Start lesson"),
+                syncTitle: () => gettext("Offline sync"),
+                status: () => gettext("Sync status"),
+                // It's not 'files' that are outdated, it's 'content'
+                contentOutdated: () => gettext("Some of your content is outdated"),
+                contentCurrent: () => gettext("You're all up to date"),
+                syncOff: () => gettext("Waiting to start syncing"),
+                syncOn: () => gettext("Getting updated content now"),
+                syncCompleted: () => gettext("Content updated"), // There is no gaurantee that the user is 'all' up to date
+                refresh: () => gettext("Refresh"),
+                avatar: () => gettext("Your sync avatar"),
+                peers: () => gettext("Recently seen peers"),
+                wifi: () => gettext("Your Wi-Fi network"),
+                connected: () => gettext("You're connected to Wi-Fi"),
+                notConnected: () => gettext("You're not connected to Wi-Fi"),
+                settings: () => gettext("Settings"),
+                connect: () => gettext("Connect to wi-fi"),
+                storage: () => gettext("Manage storage"),
+                full: () => gettext("Full"),
+                launchStorageManager: () => gettext("Free up space"),
+            },
+
+            mapAvatar(id) {
+                // TODO we'll probably need to translate these (but the colors for classes need to remain in English)
+                const colors = ['pink','red','orange','yellow','teal','blue','purple'];
+                const animals = ['bird','monkey','fish','dog','seal','shrimp','whale','dolphin',
+                    'starfish','urchin','shark','porpoise','sloth','python','frog'];
+                const plants = ['tree','grass','weed','sedge','shrub','rush','fern','coral',
+                    'acorn','moss','nettle','flower'];
+
+                const idHash = hashString(id);
+
+                return {
+                    id,
+                    color: colors[idHash % colors.length],
+                    animal: animals[idHash % animals.length],
+                    plant: plants[idHash % plants.length],
+                }
+            },
+
+            get yourSyncAvatar() {
+                // TODO actual device id
+                return this.mapAvatar(this.state.deviceId);
+            },
+
+            get syncStatusText() {
+                return this.TRANSLATIONS[this.state.syncStatus]();
+            },
+
+            get mappedPeers() {
+                // TODO the actual peers
+                const peers = this.state.peers;
+                return peers.map((it) => this.mapAvatar(it));
+            },
+
+            get usedSpacePercentage() {
+                // TODO the percentage of device storage used
+                return 30;
+            },
+
+            get usedSpacePercentageColor() {
+                if (this.usedSpacePercentage <= 50) {
+                    return "";
+                } else if (this.usedSpacePercentage <= 90) {
+                    return "orange";
+                }
+                return "red";
+            },
+
+            get connection() {
+                return {
+                    // TODO this API is only available on android and chrome OS, so I couldn't test it
+                    // https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/type
+                    type: NetworkInformation.type,
+                    // TODO I'm not sure if we can get the network name?
+                    networkName: undefined,
+                }
+            },
+
+            /**
+             * Perform the 'inbound' synchronisation of everything made available by other peers
+             * This lets us know when syncMe's inbound work is done
+             */
+            performInboundSync() {
+                this.update({syncStatus: "syncOn"});
+                CacheUtilities.injectAll().then(() => {
+                    this.update({syncStatus: "syncCompleted"});
+                });
+            },
+
+            onBeforeMount() {
+                this.state.syncStatus = "syncOff";
             },
 
             async onMounted() {
                 await CacheUtilities.unlock();
+                await this.syncMe();
+                this.performInboundSync();
                 await this.appelflapStatus();
             },
 
@@ -81,13 +280,25 @@
                 this.update({statusListings: this.state.appDataStatus.itemListings});
             },
 
+            /**
+             * Share what things we have with our peers - 'outbound' sync
+             * and subscribe to everything that we want
+             * */
             async syncMe() {
-
-                // Identify what needs to be subscribed to, and what needs to be published
                 const appDataStatus = this.state.appDataStatus;
-                const syncStatus = await appDataStatus.SyncAll();
+                // Identify what needs to be subscribed to, and what needs to be published
+                // AppDataStatus checks the certChain to make sure that this user can publish
+                // and AppelflapConnect double checks this
+                // It's possible that we may just want to fire and forget this
+                const syncStatusList = await appDataStatus.SyncAll();
+            },
 
-                // window.alert(`Published: ${JSON.stringify(syncStatus)}`);
+            async launchWiFiPicker() {
+                const result = await CacheUtilities.launchWiFiPicker();
+            },
+
+            async launchStorageManager() {
+                const result = await CacheUtilities.launchStorageManager();
             },
         };
     </script>
