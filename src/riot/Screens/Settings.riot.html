@@ -1,9 +1,55 @@
 <Settings>
     <div class="settings">
-        <TopMenu extrastyleclasses="with-swoop">
-            <h4>{ TRANSLATIONS.settings() }</h4>
+        <TopMenu extrastyleclasses="without-swoop">
+            <template if="{!state.generalSettings}">
+                <h4>{ TRANSLATIONS.settings() }</h4>
+                <a class="top-icon right extra-clickable-space" href="#profile">
+                    <span class="settings-icon"> </span>
+                </a>
+            </template>
+            <template if="{state.generalSettings}">
+                <a class="top-icon left has-circle" onclick="{toggleGeneralSettings}">
+                    <span class="arrow"></span>
+                </a>
+                <h4>{ TRANSLATIONS.general() }</h4>
+            </template>
+
         </TopMenu>
-        <div class="content-wrapper">
+
+        <template if="{!state.generalSettings}">
+            <div class="menu">
+                <a onclick="{toggleGeneralSettings}" class="menu-item">
+                    <span class="toggle-icon"></span>
+                    <p>{ TRANSLATIONS.general() }</p>
+                    <span class="arrow right"></span>
+                </a>
+                <a href="#sync" class="menu-item">
+                    <span class="sync-icon"></span>
+                    <p>{ TRANSLATIONS.sync() }</p>
+                    <span class="arrow right"></span>
+                </a>
+            </div>
+
+            <button
+                if="{state.canAddToHomeScreen}"
+                class="btn-secondary"
+                onclick="{promptUserToInstallApp}"
+                translation-comment="This button adds an icon to the device homescreen"
+            >
+                { TRANSLATIONS.add() }
+            </button>
+
+            <button class="btn-secondary"
+                onclick="{ state.isAuthenticated ? logout : login }"
+            >
+                { state.isAuthenticated ? TRANSLATIONS.logout() : TRANSLATIONS.login() }
+            </button>
+
+            <Logos></Logos>
+        </template>
+
+        <div if="{state.generalSettings}" class="content-wrapper">
+            <h2>{ TRANSLATIONS.preferences() }</h2>
             <div if="{state.browserSupportsNotifications && state.isAuthenticated }" class="notifications-toggle">
                 <div
                     class="switch {state.isSubscribedToNotifications ? 'on' : 'off'} {state.disableNotificationsButton ? 'disabled' : ''}"
@@ -16,35 +62,6 @@
             </div>
 
             <LanguageSelector></LanguageSelector>
-
-            <button
-                if="{state.canAddToHomeScreen}"
-                class="btn-secondary"
-                onclick="{promptUserToInstallApp}"
-                translation-comment="This button adds an icon to the device homescreen"
-            >
-                { TRANSLATIONS.add() }
-            </button>
-
-            <button class="btn-secondary" 
-                onclick="{ state.isAuthenticated ? logout : login }"
-            >
-                { state.isAuthenticated ? TRANSLATIONS.logout() : TRANSLATIONS.login() }
-            </button>
-
-            <button class="btn-secondary" onclick="{launchWiFiPicker}">
-                { TRANSLATIONS.launchWiFiPicker() }
-            </button>
-
-            <button class="btn-secondary" onclick="{launchStorageManager}">
-                { TRANSLATIONS.launchStorageManager() }
-            </button>
-
-            <label for="sync-state">{ TRANSLATIONS.syncTitle() }</label>
-            <div id="sync-state">
-                <span>{ state.syncState }</span>
-            </div>
-            <Logos></Logos>
         </div>
     </div>
     <script>
@@ -60,8 +77,7 @@
         } from "js/Notifications";
         import { dispatchInstallAppEvent } from "js/Events";
         import { alertIfRequestWasMadeOffline, alertIfBrowserBlocksNotifications } from "js/Errors";
-        import { getPlatform } from "ts/PlatformDetection";
-        import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
+        import { getPlatform, inAppelflap } from "ts/PlatformDetection";
         import { isAuthenticated } from "ReduxImpl/Interface";
 
         export default {
@@ -71,7 +87,7 @@
                 disableNotificationsButton: false,
                 canAddToHomeScreen: false,
                 isAuthenticated: undefined,
-                syncState: undefined,
+                generalSettings: false,
             },
 
             components: {
@@ -81,17 +97,19 @@
             },
 
             TRANSLATIONS: {
-                settings: () => gettext("Your settings"),
+                settings: () => gettext("Settings"),
                 notifications: () => gettext("I would like to receive notifications"),
                 add: () => gettext("Add to Home Screen"),
                 logout: () => gettext("Logout"),
                 login: () => gettext("Login"),
-                launchWiFiPicker: () => gettext("Launch WiFi Picker"),
-                launchStorageManager: () => gettext("Launch storage manager"),
-                syncTitle: () => gettext("Synchronisation"),
-                syncOff: () => gettext("Inbound synchronisation not started"),
-                syncOn: () => gettext("Inbound synchronisation in progress"),
-                syncCompleted: () => gettext("Inbound synchronisation completed"),
+                general: () => gettext("General settings"),
+                sync: () => gettext("Offline sync"),
+                advanced: () => gettext("Advanced settings"),
+                preferences: () => gettext("Your preferences"),
+            },
+
+            toggleGeneralSettings() {
+                this.update({generalSettings: !this.state.generalSettings})
             },
 
             logout() {
@@ -102,14 +120,6 @@
 
             login() {
                 window.location.hash = "#login";
-            },
-
-            async launchWiFiPicker() {
-                const result = await CacheUtilities.launchWiFiPicker();
-            },
-
-            async launchStorageManager() {
-                const result = await CacheUtilities.launchStorageManager();
             },
 
             async refreshSettings() {
@@ -174,22 +184,11 @@
                 return !(browser.name === "Safari" || inPWAMode || inAppelflap);
             },
 
-            /** Perform the 'inbound' synchronisation of everything made available by other peers */
-            performInboundSync() {
-                this.update({syncState: this.TRANSLATIONS.syncOn()});
-                CacheUtilities.injectAll().then(() => {
-                    this.update({syncState: this.TRANSLATIONS.syncCompleted()});
-                });
+            shouldShowSync() {
+                return inAppelflap();
             },
 
-            onBeforeMount() {
-                this.state.syncState = this.TRANSLATIONS.syncOff();
-            },
-
-            async onMounted() {
-                await CacheUtilities.unlock();
-                this.performInboundSync();
-
+            onMounted() {
                 this.refreshSettings();
             },
 

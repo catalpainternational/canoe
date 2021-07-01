@@ -1,14 +1,28 @@
 Settings {
-    .with-swoop {
-        @extend %center-with-flex;
-    }
-
-    button {
-        margin-bottom: 20px;
+    .btn-secondary {
+        margin: 0 auto 20px;
+        display: block;
+        width: unset;
 
         &:last-child {
             margin-bottom: 0;
         }
+    }
+
+    .menu {
+        margin: 20px 0 50px;
+    }
+
+    .menu-item {
+        display: grid;
+        grid-template-columns: 30px 1fr 30px;
+        align-items: center;
+        background-color: white;
+        min-height: 75px;
+        border-bottom: 1px solid  $gray-7;
+        box-sizing: border-box;
+        padding: 12px;
+        gap: 12px;
     }
 }
 
@@ -115,5 +129,216 @@ LanguageSelector {
     label {
       color: $gray-1;
       font-weight: 400;
+    }
+}
+
+Sync {
+
+    .group {
+        margin-top: 2em;
+
+        h4 {
+            font-size: 1em;
+            font-weight: 300;
+        }
+
+        p {
+            font-size: 0.85em;
+        }
+    }
+
+    .sync-status {
+        display: grid;
+        grid-template-columns: 1fr 30px;
+        gap: 1em;
+        border: 2px solid $gray-7;
+        border-radius: 100px;
+        overflow: hidden;
+        padding: 0.5em 1.5em;
+        align-items: center;
+        background-color: $white;
+    }
+
+    .download-state {
+        background-color: $app-accent-color;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        position: relative;
+
+        .download {
+            background-color: $white;
+            margin-left: 2px;
+            margin-top: 1px;
+        }
+
+        &.loading {
+            background-color: unset;
+
+            .download {
+                background-color: $app-accent-color;
+            }
+
+            &::after {
+                content: '';
+                border: 2px solid $gray-8;
+                border-top: 2px solid $app-accent-color;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                animation: spin 2s linear infinite;
+                position: absolute;
+                top: 0;
+                left: 0;
+                box-sizing: border-box;
+            }
+        }
+
+        &.complete {
+            @extend %status-complete;
+            width: 32px;
+            height: 32px;
+
+            .icon {
+                height: 12px;
+                width: 15px;
+            }
+        }
+    }
+
+    .peers {
+        display: flex;
+        gap: 12px;
+        overflow: scroll;
+        width: 100vw;
+        margin-left: -20px;
+        padding: 0 20px 1em 20px;
+        box-sizing: border-box;
+    }
+
+    p.avatar {
+        color: $white;
+        width: 52px;
+        min-width: 52px;
+        height: 52px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 0.7em;
+        line-height: 1.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3px;
+        box-sizing: border-box;
+        text-transform: capitalize;
+
+        &.pink {
+            background-color: $avatar-pink;
+        }
+
+        &.red {
+            background-color: $avatar-red;
+        }
+
+        &.orange {
+            background-color: $avatar-orange;
+        }
+
+        &.yellow {
+            background-color: $avatar-yellow;
+        }
+
+        &.teal {
+            background-color: $avatar-teal;
+        }
+
+        &.blue {
+            background-color: $avatar-lightblue;
+        }
+
+        &.purple {
+            background-color: $avatar-purple;
+        }
+    }
+
+    .wifi-panel {
+        background-color: $white;
+        border: 2px solid $gray-7;
+        border-radius: 8px;
+        padding: 1em 1.5em;
+        display: grid;
+        grid-template-columns: 1fr 30px;
+        align-items: center;
+        gap: 1em;
+
+        p {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .wifi-icon,
+        .settings-icon {
+            height: 0.9em;
+            width: 1em;
+            margin-right: 4px;
+        }
+
+        .connected {
+            @extend %status-complete;
+            width: 32px;
+            height: 32px;
+            position: relative;
+            border-radius: 50%;
+
+            .icon {
+                height: 12px;
+                width: 15px;
+            }
+        }
+
+        .incorrect-cross {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    .percentage-bar-container {
+        height: 1em;
+        width: 100%;
+        background-color: $gray-7;
+        border-radius: 8px;
+        overflow: hidden;
+
+        .percentage-bar {
+            background-color: $teal;
+            height: 100%;
+            border-radius: 8px;
+
+            &.orange {
+                background-color: $orange;
+            }
+
+            &.red {
+                background-color: $red;
+            }
+        }
+    }
+
+    .wifi-panel,
+    .storage-panel {
+        p {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    }
+}
+
+Settings,
+Sync {
+    h2 {
+        font-size: 1.2em;
+        font-weight: 300;
     }
 }
