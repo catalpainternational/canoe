@@ -107,7 +107,7 @@ async function route(hashWith) {
 }
 
 async function getValidManifest() {
-    const manifest = new Manifest();
+    const manifest = Manifest.getInstance();
     if (!manifest.isValid) {
         // we need to wait
         await manifest.prepare();

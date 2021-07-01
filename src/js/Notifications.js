@@ -1,4 +1,4 @@
-import { BACKEND_BASE_URL } from "js/urls";
+import { BACKEND_BASE_URL, CSRF_COOKIE_NAME } from "js/urls";
 import { getBrowser } from "ts/PlatformDetection";
 import { urlBase64ToUint8Array } from "js/DjangoPushNotifications";
 import { alertIfRequestWasMadeOffline } from "js/Errors";
@@ -46,7 +46,7 @@ const postNotificationSubscription = async (subscriptionData) => {
         credentials: "include",
         headers: {
             "Content-Type": "application/json",
-            "X-CSRFToken": Cookies.get("csrftoken"),
+            "X-CSRFToken": Cookies.get(CSRF_COOKIE_NAME),
         },
         method: "POST",
         body: JSON.stringify(subscriptionData),

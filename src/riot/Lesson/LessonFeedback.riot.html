@@ -1,4 +1,4 @@
-<LessonFeedback>
+<LessonFeedback class="fill-screen">
     <LessonFrame linkTo="{ props.linkTo }">
         <template if="{!state.submittedFeedback}">
             <div class="message-container">
@@ -57,27 +57,30 @@
                 <p>{ TRANSLATIONS.feedback_sent() }</p>
             </div>
         </template>
+        <div slot="bottom-buttons" class="bottom-buttons">
+            <template if="{!state.submittedFeedback}">
+                <button class="btn-secondary" onclick="{clickedNoThanks}">
+                    { TRANSLATIONS.no() }
+                </button>
+                <button
+                    class="btn-primary"
+                    onclick="{clickedSubmit}"
+                    disabled="{!state.activeSelection}"
+                >
+                    { TRANSLATIONS.submit() }
+                </button>
+            </template>
+            <template if="{state.submittedFeedback}">
+                <button
+                    class="btn-primary thank-you-container"
+                    onclick="{clickedContinue}"
+                >
+                    { TRANSLATIONS.continue() }
+                </button>
+            </template>
+        </div>
     </LessonFrame>
-    <div if="{!state.submittedFeedback}" class="bottom-buttons">
-        <button class="btn-secondary" onclick="{clickedNoThanks}">
-            { TRANSLATIONS.no() }
-        </button>
-        <button
-            class="btn-primary"
-            onclick="{clickedSubmit}"
-            disabled="{!state.activeSelection}"
-        >
-            { TRANSLATIONS.submit() }
-        </button>
-    </div>
-    <div if="{state.submittedFeedback}" class="bottom-buttons">
-        <button
-            class="btn-primary thank-you-container"
-            onclick="{clickedContinue}"
-        >
-            { TRANSLATIONS.continue() }
-        </button>
-    </div>
+
     <script>
         import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
         import { getRoute } from "ReduxImpl/Interface";

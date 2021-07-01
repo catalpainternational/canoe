@@ -31,6 +31,10 @@ LessonPage {
 }
 
 LessonFrame {
+    height: 100%;
+    display: grid;
+    grid-template-rows: $top-menu-height 1fr 70px;
+
     .without-swoop {
         justify-content: center;
 
@@ -57,28 +61,11 @@ LessonFrame {
         }
     }
 
-    // the 25px adds some room for the stacked cards below, the 50px is
-    // for the buttons
-    $base-card-height: calc(100vh - #{$top-menu-height} - 25px - 50px);
-
     .frame-background {
-        height: $base-card-height;
         display: flex;
         flex-flow: row nowrap;
         align-items: stretch;
-
-        &.safari {
-            height: calc(#{$base-card-height} - 100px);
-
-            &.hasHomeButton {
-                height: calc(#{$base-card-height} - 85px);
-            }
-        }
-
-        &.chrome,
-        &.firefox {
-            height: calc(#{$base-card-height} - 60px);
-        }
+        overflow: auto;
     }
 
     .card-frame {

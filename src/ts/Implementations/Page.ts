@@ -27,8 +27,6 @@ export class Page extends PublishableItem implements StorableItem {
     #manifest: Manifest;
     /** the parent of this page, if it has one */
     #parent: Page | undefined;
-    /** the children of this page ( references stored for efficiency ) */
-    #childPages: Page[] | undefined;
     /** the lsit of assets( references stored for efficiency ) */
     #assets: Asset[] = [];
     /** aany data that might wish to be added to a completion persisted entry */
@@ -120,15 +118,10 @@ export class Page extends PublishableItem implements StorableItem {
     }
 
     get childPages(): Page[] {
-        if (this.#childPages) {
-            return this.#childPages;
-        }
-
-        this.#childPages = this.children.map(
+        return this.children.map(
             (pageId) => this.#manifest.getSpecificPage(pageId, this),
             this.#manifest
         );
-        return this.#childPages;
     }
 
     get title(): string {
@@ -167,12 +160,10 @@ export class Page extends PublishableItem implements StorableItem {
 
     /** The asset data as defined in the manifest for this page */
     get manifestAssets(): Asset[] {
-        return this.manifestData["assets"]
-            .filter((assetEntry: TAssetEntry) => assetEntry.id)
-            .map(
-                (assetEntry: TAssetEntry) => new Asset(this, assetEntry.id),
-                this
-            );
+        return this.manifestData["assets"].map(
+            (assetEntry: TAssetEntry) => new Asset(this, assetEntry),
+            this
+        );
     }
 
     /** The assets associated with this page */

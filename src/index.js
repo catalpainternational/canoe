@@ -3,18 +3,15 @@ import "babel-polyfill";
 import { subscribeToStore, getServiceWorkerState } from "ReduxImpl/Interface";
 import { initializeServiceWorker } from "js/ServiceWorkerManagement";
 
-import { InitialiseCanoeHost } from "ts/StartUp";
+import { InitialiseBeroHost } from "ts/Appelflap/StartUp";
 
 import { ROUTES_FOR_REGISTRATION } from "js/urls";
 import { EMPTY_SLATE_BOOT_KEY } from "ts/Constants";
 
 let currentServiceWorkerState = getServiceWorkerState();
 
-// Create the global canoeHost and certChain objects
-var canoeHost = null;
-var certChain = null;
-// Initialise the canoeHost object
-InitialiseCanoeHost();
+// Initialise the beroHost object
+InitialiseBeroHost();
 
 subscribeToStore(() => {
     const newServiceWorkerState = getServiceWorkerState();

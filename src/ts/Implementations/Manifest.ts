@@ -33,6 +33,24 @@ export const ManifestBackendPath = "/manifest/v1";
 export const ManifestCacheKey = "bero-manifest";
 
 export class Manifest extends PublishableItem implements StorableItem {
+    //#region Implement as Singleton
+    static instance: Manifest;
+    static pageInstances: Record<string, Page> = {};
+
+    private constructor() {
+        super();
+        logger.log("Singleton created");
+    }
+
+    public static getInstance(): Manifest {
+        if (!Manifest.instance) {
+            Manifest.instance = new Manifest();
+        }
+
+        return Manifest.instance;
+    }
+    //#endregion
+
     get backendPath(): string {
         return ManifestBackendPath;
     }
@@ -57,6 +75,7 @@ export class Manifest extends PublishableItem implements StorableItem {
     saveToStore(data: TManifestData): void {
         storeManifest(data);
     }
+
     /** get the manifest data from the manifest store */
     get storedData(): TManifestData | undefined {
         return getManifestFromStore();
@@ -136,10 +155,6 @@ export class Manifest extends PublishableItem implements StorableItem {
         return this.childPagesValid;
     }
 
-    async isAvailableOffline(): Promise<boolean> {
-        return this.isValid;
-    }
-
     get isPublishable(): boolean {
         return this.isValid;
     }
@@ -158,41 +173,54 @@ export class Manifest extends PublishableItem implements StorableItem {
         return [...languageCodes];
     }
 
-    GetDataFromStore(): void {
-        // depecated
-        return;
-    }
-
-    StoreDataToStore(): void {
-        // depecated
-        return;
-    }
+    /** The updated response object
+     * @deprecated
+     */
     get updatedResp(): Response {
-        //deprecated
         return new Response();
     }
+
+    /** Initialise this from the response
+     * @deprecated
+     */
     async initialiseFromResponse(resp: Response): Promise<boolean> {
-        //deprecated
         return Promise.resolve(false);
     }
 
     getPageManifestData(locationHash: string): Page | undefined {
-        if (!this.storedData) return undefined;
+        if (!this.storedData) {
+            return undefined;
+        }
+
         const pageId: string | undefined = Object.keys(
             this.storedData.pages
         ).find((pageId: string) => {
             const page = this.storedData?.pages[pageId];
             return page && page.loc_hash === locationHash;
         });
+
         if (pageId === undefined) {
             throw new ManifestError(
                 `Location ${locationHash} not found in manifest`
             );
         }
+
         return this.getSpecificPage(pageId);
     }
 
     getSpecificPage(pageId: string, parent?: Page): Page {
+        let pageInstance = Manifest.pageInstances[pageId];
+        if (pageInstance) {
+            // Check the current page object vs. what the manifest says
+            const manifestVersion = this.storedData?.pages[pageId].version;
+            if (pageInstance.version === manifestVersion) {
+                return pageInstance;
+            }
+
+            // There has been a version change so delete and recreate below
+            delete Manifest.pageInstances[pageId];
+        }
+
         const pageType = this.storedData?.pages[pageId].type;
 
         switch (pageType) {
@@ -201,34 +229,51 @@ export class Manifest extends PublishableItem implements StorableItem {
             case "courseshomepage":
                 return new AllCourses(this, pageId, parent);
             case "coursepage":
-                return new Course(this, pageId, parent);
+                pageInstance = new Course(this, pageId, parent);
+                break;
             case "lessonpage":
-                return new Lesson(this, pageId, parent);
+                pageInstance = new Lesson(this, pageId, parent);
+                break;
             case "resourcesroot":
-                return new ResourcesRoot(this, pageId, parent);
+                pageInstance = new ResourcesRoot(this, pageId, parent);
+                break;
             case "resourcearticle":
-                return new Resource(this, pageId, parent);
+                pageInstance = new Resource(this, pageId, parent);
+                break;
             case "learningactivitieshomepage":
-                return new TeachingRoot(this, pageId, parent);
+                pageInstance = new TeachingRoot(this, pageId, parent);
+                break;
             case "learningactivitytopicpage":
-                return new TeachingTopic(this, pageId, parent);
+                pageInstance = new TeachingTopic(this, pageId, parent);
+                break;
             case "learningactivitypage":
-                return new TeachingActivity(this, pageId, parent);
+                pageInstance = new TeachingActivity(this, pageId, parent);
+                break;
             default:
-                return new Page(this, pageId, parent);
+                pageInstance = new Page(this, pageId, parent);
+                break;
         }
+
+        Manifest.pageInstances[pageId] = pageInstance;
+
+        return Manifest.pageInstances[pageId];
     }
 
     getLanguagePageType(
         languageCode: string,
         pageType: string
     ): Page | undefined {
-        if (!this.storedData) return undefined;
+        if (!this.storedData) {
+            return undefined;
+        }
+
         const pageId: string | undefined = Object.keys(
             this.storedData?.pages
         ).find((pageId: string) => {
             const page = this.storedData?.pages[pageId];
-            if (!page) return false;
+            if (!page) {
+                return false;
+            }
             return page.type === pageType && page.language === languageCode;
         });
 
@@ -236,7 +281,10 @@ export class Manifest extends PublishableItem implements StorableItem {
     }
 
     hasPageType(pageType: string): boolean {
-        if (!this.storedData) return false;
+        if (!this.storedData) {
+            return false;
+        }
+
         return Object.values(this.storedData?.pages)
             .map((p: TWagtailPage) => {
                 return p.type;
