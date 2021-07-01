@@ -16,6 +16,8 @@ import {
 } from "./Implementations/ItemActions";
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
+import { NOT_RELEVANT } from "./Constants";
+import { CertChain } from "./Appelflap/CertChain";
 
 type AfcFunction = (item: TPublishableItem) => Promise<TAppelflapResult>;
 
@@ -172,15 +174,15 @@ export class AppDataStatus {
                 const page = this.manifest.getPageManifestData(item.cacheKey);
                 if (!page) {
                     performed[item.cacheKey] = {
-                        result: "not relevant",
-                        reason: "not relevant",
+                        result: NOT_RELEVANT,
+                        reason: NOT_RELEVANT,
                     };
                 } else {
                     try {
                         const publishablePage =
                             await this.PageToPublishableItem(page);
                         const result =
-                            (await action(publishablePage)) || "not relevant";
+                            (await action(publishablePage)) || NOT_RELEVANT;
                         performed[item.cacheKey] = {
                             result: result,
                             reason: result,
@@ -200,15 +202,30 @@ export class AppDataStatus {
 
     /** Publish everything currently flagged as isPublishable */
     async PublishAll(): Promise<TPublishResult> {
-        return this.PerformAll((listing) => listing.isPublishable, publishItem);
+        const certChain = CertChain.getInstance();
+        if (certChain && certChain.canPublish) {
+            return this.PerformAll(
+                (listing) => listing.isPublishable,
+                publishItem
+            );
+        }
+        // This user does not have authority to publish anything,
+        // so publish nothing
+        return this.PerformAll((listing) => !listing, publishItem);
     }
 
     /** Unpublish everything currently not flagged as isPublishable */
     async UnpublishAll(): Promise<TPublishResult> {
-        return this.PerformAll(
-            (listing) => !listing.isPublishable,
-            unpublishItem
-        );
+        const certChain = CertChain.getInstance();
+        if (certChain && certChain.canPublish) {
+            return this.PerformAll(
+                (listing) => !listing.isPublishable,
+                unpublishItem
+            );
+        }
+        // This user does not have authority to publish anything,
+        // so unpublish everything
+        return this.PerformAll((listing) => !!listing, unpublishItem);
     }
 
     /** Get all current subscriptions */

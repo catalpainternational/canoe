@@ -34,7 +34,7 @@ export const InitialiseBeroHost = async (
  */
 export const initialiseCertChain = async (): Promise<void> => {
     const haveAFC = AppelflapConnect.getInstance();
-    const haveSignedCert = CertChain.getInstance().certState === "signed";
+    const haveSignedCert = CertChain.getInstance().canPublish;
     if (!haveAFC || (haveSignedCert && isAuthenticated())) {
         // We're not hosted in Appelflap,
         // or we have a signed certificate and the user is authenticated
