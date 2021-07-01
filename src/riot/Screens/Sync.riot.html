@@ -40,7 +40,7 @@
                 </p>
             </div>
 
-            <div class="group">
+            <div if="{mappedPeers}" class="group">
                 <h2>{ TRANSLATIONS.peers() }</h2>
 
                 <div class="peers">
@@ -85,20 +85,21 @@
 
             <div class="group storage-panel">
                 <h2>{ TRANSLATIONS.storage() }</h2>
-                <div class="percentage-bar-container">
+                <div if="{usedSpacePercentage}" class="percentage-bar-container">
                     <div class="percentage-bar {usedSpacePercentage > 50 && usedSpacePercentage <= 90 ? 'orange' : ''} {usedSpacePercentage > 90 ? 'red' : ''}"
                         style="width: {usedSpacePercentage}%">
                     </div>
                 </div>
                 <p>
-                    <span>{usedSpacePercentage}% { TRANSLATIONS.full() }</span>
-                    <span>&middot;</span>
+                    <template if="{usedSpacePercentage}">
+                        <span>{usedSpacePercentage}% { TRANSLATIONS.full() }</span>
+                        <span>&middot;</span>
+                    </template>
                     <a onclick="{launchStorageManager}">{ TRANSLATIONS.launchStorageManager() }</a>
                 </p>
             </div>
 
-
-
+            <!-- TODO I think this list can be removed - it's no longer in the design -->
             <ol class="sync-list">
                 <li
                     each="{(statusListing, index) in state.statusListings}">
