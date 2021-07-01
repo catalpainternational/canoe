@@ -6,7 +6,7 @@ const { updateJsonFiles } = require("./JsonUpdater.js");
 const args = process.argv.slice(2);
 const masterPotPath = path.resolve(path.dirname(__dirname), "locale", "bero.pot");
 const localePath = path.resolve(path.dirname(__dirname), "locale");
-const language_codes = ["tet", "fr"];
+const language_codes = ["tet", "fr", "th"];
 
 extractMessagesCall = () => {
     return extractMessages(

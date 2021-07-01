@@ -1,0 +1,528 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Bero\n"
+"Report-Msgid-Bugs-To: engineering@catalpa.io\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. warns the user that this site ( name goes in %1 ) will not be able to send you notifications if you turn this off
+msgid "%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
+msgstr "%1 uส่งการแจ้งเตือนเพื่อส่งการอัปเดตและการแจ้งเตือนหลักสูตรที่เป็นประโยชน์แก่คุณ หากคุณปิดการแจ้งเตือน คุณจะไม่ได้รับข้อมูลหลักสูตรนี้ คุณแน่ใจหรือไม่ว่าต้องการปิดการแจ้งเตือน"
+
+msgid "%1's Course Exam"
+msgstr "ข้อสอบหลักสูตรของ %1"
+
+msgid "%1's Prelearning Survey"
+msgstr "แบบสำรวจก่อนการเรียนรู้ของ %1"
+
+msgid "Activity"
+msgstr "กิจกรรม"
+
+msgid "Add a comment"
+msgstr "เพิ่มความคิดเห็นใหม่"
+
+msgid "Add a reply"
+msgstr "เพิ่มคำตอบ"
+
+msgid "Add to Home Screen"
+msgstr "เพิ่มไปที่หน้าจอหลัก"
+
+msgid "Add your comments (optional)"
+msgstr "เพิ่มความคิดเห็นของคุณ (ไม่บังคับ)"
+
+msgid "All courses"
+msgstr "ทุกหลักสูตร"
+
+msgid "Amazing work!"
+msgstr "การทำงานที่น่าตื่นตาตื่นใจ!"
+
+msgid "An error occurred, please try again later"
+msgstr "มีข้อผิดพลาดเกิดขึ้นโปรดลองอีกครั้ง"
+
+msgid "Are you enjoying this lesson?"
+msgstr "คุณสนุกกับบทเรียนนี้หรือไม่?"
+
+msgid "Are you enjoying this teaching plan?"
+msgstr "คุณสนุกกับแผนการสอนนี้หรือไม่?"
+
+msgid "Are you ready to retake your exam?"
+msgstr "คุณพร้อมที่จะสอบใหม่หรือไม่?"
+
+msgid "Back to Course"
+msgstr "กลับไปที่หลักสูตร"
+
+msgid "Back to Courses"
+msgstr "กลับไปที่รายวิชา"
+
+msgid "Check <strong>all</strong> answers that apply"
+msgstr "ตรวจสอบคำตอบ <strong>ทั้งหมดที่ใช่</strong>"
+
+msgid "Check answer"
+msgstr "ตรวจคำตอบ"
+
+msgid "Check answers"
+msgstr "ตรวจคำตอบ"
+
+msgid "Checking"
+msgstr "กำลังตรวจสอบ"
+
+msgid "Code of conduct"
+msgstr "ข้อพึงปฏิบัติ"
+
+msgid "Comment flagged as inappropriate"
+msgstr "ความคิดเห็นถูกตั้งค่าสถานะว่าไม่เหมาะสม"
+
+msgid "Comment posted"
+msgstr "ความคิดเห็นที่โพสต์"
+
+msgid "completed"
+msgstr "เสร็จแล้ว"
+
+msgid "Congratulations!"
+msgstr "ขอแสดงความยินดี!"
+
+msgid "Continue"
+msgstr "ต่อไป"
+
+msgid "Continue learning"
+msgstr "เรียนต่อ"
+
+msgid "Continue Learning"
+msgstr "เรียนรู้ต่อเนื่อง"
+
+msgid "Course exam"
+msgstr "สอบรายวิชา"
+
+msgid "Course progress"
+msgstr "ความคืบหน้าของหลักสูตร"
+
+msgid "Discussion"
+msgstr "การอภิปราย"
+
+msgid "Download all lessons"
+msgstr "ดาวน์โหลดบทเรียนทั้งหมด"
+
+msgid "Download this PDF to your device"
+msgstr "ดาวน์โหลด PDF นี้ไปยังอุปกรณ์ของคุณ"
+
+msgid "Downloaded"
+msgstr "ดาวน์โหลดแล้ว"
+
+msgid "Explore a range of courses to suit your needs, expertise, and interests"
+msgstr "สำรวจหลักสูตรที่หลากหลายเพื่อให้เหมาะกับความต้องการ ความเชี่ยวชาญ และความสนใจของคุณ"
+
+msgid "extend"
+msgstr "ขยาย"
+
+msgid "Extend your knowledge"
+msgstr "เพิ่มพูนความรู้ของคุณ"
+
+msgid "Find and check all correct answers and uncheck incorrect answers"
+msgstr "ค้นหาและตรวจสอบคำตอบที่ถูกต้องทั้งหมดและยกเลิกการเลือกคำตอบที่ไม่ถูกต้อง"
+
+msgid "Finish"
+msgstr "เสร็จสิ้น"
+
+msgid "Flag as inappropriate"
+msgstr "แจ้งว่าไม่เหมาะสม"
+
+msgid "Forgot username or password?"
+msgstr "ลืมชื่อผู้ใช้หรือรหัสผ่าน?"
+
+msgid "Go home"
+msgstr "กลับบ้าน"
+
+msgid "Good"
+msgstr "ดี"
+
+msgid "Good job!"
+msgstr "ทำได้ดีมาก!"
+
+msgid "Great"
+msgstr "ดีมาก"
+
+msgid "Great job!"
+msgstr "ทำได้ดีมาก!"
+
+msgid "hide"
+msgstr "ซ่อน"
+
+msgid "Highest score"
+msgstr "คะแนนสูงสุด"
+
+msgid "I need help accessing my account"
+msgstr "ฉันต้องการความช่วยเหลือในการเข้าถึงบัญชีของฉัน"
+
+msgid "I would like to receive notifications"
+msgstr "ฉันต้องการรับการแจ้งเตือน"
+
+msgid "in progress"
+msgstr "กำลังดำเนินการ"
+
+msgid "In the meantime please use Safari."
+msgstr "ในระหว่างนี้ โปรดใช้ Safari"
+
+msgid "Join the discussion"
+msgstr "เข้าร่วมการสนทนา"
+
+msgid "Latest notifications"
+msgstr "การแจ้งเตือนล่าสุด"
+
+msgid "Latest syncs"
+msgstr "ซิงค์ล่าสุด"
+
+msgid "Learning outcomes"
+msgstr "ผลการเรียนรู้"
+
+msgid "Learning statistics"
+msgstr "สถิติการเรียนรู้"
+
+msgid "Lesson"
+msgstr "บทเรียน"
+
+msgid "Lesson Activities"
+msgstr "กิจกรรมบทเรียน"
+
+msgid "Lessons"
+msgstr "บทเรียน"
+
+msgid "lessons completed"
+msgstr "เรียนจบแล้ว"
+
+msgid "lessons remaining"
+msgstr "บทเรียนที่เหลืออยู่"
+
+msgid "Let us know how you feel"
+msgstr "บอกเราหน่อยว่าคุณรู้สึกอย่างไร"
+
+msgid "Login"
+msgstr "เข้าสู่ระบบ"
+
+msgid "Logout"
+msgstr "ออกจากระบบ"
+
+msgid "Make course available offline"
+msgstr "ทำให้หลักสูตรพร้อมใช้งานแบบออฟไลน์"
+
+msgid "Make offline"
+msgstr "ทำแบบออฟไลน์"
+
+msgid "Mark complete"
+msgstr "ทำเครื่องหมายว่าเสร็จสิ้น"
+
+msgid "Mark incomplete"
+msgstr "ทำเครื่องหมายว่าไม่สมบูรณ์"
+
+msgid "Maybe later"
+msgstr "ไว้ก่อน"
+
+msgid "Need help?"
+msgstr "ต้องการความช่วยเหลือ?"
+
+msgid "New"
+msgstr "ใหม่"
+
+msgid "Newest First"
+msgstr "ใหม่สุดลำดับแรก"
+
+msgid "Next"
+msgstr "ถัดไป"
+
+msgid "Next Lesson"
+msgstr "บทเรียนต่อไป"
+
+msgid "No discussions have been started. Please check back again later"
+msgstr "ไม่มีการเริ่มการสนทนา โปรดกลับมาตรวจสอบอีกครั้งในภายหลัง"
+
+msgid "No notifications."
+msgstr "ไม่มีการแจ้งเตือน"
+
+msgid "No WhatsApp?"
+msgstr "ไม่มี WhatsApp?"
+
+msgid "Not great"
+msgstr "ไม่ค่อยดี"
+
+msgid "Not quite!"
+msgstr "ไม่แน่!"
+
+msgid "Notifications"
+msgstr "การแจ้งเตือน"
+
+msgid "Oldest First"
+msgstr "ก่อนเก่าที่สุด"
+
+msgid "Oops"
+msgstr "ขออภัย"
+
+msgid "Overview"
+msgstr "ภาพรวม"
+
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+msgid "plan"
+msgstr "วางแผน"
+
+msgid "Post a comment"
+msgstr "โพสต์ความคิดเห็น"
+
+msgid "Post comment"
+msgstr "แสดงความคิดเห็น"
+
+msgid "Prelearning Survey"
+msgstr "แบบสำรวจก่อนเรียน"
+
+msgid "Preparation tasks & materials"
+msgstr "การเตรียมงานและวัสดุ"
+
+msgid "Read the question more carefully!"
+msgstr "อ่านคำถามให้ละเอียดยิ่งขึ้น!"
+
+msgid "Ready to teach"
+msgstr "พร้อมสอน"
+
+msgid "Really great!"
+msgstr "ดีจริงๆ!"
+
+msgid "Refresh"
+msgstr "รีเฟรช"
+
+msgid "Reply"
+msgstr "ตอบ"
+
+msgid "Resources"
+msgstr "ทรัพยากร"
+
+msgid "Retake Exam"
+msgstr "สอบใหม่"
+
+msgid "Review the exam questions you answered incorrectly"
+msgstr "ทบทวนข้อสอบที่คุณตอบผิด"
+
+msgid "Review your answers"
+msgstr "ทบทวนคำตอบของคุณ"
+
+msgid "Revision notes"
+msgstr "บันทึกการแก้ไข"
+
+msgid "Search"
+msgstr "ค้นหา"
+
+msgid "See less"
+msgstr "ดูน้อยลง"
+
+msgid "See more"
+msgstr "ดูเพิ่มเติม"
+
+msgid "Select your language"
+msgstr "เลือกภาษาของคุณ"
+
+msgid "Send SMS"
+msgstr "ส่ง SMS"
+
+msgid "send us a message"
+msgstr "ส่งข้อความหาเรา"
+
+msgid "Send us a message and we'll help you log in"
+msgstr "ส่งข้อความถึงเราและเราจะช่วยคุณเข้าสู่ระบบ"
+
+msgid "Send WhatsApp"
+msgstr "ส่ง WhatsApp"
+
+msgid "Setup"
+msgstr "การติดตั้ง"
+
+msgid "show"
+msgstr "แสดง"
+
+msgid "Sorry, an unexpected error has occurred."
+msgstr "ขออภัย เกิดข้อผิดพลาดที่ไม่คาดคิด"
+
+msgid "Sorry, we cannot find this site content."
+msgstr "ขออภัย เราไม่พบเนื้อหาไซต์นี้"
+
+msgid "Sorry: This audio is missing."
+msgstr "ขออภัย: เสียงนี้หายไป"
+
+msgid "Sorry: This image is missing."
+msgstr "ขออภัย: ภาพนี้หายไป"
+
+msgid "Sorry: This video is missing."
+msgstr "ขออภัย วิดีโอนี้หายไป"
+
+msgid "Sort by"
+msgstr "เรียงตาม"
+
+msgid "Start Exam"
+msgstr "เริ่มสอบ"
+
+msgid "Start learning"
+msgstr "เริ่มเรียนรู้"
+
+msgid "Start lesson"
+msgstr "เริ่มบทเรียน"
+
+msgid "Start review"
+msgstr "เริ่มรีวิว"
+
+msgid "Submit"
+msgstr "ส่ง"
+
+msgid "Submit answers"
+msgstr "ส่งคำตอบ"
+
+msgid "Take exam"
+msgstr "ทำข้อสอบ"
+
+msgid "Take Exam"
+msgstr "ทำข้อสอบ"
+
+msgid "Take Survey"
+msgstr "ทำการสำรวจ"
+
+msgid "Take the exam now to complete the course \"%1\""
+msgstr "ทำข้อสอบตอนนี้เพื่อจบหลักสูตร \"%1\""
+
+msgid "Take the pre-learning survey to complete the course \"%1\""
+msgstr "ทำแบบสำรวจก่อนการเรียนรู้เพื่อจบหลักสูตร \"%1\""
+
+msgid "teach"
+msgstr "สั่งสอน"
+
+msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
+msgstr "ขอบคุณสำหรับความคิดเห็นของคุณ ความคิดเห็นของคุณมีความสำคัญต่อเราและเรากำลังทำงานอย่างเต็มที่เพื่อปรับปรุงประสบการณ์ของคุณ"
+
+msgid "Thanks so much"
+msgstr "ขอบคุณมาก"
+
+msgid "There are no comments yet. Be the first to contribute to the conversation! Add a comment above."
+msgstr "ยังไม่มีความคิดเห็น เป็นคนแรกที่มีส่วนร่วมในการสนทนา! เพิ่มความคิดเห็นด้านบน"
+
+msgid "There are no courses yet. Check back soon!"
+msgstr "ยังไม่มีหลักสูตร กลับมาตรวจสอบเร็ว ๆ นี้!"
+
+msgid "There are no lessons yet in this course"
+msgstr "ยังไม่มีบทเรียนในหลักสูตรนี้"
+
+msgid "There are no resources yet. Check back soon!"
+msgstr "ยังไม่มีทรัพยากร กลับมาตรวจสอบเร็ว ๆ นี้!"
+
+msgid "There was a problem downloading the content"
+msgstr "เกิดปัญหาในการดาวน์โหลดเนื้อหา"
+
+#. message for what percent a user must score to pass the exam
+msgid "To pass this exam you need to score <strong>%1% or higher</strong>"
+msgstr "หากต้องการผ่านการสอบนี้ คุณต้องได้คะแนน <strong>%1% ขึ้นไป</strong>"
+
+msgid "To save your progress"
+msgstr "เพื่อบันทึกความคืบหน้าของคุณ"
+
+msgid "Try again"
+msgstr "ลองอีกครั้ง"
+
+msgid "Try again later or reconnect to your network to start interacting with your colleagues"
+msgstr "ลองอีกครั้งในภายหลังหรือเชื่อมต่อกับเครือข่ายของคุณเพื่อเริ่มโต้ตอบกับเพื่อนร่วมงานของคุณ"
+
+msgid "Username"
+msgstr "ชื่อผู้ใช้"
+
+msgid "View all tips"
+msgstr "ดูคำแนะนำทั้งหมด"
+
+msgid "View full screen"
+msgstr "ดูแบบเต็มหน้าจอ"
+
+msgid "View Resources"
+msgstr "ดูแหล่งข้อมูล"
+
+msgid "We cannot reach the internet, you may be offline"
+msgstr "เราเข้าอินเตอร์เน็ตไม่ได้ คุณอาจออฟไลน์อยู่"
+
+msgid "We value your feedback"
+msgstr "เราให้ความสำคัญกับความคิดเห็นของคุณ"
+
+msgid "We value your feedback and all feedback is confidential"
+msgstr "เราให้ความสำคัญกับความคิดเห็นของคุณและข้อเสนอแนะทั้งหมดเป็นความลับ"
+
+msgid "We value your feedback and all feedback is confidential."
+msgstr "เราให้ความสำคัญกับความคิดเห็นของคุณและข้อเสนอแนะทั้งหมดเป็นความลับ"
+
+msgid "We're having trouble fetching what you need right now, try refreshing this page."
+msgstr "เรากำลังประสบปัญหาในการดึงข้อมูลสิ่งที่คุณต้องการในขณะนี้ ลองรีเฟรชหน้านี้"
+
+msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
+msgstr "พวกเราขอโทษ! เรายังคงเพิ่มการรองรับ Asteroid บน Chrome ใน iOS"
+
+msgid "Well done, keep it up!"
+msgstr "ทำได้ดีมาก ทำต่อไป!"
+
+msgid "Whoops! Something has gone wrong"
+msgstr "อ๊ะ! มีบางอย่างผิดพลาดไป"
+
+msgid "Wrap up"
+msgstr "สรุป"
+
+msgid "You are offline!"
+msgstr "คุณออฟไลน์อยู่!"
+
+msgid "You are online!"
+msgstr "คุณออนไลน์อยู่!"
+
+#. message when user did not pass exam
+msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can review your answers, retake this exam now, or finish it later."
+msgstr "คุณไม่ผ่านการประเมินนี้เนื่องจากคุณทำคะแนนได้เพียง %1% และคุณต้องถึง %2% จึงจะผ่าน คุณสามารถตรวจสอบคำตอบ ทำแบบทดสอบใหม่ตอนนี้ หรือทำให้เสร็จในภายหลัง"
+
+msgid "You have completed the pre-learning survey and you can now keep progressing your learning."
+msgstr "คุณทำแบบสำรวจก่อนการเรียนรู้เสร็จสิ้นแล้ว และตอนนี้คุณสามารถก้าวหน้าในการเรียนรู้ต่อไปได้"
+
+msgid "You have the opportunity to retake the exam now and achieve a successful outcome. Alternatively you can return to the course."
+msgstr "คุณมีโอกาสที่จะสอบใหม่ในขณะนี้และบรรลุผลสำเร็จ หรือคุณสามารถกลับไปที่หลักสูตร"
+
+#. message on completion of a lesson %1 is replaced by the lesson title
+msgid "You just completed the lesson \"%1\""
+msgstr "คุณเพิ่งเสร็จสิ้นบทเรียน \"%1\""
+
+msgid "You need to be logged in to use this feature"
+msgstr "คุณต้องเข้าสู่ระบบเพื่อใช้คุณสมบัตินี้"
+
+msgid "You need to be online to use the discussion tool"
+msgstr "คุณต้องออนไลน์เพื่อใช้เครื่องมือสนทนา"
+
+msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
+msgstr "คุณสอบผ่านด้วยคะแนน %1% หากคุณต้องการปรับปรุงคะแนนของคุณ คุณสามารถทำข้อสอบนี้ซ้ำได้"
+
+msgid "You've completed the course"
+msgstr "คุณเรียนจบหลักสูตรแล้ว"
+
+msgid "You've just completed this set of tips. You can now finish and return to the learning activity."
+msgstr "คุณเพิ่งเสร็จสิ้นชุดคำแนะนำนี้ เสร็จสิ้นและกลับสู่กิจกรรมการเรียนรู้ได้แล้ว"
+
+msgid "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?"
+msgstr "คุณกำลังจะเริ่มต้นการสอบของหลักสูตร คุณสัญญาไหมว่าคุณจะสอบเสร็จด้วยตัวเองโดยไม่ได้รับความช่วยเหลือจากใครเลย?"
+
+msgid "Your browser does not support the audio element."
+msgstr "เบราว์เซอร์ของคุณไม่สนับสนุนองค์ประกอบเสียง"
+
+msgid "Your browser does not support the video element."
+msgstr "เบราว์เซอร์ของคุณไม่รองรับองค์ประกอบวิดีโอ"
+
+msgid "Your lessons"
+msgstr "บทเรียนของคุณ"
+
+msgid "Your profile"
+msgstr "โปรไฟล์ของคุณ"
+
+msgid "Your settings"
+msgstr "การตั้งค่าของคุณ"
+
+msgid "Your username or password is incorrect"
+msgstr "ชื่อผู้ใช้หรือรหัสผ่านของคุณไม่ถูกต้อง"

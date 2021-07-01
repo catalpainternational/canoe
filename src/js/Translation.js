@@ -1,6 +1,7 @@
 import gettext_js from "gettext.js";
 import tetumTranslations from "../../locale/tet/bero.json";
 import frenchTranslations from "../../locale/fr/bero.json";
+import thaiTranslations from "../../locale/th/bero.json";
 
 import { getLanguage, changeLanguage, subscribeToStore } from "ReduxImpl/Interface";
 
@@ -13,6 +14,7 @@ export const AVAILABLE_LANGUAGES = {
     en: "English",
     fr: "Francais",
     tet: "Tetum",
+    th: "ไทย",
 };
 export const SUPPORTED_LANG_CODES = process.env.LANGUAGES;
 
@@ -47,6 +49,7 @@ Object.values(tetumTranslations)
 
 i18n.loadJSON(tetumTranslations, "messages");
 i18n.loadJSON(frenchTranslations, "messages");
+i18n.loadJSON(thaiTranslations, "messages");
 
 export function gettext(msgid /* , extra */) {
     return i18n.gettext.apply(i18n, [msgid].concat(Array.prototype.slice.call(arguments, 1)));

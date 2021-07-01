@@ -442,7 +442,7 @@ msgstr ""
 msgid "See more"
 msgstr ""
 
-#: src/riot/Components/LanguageSelector.riot.html:21
+#: src/riot/Components/LanguageSelector.riot.html:23
 msgid "Select your language"
 msgstr ""
 
