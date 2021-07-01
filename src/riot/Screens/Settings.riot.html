@@ -40,9 +40,9 @@
                 { TRANSLATIONS.launchStorageManager() }
             </button>
 
-            <div>
-                <span>Synchronisation Status</span>
-                <span>{ state.syncStatus }</span>
+            <label for="sync-state">{ TRANSLATIONS.syncTitle() }</label>
+            <div id="sync-state">
+                <span>{ state.syncState }</span>
             </div>
             <Logos></Logos>
         </div>
@@ -88,6 +88,7 @@
                 login: () => gettext("Login"),
                 launchWiFiPicker: () => gettext("Launch WiFi Picker"),
                 launchStorageManager: () => gettext("Launch storage manager"),
+                syncTitle: () => gettext("Synchronisation"),
                 syncOff: () => gettext("Inbound synchronisation not started"),
                 syncOn: () => gettext("Inbound synchronisation in progress"),
                 syncCompleted: () => gettext("Inbound synchronisation completed"),
@@ -175,10 +176,9 @@
 
             /** Perform the 'inbound' synchronisation of everything made available by other peers */
             performInboundSync() {
-                this.state.syncState = this.TRANSLATIONS.syncOn();
-                CacheUtilties.injectAll().then(() => {
-                    this.state.syncState = this.TRANSLATIONS.syncCompleted();
-                    this.update();
+                this.update({syncState: this.TRANSLATIONS.syncOn()});
+                CacheUtilities.injectAll().then(() => {
+                    this.update({syncState: this.TRANSLATIONS.syncCompleted()});
                 });
             },
 
@@ -188,7 +188,7 @@
 
             async onMounted() {
                 await CacheUtilities.unlock();
-                this.performSync();
+                this.performInboundSync();
 
                 this.refreshSettings();
             },
