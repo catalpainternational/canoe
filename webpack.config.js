@@ -51,6 +51,7 @@ module.exports = env => {
     processEnvironment["process.env.SITE_NAME"] = JSON.stringify(
         projectConfiguration.SITE_NAME
     );
+    processEnvironment["process.env.LANGUAGES"] = JSON.stringify(projectConfiguration.LANGUAGES);
 
     const baseConfig = {
         context: __dirname,
