@@ -4,7 +4,7 @@
             <a class="top-icon left has-circle" href="#settings">
                 <span class="arrow"></span>
             </a>
-            <h4>{ TRANSLATIONS.sync() }</h4>
+            <h4>{ TRANSLATIONS.syncTitle() }</h4>
         </TopMenu>
 
         <div class="content-wrapper">
@@ -13,10 +13,8 @@
 
                 <div class="sync-status">
                     <div>
-                        <h4 if="{state.syncStatus === 'outdated'}">{ TRANSLATIONS.foundNew() }</h4>
-                        <h4 if="{state.syncStatus === 'syncing'}">{ TRANSLATIONS.syncing() }</h4>
-                        <h4 if="{state.syncStatus === 'updated'}">{ TRANSLATIONS.current() }</h4>
-                        <!-- TODO I don't know where we get this date -->
+                        <h4>{ syncStatusText }</h4>
+                        <!-- TODO Get this date from the Manifest -->
                         <p>{ new Date().toDateString() }</p>
                     </div>
                     <div if="{state.syncStatus === 'outdated' || state.syncStatus === 'syncing'}"
@@ -86,7 +84,7 @@
             <div class="group storage-panel">
                 <h2>{ TRANSLATIONS.storage() }</h2>
                 <div if="{usedSpacePercentage}" class="percentage-bar-container">
-                    <div class="percentage-bar {usedSpacePercentage > 50 && usedSpacePercentage <= 90 ? 'orange' : ''} {usedSpacePercentage > 90 ? 'red' : ''}"
+                    <div class="percentage-bar {usedSpacePercentageColor}"
                         style="width: {usedSpacePercentage}%">
                     </div>
                 </div>
@@ -151,8 +149,13 @@
                 // mocked data below
                 deviceId: '2198734892374',
                 peers: ['123456789','328947230','213897472','890374185','5','dsa-r34jkl','1asbd','2dhdflgiam'],
-                // could be 'outdated', 'syncing', 'updated' (defines the text & loading animation logic)
-                syncStatus: 'outdated',
+                // could be "outdated" or "current" - determined from the Manifest
+                contentStatus: "outdated",
+                // We will know if 'content' (cache bandles) are outdated from what the Manifest tells us
+                // We will not know whether updates are available for them (totally depends on our peers sharing stuff)
+                // We will know whether everything that has been shared by others has been loaded in to our caches
+                // could be "syncOff", "syncOn" (in progress), "syncCompleted"
+                syncStatus: "syncOff",
             },
 
             components: {
@@ -161,11 +164,14 @@
 
             TRANSLATIONS: {
                 start: () => gettext("Start lesson"),
-                sync: () => gettext("Offline sync"),
+                syncTitle: () => gettext("Offline sync"),
                 status: () => gettext("Sync status"),
-                foundNew: () => gettext("We've found new files"),
-                syncing: () => gettext("Syncing files now"),
-                current: () => gettext("You're all up to date"),
+                // It's not 'files' that are outdated, it's 'content'
+                contentOutdated: () => gettext("Some of your content is outdated"),
+                contentCurrent: () => gettext("You're all up to date"),
+                syncOff: () => gettext("Waiting to start syncing"),
+                syncOn: () => gettext("Getting updated content now"),
+                syncCompleted: () => gettext("Content updated"), // There is no gaurantee that the user is 'all' up to date
                 refresh: () => gettext("Refresh"),
                 avatar: () => gettext("Your sync avatar"),
                 peers: () => gettext("Recently seen peers"),
@@ -202,6 +208,10 @@
                 return this.mapAvatar(this.state.deviceId);
             },
 
+            get syncStatusText() {
+                return this.TRANSLATIONS[this.state.syncStatus]();
+            },
+
             get mappedPeers() {
                 // TODO the actual peers
                 const peers = this.state.peers;
@@ -210,7 +220,16 @@
 
             get usedSpacePercentage() {
                 // TODO the percentage of device storage used
-                return '30';
+                return 30;
+            },
+
+            get usedSpacePercentageColor() {
+                if (this.usedSpacePercentage <= 50) {
+                    return "";
+                } else if (this.usedSpacePercentage <= 90) {
+                    return "orange";
+                }
+                return "red";
             },
 
             get connection() {
@@ -223,8 +242,25 @@
                 }
             },
 
+            /**
+             * Perform the 'inbound' synchronisation of everything made available by other peers
+             * This lets us know when syncMe's inbound work is done
+             */
+            performInboundSync() {
+                this.update({syncStatus: "syncOn"});
+                // CacheUtilities.injectAll().then(() => {
+                    this.update({syncStatus: "syncCompleted"});
+                // });
+            },
+
+            onBeforeMount() {
+                this.state.syncStatus = "syncOff";
+            },
+
             async onMounted() {
                 await CacheUtilities.unlock();
+                await this.syncMe();
+                this.performInboundSync();
                 await this.appelflapStatus();
             },
 
@@ -244,19 +280,17 @@
                 this.update({statusListings: this.state.appDataStatus.itemListings});
             },
 
+            /**
+             * Share what things we have with our peers - 'outbound' sync
+             * and subscribe to everything that we want
+             * */
             async syncMe() {
-                this.update({syncStatus: 'syncing'})
-                // setTimeout(() => {
-                //     // TODO this timeout is for testing / visualising in not-android. delete.
-                //     this.update({syncStatus: 'updated'})
-                // }, 3000)
-
-                // Identify what needs to be subscribed to, and what needs to be published
                 const appDataStatus = this.state.appDataStatus;
-                const syncStatus = await appDataStatus.SyncAll();
-
-                // window.alert(`Published: ${JSON.stringify(syncStatus)}`);
-                this.update({syncStatus: 'updated'})
+                // Identify what needs to be subscribed to, and what needs to be published
+                // AppDataStatus checks the certChain to make sure that this user can publish
+                // and AppelflapConnect double checks this
+                // It's possible that we may just want to fire and forget this
+                const syncStatusList = await appDataStatus.SyncAll();
             },
 
             async launchWiFiPicker() {
