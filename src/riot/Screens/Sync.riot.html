@@ -248,9 +248,9 @@
              */
             performInboundSync() {
                 this.update({syncStatus: "syncOn"});
-                // CacheUtilities.injectAll().then(() => {
+                CacheUtilities.injectAll().then(() => {
                     this.update({syncStatus: "syncCompleted"});
-                // });
+                });
             },
 
             onBeforeMount() {
