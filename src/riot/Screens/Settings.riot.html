@@ -191,10 +191,6 @@
             onMounted() {
                 this.refreshSettings();
             },
-
-            async onUnmounted() {
-                await CacheUtilities.lock();
-            },
         };
     </script>
 </Settings>
