@@ -8,7 +8,8 @@ export const AF_LOCALHOSTURI = "http://localhost";
 export const AF_API_PREFIX = "appelflap";
 
 export const AF_ENDPOINT = `moz-extension://${AF_API_PREFIX}`;
-export const AF_PROPERTIES = "serverinfo.json";
+export const AF_SERVER_PROPERTIES = "serverinfo.json";
+export const AF_PEER_PROPERTIES = "peerid.json";
 
 export const AF_EIKEL_API = `${AF_API_PREFIX}/eikel`;
 export const AF_EIKEL_META_API = `${AF_API_PREFIX}/eikel-meta`;
@@ -39,7 +40,11 @@ export const AF_CERTCHAIN_LENGTH_HEADER = "X-Appelflap-Chain-Length";
 export const APPELFLAPCOMMANDS = {
     //#region Applelflap administration
     getEndpointProperties: {
-        commandPath: `${AF_ENDPOINT}/${AF_PROPERTIES}`,
+        commandPath: `${AF_ENDPOINT}/${AF_SERVER_PROPERTIES}`,
+        method: "GET",
+    },
+    getPeerProperties: {
+        commandPath: `${AF_ENDPOINT}/${AF_PEER_PROPERTIES}`,
         method: "GET",
     },
     //#endregion
