@@ -1,19 +1,18 @@
-# 
+#
 # Translators:
 # Peter Coward <peter@catalpa.io>, 2021
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Bero\n"
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Last-Translator: Peter Coward <peter@catalpa.io>, 2021\n"
 "Language-Team: French (https://www.transifex.com/catalpa/teams/108836/fr/)\n"
-"Content-Type: text/plain; charset=UTF-8\n"
 "Language: fr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#. warns the user that this site ( name goes in %1 ) will not be able to send
-#. you notifications if you turn this off
+#. warns the user that this site ( name goes in %1 ) will not be able to send you notifications if you turn this off
 #: src/riot/Screens/Settings.riot.html:127
 msgid ""
 "%1 uses notifications to send you useful course updates and reminders. If "
@@ -21,8 +20,8 @@ msgid ""
 "Are you sure you want to turn off notifications?"
 msgstr ""
 "%1 uses notifications pour vous envoyer des mises à jour et des rappels de "
-"cours utiles. Si vous désactivez les notifications, vous ne recevrez pas ces"
-" informations sur le cours. Êtes-vous sûr de vouloir désactiver les "
+"cours utiles. Si vous désactivez les notifications, vous ne recevrez pas ces "
+"informations sur le cours. Êtes-vous sûr de vouloir désactiver les "
 "notifications ?"
 
 #: src/riot/WagtailPages/CoursePage.riot.html:326
@@ -163,11 +162,10 @@ msgid "Downloaded"
 msgstr "Téléchargé"
 
 #: src/riot/WagtailPages/AllCoursesList.riot.html:78
-msgid ""
-"Explore a range of courses to suit your needs, expertise, and interests"
+msgid "Explore a range of courses to suit your needs, expertise, and interests"
 msgstr ""
-"Explorez un éventail de cours pour répondre à vos besoins, à vos compétences"
-" et à vos intérêts"
+"Explorez un éventail de cours pour répondre à vos besoins, à vos compétences "
+"et à vos intérêts"
 
 #: src/riot/Teaching/ActivityPage.riot.html:102
 msgid "extend"
@@ -235,6 +233,13 @@ msgstr "J'ai besoin d'aide pour accéder à mon compte"
 #: src/riot/Screens/Settings.riot.html:71
 msgid "I would like to receive notifications"
 msgstr "Je souhaite recevoir des notifications"
+
+#: src/riot/Lesson/ExamResults.riot.html:87
+#, fuzzy
+msgid "If you want to improve your score you can retake this exam."
+msgstr ""
+"Vous avez réussi cet examen avec un score de %1%. Si vous voulez améliorer "
+"votre score, vous pouvez repasser cet examen."
 
 #: src/riot/Screens/Profile.riot.html:76
 msgid "in progress"
@@ -441,8 +446,7 @@ msgstr "Examen de rattrapage"
 #: src/riot/Lesson/ExamReview.riot.html:87
 msgid "Review the exam questions you answered incorrectly"
 msgstr ""
-"Revoyez les questions de l'examen auxquelles vous avez répondu "
-"incorrectement"
+"Revoyez les questions de l'examen auxquelles vous avez répondu incorrectement"
 
 #: src/riot/Lesson/ExamResults.riot.html:42
 msgid "Review your answers"
@@ -464,7 +468,7 @@ msgstr "Voir moins"
 msgid "See more"
 msgstr "Voir plus"
 
-#: src/riot/Components/LanguageSelector.riot.html:21
+#: src/riot/Components/LanguageSelector.riot.html:23
 msgid "Select your language"
 msgstr "Choisissez votre langue"
 
@@ -562,7 +566,8 @@ msgstr "Passez l'examen maintenant pour terminer le cours \"%1\""
 
 #: src/riot/Lesson/LessonComplete.riot.html:112
 msgid "Take the pre-learning survey to complete the course \"%1\""
-msgstr "Répondez à l'enquête de pré-apprentissage pour compléter le cours \"%1\""
+msgstr ""
+"Répondez à l'enquête de pré-apprentissage pour compléter le cours \"%1\""
 
 #: src/riot/Teaching/ActivityPage.riot.html:101
 msgid "teach"
@@ -570,9 +575,10 @@ msgstr "apprendre"
 
 #: src/riot/Lesson/LessonFeedback.riot.html:97
 #: src/riot/Teaching/ActivityFeedback.riot.html:97
+#, fuzzy
 msgid ""
-"Thanks for your feedback. Your opinion matters to us and we are working hard"
-" to improve your experience"
+"Thanks for your feedback. Your opinion matters to us and we are working hard "
+"to improve your experience."
 msgstr ""
 "Merci pour vos commentaires. Votre opinion compte pour nous et nous "
 "travaillons dur pour améliorer votre expérience"
@@ -610,8 +616,8 @@ msgstr "Il y a eu un problème pour télécharger le contenu"
 #: src/riot/Lesson/HonorCode.riot.html:74
 msgid "To pass this exam you need to score <strong>%1% or higher</strong>"
 msgstr ""
-"Pour réussir cet examen, vous devez obtenir un score de <strong>%1% ou "
-"plus</strong>"
+"Pour réussir cet examen, vous devez obtenir un score de <strong>%1% ou plus</"
+"strong>"
 
 #: src/riot/Components/GuestBanner.riot.html:20
 msgid "To save your progress"
@@ -656,16 +662,12 @@ msgstr ""
 msgid "We value your feedback"
 msgstr "Nous apprécions vos commentaires"
 
-#: src/riot/Teaching/ActivityFeedback.riot.html:93
-msgid "We value your feedback and all feedback is confidential"
-msgstr ""
-"Nous apprécions vos commentaires et tous les commentaires sont confidentiels"
-
 #: src/riot/Lesson/LessonFeedback.riot.html:93
-msgid "We value your feedback and all feedback is confidential."
+#: src/riot/Teaching/ActivityFeedback.riot.html:93
+#, fuzzy
+msgid "We value your input and all feedback is confidential."
 msgstr ""
-"Nous apprécions vos commentaires et tous les commentaires sont "
-"confidentiels."
+"Nous apprécions vos commentaires et tous les commentaires sont confidentiels."
 
 #: src/riot/Components/HandleError.riot.html:22
 msgid ""
@@ -703,10 +705,10 @@ msgid "You are online!"
 msgstr "Vous êtes en ligne !"
 
 #. message when user did not pass exam
-#: src/riot/Lesson/ExamResults.riot.html:90
+#: src/riot/Lesson/ExamResults.riot.html:94
 msgid ""
-"You did not pass this assessment because you only scored %1% and you need to"
-" reach %2% to pass. You can review your answers, retake this exam now, or "
+"You did not pass this assessment because you only scored %1% and you need to "
+"reach %2% to pass. You can review your answers, retake this exam now, or "
 "finish it later."
 msgstr ""
 "Vous n'avez pas réussi cette évaluation car vous n'avez obtenu que %1% et "
@@ -743,12 +745,8 @@ msgid "You need to be online to use the discussion tool"
 msgstr "Vous devez être en ligne pour utiliser l'outil de discussion"
 
 #: src/riot/Lesson/ExamResults.riot.html:82
-msgid ""
-"You passed this exam with a score of %1%. If you want to improve your score "
-"you can retake this exam."
+msgid "You passed this exam with a score of %1%."
 msgstr ""
-"Vous avez réussi cet examen avec un score de %1%. Si vous voulez améliorer "
-"votre score, vous pouvez repasser cet examen."
 
 #: src/riot/Lesson/ExamResults.riot.html:38
 msgid "You've completed the course"
@@ -756,8 +754,8 @@ msgstr "Vous avez terminé le cours"
 
 #: src/riot/Lesson/LessonComplete.riot.html:65
 msgid ""
-"You've just completed this set of tips. You can now finish and return to the"
-" learning activity."
+"You've just completed this set of tips. You can now finish and return to the "
+"learning activity."
 msgstr ""
 "Vous venez de terminer cette série de conseils. Vous pouvez maintenant "
 "terminer et retourner à l'activité d'apprentissage."
@@ -793,3 +791,15 @@ msgstr "Vos paramètres"
 #: src/riot/Components/LoginForm.riot.html:57
 msgid "Your username or password is incorrect"
 msgstr "Votre nom d'utilisateur ou votre mot de passe est incorrect"
+
+#~ msgid ""
+#~ "Thanks for your feedback. Your opinion matters to us and we are working "
+#~ "hard to improve your experience"
+#~ msgstr ""
+#~ "Merci pour vos commentaires. Votre opinion compte pour nous et nous "
+#~ "travaillons dur pour améliorer votre expérience"
+
+#~ msgid "We value your feedback and all feedback is confidential"
+#~ msgstr ""
+#~ "Nous apprécions vos commentaires et tous les commentaires sont "
+#~ "confidentiels"
