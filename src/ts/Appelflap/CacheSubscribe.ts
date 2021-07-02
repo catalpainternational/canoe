@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { TBundles } from "../Types/BundleTypes";
 import { TSubscriptions } from "../Types/CacheTypes";
 import { AppelflapConnect } from "./AppelflapConnect";
 
@@ -28,10 +29,10 @@ export class CacheSubscribe {
     /**
      * Get a list of all bundles that are 'injectable' into the cache in response to Subscriptions
      */
-    static async injectables(): Promise<string> {
+    static async injectables(): Promise<TBundles> {
         if (AppelflapConnect.getInstance()) {
             return await AppelflapConnect.getInstance()!.injectables();
         }
-        return "[]";
+        return { bundles: [] };
     }
 }

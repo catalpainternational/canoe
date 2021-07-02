@@ -298,14 +298,16 @@ export class AppelflapConnect {
 
     /**
      * Get a list of all bundles that are 'injectable' into the cache in response to Subscriptions
+     * @remarks this corresponds with @see getSubscriptions which are the bundles that have been subscribed to
      */
-    public injectables = async (): Promise<string> => {
+    public injectables = async (): Promise<TBundles> => {
         const { commandPath } = APPELFLAPCOMMANDS.getInjectables;
 
         logger.info(
             "Identifying all bundles ready for injection into the browser's cache"
         );
-        return (await this.performCommand(commandPath)) as Promise<string>;
+        const bundles = await this.performCommand(commandPath);
+        return bundles as Promise<TBundles>;
     };
     //#endregion
 
