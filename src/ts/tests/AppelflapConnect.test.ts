@@ -17,7 +17,7 @@ import {
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_LOCALHOSTURI, AF_ENDPOINT, AF_SERVER_PROPERTIES, AF_EIKEL_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT_SOFT, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "ts/Appelflap/AppelflapRouting";
+import { AF_LOCALHOSTURI, AF_ENDPOINT, AF_SERVER_PROPERTIES, AF_PEER_PROPERTIES, AF_EIKEL_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT_SOFT, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "ts/Appelflap/AppelflapRouting";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -132,34 +132,6 @@ test("Cache: unlock", async (t: any) => {
 
     fetchMock.delete(testUri, authFailureResponse, { overwriteRoutes: true });
     const result = await t.throwsAsync(afc.unlock());
-    t.is(result.message, authFailureResponse.statusText);
-
-    fetchMock.reset();
-});
-
-test("Cache: status", async (t: any) => {
-    const afc = t.context.afc as AppelflapConnect;
-    const authFailureResponse = t.context.authFailureResponse as Response;
-
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_STATUS}`;
-    const testResponse = {
-        "staged-caches": {
-            "some-web-origin": { "some-cache-name": { Size: 9000 } },
-        },
-        "disk-free": 9000,
-    };
-    const successResponse = new Response(JSON.stringify(testResponse), {
-        status: 200,
-        statusText: "Ok",
-        headers: { "Content-Type": "application/json" },
-    });
-
-    fetchMock.get(testUri, successResponse);
-    const successResult = await afc.getCacheStatus();
-    t.deepEqual(successResult, testResponse);
-
-    fetchMock.get(testUri, authFailureResponse, { overwriteRoutes: true });
-    const result = await t.throwsAsync(afc.getCacheStatus());
     t.is(result.message, authFailureResponse.statusText);
 
     fetchMock.reset();
@@ -550,6 +522,28 @@ test.skip("Cache: Delete Package Certificate", async (t: any) => {
     fetchMock.delete(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.deleteCertificate();
     t.is(successResult, "ok");
+
+    fetchMock.reset();
+});
+
+test("Appelflap: peer ID", async (t: any) => {
+    const afc = t.context.afc as AppelflapConnect;
+
+    const testUri = `${AF_ENDPOINT}/${AF_PEER_PROPERTIES}`;
+    const testResponse = {
+        "ID": 3657874,
+        "friendly_ID": "qZdP",
+        "palette": "23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+    };
+    const successResponse = new Response(JSON.stringify(testResponse), {
+        status: 200,
+        statusText: "Ok",
+        headers: { "Content-Type": "application/json" },
+    });
+
+    fetchMock.get(testUri, successResponse);
+    const successResult = await afc.getPeerProperties();
+    t.deepEqual(successResult, testResponse);
 
     fetchMock.reset();
 });
