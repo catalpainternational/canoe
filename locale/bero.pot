@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: Canoe\n"
+"Project-Id-Version: Bero\n"
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Language: en\n"
 

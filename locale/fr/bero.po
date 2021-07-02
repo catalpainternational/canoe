@@ -1,0 +1,528 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Bero\n"
+"Report-Msgid-Bugs-To: engineering@catalpa.io\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. warns the user that this site ( name goes in %1 ) will not be able to send you notifications if you turn this off
+msgid "%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
+msgstr "%1 uses notifications pour vous envoyer des mises à jour et des rappels de cours utiles. Si vous désactivez les notifications, vous ne recevrez pas ces informations sur le cours. Êtes-vous sûr de vouloir désactiver les notifications ?"
+
+msgid "%1's Course Exam"
+msgstr "Examen du cours de %1"
+
+msgid "%1's Prelearning Survey"
+msgstr "Enquête de pré-apprentissage de %1"
+
+msgid "Activity"
+msgstr "Activité"
+
+msgid "Add a comment"
+msgstr "Ajouter un commentaire"
+
+msgid "Add a reply"
+msgstr "Ajouter une réponse"
+
+msgid "Add to Home Screen"
+msgstr "\"Sur l'écran d'accueil\""
+
+msgid "Add your comments (optional)"
+msgstr "Ajoutez vos commentaires (facultatif)"
+
+msgid "All courses"
+msgstr "Tous les cours"
+
+msgid "Amazing work!"
+msgstr "Un travail incroyable !"
+
+msgid "An error occurred, please try again later"
+msgstr "Une erreur s'est produite, veuillez réessayer plus tard"
+
+msgid "Are you enjoying this lesson?"
+msgstr "Cette leçon vous plaît-elle ?"
+
+msgid "Are you enjoying this teaching plan?"
+msgstr "Ce plan d'enseignement vous plaît-il ?"
+
+msgid "Are you ready to retake your exam?"
+msgstr "Êtes-vous prêt à repasser votre examen ?"
+
+msgid "Back to Course"
+msgstr "Retour au cours"
+
+msgid "Back to Courses"
+msgstr "Retour aux cours"
+
+msgid "Check <strong>all</strong> answers that apply"
+msgstr "Cochez <strong>toutes les</strong> réponses qui s'appliquent"
+
+msgid "Check answer"
+msgstr "Voir la réponse"
+
+msgid "Check answers"
+msgstr "Vérifiez les réponses"
+
+msgid "Checking"
+msgstr "Vérification"
+
+msgid "Code of conduct"
+msgstr "Code de conduite"
+
+msgid "Comment flagged as inappropriate"
+msgstr "Commentaire signalé comme inapproprié"
+
+msgid "Comment posted"
+msgstr "Commentaire publié"
+
+msgid "completed"
+msgstr "terminé"
+
+msgid "Congratulations!"
+msgstr "Félicitations!"
+
+msgid "Continue"
+msgstr "Continuer"
+
+msgid "Continue learning"
+msgstr "Continuer l’apprentissage"
+
+msgid "Continue Learning"
+msgstr "Continuer à apprendre"
+
+msgid "Course exam"
+msgstr "Examen de cours"
+
+msgid "Course progress"
+msgstr "Progression"
+
+msgid "Discussion"
+msgstr "Discussion"
+
+msgid "Download all lessons"
+msgstr "Télécharger toutes les leçons"
+
+msgid "Download this PDF to your device"
+msgstr "Téléchargez ce PDF sur votre appareil"
+
+msgid "Downloaded"
+msgstr "Téléchargé"
+
+msgid "Explore a range of courses to suit your needs, expertise, and interests"
+msgstr "Explorez un éventail de cours pour répondre à vos besoins, à vos compétences et à vos intérêts"
+
+msgid "extend"
+msgstr "étendre"
+
+msgid "Extend your knowledge"
+msgstr "Élargir vos connaissances"
+
+msgid "Find and check all correct answers and uncheck incorrect answers"
+msgstr "Trouvez et vérifiez toutes les réponses correctes et décochez les réponses incorrectes"
+
+msgid "Finish"
+msgstr "Terminer"
+
+msgid "Flag as inappropriate"
+msgstr "Marquer comme inapproprié"
+
+msgid "Forgot username or password?"
+msgstr "Nom d'utilisateur ou mot de passe oublié ?"
+
+msgid "Go home"
+msgstr "Retour à la page d'accueil"
+
+msgid "Good"
+msgstr "Bon"
+
+msgid "Good job!"
+msgstr "Bravo !"
+
+msgid "Great"
+msgstr "Génial"
+
+msgid "Great job!"
+msgstr "Super boulot !"
+
+msgid "hide"
+msgstr "cacher"
+
+msgid "Highest score"
+msgstr "Score le plus élevé"
+
+msgid "I need help accessing my account"
+msgstr "J'ai besoin d'aide pour accéder à mon compte"
+
+msgid "I would like to receive notifications"
+msgstr "Je souhaite recevoir des notifications"
+
+msgid "in progress"
+msgstr "en cours"
+
+msgid "In the meantime please use Safari."
+msgstr "En attendant, veuillez utiliser Safari."
+
+msgid "Join the discussion"
+msgstr "Rejoindre la discussion"
+
+msgid "Latest notifications"
+msgstr "Dernières notifications"
+
+msgid "Latest syncs"
+msgstr "Dernières synchronisations"
+
+msgid "Learning outcomes"
+msgstr "Résultats de l'apprentissage"
+
+msgid "Learning statistics"
+msgstr "Apprendre les statistiques"
+
+msgid "Lesson"
+msgstr "Leçon"
+
+msgid "Lesson Activities"
+msgstr "Activités de cours"
+
+msgid "Lessons"
+msgstr "Leçons"
+
+msgid "lessons completed"
+msgstr "leçons apprises"
+
+msgid "lessons remaining"
+msgstr "leçons restantes"
+
+msgid "Let us know how you feel"
+msgstr "Faites-nous savoir ce que vous ressentez"
+
+msgid "Login"
+msgstr "Connexion"
+
+msgid "Logout"
+msgstr "Déconnexion"
+
+msgid "Make course available offline"
+msgstr "Rendre le cours disponible hors ligne"
+
+msgid "Make offline"
+msgstr "Mettre hors ligne"
+
+msgid "Mark complete"
+msgstr "Marquer terminée"
+
+msgid "Mark incomplete"
+msgstr "Mark incomplet"
+
+msgid "Maybe later"
+msgstr "Peut-être plus tard"
+
+msgid "Need help?"
+msgstr "Besoin d’aide?"
+
+msgid "New"
+msgstr "Nouveau"
+
+msgid "Newest First"
+msgstr "Plus récents en premier"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "Next Lesson"
+msgstr "Leçon suivante"
+
+msgid "No discussions have been started. Please check back again later"
+msgstr "Aucune discussion n'a été lancée. Veuillez vérifier à nouveau plus tard"
+
+msgid "No notifications."
+msgstr "Aucune notification."
+
+msgid "No WhatsApp?"
+msgstr "Pas de WhatsApp ?"
+
+msgid "Not great"
+msgstr "Pas génial"
+
+msgid "Not quite!"
+msgstr "Pas tout à fait !"
+
+msgid "Notifications"
+msgstr "Notifications"
+
+msgid "Oldest First"
+msgstr "Anciens d'abord"
+
+msgid "Oops"
+msgstr "Oups"
+
+msgid "Overview"
+msgstr "Aperçu"
+
+msgid "Password"
+msgstr "Mot de passe"
+
+msgid "plan"
+msgstr "l'abonnement"
+
+msgid "Post a comment"
+msgstr "Laisser un commentaire"
+
+msgid "Post comment"
+msgstr "Publier un commentaire"
+
+msgid "Prelearning Survey"
+msgstr "Enquête de pré-apprentissage"
+
+msgid "Preparation tasks & materials"
+msgstr "Tâches et matériel de préparation"
+
+msgid "Read the question more carefully!"
+msgstr "Lisez la question plus attentivement !"
+
+msgid "Ready to teach"
+msgstr "Prêt à enseigner"
+
+msgid "Really great!"
+msgstr "Vraiment génial !"
+
+msgid "Refresh"
+msgstr "Actualiser"
+
+msgid "Reply"
+msgstr "Répondre"
+
+msgid "Resources"
+msgstr "Ressources"
+
+msgid "Retake Exam"
+msgstr "Examen de rattrapage"
+
+msgid "Review the exam questions you answered incorrectly"
+msgstr "Revoyez les questions de l'examen auxquelles vous avez répondu incorrectement"
+
+msgid "Review your answers"
+msgstr "Passez en revue vos réponses"
+
+msgid "Revision notes"
+msgstr "Notes de révision"
+
+msgid "Search"
+msgstr "Rechercher"
+
+msgid "See less"
+msgstr "Voir moins"
+
+msgid "See more"
+msgstr "Voir plus"
+
+msgid "Select your language"
+msgstr "Choisissez votre langue"
+
+msgid "Send SMS"
+msgstr "Envoyer un SMS"
+
+msgid "send us a message"
+msgstr "envoyez-nous un message"
+
+msgid "Send us a message and we'll help you log in"
+msgstr "Envoyez-nous un message et nous vous aiderons à vous connecter"
+
+msgid "Send WhatsApp"
+msgstr "Envoyer WhatsApp"
+
+msgid "Setup"
+msgstr "Configuration"
+
+msgid "show"
+msgstr "afficher"
+
+msgid "Sorry, an unexpected error has occurred."
+msgstr "Désolé, une erreur inattendue s'est produite."
+
+msgid "Sorry, we cannot find this site content."
+msgstr "Désolé, nous ne pouvons pas trouver le contenu de ce site."
+
+msgid "Sorry: This audio is missing."
+msgstr "Désolé : cet audio est manquant."
+
+msgid "Sorry: This image is missing."
+msgstr "Désolé : cette image est manquante."
+
+msgid "Sorry: This video is missing."
+msgstr "Désolé : cette vidéo est manquante."
+
+msgid "Sort by"
+msgstr "Trier par"
+
+msgid "Start Exam"
+msgstr "Commencer le test"
+
+msgid "Start learning"
+msgstr "Commencez à apprendre"
+
+msgid "Start lesson"
+msgstr "Début de la leçon"
+
+msgid "Start review"
+msgstr "Début de l'examen"
+
+msgid "Submit"
+msgstr "Envoyer"
+
+msgid "Submit answers"
+msgstr "Soumettre les réponses"
+
+msgid "Take exam"
+msgstr "Passer l'examen"
+
+msgid "Take Exam"
+msgstr "Passer l’examen"
+
+msgid "Take Survey"
+msgstr "Répondre à l'enquête"
+
+msgid "Take the exam now to complete the course \"%1\""
+msgstr "Passez l'examen maintenant pour terminer le cours \"%1\""
+
+msgid "Take the pre-learning survey to complete the course \"%1\""
+msgstr "Répondez à l'enquête de pré-apprentissage pour compléter le cours \"%1\""
+
+msgid "teach"
+msgstr "apprendre"
+
+msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
+msgstr "Merci pour vos commentaires. Votre opinion compte pour nous et nous travaillons dur pour améliorer votre expérience"
+
+msgid "Thanks so much"
+msgstr "Merci beaucoup"
+
+msgid "There are no comments yet. Be the first to contribute to the conversation! Add a comment above."
+msgstr "Il n'y a pas encore de commentaires. Soyez le premier à contribuer à la conversation ! Ajoutez un commentaire ci-dessus."
+
+msgid "There are no courses yet. Check back soon!"
+msgstr "Il n'y a pas encore de cours. Revenez bientôt !"
+
+msgid "There are no lessons yet in this course"
+msgstr "Il n'y a pas encore de leçons dans ce cours"
+
+msgid "There are no resources yet. Check back soon!"
+msgstr "Il n'y a pas encore de ressources. Revenez bientôt !"
+
+msgid "There was a problem downloading the content"
+msgstr "Il y a eu un problème pour télécharger le contenu"
+
+#. message for what percent a user must score to pass the exam
+msgid "To pass this exam you need to score <strong>%1% or higher</strong>"
+msgstr "Pour réussir cet examen, vous devez obtenir un score de <strong>%1% ou plus</strong>"
+
+msgid "To save your progress"
+msgstr "Pour sauvegarder votre progression"
+
+msgid "Try again"
+msgstr "Réessayer"
+
+msgid "Try again later or reconnect to your network to start interacting with your colleagues"
+msgstr "Réessayez plus tard ou reconnectez-vous à votre réseau pour commencer à interagir avec vos collègues"
+
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+msgid "View all tips"
+msgstr "Voir tous les conseils"
+
+msgid "View full screen"
+msgstr "Voir en plein écran"
+
+msgid "View Resources"
+msgstr "Voir les ressources"
+
+msgid "We cannot reach the internet, you may be offline"
+msgstr "Nous n'arrivons pas à joindre l'internet, vous êtes peut-être hors ligne"
+
+msgid "We value your feedback"
+msgstr "Nous apprécions vos commentaires"
+
+msgid "We value your feedback and all feedback is confidential"
+msgstr "Nous apprécions vos commentaires et tous les commentaires sont confidentiels"
+
+msgid "We value your feedback and all feedback is confidential."
+msgstr "Nous apprécions vos commentaires et tous les commentaires sont confidentiels."
+
+msgid "We're having trouble fetching what you need right now, try refreshing this page."
+msgstr "Nous avons des difficultés à trouver ce que vous cherchez en ce moment, essayez de rafraîchir cette page."
+
+msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
+msgstr "Nous sommes désolés ! Nous sommes toujours en train d'ajouter la prise en charge d'Astéroïde sur Chrome dans iOS."
+
+msgid "Well done, keep it up!"
+msgstr "Bravo, continuez comme ça !"
+
+msgid "Whoops! Something has gone wrong"
+msgstr "Oups ! Quelque chose a mal tourné"
+
+msgid "Wrap up"
+msgstr "Récapitulation"
+
+msgid "You are offline!"
+msgstr "Vous êtes hors ligne !"
+
+msgid "You are online!"
+msgstr "Vous êtes en ligne !"
+
+#. message when user did not pass exam
+msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can review your answers, retake this exam now, or finish it later."
+msgstr "Vous n'avez pas réussi cette évaluation car vous n'avez obtenu que %1% et vous devez atteindre %2% pour réussir. Vous pouvez revoir vos réponses, repasser cet examen maintenant ou le terminer plus tard."
+
+msgid "You have completed the pre-learning survey and you can now keep progressing your learning."
+msgstr "Vous avez rempli l'enquête de pré-apprentissage et vous pouvez maintenant continuer à progresser dans votre apprentissage."
+
+msgid "You have the opportunity to retake the exam now and achieve a successful outcome. Alternatively you can return to the course."
+msgstr "Vous avez la possibilité de repasser l'examen maintenant et d'obtenir un résultat positif. Sinon, vous pouvez reprendre le cours."
+
+#. message on completion of a lesson %1 is replaced by the lesson title
+msgid "You just completed the lesson \"%1\""
+msgstr "Vous venez de terminer la leçon \"%1\""
+
+msgid "You need to be logged in to use this feature"
+msgstr "Vous devez être connecté pour utiliser cette fonction"
+
+msgid "You need to be online to use the discussion tool"
+msgstr "Vous devez être en ligne pour utiliser l'outil de discussion"
+
+msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
+msgstr "Vous avez réussi cet examen avec un score de %1%. Si vous voulez améliorer votre score, vous pouvez repasser cet examen."
+
+msgid "You've completed the course"
+msgstr "Vous avez terminé le cours"
+
+msgid "You've just completed this set of tips. You can now finish and return to the learning activity."
+msgstr "Vous venez de terminer cette série de conseils. Vous pouvez maintenant terminer et retourner à l'activité d'apprentissage."
+
+msgid "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?"
+msgstr "Vous êtes sur le point de commencer un examen de cours. Promettez-vous de terminer cet examen par vous-même, sans l'aide de personne ?"
+
+msgid "Your browser does not support the audio element."
+msgstr "Votre navigateur ne supporte pas l’élément audio."
+
+msgid "Your browser does not support the video element."
+msgstr "Votre navigateur ne supporte pas l'élément vidéo."
+
+msgid "Your lessons"
+msgstr "Vos leçons"
+
+msgid "Your profile"
+msgstr "Votre profil"
+
+msgid "Your settings"
+msgstr "Vos paramètres"
+
+msgid "Your username or password is incorrect"
+msgstr "Votre nom d'utilisateur ou votre mot de passe est incorrect"
