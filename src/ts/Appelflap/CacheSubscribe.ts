@@ -24,4 +24,14 @@ export class CacheSubscribe {
         }
         return { types: { CACHE: { groups: {} } } };
     }
+
+    /**
+     * Get a list of all bundles that are 'injectable' into the cache in response to Subscriptions
+     */
+    static async injectables(): Promise<string> {
+        if (AppelflapConnect.getInstance()) {
+            return await AppelflapConnect.getInstance()!.injectables();
+        }
+        return "[]";
+    }
 }
