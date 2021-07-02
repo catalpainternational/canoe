@@ -17,7 +17,7 @@ import {
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_LOCALHOSTURI, AF_ENDPOINT, AF_PROPERTIES, AF_EIKEL_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "ts/Appelflap/AppelflapRouting";
+import { AF_LOCALHOSTURI, AF_ENDPOINT, AF_SERVER_PROPERTIES, AF_EIKEL_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT_SOFT, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "ts/Appelflap/AppelflapRouting";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -34,7 +34,7 @@ test.before((t: any) => {
         password: "b",
         port: t.context["testPort"],
     };
-    fetchMock.mock(`${AF_ENDPOINT}/${AF_PROPERTIES}`, endpointProps);
+    fetchMock.mock(`${AF_ENDPOINT}/${AF_SERVER_PROPERTIES}`, endpointProps);
 });
 
 test.beforeEach(async (t: any) => {
@@ -170,7 +170,7 @@ test("Cache: canoe reboot soft", async (t: any) => {
     const successResponse = t.context.successResponse as Response;
     const authFailureResponse = t.context.authFailureResponse as Response;
 
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_ACTION_API}/${AF_REBOOT}`;
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_ACTION_API}/${AF_REBOOT_SOFT}`;
 
     fetchMock.post(testUri, successResponse);
     const successResult = await afc.doRebootSoft();
