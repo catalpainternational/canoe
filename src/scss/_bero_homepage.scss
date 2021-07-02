@@ -4,6 +4,27 @@ BeroHome {
     display: block;
     padding-bottom: 100px;
 
+    .primary-cta {
+        @extend %header-swoop;
+        background-image: url('~img/homepage_illustration.png');
+        background-size: cover;
+        min-height: 45vh;
+        width: 100%;
+
+        > div {
+            padding: 5em 0 4em;
+            width: 75%;
+
+            h3 {
+                letter-spacing: 0.05ch;
+            }
+
+            .btn-primary {
+                margin-top: 1em;
+            }
+        }
+    }
+
     .cards-container {
         display: flex;
         gap: 1em;
@@ -16,6 +37,34 @@ BeroHome {
     }
 
     h4 {
-        margin-left: 1em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        padding: 1em;
+        margin: 1em 0 0;
+        font-size: 0.9em;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 0.05ch;
+
+        .arrow {
+            height: 15px;
+            width: 22px;
+        }
+    }
+
+    .resource-card {
+        display: block;
+        background-color: $white;
+        padding: 0.5em 1em;
+
+        & + .resource-card {
+            margin-top: 3px;
+        }
+
+        h5 {
+            color: $gray-1;
+        }
     }
 }

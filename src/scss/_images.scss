@@ -283,6 +283,10 @@
     @include mask-icons-shared("~img/arrow.svg", contain, $app-accent-color);
     height: 12px;
     width: 17px;
+
+    &.right {
+        transform: scaleX(-1)
+    }
 }
 
 .download {

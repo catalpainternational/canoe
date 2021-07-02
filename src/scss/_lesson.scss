@@ -667,14 +667,6 @@ ExamReview {
         .btn-primary {
             margin-top: 1.5em;
             width: 220px;
-            position: relative;
-
-            .chevron {
-                position: absolute;
-                right: 12px;
-                top: 50%;
-                transform: translateY(-50%);
-            }
         }
 
         a,
