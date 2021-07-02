@@ -23,5 +23,4 @@ module.exports = {
     REQUIRE_LOGIN: false,
     PROFILE_LINK: "profile",
     LANGUAGES: ["en", "fr", "tet"],
-
 };

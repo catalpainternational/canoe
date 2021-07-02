@@ -2,7 +2,11 @@ import gettext_js from "gettext.js";
 import tetumTranslations from "../../locale/tet/bero.json";
 import frenchTranslations from "../../locale/fr/bero.json";
 
-import { getLanguage, changeLanguage, subscribeToStore } from "ReduxImpl/Interface";
+import {
+    getLanguage,
+    changeLanguage,
+    subscribeToStore,
+} from "ReduxImpl/Interface";
 
 var i18n = new gettext_js();
 
@@ -18,12 +22,19 @@ export const SUPPORTED_LANG_CODES = process.env.LANGUAGES;
 
 export function initialiseLanguage() {
     let language = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    const envLanguage = process.env.CANOE_DEFAULT_LANGUAGE;
+
+    // Allow an env-set default language.
+    if (SUPPORTED_LANG_CODES.includes(envLanguage)) {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, envLanguage);
+        language = envLanguage;
+    }
 
     if (!language || !SUPPORTED_LANG_CODES.includes(language)) {
-        // we don't have a valid loacally stored language key
+        // we don't have a valid locally stored language key
         // check all supported languages for a match with browser config
         for (const code of SUPPORTED_LANG_CODES) {
-            if(navigator.language.startsWith(code)) {
+            if (navigator.language.startsWith(code)) {
                 language = code;
                 break;
             }
@@ -49,13 +60,18 @@ i18n.loadJSON(tetumTranslations, "messages");
 i18n.loadJSON(frenchTranslations, "messages");
 
 export function gettext(msgid /* , extra */) {
-    return i18n.gettext.apply(i18n, [msgid].concat(Array.prototype.slice.call(arguments, 1)));
+    return i18n.gettext.apply(
+        i18n,
+        [msgid].concat(Array.prototype.slice.call(arguments, 1))
+    );
 }
 
 export function ngettext(msgid, msgid_plural, n /* , extra */) {
     return i18n.ngettext.apply(
         i18n,
-        [msgid, msgid_plural, n].concat(Array.prototype.slice.call(arguments, 3))
+        [msgid, msgid_plural, n].concat(
+            Array.prototype.slice.call(arguments, 3)
+        )
     );
 }
 
