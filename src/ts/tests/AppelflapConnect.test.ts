@@ -13,6 +13,7 @@ import {
     TPublication,
     TSubscriptions,
 } from "../Types/CacheTypes";
+import { TPeerProperties } from "../Types/PeerTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -530,10 +531,10 @@ test("Appelflap: peer ID", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
 
     const testUri = `${AF_ENDPOINT}/${AF_PEER_PROPERTIES}`;
-    const testResponse = {
-        "ID": 3657874,
-        "friendly_ID": "qZdP",
-        "palette": "23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+    const testResponse: TPeerProperties = {
+        ID: 3657874,
+        friendly_ID: "qZdP",
+        palette: "23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ",
     };
     const successResponse = new Response(JSON.stringify(testResponse), {
         status: 200,
