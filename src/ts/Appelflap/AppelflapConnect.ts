@@ -15,6 +15,7 @@ import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS } from "
 
 import Logger from "../Logger";
 import { inAppelflap } from "../PlatformDetection";
+import { TPeerProperties } from "../Types/PeerTypes";
 
 const logger = new Logger("AppelflapConnect");
 
@@ -26,6 +27,7 @@ export class AppelflapConnect {
         password: string;
         port: number;
     };
+    #peerProperties?: TPeerProperties;
 
     private constructor() {
         logger.log("Singleton created");
@@ -164,29 +166,21 @@ export class AppelflapConnect {
         }
     };
 
+    public getPeerProperties = async (): Promise<TPeerProperties> => {
+        if (!this.#peerProperties) {
+            const { commandPath } = APPELFLAPCOMMANDS.getPeerProperties;
+            logger.info(`Getting peer properties`);
+
+            const response = await fetch(commandPath);
+            this.#peerProperties = await response.json();
+            logger.info("Got peer properties");
+        }
+
+        return this.#peerProperties!;
+    };
+
     public getLargeObjectIndexStatus = async (): Promise<any> => {
         const { commandPath } = APPELFLAPCOMMANDS.getLargeObjectIndexStatus;
-        return await this.performCommand(commandPath);
-    };
-
-    public lock = async (): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.setLock;
-        logger.info(`'Locking' Bero`);
-        return await this.performCommand(commandPath, { method }, "text");
-    };
-
-    public unlock = async (): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.releaseLock;
-        logger.info(`'Unlocking' Bero`);
-        return await this.performCommand(commandPath, { method }, "text");
-    };
-
-    /**
-     * Get the status of the cache from Appelflap
-     * @deprecated No longer available from Appelflap, returns 404
-     */
-    public getCacheStatus = async (): Promise<any> => {
-        const { commandPath } = APPELFLAPCOMMANDS.getCacheStatus;
         return await this.performCommand(commandPath);
     };
     //#endregion
@@ -211,6 +205,29 @@ export class AppelflapConnect {
         const { commandPath, method } =
             APPELFLAPCOMMANDS.doLaunchStorageManager;
         return await this.performCommand(commandPath, { method }, "text");
+    };
+    //#endregion
+
+    //#region Cache Administration
+    public lock = async (): Promise<string> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.setLock;
+        logger.info(`'Locking' Bero`);
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    public unlock = async (): Promise<string> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.releaseLock;
+        logger.info(`'Unlocking' Bero`);
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    /**
+     * Get the status of the cache from Appelflap
+     * @deprecated No longer available from Appelflap, returns 404
+     */
+    public getCacheStatus = async (): Promise<any> => {
+        const { commandPath } = APPELFLAPCOMMANDS.getCacheStatus;
+        return await this.performCommand(commandPath);
     };
     //#endregion
 
