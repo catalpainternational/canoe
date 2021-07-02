@@ -663,7 +663,6 @@ msgstr "Ami apresia ita-nia komentáriu"
 
 #: src/riot/Lesson/LessonFeedback.riot.html:93
 #: src/riot/Teaching/ActivityFeedback.riot.html:93
-#, fuzzy
 msgid "We value your input and all feedback is confidential."
 msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál"
 
