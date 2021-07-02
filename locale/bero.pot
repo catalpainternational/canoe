@@ -216,6 +216,10 @@ msgstr ""
 msgid "I would like to receive notifications"
 msgstr ""
 
+#: src/riot/Lesson/ExamResults.riot.html:87
+msgid "If you want to improve your score you can retake this exam."
+msgstr ""
+
 #: src/riot/Screens/Profile.riot.html:76
 msgid "in progress"
 msgstr ""
@@ -442,7 +446,7 @@ msgstr ""
 msgid "See more"
 msgstr ""
 
-#: src/riot/Components/LanguageSelector.riot.html:21
+#: src/riot/Components/LanguageSelector.riot.html:23
 msgid "Select your language"
 msgstr ""
 
@@ -548,7 +552,7 @@ msgstr ""
 
 #: src/riot/Lesson/LessonFeedback.riot.html:97
 #: src/riot/Teaching/ActivityFeedback.riot.html:97
-msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
+msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience."
 msgstr ""
 
 #: src/riot/Lesson/LessonFeedback.riot.html:101
@@ -619,12 +623,9 @@ msgstr ""
 msgid "We value your feedback"
 msgstr ""
 
-#: src/riot/Teaching/ActivityFeedback.riot.html:93
-msgid "We value your feedback and all feedback is confidential"
-msgstr ""
-
 #: src/riot/Lesson/LessonFeedback.riot.html:93
-msgid "We value your feedback and all feedback is confidential."
+#: src/riot/Teaching/ActivityFeedback.riot.html:93
+msgid "We value your input and all feedback is confidential."
 msgstr ""
 
 #: src/riot/Components/HandleError.riot.html:22
@@ -657,7 +658,7 @@ msgid "You are online!"
 msgstr ""
 
 #. message when user did not pass exam
-#: src/riot/Lesson/ExamResults.riot.html:90
+#: src/riot/Lesson/ExamResults.riot.html:94
 msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can review your answers, retake this exam now, or finish it later."
 msgstr ""
 
@@ -683,7 +684,7 @@ msgid "You need to be online to use the discussion tool"
 msgstr ""
 
 #: src/riot/Lesson/ExamResults.riot.html:82
-msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
+msgid "You passed this exam with a score of %1%."
 msgstr ""
 
 #: src/riot/Lesson/ExamResults.riot.html:38

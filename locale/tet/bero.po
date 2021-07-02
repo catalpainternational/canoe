@@ -9,535 +9,791 @@ msgstr ""
 "Project-Id-Version: Canoe\n"
 "Report-Msgid-Bugs-To: engineering@catalpa.io\n"
 "Last-Translator: Julia da Costa <julia@catalpa.io>, 2020\n"
-"Language-Team: Tetum (Tetun) (https://www.transifex.com/catalpa/teams/108836/tet/)\n"
+"Language-Team: Tetum (Tetun) (https://www.transifex.com/catalpa/teams/108836/"
+"tet/)\n"
 "Language: tet\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. warns the user that this site ( name goes in %1 ) will not be able to send you notifications if you turn this off
-msgid "%1 uses notifications to send you useful course updates and reminders. If you turn off notifications, you will not receive this course information. Are you sure you want to turn off notifications?"
-msgstr "%1 uza sistema notifikasaun hodi haruka atualizasuan no notifikasaun kona-ba kursu ne'ebé util. Se ita dezativa notifikasaun ne'e, ita sei lasimu informasaun kursu ida ne'e. Ita serteza hakarak dezativa notifikasaun ne'e?"
+#: src/riot/Screens/Settings.riot.html:127
+msgid ""
+"%1 uses notifications to send you useful course updates and reminders. If "
+"you turn off notifications, you will not receive this course information. "
+"Are you sure you want to turn off notifications?"
+msgstr ""
+"%1 uza sistema notifikasaun hodi haruka atualizasuan no notifikasaun kona-ba "
+"kursu ne'ebé util. Se ita dezativa notifikasaun ne'e, ita sei lasimu "
+"informasaun kursu ida ne'e. Ita serteza hakarak dezativa notifikasaun ne'e?"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:326
 msgid "%1's Course Exam"
 msgstr "%1's Ezame ba Kursu"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:325
 msgid "%1's Prelearning Survey"
 msgstr ""
 
+#: src/riot/Teaching/TeachTab.riot.html:38
 msgid "Activity"
 msgstr "Hahu Atividade"
 
+#: src/riot/Components/DiscussionThread.riot.html:100
 msgid "Add a comment"
 msgstr ""
 
+#: src/riot/Components/DiscussionComment.riot.html:73
 msgid "Add a reply"
 msgstr ""
 
+#: src/riot/Screens/Settings.riot.html:72
 msgid "Add to Home Screen"
 msgstr "Aumenta ba pájina prinsipál"
 
+#: src/riot/Lesson/LessonFeedback.riot.html:109
+#: src/riot/Teaching/ActivityFeedback.riot.html:109
 msgid "Add your comments (optional)"
 msgstr ""
 
+#: src/riot/WagtailPages/AllCoursesList.riot.html:75
 msgid "All courses"
 msgstr "Lista Kursu Sira"
 
+#: src/riot/Lesson/ExamResults.riot.html:37
 msgid "Amazing work!"
 msgstr "Parabéns! Serbisu diak loos!"
 
+#: src/riot/Components/DiscussionThread.riot.html:105
 msgid "An error occurred, please try again later"
 msgstr ""
 
+#: src/riot/Lesson/LessonFeedback.riot.html:91
 msgid "Are you enjoying this lesson?"
 msgstr "Ita gosta lisaun ne'e?"
 
+#: src/riot/Teaching/ActivityFeedback.riot.html:91
 msgid "Are you enjoying this teaching plan?"
 msgstr "Ita gosta lisaun ne'e?"
 
+#: src/riot/Lesson/ExamReview.riot.html:90
 msgid "Are you ready to retake your exam?"
 msgstr ""
 
+#: src/riot/Lesson/ExamReview.riot.html:93
+#: src/riot/Lesson/HonorCode.riot.html:50
+#: src/riot/Lesson/LessonComplete.riot.html:63
 msgid "Back to Course"
 msgstr "Fila fali ba kursu"
 
+#: src/riot/Lesson/ExamResults.riot.html:39
 msgid "Back to Courses"
 msgstr "Fila fali ba kursu"
 
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:47
 msgid "Check <strong>all</strong> answers that apply"
 msgstr "Cek resposta <strong>hotu</strong> ne’ebeé lo’os"
 
+#: src/riot/Lesson/TestSingleAnswer.riot.html:29
 msgid "Check answer"
 msgstr "Cek resposta"
 
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:50
 msgid "Check answers"
 msgstr "Cek resposta"
 
+#: src/riot/Components/LoginForm.riot.html:60
 msgid "Checking"
 msgstr "Hein lai"
 
+#: src/riot/Lesson/HonorCode.riot.html:44
 msgid "Code of conduct"
 msgstr " Kindut"
 
+#: src/riot/Components/DiscussionThread.riot.html:104
 msgid "Comment flagged as inappropriate"
 msgstr ""
 
+#: src/riot/Components/DiscussionThread.riot.html:103
 msgid "Comment posted"
 msgstr ""
 
+#: src/riot/Screens/Profile.riot.html:77
 msgid "completed"
 msgstr "Kompleta ona"
 
+#: src/riot/Lesson/LessonComplete.riot.html:57
 msgid "Congratulations!"
 msgstr "Parabéns! "
 
+#: src/riot/Lesson/LessonFeedback.riot.html:102
+#: src/riot/Teaching/ActivityFeedback.riot.html:102
 msgid "Continue"
 msgstr "Kontinua"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:181
 #, fuzzy
 msgid "Continue learning"
 msgstr "Kontinua aprende"
 
+#: src/riot/WagtailPages/AllCoursesList.riot.html:76
 msgid "Continue Learning"
 msgstr "Kontinua aprende"
 
+#: src/riot/Lesson/HonorCode.riot.html:43
+#: src/riot/WagtailPages/CoursePage.riot.html:169
 msgid "Course exam"
 msgstr "Ezama ba kursu"
 
+#: src/riot/Screens/Profile.riot.html:72
 msgid "Course progress"
 msgstr "Ita nia progresu ba kursu"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:168
 msgid "Discussion"
 msgstr ""
 
+#: src/riot/WagtailPages/CoursePage.riot.html:177
 msgid "Download all lessons"
 msgstr ""
 
+#: src/riot/Lesson/PdfCard.riot.html:11
 msgid "Download this PDF to your device"
 msgstr "Download PDF ne’e ba ita nian telemovel"
 
+#: src/riot/Components/LessonDownload.riot.html:38
 msgid "Downloaded"
 msgstr ""
 
+#: src/riot/WagtailPages/AllCoursesList.riot.html:78
 #, fuzzy
 msgid "Explore a range of courses to suit your needs, expertise, and interests"
-msgstr "Esplora kursu sira ne'ebé tuir ita-nia presiza, espesialidadi no interese"
+msgstr ""
+"Esplora kursu sira ne'ebé tuir ita-nia presiza, espesialidadi no interese"
 
+#: src/riot/Teaching/ActivityPage.riot.html:102
 msgid "extend"
 msgstr ""
 
+#: src/riot/Teaching/TeachTab.riot.html:40
 msgid "Extend your knowledge"
 msgstr ""
 
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:49
 msgid "Find and check all correct answers and uncheck incorrect answers"
 msgstr "Buka no hili resposta hotu ne’ebé lo’os"
 
+#: src/riot/Lesson/LessonComplete.riot.html:66
+#: src/riot/Lesson/LessonContent.riot.html:108
+#: src/riot/Lesson/TestPopupModal.riot.html:38
 msgid "Finish"
 msgstr "Remata"
 
+#: src/riot/Components/DiscussionComment.riot.html:72
+#: src/riot/Components/DiscussionReply.riot.html:35
 msgid "Flag as inappropriate"
 msgstr ""
 
+#: src/riot/Screens/Login.riot.html:47
 msgid "Forgot username or password?"
 msgstr "Haluha uzuáriu ka seña?"
 
+#: src/riot/Components/HandleError.riot.html:26
 msgid "Go home"
 msgstr ""
 
+#: src/riot/Lesson/LessonFeedback.riot.html:105
+#: src/riot/Teaching/ActivityFeedback.riot.html:105
 msgid "Good"
 msgstr "Di'ak"
 
+#: src/riot/Lesson/LessonComplete.riot.html:59
 msgid "Good job!"
 msgstr "Serbisu di'ak tebes!"
 
+#: src/riot/Lesson/TestPopupModal.riot.html:89
+#: src/riot/Lesson/TestPopupModal.riot.html:91
 msgid "Great"
 msgstr "Di'ak tebes!"
 
+#: src/riot/Lesson/LessonComplete.riot.html:60
 msgid "Great job!"
 msgstr "Serbisu di'ak tebes!"
 
+#: src/riot/Components/LoginForm.riot.html:62
 msgid "hide"
 msgstr "subar"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:173
 msgid "Highest score"
 msgstr "Valór aas liu"
 
+#: src/riot/Components/ContactInformation.riot.html:23
 msgid "I need help accessing my account"
 msgstr "Ha’u presiza apoiu atu asesu ha’u nian perfil"
 
+#: src/riot/Screens/Settings.riot.html:71
 msgid "I would like to receive notifications"
 msgstr "Hau hakarak simu notifikasaun sira"
 
+#: src/riot/Lesson/ExamResults.riot.html:87
+#, fuzzy
+msgid "If you want to improve your score you can retake this exam."
+msgstr ""
+"Ita pasa ezame ho %1%. Se ita hakarak hadiak liutan ita nia klasifikasaun, "
+"ita bele tuir fali tan ezame nee."
+
+#: src/riot/Screens/Profile.riot.html:76
 msgid "in progress"
 msgstr "Ita nia progresu ba kursu"
 
+#: src/riot/Screens/ChangeBrowser.riot.html:18
 msgid "In the meantime please use Safari."
 msgstr "Iha tempu leet, favór uza Safari"
 
+#: src/riot/Lesson/LessonComplete.riot.html:64
 msgid "Join the discussion"
 msgstr ""
 
+#: src/riot/Screens/Notifications.riot.html:59
 msgid "Latest notifications"
 msgstr "Notifikasaun ikus liu"
 
+#: src/riot/Screens/Sync.riot.html:61
 msgid "Latest syncs"
 msgstr "Notifikasaun ikus liu"
 
+#: src/riot/Teaching/PlanTab.riot.html:37
 msgid "Learning outcomes"
 msgstr "Estatístika aprendizajen "
 
+#: src/riot/Screens/Profile.riot.html:73
 msgid "Learning statistics"
 msgstr "Estatístika aprendizajen "
 
+#: src/riot/WagtailPages/LessonPage.riot.html:35
 msgid "Lesson"
 msgstr "Lisaun"
 
+#: src/riot/WagtailPages/LessonPage.riot.html:36
 msgid "Lesson Activities"
 msgstr "Atividade sira husi lisaun"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:166
 #, fuzzy
 msgid "Lessons"
 msgstr "Lisaun"
 
+#: src/riot/Screens/Profile.riot.html:74
 msgid "lessons completed"
 msgstr "lisaun sira ne'ebé kompleta ona"
 
+#: src/riot/Screens/Profile.riot.html:75
 msgid "lessons remaining"
 msgstr "lisaun ne'ebé seidauk remata "
 
+#: src/riot/Lesson/LessonFeedback.riot.html:103
+#: src/riot/Teaching/ActivityFeedback.riot.html:103
 msgid "Let us know how you feel"
 msgstr "Favor dehan mai saida mak ita sente"
 
+#: src/riot/Components/DiscussionThread.riot.html:108
+#: src/riot/Components/GuestBanner.riot.html:21
+#: src/riot/Components/LoginForm.riot.html:59
+#: src/riot/Screens/Login.riot.html:50 src/riot/Screens/Settings.riot.html:74
 msgid "Login"
 msgstr "Tama"
 
+#: src/riot/Screens/Settings.riot.html:73
 msgid "Logout"
 msgstr ""
 
+#: src/riot/WagtailPages/CoursePage.riot.html:176
 #, fuzzy
 msgid "Make course available offline"
 msgstr "Audio ne’e la disponivel offline"
 
+#: src/riot/Components/LessonDownload.riot.html:37
 #, fuzzy
 msgid "Make offline"
 msgstr "Audio ne’e la disponivel offline"
 
+#: src/riot/Teaching/ActivityPage.riot.html:98
 msgid "Mark complete"
 msgstr "Kompleta ona"
 
+#: src/riot/Teaching/ActivityPage.riot.html:99
 msgid "Mark incomplete"
 msgstr "Kompleta ona"
 
+#: src/riot/Lesson/LessonFeedback.riot.html:100
+#: src/riot/Teaching/ActivityFeedback.riot.html:100
 msgid "Maybe later"
 msgstr "Karik orasida"
 
+#: src/riot/Screens/Login.riot.html:48
 msgid "Need help?"
 msgstr "Presiza ajuda?"
 
+#: src/riot/Components/Card.riot.html:24
 msgid "New"
 msgstr ""
 
+#: src/riot/Components/DiscussionThread.riot.html:90
 msgid "Newest First"
 msgstr ""
 
+#: src/riot/Lesson/CourseExam.riot.html:69
+#: src/riot/Lesson/ExamReview.riot.html:89
+#: src/riot/Lesson/LessonContent.riot.html:107
+#: src/riot/Lesson/TestPopupModal.riot.html:37
 msgid "Next"
 msgstr "Tuir mai"
 
+#: src/riot/Lesson/LessonComplete.riot.html:58
 msgid "Next Lesson"
 msgstr "Lisaun tuir mai"
 
+#: src/riot/Components/DiscussionCard.riot.html:18
 msgid "No discussions have been started. Please check back again later"
 msgstr ""
 
+#: src/riot/Screens/Notifications.riot.html:60
 msgid "No notifications."
 msgstr "La iha notifikasaun. "
 
+#: src/riot/Components/ContactInformation.riot.html:21
 msgid "No WhatsApp?"
 msgstr "Laiha WhatsApp?"
 
+#: src/riot/Lesson/LessonFeedback.riot.html:104
+#: src/riot/Teaching/ActivityFeedback.riot.html:104
 msgid "Not great"
 msgstr "Ladi'ak"
 
+#: src/riot/Lesson/ExamResults.riot.html:41
 msgid "Not quite!"
 msgstr "Resposta ne'e ladun lo'os ida!"
 
+#: src/riot/Screens/Notifications.riot.html:61
 msgid "Notifications"
 msgstr "Notifikasaun"
 
+#: src/riot/Components/DiscussionThread.riot.html:91
 msgid "Oldest First"
 msgstr ""
 
+#: src/riot/Lesson/TestPopupModal.riot.html:105
+#: src/riot/Lesson/TestPopupModal.riot.html:107
 msgid "Oops"
 msgstr "Oppss"
 
+#: src/riot/Teaching/PlanTab.riot.html:38
 msgid "Overview"
 msgstr ""
 
+#: src/riot/Components/LoginForm.riot.html:56
 msgid "Password"
 msgstr "Seña "
 
+#: src/riot/Teaching/ActivityPage.riot.html:100
 msgid "plan"
 msgstr ""
 
+#: src/riot/Components/DiscussionComment.riot.html:74
 msgid "Post a comment"
 msgstr ""
 
+#: src/riot/Components/DiscussionThread.riot.html:101
 msgid "Post comment"
 msgstr ""
 
+#: src/riot/WagtailPages/CoursePage.riot.html:170
 msgid "Prelearning Survey"
 msgstr ""
 
+#: src/riot/Teaching/PlanTab.riot.html:39
 msgid "Preparation tasks & materials"
 msgstr ""
 
+#: src/riot/Lesson/TestPopupModal.riot.html:113
+#: src/riot/Lesson/TestPopupModal.riot.html:115
 msgid "Read the question more carefully!"
 msgstr "Koko lee didi'ak ninia pergunta"
 
+#: src/riot/Teaching/PlanTab.riot.html:40
 msgid "Ready to teach"
 msgstr ""
 
+#: src/riot/Lesson/LessonFeedback.riot.html:106
+#: src/riot/Teaching/ActivityFeedback.riot.html:106
 msgid "Really great!"
 msgstr "Di'ak loos!"
 
+#: src/riot/Components/HandleError.riot.html:25
 msgid "Refresh"
 msgstr ""
 
+#: src/riot/Components/DiscussionComment.riot.html:71
 msgid "Reply"
 msgstr ""
 
+#: src/riot/Screens/Resources.riot.html:71
 msgid "Resources"
 msgstr "Rekursu"
 
+#: src/riot/Lesson/ExamResults.riot.html:43
+#: src/riot/Lesson/ExamReview.riot.html:92
 msgid "Retake Exam"
 msgstr "Koko Foti Ezame"
 
+#: src/riot/Lesson/ExamReview.riot.html:87
 #, fuzzy
 msgid "Review the exam questions you answered incorrectly"
 msgstr "Koko lee didi'ak ninia pergunta"
 
+#: src/riot/Lesson/ExamResults.riot.html:42
 msgid "Review your answers"
 msgstr ""
 
+#: src/riot/Lesson/ExamReview.riot.html:94
 msgid "Revision notes"
 msgstr ""
 
+#: src/riot/Components/SearchBar.riot.html:15
 msgid "Search"
 msgstr "Buka"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:175
 msgid "See less"
 msgstr "Haree ouituan"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:174
 msgid "See more"
 msgstr "Haree liután"
 
+#: src/riot/Components/LanguageSelector.riot.html:23
 msgid "Select your language"
 msgstr "Hili ita-nia lian"
 
+#: src/riot/Components/ContactInformation.riot.html:22
 msgid "Send SMS"
 msgstr "Manda SMS"
 
+#: src/riot/Screens/Login.riot.html:49
 msgid "send us a message"
 msgstr "favor kontaktu ami"
 
+#: src/riot/Components/ContactInformation.riot.html:19
 msgid "Send us a message and we'll help you log in"
 msgstr "Manda mensajen mai no ami sei ajuda ita atu tama"
 
+#: src/riot/Components/ContactInformation.riot.html:20
 msgid "Send WhatsApp"
 msgstr "Manda WhatsApp"
 
+#: src/riot/Teaching/TeachTab.riot.html:37
 msgid "Setup"
 msgstr ""
 
+#: src/riot/Components/LoginForm.riot.html:61
 msgid "show"
 msgstr "hatudu"
 
+#: src/riot/Components/HandleError.riot.html:24
 msgid "Sorry, an unexpected error has occurred."
 msgstr ""
 
+#: src/riot/Components/HandleError.riot.html:23
 msgid "Sorry, we cannot find this site content."
 msgstr ""
 
+#: src/riot/Lesson/AudioCard.riot.html:28
 msgid "Sorry: This audio is missing."
 msgstr ""
 
+#: src/riot/Components/ImageWrapper.riot.html:33
 msgid "Sorry: This image is missing."
 msgstr ""
 
+#: src/riot/Lesson/VideoCard.riot.html:32
 msgid "Sorry: This video is missing."
 msgstr ""
 
+#: src/riot/Components/DiscussionThread.riot.html:102
 msgid "Sort by"
 msgstr ""
 
+#: src/riot/Lesson/HonorCode.riot.html:49
 msgid "Start Exam"
 msgstr "Komesa Ezame"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:180
 #, fuzzy
 msgid "Start learning"
 msgstr "Komesa lisaun"
 
+#: src/riot/Screens/Notifications.riot.html:62
+#: src/riot/Screens/Sync.riot.html:62
+#: src/riot/WagtailPages/LessonPage.riot.html:37
 msgid "Start lesson"
 msgstr "Komesa lisaun"
 
+#: src/riot/Lesson/ExamReview.riot.html:88
 #, fuzzy
 msgid "Start review"
 msgstr "Komesa kursu"
 
+#: src/riot/Lesson/LessonFeedback.riot.html:108
+#: src/riot/Teaching/ActivityFeedback.riot.html:108
 msgid "Submit"
 msgstr "Submete"
 
+#: src/riot/Lesson/CourseExam.riot.html:70
 msgid "Submit answers"
 msgstr "Submete"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:171
 #, fuzzy
 msgid "Take exam"
 msgstr "Foti Ezame"
 
+#: src/riot/Lesson/LessonComplete.riot.html:61
 msgid "Take Exam"
 msgstr "Foti Ezame"
 
+#: src/riot/Lesson/LessonComplete.riot.html:62
+#: src/riot/WagtailPages/CoursePage.riot.html:172
 msgid "Take Survey"
 msgstr "Foti Survey"
 
+#: src/riot/Lesson/LessonComplete.riot.html:118
 msgid "Take the exam now to complete the course \"%1\""
 msgstr "Foti ezame agora atu kompleta kursu \"%1\""
 
+#: src/riot/Lesson/LessonComplete.riot.html:112
 msgid "Take the pre-learning survey to complete the course \"%1\""
 msgstr "Foti survey antes komesa aprendizajen agora atu kompleta kursu \"%1\""
 
+#: src/riot/Teaching/ActivityPage.riot.html:101
 msgid "teach"
 msgstr ""
 
-msgid "Thanks for your feedback. Your opinion matters to us and we are working hard to improve your experience"
-msgstr "Obrigado ba ita nia komentáriu. Ita nia opiniaun importante ba ami no ami servisu atu hadiak ita-nia esperiensia."
+#: src/riot/Lesson/LessonFeedback.riot.html:97
+#: src/riot/Teaching/ActivityFeedback.riot.html:97
+#, fuzzy
+msgid ""
+"Thanks for your feedback. Your opinion matters to us and we are working hard "
+"to improve your experience."
+msgstr ""
+"Obrigado ba ita nia komentáriu. Ita nia opiniaun importante ba ami no ami "
+"servisu atu hadiak ita-nia esperiensia."
 
+#: src/riot/Lesson/LessonFeedback.riot.html:101
+#: src/riot/Teaching/ActivityFeedback.riot.html:101
 msgid "Thanks so much"
 msgstr "Obrigado barak"
 
-msgid "There are no comments yet. Be the first to contribute to the conversation! Add a comment above."
+#: src/riot/Components/DiscussionThread.riot.html:106
+msgid ""
+"There are no comments yet. Be the first to contribute to the conversation! "
+"Add a comment above."
 msgstr ""
 
+#: src/riot/WagtailPages/AllCoursesList.riot.html:74
 msgid "There are no courses yet. Check back soon!"
 msgstr "Seidauk iha kursu. Favor cek fila fali iha tempu badak!"
 
+#: src/riot/WagtailPages/CoursePage.riot.html:165
 msgid "There are no lessons yet in this course"
 msgstr "Seidauk iha rekursu. Favor cek fila fali pajina ne’e iha tempu badak!"
 
+#: src/riot/Screens/Resources.riot.html:72
 msgid "There are no resources yet. Check back soon!"
 msgstr "Seidauk iha rekursu. Favor cek fila fali pajina ne’e iha tempu badak!"
 
+#: src/riot/Components/LessonDownload.riot.html:36
 msgid "There was a problem downloading the content"
 msgstr ""
 
 #. message for what percent a user must score to pass the exam
+#: src/riot/Lesson/HonorCode.riot.html:74
 msgid "To pass this exam you need to score <strong>%1% or higher</strong>"
-msgstr "Atu bele pasa ezame ne'e, ita tenki hetan valór <strong>%1% ka liu</strong>"
+msgstr ""
+"Atu bele pasa ezame ne'e, ita tenki hetan valór <strong>%1% ka liu</strong>"
 
+#: src/riot/Components/GuestBanner.riot.html:20
 msgid "To save your progress"
 msgstr "Ita nia progresu ba kursu"
 
+#: src/riot/Lesson/TestPopupModal.riot.html:39
 msgid "Try again"
 msgstr "Koko fila fali"
 
-msgid "Try again later or reconnect to your network to start interacting with your colleagues"
+#: src/riot/WagtailPages/CoursePage.riot.html:179
+msgid ""
+"Try again later or reconnect to your network to start interacting with your "
+"colleagues"
 msgstr ""
 
+#: src/riot/Components/LoginForm.riot.html:55
 msgid "Username"
 msgstr "Uzuáriu"
 
+#: src/riot/Teaching/FlashCard.riot.html:33
+#: src/riot/Teaching/TeachTab.riot.html:41
 msgid "View all tips"
 msgstr ""
 
+#: src/riot/Lesson/Html5Card.riot.html:23
 msgid "View full screen"
 msgstr ""
 
+#: src/riot/Lesson/ExamResults.riot.html:40
 msgid "View Resources"
 msgstr "Haree Rekursu"
 
+#: src/riot/Components/LoginForm.riot.html:58
 msgid "We cannot reach the internet, you may be offline"
 msgstr ""
 
+#: src/riot/Lesson/LessonFeedback.riot.html:107
+#: src/riot/Teaching/ActivityFeedback.riot.html:107
 msgid "We value your feedback"
 msgstr "Ami apresia ita-nia komentáriu"
 
-msgid "We value your feedback and all feedback is confidential"
-msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál"
-
+#: src/riot/Lesson/LessonFeedback.riot.html:93
+#: src/riot/Teaching/ActivityFeedback.riot.html:93
 #, fuzzy
-msgid "We value your feedback and all feedback is confidential."
+msgid "We value your input and all feedback is confidential."
 msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál"
 
-msgid "We're having trouble fetching what you need right now, try refreshing this page."
+#: src/riot/Components/HandleError.riot.html:22
+msgid ""
+"We're having trouble fetching what you need right now, try refreshing this "
+"page."
 msgstr ""
 
+#: src/riot/Screens/ChangeBrowser.riot.html:17
 msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
-msgstr "Ami husu deskulpa! Ami sei aumenta suporta balun ba Asteroid uza ho Chrome iha iOS."
+msgstr ""
+"Ami husu deskulpa! Ami sei aumenta suporta balun ba Asteroid uza ho Chrome "
+"iha iOS."
 
+#: src/riot/Lesson/TestPopupModal.riot.html:97
+#: src/riot/Lesson/TestPopupModal.riot.html:99
 msgid "Well done, keep it up!"
 msgstr "Kapás, kontinua nafatin!"
 
+#: src/riot/Components/HandleError.riot.html:21
 msgid "Whoops! Something has gone wrong"
 msgstr ""
 
+#: src/riot/Teaching/TeachTab.riot.html:39
 msgid "Wrap up"
 msgstr ""
 
+#: src/riot/Components/Toast.riot.html:12
 msgid "You are offline!"
 msgstr ""
 
+#: src/riot/Components/Toast.riot.html:13
 msgid "You are online!"
 msgstr ""
 
 #. message when user did not pass exam
+#: src/riot/Lesson/ExamResults.riot.html:94
 #, fuzzy
-msgid "You did not pass this assessment because you only scored %1% and you need to reach %2% to pass. You can review your answers, retake this exam now, or finish it later."
-msgstr "Ita hetan valór %1%. Ida ne'e la to'o atu pasa ezame ne'e. Atu bele pasa ita presiza atu hetan valór %2% ka liu. Ita bele koko foti fila ezame ne'e orsida ka tempu seluk atu bele hetan valór ne'ebé diak liu."
+msgid ""
+"You did not pass this assessment because you only scored %1% and you need to "
+"reach %2% to pass. You can review your answers, retake this exam now, or "
+"finish it later."
+msgstr ""
+"Ita hetan valór %1%. Ida ne'e la to'o atu pasa ezame ne'e. Atu bele pasa ita "
+"presiza atu hetan valór %2% ka liu. Ita bele koko foti fila ezame ne'e "
+"orsida ka tempu seluk atu bele hetan valór ne'ebé diak liu."
 
-msgid "You have completed the pre-learning survey and you can now keep progressing your learning."
-msgstr "Ita kompleta ona survey antes komesa ita-nia aprendizajen no agora ita bele kontinua avansa ho ita-nia aprendizajen tuir-mai"
+#: src/riot/Lesson/ExamResults.riot.html:77
+msgid ""
+"You have completed the pre-learning survey and you can now keep progressing "
+"your learning."
+msgstr ""
+"Ita kompleta ona survey antes komesa ita-nia aprendizajen no agora ita bele "
+"kontinua avansa ho ita-nia aprendizajen tuir-mai"
 
-msgid "You have the opportunity to retake the exam now and achieve a successful outcome. Alternatively you can return to the course."
+#: src/riot/Lesson/ExamReview.riot.html:91
+msgid ""
+"You have the opportunity to retake the exam now and achieve a successful "
+"outcome. Alternatively you can return to the course."
 msgstr ""
 
 #. message on completion of a lesson %1 is replaced by the lesson title
+#: src/riot/Lesson/LessonComplete.riot.html:106
 msgid "You just completed the lesson \"%1\""
 msgstr "Ita foin halo remata lisaun \"%1\""
 
+#: src/riot/Components/DiscussionThread.riot.html:107
 msgid "You need to be logged in to use this feature"
 msgstr ""
 
+#: src/riot/WagtailPages/CoursePage.riot.html:178
 msgid "You need to be online to use the discussion tool"
 msgstr ""
 
-msgid "You passed this exam with a score of %1%. If you want to improve your score you can retake this exam."
-msgstr "Ita pasa ezame ho %1%. Se ita hakarak hadiak liutan ita nia klasifikasaun, ita bele tuir fali tan ezame nee."
+#: src/riot/Lesson/ExamResults.riot.html:82
+msgid "You passed this exam with a score of %1%."
+msgstr ""
 
+#: src/riot/Lesson/ExamResults.riot.html:38
 msgid "You've completed the course"
 msgstr "Ita kompleta ona kursu"
 
-msgid "You've just completed this set of tips. You can now finish and return to the learning activity."
+#: src/riot/Lesson/LessonComplete.riot.html:65
+msgid ""
+"You've just completed this set of tips. You can now finish and return to the "
+"learning activity."
 msgstr ""
 
-msgid "You’re about to start a course exam. Do you promise that you will complete this exam on your own, without assistance from anyone?"
-msgstr "Ita atu komesa ezame ba kursu ne'e. Ita promete atu halo hotu ezame ne'e mesak no la uza ema seluk nian ajuda?"
+#: src/riot/Lesson/HonorCode.riot.html:46
+msgid ""
+"You’re about to start a course exam. Do you promise that you will complete "
+"this exam on your own, without assistance from anyone?"
+msgstr ""
+"Ita atu komesa ezame ba kursu ne'e. Ita promete atu halo hotu ezame ne'e "
+"mesak no la uza ema seluk nian ajuda?"
 
+#: src/riot/Lesson/AudioCard.riot.html:27
 msgid "Your browser does not support the audio element."
 msgstr "Ita-nia navegadór la suporta komponente audiu nian."
 
+#: src/riot/Lesson/VideoCard.riot.html:31
 msgid "Your browser does not support the video element."
 msgstr "Ita-nia navegadór la suporta komponente audiu nian."
 
+#: src/riot/WagtailPages/CoursePage.riot.html:167
 msgid "Your lessons"
 msgstr "Ita-nia lisaun"
 
+#: src/riot/Screens/Profile.riot.html:71
 msgid "Your profile"
 msgstr "Ita-nia perfil"
 
+#: src/riot/Screens/Settings.riot.html:70
 msgid "Your settings"
 msgstr "Ita-nia konfigurasaun"
 
+#: src/riot/Components/LoginForm.riot.html:57
 msgid "Your username or password is incorrect"
 msgstr "Haluha uzuáriu ka seña?"
+
+#~ msgid ""
+#~ "Thanks for your feedback. Your opinion matters to us and we are working "
+#~ "hard to improve your experience"
+#~ msgstr ""
+#~ "Obrigado ba ita nia komentáriu. Ita nia opiniaun importante ba ami no ami "
+#~ "servisu atu hadiak ita-nia esperiensia."
+
+#~ msgid "We value your feedback and all feedback is confidential"
+#~ msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál"
 
 #~ msgid "This audio is not available offline."
 #~ msgstr "Audio ne’e la disponivel offline"
@@ -552,7 +808,8 @@ msgstr "Haluha uzuáriu ka seña?"
 #~ msgstr "Sai"
 
 #~ msgid "No data or progress will be saved"
-#~ msgstr "Progresu aprendizajen sira ne'ebé mak ita halo ona iha ne'e sei la sura"
+#~ msgstr ""
+#~ "Progresu aprendizajen sira ne'ebé mak ita halo ona iha ne'e sei la sura"
 
 #~ msgid "Site download is complete!"
 #~ msgstr "Kompletu ona download sítiu ida ne'e!"
@@ -596,8 +853,12 @@ msgstr "Haluha uzuáriu ka seña?"
 #~ msgid "No thanks"
 #~ msgstr "Lae, Obrigado. "
 
-#~ msgid "No learning progress will be saved while you are logged in as a guest. If you would like to create an account, please"
-#~ msgstr "Tamba ita asesu app ne'e nu’udar bainaka, progresu aprendizajen sira ne'ebé mak ita halo ona iha ne'e sei la sura. Hakarak kria perfíl,"
+#~ msgid ""
+#~ "No learning progress will be saved while you are logged in as a guest. If "
+#~ "you would like to create an account, please"
+#~ msgstr ""
+#~ "Tamba ita asesu app ne'e nu’udar bainaka, progresu aprendizajen sira "
+#~ "ne'ebé mak ita halo ona iha ne'e sei la sura. Hakarak kria perfíl,"
 
 #~ msgid "You're logged in as a guest user"
 #~ msgstr "Ita asesu hela app ne'e nu’udar bainaka"
