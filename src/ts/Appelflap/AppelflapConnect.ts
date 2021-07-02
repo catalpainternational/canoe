@@ -17,6 +17,7 @@ import Logger from "../Logger";
 import { inAppelflap } from "../PlatformDetection";
 import { CertChain } from "./CertChain";
 import { NOT_RELEVANT } from "../Constants";
+import { TPeerProperties } from "../Types/PeerTypes";
 
 const logger = new Logger("AppelflapConnect");
 
@@ -28,6 +29,7 @@ export class AppelflapConnect {
         password: string;
         port: number;
     };
+    #peerProperties?: TPeerProperties;
 
     private constructor() {
         logger.log("Singleton created");
@@ -166,29 +168,21 @@ export class AppelflapConnect {
         }
     };
 
+    public getPeerProperties = async (): Promise<TPeerProperties> => {
+        if (!this.#peerProperties) {
+            const { commandPath } = APPELFLAPCOMMANDS.getPeerProperties;
+            logger.info(`Getting peer properties`);
+
+            const response = await fetch(commandPath);
+            this.#peerProperties = await response.json();
+            logger.info("Got peer properties");
+        }
+
+        return this.#peerProperties!;
+    };
+
     public getLargeObjectIndexStatus = async (): Promise<any> => {
         const { commandPath } = APPELFLAPCOMMANDS.getLargeObjectIndexStatus;
-        return await this.performCommand(commandPath);
-    };
-
-    public lock = async (): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.setLock;
-        logger.info(`'Locking' Bero`);
-        return await this.performCommand(commandPath, { method }, "text");
-    };
-
-    public unlock = async (): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.releaseLock;
-        logger.info(`'Unlocking' Bero`);
-        return await this.performCommand(commandPath, { method }, "text");
-    };
-
-    /**
-     * Get the status of the cache from Appelflap
-     * @deprecated No longer available from Appelflap, returns 404
-     */
-    public getCacheStatus = async (): Promise<any> => {
-        const { commandPath } = APPELFLAPCOMMANDS.getCacheStatus;
         return await this.performCommand(commandPath);
     };
     //#endregion
@@ -213,6 +207,29 @@ export class AppelflapConnect {
         const { commandPath, method } =
             APPELFLAPCOMMANDS.doLaunchStorageManager;
         return await this.performCommand(commandPath, { method }, "text");
+    };
+    //#endregion
+
+    //#region Cache Administration
+    public lock = async (): Promise<string> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.setLock;
+        logger.info(`'Locking' Bero`);
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    public unlock = async (): Promise<string> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.releaseLock;
+        logger.info(`'Unlocking' Bero`);
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    /**
+     * Get the status of the cache from Appelflap
+     * @deprecated No longer available from Appelflap, returns 404
+     */
+    public getCacheStatus = async (): Promise<any> => {
+        const { commandPath } = APPELFLAPCOMMANDS.getCacheStatus;
+        return await this.performCommand(commandPath);
     };
     //#endregion
 
@@ -287,6 +304,20 @@ export class AppelflapConnect {
             "text"
         )) as Promise<TSubscriptions>;
     };
+
+    /**
+     * Get a list of all bundles that are 'injectable' into the cache in response to Subscriptions
+     * @remarks this corresponds with @see getSubscriptions which are the bundles that have been subscribed to
+     */
+    public injectables = async (): Promise<TBundles> => {
+        const { commandPath } = APPELFLAPCOMMANDS.getInjectables;
+
+        logger.info(
+            "Identifying all bundles ready for injection into the browser's cache"
+        );
+        const bundles = await this.performCommand(commandPath);
+        return bundles as Promise<TBundles>;
+    };
     //#endregion
 
     //#region Certificates
@@ -329,15 +360,6 @@ export class AppelflapConnect {
     //#endregion
 
     //#region Appelflap Debug
-    /**
-     * Inject all relevant bundles into the browser's cache
-     * @remarks When this call returns it indicates conclusively that cache syncing has completed
-     */
-    public injectAll = async (): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.setInjectAll;
 
-        logger.info(`Injecting all relevant bundles into the browser's cache`);
-        return await this.performCommand(commandPath, { method }, "text");
-    };
     //#endregion
 }
