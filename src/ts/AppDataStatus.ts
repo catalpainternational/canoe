@@ -223,10 +223,13 @@ export class AppDataStatus {
     /** Set all current subscriptions */
     async SetSubscriptions(): Promise<TSubscriptions> {
         const subscriptions = await setSubscriptions(this.itemListings);
-        if (typeof subscriptions === "string") {
+        if (
+            typeof subscriptions === "string" &&
+            subscriptions === "not relevant"
+        ) {
             return { types: { CACHE: { groups: {} } } };
         }
-        return subscriptions;
+        return subscriptions as TSubscriptions;
     }
 
     async SyncAll(): Promise<TSyncData> {

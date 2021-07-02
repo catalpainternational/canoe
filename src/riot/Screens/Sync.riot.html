@@ -155,7 +155,8 @@
                 // We will know if 'content' (cache bandles) are outdated from what the Manifest tells us
                 // We will not know whether updates are available for them (totally depends on our peers sharing stuff)
                 // We will know whether everything that has been shared by others has been loaded in to our caches
-                // could be "syncOff", "syncOn" (in progress), "syncCompleted", "syncNotRelevant" (no more injectables)
+                // could be "syncOff", "syncOn" (in progress), "syncCompleted",
+                // "syncNotRelevant" (no more injectables), "syncSubscriptionError"
                 syncStatus: "syncOff",
             },
 
@@ -174,6 +175,7 @@
                 syncOn: () => gettext("Getting updated content now"),
                 syncCompleted: () => gettext("Content updated"), // There is no gaurantee that the user is 'all' up to date
                 syncNotRelevant: () => gettext("You have the latest version of available content"),
+                syncSubscriptionError: () => gettext("Subscribing to receive updated content failed"),
                 refresh: () => gettext("Refresh"),
                 avatar: () => gettext("Your sync avatar"),
                 peers: () => gettext("Recently seen peers"),
@@ -260,15 +262,18 @@
             },
 
             async onMounted() {
-                CacheSubscribe.injectables().then(async (bundles) => {
-                    if (bundles.bundles.length > 0) {
-                        await CacheUtilities.unlock();
-                        await this.syncMe();
-                        this.performInboundSync();
-                    } else {
-                        this.update({syncStatus: "syncNotRelevant"});
-                    }
-                });
+                const subscriptionsUpdated = await this.refreshSubscriptions();
+                if (subscriptionsUpdated) {
+                    CacheSubscribe.injectables().then(async (bundles) => {
+                        if (bundles.bundles.length > 0) {
+                            await CacheUtilities.unlock();
+                            await this.syncMe();
+                            this.performInboundSync();
+                        } else {
+                            this.update({syncStatus: "syncNotRelevant"});
+                        }
+                    });
+                }
                 await this.appelflapStatus();
             },
 
@@ -286,6 +291,18 @@
                 // Get the Item Status Listing
                 await this.state.appDataStatus.BuildList();
                 this.update({statusListings: this.state.appDataStatus.itemListings});
+            },
+
+            async refreshSubscriptions() {
+                const appDataStatus = this.state.appDataStatus;
+                const subscriptions = await appDataStatus.SetSubscriptions();
+                if (JSON.stringify(subscriptions) === JSON.stringify({ types: { CACHE: { groups: {} } } })) {
+                    // No subscriptions, several possible causes
+                    this.update({syncStatus: "syncSubscriptionError"});
+                    return false;
+                }
+
+                return true;
             },
 
             /**
