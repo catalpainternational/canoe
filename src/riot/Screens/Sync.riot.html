@@ -305,6 +305,29 @@
                 return true;
             },
 
+            async publishAll() {
+                const appDataStatus = this.state.appDataStatus;
+                const published = await appDataStatus.PublishAll();
+                if (JSON.stringify(subscriptions) === JSON.stringify({ types: { CACHE: { groups: {} } } })) {
+                    // No subscriptions, several possible causes
+                    this.update({syncStatus: "syncSubscriptionError"});
+                    return false;
+                }
+
+                return true;
+            },
+
+            async unpublishAll() {
+                const appDataStatus = this.state.appDataStatus;
+                const unpublished = await appDataStatus.UnpublishAll();
+                if (JSON.stringify(subscriptions) === JSON.stringify({ types: { CACHE: { groups: {} } } })) {
+                    // No subscriptions, several possible causes
+                    this.update({syncStatus: "syncSubscriptionError"});
+                    return false;
+                }
+
+                return true;
+            },            
             /**
              * Share what things we have with our peers - 'outbound' sync
              * and subscribe to everything that we want
