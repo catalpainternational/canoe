@@ -26,9 +26,7 @@
     "scripts": {
         "build": "yarn build:types && webpack",
         "start": "yarn build:types && webpack-dev-server",
-        "makemessages": "yarn node messages_scan.js && msgmerge --update --no-location --no-wrap locale/tet/canoe.po locale/canoe.pot",
-        "compilemessages": "yarn run po2json-gettextjs locale/tet/canoe.po locale/json/tet.json -p",
-        "translate": "yarn makemessages && yarn compilemessages",
+        "translate": "yarn node i18n/i18n.js all",
         "build:types": "tsc --emitDeclarationOnly",
         "pretty-ts": "yarn prettier -w \"./src/**/*.ts\"",
         "type-check": "tsc --noEmit",
