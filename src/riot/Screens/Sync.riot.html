@@ -17,11 +17,6 @@
                         <!-- TODO Get this date from the Manifest -->
                         <p>{ new Date().toDateString() }</p>
                     </div>
-                    <div if="{state.syncStatus === 'outdated' || state.syncStatus === 'syncing'}"
-                        class="download-state {state.syncStatus === 'syncing' ? 'loading' : ''}"
-                        onclick="{syncMe}">
-                            <span class="download"></span>
-                    </div>
                     <div if="{state.syncStatus === 'updated'}" class="download-state complete">
                         <span class="icon"></span>
                     </div>
@@ -136,7 +131,6 @@
     <script>
         import { AppDataStatus } from "ts/AppDataStatus";
         import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
-        import { CachePublish } from "ts/Appelflap/CachePublish";
         import { CacheSubscribe } from "ts/Appelflap/CacheSubscribe";
         import { hashString } from "js/utilities";
 
@@ -145,7 +139,6 @@
         export default {
             state: {
                 statusListings: [],
-                publications: "",
                 appDataStatus: new AppDataStatus(),
                 // mocked data below
                 deviceId: '2198734892374',
@@ -155,7 +148,8 @@
                 // We will know if 'content' (cache bandles) are outdated from what the Manifest tells us
                 // We will not know whether updates are available for them (totally depends on our peers sharing stuff)
                 // We will know whether everything that has been shared by others has been loaded in to our caches
-                // could be "syncOff", "syncOn" (in progress), "syncCompleted", "syncNotRelevant" (no more injectables)
+                // could be "syncOff", "syncOn" (in progress), "syncCompleted",
+                // "syncNotRelevant" (no more injectables), "syncSubscriptionError"
                 syncStatus: "syncOff",
             },
 
@@ -174,6 +168,7 @@
                 syncOn: () => gettext("Getting updated content now"),
                 syncCompleted: () => gettext("Content updated"), // There is no gaurantee that the user is 'all' up to date
                 syncNotRelevant: () => gettext("You have the latest version of available content"),
+                syncSubscriptionError: () => gettext("Subscribing to receive updated content failed"),
                 refresh: () => gettext("Refresh"),
                 avatar: () => gettext("Your sync avatar"),
                 peers: () => gettext("Recently seen peers"),
@@ -246,7 +241,6 @@
 
             /**
              * Perform the 'inbound' synchronisation of everything made available by other peers
-             * This lets us know when syncMe's inbound work is done
              */
             performInboundSync() {
                 this.update({syncStatus: "syncOn"});
@@ -260,15 +254,19 @@
             },
 
             async onMounted() {
-                CacheSubscribe.injectables().then(async (bundles) => {
-                    if (bundles.bundles.length > 0) {
-                        await CacheUtilities.unlock();
-                        await this.syncMe();
-                        this.performInboundSync();
-                    } else {
-                        this.update({syncStatus: "syncNotRelevant"});
-                    }
-                });
+                const subscriptionsUpdated = await this.refreshSubscriptions();
+                await this.publishAll();
+                await this.unpublishAll();
+                if (subscriptionsUpdated) {
+                    CacheSubscribe.injectables().then(async (bundles) => {
+                        if (bundles.bundles.length > 0) {
+                            await CacheUtilities.unlock();
+                            this.performInboundSync();
+                        } else {
+                            this.update({syncStatus: "syncNotRelevant"});
+                        }
+                    });
+                }
                 await this.appelflapStatus();
             },
 
@@ -279,26 +277,31 @@
             async appelflapStatus() {
                 this.update({ appelflapMeta: "Getting" });
 
-                const publications = await CachePublish.publications();
-                this.update(({ publications: JSON.stringify(publications) }));
-                // window.alert(`Published: ${JSON.stringify(publications)}`);
-
                 // Get the Item Status Listing
                 await this.state.appDataStatus.BuildList();
                 this.update({statusListings: this.state.appDataStatus.itemListings});
             },
 
-            /**
-             * Share what things we have with our peers - 'outbound' sync
-             * and subscribe to everything that we want
-             * */
-            async syncMe() {
+            async refreshSubscriptions() {
                 const appDataStatus = this.state.appDataStatus;
-                // Identify what needs to be subscribed to, and what needs to be published
-                // AppDataStatus checks the certChain to make sure that this user can publish
-                // and AppelflapConnect double checks this
-                // It's possible that we may just want to fire and forget this
-                const syncStatusList = await appDataStatus.SyncAll();
+                const subscriptions = await appDataStatus.SetSubscriptions();
+                if (JSON.stringify(subscriptions) === JSON.stringify({ types: { CACHE: { groups: {} } } })) {
+                    // No subscriptions, several possible causes
+                    this.update({syncStatus: "syncSubscriptionError"});
+                    return false;
+                }
+
+                return true;
+            },
+
+            async publishAll() {
+                const appDataStatus = this.state.appDataStatus;
+                const published = await appDataStatus.PublishAll();
+            },
+
+            async unpublishAll() {
+                const appDataStatus = this.state.appDataStatus;
+                const unpublished = await appDataStatus.UnpublishAll();
             },
 
             async launchWiFiPicker() {

@@ -7,6 +7,7 @@ import App from "RiotTags/App.riot.html";
 
 import { initialiseOnlineStatus } from "js/OnlineStatus";
 import { initialiseIdentity } from "js/AuthenticationUtilities";
+import { initialiseLanguage } from "js/Translation";
 import { initialiseUserActions } from "js/UserActions";
 import { initialiseRouting } from "js/Routing"
 import { initialiseBrowserSupport } from "js/BrowserSupport"
@@ -15,6 +16,7 @@ import { initialiseBrowserSupport } from "js/BrowserSupport"
 // set things we can detect immeditely before riot mounts
 initialiseOnlineStatus(window);
 initialiseBrowserSupport();
+initialiseLanguage();
 
 // Mount the riot UI to show the loader ASAP
 riot.install(function (component) {
