@@ -6,16 +6,22 @@
             <span class="site-logo top-icon center"></span>
         </TopMenu>
 
-        <!-- TODO learning activities if no courses? -->
-        <div if="{courses}">
+        <div if="{courses.length}">
             <h3>{ TRANSLATIONS.exploreCourses() }</h3>
             <button onclick="{goToCourses}" class="btn-primary">
                 { TRANSLATIONS.viewAll() } <span class="chevron"></span>
             </button>
         </div>
+
+        <div if="{!courses.length && learningActivities.length}">
+            <h3>{ TRANSLATIONS.exploreActivities() }</h3>
+            <button onclick="{goToActivities}" class="btn-primary">
+                { TRANSLATIONS.viewAll() } <span class="chevron"></span>
+            </button>
+        </div>
     </div>
 
-    <template if="{learningActivities}">
+    <template if="{learningActivities.length}">
         <h4 onclick="{goToActivities}">{TRANSLATIONS.learning()} <span class="arrow right"></span></h4>
         <div class="cards-container">
             <Card
@@ -25,7 +31,7 @@
         </div>
     </template>
 
-    <template if="{courses}">
+    <template if="{courses.length}">
         <h4 onclick="{goToCourses}">{TRANSLATIONS.courses()} <span class="arrow right"></span></h4>
         <div class="cards-container">
             <Card
@@ -46,7 +52,7 @@
         </div>
     </template>
 
-    <template if="{courseCategories}">
+    <template if="{courseCategories.length}">
         <h4 onclick="{goToCategories}">{TRANSLATIONS.courseCategories()} <span class="arrow right"></span></h4>
         <div class="cards-container">
             <Card
@@ -56,7 +62,7 @@
         </div>
     </template>
 
-    <template if="{resources}">
+    <template if="{resources.length}">
         <h4 onclick="{goToResources}">{TRANSLATIONS.resources()} <span class="arrow right"></span></h4>
         <a
             each="{(resource, index) in resources}"
@@ -80,6 +86,7 @@
             return {
                 TRANSLATIONS: {
                     exploreCourses: () => gettext("Explore and discover a diverse range of courses"),
+                    exploreActivities: () => gettext("Explore and discover a diverse range of learning activities"),
                     viewAll: () => gettext("View all"),
                     learning: () => gettext("Learning Activities"),
                     courses: () => gettext("Courses"),
