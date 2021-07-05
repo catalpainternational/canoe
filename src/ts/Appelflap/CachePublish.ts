@@ -12,7 +12,11 @@ export class CachePublish {
         return { bundles: [] };
     }
 
-    /** Instructs Appelflap to 'publish' a single publication */
+    /**
+     * Instructs Appelflap to 'publish' a single publication
+     * @remarks Note that there is no `unpublish`.
+     * Unpublishing (deleting) something published is handled by Appelflap itself.
+     */
     static async publish(publication: TPublication): Promise<void> {
         if (AppelflapConnect.getInstance()) {
             await AppelflapConnect.getInstance()!.publish(publication);

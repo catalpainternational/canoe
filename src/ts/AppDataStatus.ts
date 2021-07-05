@@ -197,7 +197,10 @@ export class AppDataStatus {
         return performed;
     }
 
-    /** Publish everything currently flagged as isPublishable */
+    /** Publish everything currently flagged as isPublishable
+     * @remarks Note that there is no `UnpublishAll`.
+     * Unpublishing (deleting) something published is handled by Appelflap itself.
+     */
     async PublishAll(): Promise<TPublishResult> {
         return this.PerformAll((listing) => listing.isPublishable, publishItem);
     }

@@ -42,6 +42,8 @@ export async function getPublications(): Promise<TBundles | string> {
  * - resolve("succeeded") on success (200),
  * - resolve("not relevant") if isPublishable is false or appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
+ * @remarks Note that there is no `unpublishItem`.
+ * Unpublishing (deleting) something published is handled by Appelflap itself.
  */
 export async function publishItem(
     item: TPublishableItem
