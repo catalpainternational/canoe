@@ -97,6 +97,7 @@ export const APPELFLAPCOMMANDS = {
     //     method: "DELETE",
     // },
     //#endregion
+    //#region Subscriptions
     getSubscriptions: {
         commandPath: `${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`,
         method: "GET",
