@@ -46,8 +46,10 @@
                 };
             },
             contentIsNew() {
-                if (this.props && this.props.contentItem) return this.props.contentItem.isNew;
+                // TODO this doesn't work the way we intended. Descoped for now.
                 return false;
+                // if (this.props && this.props.contentItem) return this.props.contentItem.isNew;
+                // return false;
             },
         };
     </script>

@@ -99,11 +99,13 @@
                 },
 
                 get learningActivities () {
-                    return this.page.learningActivities.topics;
+                    if (this.page.learningActivities) return this.page.learningActivities.topics;
+                    return [];
                 },
 
                 get courses() {
-                    return this.page.courses.courses;
+                    if (this.page.courses) return this.page.courses.courses;
+                    return [];
                 },
 
                 get courseCategories () {
@@ -112,7 +114,8 @@
                 },
 
                 get resources() {
-                    return this.page.resources.resources;
+                    if (this.page.resources) return this.page.resources.resources;
+                    return []
                 },
 
                 goToCourses() {
