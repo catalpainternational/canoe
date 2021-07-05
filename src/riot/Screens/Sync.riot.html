@@ -256,7 +256,6 @@
             async onMounted() {
                 const subscriptionsUpdated = await this.refreshSubscriptions();
                 await this.publishAll();
-                await this.unpublishAll();
                 if (subscriptionsUpdated) {
                     CacheSubscribe.injectables().then(async (bundles) => {
                         if (bundles.bundles.length > 0) {
@@ -297,11 +296,6 @@
             async publishAll() {
                 const appDataStatus = this.state.appDataStatus;
                 const published = await appDataStatus.PublishAll();
-            },
-
-            async unpublishAll() {
-                const appDataStatus = this.state.appDataStatus;
-                const unpublished = await appDataStatus.UnpublishAll();
             },
 
             async launchWiFiPicker() {
