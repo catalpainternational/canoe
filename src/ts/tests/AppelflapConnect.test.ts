@@ -234,45 +234,6 @@ test.skip("Cache: publish", async (t: any) => {
     fetchMock.reset();
 });
 
-test.skip("Cache: unpublish", async (t: any) => {
-    const afc = t.context.afc as AppelflapConnect;
-    const successResponse = t.context.successResponse as Response;
-    const authFailureResponse = t.context.authFailureResponse as Response;
-    const notFoundResponse = t.context.notFoundResponse as Response;
-    const conflictResponse = t.context.conflictResponse as Response;
-
-    const bundleType = "CACHE";
-    const webOrigin = "some-web-origin";
-    const cacheName = "some-cache-name";
-    const version = 10;
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${bundleType}/${webOrigin}/${cacheName}/${version}`;
-    const publication: TPublication = {
-        bundleType: bundleType,
-        webOrigin: webOrigin,
-        cacheName: cacheName,
-        version: version,
-    };
-
-    // When doing throwsAsync tests, expect 2 assertions returned for each test
-    // And do the 'ok' test last to ensure that all tests are awaited
-    t.plan(7);
-    [authFailureResponse, notFoundResponse, conflictResponse].forEach(
-        async (response) => {
-            fetchMock.delete(testUri, response, { overwriteRoutes: true });
-            const failureResult = await t.throwsAsync(
-                afc.unpublish(publication)
-            );
-            t.is(failureResult.message, response.statusText);
-        }
-    );
-
-    fetchMock.delete(testUri, successResponse, { overwriteRoutes: true });
-    const successResult = await afc.unpublish(publication);
-    t.is(successResult, "ok");
-
-    fetchMock.reset();
-});
-
 test("Cache: getSubscriptions", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const authFailureResponse = t.context.authFailureResponse as Response;

@@ -15,8 +15,6 @@ import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS } from "
 
 import Logger from "../Logger";
 import { inAppelflap } from "../PlatformDetection";
-import { CertChain } from "./CertChain";
-import { NOT_RELEVANT } from "../Constants";
 import { TPeerProperties } from "../Types/PeerTypes";
 
 const logger = new Logger("AppelflapConnect");
@@ -248,13 +246,6 @@ export class AppelflapConnect {
     };
 
     public publish = async (publication: TPublication): Promise<string> => {
-        // Ensure that this user has authority to publish (share) content
-        // as evidenced by the certificate chain being signed
-        const certChain = CertChain.getInstance();
-        if (!certChain || !certChain.canPublish) {
-            return Promise.resolve(NOT_RELEVANT);
-        }
-
         const { commandPath, method } = APPELFLAPCOMMANDS.savePublication;
         const requestPath = `${commandPath}/${this.publicationPath(
             publication
@@ -265,15 +256,6 @@ export class AppelflapConnect {
         };
 
         return await this.performCommand(requestPath, commandInit, "text");
-    };
-
-    public unpublish = async (publication: TPublication): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.deletePublication;
-        const requestPath = `${commandPath}/${this.publicationPath(
-            publication
-        )}`;
-
-        return await this.performCommand(requestPath, { method }, "text");
     };
     //#endregion
 

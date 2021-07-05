@@ -52,7 +52,7 @@ export class CertChain {
     }
 
     /**
-     * Does this user have authority to publish (share) content
+     * Does this user have authority to publish content
      * as proven by the certificate being signed.
      */
     get canPublish(): boolean {

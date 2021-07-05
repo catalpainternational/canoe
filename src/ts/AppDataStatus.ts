@@ -12,12 +12,10 @@ import {
     getSubscriptions,
     publishItem,
     setSubscriptions,
-    unpublishItem,
 } from "./Implementations/ItemActions";
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
 import { NOT_RELEVANT } from "./Constants";
-import { CertChain } from "./Appelflap/CertChain";
 
 type AfcFunction = (item: TPublishableItem) => Promise<TAppelflapResult>;
 
@@ -200,32 +198,12 @@ export class AppDataStatus {
         return performed;
     }
 
-    /** Publish everything currently flagged as isPublishable */
+    /** Publish everything currently flagged as isPublishable
+     * @remarks Note that there is no `UnpublishAll`.
+     * Unpublishing (deleting) something published is handled by Appelflap itself.
+     */
     async PublishAll(): Promise<TPublishResult> {
-        const certChain = CertChain.getInstance();
-        if (certChain && certChain.canPublish) {
-            return this.PerformAll(
-                (listing) => listing.isPublishable,
-                publishItem
-            );
-        }
-        // This user does not have authority to publish anything,
-        // so publish nothing
-        return this.PerformAll((listing) => !listing, publishItem);
-    }
-
-    /** Unpublish everything currently not flagged as isPublishable */
-    async UnpublishAll(): Promise<TPublishResult> {
-        const certChain = CertChain.getInstance();
-        if (certChain && certChain.canPublish) {
-            return this.PerformAll(
-                (listing) => !listing.isPublishable,
-                unpublishItem
-            );
-        }
-        // This user does not have authority to publish anything,
-        // so unpublish everything
-        return this.PerformAll((listing) => !!listing, unpublishItem);
+        return this.PerformAll((listing) => listing.isPublishable, publishItem);
     }
 
     /** Get all current subscriptions */
@@ -255,12 +233,10 @@ export class AppDataStatus {
         this.itemListings.forEach((listing) => {
             syncAllStatus[listing.cacheKey] = {
                 published: "failed",
-                unpublished: "failed",
             };
         });
 
         const published = await this.PublishAll();
-        const unpublished = await this.UnpublishAll();
         let subscriptions = await this.GetSubscriptions();
         let origins = Object.keys(subscriptions.types.CACHE?.groups || {});
         let subscribed =
@@ -298,9 +274,6 @@ export class AppDataStatus {
 
         Object.entries(published).forEach((pub) => {
             syncAllStatus[pub[0]].published = pub[1].result;
-        });
-        Object.entries(unpublished).forEach((pub) => {
-            syncAllStatus[pub[0]].unpublished = pub[1].result;
         });
 
         return syncAllStatus;

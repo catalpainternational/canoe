@@ -43,6 +43,8 @@ export async function getPublications(): Promise<TBundles | string> {
  * - resolve("succeeded") on success (200),
  * - resolve(NOT_RELEVANT) if isPublishable is false or appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
+ * @remarks Note that there is no `unpublishItem`.
+ * Unpublishing (deleting) something published is handled by Appelflap itself.
  */
 export async function publishItem(
     item: TPublishableItem
@@ -57,27 +59,6 @@ export async function publishItem(
                 ? NOT_RELEVANT
                 : "succeeded";
         return Promise.resolve(result);
-    } catch (error) {
-        return Promise.reject("failed");
-    }
-}
-
-/** Tells Appelflap to unpublish this item's cache
- * @returns
- * - resolve("succeeded") on success (200),
- * - resolve(NOT_RELEVANT) if isPublishable is true or appelflap connect wasn't provided,
- * - reject("failed") on error (404 or 500)
- */
-export async function unpublishItem(
-    item: TPublishableItem
-): Promise<TAppelflapResult> {
-    if (!item || item.isPublishable || !AppelflapConnect.getInstance()) {
-        return Promise.resolve(NOT_RELEVANT);
-    }
-
-    try {
-        await CachePublish.unpublish(CacheTarget(item));
-        return Promise.resolve("succeeded");
     } catch (error) {
         return Promise.reject("failed");
     }
