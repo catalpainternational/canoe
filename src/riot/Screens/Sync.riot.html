@@ -209,14 +209,12 @@
             },
 
             get mappedPeers() {
-                // TODO the actual peers
                 const peers = this.state.peers;
                 return peers.map((it) => this.mapAvatar(it));
             },
 
             get usedSpacePercentage() {
-                // TODO the percentage of device storage used
-                return 30;
+                return Math.round(this.state.usedSpacePercentage || 0);
             },
 
             get usedSpacePercentageColor() {
@@ -246,6 +244,10 @@
                 // Get Peer info from Appelflap
                 this.update({peerId: (await AppelflapUtilities.peerProperties()) || "unknown"});
                 this.update({peers: (await AppelflapUtilities.infoPeers()) || []});
+
+                // Get the disk utilisation info from Appelflap
+                const { disksize, diskfree } = await AppelflapUtilities.infoStorage() || { disksize: 0, diskfree: 0 };
+                this.update({usedSpacePercentage: !!disksize ? (diskfree / disksize) * 100 : 0 });
 
                 const subscriptionsUpdated = await this.refreshSubscriptions();
                 await this.publishAll();
