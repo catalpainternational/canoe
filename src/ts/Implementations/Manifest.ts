@@ -4,7 +4,10 @@ import { TManifestData } from "../Types/ManifestTypes";
 import { TWagtailPage } from "../Types/PageTypes";
 import { StorableItem } from "../Interfaces/StorableItem";
 
-import { PublishableItem } from "./PublishableItem";
+import {
+    PublishableItem,
+    UpdatePolicy,
+} from "../Implementations/PublishableItem";
 import { Page } from "./Page";
 
 import AllCourses from "./Specific/AllCourses";
@@ -17,7 +20,11 @@ import TeachingTopic from "./Specific/TeachingTopic";
 import TeachingActivity from "./Specific/TeachingActivity";
 
 // See ts/Typings for the type definitions for these imports
-import { storeManifest, getManifestFromStore } from "ReduxImpl/Interface";
+import {
+    storeManifest,
+    getManifestFromStore,
+    getPreviewing,
+} from "ReduxImpl/Interface";
 
 const logger = new Logger("Manifest");
 
@@ -82,7 +89,9 @@ export class Manifest extends PublishableItem implements StorableItem {
     // #endregion StorableItem implementations
 
     async prepare(): Promise<void> {
-        const response = await this.getResponse();
+        const response = await this.getResponse(
+            getPreviewing() ? UpdatePolicy.ForceUpdate : UpdatePolicy.Default
+        );
         return response
             .json()
             .then((manifestData: any) => {

@@ -3,7 +3,10 @@ import { TWagtailPageData } from "../Types/PageTypes";
 import { TAssetEntry } from "../Types/AssetTypes";
 import { StorableItem } from "../Interfaces/StorableItem";
 
-import { PublishableItem } from "../Implementations/PublishableItem";
+import {
+    PublishableItem,
+    UpdatePolicy,
+} from "../Implementations/PublishableItem";
 import { Asset } from "../Implementations/Asset";
 
 import Logger from "../Logger";
@@ -14,6 +17,7 @@ import {
     storePageData,
     getStoredPageCompletionDate,
     storePageComplete,
+    getPreviewing,
 } from "ReduxImpl/Interface";
 import { persistCompletion } from "js/actions/Completion";
 import { persistFeedback } from "js/UserActions";
@@ -82,7 +86,9 @@ export class Page extends PublishableItem implements StorableItem {
 
     /** Get and store this page, used in routing */
     async prepare(): Promise<void> {
-        const response = await this.getResponse();
+        const response = await this.getResponse(
+            getPreviewing() ? UpdatePolicy.ForceUpdate : UpdatePolicy.Default
+        );
         return response
             .json()
             .then((manifestData: any) => {

@@ -1,4 +1,4 @@
-import { getLanguage, setRoute, isAuthenticated } from "ReduxImpl/Interface";
+import { getLanguage, setRoute, isAuthenticated, setAndGetPreviewing } from "ReduxImpl/Interface";
 import { logPageView } from "js/GoogleAnalytics";
 
 import { Manifest } from "ts/Implementations/Manifest";
@@ -21,23 +21,24 @@ const CANOE_SHORTCUTS = {
     topics: ["learningactivitieshomepage"],
 };
 
-const IS_PAGE_PREVIEW = /^\?(.+)/;
-
 export function initialiseRouting() {
     window.addEventListener("hashchange", async () => {
-        route(window.location.hash);
+        route(window.location);
     });
-    route(window.location.hash);
+    route(window.location);
 }
 
-async function route(hashWith) {
-    const hash = hashWith.slice(1);
+async function route(location) {
+    const hash = location.hash.slice(1);
+    const queryParams = new URLSearchParams(location.search);
     const hashParts = hash.split(":");
     const pageHash = hashParts[0];
     const riotHash = hashParts.slice(1);
     let page = undefined;
     let manifest = undefined;
     let route = undefined;
+
+    const previewing = setAndGetPreviewing(queryParams.get("preview"));
 
     logPageView(hash);
 
@@ -47,7 +48,8 @@ async function route(hashWith) {
     } else {
         // otherwise we need a manifest ( bottom nav always needs to know )
         try {
-            manifest = await getValidManifest();
+            // manifest needs to know if we are getting a preview
+            manifest = await getValidManifest(previewing);
         } catch (err) {
             setRoute({
                 page: {
@@ -96,7 +98,7 @@ async function route(hashWith) {
                 : {page: {type: "pageHash_error", error: `The page shortcut "~{pageHash}" had no match in the Manifest`}};
 
             // refresh the page
-            if (!page.ready) {
+            if (!page.ready || previewing) {
                 page.prepare();
             }
         }
@@ -105,9 +107,9 @@ async function route(hashWith) {
     setRoute(route);
 }
 
-async function getValidManifest() {
+async function getValidManifest(previewing) {
     const manifest = Manifest.getInstance();
-    if (!manifest.isValid) {
+    if (!manifest.isValid || previewing) {
         // we need to wait
         await manifest.prepare();
     } else {
@@ -115,10 +117,4 @@ async function getValidManifest() {
         manifest.prepare();
     }
     return Promise.resolve(manifest);
-}
-
-//  below here deprecated - but still can be found in certain riot tags
-
-export function getNextCardsUrl(lessonId, lessonModule, lessonCardIdx) {
-    return "#" + lessonId + "/" + lessonModule + "/" + (lessonCardIdx + 2);
 }

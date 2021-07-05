@@ -2,6 +2,7 @@ import Logger from "../Logger";
 
 // See ts/Typings for the type definitions for these imports
 import { BACKEND_BASE_URL } from "js/urls";
+import { getPreviewing } from "ReduxImpl/Interface";
 
 export enum UpdatePolicy {
     Default = "default",
@@ -56,10 +57,16 @@ export abstract class PublishableItem {
      */
     async getResponseFromNetwork(): Promise<Response> {
         this.logMessage("using network");
-
         let response;
         try {
-            response = await fetch(this.url, this.getRequestOptions());
+            const url = new URL(this.url);
+            const requestOptions = this.getRequestOptions();
+            const previewing = getPreviewing();
+            if (previewing) {
+                url.searchParams.append("preview", previewing);
+                requestOptions.cache = "no-cache";
+            }
+            response = await fetch(url.toString(), requestOptions);
         } catch {
             this.logMessage("request failed");
             throw Error("Network error");
