@@ -141,6 +141,7 @@
             state: {
                 statusListings: [],
                 appDataStatus: new AppDataStatus(),
+                ssid: "",
                 peerId: "unknown",
                 peers: [],
                 // could be "outdated" or "current" - determined from the Manifest
@@ -228,11 +229,9 @@
 
             get connection() {
                 return {
-                    // TODO this API is only available on android and chrome OS, so I couldn't test it
-                    // https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/type
-                    type: NetworkInformation.type,
+                    type: this.state.ssid ? "wifi" : "",
                     // TODO I'm not sure if we can get the network name?
-                    networkName: undefined,
+                    networkName: this.state.ssid || "",
                 }
             },
 
@@ -244,6 +243,12 @@
                 // Get Peer info from Appelflap
                 this.update({peerId: (await AppelflapUtilities.peerProperties()) || "unknown"});
                 this.update({peers: (await AppelflapUtilities.infoPeers()) || []});
+
+                // Get WiFi info from Appelflap
+                const { ssid, ipadress, ipadress_raw, strength } =
+                    (await AppelflapUtilities.infoWiFi())
+                    || { ssid: "", ipadress: "", ipadress_raw: 0, strength: 0 };
+                this.update({ssid: ssid});
 
                 // Get the disk utilisation info from Appelflap
                 const { disksize, diskfree } = await AppelflapUtilities.infoStorage() || { disksize: 0, diskfree: 0 };
