@@ -257,15 +257,6 @@ export class AppelflapConnect {
 
         return await this.performCommand(requestPath, commandInit, "text");
     };
-
-    public unpublish = async (publication: TPublication): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.deletePublication;
-        const requestPath = `${commandPath}/${this.publicationPath(
-            publication
-        )}`;
-
-        return await this.performCommand(requestPath, { method }, "text");
-    };
     //#endregion
 
     //#region Subscriptions
