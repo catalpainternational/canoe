@@ -15,6 +15,7 @@ export const AF_EIKEL_API = `${AF_API_PREFIX}/eikel`;
 export const AF_EIKEL_META_API = `${AF_API_PREFIX}/eikel-meta`;
 export const AF_CACHE_API = `${AF_API_PREFIX}/ingeblikt`;
 export const AF_ACTION_API = `${AF_API_PREFIX}/do`;
+export const AF_INFO_API = `${AF_API_PREFIX}/info`;
 
 export const AF_DEBUG_API = `${AF_CACHE_API}/jeffreystube`;
 
@@ -26,10 +27,18 @@ export const AF_CERTCHAIN = "certchain";
 export const AF_INJECTABLES = "injectables";
 export const AF_STATUS = "status";
 
+//#region Appelflap Actions
 export const AF_REBOOT_HARD = "hard-reboot";
 export const AF_REBOOT_SOFT = "soft-reboot";
 export const AF_LAUNCH_WIFIPICKER = "launch-wifipicker";
 export const AF_LAUNCH_STORAGEMANAGER = "launch-storagemanager";
+//#endregion
+
+//#region Appelflap Info Blocks
+export const AF_WIFI_INFO = "wifi-info";
+export const AF_BONJOUR_PEERS = "bonjour-peers";
+export const AF_STORAGE_INFO = "storage-info";
+//#endregion
 
 export const AF_CERTCHAIN_LENGTH_HEADER = "X-Appelflap-Chain-Length";
 
@@ -64,7 +73,7 @@ export const APPELFLAPCOMMANDS = {
         commandPath: `${AF_CACHE_API}/${AF_STATUS}`,
         method: "GET",
     },
-    //#region Appelflap Utilities for Browser and Android
+    //#region Appelflap 'Actions', Utilities for Browser and Android
     doRebootHard: {
         commandPath: `${AF_ACTION_API}/${AF_REBOOT_HARD}`,
         method: "POST",
@@ -80,6 +89,20 @@ export const APPELFLAPCOMMANDS = {
     doLaunchStorageManager: {
         commandPath: `${AF_ACTION_API}/${AF_LAUNCH_STORAGEMANAGER}`,
         method: "POST",
+    },
+    //#endregion
+    //#region Appelflap Info Blocks
+    infoWiFi: {
+        commandPath: `${AF_INFO_API}/${AF_WIFI_INFO}`,
+        method: "GET",
+    },
+    infoPeers: {
+        commandPath: `${AF_INFO_API}/${AF_BONJOUR_PEERS}`,
+        method: "GET",
+    },
+    infoStorage: {
+        commandPath: `${AF_INFO_API}/${AF_STORAGE_INFO}`,
+        method: "GET",
     },
     //#endregion
     //#region Publications
@@ -124,4 +147,5 @@ export const APPELFLAPCOMMANDS = {
         commandPath: `${AF_CACHE_API}/${AF_CERTCHAIN}`,
         method: "DELETE",
     },
+    //#endregion
 };
