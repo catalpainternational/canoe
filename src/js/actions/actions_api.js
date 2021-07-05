@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { BACKEND_BASE_URL } from "js/urls";
+import { BACKEND_BASE_URL, CSRF_COOKIE_NAME } from "js/urls";
 
 const ACTIONS_ENDPOINT_URL = `${BACKEND_BASE_URL}/progress/actions`;
 
@@ -46,6 +46,6 @@ export function getActions() {
 function getHeaders() {
     return {
         "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get("csrftoken"),
+        "X-CSRFToken": Cookies.get(CSRF_COOKIE_NAME),
     };
 }

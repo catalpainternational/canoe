@@ -1,4 +1,4 @@
-import { BACKEND_BASE_URL } from "js/urls";
+import { BACKEND_BASE_URL, CSRF_COOKIE_NAME } from "js/urls";
 import { unsubscribeFromNotifications } from "js/Notifications";
 import { setAuthenticated, setUnauthenticated, getUser } from "ReduxImpl/Interface";
 import Cookies from "js-cookie";
@@ -14,7 +14,7 @@ export const login = async (usernameAndPassword) => {
         credentials: 'include',
         body: formData,
         headers: {
-            "X-CSRFToken": Cookies.get("csrftoken"),
+            "X-CSRFToken": Cookies.get(CSRF_COOKIE_NAME),
         },
     })
     .then((response) => {
@@ -29,7 +29,7 @@ export const logout = () => {
         method: "DELETE",
         credentials: 'include',
         headers: {
-            "X-CSRFToken": Cookies.get("csrftoken"),
+            "X-CSRFToken": Cookies.get(CSRF_COOKIE_NAME),
         },
     }).catch((err) => {
         // delete the Canoe=Offline-Session cookie
