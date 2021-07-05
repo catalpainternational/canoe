@@ -239,16 +239,6 @@
                 }
             },
 
-            /**
-             * Perform the 'inbound' synchronisation of everything made available by other peers
-             */
-            performInboundSync() {
-                this.update({syncStatus: "syncOn"});
-                // CacheUtilities.injectAll().then(() => {
-                //     this.update({syncStatus: "syncCompleted"});
-                // });
-            },
-
             onBeforeMount() {
                 this.state.syncStatus = "syncOff";
             },
@@ -259,8 +249,9 @@
                 if (subscriptionsUpdated) {
                     CacheSubscribe.injectables().then(async (bundles) => {
                         if (bundles.bundles.length > 0) {
+                            // Unlock the cache and let Appelflap get on with it
                             await CacheUtilities.unlock();
-                            this.performInboundSync();
+                            this.update({syncStatus: "syncOn"});
                         } else {
                             this.update({syncStatus: "syncNotRelevant"});
                         }
