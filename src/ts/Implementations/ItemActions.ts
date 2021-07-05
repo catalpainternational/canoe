@@ -7,6 +7,7 @@ import { AppelflapConnect } from "../Appelflap/AppelflapConnect";
 import { CachePublish } from "../Appelflap/CachePublish";
 import { CacheSubscribe } from "../Appelflap/CacheSubscribe";
 import { TBundles } from "../Types/BundleTypes";
+import { NOT_RELEVANT } from "../Constants";
 
 /** Define the 'target' within the cache for Appelflap */
 const CacheTarget = (item: TPublishableItem): TPublication => {
@@ -21,12 +22,12 @@ const CacheTarget = (item: TPublishableItem): TPublication => {
 /** Asks Appelflap to identify all caches that it is currently publishing
  * @returns
  * - resolve("succeeded") on success (200),
- * - resolve("not relevant") if appelflap connect wasn't provided,
+ * - resolve(NOT_RELEVANT) if appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
 export async function getPublications(): Promise<TBundles | string> {
     if (!AppelflapConnect.getInstance()) {
-        return Promise.resolve("not relevant");
+        return Promise.resolve(NOT_RELEVANT);
     }
 
     try {
@@ -40,7 +41,7 @@ export async function getPublications(): Promise<TBundles | string> {
 /** Tells Appelflap to publish this item's cache
  * @returns
  * - resolve("succeeded") on success (200),
- * - resolve("not relevant") if isPublishable is false or appelflap connect wasn't provided,
+ * - resolve(NOT_RELEVANT) if isPublishable is false or appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  * @remarks Note that there is no `unpublishItem`.
  * Unpublishing (deleting) something published is handled by Appelflap itself.
@@ -49,12 +50,15 @@ export async function publishItem(
     item: TPublishableItem
 ): Promise<TAppelflapResult> {
     if (!item || !item.isPublishable || !AppelflapConnect.getInstance()) {
-        return Promise.resolve("not relevant");
+        return Promise.resolve(NOT_RELEVANT);
     }
 
     try {
-        await CachePublish.publish(CacheTarget(item));
-        return Promise.resolve("succeeded");
+        const result =
+            (await CachePublish.publish(CacheTarget(item))) === NOT_RELEVANT
+                ? NOT_RELEVANT
+                : "succeeded";
+        return Promise.resolve(result);
     } catch (error) {
         return Promise.reject("failed");
     }
@@ -63,12 +67,12 @@ export async function publishItem(
 /** Tells Appelflap to retrieve all current subscriptions
  * @returns
  * - resolve("succeeded") on success (200),
- * - resolve("not relevant") if appelflap connect wasn't provided,
+ * - resolve(NOT_RELEVANT) if appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
 export async function getSubscriptions(): Promise<TSubscriptions | string> {
     if (!AppelflapConnect.getInstance()) {
-        return Promise.resolve("not relevant");
+        return Promise.resolve(NOT_RELEVANT);
     }
 
     try {
@@ -82,7 +86,7 @@ export async function getSubscriptions(): Promise<TSubscriptions | string> {
 /** Tells Appelflap to set all current subscriptions
  * @returns
  * - resolve("succeeded") on success (200),
- * - resolve("not relevant") if no items, none of the items are publishable, or appelflap connect wasn't provided,
+ * - resolve(NOT_RELEVANT) if no items, none of the items are publishable, or appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
 export async function setSubscriptions(
@@ -94,7 +98,7 @@ export async function setSubscriptions(
         !items.some((item) => !item.isPublishable) ||
         !AppelflapConnect.getInstance()
     ) {
-        return Promise.resolve("not relevant");
+        return Promise.resolve(NOT_RELEVANT);
     }
 
     const subscriptions: TSubscriptions = {

@@ -15,6 +15,7 @@ import {
 } from "./Implementations/ItemActions";
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
+import { NOT_RELEVANT } from "./Constants";
 
 type AfcFunction = (item: TPublishableItem) => Promise<TAppelflapResult>;
 
@@ -171,15 +172,15 @@ export class AppDataStatus {
                 const page = this.manifest.getPageManifestData(item.cacheKey);
                 if (!page) {
                     performed[item.cacheKey] = {
-                        result: "not relevant",
-                        reason: "not relevant",
+                        result: NOT_RELEVANT,
+                        reason: NOT_RELEVANT,
                     };
                 } else {
                     try {
                         const publishablePage =
                             await this.PageToPublishableItem(page);
                         const result =
-                            (await action(publishablePage)) || "not relevant";
+                            (await action(publishablePage)) || NOT_RELEVANT;
                         performed[item.cacheKey] = {
                             result: result,
                             reason: result,

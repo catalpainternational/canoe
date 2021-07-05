@@ -2,6 +2,14 @@
 
 export const EMPTY_SLATE_BOOT_KEY = "empty_slate_boot";
 
+/**
+ * This action is 'not relevant' because we're:
+ * * not in Appelflap,
+ * * the certificate isn't signed
+ * * there's no matching page
+ * @see TAppelflapResult */
+export const NOT_RELEVANT = "not relevant";
+
 // Rendition Identifiers
 // - see canoe-backend repo - TranscodeDefinition.json
 // Image Renditions
