@@ -130,6 +130,7 @@
 
     <script>
         import { AppDataStatus } from "ts/AppDataStatus";
+        import { AppelflapUtilities } from "ts/Appelflap/AppelflapUtilities";
         import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
         import { CacheSubscribe } from "ts/Appelflap/CacheSubscribe";
         import { hashString } from "js/utilities";
@@ -140,9 +141,8 @@
             state: {
                 statusListings: [],
                 appDataStatus: new AppDataStatus(),
-                // mocked data below
-                deviceId: 1234567,
-                peers: [1234589, 1234897, 1238967, 1289567, 1894567, "weft", "Q7ge", "jP52"],
+                peerId: "unknown",
+                peers: [],
                 // could be "outdated" or "current" - determined from the Manifest
                 contentStatus: "outdated",
                 // We will know if 'content' (cache bandles) are outdated from what the Manifest tells us
@@ -201,8 +201,7 @@
             },
 
             get yourSyncAvatar() {
-                // TODO actual device id
-                return this.mapAvatar(this.state.deviceId);
+                return this.mapAvatar(this.state.peerId);
             },
 
             get syncStatusText() {
@@ -244,6 +243,10 @@
             },
 
             async onMounted() {
+                // Get Peer info from Appelflap
+                this.update({peerId: (await AppelflapUtilities.peerProperties()) || "unknown"});
+                this.update({peers: (await AppelflapUtilities.infoPeers()) || []});
+
                 const subscriptionsUpdated = await this.refreshSubscriptions();
                 await this.publishAll();
                 if (subscriptionsUpdated) {

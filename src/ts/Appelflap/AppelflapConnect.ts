@@ -15,7 +15,12 @@ import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS } from "
 
 import Logger from "../Logger";
 import { inAppelflap } from "../PlatformDetection";
-import { TPeerProperties } from "../Types/PeerTypes";
+import {
+    TInfoStorage,
+    TInfoWiFi,
+    TPeerProperties,
+    TPeers,
+} from "../Types/InfoTypes";
 
 const logger = new Logger("AppelflapConnect");
 
@@ -205,6 +210,23 @@ export class AppelflapConnect {
         const { commandPath, method } =
             APPELFLAPCOMMANDS.doLaunchStorageManager;
         return await this.performCommand(commandPath, { method }, "text");
+    };
+    //#endregion
+
+    //#region Appleflap Info Blocks
+    public infoWiFi = async (): Promise<TInfoWiFi> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.infoWiFi;
+        return await this.performCommand(commandPath, { method });
+    };
+
+    public infoPeers = async (): Promise<TPeers> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.infoPeers;
+        return await this.performCommand(commandPath, { method });
+    };
+
+    public infoStorage = async (): Promise<TInfoStorage> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.infoStorage;
+        return await this.performCommand(commandPath, { method });
     };
     //#endregion
 
