@@ -1,7 +1,6 @@
 import { Page } from "../Page";
 import { TWagtailPage } from "../../Types/PageTypes";
 import TeachingTopic from "./TeachingTopic";
-import { storeAssessmentResults } from "ReduxImpl/Interface";
 import { persistAssessmentResults } from "js/actions/ExamScores";
 
 export default class TeachingActivity extends Page {
@@ -60,7 +59,6 @@ export default class TeachingActivity extends Page {
 
     saveAssessmentResults(data: Array<any>): Record<string, any> {
         persistAssessmentResults(this.id, data);
-        storeAssessmentResults(this.id, data);
         return data;
     }
 }

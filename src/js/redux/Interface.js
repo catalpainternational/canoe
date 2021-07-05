@@ -7,7 +7,7 @@ import { toggleGuestBannerAction } from "./ducks/GuestBanner";
 import { signalBrowserSupportAction } from "./ducks/BrowserSupport";
 import { clearCompletionsAction, setCompletionAction, setManyCompletionsAction } from "./ducks/Completion";
 import { clearExamScoresAction, storeExamScoreAction, storeExamScoresAction } from "./ducks/ExamScores";
-import { clearPageAnswersAction, storeTestAnswerAction, storeAssessmentResultsAction } from "./ducks/TestAnswers";
+import { clearPageAnswersAction, storeTestAnswerAction } from "./ducks/TestAnswers";
 import { changeOnlineAction } from "./ducks/Online";
 import {
     setAuthenticatedState,
@@ -103,12 +103,6 @@ export const getExamScore = (pageId) => {
     const examScores = store.getState().examScores;
     const pageIdInt = parseInt(pageId);
     return examScores ? examScores[pageIdInt] : undefined;
-}
-//#endregion
-
-//#region FormativeAssessmentResults
-export const storeAssessmentResults = (pageId, resultData) => {
-    store.dispatch(storeAssessmentResultsAction(pageId, resultData));
 }
 //#endregion
 

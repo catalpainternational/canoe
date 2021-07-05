@@ -2,7 +2,6 @@
 const TEST_ANSWERS_CLEAR = "exam/clear";
 const TEST_ANSWERS_CLEAR_PAGE = "exam/clearPage";
 const TEST_ANSWERS_STORE_ANSWER = "exam/storeAnswer";
-const FORMATIVE_ASSESSMENTS_STORE_RESULTS = "exam/storeTallies";
 
 // ACTION CREATORS
 export const clearTestAnswersAction = () => ({
@@ -18,12 +17,6 @@ export const storeTestAnswerAction = (pageId, questionId, answerData) => ({
     questionId,
     answerData,
 });
-
-export const storeAssessmentResultsAction = (pageId, resultData) => ({
-    type: FORMATIVE_ASSESSMENTS_STORE_RESULTS,
-    pageId,
-    resultData,
-})
 
 const INITIAL_STATE = null;
 
@@ -43,11 +36,6 @@ const testAnswersReducer = (state = INITIAL_STATE, action) => {
             Object.assign(newState, state);
             if(!newState[action.pageId]) newState[action.pageId] = {};
             newState[action.pageId][action.questionId] = action.answerData;
-            return newState;
-        case FORMATIVE_ASSESSMENTS_STORE_RESULTS:
-            Object.assign(newState, state);
-            if(!newState[action.pageId]) newState[action.pageId] = {};
-            newState[action.pageId] = action.resultData;
             return newState;
         default:
             return state;
