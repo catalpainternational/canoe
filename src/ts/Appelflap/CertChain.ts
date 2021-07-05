@@ -51,14 +51,6 @@ export class CertChain {
             : "unsigned";
     }
 
-    /**
-     * Does this user have authority to publish content
-     * as proven by the certificate being signed.
-     */
-    get canPublish(): boolean {
-        return this.certState === "signed";
-    }
-
     async initialise(): Promise<boolean> {
         logger.info("Initialise");
 
