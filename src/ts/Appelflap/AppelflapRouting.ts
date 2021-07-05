@@ -91,12 +91,12 @@ export const APPELFLAPCOMMANDS = {
         commandPath: `${AF_CACHE_API}/${AF_PUBLICATIONS}`,
         method: "PUT",
     },
-    deletePublication: {
-        commandPath: `${AF_CACHE_API}/${AF_PUBLICATIONS}`,
-        method: "DELETE",
-    },
+    /** @deprecated Do not use, this is performed by Appelflap garbage collection now */
+    // deletePublication: {
+    //     commandPath: `${AF_CACHE_API}/${AF_PUBLICATIONS}`,
+    //     method: "DELETE",
+    // },
     //#endregion
-    //#region Subscriptions
     getSubscriptions: {
         commandPath: `${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`,
         method: "GET",
