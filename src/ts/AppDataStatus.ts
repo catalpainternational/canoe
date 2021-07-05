@@ -203,16 +203,10 @@ export class AppDataStatus {
      * Unpublishing (deleting) something published is handled by Appelflap itself.
      */
     async PublishAll(): Promise<TPublishResult> {
-        const certChain = CertChain.getInstance();
-        if (certChain && certChain.certState === "signed") {
-            return this.PerformAll(
-                (listing) => listing.isPublishable,
-                publishItem
-            );
-        }
-        // This user does not have authority to publish anything,
-        // so publish nothing
-        return this.PerformAll((listing) => !listing, publishItem);
+        return this.PerformAll(
+            (listing) => listing.isPublishable,
+            publishItem
+        );
     }
 
     /** Get all current subscriptions */
