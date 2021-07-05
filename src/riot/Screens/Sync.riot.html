@@ -141,8 +141,8 @@
                 statusListings: [],
                 appDataStatus: new AppDataStatus(),
                 // mocked data below
-                deviceId: '2198734892374',
-                peers: ['123456789','328947230','213897472','890374185','5','dsa-r34jkl','1asbd','2dhdflgiam'],
+                deviceId: 1234567,
+                peers: [1234589, 1234897, 1238967, 1289567, 1894567, "weft", "Q7ge", "jP52"],
                 // could be "outdated" or "current" - determined from the Manifest
                 contentStatus: "outdated",
                 // We will know if 'content' (cache bandles) are outdated from what the Manifest tells us
@@ -190,7 +190,7 @@
                 const plants = ['tree','grass','weed','sedge','shrub','rush','fern','coral',
                     'acorn','moss','nettle','flower'];
 
-                const idHash = hashString(id);
+                const idHash = hashString("" + id);
 
                 return {
                     id,
