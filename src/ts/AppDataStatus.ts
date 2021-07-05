@@ -15,7 +15,6 @@ import {
 } from "./Implementations/ItemActions";
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
-import { CertChain } from "./Appelflap/CertChain";
 
 type AfcFunction = (item: TPublishableItem) => Promise<TAppelflapResult>;
 
@@ -203,10 +202,7 @@ export class AppDataStatus {
      * Unpublishing (deleting) something published is handled by Appelflap itself.
      */
     async PublishAll(): Promise<TPublishResult> {
-        return this.PerformAll(
-            (listing) => listing.isPublishable,
-            publishItem
-        );
+        return this.PerformAll((listing) => listing.isPublishable, publishItem);
     }
 
     /** Get all current subscriptions */
