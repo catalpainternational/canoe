@@ -24,7 +24,7 @@
             <p class="capitalize">{ TRANSLATIONS.choose() }</p>
             <div class="answers">
                 <div each="{answer in currentQuestion.answers}" class="answer">
-                    <p>{ answer.alpha }</p>
+                    <p>{ answer.alpha }.</p>
                     <p>{ answer.text }</p>
                 </div>
             </div>
@@ -32,7 +32,9 @@
 
         <template if="{state.cardState === 'questionCount'}">
             <span class="students"></span>
-            <h4>{ TRANSLATIONS.howManyChose() } { currentQuestion.answers[0].alpha }. { currentQuestion.answers[0].text }?</h4>
+            <h4>{ TRANSLATIONS.howManyChose() }</h4>
+            <p>{ currentQuestion.answers[0].alpha }. { currentQuestion.answers[0].text }</p>
+            <p class="capitalize label"> {TRANSLATIONS.countStudents() }</p>
             <div class="counter">
                 <button class="minus {currentQuestion.answers[0].tally === 0 ? 'disabled' : ''}" onclick="{decrementQuestionTally}">&minus;</button>
                 <div class="number">
@@ -103,10 +105,11 @@
             return {
                 TRANSLATIONS: {
                     howMany: () => gettext("How many students are undertaking this assessment?"),
-                    howManyChose: () => gettext("How many students chose the answer"),
+                    howManyChose: () => gettext("Ask students to raise their hand if they chose"),
                     students: () => gettext("Students"),
                     next: () => gettext("Next"),
-                    choose: () => gettext("Students can choose one of the following answers"),
+                    choose: () => gettext("Ask students to consider the following options"),
+                    countStudents: () => gettext("Count the number of students"),
                     excellent: () => gettext("Excellent work!"),
                     notBad: () => gettext("Not bad..."),
                     letsSee: () => gettext("Let's see how we did"),

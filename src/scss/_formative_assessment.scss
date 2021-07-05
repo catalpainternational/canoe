@@ -46,19 +46,8 @@ FormativeAssessment {
 
         .answer {
             display: grid;
-            grid-template-columns: 30px 1fr;
-            gap: 12px;
-
-            p:first-child {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: 2px solid $gray-7;
-                border-radius: 50%;
-                width: 30px;
-                height: 30px;
-                font-size: 0.9em;
-            }
+            grid-template-columns: 3ch 1fr;
+            gap: 5px;
         }
     }
 
@@ -97,12 +86,12 @@ FormativeAssessment {
         align-items: center;
         background-color: rgba($app-accent-color, 0.25);
         box-sizing: border-box;
-        width: calc(100% + 40px);
-        top: -30px;
-        margin: 0;
-        position: relative;
-        border-radius: 8px 8px 0 0;
         padding: 1em;
+        width: calc(100% + (2 * 20px));
+        margin-left: -20px;
+        margin-right: -20px;
+        margin-top: -30px;
+        border-radius: 8px 8px 0 0;
     }
 
     .capitalize {
@@ -110,7 +99,10 @@ FormativeAssessment {
         color: $gray-3;
         font-size: 0.85em;
         letter-spacing: 0.05ch;
-        margin-bottom: 1.5em;
+
+        &.label {
+            margin: 2em 0 0.5em;
+        }
     }
 
     .pill-container {
