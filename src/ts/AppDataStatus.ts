@@ -12,7 +12,6 @@ import {
     getSubscriptions,
     publishItem,
     setSubscriptions,
-    unpublishItem,
 } from "./Implementations/ItemActions";
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
@@ -203,14 +202,6 @@ export class AppDataStatus {
         return this.PerformAll((listing) => listing.isPublishable, publishItem);
     }
 
-    /** Unpublish everything currently not flagged as isPublishable */
-    async UnpublishAll(): Promise<TPublishResult> {
-        return this.PerformAll(
-            (listing) => !listing.isPublishable,
-            unpublishItem
-        );
-    }
-
     /** Get all current subscriptions */
     async GetSubscriptions(): Promise<TSubscriptions> {
         const subscriptions = await getSubscriptions();
@@ -235,12 +226,10 @@ export class AppDataStatus {
         this.itemListings.forEach((listing) => {
             syncAllStatus[listing.cacheKey] = {
                 published: "failed",
-                unpublished: "failed",
             };
         });
 
         const published = await this.PublishAll();
-        const unpublished = await this.UnpublishAll();
         let subscriptions = await this.GetSubscriptions();
         let origins = Object.keys(subscriptions.types.CACHE?.groups || {});
         let subscribed =
@@ -278,9 +267,6 @@ export class AppDataStatus {
 
         Object.entries(published).forEach((pub) => {
             syncAllStatus[pub[0]].published = pub[1].result;
-        });
-        Object.entries(unpublished).forEach((pub) => {
-            syncAllStatus[pub[0]].unpublished = pub[1].result;
         });
 
         return syncAllStatus;

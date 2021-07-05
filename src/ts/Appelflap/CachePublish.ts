@@ -18,11 +18,4 @@ export class CachePublish {
             await AppelflapConnect.getInstance()!.publish(publication);
         }
     }
-
-    /** Instructs Appelflap to cease publishing a single publication */
-    static async unpublish(publication: TPublication): Promise<void> {
-        if (AppelflapConnect.getInstance()) {
-            await AppelflapConnect.getInstance()!.unpublish(publication);
-        }
-    }
 }

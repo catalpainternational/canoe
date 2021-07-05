@@ -58,27 +58,6 @@ export async function publishItem(
     }
 }
 
-/** Tells Appelflap to unpublish this item's cache
- * @returns
- * - resolve("succeeded") on success (200),
- * - resolve("not relevant") if isPublishable is true or appelflap connect wasn't provided,
- * - reject("failed") on error (404 or 500)
- */
-export async function unpublishItem(
-    item: TPublishableItem
-): Promise<TAppelflapResult> {
-    if (!item || item.isPublishable || !AppelflapConnect.getInstance()) {
-        return Promise.resolve("not relevant");
-    }
-
-    try {
-        await CachePublish.unpublish(CacheTarget(item));
-        return Promise.resolve("succeeded");
-    } catch (error) {
-        return Promise.reject("failed");
-    }
-}
-
 /** Tells Appelflap to retrieve all current subscriptions
  * @returns
  * - resolve("succeeded") on success (200),
