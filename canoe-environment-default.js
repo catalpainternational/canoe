@@ -3,13 +3,13 @@
 
 module.exports = {
     GA_TAG: false,
-    API_BASE_URL: "http://localhost:8005",
+    API_BASE_URL: "http://localhost:8000",
     SKIP_SW: false,
     DONT_SHOW_COMPLETIONS_AFTER: "2020-2-15",
     APPLICATION_SERVER_KEY: "",
     WEBPACK_CONFIG: {
         devServer: {
-            port: 8085,
+            port: 8080,
         },
     },
     GUEST_USERNAME: "Guest",
