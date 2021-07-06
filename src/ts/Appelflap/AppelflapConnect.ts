@@ -126,6 +126,7 @@ export class AppelflapConnect {
                 case 401:
                 case 404:
                 case 409:
+                case 410:
                 case 500:
                 case 503:
                     return Promise.reject(new Error(response.statusText));
@@ -219,9 +220,17 @@ export class AppelflapConnect {
     //#endregion
 
     //#region Appleflap Info Blocks
-    public infoWiFi = async (): Promise<TInfoWiFi> => {
+    public infoWiFi = async (): Promise<TInfoWiFi | undefined> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.infoWiFi;
-        return await this.performCommand(commandPath, { method });
+        let wifiInfo: TInfoWiFi | undefined = undefined;
+        try {
+            wifiInfo = await this.performCommand(commandPath, { method });
+        } catch (infoErr) {
+            if (infoErr.message !== "Gone") {
+                throw infoErr;
+            }
+        }
+        return wifiInfo;
     };
 
     public infoPeers = async (): Promise<TPeers> => {
