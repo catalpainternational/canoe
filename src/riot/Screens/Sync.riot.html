@@ -142,7 +142,7 @@
                 statusListings: [],
                 appDataStatus: new AppDataStatus(),
                 ssid: "",
-                peerId: { friendly_ID: "unknown" },
+                peerId: { friendly_id: "unknown" },
                 peers: [],
                 // could be "outdated" or "current" - determined from the Manifest
                 contentStatus: "outdated",
@@ -202,7 +202,7 @@
             },
 
             get yourSyncAvatar() {
-                return this.mapAvatar(this.state.peerId.friendly_ID);
+                return this.mapAvatar(this.state.peerId.friendly_id);
             },
 
             get syncStatusText() {
@@ -211,7 +211,7 @@
 
             get mappedPeers() {
                 const peers = this.state.peers;
-                return peers.map((peer) => this.mapAvatar(peer.friendly_ID));
+                return peers.map((peer) => this.mapAvatar(peer.friendly_id));
             },
 
             get usedSpacePercentage() {
