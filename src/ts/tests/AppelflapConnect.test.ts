@@ -493,8 +493,8 @@ test("Appelflap: peer ID", async (t: any) => {
 
     const testUri = `${AF_ENDPOINT}/${AF_PEER_PROPERTIES}`;
     const testResponse: TPeerProperties = {
-        ID: 3657874,
-        friendly_ID: "qZdP",
+        id: 3657874,
+        friendly_id: "qZdP",
         palette: "23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ",
     };
     const successResponse = new Response(JSON.stringify(testResponse), {
