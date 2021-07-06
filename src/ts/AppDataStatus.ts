@@ -22,14 +22,23 @@ type AfcFunction = (item: TPublishableItem) => Promise<TAppelflapResult>;
 /** An overview of the status for all cached data used by the app */
 export class AppDataStatus {
     manifest: Manifest;
-    itemListings: TItemListing[];
+    #itemListings: TItemListing[];
 
     constructor() {
         this.manifest = Manifest.getInstance();
-        this.itemListings = [];
+        this.#itemListings = [];
     }
 
-    async ManifestListing(): Promise<TItemListing> {
+    async ItemListings(): Promise<TItemListing[]> {
+        if (this.#itemListings.length) {
+            return this.#itemListings;
+        }
+
+        await this.BuildList();
+        return this.#itemListings;
+    }
+
+    private async ManifestListing(): Promise<TItemListing> {
         const isAvailableOffline = await this.manifest.isAvailableOffline();
 
         return {
@@ -44,7 +53,7 @@ export class AppDataStatus {
         };
     }
 
-    async PageListing(
+    private async PageListing(
         pageId: string,
         manifestPage: TWagtailPage,
         inCache: boolean
@@ -74,9 +83,9 @@ export class AppDataStatus {
         };
     }
 
-    async BuildList(): Promise<void> {
-        this.itemListings = [];
-        this.itemListings.push(await this.ManifestListing());
+    private async BuildList(): Promise<void> {
+        this.#itemListings = [];
+        this.#itemListings.push(await this.ManifestListing());
 
         const pageIds = Object.keys(this.manifest.pages);
         const cacheKeys = await CacheKeys();
@@ -95,16 +104,16 @@ export class AppDataStatus {
         }
 
         // Add the page listings in order of published, publishable, available, valid, none of the above
-        this.itemListings.push(
+        this.#itemListings.push(
             ...pageListings.filter((pageListing) => pageListing.isPublishable)
         );
-        this.itemListings.push(
+        this.#itemListings.push(
             ...pageListings.filter(
                 (pageListing) =>
                     !pageListing.isPublishable && pageListing.isAvailableOffline
             )
         );
-        this.itemListings.push(
+        this.#itemListings.push(
             ...pageListings.filter(
                 (pageListing) =>
                     !pageListing.isPublishable &&
@@ -112,7 +121,7 @@ export class AppDataStatus {
                     pageListing.isValid
             )
         );
-        this.itemListings.push(
+        this.#itemListings.push(
             ...pageListings.filter(
                 (pageListing) =>
                     !pageListing.isPublishable &&
@@ -148,7 +157,7 @@ export class AppDataStatus {
         filter: (item: TItemListing) => boolean,
         action: AfcFunction
     ) {
-        const performable = this.itemListings.filter(filter);
+        const performable = (await this.ItemListings()).filter(filter);
 
         const performed: TPublishResult = {};
         for (let ix = 0; ix < performable.length; ix++) {
@@ -217,7 +226,7 @@ export class AppDataStatus {
 
     /** Set all current subscriptions */
     async SetSubscriptions(): Promise<TSubscriptions> {
-        const subscriptions = await setSubscriptions(this.itemListings);
+        const subscriptions = await setSubscriptions(await this.ItemListings());
         if (
             typeof subscriptions === "string" &&
             subscriptions === "not relevant"
@@ -229,8 +238,9 @@ export class AppDataStatus {
 
     async SyncAll(): Promise<TSyncData> {
         const syncAllStatus: TSyncData = {};
+        const itemListings = await this.ItemListings();
 
-        this.itemListings.forEach((listing) => {
+        itemListings.forEach((listing) => {
             syncAllStatus[listing.cacheKey] = {
                 published: "failed",
             };
@@ -247,7 +257,7 @@ export class AppDataStatus {
                   )
                 : [];
         let publishSubscribeMismatch = false;
-        if (this.itemListings.length !== subscribed.length) {
+        if (itemListings.length !== subscribed.length) {
             publishSubscribeMismatch = true;
         } else {
             publishSubscribeMismatch = subscribed.some((sub) => {
