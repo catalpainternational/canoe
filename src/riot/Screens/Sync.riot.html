@@ -281,7 +281,7 @@
                 const statusListings = await this.state.appDataStatus.ItemListings();
 
                 this.update({
-                    peerId: (await AppelflapUtilities.peerProperties()) || { friendly_ID: "unknown" },
+                    peerId: (await AppelflapUtilities.peerProperties()) || { friendly_id: "unknown" },
                     peers: await AppelflapUtilities.infoPeers(),
                     ssid: ssid,
                     usedSpacePercentage: usedPct,
