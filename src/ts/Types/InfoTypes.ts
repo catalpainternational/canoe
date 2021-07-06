@@ -20,6 +20,7 @@ export type TInfoWiFi = {
      * IP Address as a simple number
      */
     ipaddress_raw: number;
+    /** This is expressed as a number in the range 0-100 (inclusive) */
     strength: number;
 };
 
