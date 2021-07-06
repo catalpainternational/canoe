@@ -14,14 +14,13 @@ export type TInfoWiFi = {
     ssid: string;
     /**
      * IP Address correctly formatted
-     * @remarks Note the spelling mistake in `ipadress`
      */
-    ipadress: string;
+    ipaddress: string;
     /**
      * IP Address as a simple number
-     * @remarks Note the spelling mistake in `ipadress_raw`
      */
-    ipadress_raw: number;
+    ipaddress_raw: number;
+    /** This is expressed as a number in the range 0-100 (inclusive) */
     strength: number;
 };
 

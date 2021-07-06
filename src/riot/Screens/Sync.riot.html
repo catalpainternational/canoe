@@ -263,14 +263,13 @@
 
             async appelflapStatus() {
                 // Get Peer info from Appelflap
-                const peerId = (await AppelflapUtilities.peerProperties()) || { friendly_ID: "unknown" };
+                const peerId = (await AppelflapUtilities.peerProperties()) || { friendly_id: "unknown" };
                 const peers = await AppelflapUtilities.infoPeers();
 
                 // Get WiFi info from Appelflap
-                // Note the spelling mistake in `ipadress` and `ipadress_raw`
-                const { ssid, ipadress, ipadress_raw, strength } =
+                const { ssid, ipaddress, ipaddress_raw, strength } =
                     (await AppelflapUtilities.infoWiFi())
-                    || { ssid: "", ipadress: "", ipadress_raw: 0, strength: 0 };
+                    || { ssid: "", ipaddress: "", ipaddress_raw: 0, strength: 0 };
 
                 // Get the disk utilisation info from Appelflap
                 const { disksize, diskfree } = await AppelflapUtilities.infoStorage() || { disksize: 0, diskfree: 0 };
