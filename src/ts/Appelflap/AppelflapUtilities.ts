@@ -23,10 +23,11 @@ export class AppelflapUtilities {
     }
 
     /** Get the properties for the current 'peers' of this user */
-    static async infoPeers(): Promise<TPeers | undefined> {
+    static async infoPeers(): Promise<TPeers> {
         if (AppelflapConnect.getInstance()) {
             return await AppelflapConnect.getInstance()!.infoPeers();
         }
+        return [];
     }
 
     static async infoStorage(): Promise<TInfoStorage | undefined> {

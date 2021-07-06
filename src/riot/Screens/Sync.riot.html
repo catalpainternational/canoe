@@ -142,7 +142,7 @@
                 statusListings: [],
                 appDataStatus: new AppDataStatus(),
                 ssid: "",
-                peerId: "unknown",
+                peerId: { friendly_ID: "unknown" },
                 peers: [],
                 // could be "outdated" or "current" - determined from the Manifest
                 contentStatus: "outdated",
@@ -202,7 +202,7 @@
             },
 
             get yourSyncAvatar() {
-                return this.mapAvatar(this.state.peerId);
+                return this.mapAvatar(this.state.peerId.friendly_ID);
             },
 
             get syncStatusText() {
@@ -211,7 +211,7 @@
 
             get mappedPeers() {
                 const peers = this.state.peers;
-                return peers.map((it) => this.mapAvatar(it));
+                return peers.map((peer) => this.mapAvatar(peer.friendly_ID));
             },
 
             get usedSpacePercentage() {
@@ -241,18 +241,24 @@
 
             async onMounted() {
                 // Get Peer info from Appelflap
-                this.update({peerId: (await AppelflapUtilities.peerProperties()) || "unknown"});
-                this.update({peers: (await AppelflapUtilities.infoPeers()) || []});
+                this.update({
+                    peerId: (await AppelflapUtilities.peerProperties()) || { friendly_ID: "unknown" },
+                    peers: await AppelflapUtilities.infoPeers(),
+                });
 
                 // Get WiFi info from Appelflap
+                // Note the spelling mistake in `ipadress` and `ipadress_raw`
                 const { ssid, ipadress, ipadress_raw, strength } =
                     (await AppelflapUtilities.infoWiFi())
                     || { ssid: "", ipadress: "", ipadress_raw: 0, strength: 0 };
-                this.update({ssid: ssid});
+                this.update({ ssid: ssid });
 
                 // Get the disk utilisation info from Appelflap
                 const { disksize, diskfree } = await AppelflapUtilities.infoStorage() || { disksize: 0, diskfree: 0 };
-                this.update({usedSpacePercentage: !!disksize ? (diskfree / disksize) * 100 : 0 });
+                const usedPct = !!disksize
+                    ? ((disksize - diskfree) / disksize) * 100
+                    : 0;
+                this.update({ usedSpacePercentage: usedPct });
 
                 const subscriptionsUpdated = await this.refreshSubscriptions();
                 await this.publishAll();
