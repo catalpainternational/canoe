@@ -235,17 +235,7 @@ export class AppelflapConnect {
 
     public infoPeers = async (): Promise<TPeers> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.infoPeers;
-        // Note that the infoPeers command doesn't return the field names with the same case
-        // so some manipulation is required
-        const peers: TPeers = (
-            (await this.performCommand(commandPath, { method })) || []
-        ).map((peer: Record<string, any>) => {
-            return {
-                ID: peer.id,
-                friendly_ID: peer.friendly_ID,
-            } as TPeerProperties;
-        });
-        return peers;
+        return this.performCommand(commandPath, { method });
     };
 
     public infoStorage = async (): Promise<TInfoStorage> => {
