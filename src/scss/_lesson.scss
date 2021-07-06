@@ -775,6 +775,14 @@ ExamReview {
             text-transform: uppercase;
         }
     }
+
+    .exam-summary {
+        display: block;
+
+        a.back {
+            display: block;
+        }
+    }
 }
 
 // Shared lesson styles
