@@ -13,11 +13,12 @@ import {
     TPublication,
     TSubscriptions,
 } from "../Types/CacheTypes";
+import { TPeerProperties } from "../Types/InfoTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_LOCALHOSTURI, AF_ENDPOINT, AF_PROPERTIES, AF_EIKEL_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "ts/Appelflap/AppelflapRouting";
+import { AF_LOCALHOSTURI, AF_ENDPOINT, AF_SERVER_PROPERTIES, AF_PEER_PROPERTIES, AF_EIKEL_META_API, AF_CACHE_API, AF_ACTION_API, AF_INS_LOCK, AF_PUBLICATIONS, AF_SUBSCRIPTIONS, AF_STATUS, AF_REBOOT_SOFT, AF_CERTCHAIN, AF_CERTCHAIN_LENGTH_HEADER } from "ts/Appelflap/AppelflapRouting";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -27,14 +28,14 @@ test.before((t: any) => {
     global["navigator"] = buildFakeNavigator(t.context.testPort);
     const gt = globalThis as Record<string, any>;
     gt["AFC_MOCKMODE"] = true;
-    t.context["afc"] = AppelflapConnect.Instance;
+    t.context["afc"] = AppelflapConnect.getInstance();
 
     const endpointProps = {
         user: "a",
         password: "b",
         port: t.context["testPort"],
     };
-    fetchMock.mock(`${AF_ENDPOINT}/${AF_PROPERTIES}`, endpointProps);
+    fetchMock.mock(`${AF_ENDPOINT}/${AF_SERVER_PROPERTIES}`, endpointProps);
 });
 
 test.beforeEach(async (t: any) => {
@@ -137,47 +138,19 @@ test("Cache: unlock", async (t: any) => {
     fetchMock.reset();
 });
 
-test("Cache: status", async (t: any) => {
-    const afc = t.context.afc as AppelflapConnect;
-    const authFailureResponse = t.context.authFailureResponse as Response;
-
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_STATUS}`;
-    const testResponse = {
-        "staged-caches": {
-            "some-web-origin": { "some-cache-name": { Size: 9000 } },
-        },
-        "disk-free": 9000,
-    };
-    const successResponse = new Response(JSON.stringify(testResponse), {
-        status: 200,
-        statusText: "Ok",
-        headers: { "Content-Type": "application/json" },
-    });
-
-    fetchMock.get(testUri, successResponse);
-    const successResult = await afc.getCacheStatus();
-    t.deepEqual(successResult, testResponse);
-
-    fetchMock.get(testUri, authFailureResponse, { overwriteRoutes: true });
-    const result = await t.throwsAsync(afc.getCacheStatus());
-    t.is(result.message, authFailureResponse.statusText);
-
-    fetchMock.reset();
-});
-
-test("Cache: canoe reboot", async (t: any) => {
+test("Cache: canoe reboot soft", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const successResponse = t.context.successResponse as Response;
     const authFailureResponse = t.context.authFailureResponse as Response;
 
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_ACTION_API}/${AF_REBOOT}`;
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_ACTION_API}/${AF_REBOOT_SOFT}`;
 
     fetchMock.post(testUri, successResponse);
-    const successResult = await afc.doReboot();
+    const successResult = await afc.doRebootSoft();
     t.is(successResult, "ok");
 
     fetchMock.post(testUri, authFailureResponse, { overwriteRoutes: true });
-    const result = await t.throwsAsync(afc.doReboot());
+    const result = await t.throwsAsync(afc.doRebootSoft());
     t.is(result.message, authFailureResponse.statusText);
 
     fetchMock.reset();
@@ -221,11 +194,13 @@ test.skip("Cache: publish", async (t: any) => {
     const serviceUnavailableResponse = t.context
         .serviceUnavailableResponse as Response;
 
+    const bundleType = "CACHE";
     const webOrigin = "some-web-origin";
     const cacheName = "some-cache-name";
     const version = 10;
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${webOrigin}/${cacheName}/${version}`;
+    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${bundleType}/${webOrigin}/${cacheName}/${version}`;
     const publication: TPublication = {
+        bundleType: bundleType,
         webOrigin: webOrigin,
         cacheName: cacheName,
         version: version,
@@ -259,81 +234,73 @@ test.skip("Cache: publish", async (t: any) => {
     fetchMock.reset();
 });
 
-test.skip("Cache: unpublish", async (t: any) => {
-    const afc = t.context.afc as AppelflapConnect;
-    const successResponse = t.context.successResponse as Response;
-    const authFailureResponse = t.context.authFailureResponse as Response;
-    const notFoundResponse = t.context.notFoundResponse as Response;
-    const conflictResponse = t.context.conflictResponse as Response;
-
-    const webOrigin = "some-web-origin";
-    const cacheName = "some-cache-name";
-    const version = 10;
-    const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_PUBLICATIONS}/${webOrigin}/${cacheName}/${version}`;
-    const publication: TPublication = {
-        webOrigin: webOrigin,
-        cacheName: cacheName,
-        version: version,
-    };
-
-    // When doing throwsAsync tests, expect 2 assertions returned for each test
-    // And do the 'ok' test last to ensure that all tests are awaited
-    t.plan(7);
-    [authFailureResponse, notFoundResponse, conflictResponse].forEach(
-        async (response) => {
-            fetchMock.delete(testUri, response, { overwriteRoutes: true });
-            const failureResult = await t.throwsAsync(
-                afc.unpublish(publication)
-            );
-            t.is(failureResult.message, response.statusText);
-        }
-    );
-
-    fetchMock.delete(testUri, successResponse, { overwriteRoutes: true });
-    const successResult = await afc.unpublish(publication);
-    t.is(successResult, "ok");
-
-    fetchMock.reset();
-});
-
 test("Cache: getSubscriptions", async (t: any) => {
     const afc = t.context.afc as AppelflapConnect;
     const authFailureResponse = t.context.authFailureResponse as Response;
 
     const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`;
-    const testResponse = {
-        origins: {
-            "some-web-origin": {
-                caches: {
-                    "some-cache-name": {
-                        injection_version_min: 10,
-                        injection_version_max: 20,
-                        p2p_version_min: 200,
-                        p2p_version_max: 888,
-                        injected_version: 12,
+    const testEmptyResponse: TSubscriptions = { types: {} };
+    const testResponse: TSubscriptions = {
+        types: {
+            CACHE: {
+                groups: {
+                    "some-web-origin": {
+                        names: {
+                            "some-cache-name": {
+                                injection_version_min: 10,
+                                injection_version_max: 20,
+                                p2p_version_min: 200,
+                                p2p_version_max: 888,
+                                injected_version: 12,
+                            },
+                            "another-cache-name": {
+                                injection_version_min: 42,
+                                injection_version_max: 42,
+                                p2p_version_min: 1,
+                                p2p_version_max: 9000,
+                                injected_version: null,
+                            },
+                        },
                     },
-                    "another-cache-name": {
-                        injection_version_min: 42,
-                        injection_version_max: 42,
-                        p2p_version_min: 1,
-                        p2p_version_max: 9000,
-                        injected_version: null,
+                    "some-other-web-origin": {
+                        names: {
+                            "yet-another-cache-name": {
+                                injection_version_min: 42,
+                                injection_version_max: 42,
+                                p2p_version_min: 1,
+                                p2p_version_max: 9000,
+                                injected_version: null,
+                            },
+                        },
                     },
                 },
             },
-            "some-other-web-origin": {
-                caches: {
-                    "yet-another-cache-name": {
-                        injection_version_min: 42,
-                        injection_version_max: 42,
-                        p2p_version_min: 1,
-                        p2p_version_max: 9000,
-                        injected_version: null,
+            SWORK: {
+                groups: {
+                    "https://learn.canoe-engineering.temp.build": {
+                        names: {
+                            "sw.js": {
+                                injection_version_min: 2,
+                                injection_version_max: 2,
+                                p2p_version_min: 1,
+                                p2p_version_max: 9000,
+                                injected_version: 2,
+                            },
+                        },
                     },
                 },
             },
         },
     };
+
+    const successEmptyResponse = new Response(
+        JSON.stringify(testEmptyResponse),
+        {
+            status: 200,
+            statusText: "Ok",
+            headers: { "Content-Type": "application/json" },
+        }
+    );
 
     const successResponse = new Response(JSON.stringify(testResponse), {
         status: 200,
@@ -341,13 +308,18 @@ test("Cache: getSubscriptions", async (t: any) => {
         headers: { "Content-Type": "application/json" },
     });
 
-    fetchMock.get(testUri, successResponse);
-    const successResult = await afc.getSubscriptions();
-    t.deepEqual(successResult, testResponse);
-
+    // Do failure tests before success tests
     fetchMock.get(testUri, authFailureResponse, { overwriteRoutes: true });
     const result = await t.throwsAsync(afc.getSubscriptions());
     t.is(result.message, authFailureResponse.statusText);
+
+    fetchMock.get(testUri, successEmptyResponse);
+    const successEmptyResult = await afc.getSubscriptions();
+    t.deepEqual(successEmptyResult, testEmptyResponse);
+
+    fetchMock.get(testUri, successResponse);
+    const successResult = await afc.getSubscriptions();
+    t.deepEqual(successResult, testResponse);
 
     fetchMock.reset();
 });
@@ -363,33 +335,37 @@ test.skip("Cache: setSubscriptions", async (t: any) => {
 
     const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`;
     const subscriptions: TSubscriptions = {
-        origins: {
-            "some-web-origin": {
-                caches: {
-                    "some-cache-name": {
-                        injection_version_min: 10,
-                        injection_version_max: 20,
-                        p2p_version_min: 200,
-                        p2p_version_max: 888,
-                        injected_version: 12,
+        types: {
+            CACHE: {
+                groups: {
+                    "some-web-origin": {
+                        names: {
+                            "some-cache-name": {
+                                injection_version_min: 10,
+                                injection_version_max: 20,
+                                p2p_version_min: 200,
+                                p2p_version_max: 888,
+                                injected_version: 12,
+                            },
+                            "another-cache-name": {
+                                injection_version_min: 42,
+                                injection_version_max: 42,
+                                p2p_version_min: 1,
+                                p2p_version_max: 9000,
+                                injected_version: null,
+                            },
+                        },
                     },
-                    "another-cache-name": {
-                        injection_version_min: 42,
-                        injection_version_max: 42,
-                        p2p_version_min: 1,
-                        p2p_version_max: 9000,
-                        injected_version: null,
-                    },
-                },
-            },
-            "some-other-web-origin": {
-                caches: {
-                    "yet-another-cache-name": {
-                        injection_version_min: 42,
-                        injection_version_max: 42,
-                        p2p_version_min: 1,
-                        p2p_version_max: 9000,
-                        injected_version: null,
+                    "some-other-web-origin": {
+                        names: {
+                            "yet-another-cache-name": {
+                                injection_version_min: 42,
+                                injection_version_max: 42,
+                                p2p_version_min: 1,
+                                p2p_version_max: 9000,
+                                injected_version: null,
+                            },
+                        },
                     },
                 },
             },
@@ -508,6 +484,28 @@ test.skip("Cache: Delete Package Certificate", async (t: any) => {
     fetchMock.delete(testUri, successResponse, { overwriteRoutes: true });
     const successResult = await afc.deleteCertificate();
     t.is(successResult, "ok");
+
+    fetchMock.reset();
+});
+
+test("Appelflap: peer ID", async (t: any) => {
+    const afc = t.context.afc as AppelflapConnect;
+
+    const testUri = `${AF_ENDPOINT}/${AF_PEER_PROPERTIES}`;
+    const testResponse: TPeerProperties = {
+        ID: 3657874,
+        friendly_ID: "qZdP",
+        palette: "23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ",
+    };
+    const successResponse = new Response(JSON.stringify(testResponse), {
+        status: 200,
+        statusText: "Ok",
+        headers: { "Content-Type": "application/json" },
+    });
+
+    fetchMock.get(testUri, successResponse);
+    const successResult = await afc.getPeerProperties();
+    t.deepEqual(successResult, testResponse);
 
     fetchMock.reset();
 });

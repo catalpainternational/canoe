@@ -7,16 +7,13 @@ export type TPublicationVersion = {
     version: number;
 };
 
-export type TPublication = TPublicationTarget & TPublicationVersion;
+export type TPublication = {
+    bundleType: string;
+} & TPublicationTarget &
+    TPublicationVersion;
 
 export type TPublicationSize = {
     size: number;
-};
-
-export type TPublications = {
-    [name: string]: {
-        [name: string]: TPublicationVersion & TPublicationSize;
-    };
 };
 
 export type TSubscriptionVersion = {
@@ -29,13 +26,15 @@ export type TSubscriptionVersion = {
 
 export type TSubscription = TPublicationTarget & TSubscriptionVersion;
 
+export type TSubscriptionCache = {
+    groups: Record<string, { names: Record<string, TSubscriptionVersion> }>;
+};
+
 export type TSubscriptions = {
-    origins: Record<
-        string,
-        {
-            caches: Record<string, TSubscriptionVersion>;
-        }
-    >;
+    types: {
+        CACHE?: TSubscriptionCache;
+        SWORK?: TSubscriptionCache;
+    };
 };
 
 export type TCertificate = {

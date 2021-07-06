@@ -2,9 +2,9 @@
 import {
     TCertificate,
     TPublication,
-    TPublications,
     TSubscriptions,
 } from "../Types/CacheTypes";
+import { TBundles } from "../Types/BundleTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -15,6 +15,12 @@ import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS } from "
 
 import Logger from "../Logger";
 import { inAppelflap } from "../PlatformDetection";
+import {
+    TInfoStorage,
+    TInfoWiFi,
+    TPeerProperties,
+    TPeers,
+} from "../Types/InfoTypes";
 
 const logger = new Logger("AppelflapConnect");
 
@@ -26,6 +32,7 @@ export class AppelflapConnect {
         password: string;
         port: number;
     };
+    #peerProperties?: TPeerProperties;
 
     private constructor() {
         logger.log("Singleton created");
@@ -35,7 +42,7 @@ export class AppelflapConnect {
      * Gets the single instance of AppelflapConnect
      * or undefined if we're not inAppelflap
      */
-    public static get Instance(): AppelflapConnect | undefined {
+    public static getInstance(): AppelflapConnect | undefined {
         if (!AppelflapConnect.instance) {
             const gt = globalThis as Record<string, any>;
             gt["AFC_MOCKMODE"] = gt["AFC_MOCKMODE"] || false;
@@ -119,6 +126,7 @@ export class AppelflapConnect {
                 case 401:
                 case 404:
                 case 409:
+                case 500:
                 case 503:
                     return Promise.reject(new Error(response.statusText));
             }
@@ -151,6 +159,7 @@ export class AppelflapConnect {
         /* eslint-enable no-case-declarations */
     };
 
+    //#region Appelflap Administration
     private getEndpointProperties = async (): Promise<void> => {
         if (!this.#endpointProperties) {
             const { commandPath } = APPELFLAPCOMMANDS.getEndpointProperties;
@@ -162,11 +171,66 @@ export class AppelflapConnect {
         }
     };
 
+    public getPeerProperties = async (): Promise<TPeerProperties> => {
+        if (!this.#peerProperties) {
+            const { commandPath } = APPELFLAPCOMMANDS.getPeerProperties;
+            logger.info(`Getting peer properties`);
+
+            const response = await fetch(commandPath);
+            this.#peerProperties = await response.json();
+            logger.info("Got peer properties");
+        }
+
+        return this.#peerProperties!;
+    };
+
     public getLargeObjectIndexStatus = async (): Promise<any> => {
         const { commandPath } = APPELFLAPCOMMANDS.getLargeObjectIndexStatus;
         return await this.performCommand(commandPath);
     };
+    //#endregion
 
+    //#region Appleflap Actions
+    public doRebootHard = async (): Promise<any> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.doRebootHard;
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    public doRebootSoft = async (): Promise<any> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.doRebootSoft;
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    public doLaunchWiFiPicker = async (): Promise<any> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.doLaunchWiFiPicker;
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    public doLaunchStorageManager = async (): Promise<any> => {
+        const { commandPath, method } =
+            APPELFLAPCOMMANDS.doLaunchStorageManager;
+        return await this.performCommand(commandPath, { method }, "text");
+    };
+    //#endregion
+
+    //#region Appleflap Info Blocks
+    public infoWiFi = async (): Promise<TInfoWiFi> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.infoWiFi;
+        return await this.performCommand(commandPath, { method });
+    };
+
+    public infoPeers = async (): Promise<TPeers> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.infoPeers;
+        return await this.performCommand(commandPath, { method });
+    };
+
+    public infoStorage = async (): Promise<TInfoStorage> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.infoStorage;
+        return await this.performCommand(commandPath, { method });
+    };
+    //#endregion
+
+    //#region Cache Administration
     public lock = async (): Promise<string> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.setLock;
         logger.info(`'Locking' Bero`);
@@ -179,27 +243,28 @@ export class AppelflapConnect {
         return await this.performCommand(commandPath, { method }, "text");
     };
 
+    /**
+     * Get the status of the cache from Appelflap
+     * @deprecated No longer available from Appelflap, returns 404
+     */
     public getCacheStatus = async (): Promise<any> => {
         const { commandPath } = APPELFLAPCOMMANDS.getCacheStatus;
         return await this.performCommand(commandPath);
     };
+    //#endregion
 
-    public doReboot = async (): Promise<any> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.doReboot;
-        return await this.performCommand(commandPath, { method }, "text");
-    };
-
-    public getPublications = async (): Promise<TPublications> => {
+    //#region Publication
+    public getPublications = async (): Promise<TBundles> => {
         const { commandPath } = APPELFLAPCOMMANDS.getPublications;
-        return (await this.performCommand(
-            commandPath
-        )) as Promise<TPublications>;
+        const bundles = await this.performCommand(commandPath);
+        return bundles as Promise<TBundles>;
     };
 
     private publicationPath = (publication: TPublication) => {
+        const bundleType = "CACHE";
         const prepWebOrigin = encodeURIComponent(publication.webOrigin);
         const prepCacheName = encodeURIComponent(publication.cacheName);
-        return `${prepWebOrigin}/${prepCacheName}/${publication.version}`;
+        return `${bundleType}/${prepWebOrigin}/${prepCacheName}/${publication.version}`;
     };
 
     public publish = async (publication: TPublication): Promise<string> => {
@@ -214,22 +279,14 @@ export class AppelflapConnect {
 
         return await this.performCommand(requestPath, commandInit, "text");
     };
+    //#endregion
 
-    public unpublish = async (publication: TPublication): Promise<string> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.deletePublication;
-        const requestPath = `${commandPath}/${this.publicationPath(
-            publication
-        )}`;
-
-        return await this.performCommand(requestPath, { method }, "text");
-    };
-
+    //#region Subscriptions
     public getSubscriptions = async (): Promise<TSubscriptions> => {
         const { commandPath } = APPELFLAPCOMMANDS.getSubscriptions;
 
-        return (await this.performCommand(
-            commandPath
-        )) as Promise<TSubscriptions>;
+        const subscriptions = await this.performCommand(commandPath);
+        return subscriptions as Promise<TSubscriptions>;
     };
 
     public setSubscriptions = async (
@@ -252,6 +309,22 @@ export class AppelflapConnect {
         )) as Promise<TSubscriptions>;
     };
 
+    /**
+     * Get a list of all bundles that are 'injectable' into the cache in response to Subscriptions
+     * @remarks this corresponds with @see getSubscriptions which are the bundles that have been subscribed to
+     */
+    public injectables = async (): Promise<TBundles> => {
+        const { commandPath } = APPELFLAPCOMMANDS.getInjectables;
+
+        logger.info(
+            "Identifying all bundles ready for injection into the browser's cache"
+        );
+        const bundles = await this.performCommand(commandPath);
+        return bundles as Promise<TBundles>;
+    };
+    //#endregion
+
+    //#region Certificates
     public getCertificate = async (): Promise<TCertificate> => {
         const { commandPath } = APPELFLAPCOMMANDS.getCertificate;
 
@@ -288,4 +361,9 @@ export class AppelflapConnect {
         logger.info(`Deleting certificate`);
         return await this.performCommand(commandPath, { method }, "text");
     };
+    //#endregion
+
+    //#region Appelflap Debug
+
+    //#endregion
 }

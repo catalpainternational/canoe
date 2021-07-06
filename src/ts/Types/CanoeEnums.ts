@@ -5,13 +5,12 @@
  * or whether it is relinquishing that lock and can be restarted */
 export type TLock = "lock" | "unlock";
 
-/** Whether a certain 'package' is (or should be) published or is (or should be) unpublished */
-export type TPublish = "publish" | "unpublish";
-
 /** Whether a certain 'package' is (or should be) subscribed to or is (or should be) unsubscribed from */
 export type TSubscribe = "subscribe" | "unsubscribe";
 
-/** Whether a request to Appelflap succeeded (returned 200), failed (returned 404 or 500), or was simply not relevant */
+/**
+ * Whether a request to Appelflap succeeded (returned 200), failed (returned 404 or 500), or was simply not relevant
+ * @see NOT_RELEVANT */
 export type TAppelflapResult = "succeeded" | "not relevant" | "failed";
 
 /** Accepted Http methods (complete list) */

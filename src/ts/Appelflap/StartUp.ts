@@ -4,6 +4,9 @@ import { BeroHost } from "./BeroHost";
 import { CertChain } from "./CertChain";
 import Logger from "../Logger";
 
+// See ts/Typings for the type definitions for these imports
+import { isAuthenticated } from "ReduxImpl/Interface";
+
 const logger = new Logger("StartUp");
 
 /** Initialise the BeroHost (a wrapper around Appelflap)
@@ -13,7 +16,7 @@ export const InitialiseBeroHost = async (
     startup: () => void = () => {}
 ): Promise<string> => {
     try {
-        await BeroHost.Instance.StartBero(startup);
+        await BeroHost.getInstance().StartBero(startup);
         logger.info("BeroHost initialised");
         return await Promise.resolve("");
     } catch (e) {
@@ -25,18 +28,21 @@ export const InitialiseBeroHost = async (
 };
 
 /** Initialise the certificate chain, this should only work if:
- * - Bero is hosted in Appelflap (test the Appelflap.Instance exists)
+ * - Bero is hosted in Appelflap (test the Appelflap.getInstance() exists)
  * - The user is logged in
  * - The user has the correct permissions to publish
  */
 export const initialiseCertChain = async (): Promise<void> => {
-    const haveAFC = AppelflapConnect.Instance;
-    const haveSignedCert = CertChain.Instance.certState === "signed";
-    if (!haveAFC || haveSignedCert) {
+    const haveAFC = AppelflapConnect.getInstance();
+    const haveSignedCert = CertChain.getInstance().certState === "signed";
+    if (!haveAFC || (haveSignedCert && isAuthenticated())) {
+        // We're not hosted in Appelflap,
+        // or we have a signed certificate and the user is authenticated
         return;
     }
+
     try {
-        const hasCert = await CertChain.Instance.initialise();
+        const hasCert = await CertChain.getInstance().initialise();
         if (!hasCert) {
             throw new Error(
                 "Publishing certificate chain could not be initialised. \

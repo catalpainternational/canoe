@@ -12,10 +12,10 @@ import {
     getSubscriptions,
     publishItem,
     setSubscriptions,
-    unpublishItem,
 } from "./Implementations/ItemActions";
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
+import { NOT_RELEVANT } from "./Constants";
 
 type AfcFunction = (item: TPublishableItem) => Promise<TAppelflapResult>;
 
@@ -81,6 +81,7 @@ export class AppDataStatus {
         const pageIds = Object.keys(this.manifest.pages);
         const cacheKeys = await CacheKeys();
 
+        const pageListings: TItemListing[] = [];
         for (let ix = 0; ix < pageIds.length; ix++) {
             const pageId = pageIds[ix];
             const manifestPage = this.manifest.pages[pageId];
@@ -90,8 +91,35 @@ export class AppDataStatus {
                 manifestPage,
                 inCache
             );
-            this.itemListings.push(pageListing);
+            pageListings.push(pageListing);
         }
+
+        // Add the page listings in order of published, publishable, available, valid, none of the above
+        this.itemListings.push(
+            ...pageListings.filter((pageListing) => pageListing.isPublishable)
+        );
+        this.itemListings.push(
+            ...pageListings.filter(
+                (pageListing) =>
+                    !pageListing.isPublishable && pageListing.isAvailableOffline
+            )
+        );
+        this.itemListings.push(
+            ...pageListings.filter(
+                (pageListing) =>
+                    !pageListing.isPublishable &&
+                    !pageListing.isAvailableOffline &&
+                    pageListing.isValid
+            )
+        );
+        this.itemListings.push(
+            ...pageListings.filter(
+                (pageListing) =>
+                    !pageListing.isPublishable &&
+                    !pageListing.isAvailableOffline &&
+                    !pageListing.isValid
+            )
+        );
     }
 
     private async ManifestToPublishableItem(
@@ -144,15 +172,15 @@ export class AppDataStatus {
                 const page = this.manifest.getPageManifestData(item.cacheKey);
                 if (!page) {
                     performed[item.cacheKey] = {
-                        result: "not relevant",
-                        reason: "not relevant",
+                        result: NOT_RELEVANT,
+                        reason: NOT_RELEVANT,
                     };
                 } else {
                     try {
                         const publishablePage =
                             await this.PageToPublishableItem(page);
                         const result =
-                            (await action(publishablePage)) || "not relevant";
+                            (await action(publishablePage)) || NOT_RELEVANT;
                         performed[item.cacheKey] = {
                             result: result,
                             reason: result,
@@ -170,24 +198,19 @@ export class AppDataStatus {
         return performed;
     }
 
-    /** Publish everything currently flagged as isPublishable */
+    /** Publish everything currently flagged as isPublishable
+     * @remarks Note that there is no `UnpublishAll`.
+     * Unpublishing (deleting) something published is handled by Appelflap itself.
+     */
     async PublishAll(): Promise<TPublishResult> {
         return this.PerformAll((listing) => listing.isPublishable, publishItem);
-    }
-
-    /** Unpublish everything currently not flagged as isPublishable */
-    async UnpublishAll(): Promise<TPublishResult> {
-        return this.PerformAll(
-            (listing) => !listing.isPublishable,
-            unpublishItem
-        );
     }
 
     /** Get all current subscriptions */
     async GetSubscriptions(): Promise<TSubscriptions> {
         const subscriptions = await getSubscriptions();
         if (typeof subscriptions === "string") {
-            return { origins: {} };
+            return { types: { CACHE: { groups: {} } } };
         }
         return subscriptions;
     }
@@ -195,10 +218,13 @@ export class AppDataStatus {
     /** Set all current subscriptions */
     async SetSubscriptions(): Promise<TSubscriptions> {
         const subscriptions = await setSubscriptions(this.itemListings);
-        if (typeof subscriptions === "string") {
-            return { origins: {} };
+        if (
+            typeof subscriptions === "string" &&
+            subscriptions === "not relevant"
+        ) {
+            return { types: { CACHE: { groups: {} } } };
         }
-        return subscriptions;
+        return subscriptions as TSubscriptions;
     }
 
     async SyncAll(): Promise<TSyncData> {
@@ -207,17 +233,18 @@ export class AppDataStatus {
         this.itemListings.forEach((listing) => {
             syncAllStatus[listing.cacheKey] = {
                 published: "failed",
-                unpublished: "failed",
             };
         });
 
         const published = await this.PublishAll();
-        const unpublished = await this.UnpublishAll();
         let subscriptions = await this.GetSubscriptions();
-        let origins = Object.keys(subscriptions.origins);
+        let origins = Object.keys(subscriptions.types.CACHE?.groups || {});
         let subscribed =
             origins.length === 1
-                ? Object.entries(subscriptions.origins[origins[0]].caches)
+                ? Object.entries(
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      subscriptions.types.CACHE!.groups[origins[0]].names
+                  )
                 : [];
         let publishSubscribeMismatch = false;
         if (this.itemListings.length !== subscribed.length) {
@@ -235,20 +262,18 @@ export class AppDataStatus {
 
         if (publishSubscribeMismatch) {
             subscriptions = await this.SetSubscriptions();
-            origins = Object.keys(subscriptions.origins);
+            origins = Object.keys(subscriptions.types.CACHE?.groups || {});
             if (origins.length) {
                 const firstOrigin = origins[0];
                 subscribed = Object.entries(
-                    subscriptions.origins[firstOrigin].caches
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    subscriptions.types.CACHE!.groups[firstOrigin].names
                 );
             }
         }
 
         Object.entries(published).forEach((pub) => {
             syncAllStatus[pub[0]].published = pub[1].result;
-        });
-        Object.entries(unpublished).forEach((pub) => {
-            syncAllStatus[pub[0]].unpublished = pub[1].result;
         });
 
         return syncAllStatus;
