@@ -2,6 +2,7 @@
 import { AppelflapConnect } from "./AppelflapConnect";
 import { TPublication } from "../Types/CacheTypes";
 import { TBundles } from "../Types/BundleTypes";
+import { NOT_RELEVANT } from "../Constants";
 
 export class CachePublish {
     /** Get a list of published items from Appelflap */
@@ -17,9 +18,10 @@ export class CachePublish {
      * @remarks Note that there is no `unpublish`.
      * Unpublishing (deleting) something published is handled by Appelflap itself.
      */
-    static async publish(publication: TPublication): Promise<void> {
+    static async publish(publication: TPublication): Promise<string> {
         if (AppelflapConnect.getInstance()) {
-            await AppelflapConnect.getInstance()!.publish(publication);
+            return await AppelflapConnect.getInstance()!.publish(publication);
         }
+        return Promise.resolve(NOT_RELEVANT);
     }
 }

@@ -15,7 +15,12 @@ import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS } from "
 
 import Logger from "../Logger";
 import { inAppelflap } from "../PlatformDetection";
-import { TPeerProperties } from "../Types/PeerTypes";
+import {
+    TInfoStorage,
+    TInfoWiFi,
+    TPeerProperties,
+    TPeers,
+} from "../Types/InfoTypes";
 
 const logger = new Logger("AppelflapConnect");
 
@@ -208,6 +213,23 @@ export class AppelflapConnect {
     };
     //#endregion
 
+    //#region Appleflap Info Blocks
+    public infoWiFi = async (): Promise<TInfoWiFi> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.infoWiFi;
+        return await this.performCommand(commandPath, { method });
+    };
+
+    public infoPeers = async (): Promise<TPeers> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.infoPeers;
+        return await this.performCommand(commandPath, { method });
+    };
+
+    public infoStorage = async (): Promise<TInfoStorage> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.infoStorage;
+        return await this.performCommand(commandPath, { method });
+    };
+    //#endregion
+
     //#region Cache Administration
     public lock = async (): Promise<string> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.setLock;
@@ -286,6 +308,20 @@ export class AppelflapConnect {
             "text"
         )) as Promise<TSubscriptions>;
     };
+
+    /**
+     * Get a list of all bundles that are 'injectable' into the cache in response to Subscriptions
+     * @remarks this corresponds with @see getSubscriptions which are the bundles that have been subscribed to
+     */
+    public injectables = async (): Promise<TBundles> => {
+        const { commandPath } = APPELFLAPCOMMANDS.getInjectables;
+
+        logger.info(
+            "Identifying all bundles ready for injection into the browser's cache"
+        );
+        const bundles = await this.performCommand(commandPath);
+        return bundles as Promise<TBundles>;
+    };
     //#endregion
 
     //#region Certificates
@@ -325,5 +361,9 @@ export class AppelflapConnect {
         logger.info(`Deleting certificate`);
         return await this.performCommand(commandPath, { method }, "text");
     };
+    //#endregion
+
+    //#region Appelflap Debug
+
     //#endregion
 }

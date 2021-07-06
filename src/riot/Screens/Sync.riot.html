@@ -17,11 +17,6 @@
                         <!-- TODO Get this date from the Manifest -->
                         <p>{ new Date().toDateString() }</p>
                     </div>
-                    <div if="{state.syncStatus === 'outdated' || state.syncStatus === 'syncing'}"
-                        class="download-state {state.syncStatus === 'syncing' ? 'loading' : ''}"
-                        onclick="{syncMe}">
-                            <span class="download"></span>
-                    </div>
                     <div if="{state.syncStatus === 'updated'}" class="download-state complete">
                         <span class="icon"></span>
                     </div>
@@ -135,8 +130,9 @@
 
     <script>
         import { AppDataStatus } from "ts/AppDataStatus";
+        import { AppelflapUtilities } from "ts/Appelflap/AppelflapUtilities";
         import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
-        import { CachePublish } from "ts/Appelflap/CachePublish";
+        import { CacheSubscribe } from "ts/Appelflap/CacheSubscribe";
         import { hashString } from "js/utilities";
 
         import TopMenu from "riot/Components/TopMenu.riot.html";
@@ -144,17 +140,17 @@
         export default {
             state: {
                 statusListings: [],
-                publications: "",
                 appDataStatus: new AppDataStatus(),
-                // mocked data below
-                deviceId: '2198734892374',
-                peers: ['123456789','328947230','213897472','890374185','5','dsa-r34jkl','1asbd','2dhdflgiam'],
+                ssid: "",
+                peerId: "unknown",
+                peers: [],
                 // could be "outdated" or "current" - determined from the Manifest
                 contentStatus: "outdated",
                 // We will know if 'content' (cache bandles) are outdated from what the Manifest tells us
                 // We will not know whether updates are available for them (totally depends on our peers sharing stuff)
                 // We will know whether everything that has been shared by others has been loaded in to our caches
-                // could be "syncOff", "syncOn" (in progress), "syncCompleted"
+                // could be "syncOff", "syncOn" (in progress), "syncCompleted",
+                // "syncNotRelevant" (no more injectables), "syncSubscriptionError"
                 syncStatus: "syncOff",
             },
 
@@ -172,6 +168,8 @@
                 syncOff: () => gettext("Waiting to start syncing"),
                 syncOn: () => gettext("Getting updated content now"),
                 syncCompleted: () => gettext("Content updated"), // There is no gaurantee that the user is 'all' up to date
+                syncNotRelevant: () => gettext("You have the latest version of available content"),
+                syncSubscriptionError: () => gettext("Subscribing to receive updated content failed"),
                 refresh: () => gettext("Refresh"),
                 avatar: () => gettext("Your sync avatar"),
                 peers: () => gettext("Recently seen peers"),
@@ -193,7 +191,7 @@
                 const plants = ['tree','grass','weed','sedge','shrub','rush','fern','coral',
                     'acorn','moss','nettle','flower'];
 
-                const idHash = hashString(id);
+                const idHash = hashString("" + id);
 
                 return {
                     id,
@@ -204,8 +202,7 @@
             },
 
             get yourSyncAvatar() {
-                // TODO actual device id
-                return this.mapAvatar(this.state.deviceId);
+                return this.mapAvatar(this.state.peerId);
             },
 
             get syncStatusText() {
@@ -213,14 +210,12 @@
             },
 
             get mappedPeers() {
-                // TODO the actual peers
                 const peers = this.state.peers;
                 return peers.map((it) => this.mapAvatar(it));
             },
 
             get usedSpacePercentage() {
-                // TODO the percentage of device storage used
-                return 30;
+                return Math.round(this.state.usedSpacePercentage || 0);
             },
 
             get usedSpacePercentageColor() {
@@ -234,23 +229,10 @@
 
             get connection() {
                 return {
-                    // TODO this API is only available on android and chrome OS, so I couldn't test it
-                    // https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/type
-                    type: NetworkInformation.type,
+                    type: this.state.ssid ? "wifi" : "",
                     // TODO I'm not sure if we can get the network name?
-                    networkName: undefined,
+                    networkName: this.state.ssid || "",
                 }
-            },
-
-            /**
-             * Perform the 'inbound' synchronisation of everything made available by other peers
-             * This lets us know when syncMe's inbound work is done
-             */
-            performInboundSync() {
-                this.update({syncStatus: "syncOn"});
-                // CacheUtilities.injectAll().then(() => {
-                    this.update({syncStatus: "syncCompleted"});
-                // });
             },
 
             onBeforeMount() {
@@ -258,9 +240,33 @@
             },
 
             async onMounted() {
-                await CacheUtilities.unlock();
-                await this.syncMe();
-                this.performInboundSync();
+                // Get Peer info from Appelflap
+                this.update({peerId: (await AppelflapUtilities.peerProperties()) || "unknown"});
+                this.update({peers: (await AppelflapUtilities.infoPeers()) || []});
+
+                // Get WiFi info from Appelflap
+                const { ssid, ipadress, ipadress_raw, strength } =
+                    (await AppelflapUtilities.infoWiFi())
+                    || { ssid: "", ipadress: "", ipadress_raw: 0, strength: 0 };
+                this.update({ssid: ssid});
+
+                // Get the disk utilisation info from Appelflap
+                const { disksize, diskfree } = await AppelflapUtilities.infoStorage() || { disksize: 0, diskfree: 0 };
+                this.update({usedSpacePercentage: !!disksize ? (diskfree / disksize) * 100 : 0 });
+
+                const subscriptionsUpdated = await this.refreshSubscriptions();
+                await this.publishAll();
+                if (subscriptionsUpdated) {
+                    CacheSubscribe.injectables().then(async (bundles) => {
+                        if (bundles.bundles.length > 0) {
+                            // Unlock the cache and let Appelflap get on with it
+                            await CacheUtilities.unlock();
+                            this.update({syncStatus: "syncOn"});
+                        } else {
+                            this.update({syncStatus: "syncNotRelevant"});
+                        }
+                    });
+                }
                 await this.appelflapStatus();
             },
 
@@ -271,34 +277,34 @@
             async appelflapStatus() {
                 this.update({ appelflapMeta: "Getting" });
 
-                const publications = await CachePublish.publications();
-                this.update(({ publications: JSON.stringify(publications) }));
-                // window.alert(`Published: ${JSON.stringify(publications)}`);
-
                 // Get the Item Status Listing
                 await this.state.appDataStatus.BuildList();
                 this.update({statusListings: this.state.appDataStatus.itemListings});
             },
 
-            /**
-             * Share what things we have with our peers - 'outbound' sync
-             * and subscribe to everything that we want
-             * */
-            async syncMe() {
+            async refreshSubscriptions() {
                 const appDataStatus = this.state.appDataStatus;
-                // Identify what needs to be subscribed to, and what needs to be published
-                // AppDataStatus checks the certChain to make sure that this user can publish
-                // and AppelflapConnect double checks this
-                // It's possible that we may just want to fire and forget this
-                const syncStatusList = await appDataStatus.SyncAll();
+                const subscriptions = await appDataStatus.SetSubscriptions();
+                if (JSON.stringify(subscriptions) === JSON.stringify({ types: { CACHE: { groups: {} } } })) {
+                    // No subscriptions, several possible causes
+                    this.update({syncStatus: "syncSubscriptionError"});
+                    return false;
+                }
+
+                return true;
+            },
+
+            async publishAll() {
+                const appDataStatus = this.state.appDataStatus;
+                const published = await appDataStatus.PublishAll();
             },
 
             async launchWiFiPicker() {
-                const result = await CacheUtilities.launchWiFiPicker();
+                const result = await AppelflapUtilities.launchWiFiPicker();
             },
 
             async launchStorageManager() {
-                const result = await CacheUtilities.launchStorageManager();
+                const result = await AppelflapUtilities.launchStorageManager();
             },
         };
     </script>

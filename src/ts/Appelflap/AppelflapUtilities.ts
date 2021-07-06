@@ -1,14 +1,40 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { TPeerProperties } from "../Types/PeerTypes";
+import {
+    TInfoStorage,
+    TInfoWiFi,
+    TPeerProperties,
+    TPeers,
+} from "../Types/InfoTypes";
 import { AppelflapConnect } from "./AppelflapConnect";
 
 export class AppelflapUtilities {
-    /** Get the 'peer' properties from Appelflap */
+    /** Get the 'peer' properties from Appelflap for this user */
     static async peerProperties(): Promise<TPeerProperties | undefined> {
         if (AppelflapConnect.getInstance()) {
             return await AppelflapConnect.getInstance()!.getPeerProperties();
         }
     }
+
+    //#region Appleflap Info Blocks
+    static async infoWiFi(): Promise<TInfoWiFi | undefined> {
+        if (AppelflapConnect.getInstance()) {
+            return await AppelflapConnect.getInstance()!.infoWiFi();
+        }
+    }
+
+    /** Get the properties for the current 'peers' of this user */
+    static async infoPeers(): Promise<TPeers | undefined> {
+        if (AppelflapConnect.getInstance()) {
+            return await AppelflapConnect.getInstance()!.infoPeers();
+        }
+    }
+
+    static async infoStorage(): Promise<TInfoStorage | undefined> {
+        if (AppelflapConnect.getInstance()) {
+            return await AppelflapConnect.getInstance()!.infoStorage();
+        }
+    }
+    //#endregion
 
     /**
      * Get the status of the cache from Appelflap

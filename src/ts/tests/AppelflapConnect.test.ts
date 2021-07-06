@@ -13,7 +13,7 @@ import {
     TPublication,
     TSubscriptions,
 } from "../Types/CacheTypes";
-import { TPeerProperties } from "../Types/PeerTypes";
+import { TPeerProperties } from "../Types/InfoTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
