@@ -4,7 +4,7 @@ import {
     TPublication,
     TSubscriptions,
 } from "../Types/CacheTypes";
-import { TBundles } from "../Types/BundleTypes";
+import { TBundleResults, TBundles } from "../Types/BundleTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -210,6 +210,11 @@ export class AppelflapConnect {
         const { commandPath, method } =
             APPELFLAPCOMMANDS.doLaunchStorageManager;
         return await this.performCommand(commandPath, { method }, "text");
+    };
+
+    public doInjectCaches = async (): Promise<TBundleResults> => {
+        const { commandPath, method } = APPELFLAPCOMMANDS.doInjectCaches;
+        return await this.performCommand(commandPath, { method });
     };
     //#endregion
 

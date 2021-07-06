@@ -14,3 +14,10 @@ export type TBundleMeta = {
 export type TBundles = {
     bundles: Array<TBundleMeta>;
 };
+
+export type TBundleResults = {
+    results: Array<{
+        bundle: TBundle;
+        success: boolean;
+    }>;
+};

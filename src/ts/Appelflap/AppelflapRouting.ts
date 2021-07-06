@@ -32,6 +32,7 @@ export const AF_REBOOT_HARD = "hard-reboot";
 export const AF_REBOOT_SOFT = "soft-reboot";
 export const AF_LAUNCH_WIFIPICKER = "launch-wifipicker";
 export const AF_LAUNCH_STORAGEMANAGER = "launch-storagemanager";
+export const AF_INJECT_CACHES = "inject-caches";
 //#endregion
 
 //#region Appelflap Info Blocks
@@ -88,6 +89,10 @@ export const APPELFLAPCOMMANDS = {
     },
     doLaunchStorageManager: {
         commandPath: `${AF_ACTION_API}/${AF_LAUNCH_STORAGEMANAGER}`,
+        method: "POST",
+    },
+    doInjectCaches: {
+        commandPath: `${AF_ACTION_API}/${AF_INJECT_CACHES}`,
         method: "POST",
     },
     //#endregion

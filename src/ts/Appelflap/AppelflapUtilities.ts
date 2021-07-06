@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { TBundleResults } from "../Types/BundleTypes";
 import {
     TInfoStorage,
     TInfoWiFi,
@@ -76,5 +77,17 @@ export class AppelflapUtilities {
         if (AppelflapConnect.getInstance()) {
             await AppelflapConnect.getInstance()!.doLaunchStorageManager();
         }
+    }
+
+    /**
+     * Instruct Appelflap to do all cache injections
+     * @note This will do cache injection without honouring the `cache.lock` (@see CacheUtilities.ts ).
+     * Therefore should only be called from a 'system' page, such as the Sync page.
+     */
+    static async injectCaches(): Promise<TBundleResults> {
+        if (AppelflapConnect.getInstance()) {
+            await AppelflapConnect.getInstance()!.doInjectCaches();
+        }
+        return { results: [] };
     }
 }

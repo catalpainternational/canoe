@@ -240,40 +240,21 @@
             },
 
             async onMounted() {
-                // Get Peer info from Appelflap
-                this.update({
-                    peerId: (await AppelflapUtilities.peerProperties()) || { friendly_ID: "unknown" },
-                    peers: await AppelflapUtilities.infoPeers(),
-                });
-
-                // Get WiFi info from Appelflap
-                // Note the spelling mistake in `ipadress` and `ipadress_raw`
-                const { ssid, ipadress, ipadress_raw, strength } =
-                    (await AppelflapUtilities.infoWiFi())
-                    || { ssid: "", ipadress: "", ipadress_raw: 0, strength: 0 };
-                this.update({ ssid: ssid });
-
-                // Get the disk utilisation info from Appelflap
-                const { disksize, diskfree } = await AppelflapUtilities.infoStorage() || { disksize: 0, diskfree: 0 };
-                const usedPct = !!disksize
-                    ? ((disksize - diskfree) / disksize) * 100
-                    : 0;
-                this.update({ usedSpacePercentage: usedPct });
+                await this.appelflapStatus();
 
                 const subscriptionsUpdated = await this.refreshSubscriptions();
                 await this.publishAll();
                 if (subscriptionsUpdated) {
                     CacheSubscribe.injectables().then(async (bundles) => {
                         if (bundles.bundles.length > 0) {
-                            // Unlock the cache and let Appelflap get on with it
-                            await CacheUtilities.unlock();
                             this.update({syncStatus: "syncOn"});
+                            // Tell Appelflap get on with it
+                            const result = await AppelflapUtilities.injectCache();
                         } else {
                             this.update({syncStatus: "syncNotRelevant"});
                         }
                     });
                 }
-                await this.appelflapStatus();
             },
 
             async onUnmounted() {
@@ -281,11 +262,32 @@
             },
 
             async appelflapStatus() {
-                this.update({ appelflapMeta: "Getting" });
+                // Get Peer info from Appelflap
+                const peerId = (await AppelflapUtilities.peerProperties()) || { friendly_ID: "unknown" };
+                const peers = await AppelflapUtilities.infoPeers();
+
+                // Get WiFi info from Appelflap
+                // Note the spelling mistake in `ipadress` and `ipadress_raw`
+                const { ssid, ipadress, ipadress_raw, strength } =
+                    (await AppelflapUtilities.infoWiFi())
+                    || { ssid: "", ipadress: "", ipadress_raw: 0, strength: 0 };
+
+                // Get the disk utilisation info from Appelflap
+                const { disksize, diskfree } = await AppelflapUtilities.infoStorage() || { disksize: 0, diskfree: 0 };
+                const usedPct = !!disksize
+                    ? ((disksize - diskfree) / disksize) * 100
+                    : 0;
 
                 // Get the Item Status Listing
-                await this.state.appDataStatus.BuildList();
-                this.update({statusListings: this.state.appDataStatus.itemListings});
+                const statusListings = await this.state.appDataStatus.ItemListings();
+
+                this.update({
+                    peerId: (await AppelflapUtilities.peerProperties()) || { friendly_ID: "unknown" },
+                    peers: await AppelflapUtilities.infoPeers(),
+                    ssid: ssid,
+                    usedSpacePercentage: usedPct,
+                    statusListings: statusListings,
+                });
             },
 
             async refreshSubscriptions() {
@@ -293,7 +295,7 @@
                 const subscriptions = await appDataStatus.SetSubscriptions();
                 if (JSON.stringify(subscriptions) === JSON.stringify({ types: { CACHE: { groups: {} } } })) {
                     // No subscriptions, several possible causes
-                    this.update({syncStatus: "syncSubscriptionError"});
+                    this.update({ syncStatus: "syncSubscriptionError" });
                     return false;
                 }
 
