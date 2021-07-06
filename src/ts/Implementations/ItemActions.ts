@@ -86,18 +86,13 @@ export async function getSubscriptions(): Promise<TSubscriptions | string> {
 /** Tells Appelflap to set all current subscriptions
  * @returns
  * - resolve("succeeded") on success (200),
- * - resolve(NOT_RELEVANT) if no items, none of the items are publishable, or appelflap connect wasn't provided,
+ * - resolve(NOT_RELEVANT) if no items or appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
 export async function setSubscriptions(
     items: TItemListing[]
 ): Promise<TSubscriptions | string> {
-    if (
-        !items ||
-        !items.length ||
-        !items.some((item) => !item.isPublishable) ||
-        !AppelflapConnect.getInstance()
-    ) {
+    if (!items || !items.length || !AppelflapConnect.getInstance()) {
         return Promise.resolve(NOT_RELEVANT);
     }
 
@@ -125,6 +120,8 @@ export async function setSubscriptions(
     });
 
     try {
+        console.log("Telling CacheSubscribe to setSubscriptions");
+
         const result = await CacheSubscribe.setSubscriptions(subscriptions);
         return Promise.resolve(result);
     } catch (error) {
