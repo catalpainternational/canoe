@@ -241,9 +241,6 @@
             },
 
             appelflapStatus() {
-                // Get the Item Status Listings
-                // this.updateStatusData("statusListings", AppDataStatus.getInstance().ItemListings, [] );
-
                 // Get Peer info from Appelflap
                 this.updateStatusData({ name: "peerId", source: AppelflapUtilities.peerProperties, default: peerPropDefault });
                 this.updateStatusData({ name: "peers", source: AppelflapUtilities.infoPeers, default: [] });
