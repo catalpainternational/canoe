@@ -51,14 +51,20 @@ export default class TeachingActivity extends Page {
     }
     set complete(complete: boolean) {
         super.complete = complete;
-        const topicCompelte = this.topic.childPages.every((c) => c.complete);
-        if (this.topic.complete !== topicCompelte) {
-            this.topic.complete = topicCompelte;
+        const topicComplete = this.topic.childPages.every((c) => c.complete);
+        if (this.topic.complete !== topicComplete) {
+            this.topic.complete = topicComplete;
         }
     }
 
     saveAssessmentResults(data: Array<any>): Record<string, any> {
-        persistAssessmentResults(this.id, data);
+        const assessmentData = {
+            pageId: this.id,
+            revisionId: this.revisionId,
+            version: this.version,
+            ...data,
+        };
+        persistAssessmentResults(this.id, assessmentData);
         return data;
     }
 }
