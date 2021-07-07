@@ -82,12 +82,6 @@ button {
     font-weight: 400;
 }
 
-button,
-a {
-    // disables the double-tap-to-zoom behaviour
-    touch-action: manipulation;
-}
-
 label {
     font-family: $app-typography;
     font-size: 1em;

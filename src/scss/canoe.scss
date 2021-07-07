@@ -39,6 +39,8 @@
 * {
     margin: 0;
     padding: 0;
+    // disables the double-tap-to-zoom behaviour
+    touch-action: manipulation;
 }
 
 div.content-wrapper {
