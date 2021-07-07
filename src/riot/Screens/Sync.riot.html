@@ -14,10 +14,9 @@
                 <div class="sync-status">
                     <div>
                         <h4>{ syncStatusText }</h4>
-                        <!-- TODO Get this date from the Manifest -->
-                        <p>{ new Date().toDateString() }</p>
+                        <p>{ TRANSLATIONS.lastUpdated() }: { lastUpdatedDate }</p>
                     </div>
-                    <div if="{state.syncStatus === 'updated'}" class="download-state complete">
+                    <div class="status-icon {state.syncStatus}">
                         <span class="icon"></span>
                     </div>
                 </div>
@@ -27,20 +26,16 @@
                 <h2>{ TRANSLATIONS.avatar() }</h2>
 
                 <p class="avatar {yourSyncAvatar.color}">
-                    {yourSyncAvatar.color}<br>
-                    {yourSyncAvatar.animal}<br>
-                    {yourSyncAvatar.plant}
+                    {yourSyncAvatar.id}<br>
                 </p>
             </div>
 
-            <div if="{mappedPeers}" class="group">
+            <div if="{mappedPeers.length}" class="group">
                 <h2>{ TRANSLATIONS.peers() }</h2>
 
                 <div class="peers">
                     <p each="{peer in mappedPeers}" class="avatar {peer.color}">
-                        {peer.color}<br>
-                        {peer.animal}<br>
-                        {peer.plant}
+                        {peer.id}
                     </p>
                 </div>
             </div>
@@ -91,40 +86,6 @@
                     <a onclick="{launchStorageManager}">{ TRANSLATIONS.launchStorageManager() }</a>
                 </p>
             </div>
-
-            <!-- TODO I think this list can be removed - it's no longer in the design -->
-            <ol class="sync-list">
-                <li
-                    each="{(statusListing, index) in state.statusListings}">
-                    <div class="sync-header">
-                        <h5><small>{statusListing.type}:</small> { statusListing.title }</h5>
-                    </div>
-                    <!-- <div class="sync-body"><small>version: {statusListing.version}</small></div> -->
-                    <!-- <div if="{statusListing.backendPath === statusListing.cacheKey}" class="sync-body">
-                        <span><small>Store Path/Cache Key:</small> { statusListing.backendPath }</span>
-                    </div> -->
-                    <!-- <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
-                        <span><small>Store Path:</small> { statusListing.backendPath }</span>
-                    </div> -->
-                    <!-- <div if="{statusListing.backendPath != statusListing.cacheKey}" class="sync-body">
-                        <span><small>Cache Key:</small> { statusListing.cacheKey }</span>
-                    </div> -->
-
-                    <div class="sync-body">
-                        <span><small>Publishable:</small> { statusListing.isPublishable }, </span>
-                    </div>
-
-                    <!-- <div class="sync-footer">
-                        <a class="action">
-                            <span class="arrow-blue"></span>
-                            <p>{ TRANSLATIONS.start() }</p>
-                        </a>
-                        <div>
-                            <p>{showTimeAgoFromNow(sync.timestamp)}</p>
-                        </div>
-                    </div> -->
-                </li>
-            </ol>
         </div>
     </div>
 
@@ -134,6 +95,7 @@
         import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
         import { CacheSubscribe } from "ts/Appelflap/CacheSubscribe";
         import { hashString } from "js/utilities";
+        import { getRoute } from "ReduxImpl/Interface";
 
         import TopMenu from "riot/Components/TopMenu.riot.html";
 
@@ -163,12 +125,12 @@
                 start: () => gettext("Start lesson"),
                 syncTitle: () => gettext("Offline sync"),
                 status: () => gettext("Sync status"),
-                // It's not 'files' that are outdated, it's 'content'
+                lastUpdated: () => gettext("Last updated"),
                 contentOutdated: () => gettext("Some of your content is outdated"),
                 contentCurrent: () => gettext("You're all up to date"),
                 syncOff: () => gettext("Waiting to start syncing"),
                 syncOn: () => gettext("Getting updated content now"),
-                syncCompleted: () => gettext("Content updated"), // There is no gaurantee that the user is 'all' up to date
+                syncCompleted: () => gettext("Content updated"),
                 syncNotRelevant: () => gettext("You have the latest version of available content"),
                 syncSubscriptionError: () => gettext("Subscribing to receive updated content failed"),
                 refresh: () => gettext("Refresh"),
@@ -184,21 +146,22 @@
                 launchStorageManager: () => gettext("Free up space"),
             },
 
+            get manifest() {
+                return getRoute().page.manifest;
+            },
+
+            get lastUpdatedDate() {
+                return new Date(this.manifest.version / 1000).toDateString();
+            },
+
             mapAvatar(id) {
-                // TODO we'll probably need to translate these (but the colors for classes need to remain in English)
                 const colors = ['pink','red','orange','yellow','teal','blue','purple'];
-                const animals = ['bird','monkey','fish','dog','seal','shrimp','whale','dolphin',
-                    'starfish','urchin','shark','porpoise','sloth','python','frog'];
-                const plants = ['tree','grass','weed','sedge','shrub','rush','fern','coral',
-                    'acorn','moss','nettle','flower'];
 
                 const idHash = hashString("" + id);
 
                 return {
                     id,
                     color: colors[idHash % colors.length],
-                    animal: animals[idHash % animals.length],
-                    plant: plants[idHash % plants.length],
                 }
             },
 
@@ -231,7 +194,6 @@
             get connection() {
                 return {
                     type: this.state.ssid ? "wifi" : "",
-                    // TODO I'm not sure if we can get the network name?
                     networkName: this.state.ssid || "",
                 }
             },
@@ -300,7 +262,7 @@
                     name: "usedSpacePercentage",
                     source: AppelflapUtilities.infoStorage,
                     default: { disksize: 0, diskfree: 0 },
-                    getValue: (value) => { 
+                    getValue: (value) => {
                         const { disksize, diskfree } = value;
                         return !!disksize
                             ? ((disksize - diskfree) / disksize) * 100

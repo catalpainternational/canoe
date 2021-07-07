@@ -159,26 +159,16 @@ Sync {
         background-color: $white;
     }
 
-    .download-state {
-        background-color: $app-accent-color;
+    .status-icon {
         width: 30px;
         height: 30px;
         border-radius: 100%;
         position: relative;
 
-        .download {
-            background-color: $white;
-            margin-left: 2px;
-            margin-top: 1px;
-        }
-
-        &.loading {
-            background-color: unset;
-
-            .download {
-                background-color: $app-accent-color;
-            }
-
+        &.syncOff,
+        &.syncOn {
+            // Waiting to start syncing
+            // Getting updated content now
             &::after {
                 content: '';
                 border: 2px solid $gray-8;
@@ -194,7 +184,10 @@ Sync {
             }
         }
 
-        &.complete {
+        &.syncCompleted,
+        &.syncNotRelevant {
+            // Content updated
+            // You have the latest version of available content
             @extend %status-complete;
             width: 32px;
             height: 32px;
@@ -203,6 +196,11 @@ Sync {
                 height: 12px;
                 width: 15px;
             }
+        }
+
+        &.syncSubscriptionError {
+            // Subscribing to receive updated content failed
+            @include unmaskable-icons-shared("~img/incorrect_cross.svg", contain);
         }
     }
 
