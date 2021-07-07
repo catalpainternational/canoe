@@ -133,6 +133,7 @@
                 syncCompleted: () => gettext("Content updated"),
                 syncNotRelevant: () => gettext("You have the latest version of available content"),
                 syncSubscriptionError: () => gettext("Subscribing to receive updated content failed"),
+                syncNoWiFiError: () => gettext("Subscribing for updated content needs WiFi"),
                 refresh: () => gettext("Refresh"),
                 avatar: () => gettext("Your sync avatar"),
                 peers: () => gettext("Recently seen peers"),
@@ -269,6 +270,13 @@
             },
 
             async refreshSubscriptions() {
+                // Note: this test is a workaround because Appelflap's `saveSubscriptions` method
+                // does not return when the device is not connected to WiFi
+                // Hopefully we can remove this later
+                if (!this.state.ssid) {
+                    this.update({ syncStatus: "syncNoWiFiError" });
+                    return false;
+                }
                 const subscriptions = await AppDataStatus.getInstance().SetSubscriptions();
                 if (JSON.stringify(subscriptions) === JSON.stringify({ types: { CACHE: { groups: {} } } })) {
                     // No subscriptions, several possible causes
