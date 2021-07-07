@@ -236,7 +236,15 @@
                 },
 
                 finishAssessment() {
-                    this.props.activity.saveAssessmentResults(this.state.questions);
+                    const submitData = {
+                        totalStudents: this.state.totalStudents,
+                        correctTallies: {}
+                    };
+                    this.state.questions.forEach(question => {
+                        const correct = question.answers.find(answer => answer.correct);
+                        submitData.correctTallies[question.id] = correct.tally;
+                    });
+                    this.props.activity.saveAssessmentResults(submitData);
                     this.props.closeAssessment();
                 },
             };

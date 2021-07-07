@@ -47,7 +47,7 @@ export function persistExamScore(pageId, scoreData) {
     return saveAndPostAction(EXAM_SCORE_TYPE, { pageId, ...scoreData });
 }
 
-export function persistAssessmentResults(pageId, data = {}) {
+export function persistAssessmentResults(pageId, assessmentData = {}) {
     // store the action ( via idb and api )
-    return saveAndPostAction(FORMATIVE_ASSESSMENT_RESULTS_TYPE, { pageId, data });
+    return saveAndPostAction(FORMATIVE_ASSESSMENT_RESULTS_TYPE, { pageId, ...assessmentData });
 }
