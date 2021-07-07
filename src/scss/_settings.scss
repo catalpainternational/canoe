@@ -197,6 +197,7 @@ Sync {
         }
 
         &.syncSubscriptionError,
+        &.syncNoPeersError,
         &.syncNoWiFiError {
             // Subscribing to receive updated content failed or not connected to wifi
             @include unmaskable-icons-shared("~img/incorrect_cross.svg", contain);
