@@ -100,6 +100,7 @@
         import TopMenu from "riot/Components/TopMenu.riot.html";
 
         const peerPropDefault = { friendly_id: "unknown" };
+        const subscriptionsDefault = { types: { CACHE: { groups: {} } } };
 
         export default {
             state: {
@@ -107,6 +108,7 @@
                 ssid: "",
                 peerId: peerPropDefault,
                 peers: [],
+                subscriptions: subscriptionsDefault,
                 // could be "outdated" or "current" - determined from the Manifest
                 contentStatus: "outdated",
                 // We will know if 'content' (cache bandles) are outdated from what the Manifest tells us
@@ -133,6 +135,7 @@
                 syncCompleted: () => gettext("Content updated"),
                 syncNotRelevant: () => gettext("You have the latest version of available content"),
                 syncSubscriptionError: () => gettext("Subscribing to receive updated content failed"),
+                syncNoPeersError: () => gettext("Subscribing for updated content needs Peers"),
                 syncNoWiFiError: () => gettext("Subscribing for updated content needs WiFi"),
                 refresh: () => gettext("Refresh"),
                 avatar: () => gettext("Your sync avatar"),
@@ -199,10 +202,6 @@
                 }
             },
 
-            onBeforeMount() {
-                this.state.syncStatus = "syncOff";
-            },
-
             async onMounted() {
                 this.appelflapStatus();
 
@@ -211,11 +210,12 @@
                 if (subscriptionsUpdated) {
                     CacheSubscribe.injectables().then(async (bundles) => {
                         if (bundles.bundles.length > 0) {
-                            this.update({syncStatus: "syncOn"});
-                            // Tell Appelflap get on with it
-                            const result = await AppelflapUtilities.injectCache();
+                            if (this.setSyncStatus("syncOn")) {
+                                // Tell Appelflap get on with it
+                                const result = await AppelflapUtilities.injectCache();
+                            }
                         } else {
-                            this.update({syncStatus: "syncNotRelevant"});
+                            this.setSyncStatus("syncNotRelevant", true);
                         }
                     });
                 }
@@ -225,12 +225,40 @@
                 await CacheUtilities.lock();
             },
 
+            /**
+             * Sync status depends on the state of a few other values for it to be set correctly
+             * @returns true for some OK state, false for not OK (i.e. the caller should not continue)
+             */
+            setSyncStatus(desiredState, forceDesiredState = false) {
+                desiredState = desiredState || this.state.stncStatus;
+                // Note: this test is a workaround because Appelflap's `saveSubscriptions` method
+                // does not return when the device is not connected to WiFi
+                // Hopefully we can remove this later
+                if (!this.state.ssid && !forceDesiredState) {
+                    // If there's no WiFi, as shown by no ssid, then the status is No WiFi
+                    this.update({ syncStatus: "syncNoWiFiError" });
+                    return false;
+                }
+                if (this.state.peers.length === 0) {
+                    this.update({ syncStatus: "syncNoPeersError" });
+                    return false;
+                }
+                if (JSON.stringify(this.state.subscriptions) === JSON.stringify(subscriptionsDefault) && !forceDesiredState) {
+                    // No subscriptions, several possible causes
+                    this.update({ syncStatus: "syncSubscriptionError" });
+                    return false;
+                }
+
+                this.update({ syncStatus: desiredState });
+                return true;
+            },
+
             updateStatusData(statusUpdate) {
                 if (!statusUpdate.getValue) {
                     statusUpdate.getValue = (value) => { return value; };
                 }
                 let value;
-                statusUpdate.source()
+                return statusUpdate.source()
                 .then((result) => {
                     value = result || statusUpdate.default;
                 }).catch((err) => {
@@ -238,13 +266,20 @@
                 }).finally(() => {
                     this.state[statusUpdate.name] = statusUpdate.getValue(value);
                     this.update();
+                    return Promise.resolve();
                 });
             },
 
             appelflapStatus() {
                 // Get Peer info from Appelflap
                 this.updateStatusData({ name: "peerId", source: AppelflapUtilities.peerProperties, default: peerPropDefault });
-                this.updateStatusData({ name: "peers", source: AppelflapUtilities.infoPeers, default: [] });
+                this.updateStatusData({
+                    name: "peers",
+                    source: AppelflapUtilities.infoPeers,
+                    default: []
+                }).then(() => {
+                    this.refreshSubscriptions();
+                });
 
                 // Get WiFi info from Appelflap
                 const wifiInfoDefault = { ssid: "", ipaddress: "", ipaddress_raw: 0, strength: 0 };
@@ -253,6 +288,8 @@
                     source: AppelflapUtilities.infoWiFi,
                     default: wifiInfoDefault,
                     getValue: (value) => { return value.ssid; }
+                }).then(() => {
+                    this.refreshSubscriptions();
                 });
 
                 // Get the disk utilisation info from Appelflap
@@ -270,21 +307,19 @@
             },
 
             async refreshSubscriptions() {
-                // Note: this test is a workaround because Appelflap's `saveSubscriptions` method
-                // does not return when the device is not connected to WiFi
+                // Note: this first test is a workaround because Appelflap's `saveSubscriptions` method
+                // does not return when the device is not connected to WiFi.
+                // This test examines whether the ssid is set or not.
                 // Hopefully we can remove this later
-                if (!this.state.ssid) {
-                    this.update({ syncStatus: "syncNoWiFiError" });
+                if (!this.setSyncStatus()) {
                     return false;
                 }
-                const subscriptions = await AppDataStatus.getInstance().SetSubscriptions();
-                if (JSON.stringify(subscriptions) === JSON.stringify({ types: { CACHE: { groups: {} } } })) {
-                    // No subscriptions, several possible causes
-                    this.update({ syncStatus: "syncSubscriptionError" });
+                this.state.subscriptions = await AppDataStatus.getInstance().SetSubscriptions();
+                if (!this.setSyncStatus()) {
                     return false;
                 }
 
-                return true;
+                return this.setSyncStatus("syncOn");
             },
 
             async publishAll() {
