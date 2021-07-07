@@ -167,8 +167,7 @@ Sync {
 
         &.syncOff,
         &.syncOn {
-            // Waiting to start syncing
-            // Getting updated content now
+            // Waiting to start syncing or Getting updated content now
             &::after {
                 content: '';
                 border: 2px solid $gray-8;
@@ -186,8 +185,7 @@ Sync {
 
         &.syncCompleted,
         &.syncNotRelevant {
-            // Content updated
-            // You have the latest version of available content
+            // Content updated or You have the latest version of available content
             @extend %status-complete;
             width: 32px;
             height: 32px;
@@ -198,8 +196,9 @@ Sync {
             }
         }
 
-        &.syncSubscriptionError {
-            // Subscribing to receive updated content failed
+        &.syncSubscriptionError,
+        &.syncNoWiFiError {
+            // Subscribing to receive updated content failed or not connected to wifi
             @include unmaskable-icons-shared("~img/incorrect_cross.svg", contain);
         }
     }
