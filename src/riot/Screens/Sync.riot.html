@@ -137,12 +137,13 @@
 
         import TopMenu from "riot/Components/TopMenu.riot.html";
 
+        const peerPropDefault = { friendly_id: "unknown" };
+
         export default {
             state: {
                 statusListings: [],
-                appDataStatus: new AppDataStatus(),
                 ssid: "",
-                peerId: { friendly_id: "unknown" },
+                peerId: peerPropDefault,
                 peers: [],
                 // could be "outdated" or "current" - determined from the Manifest
                 contentStatus: "outdated",
@@ -240,7 +241,7 @@
             },
 
             async onMounted() {
-                await this.appelflapStatus();
+                this.appelflapStatus();
 
                 const subscriptionsUpdated = await this.refreshSubscriptions();
                 await this.publishAll();
@@ -261,37 +262,55 @@
                 await CacheUtilities.lock();
             },
 
-            async appelflapStatus() {
+            updateStatusData(statusUpdate) {
+                if (!statusUpdate.getValue) {
+                    statusUpdate.getValue = (value) => { return value; };
+                }
+                let value;
+                statusUpdate.source()
+                .then((result) => {
+                    value = result || statusUpdate.default;
+                }).catch((err) => {
+                    value = statusUpdate.default;
+                }).finally(() => {
+                    this.state[statusUpdate.name] = statusUpdate.getValue(value);
+                    this.update();
+                });
+            },
+
+            appelflapStatus() {
+                // Get the Item Status Listings
+                // this.updateStatusData("statusListings", AppDataStatus.getInstance().ItemListings, [] );
+
                 // Get Peer info from Appelflap
-                const peerId = (await AppelflapUtilities.peerProperties()) || { friendly_id: "unknown" };
-                const peers = await AppelflapUtilities.infoPeers();
+                this.updateStatusData({ name: "peerId", source: AppelflapUtilities.peerProperties, default: peerPropDefault });
+                this.updateStatusData({ name: "peers", source: AppelflapUtilities.infoPeers, default: [] });
 
                 // Get WiFi info from Appelflap
-                const { ssid, ipaddress, ipaddress_raw, strength } =
-                    (await AppelflapUtilities.infoWiFi())
-                    || { ssid: "", ipaddress: "", ipaddress_raw: 0, strength: 0 };
+                const wifiInfoDefault = { ssid: "", ipaddress: "", ipaddress_raw: 0, strength: 0 };
+                this.updateStatusData({
+                    name: "ssid",
+                    source: AppelflapUtilities.infoWiFi,
+                    default: wifiInfoDefault,
+                    getValue: (value) => { return value.ssid; }
+                });
 
                 // Get the disk utilisation info from Appelflap
-                const { disksize, diskfree } = await AppelflapUtilities.infoStorage() || { disksize: 0, diskfree: 0 };
-                const usedPct = !!disksize
-                    ? ((disksize - diskfree) / disksize) * 100
-                    : 0;
-
-                // Get the Item Status Listing
-                const statusListings = await this.state.appDataStatus.ItemListings();
-
-                this.update({
-                    peerId: (await AppelflapUtilities.peerProperties()) || { friendly_id: "unknown" },
-                    peers: await AppelflapUtilities.infoPeers(),
-                    ssid: ssid,
-                    usedSpacePercentage: usedPct,
-                    statusListings: statusListings,
+                this.updateStatusData({
+                    name: "usedSpacePercentage",
+                    source: AppelflapUtilities.infoStorage,
+                    default: { disksize: 0, diskfree: 0 },
+                    getValue: (value) => { 
+                        const { disksize, diskfree } = value;
+                        return !!disksize
+                            ? ((disksize - diskfree) / disksize) * 100
+                            : 0;
+                    }
                 });
             },
 
             async refreshSubscriptions() {
-                const appDataStatus = this.state.appDataStatus;
-                const subscriptions = await appDataStatus.SetSubscriptions();
+                const subscriptions = await AppDataStatus.getInstance().SetSubscriptions();
                 if (JSON.stringify(subscriptions) === JSON.stringify({ types: { CACHE: { groups: {} } } })) {
                     // No subscriptions, several possible causes
                     this.update({ syncStatus: "syncSubscriptionError" });
@@ -302,8 +321,7 @@
             },
 
             async publishAll() {
-                const appDataStatus = this.state.appDataStatus;
-                const published = await appDataStatus.PublishAll();
+                const published = await AppDataStatus.getInstance().PublishAll();
             },
 
             async launchWiFiPicker() {

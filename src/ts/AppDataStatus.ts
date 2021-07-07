@@ -17,39 +17,54 @@ import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
 import { NOT_RELEVANT } from "./Constants";
 
+import Logger from "./Logger";
+
 type AfcFunction = (item: TPublishableItem) => Promise<TAppelflapResult>;
+
+const logger = new Logger("AppDataStatus");
 
 /** An overview of the status for all cached data used by the app */
 export class AppDataStatus {
-    manifest: Manifest;
-    #itemListings: TItemListing[];
+    //#region Implement as Singleton
+    static instance: AppDataStatus;
+    private itemListing: TItemListing[];
 
-    constructor() {
-        this.manifest = Manifest.getInstance();
-        this.#itemListings = [];
+    private constructor() {
+        logger.log("Singleton created");
+        this.itemListing = [];
     }
 
-    async ItemListings(): Promise<TItemListing[]> {
-        if (this.#itemListings.length) {
-            return this.#itemListings;
+    public static getInstance(): AppDataStatus {
+        if (!AppDataStatus.instance) {
+            AppDataStatus.instance = new AppDataStatus();
         }
 
-        await this.BuildList();
-        return this.#itemListings;
+        return AppDataStatus.instance;
+    }
+    //#endregion
+
+    async ItemListings(): Promise<TItemListing[]> {
+        if (this.itemListing.length) {
+            return this.itemListing;
+        }
+
+        this.itemListing = await this.BuildList();
+        return this.itemListing;
     }
 
     private async ManifestListing(): Promise<TItemListing> {
-        const isAvailableOffline = await this.manifest.isAvailableOffline();
+        const manifest = Manifest.getInstance();
+        const isAvailableOffline = await manifest.isAvailableOffline();
 
         return {
             title: "manifest",
-            backendPath: this.manifest.backendPath,
-            cacheKey: this.manifest.cacheKey,
-            version: this.manifest.version,
+            backendPath: manifest.backendPath,
+            cacheKey: manifest.cacheKey,
+            version: manifest.version,
             type: "manifest",
-            isValid: this.manifest.isValid,
+            isValid: manifest.isValid,
             isAvailableOffline: isAvailableOffline,
-            isPublishable: this.manifest.isPublishable,
+            isPublishable: manifest.isPublishable,
         };
     }
 
@@ -64,7 +79,7 @@ export class AppDataStatus {
         let isPublishable = false;
 
         if (inCache) {
-            const page = new Page(this.manifest, pageId);
+            const page = new Page(Manifest.getInstance(), pageId);
             // await InitialiseFromCache(page);
             isValid = page.isValid;
             isAvailableOffline = await page.isAvailableOffline();
@@ -83,17 +98,17 @@ export class AppDataStatus {
         };
     }
 
-    private async BuildList(): Promise<void> {
-        this.#itemListings = [];
-        this.#itemListings.push(await this.ManifestListing());
+    private async BuildList(): Promise<TItemListing[]> {
+        const itemListings: TItemListing[] = [];
+        itemListings.push(await this.ManifestListing());
 
-        const pageIds = Object.keys(this.manifest.pages);
+        const pageIds = Object.keys(Manifest.getInstance().pages);
         const cacheKeys = await CacheKeys();
 
         const pageListings: TItemListing[] = [];
         for (let ix = 0; ix < pageIds.length; ix++) {
             const pageId = pageIds[ix];
-            const manifestPage = this.manifest.pages[pageId];
+            const manifestPage = Manifest.getInstance().pages[pageId];
             const inCache = cacheKeys.includes(manifestPage.storage_container);
             const pageListing = await this.PageListing(
                 pageId,
@@ -104,16 +119,16 @@ export class AppDataStatus {
         }
 
         // Add the page listings in order of published, publishable, available, valid, none of the above
-        this.#itemListings.push(
+        itemListings.push(
             ...pageListings.filter((pageListing) => pageListing.isPublishable)
         );
-        this.#itemListings.push(
+        itemListings.push(
             ...pageListings.filter(
                 (pageListing) =>
                     !pageListing.isPublishable && pageListing.isAvailableOffline
             )
         );
-        this.#itemListings.push(
+        itemListings.push(
             ...pageListings.filter(
                 (pageListing) =>
                     !pageListing.isPublishable &&
@@ -121,7 +136,7 @@ export class AppDataStatus {
                     pageListing.isValid
             )
         );
-        this.#itemListings.push(
+        itemListings.push(
             ...pageListings.filter(
                 (pageListing) =>
                     !pageListing.isPublishable &&
@@ -129,6 +144,8 @@ export class AppDataStatus {
                     !pageListing.isValid
             )
         );
+
+        return itemListings;
     }
 
     private async ManifestToPublishableItem(
@@ -159,26 +176,28 @@ export class AppDataStatus {
     ) {
         const performable = (await this.ItemListings()).filter(filter);
 
+        const manifest = Manifest.getInstance();
+
         const performed: TPublishResult = {};
         for (let ix = 0; ix < performable.length; ix++) {
             const item = performable[ix];
             if (item.type === "manifest") {
                 try {
                     const publishableManifest =
-                        await this.ManifestToPublishableItem(this.manifest);
+                        await this.ManifestToPublishableItem(manifest);
                     const result = await action(publishableManifest);
-                    performed[this.manifest.cacheKey] = {
+                    performed[manifest.cacheKey] = {
                         result: result,
                         reason: result,
                     };
                 } catch (err) {
-                    performed[this.manifest.cacheKey] = {
+                    performed[manifest.cacheKey] = {
                         result: "failed",
                         reason: err,
                     };
                 }
             } else if (item.type === "page") {
-                const page = this.manifest.getPageManifestData(item.cacheKey);
+                const page = manifest.getPageManifestData(item.cacheKey);
                 if (!page) {
                     performed[item.cacheKey] = {
                         result: NOT_RELEVANT,
@@ -212,6 +231,9 @@ export class AppDataStatus {
      * Unpublishing (deleting) something published is handled by Appelflap itself.
      */
     async PublishAll(): Promise<TPublishResult> {
+        logger.info(
+            "Publish all items that are already certified, or that can be certifified"
+        );
         return this.PerformAll((listing) => listing.isPublishable, publishItem);
     }
 
@@ -226,66 +248,16 @@ export class AppDataStatus {
 
     /** Set all current subscriptions */
     async SetSubscriptions(): Promise<TSubscriptions> {
-        const subscriptions = await setSubscriptions(await this.ItemListings());
+        const itemListings = await this.ItemListings();
+        const subscriptions = await setSubscriptions(itemListings);
         if (
             typeof subscriptions === "string" &&
             subscriptions === "not relevant"
         ) {
+            logger.warn("Could not set subscriptions ");
+
             return { types: { CACHE: { groups: {} } } };
         }
         return subscriptions as TSubscriptions;
-    }
-
-    async SyncAll(): Promise<TSyncData> {
-        const syncAllStatus: TSyncData = {};
-        const itemListings = await this.ItemListings();
-
-        itemListings.forEach((listing) => {
-            syncAllStatus[listing.cacheKey] = {
-                published: "failed",
-            };
-        });
-
-        const published = await this.PublishAll();
-        let subscriptions = await this.GetSubscriptions();
-        let origins = Object.keys(subscriptions.types.CACHE?.groups || {});
-        let subscribed =
-            origins.length === 1
-                ? Object.entries(
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      subscriptions.types.CACHE!.groups[origins[0]].names
-                  )
-                : [];
-        let publishSubscribeMismatch = false;
-        if (itemListings.length !== subscribed.length) {
-            publishSubscribeMismatch = true;
-        } else {
-            publishSubscribeMismatch = subscribed.some((sub) => {
-                const cacheName = sub[0];
-                const version = sub[1].injected_version;
-                return (
-                    (!published[cacheName] && version !== null) ||
-                    (published[cacheName] && version === null)
-                );
-            });
-        }
-
-        if (publishSubscribeMismatch) {
-            subscriptions = await this.SetSubscriptions();
-            origins = Object.keys(subscriptions.types.CACHE?.groups || {});
-            if (origins.length) {
-                const firstOrigin = origins[0];
-                subscribed = Object.entries(
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    subscriptions.types.CACHE!.groups[firstOrigin].names
-                );
-            }
-        }
-
-        Object.entries(published).forEach((pub) => {
-            syncAllStatus[pub[0]].published = pub[1].result;
-        });
-
-        return syncAllStatus;
     }
 }
