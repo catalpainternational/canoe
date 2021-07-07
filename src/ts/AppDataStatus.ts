@@ -243,26 +243,21 @@ export class AppDataStatus {
         if (typeof subscriptions === "string") {
             return { types: { CACHE: { groups: {} } } };
         }
-        logger.info("Got existing subscriptions for desired items");
         return subscriptions;
     }
 
     /** Set all current subscriptions */
     async SetSubscriptions(): Promise<TSubscriptions> {
         const itemListings = await this.ItemListings();
-        logger.info(
-            `Setting subscriptions for ${itemListings.length} desired items`
-        );
         const subscriptions = await setSubscriptions(itemListings);
         if (
             typeof subscriptions === "string" &&
             subscriptions === "not relevant"
         ) {
-            logger.info("Could not set subscriptions ");
+            logger.warn("Could not set subscriptions ");
 
             return { types: { CACHE: { groups: {} } } };
         }
-        logger.info("Set subscriptions for desired items");
         return subscriptions as TSubscriptions;
     }
 }

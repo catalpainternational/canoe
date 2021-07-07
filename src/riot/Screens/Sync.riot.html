@@ -262,15 +262,18 @@
                 await CacheUtilities.lock();
             },
 
-            updateStatusData(statusName, promiseFunction, defaultResult, postProc = (value) => { return value; } ) {
+            updateStatusData(statusUpdate) {
+                if (!statusUpdate.getValue) {
+                    statusUpdate.getValue = (value) => { return value; };
+                }
                 let value;
-                promiseFunction()
+                statusUpdate.source()
                 .then((result) => {
-                    value = result || defaultResult;
+                    value = result || statusUpdate.default;
                 }).catch((err) => {
-                    value = defaultResult;
+                    value = statusUpdate.default;
                 }).finally(() => {
-                    this.state[statusName] = postProc(value);
+                    this.state[statusUpdate.name] = statusUpdate.getValue(value);
                     this.update();
                 });
             },
@@ -280,25 +283,30 @@
                 // this.updateStatusData("statusListings", AppDataStatus.getInstance().ItemListings, [] );
 
                 // Get Peer info from Appelflap
-                this.updateStatusData("peerId", AppelflapUtilities.peerProperties, peerPropDefault );
-                this.updateStatusData("peers", AppelflapUtilities.infoPeers, [] );
+                this.updateStatusData({ name: "peerId", source: AppelflapUtilities.peerProperties, default: peerPropDefault });
+                this.updateStatusData({ name: "peers", source: AppelflapUtilities.infoPeers, default: [] });
 
                 // Get WiFi info from Appelflap
                 const wifiInfoDefault = { ssid: "", ipaddress: "", ipaddress_raw: 0, strength: 0 };
-                this.updateStatusData("ssid", AppelflapUtilities.infoWiFi, wifiInfoDefault, (value) => { return value.ssid; } );
+                this.updateStatusData({
+                    name: "ssid",
+                    source: AppelflapUtilities.infoWiFi,
+                    default: wifiInfoDefault,
+                    getValue: (value) => { return value.ssid; }
+                });
 
                 // Get the disk utilisation info from Appelflap
-                this.updateStatusData(
-                    "usedSpacePercentage",
-                    AppelflapUtilities.infoStorage,
-                    { disksize: 0, diskfree: 0 },
-                    (value) => { 
+                this.updateStatusData({
+                    name: "usedSpacePercentage",
+                    source: AppelflapUtilities.infoStorage,
+                    default: { disksize: 0, diskfree: 0 },
+                    getValue: (value) => { 
                         const { disksize, diskfree } = value;
                         return !!disksize
                             ? ((disksize - diskfree) / disksize) * 100
                             : 0;
-                    },
-                );
+                    }
+                });
             },
 
             async refreshSubscriptions() {

@@ -120,8 +120,6 @@ export async function setSubscriptions(
     });
 
     try {
-        console.log("Telling CacheSubscribe to setSubscriptions");
-
         const result = await CacheSubscribe.setSubscriptions(subscriptions);
         return Promise.resolve(result);
     } catch (error) {

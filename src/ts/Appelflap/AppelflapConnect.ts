@@ -306,6 +306,8 @@ export class AppelflapConnect {
     public setSubscriptions = async (
         subscriptions: TSubscriptions
     ): Promise<TSubscriptions> => {
+        logger.info(`Setting subscriptions for desired items`);
+
         const { commandPath, method } = APPELFLAPCOMMANDS.setSubscriptions;
         const requestPath = `${commandPath}`;
         const commandInit = {
@@ -316,10 +318,13 @@ export class AppelflapConnect {
             body: JSON.stringify(subscriptions),
         };
 
-        return (await this.performCommand(
+        const setSubscriptions: TSubscriptions = await this.performCommand(
             requestPath,
             commandInit
-        )) as Promise<TSubscriptions>;
+        );
+
+        logger.info(`Successfully set subscriptions for desired items`);
+        return setSubscriptions;
     };
 
     /**
