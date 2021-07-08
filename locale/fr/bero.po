@@ -1,0 +1,805 @@
+#
+# Translators:
+# Peter Coward <peter@catalpa.io>, 2021
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Bero\n"
+"Report-Msgid-Bugs-To: engineering@catalpa.io\n"
+"Last-Translator: Peter Coward <peter@catalpa.io>, 2021\n"
+"Language-Team: French (https://www.transifex.com/catalpa/teams/108836/fr/)\n"
+"Language: fr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. warns the user that this site ( name goes in %1 ) will not be able to send you notifications if you turn this off
+#: src/riot/Screens/Settings.riot.html:127
+msgid ""
+"%1 uses notifications to send you useful course updates and reminders. If "
+"you turn off notifications, you will not receive this course information. "
+"Are you sure you want to turn off notifications?"
+msgstr ""
+"%1 uses notifications pour vous envoyer des mises à jour et des rappels de "
+"cours utiles. Si vous désactivez les notifications, vous ne recevrez pas ces "
+"informations sur le cours. Êtes-vous sûr de vouloir désactiver les "
+"notifications ?"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:326
+msgid "%1's Course Exam"
+msgstr "Examen du cours de %1"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:325
+msgid "%1's Prelearning Survey"
+msgstr "Enquête de pré-apprentissage de %1"
+
+#: src/riot/Teaching/TeachTab.riot.html:38
+msgid "Activity"
+msgstr "Activité"
+
+#: src/riot/Components/DiscussionThread.riot.html:100
+msgid "Add a comment"
+msgstr "Ajouter un commentaire"
+
+#: src/riot/Components/DiscussionComment.riot.html:73
+msgid "Add a reply"
+msgstr "Ajouter une réponse"
+
+#: src/riot/Screens/Settings.riot.html:72
+msgid "Add to Home Screen"
+msgstr "\"Sur l'écran d'accueil\""
+
+#: src/riot/Lesson/LessonFeedback.riot.html:109
+#: src/riot/Teaching/ActivityFeedback.riot.html:109
+msgid "Add your comments (optional)"
+msgstr "Ajoutez vos commentaires (facultatif)"
+
+#: src/riot/WagtailPages/AllCoursesList.riot.html:75
+msgid "All courses"
+msgstr "Tous les cours"
+
+#: src/riot/Lesson/ExamResults.riot.html:37
+msgid "Amazing work!"
+msgstr "Un travail incroyable !"
+
+#: src/riot/Components/DiscussionThread.riot.html:105
+msgid "An error occurred, please try again later"
+msgstr "Une erreur s'est produite, veuillez réessayer plus tard"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:91
+msgid "Are you enjoying this lesson?"
+msgstr "Cette leçon vous plaît-elle ?"
+
+#: src/riot/Teaching/ActivityFeedback.riot.html:91
+msgid "Are you enjoying this teaching plan?"
+msgstr "Ce plan d'enseignement vous plaît-il ?"
+
+#: src/riot/Lesson/ExamReview.riot.html:90
+msgid "Are you ready to retake your exam?"
+msgstr "Êtes-vous prêt à repasser votre examen ?"
+
+#: src/riot/Lesson/ExamReview.riot.html:93
+#: src/riot/Lesson/HonorCode.riot.html:50
+#: src/riot/Lesson/LessonComplete.riot.html:63
+msgid "Back to Course"
+msgstr "Retour au cours"
+
+#: src/riot/Lesson/ExamResults.riot.html:39
+msgid "Back to Courses"
+msgstr "Retour aux cours"
+
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:47
+msgid "Check <strong>all</strong> answers that apply"
+msgstr "Cochez <strong>toutes les</strong> réponses qui s'appliquent"
+
+#: src/riot/Lesson/TestSingleAnswer.riot.html:29
+msgid "Check answer"
+msgstr "Voir la réponse"
+
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:50
+msgid "Check answers"
+msgstr "Vérifiez les réponses"
+
+#: src/riot/Components/LoginForm.riot.html:60
+msgid "Checking"
+msgstr "Vérification"
+
+#: src/riot/Lesson/HonorCode.riot.html:44
+msgid "Code of conduct"
+msgstr "Code de conduite"
+
+#: src/riot/Components/DiscussionThread.riot.html:104
+msgid "Comment flagged as inappropriate"
+msgstr "Commentaire signalé comme inapproprié"
+
+#: src/riot/Components/DiscussionThread.riot.html:103
+msgid "Comment posted"
+msgstr "Commentaire publié"
+
+#: src/riot/Screens/Profile.riot.html:77
+msgid "completed"
+msgstr "terminé"
+
+#: src/riot/Lesson/LessonComplete.riot.html:57
+msgid "Congratulations!"
+msgstr "Félicitations!"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:102
+#: src/riot/Teaching/ActivityFeedback.riot.html:102
+msgid "Continue"
+msgstr "Continuer"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:181
+msgid "Continue learning"
+msgstr "Continuer l’apprentissage"
+
+#: src/riot/WagtailPages/AllCoursesList.riot.html:76
+msgid "Continue Learning"
+msgstr "Continuer à apprendre"
+
+#: src/riot/Lesson/HonorCode.riot.html:43
+#: src/riot/WagtailPages/CoursePage.riot.html:169
+msgid "Course exam"
+msgstr "Examen de cours"
+
+#: src/riot/Screens/Profile.riot.html:72
+msgid "Course progress"
+msgstr "Progression"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:168
+msgid "Discussion"
+msgstr "Discussion"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:177
+msgid "Download all lessons"
+msgstr "Télécharger toutes les leçons"
+
+#: src/riot/Lesson/PdfCard.riot.html:11
+msgid "Download this PDF to your device"
+msgstr "Téléchargez ce PDF sur votre appareil"
+
+#: src/riot/Components/LessonDownload.riot.html:38
+msgid "Downloaded"
+msgstr "Téléchargé"
+
+#: src/riot/WagtailPages/AllCoursesList.riot.html:78
+msgid "Explore a range of courses to suit your needs, expertise, and interests"
+msgstr ""
+"Explorez un éventail de cours pour répondre à vos besoins, à vos compétences "
+"et à vos intérêts"
+
+#: src/riot/Teaching/ActivityPage.riot.html:102
+msgid "extend"
+msgstr "étendre"
+
+#: src/riot/Teaching/TeachTab.riot.html:40
+msgid "Extend your knowledge"
+msgstr "Élargir vos connaissances"
+
+#: src/riot/Lesson/TestMultipleAnswer.riot.html:49
+msgid "Find and check all correct answers and uncheck incorrect answers"
+msgstr ""
+"Trouvez et vérifiez toutes les réponses correctes et décochez les réponses "
+"incorrectes"
+
+#: src/riot/Lesson/LessonComplete.riot.html:66
+#: src/riot/Lesson/LessonContent.riot.html:108
+#: src/riot/Lesson/TestPopupModal.riot.html:38
+msgid "Finish"
+msgstr "Terminer"
+
+#: src/riot/Components/DiscussionComment.riot.html:72
+#: src/riot/Components/DiscussionReply.riot.html:35
+msgid "Flag as inappropriate"
+msgstr "Marquer comme inapproprié"
+
+#: src/riot/Screens/Login.riot.html:47
+msgid "Forgot username or password?"
+msgstr "Nom d'utilisateur ou mot de passe oublié ?"
+
+#: src/riot/Components/HandleError.riot.html:26
+msgid "Go home"
+msgstr "Retour à la page d'accueil"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:105
+#: src/riot/Teaching/ActivityFeedback.riot.html:105
+msgid "Good"
+msgstr "Bon"
+
+#: src/riot/Lesson/LessonComplete.riot.html:59
+msgid "Good job!"
+msgstr "Bravo !"
+
+#: src/riot/Lesson/TestPopupModal.riot.html:89
+#: src/riot/Lesson/TestPopupModal.riot.html:91
+msgid "Great"
+msgstr "Génial"
+
+#: src/riot/Lesson/LessonComplete.riot.html:60
+msgid "Great job!"
+msgstr "Super boulot !"
+
+#: src/riot/Components/LoginForm.riot.html:62
+msgid "hide"
+msgstr "cacher"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:173
+msgid "Highest score"
+msgstr "Score le plus élevé"
+
+#: src/riot/Components/ContactInformation.riot.html:23
+msgid "I need help accessing my account"
+msgstr "J'ai besoin d'aide pour accéder à mon compte"
+
+#: src/riot/Screens/Settings.riot.html:71
+msgid "I would like to receive notifications"
+msgstr "Je souhaite recevoir des notifications"
+
+#: src/riot/Lesson/ExamResults.riot.html:87
+#, fuzzy
+msgid "If you want to improve your score you can retake this exam."
+msgstr ""
+"Vous avez réussi cet examen avec un score de %1%. Si vous voulez améliorer "
+"votre score, vous pouvez repasser cet examen."
+
+#: src/riot/Screens/Profile.riot.html:76
+msgid "in progress"
+msgstr "en cours"
+
+#: src/riot/Screens/ChangeBrowser.riot.html:18
+msgid "In the meantime please use Safari."
+msgstr "En attendant, veuillez utiliser Safari."
+
+#: src/riot/Lesson/LessonComplete.riot.html:64
+msgid "Join the discussion"
+msgstr "Rejoindre la discussion"
+
+#: src/riot/Screens/Notifications.riot.html:59
+msgid "Latest notifications"
+msgstr "Dernières notifications"
+
+#: src/riot/Screens/Sync.riot.html:61
+msgid "Latest syncs"
+msgstr "Dernières synchronisations"
+
+#: src/riot/Teaching/PlanTab.riot.html:37
+msgid "Learning outcomes"
+msgstr "Résultats de l'apprentissage"
+
+#: src/riot/Screens/Profile.riot.html:73
+msgid "Learning statistics"
+msgstr "Apprendre les statistiques"
+
+#: src/riot/WagtailPages/LessonPage.riot.html:35
+msgid "Lesson"
+msgstr "Leçon"
+
+#: src/riot/WagtailPages/LessonPage.riot.html:36
+msgid "Lesson Activities"
+msgstr "Activités de cours"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:166
+msgid "Lessons"
+msgstr "Leçons"
+
+#: src/riot/Screens/Profile.riot.html:74
+msgid "lessons completed"
+msgstr "leçons apprises"
+
+#: src/riot/Screens/Profile.riot.html:75
+msgid "lessons remaining"
+msgstr "leçons restantes"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:103
+#: src/riot/Teaching/ActivityFeedback.riot.html:103
+msgid "Let us know how you feel"
+msgstr "Faites-nous savoir ce que vous ressentez"
+
+#: src/riot/Components/DiscussionThread.riot.html:108
+#: src/riot/Components/GuestBanner.riot.html:21
+#: src/riot/Components/LoginForm.riot.html:59
+#: src/riot/Screens/Login.riot.html:50 src/riot/Screens/Settings.riot.html:74
+msgid "Login"
+msgstr "Connexion"
+
+#: src/riot/Screens/Settings.riot.html:73
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:176
+msgid "Make course available offline"
+msgstr "Rendre le cours disponible hors ligne"
+
+#: src/riot/Components/LessonDownload.riot.html:37
+msgid "Make offline"
+msgstr "Mettre hors ligne"
+
+#: src/riot/Teaching/ActivityPage.riot.html:98
+msgid "Mark complete"
+msgstr "Marquer terminée"
+
+#: src/riot/Teaching/ActivityPage.riot.html:99
+msgid "Mark incomplete"
+msgstr "Mark incomplet"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:100
+#: src/riot/Teaching/ActivityFeedback.riot.html:100
+msgid "Maybe later"
+msgstr "Peut-être plus tard"
+
+#: src/riot/Screens/Login.riot.html:48
+msgid "Need help?"
+msgstr "Besoin d’aide?"
+
+#: src/riot/Components/Card.riot.html:24
+msgid "New"
+msgstr "Nouveau"
+
+#: src/riot/Components/DiscussionThread.riot.html:90
+msgid "Newest First"
+msgstr "Plus récents en premier"
+
+#: src/riot/Lesson/CourseExam.riot.html:69
+#: src/riot/Lesson/ExamReview.riot.html:89
+#: src/riot/Lesson/LessonContent.riot.html:107
+#: src/riot/Lesson/TestPopupModal.riot.html:37
+msgid "Next"
+msgstr "Suivant"
+
+#: src/riot/Lesson/LessonComplete.riot.html:58
+msgid "Next Lesson"
+msgstr "Leçon suivante"
+
+#: src/riot/Components/DiscussionCard.riot.html:18
+msgid "No discussions have been started. Please check back again later"
+msgstr ""
+"Aucune discussion n'a été lancée. Veuillez vérifier à nouveau plus tard"
+
+#: src/riot/Screens/Notifications.riot.html:60
+msgid "No notifications."
+msgstr "Aucune notification."
+
+#: src/riot/Components/ContactInformation.riot.html:21
+msgid "No WhatsApp?"
+msgstr "Pas de WhatsApp ?"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:104
+#: src/riot/Teaching/ActivityFeedback.riot.html:104
+msgid "Not great"
+msgstr "Pas génial"
+
+#: src/riot/Lesson/ExamResults.riot.html:41
+msgid "Not quite!"
+msgstr "Pas tout à fait !"
+
+#: src/riot/Screens/Notifications.riot.html:61
+msgid "Notifications"
+msgstr "Notifications"
+
+#: src/riot/Components/DiscussionThread.riot.html:91
+msgid "Oldest First"
+msgstr "Anciens d'abord"
+
+#: src/riot/Lesson/TestPopupModal.riot.html:105
+#: src/riot/Lesson/TestPopupModal.riot.html:107
+msgid "Oops"
+msgstr "Oups"
+
+#: src/riot/Teaching/PlanTab.riot.html:38
+msgid "Overview"
+msgstr "Aperçu"
+
+#: src/riot/Components/LoginForm.riot.html:56
+msgid "Password"
+msgstr "Mot de passe"
+
+#: src/riot/Teaching/ActivityPage.riot.html:100
+msgid "plan"
+msgstr "l'abonnement"
+
+#: src/riot/Components/DiscussionComment.riot.html:74
+msgid "Post a comment"
+msgstr "Laisser un commentaire"
+
+#: src/riot/Components/DiscussionThread.riot.html:101
+msgid "Post comment"
+msgstr "Publier un commentaire"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:170
+msgid "Prelearning Survey"
+msgstr "Enquête de pré-apprentissage"
+
+#: src/riot/Teaching/PlanTab.riot.html:39
+msgid "Preparation tasks & materials"
+msgstr "Tâches et matériel de préparation"
+
+#: src/riot/Lesson/TestPopupModal.riot.html:113
+#: src/riot/Lesson/TestPopupModal.riot.html:115
+msgid "Read the question more carefully!"
+msgstr "Lisez la question plus attentivement !"
+
+#: src/riot/Teaching/PlanTab.riot.html:40
+msgid "Ready to teach"
+msgstr "Prêt à enseigner"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:106
+#: src/riot/Teaching/ActivityFeedback.riot.html:106
+msgid "Really great!"
+msgstr "Vraiment génial !"
+
+#: src/riot/Components/HandleError.riot.html:25
+msgid "Refresh"
+msgstr "Actualiser"
+
+#: src/riot/Components/DiscussionComment.riot.html:71
+msgid "Reply"
+msgstr "Répondre"
+
+#: src/riot/Screens/Resources.riot.html:71
+msgid "Resources"
+msgstr "Ressources"
+
+#: src/riot/Lesson/ExamResults.riot.html:43
+#: src/riot/Lesson/ExamReview.riot.html:92
+msgid "Retake Exam"
+msgstr "Examen de rattrapage"
+
+#: src/riot/Lesson/ExamReview.riot.html:87
+msgid "Review the exam questions you answered incorrectly"
+msgstr ""
+"Revoyez les questions de l'examen auxquelles vous avez répondu incorrectement"
+
+#: src/riot/Lesson/ExamResults.riot.html:42
+msgid "Review your answers"
+msgstr "Passez en revue vos réponses"
+
+#: src/riot/Lesson/ExamReview.riot.html:94
+msgid "Revision notes"
+msgstr "Notes de révision"
+
+#: src/riot/Components/SearchBar.riot.html:15
+msgid "Search"
+msgstr "Rechercher"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:175
+msgid "See less"
+msgstr "Voir moins"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:174
+msgid "See more"
+msgstr "Voir plus"
+
+#: src/riot/Components/LanguageSelector.riot.html:23
+msgid "Select your language"
+msgstr "Choisissez votre langue"
+
+#: src/riot/Components/ContactInformation.riot.html:22
+msgid "Send SMS"
+msgstr "Envoyer un SMS"
+
+#: src/riot/Screens/Login.riot.html:49
+msgid "send us a message"
+msgstr "envoyez-nous un message"
+
+#: src/riot/Components/ContactInformation.riot.html:19
+msgid "Send us a message and we'll help you log in"
+msgstr "Envoyez-nous un message et nous vous aiderons à vous connecter"
+
+#: src/riot/Components/ContactInformation.riot.html:20
+msgid "Send WhatsApp"
+msgstr "Envoyer WhatsApp"
+
+#: src/riot/Teaching/TeachTab.riot.html:37
+msgid "Setup"
+msgstr "Configuration"
+
+#: src/riot/Components/LoginForm.riot.html:61
+msgid "show"
+msgstr "afficher"
+
+#: src/riot/Components/HandleError.riot.html:24
+msgid "Sorry, an unexpected error has occurred."
+msgstr "Désolé, une erreur inattendue s'est produite."
+
+#: src/riot/Components/HandleError.riot.html:23
+msgid "Sorry, we cannot find this site content."
+msgstr "Désolé, nous ne pouvons pas trouver le contenu de ce site."
+
+#: src/riot/Lesson/AudioCard.riot.html:28
+msgid "Sorry: This audio is missing."
+msgstr "Désolé : cet audio est manquant."
+
+#: src/riot/Components/ImageWrapper.riot.html:33
+msgid "Sorry: This image is missing."
+msgstr "Désolé : cette image est manquante."
+
+#: src/riot/Lesson/VideoCard.riot.html:32
+msgid "Sorry: This video is missing."
+msgstr "Désolé : cette vidéo est manquante."
+
+#: src/riot/Components/DiscussionThread.riot.html:102
+msgid "Sort by"
+msgstr "Trier par"
+
+#: src/riot/Lesson/HonorCode.riot.html:49
+msgid "Start Exam"
+msgstr "Commencer le test"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:180
+msgid "Start learning"
+msgstr "Commencez à apprendre"
+
+#: src/riot/Screens/Notifications.riot.html:62
+#: src/riot/Screens/Sync.riot.html:62
+#: src/riot/WagtailPages/LessonPage.riot.html:37
+msgid "Start lesson"
+msgstr "Début de la leçon"
+
+#: src/riot/Lesson/ExamReview.riot.html:88
+msgid "Start review"
+msgstr "Début de l'examen"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:108
+#: src/riot/Teaching/ActivityFeedback.riot.html:108
+msgid "Submit"
+msgstr "Envoyer"
+
+#: src/riot/Lesson/CourseExam.riot.html:70
+msgid "Submit answers"
+msgstr "Soumettre les réponses"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:171
+msgid "Take exam"
+msgstr "Passer l'examen"
+
+#: src/riot/Lesson/LessonComplete.riot.html:61
+msgid "Take Exam"
+msgstr "Passer l’examen"
+
+#: src/riot/Lesson/LessonComplete.riot.html:62
+#: src/riot/WagtailPages/CoursePage.riot.html:172
+msgid "Take Survey"
+msgstr "Répondre à l'enquête"
+
+#: src/riot/Lesson/LessonComplete.riot.html:118
+msgid "Take the exam now to complete the course \"%1\""
+msgstr "Passez l'examen maintenant pour terminer le cours \"%1\""
+
+#: src/riot/Lesson/LessonComplete.riot.html:112
+msgid "Take the pre-learning survey to complete the course \"%1\""
+msgstr ""
+"Répondez à l'enquête de pré-apprentissage pour compléter le cours \"%1\""
+
+#: src/riot/Teaching/ActivityPage.riot.html:101
+msgid "teach"
+msgstr "apprendre"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:97
+#: src/riot/Teaching/ActivityFeedback.riot.html:97
+#, fuzzy
+msgid ""
+"Thanks for your feedback. Your opinion matters to us and we are working hard "
+"to improve your experience."
+msgstr ""
+"Merci pour vos commentaires. Votre opinion compte pour nous et nous "
+"travaillons dur pour améliorer votre expérience"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:101
+#: src/riot/Teaching/ActivityFeedback.riot.html:101
+msgid "Thanks so much"
+msgstr "Merci beaucoup"
+
+#: src/riot/Components/DiscussionThread.riot.html:106
+msgid ""
+"There are no comments yet. Be the first to contribute to the conversation! "
+"Add a comment above."
+msgstr ""
+"Il n'y a pas encore de commentaires. Soyez le premier à contribuer à la "
+"conversation ! Ajoutez un commentaire ci-dessus."
+
+#: src/riot/WagtailPages/AllCoursesList.riot.html:74
+msgid "There are no courses yet. Check back soon!"
+msgstr "Il n'y a pas encore de cours. Revenez bientôt !"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:165
+msgid "There are no lessons yet in this course"
+msgstr "Il n'y a pas encore de leçons dans ce cours"
+
+#: src/riot/Screens/Resources.riot.html:72
+msgid "There are no resources yet. Check back soon!"
+msgstr "Il n'y a pas encore de ressources. Revenez bientôt !"
+
+#: src/riot/Components/LessonDownload.riot.html:36
+msgid "There was a problem downloading the content"
+msgstr "Il y a eu un problème pour télécharger le contenu"
+
+#. message for what percent a user must score to pass the exam
+#: src/riot/Lesson/HonorCode.riot.html:74
+msgid "To pass this exam you need to score <strong>%1% or higher</strong>"
+msgstr ""
+"Pour réussir cet examen, vous devez obtenir un score de <strong>%1% ou plus</"
+"strong>"
+
+#: src/riot/Components/GuestBanner.riot.html:20
+msgid "To save your progress"
+msgstr "Pour sauvegarder votre progression"
+
+#: src/riot/Lesson/TestPopupModal.riot.html:39
+msgid "Try again"
+msgstr "Réessayer"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:179
+msgid ""
+"Try again later or reconnect to your network to start interacting with your "
+"colleagues"
+msgstr ""
+"Réessayez plus tard ou reconnectez-vous à votre réseau pour commencer à "
+"interagir avec vos collègues"
+
+#: src/riot/Components/LoginForm.riot.html:55
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: src/riot/Teaching/FlashCard.riot.html:33
+#: src/riot/Teaching/TeachTab.riot.html:41
+msgid "View all tips"
+msgstr "Voir tous les conseils"
+
+#: src/riot/Lesson/Html5Card.riot.html:23
+msgid "View full screen"
+msgstr "Voir en plein écran"
+
+#: src/riot/Lesson/ExamResults.riot.html:40
+msgid "View Resources"
+msgstr "Voir les ressources"
+
+#: src/riot/Components/LoginForm.riot.html:58
+msgid "We cannot reach the internet, you may be offline"
+msgstr ""
+"Nous n'arrivons pas à joindre l'internet, vous êtes peut-être hors ligne"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:107
+#: src/riot/Teaching/ActivityFeedback.riot.html:107
+msgid "We value your feedback"
+msgstr "Nous apprécions vos commentaires"
+
+#: src/riot/Lesson/LessonFeedback.riot.html:93
+#: src/riot/Teaching/ActivityFeedback.riot.html:93
+#, fuzzy
+msgid "We value your input and all feedback is confidential."
+msgstr ""
+"Nous apprécions vos commentaires et tous les commentaires sont confidentiels."
+
+#: src/riot/Components/HandleError.riot.html:22
+msgid ""
+"We're having trouble fetching what you need right now, try refreshing this "
+"page."
+msgstr ""
+"Nous avons des difficultés à trouver ce que vous cherchez en ce moment, "
+"essayez de rafraîchir cette page."
+
+#: src/riot/Screens/ChangeBrowser.riot.html:17
+msgid "We're sorry! We're still adding support for Asteroid on Chrome in iOS."
+msgstr ""
+"Nous sommes désolés ! Nous sommes toujours en train d'ajouter la prise en "
+"charge d'Astéroïde sur Chrome dans iOS."
+
+#: src/riot/Lesson/TestPopupModal.riot.html:97
+#: src/riot/Lesson/TestPopupModal.riot.html:99
+msgid "Well done, keep it up!"
+msgstr "Bravo, continuez comme ça !"
+
+#: src/riot/Components/HandleError.riot.html:21
+msgid "Whoops! Something has gone wrong"
+msgstr "Oups ! Quelque chose a mal tourné"
+
+#: src/riot/Teaching/TeachTab.riot.html:39
+msgid "Wrap up"
+msgstr "Récapitulation"
+
+#: src/riot/Components/Toast.riot.html:12
+msgid "You are offline!"
+msgstr "Vous êtes hors ligne !"
+
+#: src/riot/Components/Toast.riot.html:13
+msgid "You are online!"
+msgstr "Vous êtes en ligne !"
+
+#. message when user did not pass exam
+#: src/riot/Lesson/ExamResults.riot.html:94
+msgid ""
+"You did not pass this assessment because you only scored %1% and you need to "
+"reach %2% to pass. You can review your answers, retake this exam now, or "
+"finish it later."
+msgstr ""
+"Vous n'avez pas réussi cette évaluation car vous n'avez obtenu que %1% et "
+"vous devez atteindre %2% pour réussir. Vous pouvez revoir vos réponses, "
+"repasser cet examen maintenant ou le terminer plus tard."
+
+#: src/riot/Lesson/ExamResults.riot.html:77
+msgid ""
+"You have completed the pre-learning survey and you can now keep progressing "
+"your learning."
+msgstr ""
+"Vous avez rempli l'enquête de pré-apprentissage et vous pouvez maintenant "
+"continuer à progresser dans votre apprentissage."
+
+#: src/riot/Lesson/ExamReview.riot.html:91
+msgid ""
+"You have the opportunity to retake the exam now and achieve a successful "
+"outcome. Alternatively you can return to the course."
+msgstr ""
+"Vous avez la possibilité de repasser l'examen maintenant et d'obtenir un "
+"résultat positif. Sinon, vous pouvez reprendre le cours."
+
+#. message on completion of a lesson %1 is replaced by the lesson title
+#: src/riot/Lesson/LessonComplete.riot.html:106
+msgid "You just completed the lesson \"%1\""
+msgstr "Vous venez de terminer la leçon \"%1\""
+
+#: src/riot/Components/DiscussionThread.riot.html:107
+msgid "You need to be logged in to use this feature"
+msgstr "Vous devez être connecté pour utiliser cette fonction"
+
+#: src/riot/WagtailPages/CoursePage.riot.html:178
+msgid "You need to be online to use the discussion tool"
+msgstr "Vous devez être en ligne pour utiliser l'outil de discussion"
+
+#: src/riot/Lesson/ExamResults.riot.html:82
+msgid "You passed this exam with a score of %1%."
+msgstr ""
+
+#: src/riot/Lesson/ExamResults.riot.html:38
+msgid "You've completed the course"
+msgstr "Vous avez terminé le cours"
+
+#: src/riot/Lesson/LessonComplete.riot.html:65
+msgid ""
+"You've just completed this set of tips. You can now finish and return to the "
+"learning activity."
+msgstr ""
+"Vous venez de terminer cette série de conseils. Vous pouvez maintenant "
+"terminer et retourner à l'activité d'apprentissage."
+
+#: src/riot/Lesson/HonorCode.riot.html:46
+msgid ""
+"You’re about to start a course exam. Do you promise that you will complete "
+"this exam on your own, without assistance from anyone?"
+msgstr ""
+"Vous êtes sur le point de commencer un examen de cours. Promettez-vous de "
+"terminer cet examen par vous-même, sans l'aide de personne ?"
+
+#: src/riot/Lesson/AudioCard.riot.html:27
+msgid "Your browser does not support the audio element."
+msgstr "Votre navigateur ne supporte pas l’élément audio."
+
+#: src/riot/Lesson/VideoCard.riot.html:31
+msgid "Your browser does not support the video element."
+msgstr "Votre navigateur ne supporte pas l'élément vidéo."
+
+#: src/riot/WagtailPages/CoursePage.riot.html:167
+msgid "Your lessons"
+msgstr "Vos leçons"
+
+#: src/riot/Screens/Profile.riot.html:71
+msgid "Your profile"
+msgstr "Votre profil"
+
+#: src/riot/Screens/Settings.riot.html:70
+msgid "Your settings"
+msgstr "Vos paramètres"
+
+#: src/riot/Components/LoginForm.riot.html:57
+msgid "Your username or password is incorrect"
+msgstr "Votre nom d'utilisateur ou votre mot de passe est incorrect"
+
+#~ msgid ""
+#~ "Thanks for your feedback. Your opinion matters to us and we are working "
+#~ "hard to improve your experience"
+#~ msgstr ""
+#~ "Merci pour vos commentaires. Votre opinion compte pour nous et nous "
+#~ "travaillons dur pour améliorer votre expérience"
+
+#~ msgid "We value your feedback and all feedback is confidential"
+#~ msgstr ""
+#~ "Nous apprécions vos commentaires et tous les commentaires sont "
+#~ "confidentiels"
