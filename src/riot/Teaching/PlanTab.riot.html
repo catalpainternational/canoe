@@ -1,18 +1,18 @@
 <PlanTab>
     <TabSection
-        class="{'first-section'}"
+        if="{ plan.outcomes }"
         icon="{'brain'}"
         title="{TRANSLATIONS.learningOutcomes()}"
         section={ plan.outcomes }
     ></TabSection>
     <TabSection
-        class="{'middle-section'}"
+        if="{ plan.overview }"
         icon="{'binocular'}"
         title="{TRANSLATIONS.overview()}"
         section={ plan.overview }
     ></TabSection>
     <TabSection
-        class="{'last-section'}"
+        if="{ plan.preparation }"
         icon="{'clipboard-pencil'}"
         title="{TRANSLATIONS.preparation()}"
         section={ plan.preparation }

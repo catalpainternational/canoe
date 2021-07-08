@@ -56,18 +56,23 @@ ActivityPage {
         }
     }
 
-    .first-section {
-        padding-bottom: 1.5em;
-        border-bottom: 2px solid $gray-6;
-    }
+    TabSection {
+        padding: 1.5em 0;
+        display: block;
 
-    .middle-section {
-        padding: 2em 0;
-        border-bottom: 2px solid $gray-6;
-    }
+        .btn-primary.assessment {
+            max-width: 80%;
+            display: block;
+            margin: 1em auto;
+        }
 
-    .last-section {
-        padding: 2em 0 1em 0;
+        &:first-of-type {
+            padding-top: 0;
+        }
+
+        + TabSection {
+            border-top: 2px solid $gray-6;
+        }
     }
 
     div.content-wrapper {
