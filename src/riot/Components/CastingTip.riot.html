@@ -1,0 +1,44 @@
+<CastingTip>
+    <template if="{!state.hasBeenDismissed}">
+        <div if="{state.uiState === 'prompt'}" class="tip-prompt">
+            <span class="cross gray" onclick="{dismissPrompt}"></span>
+            <h4>
+                <span class="icon"><span class="light-bulb"></span></span>
+                { TRANSLATIONS.tipPromptTitle() }
+            </h4>
+            <p>{ TRANSLATIONS.tipPromptContent() }</p>
+            <a onclick="{openCastingTips}">{ TRANSLATIONS.learnMore() } <span class="arrow right"></span></a>
+        </div>
+
+        <div if="{state.uiState === 'cards'}">
+
+        </div>
+
+    </template>
+
+    <script>
+        function CastingTip() { return {
+            TRANSLATIONS: {
+                tipPromptTitle: () => gettext("Casting Tip"),
+                tipPromptContent: () => gettext("Casting this video to your class is an effective way to boost engagement with students and set the scene for this learning activity"),
+                learnMore: () => gettext("Learn more"),
+            },
+
+            state: {
+                uiState: 'prompt',
+                hasBeenDismissed: false,
+            },
+
+            dismissPrompt() {
+                // should we do this in local storage? probably. design question
+                this.update({ hasBeenDismissed: true });
+            },
+
+            openCastingTips() {
+                this.update({ uiState: 'cards' });
+            }
+        }}
+
+        export default CastingTip;
+    </script>
+</CastingTip>

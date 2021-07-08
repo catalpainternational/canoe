@@ -10,6 +10,8 @@
                 <ListCard if="{ card.tag === 'list' }" card="{ card }"></ListCard>
                 <AudioCard if="{ card.tag === 'media' && card.media_type === 'audio' }" media="{ card }"></AudioCard>
                 <VideoCard if="{ card.tag === 'media' && card.media_type === 'video' }" media="{ card }"></VideoCard>
+                <!-- TODO casting tips if it's a video card? before or after, given the text content is below the actual video element -->
+                <CastingTip if="{ card.tag === 'media' && card.media_type === 'video' }""></CastingTip>
                 <Html5Card if="{ card.tag === 'html5' }" card="{ card }"></Html5Card>
                 <PdfCard if="{ card.tag === 'pdf' }" card="{ card }"></PdfCard>
                 <Raw if="{ card.tag === 'raw' }" card="{ card }"></Raw>
@@ -24,6 +26,7 @@
         import PdfCard from "RiotTags/Lesson/PdfCard.riot.html";
         import Html5Card from "RiotTags/Lesson/Html5Card.riot.html";
         import Raw from "RiotTags/Components/Raw.riot.html";
+        import CastingTip from "RiotTags/Components/CastingTip.riot.html";
 
         export default {
             components: {
@@ -33,7 +36,8 @@
                 listcard: ListCard,
                 pdfcard: PdfCard,
                 html5card: Html5Card,
-                raw: Raw
+                raw: Raw,
+                castingtip: CastingTip,
             },
         };
     </script>
