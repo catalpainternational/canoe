@@ -1,5 +1,5 @@
 <ActivityPage>
-    <template if="{state.status !== 'feedback'}">
+    <template if="{state.status !== 'feedback' && state.status !== 'assessment'}">
         <TopMenu
             extrastyleclasses="with-swoop"
             backgroundImage="{getCardImage(activity.loc_hash, activity.cardImage)}"
@@ -66,6 +66,7 @@
                         if="{selectedTab === 'teach'}"
                         selectTab="{selectTab}"
                         getTipCards="{getTipCards}"
+                        openAssessment="{() => updateActivity('assessment')}"
                     >
                     </TeachTab>
                     <ExtendTab
@@ -79,12 +80,19 @@
         if="{state.status === 'feedback'}"
         sentFeedback="{() => updateActivity('complete')}"
     ></ActivityFeedback>
+    <FormativeAssessment
+        if="{state.status === 'assessment' && activity.teach}"
+        content="{activity.teach.formative_assessment}"
+        activity="{activity}"
+        closeAssessment="{() => updateActivity('content')}">
+    </FormativeAssessment>
     <script>
         import TopMenu from "RiotTags/Components/TopMenu.riot.html";
         import PlanTab from "RiotTags/Teaching/PlanTab.riot.html";
         import TeachTab from "RiotTags/Teaching/TeachTab.riot.html";
         import ExtendTab from "RiotTags/Teaching/ExtendTab.riot.html";
         import ActivityFeedback from "RiotTags/Teaching/ActivityFeedback.riot.html";
+        import FormativeAssessment from "RiotTags/Teaching/FormativeAssessment.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
         import { getCardImageUrl } from "js/utilities";
@@ -147,7 +155,7 @@
 
             updateActivity(status) {
                 const footerEl = document.getElementsByTagName("footer")[0];
-                if (status === "feedback") {
+                if (status === "feedback" || status === "assessment") {
                     footerEl.classList.add("hide");
                 } else if (footerEl.classList.contains("hide")) {
                     footerEl.classList.remove("hide");
@@ -162,6 +170,7 @@
             teachtab: TeachTab,
             extendtab: ExtendTab,
             activityfeedback: ActivityFeedback,
+            formativeassessment: FormativeAssessment,
         };
 
         export default ActivityPage;

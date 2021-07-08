@@ -1,22 +1,32 @@
 <TeachTab>
     <TabSection
-        class="{'first-section'}"
+        if="{ teach.setup.length }"
         icon="{'group-circle'}"
         title="{ TRANSLATIONS.setup() }"
         section={ teach.setup }
     ></TabSection>
     <TabSection
-        class="{'middle-section'}"
+        if="{ teach.activity.length }"
         icon="{'crossed-pencil'}"
         title="{ TRANSLATIONS.activity() }"
         section={ teach.activity }
     ></TabSection>
     <TabSection
-        class="{'last-section'}"
+        if="{ teach.wrapup.length }"
         icon="{'chat-bubbles'}"
         title="{ TRANSLATIONS.wrap() }"
         section={ teach.wrapup }
     ></TabSection>
+    <TabSection
+        if="{ teach.formative_assessment.length }"
+        icon="{'assessment-checkmark'}"
+        title="{ TRANSLATIONS.formative() }"
+        description="{ TRANSLATIONS.assessment_desc() }"
+    >
+        <button class="btn-primary assessment" onclick="{openAssessment}">
+            { TRANSLATIONS.start_assessment() }
+        </button>
+    </TabSection>
 
     <FlashCard
         if="{teachTips}"
@@ -38,6 +48,9 @@
                 activity: () => gettext("Activity"),
                 wrap: () => gettext("Wrap up"),
                 extendKnowledge: () => gettext("Extend your knowledge"),
+                formative: () => gettext("Formative Assessment"),
+                assessment_desc: () => gettext("Conduct a formative assessment with your class to consolidate learning."),
+                start_assessment: () => gettext("Start assessment"),
                 viewTips: () => gettext("View all tips"),
             },
 
@@ -51,6 +64,10 @@
 
             get teachTips() {
                 return this.route.page.teach_tips;
+            },
+
+            openAssessment() {
+                this.props.openAssessment()
             },
 
             openTips() {

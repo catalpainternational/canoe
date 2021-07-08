@@ -34,7 +34,7 @@ const testAnswersReducer = (state = INITIAL_STATE, action) => {
             return newState;
         case TEST_ANSWERS_STORE_ANSWER:
             Object.assign(newState, state);
-            if(!newState[action.pageId]) newState[action.pageId] = {};  
+            if(!newState[action.pageId]) newState[action.pageId] = {};
             newState[action.pageId][action.questionId] = action.answerData;
             return newState;
         default:
