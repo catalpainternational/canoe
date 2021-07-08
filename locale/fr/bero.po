@@ -48,7 +48,7 @@ msgstr "Ajouter une réponse"
 msgid "Add to Home Screen"
 msgstr "\"Sur l'écran d'accueil\""
 
-#: src/riot/Lesson/LessonFeedback.riot.html:109
+#: src/riot/Lesson/LessonFeedback.riot.html:112
 #: src/riot/Teaching/ActivityFeedback.riot.html:109
 msgid "Add your comments (optional)"
 msgstr "Ajoutez vos commentaires (facultatif)"
@@ -123,7 +123,7 @@ msgstr "terminé"
 msgid "Congratulations!"
 msgstr "Félicitations!"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:102
+#: src/riot/Lesson/LessonFeedback.riot.html:105
 #: src/riot/Teaching/ActivityFeedback.riot.html:102
 msgid "Continue"
 msgstr "Continuer"
@@ -200,7 +200,7 @@ msgstr "Nom d'utilisateur ou mot de passe oublié ?"
 msgid "Go home"
 msgstr "Retour à la page d'accueil"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:105
+#: src/riot/Lesson/LessonFeedback.riot.html:108
 #: src/riot/Teaching/ActivityFeedback.riot.html:105
 msgid "Good"
 msgstr "Bon"
@@ -289,7 +289,7 @@ msgstr "leçons apprises"
 msgid "lessons remaining"
 msgstr "leçons restantes"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:103
+#: src/riot/Lesson/LessonFeedback.riot.html:106
 #: src/riot/Teaching/ActivityFeedback.riot.html:103
 msgid "Let us know how you feel"
 msgstr "Faites-nous savoir ce que vous ressentez"
@@ -321,7 +321,7 @@ msgstr "Marquer terminée"
 msgid "Mark incomplete"
 msgstr "Mark incomplet"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:100
+#: src/riot/Lesson/LessonFeedback.riot.html:103
 #: src/riot/Teaching/ActivityFeedback.riot.html:100
 msgid "Maybe later"
 msgstr "Peut-être plus tard"
@@ -362,7 +362,7 @@ msgstr "Aucune notification."
 msgid "No WhatsApp?"
 msgstr "Pas de WhatsApp ?"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:104
+#: src/riot/Lesson/LessonFeedback.riot.html:107
 #: src/riot/Teaching/ActivityFeedback.riot.html:104
 msgid "Not great"
 msgstr "Pas génial"
@@ -421,7 +421,7 @@ msgstr "Lisez la question plus attentivement !"
 msgid "Ready to teach"
 msgstr "Prêt à enseigner"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:106
+#: src/riot/Lesson/LessonFeedback.riot.html:109
 #: src/riot/Teaching/ActivityFeedback.riot.html:106
 msgid "Really great!"
 msgstr "Vraiment génial !"
@@ -538,7 +538,7 @@ msgstr "Début de la leçon"
 msgid "Start review"
 msgstr "Début de l'examen"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:108
+#: src/riot/Lesson/LessonFeedback.riot.html:111
 #: src/riot/Teaching/ActivityFeedback.riot.html:108
 msgid "Submit"
 msgstr "Envoyer"
@@ -573,7 +573,7 @@ msgstr ""
 msgid "teach"
 msgstr "apprendre"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:97
+#: src/riot/Lesson/LessonFeedback.riot.html:100
 #: src/riot/Teaching/ActivityFeedback.riot.html:97
 #, fuzzy
 msgid ""
@@ -583,7 +583,7 @@ msgstr ""
 "Merci pour vos commentaires. Votre opinion compte pour nous et nous "
 "travaillons dur pour améliorer votre expérience"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:101
+#: src/riot/Lesson/LessonFeedback.riot.html:104
 #: src/riot/Teaching/ActivityFeedback.riot.html:101
 msgid "Thanks so much"
 msgstr "Merci beaucoup"
@@ -657,7 +657,7 @@ msgid "We cannot reach the internet, you may be offline"
 msgstr ""
 "Nous n'arrivons pas à joindre l'internet, vous êtes peut-être hors ligne"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:107
+#: src/riot/Lesson/LessonFeedback.riot.html:110
 #: src/riot/Teaching/ActivityFeedback.riot.html:107
 msgid "We value your feedback"
 msgstr "Nous apprécions vos commentaires"
