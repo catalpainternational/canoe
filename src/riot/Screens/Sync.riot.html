@@ -94,13 +94,14 @@
         import { AppelflapUtilities } from "ts/Appelflap/AppelflapUtilities";
         import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
         import { CacheSubscribe } from "ts/Appelflap/CacheSubscribe";
+        import { AF_EMPTY_TAGGED_SUBSCRIPTIONS } from "ts/Constants";
         import { hashString } from "js/utilities";
         import { getRoute } from "ReduxImpl/Interface";
 
         import TopMenu from "riot/Components/TopMenu.riot.html";
 
         const peerPropDefault = { friendly_id: "unknown" };
-        const subscriptionsDefault = { types: { CACHE: { groups: {} } } };
+        const taggedSubsDefault = AF_EMPTY_TAGGED_SUBSCRIPTIONS;
 
         export default {
             state: {
@@ -108,7 +109,7 @@
                 ssid: "",
                 peerId: peerPropDefault,
                 peers: [],
-                subscriptions: subscriptionsDefault,
+                taggedSubs: taggedSubsDefault,
                 // could be "outdated" or "current" - determined from the Manifest
                 contentStatus: "outdated",
                 // We will know if 'content' (cache bandles) are outdated from what the Manifest tells us
@@ -243,7 +244,7 @@
                     this.update({ syncStatus: "syncNoPeersError" });
                     return false;
                 }
-                if (JSON.stringify(this.state.subscriptions) === JSON.stringify(subscriptionsDefault) && !forceDesiredState) {
+                if (JSON.stringify(this.state.taggedSubs) === JSON.stringify(taggedSubsDefault) && !forceDesiredState) {
                     // No subscriptions, several possible causes
                     this.update({ syncStatus: "syncSubscriptionError" });
                     return false;
@@ -314,7 +315,7 @@
                 if (!this.setSyncStatus()) {
                     return false;
                 }
-                this.state.subscriptions = await AppDataStatus.getInstance().SetSubscriptions();
+                this.state.taggedSubs = await AppDataStatus.getInstance().SetSubscriptions();
                 if (!this.setSyncStatus()) {
                     return false;
                 }

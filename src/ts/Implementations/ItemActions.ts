@@ -1,4 +1,4 @@
-import { TPublication, TSubscriptions } from "../Types/CacheTypes";
+import { TPublication, TTaggedSubscriptions } from "../Types/CacheTypes";
 import { TAppelflapResult } from "../Types/CanoeEnums";
 import { TItemListing } from "../Types/PublishableItemTypes";
 import { TPublishableItem } from "../Types/PublishableItemTypes";
@@ -7,7 +7,7 @@ import { AppelflapConnect } from "../Appelflap/AppelflapConnect";
 import { CachePublish } from "../Appelflap/CachePublish";
 import { CacheSubscribe } from "../Appelflap/CacheSubscribe";
 import { TBundles } from "../Types/BundleTypes";
-import { NOT_RELEVANT } from "../Constants";
+import { AF_EMPTY_TAGGED_SUBSCRIPTIONS, NOT_RELEVANT } from "../Constants";
 
 /** Define the 'target' within the cache for Appelflap */
 const CacheTarget = (item: TPublishableItem): TPublication => {
@@ -70,14 +70,16 @@ export async function publishItem(
  * - resolve(NOT_RELEVANT) if appelflap connect wasn't provided,
  * - reject("failed") on error (404 or 500)
  */
-export async function getSubscriptions(): Promise<TSubscriptions | string> {
+export async function getSubscriptions(): Promise<
+    TTaggedSubscriptions | string
+> {
     if (!AppelflapConnect.getInstance()) {
         return Promise.resolve(NOT_RELEVANT);
     }
 
     try {
-        const subscriptions = await CacheSubscribe.getSubscriptions();
-        return Promise.resolve(subscriptions);
+        const taggedSubs = await CacheSubscribe.getSubscriptions();
+        return Promise.resolve(taggedSubs);
     } catch (error) {
         return Promise.reject("failed");
     }
@@ -90,27 +92,24 @@ export async function getSubscriptions(): Promise<TSubscriptions | string> {
  * - reject("failed") on error (404 or 500)
  */
 export async function setSubscriptions(
+    eTag: string,
     items: TItemListing[]
-): Promise<TSubscriptions | string> {
+): Promise<TTaggedSubscriptions | string> {
     if (!items || !items.length || !AppelflapConnect.getInstance()) {
         return Promise.resolve(NOT_RELEVANT);
     }
 
-    const subscriptions: TSubscriptions = {
-        types: {
-            CACHE: {
-                groups: {},
-            },
-        },
-    };
+    const taggedSubs = AF_EMPTY_TAGGED_SUBSCRIPTIONS;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    subscriptions.types.CACHE!.groups[self.origin] = { names: {} };
+    taggedSubs.subscriptions.types.CACHE!.groups[self.origin] = { names: {} };
 
     const aDay = 24 * 60 * 60 * 1000;
 
     items.forEach((item) => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        subscriptions.types.CACHE!.groups[self.origin].names[item.cacheKey] = {
+        taggedSubs.subscriptions.types.CACHE!.groups[self.origin].names[
+            item.cacheKey
+        ] = {
             injection_version_min: item.version - aDay,
             injection_version_max: item.version + aDay,
             p2p_version_min: item.version - aDay,
@@ -120,7 +119,7 @@ export async function setSubscriptions(
     });
 
     try {
-        const result = await CacheSubscribe.setSubscriptions(subscriptions);
+        const result = await CacheSubscribe.setSubscriptions(taggedSubs);
         return Promise.resolve(result);
     } catch (error) {
         return Promise.reject("failed");

@@ -42,6 +42,7 @@ export const AF_STORAGE_INFO = "storage-info";
 //#endregion
 
 export const AF_CERTCHAIN_LENGTH_HEADER = "X-Appelflap-Chain-Length";
+export const AF_ETAG = "ETag";
 
 /** These are all of the commands provided by Appelflap across its API surface that we wish to expose */
 export const APPELFLAPCOMMANDS = {
@@ -119,12 +120,6 @@ export const APPELFLAPCOMMANDS = {
         commandPath: `${AF_CACHE_API}/${AF_PUBLICATIONS}`,
         method: "PUT",
     },
-    /** @deprecated Do not use, this is performed by Appelflap garbage collection now */
-    // deletePublication: {
-    //     commandPath: `${AF_CACHE_API}/${AF_PUBLICATIONS}`,
-    //     method: "DELETE",
-    // },
-    //#endregion
     //#region Subscriptions
     getSubscriptions: {
         commandPath: `${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`,

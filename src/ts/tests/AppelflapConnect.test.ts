@@ -12,6 +12,7 @@ import {
     TCertificate,
     TPublication,
     TSubscriptions,
+    TTaggedSubscriptions,
 } from "../Types/CacheTypes";
 import { TPeerProperties } from "../Types/InfoTypes";
 
@@ -293,19 +294,20 @@ test("Cache: getSubscriptions", async (t: any) => {
         },
     };
 
+    const testTag = "testy";
     const successEmptyResponse = new Response(
         JSON.stringify(testEmptyResponse),
         {
             status: 200,
             statusText: "Ok",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", ETag: testTag },
         }
     );
 
     const successResponse = new Response(JSON.stringify(testResponse), {
         status: 200,
         statusText: "Ok",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ETag: testTag },
     });
 
     // Do failure tests before success tests
@@ -315,11 +317,14 @@ test("Cache: getSubscriptions", async (t: any) => {
 
     fetchMock.get(testUri, successEmptyResponse);
     const successEmptyResult = await afc.getSubscriptions();
-    t.deepEqual(successEmptyResult, testEmptyResponse);
+    t.deepEqual(successEmptyResult, {
+        eTag: testTag,
+        subscriptions: testEmptyResponse,
+    });
 
     fetchMock.get(testUri, successResponse);
     const successResult = await afc.getSubscriptions();
-    t.deepEqual(successResult, testResponse);
+    t.deepEqual(successResult, { eTag: testTag, subscriptions: testResponse });
 
     fetchMock.reset();
 });
@@ -334,36 +339,39 @@ test.skip("Cache: setSubscriptions", async (t: any) => {
     const authFailureResponse = t.context.authFailureResponse as Response;
 
     const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`;
-    const subscriptions: TSubscriptions = {
-        types: {
-            CACHE: {
-                groups: {
-                    "some-web-origin": {
-                        names: {
-                            "some-cache-name": {
-                                injection_version_min: 10,
-                                injection_version_max: 20,
-                                p2p_version_min: 200,
-                                p2p_version_max: 888,
-                                injected_version: 12,
-                            },
-                            "another-cache-name": {
-                                injection_version_min: 42,
-                                injection_version_max: 42,
-                                p2p_version_min: 1,
-                                p2p_version_max: 9000,
-                                injected_version: null,
+    const taggedSubs: TTaggedSubscriptions = {
+        eTag: "sdfdsfsdf",
+        subscriptions: {
+            types: {
+                CACHE: {
+                    groups: {
+                        "some-web-origin": {
+                            names: {
+                                "some-cache-name": {
+                                    injection_version_min: 10,
+                                    injection_version_max: 20,
+                                    p2p_version_min: 200,
+                                    p2p_version_max: 888,
+                                    injected_version: 12,
+                                },
+                                "another-cache-name": {
+                                    injection_version_min: 42,
+                                    injection_version_max: 42,
+                                    p2p_version_min: 1,
+                                    p2p_version_max: 9000,
+                                    injected_version: null,
+                                },
                             },
                         },
-                    },
-                    "some-other-web-origin": {
-                        names: {
-                            "yet-another-cache-name": {
-                                injection_version_min: 42,
-                                injection_version_max: 42,
-                                p2p_version_min: 1,
-                                p2p_version_max: 9000,
-                                injected_version: null,
+                        "some-other-web-origin": {
+                            names: {
+                                "yet-another-cache-name": {
+                                    injection_version_min: 42,
+                                    injection_version_max: 42,
+                                    p2p_version_min: 1,
+                                    p2p_version_max: 9000,
+                                    injected_version: null,
+                                },
                             },
                         },
                     },
@@ -378,13 +386,13 @@ test.skip("Cache: setSubscriptions", async (t: any) => {
     [badRequestResponse, authFailureResponse].forEach(async (response) => {
         fetchMock.put(testUri, response, { overwriteRoutes: true });
         const failureResult = await t.throwsAsync(
-            afc.setSubscriptions(subscriptions)
+            afc.setSubscriptions(taggedSubs)
         );
         t.is(failureResult.message, response.statusText);
     });
 
     fetchMock.put(testUri, successResponse, { overwriteRoutes: true });
-    const successResult = await afc.setSubscriptions(subscriptions);
+    const successResult = await afc.setSubscriptions(taggedSubs);
     t.is(successResult, "ok");
 
     fetchMock.reset();

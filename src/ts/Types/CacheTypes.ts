@@ -37,6 +37,11 @@ export type TSubscriptions = {
     };
 };
 
+export type TTaggedSubscriptions = {
+    eTag: string;
+    subscriptions: TSubscriptions;
+};
+
 export type TCertificate = {
     /** The body of the pem certificate file, as a text string */
     cert: string;

@@ -3,13 +3,14 @@ import {
     TCertificate,
     TPublication,
     TSubscriptions,
+    TTaggedSubscriptions,
 } from "../Types/CacheTypes";
 import { TBundleResults, TBundles } from "../Types/BundleTypes";
 
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: For when the unit tests cannot find the declaration file
-import { AF_CERTCHAIN_LENGTH_HEADER, AF_LOCALHOSTURI, APPELFLAPCOMMANDS } from "./AppelflapRouting";
+import { AF_CERTCHAIN_LENGTH_HEADER, AF_ETAG, AF_LOCALHOSTURI, APPELFLAPCOMMANDS } from "./AppelflapRouting";
 // The above import statement MUST all appear on the one line for the @ts-ignore to work
 /* eslint-enable prettier/prettier */
 
@@ -109,7 +110,7 @@ export class AppelflapConnect {
     private performCommand = async (
         commandPath: string,
         commandInit?: RequestInit,
-        returnType: "json" | "text" | "pem" = "json"
+        returnType: "json" | "text" | "response" = "json"
     ): Promise<any> => {
         await this.getEndpointProperties();
         if (!this.#endpointProperties) {
@@ -143,19 +144,8 @@ export class AppelflapConnect {
             case "text":
                 const testResult = await response.text();
                 return testResult || response.statusText;
-            case "pem":
-                // A `application/x-pem-file` is actually a sub-type of `text`
-                // But we need to include a little extra info from the repsonse header.
-                // So we'll actually return it as an object (i.e. json)
-                const encodedCertificate = await response.text();
-                const isCertSigned =
-                    response.headers.get(AF_CERTCHAIN_LENGTH_HEADER) === "3";
-                const cert = {
-                    cert: encodedCertificate,
-                    isCertSigned: isCertSigned,
-                } as TCertificate;
-
-                return cert;
+            case "response":
+                return response;
         }
         /* eslint-enable no-case-declarations */
     };
@@ -296,16 +286,29 @@ export class AppelflapConnect {
     //#endregion
 
     //#region Subscriptions
-    public getSubscriptions = async (): Promise<TSubscriptions> => {
+    public getSubscriptions = async (): Promise<TTaggedSubscriptions> => {
         const { commandPath } = APPELFLAPCOMMANDS.getSubscriptions;
 
-        const subscriptions = await this.performCommand(commandPath);
-        return subscriptions as Promise<TSubscriptions>;
+        const subResponse = (await this.performCommand(
+            commandPath,
+            undefined,
+            "response"
+        )) as Response;
+
+        const getSubscriptions: TTaggedSubscriptions = {
+            eTag: subResponse.headers.get(AF_ETAG) || "",
+            subscriptions: (await subResponse.json()) as TSubscriptions,
+        };
+
+        logger.info(
+            `Got current subscriptions with the ETag ${getSubscriptions.eTag}`
+        );
+        return getSubscriptions;
     };
 
     public setSubscriptions = async (
-        subscriptions: TSubscriptions
-    ): Promise<TSubscriptions> => {
+        taggedSubs: TTaggedSubscriptions
+    ): Promise<TTaggedSubscriptions> => {
         logger.info(`Setting subscriptions for desired items`);
 
         const { commandPath, method } = APPELFLAPCOMMANDS.setSubscriptions;
@@ -314,14 +317,21 @@ export class AppelflapConnect {
             method: method,
             headers: {
                 "content-type": "application/json",
+                "If-Match": taggedSubs.eTag,
             },
-            body: JSON.stringify(subscriptions),
+            body: JSON.stringify(taggedSubs.subscriptions),
         };
 
-        const setSubscriptions: TSubscriptions = await this.performCommand(
+        const subResponse = (await this.performCommand(
             requestPath,
-            commandInit
-        );
+            commandInit,
+            "response"
+        )) as Response;
+
+        const setSubscriptions: TTaggedSubscriptions = {
+            eTag: subResponse.headers.get(AF_ETAG) || "",
+            subscriptions: (await subResponse.json()) as TSubscriptions,
+        };
 
         logger.info(`Successfully set subscriptions for desired items`);
         return setSubscriptions;
@@ -346,15 +356,26 @@ export class AppelflapConnect {
     public getCertificate = async (): Promise<TCertificate> => {
         const { commandPath } = APPELFLAPCOMMANDS.getCertificate;
 
-        const certificate = (await this.performCommand(
+        const certResponse = (await this.performCommand(
             commandPath,
             undefined,
-            "pem"
-        )) as TCertificate;
+            "response"
+        )) as Response;
 
-        const certSigned = certificate.isCertSigned ? "signed" : "unsigned";
+        // A `application/x-pem-file` is actually a sub-type of `text`
+        // But we need to include a little extra info from the response header.
+        // So we'll actually return it as an object (i.e. json)
+        const encodedCertificate = await certResponse.text();
+        const isCertSigned =
+            certResponse.headers.get(AF_CERTCHAIN_LENGTH_HEADER) === "3";
+        const cert = {
+            cert: encodedCertificate,
+            isCertSigned: isCertSigned,
+        } as TCertificate;
+
+        const certSigned = cert.isCertSigned ? "signed" : "unsigned";
         logger.info(`Got ${certSigned} certificate`);
-        return certificate;
+        return cert;
     };
 
     public saveCertificate = async (
