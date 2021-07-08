@@ -107,6 +107,13 @@ export class AppelflapConnect {
         return await fetch(requestInfo, requestInit);
     };
 
+    /**
+     * Perform the command identified by commandPath
+     * @remarks If the `response` object never seems to have the header that you need,
+     * even though it shows up in the developer console.
+     * Then this means that Appelflap is not setting the `Access-Control-Expose-Headers` header
+     * with the relevant header name.
+     */
     private performCommand = async (
         commandPath: string,
         commandInit?: RequestInit,
@@ -287,11 +294,18 @@ export class AppelflapConnect {
 
     //#region Subscriptions
     public getSubscriptions = async (): Promise<TTaggedSubscriptions> => {
-        const { commandPath } = APPELFLAPCOMMANDS.getSubscriptions;
+        const { commandPath, method } = APPELFLAPCOMMANDS.getSubscriptions;
+        const requestPath = `${commandPath}`;
+        const commandInit: RequestInit = {
+            method: method,
+            headers: {
+                "content-type": "application/json",
+            },
+        };
 
         const subResponse = (await this.performCommand(
-            commandPath,
-            undefined,
+            requestPath,
+            commandInit,
             "response"
         )) as Response;
 
@@ -300,8 +314,11 @@ export class AppelflapConnect {
             subscriptions: (await subResponse.json()) as TSubscriptions,
         };
 
+        // Strip all double quotes from the eTag
+        getSubscriptions.eTag = getSubscriptions.eTag.replaceAll('"', "");
+
         logger.info(
-            `Got current subscriptions with the ETag ${getSubscriptions.eTag}`
+            `Got current subscriptions with the ETag:${getSubscriptions.eTag}`
         );
         return getSubscriptions;
     };
@@ -317,7 +334,7 @@ export class AppelflapConnect {
             method: method,
             headers: {
                 "content-type": "application/json",
-                "If-Match": taggedSubs.eTag,
+                "If-Match": `"${taggedSubs.eTag}"`,
             },
             body: JSON.stringify(taggedSubs.subscriptions),
         };

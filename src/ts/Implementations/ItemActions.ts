@@ -100,6 +100,7 @@ export async function setSubscriptions(
     }
 
     const taggedSubs = AF_EMPTY_TAGGED_SUBSCRIPTIONS;
+    taggedSubs.eTag = eTag;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     taggedSubs.subscriptions.types.CACHE!.groups[self.origin] = { names: {} };
 

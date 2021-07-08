@@ -308,13 +308,8 @@
             },
 
             async refreshSubscriptions() {
-                // Note: this first test is a workaround because Appelflap's `saveSubscriptions` method
-                // does not return when the device is not connected to WiFi.
-                // This test examines whether the ssid is set or not.
-                // Hopefully we can remove this later
-                if (!this.setSyncStatus()) {
-                    return false;
-                }
+                this.state.taggedSubs = await AppDataStatus.getInstance().GetSubscriptions();
+
                 this.state.taggedSubs = await AppDataStatus.getInstance().SetSubscriptions();
                 if (!this.setSyncStatus()) {
                     return false;
