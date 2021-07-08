@@ -40,7 +40,7 @@ msgstr "Hahu Atividade"
 
 #: src/riot/Components/DiscussionThread.riot.html:100
 msgid "Add a comment"
-msgstr ""
+msgstr "Hakerek ita nia komentáriu"
 
 #: src/riot/Components/DiscussionComment.riot.html:73
 msgid "Add a reply"
@@ -50,7 +50,7 @@ msgstr ""
 msgid "Add to Home Screen"
 msgstr "Aumenta ba pájina prinsipál"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:112
+#: src/riot/Lesson/LessonFeedback.riot.html:109
 #: src/riot/Teaching/ActivityFeedback.riot.html:109
 msgid "Add your comments (optional)"
 msgstr "Hakerek ita nia komentáriu (opsional)"
@@ -125,7 +125,7 @@ msgstr "Kompleta ona"
 msgid "Congratulations!"
 msgstr "Parabéns! "
 
-#: src/riot/Lesson/LessonFeedback.riot.html:105
+#: src/riot/Lesson/LessonFeedback.riot.html:102
 #: src/riot/Teaching/ActivityFeedback.riot.html:102
 msgid "Continue"
 msgstr "Kontinua"
@@ -150,7 +150,7 @@ msgstr "Ita nia progresu ba kursu"
 
 #: src/riot/WagtailPages/CoursePage.riot.html:168
 msgid "Discussion"
-msgstr ""
+msgstr "Diskusaun"
 
 #: src/riot/WagtailPages/CoursePage.riot.html:177
 msgid "Download all lessons"
@@ -191,7 +191,7 @@ msgstr "Remata"
 #: src/riot/Components/DiscussionComment.riot.html:72
 #: src/riot/Components/DiscussionReply.riot.html:35
 msgid "Flag as inappropriate"
-msgstr ""
+msgstr "Fo marka karik inapropriadu"
 
 #: src/riot/Screens/Login.riot.html:47
 msgid "Forgot username or password?"
@@ -201,7 +201,7 @@ msgstr "Haluha uzuáriu ka seña?"
 msgid "Go home"
 msgstr ""
 
-#: src/riot/Lesson/LessonFeedback.riot.html:108
+#: src/riot/Lesson/LessonFeedback.riot.html:105
 #: src/riot/Teaching/ActivityFeedback.riot.html:105
 msgid "Good"
 msgstr "Di'ak"
@@ -279,7 +279,6 @@ msgid "Lesson Activities"
 msgstr "Atividade sira husi lisaun"
 
 #: src/riot/WagtailPages/CoursePage.riot.html:166
-#, fuzzy
 msgid "Lessons"
 msgstr "Lisaun"
 
@@ -291,7 +290,7 @@ msgstr "lisaun sira ne'ebé kompleta ona"
 msgid "lessons remaining"
 msgstr "lisaun ne'ebé seidauk remata "
 
-#: src/riot/Lesson/LessonFeedback.riot.html:106
+#: src/riot/Lesson/LessonFeedback.riot.html:103
 #: src/riot/Teaching/ActivityFeedback.riot.html:103
 msgid "Let us know how you feel"
 msgstr "Favor dehan mai saida mak ita sente"
@@ -325,7 +324,7 @@ msgstr "Kompleta ona"
 msgid "Mark incomplete"
 msgstr "Kompleta ona"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:103
+#: src/riot/Lesson/LessonFeedback.riot.html:100
 #: src/riot/Teaching/ActivityFeedback.riot.html:100
 msgid "Maybe later"
 msgstr "Karik orasida"
@@ -336,11 +335,12 @@ msgstr "Presiza ajuda?"
 
 #: src/riot/Components/Card.riot.html:24
 msgid "New"
-msgstr ""
+msgstr "Foun"
 
 #: src/riot/Components/DiscussionThread.riot.html:90
+#: src/riot/Components/DiscussionThread.riot.html:93
 msgid "Newest First"
-msgstr ""
+msgstr "foun"
 
 #: src/riot/Lesson/CourseExam.riot.html:69
 #: src/riot/Lesson/ExamReview.riot.html:89
@@ -355,7 +355,7 @@ msgstr "Lisaun tuir mai"
 
 #: src/riot/Components/DiscussionCard.riot.html:18
 msgid "No discussions have been started. Please check back again later"
-msgstr ""
+msgstr "Diskusaun seidauk komesa. Bele haree fali orsida."
 
 #: src/riot/Screens/Notifications.riot.html:60
 msgid "No notifications."
@@ -365,7 +365,7 @@ msgstr "La iha notifikasaun. "
 msgid "No WhatsApp?"
 msgstr "Laiha WhatsApp?"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:107
+#: src/riot/Lesson/LessonFeedback.riot.html:104
 #: src/riot/Teaching/ActivityFeedback.riot.html:104
 msgid "Not great"
 msgstr "Ladi'ak"
@@ -380,7 +380,7 @@ msgstr "Notifikasaun"
 
 #: src/riot/Components/DiscussionThread.riot.html:91
 msgid "Oldest First"
-msgstr ""
+msgstr "tuan"
 
 #: src/riot/Lesson/TestPopupModal.riot.html:105
 #: src/riot/Lesson/TestPopupModal.riot.html:107
@@ -424,7 +424,7 @@ msgstr "Koko lee didi'ak ninia pergunta"
 msgid "Ready to teach"
 msgstr ""
 
-#: src/riot/Lesson/LessonFeedback.riot.html:109
+#: src/riot/Lesson/LessonFeedback.riot.html:106
 #: src/riot/Teaching/ActivityFeedback.riot.html:106
 msgid "Really great!"
 msgstr "Di'ak loos!"
@@ -435,7 +435,7 @@ msgstr ""
 
 #: src/riot/Components/DiscussionComment.riot.html:71
 msgid "Reply"
-msgstr ""
+msgstr "Hatán"
 
 #: src/riot/Screens/Resources.riot.html:71
 msgid "Resources"
@@ -521,7 +521,7 @@ msgstr ""
 
 #: src/riot/Components/DiscussionThread.riot.html:102
 msgid "Sort by"
-msgstr ""
+msgstr "Klasifika uluk ida ne'ebé mak"
 
 #: src/riot/Lesson/HonorCode.riot.html:49
 msgid "Start Exam"
@@ -543,7 +543,7 @@ msgstr "Komesa lisaun"
 msgid "Start review"
 msgstr "Komesa kursu"
 
-#: src/riot/Lesson/LessonFeedback.riot.html:111
+#: src/riot/Lesson/LessonFeedback.riot.html:108
 #: src/riot/Teaching/ActivityFeedback.riot.html:108
 msgid "Submit"
 msgstr "Submete"
@@ -578,7 +578,7 @@ msgstr "Foti survey antes komesa aprendizajen agora atu kompleta kursu \"%1\""
 msgid "teach"
 msgstr ""
 
-#: src/riot/Lesson/LessonFeedback.riot.html:100
+#: src/riot/Lesson/LessonFeedback.riot.html:97
 #: src/riot/Teaching/ActivityFeedback.riot.html:97
 #, fuzzy
 msgid ""
@@ -588,7 +588,7 @@ msgstr ""
 "Obrigado ba ita nia komentáriu. Ita nia opiniaun importante ba ami no ami "
 "servisu atu hadiak ita-nia esperiensia."
 
-#: src/riot/Lesson/LessonFeedback.riot.html:104
+#: src/riot/Lesson/LessonFeedback.riot.html:101
 #: src/riot/Teaching/ActivityFeedback.riot.html:101
 msgid "Thanks so much"
 msgstr "Obrigado barak"
@@ -656,7 +656,7 @@ msgstr "Haree Rekursu"
 msgid "We cannot reach the internet, you may be offline"
 msgstr ""
 
-#: src/riot/Lesson/LessonFeedback.riot.html:110
+#: src/riot/Lesson/LessonFeedback.riot.html:107
 #: src/riot/Teaching/ActivityFeedback.riot.html:107
 msgid "We value your feedback"
 msgstr "Ami apresia ita-nia komentáriu"
