@@ -19,18 +19,18 @@ export const AVAILABLE_LANGUAGES = {
     tet: "Tetum",
 };
 export const SUPPORTED_LANG_CODES = process.env.LANGUAGES;
+const IGNORE_BROWSER_LANGUAGE = process.env.IGNORE_BROWSER_LANGUAGE;
+if (!SUPPORTED_LANG_CODES || SUPPORTED_LANG_CODES.length === 0) {
+    throw new Error("You must define LANGUAGES in canoe-project.");
+}
 
 export function initialiseLanguage() {
     let language = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    const envLanguage = process.env.CANOE_DEFAULT_LANGUAGE;
 
-    // Allow an env-set default language.
-    if (SUPPORTED_LANG_CODES.includes(envLanguage)) {
-        localStorage.setItem(LANGUAGE_STORAGE_KEY, envLanguage);
-        language = envLanguage;
-    }
-
-    if (!language || !SUPPORTED_LANG_CODES.includes(language)) {
+    if (
+        !IGNORE_BROWSER_LANGUAGE &&
+        (!language || !SUPPORTED_LANG_CODES.includes(language))
+    ) {
         // we don't have a valid locally stored language key
         // check all supported languages for a match with browser config
         for (const code of SUPPORTED_LANG_CODES) {
@@ -40,6 +40,7 @@ export function initialiseLanguage() {
             }
         }
     }
+
     if (!language) {
         // we still don't have a language, just use the first available
         language = SUPPORTED_LANG_CODES[0];
