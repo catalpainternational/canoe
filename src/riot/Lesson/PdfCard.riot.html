@@ -1,8 +1,6 @@
 <PdfCard>
     <h3>{props.card.title}</h3>
-    <a href="{getMediaUrl(props.card.url)}" target="_blank"
-        >{ TRANSLATIONS.download() }</a
-    >
+    <a href="{getMediaUrl(props.card.url)}" download>{ TRANSLATIONS.download() }</a>
     <script>
         import { BACKEND_BASE_URL } from "js/urls";
 
