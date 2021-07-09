@@ -231,10 +231,7 @@
              * @returns true for some OK state, false for not OK (i.e. the caller should not continue)
              */
             setSyncStatus(desiredState, forceDesiredState = false) {
-                desiredState = desiredState || this.state.stncStatus;
-                // Note: this test is a workaround because Appelflap's `saveSubscriptions` method
-                // does not return when the device is not connected to WiFi
-                // Hopefully we can remove this later
+                desiredState = desiredState || this.state.syncStatus;
                 if (!this.state.ssid && !forceDesiredState) {
                     // If there's no WiFi, as shown by no ssid, then the status is No WiFi
                     this.update({ syncStatus: "syncNoWiFiError" });
@@ -308,9 +305,18 @@
             },
 
             async refreshSubscriptions() {
-                this.state.taggedSubs = await AppDataStatus.getInstance().GetSubscriptions();
+                try {
+                    this.state.taggedSubs = await AppDataStatus.getInstance().GetSubscriptions();
+                } catch (err) {
+                    console.warn(`Could not get existing subscriptions: ${err}`);
+                }
 
-                this.state.taggedSubs = await AppDataStatus.getInstance().SetSubscriptions();
+                try {
+                    this.state.taggedSubs = await AppDataStatus.getInstance().SetSubscriptions();
+                } catch (err) {
+                    console.warn(`Could not set new subscriptions: ${err}`);
+                }
+                
                 if (!this.setSyncStatus()) {
                     return false;
                 }
