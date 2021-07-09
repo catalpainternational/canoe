@@ -296,6 +296,30 @@
     margin: 1.5em auto;
 }
 
+.casting-1 {
+    @include unmaskable-icons-shared("~img/casting_1.png", contain);
+}
+
+.casting-2 {
+    @include unmaskable-icons-shared("~img/casting_2.png", contain);
+}
+
+.casting-3 {
+    @include unmaskable-icons-shared("~img/casting_3.png", contain);
+}
+
+.ios-casting {
+    @include unmaskable-icons-shared("~img/ios_casting_example.svg", contain);
+    width: 100%;
+    min-height: 220px;
+}
+
+.android-casting {
+    @include unmaskable-icons-shared("~img/android_casting_example.svg", contain);
+    width: 100%;
+    min-height: 220px;
+}
+
 .arrow {
     @include mask-icons-shared("~img/arrow.svg", contain, $app-accent-color);
     height: 12px;
