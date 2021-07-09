@@ -22,5 +22,5 @@ module.exports = {
     // unless they have a manifest cache in place already
     REQUIRE_LOGIN: false,
     PROFILE_LINK: "profile",
-    LANGUAGES: ["en", "fr", "tet"],
+    LANGUAGES: ["en"],
 };
