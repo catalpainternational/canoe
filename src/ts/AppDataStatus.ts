@@ -1,8 +1,8 @@
-import { TSubscriptions } from "./Types/CacheTypes";
+import { TTaggedSubscriptions } from "./Types/CacheTypes";
 import { TAppelflapResult } from "./Types/CanoeEnums";
 import { TWagtailPage } from "./Types/PageTypes";
 import { TItemListing, TPublishableItem } from "./Types/PublishableItemTypes";
-import { TPublishResult, TSyncData } from "./Types/SyncTypes";
+import { TPublishResult } from "./Types/SyncTypes";
 
 import {
     CacheKeys,
@@ -15,7 +15,7 @@ import {
 } from "./Implementations/ItemActions";
 import { Manifest } from "./Implementations/Manifest";
 import { Page } from "./Implementations/Page";
-import { NOT_RELEVANT } from "./Constants";
+import { AF_EMPTY_TAGGED_SUBSCRIPTIONS, NOT_RELEVANT } from "./Constants";
 
 import Logger from "./Logger";
 
@@ -27,10 +27,12 @@ const logger = new Logger("AppDataStatus");
 export class AppDataStatus {
     //#region Implement as Singleton
     static instance: AppDataStatus;
+    private eTag: string;
     private itemListing: TItemListing[];
 
     private constructor() {
         logger.log("Singleton created");
+        this.eTag = "";
         this.itemListing = [];
     }
 
@@ -42,6 +44,10 @@ export class AppDataStatus {
         return AppDataStatus.instance;
     }
     //#endregion
+
+    get ETag(): string {
+        return this.eTag;
+    }
 
     async ItemListings(): Promise<TItemListing[]> {
         if (this.itemListing.length) {
@@ -238,26 +244,25 @@ export class AppDataStatus {
     }
 
     /** Get all current subscriptions */
-    async GetSubscriptions(): Promise<TSubscriptions> {
-        const subscriptions = await getSubscriptions();
-        if (typeof subscriptions === "string") {
-            return { types: { CACHE: { groups: {} } } };
+    async GetSubscriptions(): Promise<TTaggedSubscriptions> {
+        const taggedSubs = await getSubscriptions();
+        if (typeof taggedSubs === "string") {
+            return AF_EMPTY_TAGGED_SUBSCRIPTIONS;
         }
-        return subscriptions;
+        this.eTag = (taggedSubs as TTaggedSubscriptions).eTag;
+        return taggedSubs;
     }
 
     /** Set all current subscriptions */
-    async SetSubscriptions(): Promise<TSubscriptions> {
+    async SetSubscriptions(): Promise<TTaggedSubscriptions> {
         const itemListings = await this.ItemListings();
-        const subscriptions = await setSubscriptions(itemListings);
-        if (
-            typeof subscriptions === "string" &&
-            subscriptions === "not relevant"
-        ) {
+        const taggedSubs = await setSubscriptions(this.eTag, itemListings);
+        if (typeof taggedSubs === "string" && taggedSubs === "not relevant") {
             logger.warn("Could not set subscriptions ");
 
-            return { types: { CACHE: { groups: {} } } };
+            return AF_EMPTY_TAGGED_SUBSCRIPTIONS;
         }
-        return subscriptions as TSubscriptions;
+        this.eTag = (taggedSubs as TTaggedSubscriptions).eTag;
+        return taggedSubs as TTaggedSubscriptions;
     }
 }

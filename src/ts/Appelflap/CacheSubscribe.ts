@@ -1,29 +1,30 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { AF_EMPTY_TAGGED_SUBSCRIPTIONS } from "../Constants";
 import { TBundles } from "../Types/BundleTypes";
-import { TSubscriptions } from "../Types/CacheTypes";
+import { TTaggedSubscriptions } from "../Types/CacheTypes";
 import { AppelflapConnect } from "./AppelflapConnect";
 
 export class CacheSubscribe {
-    static async getSubscriptions(): Promise<TSubscriptions> {
+    static async getSubscriptions(): Promise<TTaggedSubscriptions> {
         if (AppelflapConnect.getInstance()) {
-            const subscriptions =
+            const taggedSubs =
                 await AppelflapConnect.getInstance()!.getSubscriptions();
-            if (subscriptions.types.CACHE) {
-                return subscriptions;
+            if (taggedSubs.subscriptions.types.CACHE) {
+                return taggedSubs;
             }
         }
-        return { types: { CACHE: { groups: {} } } };
+        return AF_EMPTY_TAGGED_SUBSCRIPTIONS;
     }
 
     static async setSubscriptions(
-        subscriptions: TSubscriptions
-    ): Promise<TSubscriptions> {
+        taggedSubs: TTaggedSubscriptions
+    ): Promise<TTaggedSubscriptions> {
         if (AppelflapConnect.getInstance()) {
             return await AppelflapConnect.getInstance()!.setSubscriptions(
-                subscriptions
+                taggedSubs
             );
         }
-        return { types: { CACHE: { groups: {} } } };
+        return AF_EMPTY_TAGGED_SUBSCRIPTIONS;
     }
 
     /**

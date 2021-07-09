@@ -1,6 +1,13 @@
 /* A place to define various magic strings etc. that do not belong in urls.js */
 
+import { TTaggedSubscriptions } from "./Types/CacheTypes";
+
 export const EMPTY_SLATE_BOOT_KEY = "empty_slate_boot";
+
+export const AF_EMPTY_TAGGED_SUBSCRIPTIONS: TTaggedSubscriptions = {
+    eTag: "",
+    subscriptions: { types: { CACHE: { groups: {} } } },
+};
 
 /**
  * This action is 'not relevant' because we're:
