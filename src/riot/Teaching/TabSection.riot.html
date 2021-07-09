@@ -11,7 +11,7 @@
             <AudioCard if="{ card.tag === 'media' && card.media_type === 'audio' }" media="{ card }"></AudioCard>
             <VideoCard if="{ card.tag === 'media' && card.media_type === 'video' }" media="{ card }"></VideoCard>
             <!-- TODO casting tips if it's a video card? before or after, given the text content is below the actual video element -->
-            <CastingTip if="{ card.tag === 'media' && card.media_type === 'video' }""></CastingTip>
+            <CastingTip if="{ card.tag === 'media' && card.media_type === 'video' }"></CastingTip>
             <Html5Card if="{ card.tag === 'html5' }" card="{ card }"></Html5Card>
             <PdfCard if="{ card.tag === 'pdf' }" card="{ card }"></PdfCard>
             <Raw if="{ card.tag === 'raw' }" card="{ card }"></Raw>
