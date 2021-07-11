@@ -100,6 +100,12 @@
     }
 }
 
+.light-bulb {
+    @include mask-icons-shared("~img/light_bulb.svg", contain, $white);
+    width: 17px;
+    height: 17px;
+}
+
 .cross {
     @include mask-icons-shared("~img/cross.svg", contain, $gray-3);
     height: 13px;
@@ -290,10 +296,38 @@
     margin: 1.5em auto;
 }
 
+.casting-1 {
+    @include unmaskable-icons-shared("~img/casting_1.png", contain);
+}
+
+.casting-2 {
+    @include unmaskable-icons-shared("~img/casting_2.png", contain);
+}
+
+.casting-3 {
+    @include unmaskable-icons-shared("~img/casting_3.png", contain);
+}
+
+.ios-casting {
+    @include unmaskable-icons-shared("~img/ios_casting_example.svg", contain);
+    width: 100%;
+    min-height: 220px;
+}
+
+.android-casting {
+    @include unmaskable-icons-shared("~img/android_casting_example.svg", contain);
+    width: 100%;
+    min-height: 220px;
+}
+
 .arrow {
     @include mask-icons-shared("~img/arrow.svg", contain, $app-accent-color);
     height: 12px;
     width: 17px;
+
+    &.right {
+        transform: scaleX(-1)
+    }
 }
 
 .download {

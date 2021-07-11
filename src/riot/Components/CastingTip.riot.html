@@ -1,0 +1,177 @@
+<CastingTip>
+    <template if="{!state.hasBeenDismissed}">
+        <div if="{state.uiState === 'prompt'}" class="tip-prompt">
+            <span class="cross gray" onclick="{dismissPrompt}"></span>
+            <h4>
+                <span class="icon"><span class="light-bulb"></span></span>
+                { TRANSLATIONS.tipPromptTitle() }
+            </h4>
+            <p>{ TRANSLATIONS.tipPromptContent() }</p>
+            <a onclick="{() => toggleCastingTips('cards')}">{ TRANSLATIONS.learnMore() } <span class="arrow right"></span></a>
+        </div>
+
+        <LessonFrame
+            if="{state.uiState === 'cards'}"
+            linkTo="{ '' }"
+            close="{ () => toggleCastingTips('prompt') }"
+        >
+            <h3>{ currentCard.title() }</h3>
+            <p class="capitalize">{ currentCard.subtitle() }</p>
+            <template if="{ currentCard.hasDropdown }">
+                <div class="dropdown">
+                    <p
+                        class="option active { state.dropdownIsOpen ? 'dropdownOpen' : ''}"
+                        onclick="{() => toggleDropdown(state.activeExampleOs)}"
+                    >
+                        { state.activeExampleOs } { TRANSLATIONS.example() } <span class="down-arrow { state.dropdownIsOpen ? 'reverse' : ''}"></span>
+                    </p>
+                    <p
+                        class="option {state.dropdownIsOpen ? 'visible' : 'hidden'}"
+                        onclick="{() => toggleDropdown(state.inactiveExampleOs)}"
+                    >
+                        { state.inactiveExampleOs } { TRANSLATIONS.example() }
+                    </p>
+                </div>
+                <span if="{state.activeExampleOs === 'iOS'}" class="ios-casting"></span>
+                <span if="{state.activeExampleOs === 'Android'}" class="android-casting"></span>
+            </template>
+            <span if="{currentCard.imgClass}" class="image { currentCard.imgClass }"></span>
+            <p>{ currentCard.additionalText() }</p>
+
+            <div slot="bottom-buttons" class="bottom-buttons">
+                 <div>
+                     <a
+                         if="{ state.currentCardIndex > 0 }"
+                         class="has-circle"
+                         onclick="{ prevCard }"
+                     >
+                         <span class="arrow"></span>
+                     </a>
+                 </div>
+                 <div>
+                     <button
+                         class="btn-primary"
+                         onclick="{ nextCard }"
+                     >
+                         <template if="{state.currentCardIndex === instructionCards.length - 1}">
+                             { TRANSLATIONS.gotIt() }
+                         </template>
+                         <template if="{state.currentCardIndex < instructionCards.length - 1}">
+                             { TRANSLATIONS.next() }
+                         </template>
+
+                     </button>
+                 </div>
+            </div>
+        </LessonFrame>
+
+    </template>
+
+    <script>
+        import LessonFrame from "RiotTags/Components/LessonFrame.riot.html";
+
+        function CastingTip() { return {
+            TRANSLATIONS: {
+                tipPromptTitle: () => gettext("Casting Tip"),
+                tipPromptContent: () => gettext("Casting this video to your class is an effective way to boost engagement with students and set the scene for this learning activity"),
+                learnMore: () => gettext("Learn more"),
+                next: () => gettext("Next"),
+                gotIt: () => gettext("Ok, got it"),
+                example: () => gettext("Example"),
+            },
+
+            state: {
+                uiState: 'prompt',
+                hasBeenDismissed: false,
+                currentCardIndex: 0,
+                dropdownIsOpen: false,
+                activeExampleOs: 'Android',
+                inactiveExampleOs: 'iOS',
+            },
+
+            get instructionCards() {
+                return [
+                    {
+                        hasDropdown: false,
+                        title: () => gettext("How does screen casting work?"),
+                        subtitle: () => gettext("Casting allows you to quickly and easily send media to a projector"),
+                        imgClass: 'casting-1',
+                        additionalText: () => gettext("Casting media to students in a classroom setting is a great way to encourage collaboration"),
+                    }, {
+                        hasDropdown: false,
+                        title: () => gettext("How do I cast?"),
+                        subtitle: () => gettext("Simply tap on the casting icon linked to media"),
+                        imgClass: 'casting-2',
+                        additionalText: () => gettext("Videos can be cast directly to your chosen projector"),
+                    }, {
+                        hasDropdown: true,
+                        title: () => gettext("Turn on your projector"),
+                        subtitle: () => gettext("Tap on the cast icon and simply select your projector"),
+                        imgClass: false,
+                        additionalText: () => gettext("Once selected your media will display to your class. You can turn this off by tapping the cast icon again"),
+                    }, {
+                        hasDropdown: false,
+                        title: () => gettext("Learn together"),
+                        subtitle: () => gettext("Keep an eye out for the casting icon and share with your students"),
+                        imgClass: 'casting-3',
+                        additionalText: () => gettext("We've added casting tips throughout lesson activities to remind you when and where we recommend casting media to your classroom. Enjoy!"),
+                    }
+                ]
+            },
+
+            get currentCard() {
+                return this.instructionCards[this.state.currentCardIndex];
+            },
+
+            dismissPrompt() {
+                // TODO: should we do this in local storage? probably. design question
+                this.update({ hasBeenDismissed: true });
+            },
+
+            toggleCastingTips(uiState) {
+                const footerEl = document.getElementsByTagName("footer")[0];
+                if (uiState === "cards") {
+                    footerEl.classList.add("hide");
+                    document.body.style.overflow = "hidden";
+                } else if (footerEl.classList.contains("hide")) {
+                    footerEl.classList.remove("hide");
+                    document.body.style.overflow = "unset";
+                }
+                this.update({ uiState });
+            },
+
+            prevCard() {
+                if (this.state.currentCardIndex > 0) {
+                    this.update({ currentCardIndex: this.state.currentCardIndex - 1});
+                }
+            },
+
+            nextCard() {
+                if (this.state.currentCardIndex < this.instructionCards.length - 1) {
+                    this.update({ currentCardIndex: this.state.currentCardIndex + 1});
+                } else {
+                    this.update({ currentCardIndex: 0 });
+                    this.toggleCastingTips('prompt');
+                }
+            },
+
+            toggleDropdown(os) {
+                if (os === this.state.activeExampleOs) {
+                    this.update({ dropdownIsOpen: !this.state.dropdownIsOpen })
+                } else {
+                    this.update({
+                        inactiveExampleOs: this.state.activeExampleOs,
+                        activeExampleOs: os,
+                        dropdownIsOpen: !this.state.dropdownIsOpen
+                    });
+                }
+            },
+        }}
+
+        CastingTip.components = {
+            lessonframe: LessonFrame,
+        };
+
+        export default CastingTip;
+    </script>
+</CastingTip>
