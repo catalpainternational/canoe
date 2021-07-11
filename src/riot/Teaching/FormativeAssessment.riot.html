@@ -53,9 +53,8 @@
 
         <template if="{state.cardState === 'questionReview'}">
             <span class="lesson-presentation"></span>
-            <h2 if="{majorityCorrect}">{ TRANSLATIONS.excellent() }</h2>
-            <h2 if="{!majorityCorrect}">{ TRANSLATIONS.notBad() }</h2>
-            <p class="capitalize">{ TRANSLATIONS.letsSee() }</p>
+            <h2>{ feedback.title() }</h2>
+            <p class="capitalize">{ feedback.text() }</p>
 
             <div class="pill-container">
                 <div class="pill {answer.correct ? 'correct' : 'incorrect'}" each="{ answer in currentQuestion.answers }">
@@ -110,9 +109,6 @@
                     next: () => gettext("Next"),
                     choose: () => gettext("Ask students to consider the following options"),
                     countStudents: () => gettext("Count the number of students"),
-                    excellent: () => gettext("Excellent work!"),
-                    notBad: () => gettext("Not bad..."),
-                    letsSee: () => gettext("Let's see how we did"),
                     lovely: () => gettext("Lovely work!"),
                     completed: () => gettext("You've just completed this formative assessment. You can now finish and return to the learning activity"),
                     finish: () => gettext("Finish"),
@@ -124,7 +120,6 @@
                     cardState: 'studentCounter',
                     currentCardNumber: 1,
                     questions: [],
-                    passScore: 0.5,
                 },
 
                 onBeforeMount(props, state) {
@@ -152,11 +147,27 @@
                     return this.state.questions[this.state.questionNumber - 1];
                 },
 
-                get majorityCorrect() {
+                get feedback() {
                     if (this.currentQuestion) {
                         const correctAnswer = this.currentQuestion.answers.find(it => it.correct);
+                        const percentagePassed = correctAnswer.tally / this.state.totalStudents;
 
-                        return (correctAnswer.tally / this.state.totalStudents) > this.state.passScore;
+                        if (percentagePassed <= 0.5) {
+                            return {
+                                title: () => gettext("We'll need to review this"),
+                                text: () => gettext("Remember to ask questions if you're getting stuck"),
+                            }
+                        } else if (percentagePassed <= 0.8) {
+                            return {
+                                title: () => gettext("We're close to understanding"),
+                                text: () => gettext("Let's see where we can improve"),
+                            }
+                        } else {
+                            return {
+                                title: () => gettext("Excellent work!"),
+                                text: () => gettext("Let's review what we've learnt"),
+                            }
+                        }
                     }
                 },
 
