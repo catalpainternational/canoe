@@ -240,7 +240,7 @@ test("Cache: getSubscriptions", async (t: any) => {
     const authFailureResponse = t.context.authFailureResponse as Response;
 
     const testUri = `${AF_LOCALHOSTURI}:${t.context.testPort}/${AF_CACHE_API}/${AF_SUBSCRIPTIONS}`;
-    const testEmptyResponse: TSubscriptions = { types: {} };
+    const testEmptyResponse: TSubscriptions = { types: { CACHE: { groups: {} } } };
     const testResponse: TSubscriptions = {
         types: {
             CACHE: {
