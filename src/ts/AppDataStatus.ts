@@ -250,12 +250,14 @@ export class AppDataStatus {
             return AF_EMPTY_TAGGED_SUBSCRIPTIONS;
         }
         this.eTag = (taggedSubs as TTaggedSubscriptions).eTag;
+        logger.info(`Got Subscriptions and ETag:${this.eTag}`);
         return taggedSubs;
     }
 
     /** Set all current subscriptions */
     async SetSubscriptions(): Promise<TTaggedSubscriptions> {
         const itemListings = await this.ItemListings();
+        logger.info(`Setting Subscriptions with ETag:${this.eTag}`);
         const taggedSubs = await setSubscriptions(this.eTag, itemListings);
         if (typeof taggedSubs === "string" && taggedSubs === "not relevant") {
             logger.warn("Could not set subscriptions ");
@@ -263,6 +265,7 @@ export class AppDataStatus {
             return AF_EMPTY_TAGGED_SUBSCRIPTIONS;
         }
         this.eTag = (taggedSubs as TTaggedSubscriptions).eTag;
+        logger.info(`Set Subscriptions and got ETag:${this.eTag}`);
         return taggedSubs as TTaggedSubscriptions;
     }
 }

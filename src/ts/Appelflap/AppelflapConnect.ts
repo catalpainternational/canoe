@@ -222,7 +222,6 @@ export class AppelflapConnect {
 
     //#region Appleflap Info Blocks
     public infoWiFi = async (): Promise<TInfoWiFi | undefined> => {
-        logger.info("Getting WiFi status");
         const { commandPath, method } = APPELFLAPCOMMANDS.infoWiFi;
         logger.info("Getting WiFi status");
         let wifiInfo: TInfoWiFi | undefined = undefined;
@@ -330,6 +329,10 @@ export class AppelflapConnect {
         // Strip all double quotes from the eTag
         getSubscriptions.eTag = getSubscriptions.eTag.replaceAll('"', "");
 
+        // Ensure that there's a minimum response that is understood by the downstream code
+        if (!getSubscriptions.subscriptions.types.CACHE) {
+            getSubscriptions.subscriptions.types.CACHE = { groups: {} };
+        }
         logger.info(
             `Got current subscriptions with the ETag:${getSubscriptions.eTag}`
         );
@@ -363,6 +366,14 @@ export class AppelflapConnect {
             subscriptions: (await subResponse.json()) as TSubscriptions,
         };
 
+        // Strip all double quotes from the eTag
+        setSubscriptions.eTag = setSubscriptions.eTag.replaceAll('"', "");
+
+        // Ensure that there's a minimum response that is understood by the downstream code
+        if (!setSubscriptions.subscriptions.types.CACHE) {
+            setSubscriptions.subscriptions.types.CACHE = { groups: {} };
+        }
+
         logger.info(`Successfully set subscriptions for desired items`);
         return setSubscriptions;
     };
@@ -378,6 +389,7 @@ export class AppelflapConnect {
             "Identifying all bundles ready for injection into the browser's cache"
         );
         const bundles = await this.performCommand(commandPath);
+        logger.info(`Bundles found: ${bundles.bundles.length}`);
         return bundles as Promise<TBundles>;
     };
     //#endregion

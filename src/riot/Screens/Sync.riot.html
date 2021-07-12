@@ -88,11 +88,13 @@
             </div>
 
             <!-- Status of each cached item -->
-            <ol class="sync-list" style="line-height: 0.6;">
+            <ol if="{state.isNotProduction}" class="sync-list" style="line-height: 1;">
                 <li
                     each="{(statusListing, index) in state.statusListings}">
                     <div class="sync-header">
-                        <h5 style="color:{statusListing.isPublishable ? 'green' : 'red'};"><small style="color:black;">{statusListing.type}:</small> { statusListing.title }</h5>
+                        <h5 style="color:{statusListing.isPublishable ? 'green' : 'red'}; margin: 0.2em 0;">
+                            <small style="color:black;">{statusListing.type}:</small> { statusListing.title }
+                        </h5>
                     </div>
                     <!-- <div class="sync-body"><small>version: {statusListing.version}</small></div> -->
                 </li>
@@ -129,6 +131,7 @@
                 // could be "syncOff", "syncOn" (in progress), "syncCompleted",
                 // "syncNotRelevant" (no more injectables), "syncSubscriptionError", "syncNoWiFiError"
                 syncStatus: "syncOff",
+                isNotProduction: process.env.NODE_ENV && process.env.NODE_ENV !== "production",
             },
 
             components: {
@@ -224,7 +227,7 @@
                         if (bundles.bundles.length > 0) {
                             if (this.setSyncStatus("syncOn")) {
                                 // Tell Appelflap get on with it
-                                const result = await AppelflapUtilities.injectCache();
+                                const result = await AppelflapUtilities.injectCaches();
                             }
                         } else {
                             this.setSyncStatus("syncNotRelevant", true);
@@ -321,14 +324,15 @@
             },
 
             async refreshSubscriptions() {
+                const appDataStatus = AppDataStatus.getInstance();
                 try {
-                    this.state.taggedSubs = await AppDataStatus.getInstance().GetSubscriptions();
+                    this.state.taggedSubs = await appDataStatus.GetSubscriptions();
                 } catch (err) {
                     console.warn(`Could not get existing subscriptions: ${err}`);
                 }
 
                 try {
-                    this.state.taggedSubs = await AppDataStatus.getInstance().SetSubscriptions();
+                    this.state.taggedSubs = await appDataStatus.SetSubscriptions();
                 } catch (err) {
                     console.warn(`Could not set new subscriptions: ${err}`);
                 }
