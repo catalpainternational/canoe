@@ -86,6 +86,17 @@
                     <a onclick="{launchStorageManager}">{ TRANSLATIONS.launchStorageManager() }</a>
                 </p>
             </div>
+
+            <!-- Status of each cached item -->
+            <ol class="sync-list">
+                <li
+                    each="{(statusListing, index) in state.statusListings}">
+                    <div class="sync-header">
+                        <h5 style="color:{statusListing.isPublishable ? 'green' : 'red'}"><small style="color:black">{statusListing.type}:</small> { statusListing.title }</h5>
+                    </div>
+                    <!-- <div class="sync-body"><small>version: {statusListing.version}</small></div> -->
+                </li>
+            </ol>
         </div>
     </div>
 
@@ -260,6 +271,7 @@
                 .then((result) => {
                     value = result || statusUpdate.default;
                 }).catch((err) => {
+                    console.warn(err);
                     value = statusUpdate.default;
                 }).finally(() => {
                     this.state[statusUpdate.name] = statusUpdate.getValue(value);
@@ -269,6 +281,10 @@
             },
 
             appelflapStatus() {
+                // Get the Item Status Listings
+                const itemListings = async () => AppDataStatus.getInstance().ItemListings();
+                this.updateStatusData({ name: "statusListings", source: itemListings, default: [] } );
+                
                 // Get Peer info from Appelflap
                 this.updateStatusData({ name: "peerId", source: AppelflapUtilities.peerProperties, default: peerPropDefault });
                 this.updateStatusData({
