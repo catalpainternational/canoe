@@ -97,12 +97,14 @@ export class AppelflapConnect {
             ? undefined
             : commandInit || ({} as RequestInit);
 
+        const newHeaders: any = requestInit!.headers || {};
         if (weHaveAuthorization) {
             // Add the authorization header
-            const newHeaders: any = requestInit!.headers || {};
             newHeaders["Authorization"] = authorization;
-            requestInit!.headers = newHeaders;
         }
+        // Always turn off caching for talking with Appelflap
+        newHeaders["Cache-Control"] = "no-store, max-age=0";
+        requestInit!.headers = newHeaders;
 
         return await fetch(requestInfo, requestInit);
     };
@@ -220,15 +222,18 @@ export class AppelflapConnect {
 
     //#region Appleflap Info Blocks
     public infoWiFi = async (): Promise<TInfoWiFi | undefined> => {
+        logger.info("Getting WiFi status");
         const { commandPath, method } = APPELFLAPCOMMANDS.infoWiFi;
         let wifiInfo: TInfoWiFi | undefined = undefined;
         try {
             wifiInfo = await this.performCommand(commandPath, { method });
         } catch (infoErr) {
             if (infoErr.message !== "Gone") {
+                logger.warn("Error getting WiFi status");
                 throw infoErr;
             }
         }
+        logger.info("Got WiFi status");
         return wifiInfo;
     };
 

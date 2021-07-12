@@ -88,11 +88,11 @@
             </div>
 
             <!-- Status of each cached item -->
-            <ol class="sync-list">
+            <ol class="sync-list" style="line-height: 0.6;">
                 <li
                     each="{(statusListing, index) in state.statusListings}">
                     <div class="sync-header">
-                        <h5 style="color:{statusListing.isPublishable ? 'green' : 'red'}"><small style="color:black">{statusListing.type}:</small> { statusListing.title }</h5>
+                        <h5 style="color:{statusListing.isPublishable ? 'green' : 'red'};"><small style="color:black;">{statusListing.type}:</small> { statusListing.title }</h5>
                     </div>
                     <!-- <div class="sync-body"><small>version: {statusListing.version}</small></div> -->
                 </li>
