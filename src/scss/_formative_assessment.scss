@@ -1,0 +1,190 @@
+FormativeAssessment {
+    .counter {
+        display: grid;
+        grid-template-columns: 30px 1fr 30px;
+        width: 100%;
+        padding: 1em 0;
+        border-top: 2px solid $gray-7;
+        border-bottom: 2px solid $gray-7;
+
+        .plus,
+        .minus {
+            width: 30px;
+            height: 30px;
+            border: 2px solid $app-accent-color;
+            border-radius: 50%;
+            color: $app-accent-color;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+
+            &.disabled {
+                border-color: $gray-5;
+                color: $gray-5;
+            }
+        }
+
+        .number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+
+            h2, p {
+                margin: 0;
+            }
+
+            p {
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    .answers {
+        width: 100%;
+
+        .answer {
+            display: grid;
+            grid-template-columns: 3ch 1fr;
+            gap: 5px;
+        }
+    }
+
+    .alt-answer-counter {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        width: 100%;
+        gap: 12px;
+        align-items: center;
+        border-top: 2px solid $gray-7;
+
+        p {
+            margin: 0;
+            padding: 0.8em;
+        }
+
+        p:first-child {
+            border-right: 2px solid $gray-7;
+        }
+
+        p:last-child {
+            margin-left: auto;
+        }
+    }
+
+    h4:not(.question) {
+        text-align: center;
+        margin-bottom: 1.5em;
+    }
+
+    .question {
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        background-color: rgba($app-accent-color, 0.25);
+        box-sizing: border-box;
+        padding: 1em;
+        width: calc(100% + (2 * 20px));
+        margin-left: -20px;
+        margin-right: -20px;
+        margin-top: -30px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .capitalize {
+        text-transform: uppercase;
+        color: $gray-3;
+        font-size: 0.85em;
+        letter-spacing: 0.05ch;
+
+        &.label {
+            margin: 2em 0 0.5em;
+        }
+    }
+
+    .pill-container {
+        width: 100%;
+
+        .pill {
+            display: grid;
+            grid-template-columns: 30px 1fr 50px;
+            border-radius: 30px;
+            gap: 0.8em;
+            position: relative;
+            overflow: hidden;
+
+            &.correct {
+                border: 2px solid $teal;
+
+                p:first-child {
+                    border-right: 2px solid $teal;
+                    background-color: $teal;
+                }
+
+                .percentage-bar {
+                    background-color: $teal;
+                }
+            }
+
+            &.incorrect {
+                border: 2px solid $red;
+
+                p:first-child {
+                    border-right: 2px solid $red;
+                    background-color: $red;
+                }
+
+                .percentage-bar {
+                    background-color: $red;
+                }
+            }
+
+            p:first-child {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+                border-radius: 30px 0 0 30px;
+                color: white;
+            }
+
+            p {
+                position: relative;
+                z-index: 2;
+            }
+
+            .checkmark {
+                background-color: $teal;
+                height: 10px;
+                margin-left: 8px;
+            }
+
+            .cross {
+                background-color: $red;
+                height: 10px;
+                margin-left: 8px;
+            }
+
+            .percentage-bar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                opacity: 0.25;
+                z-index: 1;
+            }
+
+            + .pill {
+                margin-top: 1em;
+            }
+        }
+    }
+
+    .congratulations-container {
+        display: block;
+        padding-top: 5em;
+    }
+}

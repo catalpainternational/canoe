@@ -241,6 +241,22 @@
     display: block;
 }
 
+.students {
+    @include unmaskable-icons-shared("~img/students.png", contain);
+    height: 100px;
+    width: 100%;
+    display: block;
+    margin: 1em 0;
+}
+
+.assessment-complete {
+    @include unmaskable-icons-shared("~img/sitting_reviewing.png", contain);
+    height: 150px;
+    width: 100%;
+    display: block;
+    margin: 1em 0;
+}
+
 .high-fivers {
     @include unmaskable-icons-shared("~img/high_fivers.png", contain);
     width: 100%;
@@ -459,6 +475,12 @@
 
 .chat-bubbles {
     @include mask-icons-shared("~img/chat.svg", contain, $app-accent-color);
+    width: 14px;
+    height: 12px;
+}
+
+.assessment-checkmark {
+    @include mask-icons-shared("~img/assessment_checkmark.svg", contain, $app-accent-color);
     width: 14px;
     height: 12px;
 }

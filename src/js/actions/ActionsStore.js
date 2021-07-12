@@ -22,13 +22,14 @@ const EXAM_ACTION_TYPE = "exam";
 export const COMPLETION_ACTION_TYPE = "completion";
 export const EXAM_ANSWER_TYPE = `${EXAM_ACTION_TYPE}.answer`;
 export const EXAM_SCORE_TYPE = `${EXAM_ACTION_TYPE}.finalScore`;
+export const FORMATIVE_ASSESSMENT_RESULTS_TYPE = "assessment.tally";
 
 /**
  * Saves an action in the persistent local store
  * If authenticated, posts to the API to persist on the server
- * @param {*} actionType 
- * @param {*} data 
- * @returnsa the data stored in idb 
+ * @param {*} actionType
+ * @param {*} data
+ * @returnsa the data stored in idb
  */
 export const saveAndPostAction = (actionType, data) => {
     const action = {
@@ -102,7 +103,7 @@ export async function updateIdb() {
         // don't continue to post the action if we are not logged in!
         return;
     }
-    
+
     // get server actions and ensure we have them in idb
     const actions = await getActions();
     for (const action of actions) {

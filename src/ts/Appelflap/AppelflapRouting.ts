@@ -26,6 +26,7 @@ export const AF_CERTCHAIN = "certchain";
 
 export const AF_INJECTABLES = "injectables";
 export const AF_STATUS = "status";
+export const AF_NUKE = "nuke";
 
 //#region Appelflap Actions
 export const AF_REBOOT_HARD = "hard-reboot";

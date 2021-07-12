@@ -6,4 +6,9 @@ declare module "js/actions/ExamScores" {
         pageId: number | string,
         scoreData: Record<string, any>
     ): Record<string, any>;
+
+    export function persistAssessmentResults(
+        pageId: number | string,
+        data: Array<any>
+    ): any;
 }
