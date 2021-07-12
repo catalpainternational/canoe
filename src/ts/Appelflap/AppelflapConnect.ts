@@ -97,12 +97,14 @@ export class AppelflapConnect {
             ? undefined
             : commandInit || ({} as RequestInit);
 
+        const newHeaders: any = requestInit!.headers || {};
         if (weHaveAuthorization) {
             // Add the authorization header
-            const newHeaders: any = requestInit!.headers || {};
             newHeaders["Authorization"] = authorization;
-            requestInit!.headers = newHeaders;
         }
+        // Always turn off caching for talking with Appelflap
+        newHeaders["Cache-Control"] = "no-store, max-age=0";
+        requestInit!.headers = newHeaders;
 
         return await fetch(requestInfo, requestInit);
     };
@@ -161,8 +163,9 @@ export class AppelflapConnect {
     private getEndpointProperties = async (): Promise<void> => {
         if (!this.#endpointProperties) {
             const { commandPath } = APPELFLAPCOMMANDS.getEndpointProperties;
-            logger.info(`Getting endpoint properties`);
+            logger.info("Getting endpoint properties");
 
+            // This, and getPeerProperties, are the only commands that directly call fetch
             const response = await fetch(commandPath);
             this.#endpointProperties = await response.json();
             logger.info("Got endpoint properties");
@@ -172,11 +175,12 @@ export class AppelflapConnect {
     public getPeerProperties = async (): Promise<TPeerProperties> => {
         if (!this.#peerProperties) {
             const { commandPath } = APPELFLAPCOMMANDS.getPeerProperties;
-            logger.info(`Getting peer properties`);
+            logger.info("Getting this peer's properties");
 
+            // This, and getEndpointProperties, are the only commands that directly call fetch
             const response = await fetch(commandPath);
             this.#peerProperties = await response.json();
-            logger.info("Got peer properties");
+            logger.info("Got this peer's properties");
         }
 
         return this.#peerProperties!;
@@ -219,20 +223,28 @@ export class AppelflapConnect {
     //#region Appleflap Info Blocks
     public infoWiFi = async (): Promise<TInfoWiFi | undefined> => {
         const { commandPath, method } = APPELFLAPCOMMANDS.infoWiFi;
+        logger.info("Getting WiFi status");
         let wifiInfo: TInfoWiFi | undefined = undefined;
         try {
             wifiInfo = await this.performCommand(commandPath, { method });
         } catch (infoErr) {
             if (infoErr.message !== "Gone") {
+                logger.warn("Error getting WiFi status");
                 throw infoErr;
             }
         }
+        logger.info("Got WiFi status");
         return wifiInfo;
     };
 
     public infoPeers = async (): Promise<TPeers> => {
-        const { commandPath, method } = APPELFLAPCOMMANDS.infoPeers;
-        return this.performCommand(commandPath, { method });
+        logger.info("Getting other peers' properties");
+
+        const { commandPath } = APPELFLAPCOMMANDS.infoPeers;
+        const peers = await this.performCommand(commandPath);
+
+        logger.info(`Got properties for ${peers.length} other peers`);
+        return peers;
     };
 
     public infoStorage = async (): Promise<TInfoStorage> => {
