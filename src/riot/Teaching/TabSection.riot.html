@@ -1,21 +1,21 @@
 <TabSection>
-    <div class="{props.class}">
-        <h4 if="{ props.icon || props.title }">
-            <span if="{ props.icon }" class="has-circle"><span class="{props.icon}"></span></span>
-            <template if="{ props.title }">{ props.title }</template>
-        </h4>
-        <div class="cards-list">
-            <template each="{ card in props.section }">
-                <BasicCard if="{ card.tag === 'basic' }" card="{ card }"></BasicCard>
-                <ListCard if="{ card.tag === 'list' }" card="{ card }"></ListCard>
-                <AudioCard if="{ card.tag === 'media' && card.media_type === 'audio' }" media="{ card }"></AudioCard>
-                <VideoCard if="{ card.tag === 'media' && card.media_type === 'video' }" media="{ card }"></VideoCard>
-                <Html5Card if="{ card.tag === 'html5' }" card="{ card }"></Html5Card>
-                <PdfCard if="{ card.tag === 'pdf' }" card="{ card }"></PdfCard>
-                <Raw if="{ card.tag === 'raw' }" card="{ card }"></Raw>
-            </template>
-        </div>
+    <h4 if="{ props.icon || props.title }">
+        <span if="{ props.icon }" class="has-circle"><span class="{props.icon}"></span></span>
+        <template if="{ props.title }">{ props.title }</template>
+    </h4>
+    <p if="{ props.description }">{ props.description }</p>
+    <div if="{ props.section }" class="cards-list">
+        <template each="{ card in props.section }">
+            <BasicCard if="{ card.tag === 'basic' }" card="{ card }"></BasicCard>
+            <ListCard if="{ card.tag === 'list' }" card="{ card }"></ListCard>
+            <AudioCard if="{ card.tag === 'media' && card.media_type === 'audio' }" media="{ card }"></AudioCard>
+            <VideoCard if="{ card.tag === 'media' && card.media_type === 'video' }" media="{ card }"></VideoCard>
+            <Html5Card if="{ card.tag === 'html5' }" card="{ card }"></Html5Card>
+            <PdfCard if="{ card.tag === 'pdf' }" card="{ card }"></PdfCard>
+            <Raw if="{ card.tag === 'raw' }" card="{ card }"></Raw>
+        </template>
     </div>
+    <slot />
     <script>
         import BasicCard from "RiotTags/Components/BasicCard.riot.html";
         import VideoCard from "RiotTags/Lesson/VideoCard.riot.html";
