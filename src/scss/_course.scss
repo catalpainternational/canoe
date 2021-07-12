@@ -39,12 +39,7 @@ CoursePage {
             }
 
             .clamp-3-lines {
-                line-height: 1.2em;
-                height: calc(3 * 1.2em);
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
+                @extend %clamp-3-lines;
             }
         }
     }
@@ -160,12 +155,37 @@ Resources {
         justify-content: center;
         gap: 3px;
         height: 100%;
+        position: relative;
+        padding-right: 18px;
 
         p {
             font-size: 0.5em;
             text-align: center;
             text-transform: uppercase;
             color: $gray-4;
+        }
+
+        .resource-downloaded {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: $gray-8;
+            border-radius: 0 0 0 8px;
+            min-width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 0 5px;
+
+            .checkmark {
+                width: 11px;
+                height: 11px;
+            }
+
+            p {
+                color: $gray-1;
+            }
         }
     }
 }
