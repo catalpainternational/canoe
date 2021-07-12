@@ -25,6 +25,7 @@
 @import "login";
 @import "all_courses";
 @import "teaching";
+@import "formative_assessment";
 @import "long_card";
 @import "activity";
 @import "toast";
@@ -40,6 +41,8 @@
 * {
     margin: 0;
     padding: 0;
+    // disables the double-tap-to-zoom behaviour
+    touch-action: manipulation;
 }
 
 div.content-wrapper {

@@ -40,7 +40,7 @@ msgstr "Hahu Atividade"
 
 #: src/riot/Components/DiscussionThread.riot.html:100
 msgid "Add a comment"
-msgstr ""
+msgstr "Hakerek ita nia komentáriu"
 
 #: src/riot/Components/DiscussionComment.riot.html:73
 msgid "Add a reply"
@@ -53,7 +53,7 @@ msgstr "Aumenta ba pájina prinsipál"
 #: src/riot/Lesson/LessonFeedback.riot.html:109
 #: src/riot/Teaching/ActivityFeedback.riot.html:109
 msgid "Add your comments (optional)"
-msgstr ""
+msgstr "Hakerek ita nia komentáriu (opsional)"
 
 #: src/riot/WagtailPages/AllCoursesList.riot.html:75
 msgid "All courses"
@@ -150,7 +150,7 @@ msgstr "Ita nia progresu ba kursu"
 
 #: src/riot/WagtailPages/CoursePage.riot.html:168
 msgid "Discussion"
-msgstr ""
+msgstr "Diskusaun"
 
 #: src/riot/WagtailPages/CoursePage.riot.html:177
 msgid "Download all lessons"
@@ -191,7 +191,7 @@ msgstr "Remata"
 #: src/riot/Components/DiscussionComment.riot.html:72
 #: src/riot/Components/DiscussionReply.riot.html:35
 msgid "Flag as inappropriate"
-msgstr ""
+msgstr "Fo marka karik inapropriadu"
 
 #: src/riot/Screens/Login.riot.html:47
 msgid "Forgot username or password?"
@@ -279,7 +279,6 @@ msgid "Lesson Activities"
 msgstr "Atividade sira husi lisaun"
 
 #: src/riot/WagtailPages/CoursePage.riot.html:166
-#, fuzzy
 msgid "Lessons"
 msgstr "Lisaun"
 
@@ -336,11 +335,12 @@ msgstr "Presiza ajuda?"
 
 #: src/riot/Components/Card.riot.html:24
 msgid "New"
-msgstr ""
+msgstr "Foun"
 
 #: src/riot/Components/DiscussionThread.riot.html:90
+#: src/riot/Components/DiscussionThread.riot.html:93
 msgid "Newest First"
-msgstr ""
+msgstr "foun"
 
 #: src/riot/Lesson/CourseExam.riot.html:69
 #: src/riot/Lesson/ExamReview.riot.html:89
@@ -355,7 +355,7 @@ msgstr "Lisaun tuir mai"
 
 #: src/riot/Components/DiscussionCard.riot.html:18
 msgid "No discussions have been started. Please check back again later"
-msgstr ""
+msgstr "Diskusaun seidauk komesa. Bele haree fali orsida."
 
 #: src/riot/Screens/Notifications.riot.html:60
 msgid "No notifications."
@@ -380,7 +380,7 @@ msgstr "Notifikasaun"
 
 #: src/riot/Components/DiscussionThread.riot.html:91
 msgid "Oldest First"
-msgstr ""
+msgstr "tuan"
 
 #: src/riot/Lesson/TestPopupModal.riot.html:105
 #: src/riot/Lesson/TestPopupModal.riot.html:107
@@ -435,7 +435,7 @@ msgstr ""
 
 #: src/riot/Components/DiscussionComment.riot.html:71
 msgid "Reply"
-msgstr ""
+msgstr "Hatán"
 
 #: src/riot/Screens/Resources.riot.html:71
 msgid "Resources"
@@ -521,7 +521,7 @@ msgstr ""
 
 #: src/riot/Components/DiscussionThread.riot.html:102
 msgid "Sort by"
-msgstr ""
+msgstr "Klasifika uluk ida ne'ebé mak"
 
 #: src/riot/Lesson/HonorCode.riot.html:49
 msgid "Start Exam"
@@ -663,9 +663,8 @@ msgstr "Ami apresia ita-nia komentáriu"
 
 #: src/riot/Lesson/LessonFeedback.riot.html:93
 #: src/riot/Teaching/ActivityFeedback.riot.html:93
-#, fuzzy
 msgid "We value your input and all feedback is confidential."
-msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál"
+msgstr "Ami valoriza ita-nia komentáriu no komentáriu hotu konfidensiál."
 
 #: src/riot/Components/HandleError.riot.html:22
 msgid ""

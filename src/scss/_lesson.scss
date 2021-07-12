@@ -637,7 +637,8 @@ LessonFeedback {
 
 LessonComplete,
 ExamResults,
-ExamReview {
+ExamReview,
+FormativeAssessment {
     .congratulations-container,
     .exam-summary {
         display: flex;
@@ -646,6 +647,7 @@ ExamReview {
         align-items: center;
         text-align: center;
         height: 100%;
+        box-sizing: border-box;
         padding-bottom: 2em;
 
         h2,
@@ -765,6 +767,14 @@ ExamReview {
         h3 {
             font-size: 1em;
             text-transform: uppercase;
+        }
+    }
+
+    .exam-summary {
+        display: block;
+
+        a.back {
+            display: block;
         }
     }
 }
