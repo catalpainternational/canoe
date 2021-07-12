@@ -224,6 +224,7 @@ export class AppelflapConnect {
     public infoWiFi = async (): Promise<TInfoWiFi | undefined> => {
         logger.info("Getting WiFi status");
         const { commandPath, method } = APPELFLAPCOMMANDS.infoWiFi;
+        logger.info("Getting WiFi status");
         let wifiInfo: TInfoWiFi | undefined = undefined;
         try {
             wifiInfo = await this.performCommand(commandPath, { method });
