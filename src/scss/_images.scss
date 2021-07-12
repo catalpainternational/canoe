@@ -57,6 +57,11 @@
     }
 }
 
+.home-icon {
+    @extend %bottom-nav-shared;
+    @include mask-icons-shared("~img/home.svg", contain, $gray-4);
+}
+
 .all-courses-icon {
     @extend %bottom-nav-shared;
     @include mask-icons-shared("~img/all_courses.svg", contain, $gray-4);
@@ -294,6 +299,10 @@
     @include mask-icons-shared("~img/arrow.svg", contain, $app-accent-color);
     height: 12px;
     width: 17px;
+
+    &.right {
+        transform: scaleX(-1)
+    }
 }
 
 .download {

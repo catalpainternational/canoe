@@ -1,0 +1,148 @@
+<BeroHome>
+    <GuestBanner></GuestBanner>
+
+    <div class="primary-cta">
+        <TopMenu extrastyleclasses="without-swoop">
+            <span class="site-logo top-icon center"></span>
+        </TopMenu>
+
+        <div if="{courses.length}">
+            <h3>{ TRANSLATIONS.exploreCourses() }</h3>
+            <button onclick="{goToCourses}" class="btn-primary">
+                { TRANSLATIONS.viewAll() } <span class="chevron"></span>
+            </button>
+        </div>
+
+        <div if="{!courses.length && learningActivities.length}">
+            <h3>{ TRANSLATIONS.exploreActivities() }</h3>
+            <button onclick="{goToActivities}" class="btn-primary">
+                { TRANSLATIONS.viewAll() } <span class="chevron"></span>
+            </button>
+        </div>
+    </div>
+
+    <template if="{learningActivities.length}">
+        <h4 onclick="{goToActivities}">{TRANSLATIONS.learning()} <span class="arrow right"></span></h4>
+        <div class="cards-container">
+            <Card
+                each="{topic in learningActivities}"
+                contentItem="{topic}"
+            ></Card>
+        </div>
+    </template>
+
+    <template if="{courses.length}">
+        <h4 onclick="{goToCourses}">{TRANSLATIONS.courses()} <span class="arrow right"></span></h4>
+        <div class="cards-container">
+            <Card
+                each="{course in courses}"
+                if="{course.progressStatus === 'in-progress'}"
+                contentItem="{course}"
+            ></Card>
+            <Card
+                each="{course in courses}"
+                if="{course.progressStatus === 'not-started'}"
+                contentItem="{course}"
+            ></Card>
+            <Card
+                each="{course in courses}"
+                if="{course.progressStatus === 'complete'}"
+                contentItem="{course}"
+            ></Card>
+        </div>
+    </template>
+
+    <template if="{courseCategories.length}">
+        <h4 onclick="{goToCategories}">{TRANSLATIONS.courseCategories()} <span class="arrow right"></span></h4>
+        <div class="cards-container">
+            <Card
+                each="{category in courseCategories}"
+                contentItem="{category}"
+            ></Card>
+        </div>
+    </template>
+
+    <template if="{resources.length}">
+        <h4 onclick="{goToResources}">{TRANSLATIONS.resources()} <span class="arrow right"></span></h4>
+        <a
+            each="{(resource, index) in resources}"
+            if="{index < 3}"
+            href="#{resource.loc_hash}"
+            class="resource-card"
+        >
+            <h5>{ resource.title }</h5>
+            <p>{ resource.description }</p>
+        </a>
+    </template>
+
+    <script>
+        import { getRoute } from "ReduxImpl/Interface";
+
+        import Card from "RiotTags/Components/Card.riot.html";
+        import GuestBanner from "riot/Components/GuestBanner.riot.html";
+        import TopMenu from "RiotTags/Components/TopMenu.riot.html";
+
+        function BeroHome() {
+            return {
+                TRANSLATIONS: {
+                    exploreCourses: () => gettext("Explore and discover a diverse range of courses"),
+                    exploreActivities: () => gettext("Explore and discover a diverse range of learning activities"),
+                    viewAll: () => gettext("View all"),
+                    learning: () => gettext("Learning Activities"),
+                    courses: () => gettext("Courses"),
+                    courseCategories: () => gettext("Courses by Category"),
+                    resources: () => gettext("Resources"),
+                },
+
+                get page() {
+                    return getRoute().page;
+                },
+
+                get learningActivities () {
+                    if (this.page.learningActivities) return this.page.learningActivities.topics;
+                    return [];
+                },
+
+                get courses() {
+                    if (this.page.courses) return this.page.courses.courses;
+                    return [];
+                },
+
+                get courseCategories () {
+                    // TODO
+                    return false;
+                },
+
+                get resources() {
+                    if (this.page.resources) return this.page.resources.resources;
+                    return []
+                },
+
+                goToCourses() {
+                    location.hash = '#courses';
+                },
+
+                goToActivities() {
+                    location.hash = '#topics';
+                },
+
+                goToCategories() {
+                    // TODO
+                    // location.hash = '#categories';
+                },
+
+                goToResources() {
+                    location.hash = '#resources';
+                },
+            };
+        }
+
+        BeroHome.components = {
+            card: Card,
+            guestbanner: GuestBanner,
+            topmenu: TopMenu,
+        };
+
+        export default BeroHome;
+    </script>
+</BeroHome>

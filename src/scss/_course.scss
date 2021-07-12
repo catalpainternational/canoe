@@ -23,15 +23,6 @@ CoursePage {
                 width: 240px;
                 display: block;
                 margin: 1.5em 0;
-                position: relative;
-
-                .chevron {
-                    height: 14px;
-                    position: absolute;
-                    right: 15px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                }
             }
 
             p {

@@ -21,15 +21,15 @@
                 <h5 class="section-title">{ TRANSLATIONS.completed() }</h5>
             </a>
         </div>
-        <div if="{ state.selectedInProgress && home.coursesInProgress.length }" class="card-container">
+        <div if="{ state.selectedInProgress && home.courses.coursesInProgress.length }" class="card-container">
             <Card
-                each="{ course in home.coursesInProgress }"
+                each="{ course in home.courses.coursesInProgress }"
                 contentItem="{ course }"
             ></Card>
         </div>
-        <div if="{ !state.selectedInProgress && home.coursesCompleted.length  }" class="card-container">
+        <div if="{ !state.selectedInProgress && home.courses.coursesCompleted.length  }" class="card-container">
             <Card
-                each="{ course in home.coursesCompleted }"
+                each="{ course in home.courses.coursesCompleted }"
                 contentItem="{ course }"
             ></Card>
         </div>

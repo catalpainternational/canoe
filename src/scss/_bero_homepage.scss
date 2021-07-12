@@ -1,0 +1,78 @@
+BeroHome {
+    max-width: $tablet;
+    margin: 0 auto;
+    display: block;
+    padding-bottom: 100px;
+
+    .primary-cta {
+        -webkit-clip-path: ellipse(200% 100% at 50% 0%);
+        clip-path: ellipse(200% 100% at 50% 0%);
+        background-image: url('~img/homepage_illustration.png');
+        background-size: cover;
+        min-height: 45vh;
+        width: 100%;
+        padding: 0 1em;
+        box-sizing: border-box;
+
+        > div {
+            padding: 5em 0 4em;
+            width: 75%;
+
+            h3 {
+                letter-spacing: 0.05ch;
+            }
+
+            .btn-primary {
+                margin-top: 1em;
+            }
+        }
+    }
+
+    .cards-container {
+        display: flex;
+        gap: 1em;
+        padding: 1em;
+        overflow: scroll;
+    }
+
+    .card {
+        width: 40vw;
+    }
+
+    h4 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        padding: 1em;
+        margin: 25px 0 0;
+        font-size: 1em;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 0.07ch;
+
+        .arrow {
+            height: 12px;
+            width: 18px;
+        }
+    }
+
+    .resource-card {
+        display: block;
+        background-color: $white;
+        padding: 0.5em 1em;
+
+        & + .resource-card {
+            margin-top: 3px;
+        }
+
+        h5 {
+            color: $gray-1;
+            font-size: 1em;
+        }
+
+        p {
+            font-size: 0.85em;
+        }
+    }
+}

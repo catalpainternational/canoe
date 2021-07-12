@@ -1,8 +1,12 @@
 <BottomMenu>
     <footer if="{showBottomMenu()}">
         <div class="bottom-menu">
-            <a href="#" if="{shouldShowLearningHome()}">
-                <span class="all-courses-icon { page.type === 'homepage' ? 'active' : ''}">
+            <a href="#" if="{shouldShowBeroHome()}">
+                <span class="home-icon { page.type === 'berohomepage' ? 'active' : ''}">
+                </span>
+            </a>
+            <a href="#courses" if="{shouldShowLearningHome()}">
+                <span class="all-courses-icon { page.type === 'courseshomepage' ? 'active' : ''}">
                 </span>
             </a>
             <a href="#topics" if="{shouldShowTeachingHome()}">
@@ -44,8 +48,12 @@
                 return inAppelflap();
             },
 
+            shouldShowBeroHome() {
+                return this.page.manifest.hasPageType('berohomepage');
+            },
+
             shouldShowLearningHome() {
-                return this.page.manifest.hasPageType('homepage');
+                return this.page.manifest.hasPageType('courseshomepage');
             },
 
             shouldShowTeachingHome() {

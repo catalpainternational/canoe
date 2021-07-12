@@ -84,6 +84,12 @@ TopMenu {
             right: 15px;
         }
 
+        &.center {
+            grid-column: 2 / 2;
+            position: unset;
+            margin: 0 auto;
+        }
+
         &.left {
             grid-column: 1 / 1;
             left: 15px;
