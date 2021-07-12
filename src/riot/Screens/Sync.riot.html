@@ -299,12 +299,14 @@
                 });
 
                 // Get WiFi info from Appelflap
-                const wifiInfoDefault = { ssid: "", ipaddress: "", ipaddress_raw: 0, strength: 0 };
+                const wifiInfoDefault = { network: null };
+                // When riot can handle standard Javascript optional chaining operators (?.) we can change this
+                const getSSID = (value) => !value ? "" : !value.network ? "" : value.network.ssid || "";
                 this.updateStatusData({
                     name: "ssid",
                     source: AppelflapUtilities.infoWiFi,
                     default: wifiInfoDefault,
-                    getValue: (value) => { return value.ssid; }
+                    getValue: getSSID
                 }).then(() => {
                     this.refreshSubscriptions();
                 });
