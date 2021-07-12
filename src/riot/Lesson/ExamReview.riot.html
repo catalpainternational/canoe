@@ -64,7 +64,7 @@
             { TRANSLATIONS.retake() }
         </button>
 
-        <a onclick="{goToCourseOverview}">
+        <a class="back" onclick="{goToCourseOverview}">
             { TRANSLATIONS.backCourse() }
         </a>
     </div>
@@ -115,7 +115,7 @@
 
                 if (correctAnswers.length) {
                     return mappedQuestions.filter((it) => {
-                        return correctAnswers.some(a => a.id !== it.id)
+                        return !correctAnswers.find(a => a.id === it.id)
                     })
                 }
                 return mappedQuestions;
