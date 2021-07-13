@@ -57,11 +57,11 @@ export abstract class PublishableItem {
      */
     async getResponseFromNetwork(): Promise<Response> {
         this.logMessage("using network");
+        const previewing = getPreviewing();
         let response;
         try {
             const url = new URL(this.url);
             const requestOptions = this.getRequestOptions();
-            const previewing = getPreviewing();
             if (previewing) {
                 url.searchParams.append("preview", previewing);
                 requestOptions.cache = "no-cache";
@@ -77,11 +77,13 @@ export abstract class PublishableItem {
             throw Error("Network response not ok");
         }
 
-        this.logMessage("caching response");
-        const responseClone = response.clone();
-        await caches
-            .open(this.cacheKey)
-            .then((c) => c.put(this.url, responseClone));
+        if(!previewing) {
+            this.logMessage("caching response");
+            const responseClone = response.clone();
+            await caches
+                .open(this.cacheKey)
+                .then((c) => c.put(this.url, responseClone));
+        }
         return response;
     }
 

@@ -104,7 +104,7 @@ export class Manifest extends PublishableItem implements StorableItem {
                     response,
                     this
                 );
-                throw new ManifestError("Mainfest failed to deserialize");
+                throw new ManifestError("Manifest failed to deserialize");
             });
     }
 
