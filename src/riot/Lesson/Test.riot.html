@@ -4,8 +4,11 @@
         image="{ card.image }"
     ></ImageWrapper>
     <h3>
-        <template if="{ isExam }">
+        <template if="{ isExam && !props.displayCardNumber }">
             { cardNumber }.&nbsp;
+        </template>
+        <template if="{ isExam && props.displayCardNumber }">
+            { props.displayCardNumber }.&nbsp;
         </template>
         { card.question }
     </h3>
