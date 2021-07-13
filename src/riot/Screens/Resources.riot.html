@@ -18,18 +18,17 @@
             <div
                 each="{resource in page.resources}"
                 if="{isResourceVisible(resource)}"
-                class="resource-card"
+                class="resource-card {resource.cardImage ? 'has-image' : ''}"
             >
+                <div class="image-wrapper" if="{resource.cardImage}">
+                    <img src="{getCardImage(resource.loc_hash, resource.cardImage)}">
+                </div>
                 <a href="#{resource.loc_hash}" class="resource-content">
-                    <span each="{ type in resource.cardTypes }">
-                        <p>{ type }</p>
-                        <span if="{ resource.cardTypes.length > 1 }">,</span>
-                    </span>
                     <h5>{ resource.title }</h5>
-                    <h6>{ resource.description }</h6>
+                    <p>{ resource.description }</p>
                 </a>
                 <LessonDownload
-                    iconOnly="{true}"
+                    resourceDownload="{true}"
                     contentItem="{resource}"
                 ></LessonDownload>
             </div>
@@ -46,6 +45,7 @@
         import LessonDownload from "RiotTags/Components/LessonDownload.riot.html";
 
         import { getRoute } from "ReduxImpl/Interface";
+        import { getCardImageUrl } from "js/utilities";
 
         import {
             doPageTagsMatchSelections,
@@ -115,6 +115,10 @@
 
                 const show = isQueryMatch && isTagMatch;
                 return show;
+            },
+
+            getCardImage(link, cardImage) {
+                return getCardImageUrl(link, cardImage);
             },
         };
     </script>

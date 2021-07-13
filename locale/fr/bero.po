@@ -335,6 +335,7 @@ msgid "New"
 msgstr "Nouveau"
 
 #: src/riot/Components/DiscussionThread.riot.html:90
+#: src/riot/Components/DiscussionThread.riot.html:93
 msgid "Newest First"
 msgstr "Plus récents en premier"
 
