@@ -14,6 +14,7 @@ import {
     setUnAuthenticatedState,
 } from "./ducks/Identity";
 import { setCanoePage } from "./ducks/Route";
+import { addSyncStateAction } from "./ducks/SyncState";
 
 //#region Site
 export const storePageData = (pageId, pageData) => {
@@ -161,6 +162,17 @@ export const setRoute = (route) => {
 };
 export const getRoute = () => {
     return store.getState().route;
+};
+//#endregion
+
+//#region SyncStatus
+/** Only for use by SyncStatus, for it to set the syncState */
+export const setSyncState = (syncState) => {
+    store.dispatch(addSyncStateAction(syncState));
+};
+/** Used by any code that is triggered by changes to syncState */
+export const getSyncState = () => {
+    return store.getState().syncState;
 };
 //#endregion
 

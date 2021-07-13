@@ -41,4 +41,9 @@ declare module "ReduxImpl/Interface" {
     export function clearPageTestAnswers(pageId: string | number): void;
 
     export function isAuthenticated(): boolean;
+
+    /** Used by any code that is triggered by changes to syncState */
+    export function getSyncState(): any;
+    /** Only intended for use by SyncStatus for it to set the syncState */
+    export function setSyncState(syncState: any): void;
 }
