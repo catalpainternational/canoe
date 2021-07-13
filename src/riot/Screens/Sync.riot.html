@@ -86,6 +86,19 @@
                     <a onclick="{launchStorageManager}">{ TRANSLATIONS.launchStorageManager() }</a>
                 </p>
             </div>
+
+            <!-- Status of each cached item -->
+            <ol if="{state.isNotProduction}" class="sync-list" style="line-height: 1;">
+                <li
+                    each="{(statusListing, index) in state.statusListings}">
+                    <div class="sync-header">
+                        <h5 style="color:{statusListing.isPublishable ? 'green' : 'red'}; margin: 0.2em 0;">
+                            <small style="color:black;">{statusListing.type}:</small> { statusListing.title }
+                        </h5>
+                    </div>
+                    <!-- <div class="sync-body"><small>version: {statusListing.version}</small></div> -->
+                </li>
+            </ol>
         </div>
     </div>
 
@@ -118,6 +131,7 @@
                 // could be "syncOff", "syncOn" (in progress), "syncCompleted",
                 // "syncNotRelevant" (no more injectables), "syncSubscriptionError", "syncNoWiFiError"
                 syncStatus: "syncOff",
+                isNotProduction: process.env.NODE_ENV && process.env.NODE_ENV !== "production",
             },
 
             components: {
@@ -213,7 +227,7 @@
                         if (bundles.bundles.length > 0) {
                             if (this.setSyncStatus("syncOn")) {
                                 // Tell Appelflap get on with it
-                                const result = await AppelflapUtilities.injectCache();
+                                const result = await AppelflapUtilities.injectCaches();
                             }
                         } else {
                             this.setSyncStatus("syncNotRelevant", true);
@@ -231,10 +245,7 @@
              * @returns true for some OK state, false for not OK (i.e. the caller should not continue)
              */
             setSyncStatus(desiredState, forceDesiredState = false) {
-                desiredState = desiredState || this.state.stncStatus;
-                // Note: this test is a workaround because Appelflap's `saveSubscriptions` method
-                // does not return when the device is not connected to WiFi
-                // Hopefully we can remove this later
+                desiredState = desiredState || this.state.syncStatus;
                 if (!this.state.ssid && !forceDesiredState) {
                     // If there's no WiFi, as shown by no ssid, then the status is No WiFi
                     this.update({ syncStatus: "syncNoWiFiError" });
@@ -263,6 +274,7 @@
                 .then((result) => {
                     value = result || statusUpdate.default;
                 }).catch((err) => {
+                    console.warn(err);
                     value = statusUpdate.default;
                 }).finally(() => {
                     this.state[statusUpdate.name] = statusUpdate.getValue(value);
@@ -272,6 +284,10 @@
             },
 
             appelflapStatus() {
+                // Get the Item Status Listings
+                const itemListings = async () => AppDataStatus.getInstance().ItemListings();
+                this.updateStatusData({ name: "statusListings", source: itemListings, default: [] } );
+                
                 // Get Peer info from Appelflap
                 this.updateStatusData({ name: "peerId", source: AppelflapUtilities.peerProperties, default: peerPropDefault });
                 this.updateStatusData({
@@ -283,12 +299,14 @@
                 });
 
                 // Get WiFi info from Appelflap
-                const wifiInfoDefault = { ssid: "", ipaddress: "", ipaddress_raw: 0, strength: 0 };
+                const wifiInfoDefault = { network: null };
+                // When riot can handle standard Javascript optional chaining operators (?.) we can change this
+                const getSSID = (value) => !value ? "" : !value.network ? "" : value.network.ssid || "";
                 this.updateStatusData({
                     name: "ssid",
                     source: AppelflapUtilities.infoWiFi,
                     default: wifiInfoDefault,
-                    getValue: (value) => { return value.ssid; }
+                    getValue: getSSID
                 }).then(() => {
                     this.refreshSubscriptions();
                 });
@@ -308,9 +326,19 @@
             },
 
             async refreshSubscriptions() {
-                this.state.taggedSubs = await AppDataStatus.getInstance().GetSubscriptions();
+                const appDataStatus = AppDataStatus.getInstance();
+                try {
+                    this.state.taggedSubs = await appDataStatus.GetSubscriptions();
+                } catch (err) {
+                    console.warn(`Could not get existing subscriptions: ${err}`);
+                }
 
-                this.state.taggedSubs = await AppDataStatus.getInstance().SetSubscriptions();
+                try {
+                    this.state.taggedSubs = await appDataStatus.SetSubscriptions();
+                } catch (err) {
+                    console.warn(`Could not set new subscriptions: ${err}`);
+                }
+                
                 if (!this.setSyncStatus()) {
                     return false;
                 }

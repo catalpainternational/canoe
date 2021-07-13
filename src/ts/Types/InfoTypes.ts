@@ -11,13 +11,15 @@ export type TPeerProperties = {
 export type TPeers = Array<TPeerProperties>;
 
 export type TInfoWiFi = {
-    ssid: string;
-    /** IP Address correctly formatted */
-    ipaddress: string;
-    /** IP Address as a simple number */
-    ipaddress_raw: number;
-    /** This is expressed as a number in the range 0-100 (inclusive) */
-    strength: number;
+    network: {
+        ssid: string;
+        /** IP Address correctly formatted */
+        ipaddress: string;
+        /** IP Address as a simple number */
+        ipaddress_raw: number;
+        /** This is expressed as a number in the range 0-100 (inclusive) */
+        strength: number;
+    } | null;
 };
 
 export type TInfoStorage = {
