@@ -34,3 +34,22 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+%clamp-lines {
+    overflow: hidden;
+    line-height: 1.2em;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+%clamp-2-lines {
+    @extend %clamp-lines;
+    height: calc(2 * 1.2em);
+    -webkit-line-clamp: 2;
+}
+
+%clamp-3-lines {
+    @extend %clamp-lines;
+    height: calc(3 * 1.2em);
+    -webkit-line-clamp: 3;
+}
