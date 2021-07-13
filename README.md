@@ -62,3 +62,8 @@ Canoe is currently instrumented to submit data to google anlaytics if configured
 ## Debug Redux
 
 We recommend the [Redux Devtools Extension](https://github.com/zalmoxisus/redux-devtools-extension). The extension visualizes the Redux store and the store's changes. It simplifies Redux debugging.
+
+## Translations
+
+We currently support English, Tetum and French.
+[Read More](./README_TRANSLATIONS.md)

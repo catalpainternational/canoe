@@ -24,6 +24,7 @@
             <Test
                 review={true}
                 card-number="{ stage }"
+                displayCardNumber="{ currentQuestionNumber }"
                 cards="{ incorrectAnswers }"
             ></Test>
             <div class="revision-note" if="{ incorrectAnswers[stage - 1].revision_note }">
@@ -64,7 +65,7 @@
             { TRANSLATIONS.retake() }
         </button>
 
-        <a onclick="{goToCourseOverview}">
+        <a class="back" onclick="{goToCourseOverview}">
             { TRANSLATIONS.backCourse() }
         </a>
     </div>
@@ -106,6 +107,13 @@
                 }
             },
 
+            get currentQuestionNumber() {
+                const stageAsNum = Number(this.stage);
+                if (!isNaN(stageAsNum)) {
+                    return this.incorrectAnswers[stageAsNum - 1].questionNumber;
+                }
+            },
+
             get incorrectAnswers() {
                 const mappedQuestions = this.course.data.exam_cards.map((it, index) => ({
                     ...it,
@@ -115,7 +123,7 @@
 
                 if (correctAnswers.length) {
                     return mappedQuestions.filter((it) => {
-                        return correctAnswers.some(a => a.id !== it.id)
+                        return !correctAnswers.find(a => a.id === it.id)
                     })
                 }
                 return mappedQuestions;

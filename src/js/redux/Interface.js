@@ -1,4 +1,4 @@
-import { store, LANGUAGE_STORAGE_KEY } from "./Store";
+import { store } from "./Store";
 
 import { changeLanguageAction } from "./ducks/i18n";
 import { addManifestAction, addPageAction } from "./ducks/Site";
@@ -35,7 +35,6 @@ export const getManifestFromStore = () => {
 //#region i18n
 export const changeLanguage = (language) => {
     store.dispatch(changeLanguageAction(language));
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
 };
 export const getLanguage = () => {
     return store.getState().language;

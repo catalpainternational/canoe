@@ -1,5 +1,5 @@
-<LessonDownload class="{ props.iconOnly ? '' : 'download-block' }">
-    <template if="{!props.iconOnly}">
+<LessonDownload class="{ props.resourceDownload ? '' : 'download-block' }">
+    <template if="{!props.resourceDownload}">
         <p class="lesson-number">{props.itemIndex + 1}</p>
         <p class="title">{props.contentItem.title}</p>
         <div class="download-state" onclick="{toggleCached}">
@@ -12,12 +12,12 @@
         </div>
     </template>
 
-    <template if="{props.iconOnly}">
+    <template if="{props.resourceDownload}">
         <div onclick="{ toggleCached }" class="download-button">
-            <template if="{ state.cached }">
-                <span class="download"></span>
-                <p>{ TRANSLATIONS.downloaded() }</p>
-            </template>
+            <div if="{ state.cached }" class="resource-downloaded">
+                <span class="checkmark teal"></span>
+                <p>{ TRANSLATIONS.available() }</p>
+            </div>
             <template if="{ !state.cached }">
                 <span class="download gray"></span>
                 <p>{ TRANSLATIONS.make() }</p>
@@ -35,7 +35,7 @@
             TRANSLATIONS: {
                 issue: () => gettext("There was a problem downloading the content"),
                 make: () => gettext("Make offline"),
-                downloaded: () => gettext("Downloaded"),
+                available: () => gettext("Available offline"),
             },
 
             onMounted(props, state) {

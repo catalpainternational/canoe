@@ -57,12 +57,7 @@ Card {
         }
 
         .clamp-lines {
-            line-height: 1.2em;
-            height: calc(3 * 1.2em);
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
+            @extend %clamp-3-lines;
         }
     }
 
@@ -136,8 +131,7 @@ AllTopicsList .card {
             min-height: 80px;
 
             .clamp-lines {
-                height: calc(2 * 1.2em);
-                -webkit-line-clamp: 2;
+                @extend %clamp-2-lines;
             }
         }
     }

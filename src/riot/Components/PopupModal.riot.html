@@ -14,6 +14,7 @@
             },
 
             onUnmounted(props, state) {
+                document.body.classList.remove('modal-open');
                 const { toggleModal } = props;
                 if (!toggleModal) {
                     return;
