@@ -24,6 +24,7 @@
             <Test
                 review={true}
                 card-number="{ stage }"
+                displayCardNumber="{ currentQuestionNumber }"
                 cards="{ incorrectAnswers }"
             ></Test>
             <div class="revision-note" if="{ incorrectAnswers[stage - 1].revision_note }">
@@ -103,6 +104,13 @@
 
                 if (s) {
                     return s;
+                }
+            },
+
+            get currentQuestionNumber() {
+                const stageAsNum = Number(this.stage);
+                if (!isNaN(stageAsNum)) {
+                    return this.incorrectAnswers[stageAsNum - 1].questionNumber;
                 }
             },
 
