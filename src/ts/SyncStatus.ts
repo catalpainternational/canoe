@@ -106,15 +106,6 @@ export class SyncStatus {
     //#region Implement as Singleton
     static instance: SyncStatus;
 
-    private _accessSyncState = false;
-    private _accessInjectables = false;
-    private _accessItemListing = false;
-    private _accessItemSubscriptions = false;
-    private _accessSSID = false;
-    private _accessPeerId = false;
-    private _accessPeers = false;
-    private _accessUsedStoragePercentage = false;
-
     private _syncState: TSyncState = "Off";
     private _nextState: TSyncState | null = null;
 
@@ -127,10 +118,14 @@ export class SyncStatus {
     private _itemSubscriptions: TTaggedSubscriptions;
     private _usedStoragePercentage: number;
 
+    private _accessGuards: Record<keyof CreateMutable<SyncStatus>, boolean>;
     private _pollerIds: Record<
         "wifi" | "peers" | "injectables" | "storage",
         number
     >;
+
+    private _slowPoll: number;
+    private _fastPoll: number;
 
     private peerPropDefault: TPeerProperties = {
         id: 0,
@@ -149,7 +144,28 @@ export class SyncStatus {
         this._peerId = this.peerPropDefault;
         this._peers = [];
         this._usedStoragePercentage = 0;
+        this._slowPoll = 6000;
+        this._fastPoll = 600;
 
+        this._accessGuards = {
+            syncState: false,
+            ssid: false,
+            peerId: false,
+            peers: false,
+            usedStoragePercentage: false,
+            injectables: false,
+            itemListing: false,
+            itemSubscriptions: false,
+            ETag: false,
+            On: false,
+            Off: false,
+            ItemListings: false,
+            PublishAll: false,
+            GetSubscriptions: false,
+            SetSubscriptions: false,
+            slowPoll: false,
+            fastPoll: false,
+        };
         this._pollerIds = { wifi: 0, peers: 0, injectables: 0, storage: 0 };
     }
 
@@ -164,6 +180,40 @@ export class SyncStatus {
 
     get ETag(): string {
         return this.eTag;
+    }
+
+    get slowPoll(): number {
+        return this._slowPoll;
+    }
+
+    set slowPoll(value: number) {
+        if (this._fastPoll > 1200) {
+            this._fastPoll = 1200;
+        }
+        if (value < this._fastPoll * 5) {
+            value = this._fastPoll * 5;
+        } else if (value > this._fastPoll * 50) {
+            value = this._fastPoll * 50;
+        }
+
+        this._slowPoll = value;
+    }
+
+    get fastPoll(): number {
+        return this._fastPoll;
+    }
+
+    set fastPoll(value: number) {
+        if (this._slowPoll < 6000) {
+            this._slowPoll = 6000;
+        }
+        if (value < this._slowPoll / 5) {
+            value = this._slowPoll / 5;
+        } else if (value > this._slowPoll) {
+            value = this._slowPoll;
+        }
+
+        this._fastPoll = value;
     }
 
     //#region Accessors - with pseudo private `set`
@@ -181,10 +231,10 @@ export class SyncStatus {
     }
 
     set syncState(value: TSyncState) {
-        if (!this._accessSyncState) {
+        if (!this._accessGuards.syncState) {
             throw this.PrivateAccessorError("syncState");
         }
-        this._accessSyncState = false;
+        this._accessGuards.syncState = false;
         this._syncState = value;
     }
 
@@ -193,10 +243,10 @@ export class SyncStatus {
     }
 
     set ssid(value: string) {
-        if (!this._accessSSID) {
+        if (!this._accessGuards.ssid) {
             throw this.PrivateAccessorError("ssid");
         }
-        this._accessSSID = false;
+        this._accessGuards.ssid = false;
         this._ssid = value;
     }
 
@@ -205,10 +255,10 @@ export class SyncStatus {
     }
 
     set peerId(value: TPeerProperties) {
-        if (!this._accessPeerId) {
+        if (!this._accessGuards.peerId) {
             throw this.PrivateAccessorError("peerId");
         }
-        this._accessPeerId = false;
+        this._accessGuards.peerId = false;
         this._peerId = value;
     }
 
@@ -217,10 +267,10 @@ export class SyncStatus {
     }
 
     set peers(value: TPeers) {
-        if (!this._accessPeers) {
+        if (!this._accessGuards.peers) {
             throw this.PrivateAccessorError("peers");
         }
-        this._accessPeers = false;
+        this._accessGuards.peers = false;
         this._peers = value;
     }
 
@@ -229,10 +279,10 @@ export class SyncStatus {
     }
 
     set usedStoragePercentage(value: number) {
-        if (!this._accessUsedStoragePercentage) {
+        if (!this._accessGuards.usedStoragePercentage) {
             throw this.PrivateAccessorError("usedStoragePercentage");
         }
-        this._accessUsedStoragePercentage = false;
+        this._accessGuards.usedStoragePercentage = false;
         if (value < 0) {
             value = 0;
         } else if (value > 100) {
@@ -246,10 +296,10 @@ export class SyncStatus {
     }
 
     set injectables(value: TBundles) {
-        if (!this._accessInjectables) {
+        if (!this._accessGuards.injectables) {
             throw this.PrivateAccessorError("injectables");
         }
-        this._accessInjectables = false;
+        this._accessGuards.injectables = false;
         this._injectables = value;
     }
 
@@ -258,10 +308,10 @@ export class SyncStatus {
     }
 
     set itemListing(value: TItemListing[]) {
-        if (!this._accessItemListing) {
+        if (!this._accessGuards.itemListing) {
             throw this.PrivateAccessorError("itemListing");
         }
-        this._accessItemListing = false;
+        this._accessGuards.itemListing = false;
         this._itemListing = value;
     }
 
@@ -270,23 +320,30 @@ export class SyncStatus {
     }
 
     set itemSubscriptions(value: TTaggedSubscriptions) {
-        if (!this._accessItemSubscriptions) {
+        if (!this._accessGuards.itemSubscriptions) {
             throw this.PrivateAccessorError("itemSubscriptions");
         }
-        this._accessItemSubscriptions = false;
+        this._accessGuards.itemSubscriptions = false;
         this._itemSubscriptions = value;
     }
     //#endregion
 
-    private updateSyncStatusData<T>(
+    private UpdateSyncStatusData<T>(
         statusUpdate: TStatusUpdate<T>
     ): Promise<void> {
         if (!statusUpdate.getValue) {
             statusUpdate.getValue = (value: T) => value;
         }
+        const SetStatus = () => {
+            this._accessGuards[statusUpdate.name] = true;
+            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+            // @ts-ignore TS-2540 - names are already restricted to exclude the `get` accessors
+            this[statusUpdate.name] = statusUpdate.getValue(value);
+            return Promise.resolve();
+        };
         let value: any;
-        return statusUpdate
-            .source()
+        return statusUpdate.source
+            .bind(this)()
             .then((result: any) => {
                 value = result || statusUpdate.default;
             })
@@ -294,21 +351,16 @@ export class SyncStatus {
                 logger.warn(err);
                 value = statusUpdate.default;
             })
-            .finally(() => {
-                /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-                // @ts-ignore TS-2540 - names are already restricted to exclude the `get` accessors
-                this[statusUpdate.name] = statusUpdate.getValue(value);
-                return Promise.resolve();
-            });
+            .finally(SetStatus.bind(this));
     }
 
     /** (Re)Starts the state transitioning */
     On(): void {
-        this.Transition("Initialisation");
+        this.Transition.bind(this)("Initialisation");
     }
 
     Off(): void {
-        this.Transition("Off");
+        this.Transition.bind(this)("Off");
     }
 
     private SetSyncState(fields: any): void {
@@ -332,22 +384,22 @@ export class SyncStatus {
         let transitionResult: Promise<void>;
         switch (desiredState) {
             case "Initialisation":
-                transitionResult = this.TransitionToInitialisation();
+                transitionResult = this.TransitionToInitialisation.bind(this)();
                 break;
             case "Off":
-                transitionResult = this.TransitionToOff();
+                transitionResult = this.TransitionToOff.bind(this)();
                 break;
             case "Syncing":
-                transitionResult = this.TransitionToSyncing();
+                transitionResult = this.TransitionToSyncing.bind(this)();
                 break;
             case "NoPeers":
-                transitionResult = this.TransitionToNoPeers();
+                transitionResult = this.TransitionToNoPeers.bind(this)();
                 break;
             case "NoWiFi":
-                transitionResult = this.TransitionToNoWiFi();
+                transitionResult = this.TransitionToNoWiFi.bind(this)();
                 break;
             case "UpToDate":
-                transitionResult = this.TransitionToUpToDate();
+                transitionResult = this.TransitionToUpToDate.bind(this)();
                 break;
             default:
                 // Unknown state to transition to - programmer error
@@ -357,7 +409,7 @@ export class SyncStatus {
 
         transitionResult
             .then(() => {
-                this.SetSyncState({ syncState: this.syncState });
+                this.SetSyncState.bind(this)({ syncState: this.syncState });
             })
             .catch(() => {
                 // How do we want to handle failures?
@@ -366,24 +418,31 @@ export class SyncStatus {
 
     private async TransitionToInitialisation(): Promise<void> {
         this._nextState = "Initialisation";
-        this._accessItemListing = true;
-        this._accessItemSubscriptions = true;
-        this._accessPeerId = true;
-        const gotItemListing = this.updateSyncStatusData({
+        const itemListingStatusUpdate: TStatusUpdate<TItemListing[]> = {
             name: "itemListing",
-            source: this.BuildList,
+            source: this.BuildList.bind(this),
             default: [],
-        });
-        const gotItemSubscriptions = this.updateSyncStatusData({
-            name: "itemSubscriptions",
-            source: this.GetSubscriptions,
-            default: AF_EMPTY_TAGGED_SUBSCRIPTIONS,
-        });
-        const gotPeerData = this.updateSyncStatusData({
-            name: "peerId",
-            source: AppelflapUtilities.peerProperties,
-            default: this.peerPropDefault,
-        });
+        };
+        const itemSubscriptionsStatusUpdate: TStatusUpdate<TTaggedSubscriptions> =
+            {
+                name: "itemSubscriptions",
+                source: this.GetSubscriptions.bind(this),
+                default: AF_EMPTY_TAGGED_SUBSCRIPTIONS,
+            };
+        const peerDataStatusUpdate: TStatusUpdate<TPeerProperties | undefined> =
+            {
+                name: "peerId",
+                source: AppelflapUtilities.peerProperties,
+                default: this.peerPropDefault,
+            };
+        const gotItemListing = this.UpdateSyncStatusData.bind(this)(
+            itemListingStatusUpdate
+        );
+        const gotItemSubscriptions = this.UpdateSyncStatusData.bind(this)(
+            itemSubscriptionsStatusUpdate
+        );
+        const gotPeerData =
+            this.UpdateSyncStatusData.bind(this)(peerDataStatusUpdate);
 
         try {
             const transitionResults = await Promise.allSettled([
@@ -391,11 +450,11 @@ export class SyncStatus {
                 gotItemSubscriptions,
                 gotPeerData,
             ]);
-            this.PollWiFi();
-            this.PollUsedStoragePercentage();
-            this.RefreshPubSub();
+            this.PollWiFi.bind(this)();
+            this.PollUsedStoragePercentage.bind(this)();
+            this.RefreshPubSub.bind(this)();
 
-            this._accessSyncState = true;
+            this._accessGuards.syncState = true;
             this.syncState = this._nextState;
             this._nextState = null;
 
@@ -419,7 +478,7 @@ export class SyncStatus {
             }
         }
 
-        this._accessSyncState = true;
+        this._accessGuards.syncState = true;
         this.syncState = this._nextState;
         this._nextState = null;
 
@@ -430,12 +489,12 @@ export class SyncStatus {
         this._nextState = "Syncing";
 
         // We set the syncState 'early', because we're going to fast poll the injectables
-        this._accessSyncState = true;
+        this._accessGuards.syncState = true;
         this.syncState = this._nextState;
 
         // Switch to fast polling the injectables
         clearInterval(this._pollerIds.injectables);
-        this.PollInjectables(300);
+        this.PollInjectables.bind(this)(this.fastPoll);
 
         // Start cache injection
         let result = true;
@@ -449,7 +508,7 @@ export class SyncStatus {
         this._nextState = null;
         // Switch back to slow polling
         clearInterval(this._pollerIds.injectables);
-        this.PollInjectables(2000);
+        this.PollInjectables.bind(this)(this.slowPoll);
 
         return await (result ? Promise.resolve() : Promise.reject());
     }
@@ -461,7 +520,7 @@ export class SyncStatus {
         clearInterval(this._pollerIds.injectables);
         this._pollerIds.injectables = 0;
 
-        this._accessSyncState = true;
+        this._accessGuards.syncState = true;
         this.syncState = this._nextState;
         this._nextState = null;
 
@@ -473,9 +532,9 @@ export class SyncStatus {
 
         // Switch to slow polling the injectables
         clearInterval(this._pollerIds.injectables);
-        this.PollInjectables(2000);
+        this.PollInjectables.bind(this)(this.slowPoll);
 
-        this._accessSyncState = true;
+        this._accessGuards.syncState = true;
         this.syncState = this._nextState;
         this._nextState = null;
 
@@ -489,7 +548,7 @@ export class SyncStatus {
         clearInterval(this._pollerIds.injectables);
         this._pollerIds.injectables = 0;
 
-        this._accessSyncState = true;
+        this._accessGuards.syncState = true;
         this.syncState = this._nextState;
         this._nextState = null;
 
@@ -503,27 +562,10 @@ export class SyncStatus {
         }
 
         // Poll the wifi connectivity every 2 seconds
-        this._pollerIds.wifi = window.setInterval(() => {
-            const wifiInfoDefault: TInfoWiFi = { network: null };
-            const getSSID = (value: TInfoWiFi) => value?.network?.ssid || "";
-            this._accessSSID = true;
-            this.updateSyncStatusData({
-                name: "ssid",
-                source: AppelflapUtilities.infoWiFi,
-                default: wifiInfoDefault,
-                getValue: getSSID,
-            }).then(() => {
-                this.SetSyncState({ ssid: this.ssid });
-                // On success
-                if (this.ssid) {
-                    // Start / continue polling the list of peers
-                    this.PollPeers();
-                } else {
-                    // Transition to NoWiFi
-                    this.Transition("NoWiFi");
-                }
-            });
-        }, 2000);
+        this._pollerIds.wifi = window.setInterval(
+            this.GetWiFiInfo.bind(this),
+            this.slowPoll
+        );
     }
 
     private PollUsedStoragePercentage() {
@@ -533,25 +575,10 @@ export class SyncStatus {
         }
 
         // Poll the storage every 2 seconds
-        this._pollerIds.storage = window.setInterval(() => {
-            this._accessUsedStoragePercentage = true;
-            this.updateSyncStatusData({
-                name: "usedStoragePercentage",
-                source: AppelflapUtilities.infoStorage,
-                default: { disksize: 0, diskfree: 0 },
-                getValue: (value) => {
-                    const { disksize, diskfree } = value;
-                    return disksize
-                        ? ((disksize - diskfree) / disksize) * 100
-                        : 0;
-                },
-            }).then(() => {
-                this.SetSyncState({
-                    usedStoragePercentage: this.usedStoragePercentage,
-                });
-                // On success - we don't do anything else, yet...
-            });
-        }, 2000);
+        this._pollerIds.storage = window.setInterval(
+            this.GetUsedStoragePercentage.bind(this),
+            this.slowPoll
+        );
     }
 
     private PollPeers() {
@@ -561,24 +588,10 @@ export class SyncStatus {
         }
 
         // Poll the list of peers every 2 seconds
-        this._pollerIds.peers = window.setInterval(() => {
-            this._accessPeers = true;
-            this.updateSyncStatusData({
-                name: "peers",
-                source: AppelflapUtilities.infoPeers,
-                default: [],
-            }).then(() => {
-                this.SetSyncState({ peers: this.peers });
-                // On success
-                if (this.peers.length) {
-                    // start 'slow' polling the injectable bundles
-                    this.PollInjectables(2000);
-                } else {
-                    // Transition to NoPeers
-                    this.Transition("NoPeers");
-                }
-            });
-        }, 2000);
+        this._pollerIds.peers = window.setInterval(
+            this.GetPeers.bind(this),
+            this.slowPoll
+        );
     }
 
     private PollInjectables(delay: number) {
@@ -589,53 +602,127 @@ export class SyncStatus {
 
         // Poll the list of injectables every 2 seconds
         this._pollerIds.injectables = window.setInterval(
-            this.GetInjectables,
+            this.GetInjectables.bind(this),
             delay
         );
     }
 
+    private GetWiFiInfo() {
+        const wifiInfoDefault: TInfoWiFi = { network: null };
+        const getSSID = (value: TInfoWiFi) => value?.network?.ssid || "";
+        const statusUpdate: TStatusUpdate<string> = {
+            name: "ssid",
+            source: AppelflapUtilities.infoWiFi,
+            default: wifiInfoDefault,
+            getValue: getSSID,
+        };
+        const UpdateWifiInfo = () => {
+            this.SetSyncState({ ssid: this.ssid });
+            // On success
+            if (this.ssid) {
+                // Start / continue polling the list of peers
+                this.PollPeers.bind(this)();
+            } else {
+                // Transition to NoWiFi
+                this.Transition.bind(this)("NoWiFi");
+            }
+        };
+        const updateStatusData = this.UpdateSyncStatusData.bind(this);
+        updateStatusData(statusUpdate).then(UpdateWifiInfo.bind(this));
+    }
+
+    private GetUsedStoragePercentage() {
+        const getValue = (value: any) => {
+            const { disksize, diskfree } = value;
+            return disksize ? ((disksize - diskfree) / disksize) * 100 : 0;
+        };
+        const statusUpdate: TStatusUpdate<number> = {
+            name: "usedStoragePercentage",
+            source: AppelflapUtilities.infoStorage,
+            default: { disksize: 0, diskfree: 0 },
+            getValue,
+        };
+        const UpdateUsedStoragePercentage = () => {
+            this.SetSyncState.bind(this)({
+                usedStoragePercentage: this.usedStoragePercentage,
+            });
+            // On success - we don't do anything else, yet...
+        };
+        const updateStatusData = this.UpdateSyncStatusData.bind(this);
+        updateStatusData(statusUpdate).then(
+            UpdateUsedStoragePercentage.bind(this)
+        );
+    }
+
+    private GetPeers() {
+        const statusUpdate: TStatusUpdate<TTaggedSubscriptions> = {
+            name: "peers",
+            source: AppelflapUtilities.infoPeers,
+            default: [],
+        };
+        const UpdatePeers = () => {
+            this.SetSyncState.bind(this)({ peers: this.peers });
+            // On success
+            if (this.peers.length) {
+                // start 'slow' polling the injectable bundles
+                this.PollInjectables.bind(this)(this.slowPoll);
+            } else {
+                // Transition to NoPeers
+                this.Transition.bind(this)("NoPeers");
+            }
+        };
+        const updateStatusData = this.UpdateSyncStatusData.bind(this);
+        updateStatusData(statusUpdate).then(UpdatePeers.bind(this));
+    }
+
     private GetInjectables() {
-        this._accessInjectables = true;
-        this.updateSyncStatusData({
+        const statusUpdate: TStatusUpdate<TTaggedSubscriptions> = {
             name: "injectables",
             source: CacheSubscribe.injectables,
             default: { bundles: [] } as TBundles,
-        }).then(() => {
+        };
+        const UpdateInjectables = () => {
             const bundleCount = this.injectables.bundles.length;
-            this.SetSyncState({ bundles: bundleCount });
+            this.SetSyncState.bind(this)({ bundles: bundleCount });
             // On success, time to trigger a transition depending on our current state
+            let desiredState: TSyncState | null = null;
             switch (this.syncState) {
                 case "Off":
                     // Do nothing, we're initialising, or we've already left
                     break;
                 case "Syncing":
                     if (!bundleCount) {
-                        this.RefreshPubSub();
+                        this.RefreshPubSub.bind(this)();
                     }
-                    this.Transition(bundleCount ? "Syncing" : "UpToDate");
+                    desiredState = bundleCount ? "Syncing" : "UpToDate";
                     break;
                 case "Initialisation":
                 case "UpToDate":
-                    this.Transition(bundleCount ? "Syncing" : "UpToDate");
+                    desiredState = bundleCount ? "Syncing" : "UpToDate";
                     break;
                 case "NoPeers":
-                    this.Transition(bundleCount ? "Syncing" : "NoPeers");
+                    desiredState = bundleCount ? "Syncing" : "NoPeers";
                     break;
                 case "NoWiFi":
-                    this.Transition(bundleCount ? "Syncing" : "NoWiFi");
+                    desiredState = bundleCount ? "Syncing" : "NoWiFi";
                     break;
             }
-        });
+            if (desiredState) {
+                this.Transition.bind(this)(desiredState);
+            }
+        };
+        this.UpdateSyncStatusData.bind(this)(statusUpdate).then(
+            UpdateInjectables.bind(this)
+        );
     }
 
     private SetSubscribable() {
-        this._accessItemSubscriptions = true;
         const statusUpdate: TStatusUpdate<TTaggedSubscriptions> = {
             name: "itemSubscriptions",
-            source: this.SetSubscriptions,
+            source: this.SetSubscriptions.bind(this),
             default: AF_EMPTY_TAGGED_SUBSCRIPTIONS,
         };
-        this.updateSyncStatusData(statusUpdate)
+        this.UpdateSyncStatusData.bind(this)(statusUpdate)
             .then(() => {
                 // Nothing more to do on the happy path
                 // Polling Injectables tells us whether there's anything to do
@@ -646,8 +733,8 @@ export class SyncStatus {
     }
 
     private RefreshPubSub() {
-        this.SetSubscribable();
-        this.PublishAll();
+        this.SetSubscribable.bind(this)();
+        this.PublishAll.bind(this)();
     }
 
     async ItemListings(): Promise<TItemListing[]> {
@@ -655,7 +742,8 @@ export class SyncStatus {
             return this.itemListing;
         }
 
-        this.itemListing = await this.BuildList();
+        this._accessGuards.itemListing = true;
+        this.itemListing = await this.BuildList.bind(this)();
         return this.itemListing;
     }
 
@@ -707,7 +795,7 @@ export class SyncStatus {
 
     private async BuildList(): Promise<TItemListing[]> {
         const itemListings: TItemListing[] = [];
-        itemListings.push(await this.ManifestListing());
+        itemListings.push(await this.ManifestListing.bind(this)());
 
         const pageIds = Object.keys(Manifest.getInstance().pages);
         const cacheKeys = await CacheKeys();
@@ -717,7 +805,7 @@ export class SyncStatus {
             const pageId = pageIds[ix];
             const manifestPage = Manifest.getInstance().pages[pageId];
             const inCache = cacheKeys.includes(manifestPage.storage_container);
-            const pageListing = await this.PageListing(
+            const pageListing = await this.PageListing.bind(this)(
                 pageId,
                 manifestPage,
                 inCache
@@ -781,7 +869,9 @@ export class SyncStatus {
         filter: (item: TItemListing) => boolean,
         action: AfcFunction
     ) {
-        const performable = (await this.ItemListings()).filter(filter);
+        const performable = (await this.ItemListings.bind(this)()).filter(
+            filter
+        );
 
         const manifest = Manifest.getInstance();
 
@@ -841,7 +931,10 @@ export class SyncStatus {
         logger.info(
             "Publish all items that are already certified, or that can be certifified"
         );
-        return this.PerformAll((listing) => listing.isPublishable, publishItem);
+        return this.PerformAll.bind(this)(
+            (listing) => listing.isPublishable,
+            publishItem
+        );
     }
 
     /** Get all current subscriptions */
@@ -857,7 +950,7 @@ export class SyncStatus {
 
     /** Set all current subscriptions */
     async SetSubscriptions(): Promise<TTaggedSubscriptions> {
-        const itemListings = await this.ItemListings();
+        const itemListings = await this.ItemListings.bind(this)();
         logger.info(`Setting Subscriptions with ETag:${this.eTag}`);
         const taggedSubs = await setSubscriptions(this.eTag, itemListings);
         if (typeof taggedSubs === "string" && taggedSubs === "not relevant") {

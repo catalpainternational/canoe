@@ -248,8 +248,13 @@ export class AppelflapConnect {
     };
 
     public infoStorage = async (): Promise<TInfoStorage> => {
+        logger.info("Getting storage info");
+
         const { commandPath, method } = APPELFLAPCOMMANDS.infoStorage;
-        return await this.performCommand(commandPath, { method });
+        const storageInfo = await this.performCommand(commandPath, { method });
+
+        logger.info(`Got storage info of ${JSON.stringify(storageInfo)}`);
+        return storageInfo;
     };
     //#endregion
 
