@@ -21,32 +21,108 @@ import Logger from "./Logger";
 
 type AfcFunction = (item: TPublishableItem) => Promise<TAppelflapResult>;
 
-const logger = new Logger("AppDataStatus");
+const logger = new Logger("SyncStatus");
 
-/** An overview of the status for all cached data used by the app */
-export class AppDataStatus {
+/**
+ * The App's Sync state, as a state machine
+ *
+ * Sync State depends on (in order of importance):
+ * 1. WiFi connectivity - this can go on or off at any time 
+ * 2. Injectable bundles - whether Appelflap has anything new or updated in its local store that can be injected into the cache
+ * 3. Peers - whether Appelflap has anyone to share things with
+ * 4. Items to Sync - a list of items that are subscribed to (all of them), and published (depends on user auth)
+ * 
+ * Sync Transitions are:
+ * - Entering (Off -> On) - entering the Sync State, takes a snapshot of Items to Sync, starts polling WiFi connectivity and checks Injectable bundles count
+ * - Exiting (On -> Off) - exiting the Sync State, stops all polling activity
+ * - WiFi Off->On - starts polling Peers, in the background Appelflap will try sharing files between Peers
+ * - WiFi On->Off - stops polling Peers, clears list of Peers, stops slow polling Injectable bundles count
+ * - Injectable bundles 0 -> +ve - calls for Cache Injection to commence, starts a quick polling loop:
+ *     - comparing the original Items to Sync snapshot with its updated state
+ *     - re-checks Injectables bundles count
+ * - Injectable bundles +ve -> 0 - stops quick polling Injectable bundles count, updates Items to Sync
+ * - Peers list changes - restarts slow polling Injectable bundles count if it has stopped
+ * 
+ * Sync States:
+ * - Sync Off - No Sync activity at all
+ * - Sync Initialisation - Entering
+ * - Sync Suspension - Exiting
+ * - Syncing - Injectable bundles > 0
+ * - No WiFi - WiFi off, no Injectable bundles
+ * - No Peers - WiFi On, no Injectable bundles, no Peers
+ * - Sync up to date - WiFi On, no Injectable bundles, Peers > 0
+ * 
+ * Note that there is no concept of 'Sync Completed' because you never know ...
+ */
+export class SyncStatus {
     //#region Implement as Singleton
-    static instance: AppDataStatus;
+    static instance: SyncStatus;
     private eTag: string;
     private itemListing: TItemListing[];
+    private _syncState: "Off" | "Initialisation" | "Suspension" | "Syncing" | "NoWiFi" | "NoPeers" | "UpToDate" = "Off";
+    private inTransition: boolean = false;
+    private _ssid: string;
 
     private constructor() {
         logger.log("Singleton created");
         this.eTag = "";
         this.itemListing = [];
+        this._syncState = "Off";
+        this.inTransition = false;
+        this._ssid = "";
     }
 
-    public static getInstance(): AppDataStatus {
-        if (!AppDataStatus.instance) {
-            AppDataStatus.instance = new AppDataStatus();
+    public static getInstance(): SyncStatus {
+        if (!SyncStatus.instance) {
+            SyncStatus.instance = new SyncStatus();
         }
 
-        return AppDataStatus.instance;
+        return SyncStatus.instance;
     }
     //#endregion
 
     get ETag(): string {
         return this.eTag;
+    }
+
+    get syncState(): "Off" | "Initialisation" | "Suspension" | "Syncing" | "NoWiFi" | "NoPeers" | "UpToDate" {
+        return this._syncState;
+    }
+
+    get ssid(): string {
+        return this._ssid;
+    }
+
+    updateSyncStatusData<T>(statusUpdate: {name: keyof SyncStatus, source: () => any, default: any, getValue: (value: any) => T }): Promise<void> {
+        if (!statusUpdate.getValue) {
+            statusUpdate.getValue = (value: T) => { return value; };
+        }
+        let value: any;
+        return statusUpdate.source()
+        .then((result: any) => {
+            value = result || statusUpdate.default;
+        }).catch((err: any) => {
+            console.warn(err);
+            value = statusUpdate.default;
+        }).finally(() => {
+            this[-readonly statusUpdate.name] = statusUpdate.getValue(value);
+            this.update();
+            return Promise.resolve();
+        });
+    },
+
+    async transition(): Promise<void> {
+        if (this.inTransition) {
+            return;
+        }
+
+        this.inTransition = true;
+        switch (this._syncState) {
+            case "Off":
+                this._syncState = "Initialisation";
+                this.itemListing = await this.BuildList();
+                break;
+        }
     }
 
     async ItemListings(): Promise<TItemListing[]> {

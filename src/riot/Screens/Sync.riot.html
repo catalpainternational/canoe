@@ -103,7 +103,7 @@
     </div>
 
     <script>
-        import { AppDataStatus } from "ts/AppDataStatus";
+        import { SyncStatus } from "ts/SyncStatus";
         import { AppelflapUtilities } from "ts/Appelflap/AppelflapUtilities";
         import { CacheUtilities } from "ts/Appelflap/CacheUtilities";
         import { CacheSubscribe } from "ts/Appelflap/CacheSubscribe";
@@ -285,7 +285,7 @@
 
             appelflapStatus() {
                 // Get the Item Status Listings
-                const itemListings = async () => AppDataStatus.getInstance().ItemListings();
+                const itemListings = async () => SyncStatus.getInstance().ItemListings();
                 this.updateStatusData({ name: "statusListings", source: itemListings, default: [] } );
                 
                 // Get Peer info from Appelflap
@@ -326,15 +326,15 @@
             },
 
             async refreshSubscriptions() {
-                const appDataStatus = AppDataStatus.getInstance();
+                const syncStatus = SyncStatus.getInstance();
                 try {
-                    this.state.taggedSubs = await appDataStatus.GetSubscriptions();
+                    this.state.taggedSubs = await syncStatus.GetSubscriptions();
                 } catch (err) {
                     console.warn(`Could not get existing subscriptions: ${err}`);
                 }
 
                 try {
-                    this.state.taggedSubs = await appDataStatus.SetSubscriptions();
+                    this.state.taggedSubs = await syncStatus.SetSubscriptions();
                 } catch (err) {
                     console.warn(`Could not set new subscriptions: ${err}`);
                 }
@@ -347,7 +347,7 @@
             },
 
             async publishAll() {
-                const published = await AppDataStatus.getInstance().PublishAll();
+                const published = await SyncStatus.getInstance().PublishAll();
             },
 
             async launchWiFiPicker() {
