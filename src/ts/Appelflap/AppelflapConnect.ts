@@ -327,7 +327,7 @@ export class AppelflapConnect {
         };
 
         // Strip all double quotes from the eTag
-        getSubscriptions.eTag = getSubscriptions.eTag.replace(/\"/g, "");
+        getSubscriptions.eTag = getSubscriptions.eTag.replace(/"/g, "");
 
         // Ensure that there's a minimum response that is understood by the downstream code
         if (!getSubscriptions.subscriptions.types.CACHE) {
